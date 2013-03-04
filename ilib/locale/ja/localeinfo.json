@@ -1,0 +1,19 @@
+{
+	"clock": "24",
+	"calendar": "gregorian",
+	"firstDayOfWeek": 0,
+	"units": "metric",
+	"paperSizes": {
+		"regular": "A4",
+		"photo": "L"
+	},
+	"language.name": "Japanese",
+	"numfmt": {
+		"decimalChar": ".",
+		"groupChar": "",
+		"groupSize": 0,
+		"pctFmt": "{n}％"
+	},
+	"scripts": ["Jpan"],
+	"locale": "ja"
+}

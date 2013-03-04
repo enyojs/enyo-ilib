@@ -1,0 +1,10 @@
+{
+	"currency": "GBP",
+	"region.name": "Great Britain",
+	"timezone": "Europe/London",
+	"units": "imperial",
+	"paperSizes": {
+		"regular": "A4",
+		"photo": "24x16"
+	},	"locale": "cy-GB"
+}

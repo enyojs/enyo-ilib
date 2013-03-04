@@ -1,0 +1,13 @@
+{
+	"language.name": "Uzbeki",
+"numfmt": {
+	"decimalChar": ",",
+	"groupChar": " ",
+	"groupSize": 3,
+	"pctFmt": "{n}%",
+	"pctChar": "%"
+},
+
+	"scripts": ["Arab","Cyrl","Latn"],
+	"locale": "uz"
+}

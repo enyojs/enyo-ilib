@@ -1,0 +1,11 @@
+{
+	"language.name": "Estonian",
+	"numfmt": {
+		"decimalChar": ".",
+		"groupChar": " ",
+		"groupSize": 3,
+		"pctFmt": "{n} %"
+	},
+	"scripts": ["Latn"],
+	"locale": "et"
+}

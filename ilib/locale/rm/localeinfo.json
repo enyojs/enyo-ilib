@@ -1,0 +1,12 @@
+{
+	"language.name": "Romance",
+	"numfmt": {
+		"decimalChar": ".",
+		"groupChar": "'",
+		"groupSize": 3,
+		"pctFmt": "{n}%",
+		"pctChar": "%"
+	},
+	"scripts": ["Latn"],
+	"locale": "rm"
+}

@@ -1,0 +1,17 @@
+{
+	"currencyFormats": {
+		"common": "{n} {s}",
+		"iso": "{n} {s}"
+	},
+	"language.name": "Dutch",
+"numfmt": {
+	"decimalChar": ",",
+	"groupChar": ".",
+	"groupSize": 3,
+	"pctFmt": "{n}%",
+	"pctChar": "%"
+},
+
+	"scripts": ["Latn"],
+	"locale": "nl"
+}

@@ -1,0 +1,4 @@
+{
+	"scripts": ["Latn","Beng","Deva","Olck","Orya"],
+	"locale": "sat"
+}

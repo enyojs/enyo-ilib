@@ -1,0 +1,11 @@
+{
+	"language.name": "Kazakh",
+	"numfmt": {
+		"decimalChar": "-",
+		"groupChar": " ",
+		"groupSize": 3,
+		"pctFmt": "{n} %"
+	},
+	"scripts": ["Cyrl","Arab"],
+	"locale": "kk"
+}

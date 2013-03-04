@@ -1,0 +1,11 @@
+{
+	"language.name": "Russian",
+	"numfmt": {
+		"decimalChar": ",",
+		"groupChar": " ",
+		"groupSize": 3,
+		"pctFmt": "{n} %"
+	},
+	"scripts": ["Cyrl"],
+	"locale": "ru"
+}

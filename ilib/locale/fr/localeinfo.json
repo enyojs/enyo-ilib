@@ -1,0 +1,24 @@
+{
+	"calendar": "gregorian",
+	"firstDayOfWeek": 1,
+	"clock": "24",
+	"currencyFormats": {
+		"common": "{n} {s}",
+		"iso": "{n} {s}"
+	},
+	"units": "metric",
+	"paperSizes": {
+		"regular": "A4",
+		"photo": "4x6"
+	},
+	"language.name": "French",
+	"numfmt": {
+		"decimalChar": ",",
+		"groupChar": " ",
+		"groupSize": 3,
+		"pctFmt": "{n}%"
+	},
+	"scripts": ["Latn"],
+	"timezone": "Europe/Paris",
+	"locale": "fr"
+}

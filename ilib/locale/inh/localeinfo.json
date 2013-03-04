@@ -1,0 +1,4 @@
+{
+	"scripts": ["Cyrl","Arab","Latn"],
+	"locale": "inh"
+}

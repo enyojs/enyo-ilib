@@ -1,0 +1,11 @@
+{
+	"language.name": "Farsi",
+	"numfmt": {
+		"decimalChar": "/",
+		"groupChar": ",",
+		"groupSize": 3,
+		"pctFmt": "{n} %"
+	},
+	"scripts": ["Arab"],
+	"locale": "fa"
+}

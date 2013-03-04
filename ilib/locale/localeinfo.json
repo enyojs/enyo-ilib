@@ -1,0 +1,21 @@
+{
+	"clock": "24",
+	"currencyFormats": {
+		"common": "{s}{n}",
+		"iso": "{s} {n}"
+	},
+	"units": "metric",
+	"calendar": "gregorian",
+	"firstDayOfWeek": 0,
+	"currency": "USD",
+	"timezone": "Etc/UTC",
+	"numfmt": {
+		"decimalChar": ",",
+		"groupChar": ".",
+		"groupSize": 3,
+		"pctFmt": "{n}%",
+		"pctChar": "%",
+		"roundingMode": "halfdown"
+	},
+	"locale": "."
+}

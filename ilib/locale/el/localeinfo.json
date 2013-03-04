@@ -1,0 +1,14 @@
+{
+	"clock": "12",
+	"language.name": "Greek",
+"numfmt": {
+	"decimalChar": ",",
+	"groupChar": ".",
+	"groupSize": 3,
+	"pctFmt": "{n}%",
+	"pctChar": "%"
+},
+
+	"scripts": ["Grek"],
+	"locale": "el"
+}

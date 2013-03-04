@@ -1,0 +1,15 @@
+{
+	"units": "metric",
+	"clock": "24",
+	"calendar": "gregorian",
+	"firstDayOfWeek": 0,
+	"language.name": "English",
+	"numfmt": {
+		"decimalChar": ".",
+		"groupChar": ",",
+		"groupSize": 3,
+		"pctFmt": "{n}%"
+	},
+	"scripts": ["Latn","Dsrt","Shaw"],
+	"locale": "en"
+}

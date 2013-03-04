@@ -1,0 +1,13 @@
+{
+	"currency": "CHF",
+	"numfmt": {
+		"decimalChar": ".",
+		"groupChar": "'",
+		"groupSize": 3,
+		"pctFmt": "{n}%",
+		"pctChar": "%"
+	},
+	"region.name": "Switzerland",
+	"timezone": "Europe/Zurich",
+	"locale": "de-CH"
+}

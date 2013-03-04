@@ -1,0 +1,13 @@
+{
+	"language.name": "Faroese",
+"numfmt": {
+	"decimalChar": ",",
+	"groupChar": ".",
+	"groupSize": 3,
+	"pctFmt": "{n}%",
+	"pctChar": "%"
+},
+
+	"scripts": ["Latn"],
+	"locale": "fo"
+}

@@ -1,0 +1,13 @@
+{
+	"language.name": "Basque",
+"numfmt": {
+	"decimalChar": ",",
+	"groupChar": ".",
+	"groupSize": 3,
+	"pctFmt": "{n}%",
+	"pctChar": "%"
+},
+
+	"scripts": ["Latn"],
+	"locale": "eu"
+}

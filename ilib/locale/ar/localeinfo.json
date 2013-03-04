@@ -1,0 +1,11 @@
+{
+	"calendar": "islamic",	"language.name": "Arabic",
+	"numfmt": {
+		"decimalChar": "٫",
+		"groupChar": "٬",
+		"groupSize": 3,
+		"pctFmt": "{n}%"
+	},
+	"scripts": ["Arab","Syrc"],
+	"locale": "ar"
+}

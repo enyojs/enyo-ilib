@@ -1,0 +1,13 @@
+{
+	"language.name": "Serbian",
+"numfmt": {
+	"decimalChar": ",",
+	"groupChar": ".",
+	"groupSize": 3,
+	"pctFmt": "{n}%",
+	"pctChar": "%"
+},
+
+	"scripts": ["Cyrl","Latn"],
+	"locale": "sr"
+}

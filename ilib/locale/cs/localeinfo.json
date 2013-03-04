@@ -1,0 +1,12 @@
+{
+	"language.name": "Czech",
+	"numfmt": {
+		"decimalChar": ",",
+		"groupChar": " ",
+		"groupSize": 3,
+		"pctFmt": "{n}%",
+		"pctChar": "%"
+	},
+	"scripts": ["Latn"],
+	"locale": "cs"
+}

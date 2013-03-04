@@ -1,0 +1,16 @@
+{
+	"clock": "12",
+	"currencyFormats": {
+		"common": "{n}{s}",
+		"iso": "{s}{n}"
+	},
+	"language.name": "Chinese",
+	"numfmt": {
+		"decimalChar": ".",
+		"groupChar": ",",
+		"groupSize": 3,
+		"pctFmt": "{n}％"
+	},
+	"scripts": ["Hans","Hant","Bopo","Phag"],
+	"locale": "zh"
+}

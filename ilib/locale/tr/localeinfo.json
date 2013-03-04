@@ -1,0 +1,18 @@
+{
+	"currencyFormats": {
+		"common": "{n} {s}",
+		"iso": "{n} {s}"
+	},
+	"language.name": "Turkish",
+	"numfmt": {
+		"decimalChar": ",",
+		"groupChar": ".",
+		"groupSize": 3,
+		"pctFmt": "% {n}",
+		"pctChar": "%",
+		"roundingMode": "halfup"
+	},
+
+	"scripts": ["Latn","Arab"],
+	"locale": "tr"
+}
