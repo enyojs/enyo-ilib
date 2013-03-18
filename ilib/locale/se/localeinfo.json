@@ -1,4 +1,5 @@
 {
+	"language.name": "Northern Sami",
 	"scripts": ["Latn","Cyrl"],
 	"locale": "se"
 }

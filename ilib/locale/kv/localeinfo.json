@@ -1,4 +1,5 @@
 {
+	"language.name": "Komi",
 	"scripts": ["Cyrl","Latn"],
 	"locale": "kv"
 }

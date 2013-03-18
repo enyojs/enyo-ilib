@@ -715,6 +715,3055 @@ ilib.Date.prototype = {
 };
 
 /*
+ * util/utils.js - Misc utility routines
+ * 
+ * Copyright © 2012, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// !depends ilibglobal.js
+
+/**
+ * Binary search a sorted array for a particular target value.
+ * If the exact value is not found, it returns the index of the smallest 
+ * entry that is greater than the given target value.<p> 
+ * 
+ * The comparator
+ * parameter is a function that knows how to compare elements of the 
+ * array and the target. The function should return a value greater than 0
+ * if the array element is greater than the target, a value less than 0 if
+ * the array element is less than the target, and 0 if the array element 
+ * and the target are equivalent.<p>
+ * 
+ * If the comparator function is not specified, this function assumes
+ * the array and the target are numeric values and should be compared 
+ * as such.<p>
+ * 
+ * Depends directive: !depends utils.js
+ * 
+ * 
+ * @param {*} target element being sought 
+ * @param {Array} arr the array being searched
+ * @param {?function(*,*)=} comparator a comparator that is appropriate for comparing two entries
+ * in the array  
+ * @return the index of the array into which the value would fit if 
+ * inserted, or -1 if given array is not an array or the target is not 
+ * a number
+ */
+ilib.bsearch = function(target, arr, comparator) {
+	if (typeof(arr) === 'undefined' || !arr || typeof(target) === 'undefined') {
+		return -1;
+	}
+	
+	var high = arr.length - 1,
+		low = 0,
+		mid = 0,
+		value,
+		cmp = comparator || ilib.bsearch.numbers;
+	
+	while (low <= high) {
+		mid = Math.floor((high+low)/2);
+		value = cmp(arr[mid], target);
+		if (value > 0) {
+			high = mid - 1;
+		} else if (value < 0) {
+			low = mid + 1;
+		} else {
+			return mid;
+		}
+	}
+	
+	return low;
+};
+
+/**
+ * @private
+ * Returns whether or not the given element is greater than, less than,
+ * or equal to the given target.<p>
+ * 
+ * Depends directive: !depends utils.js
+ * 
+ * @param {number} element the element being tested
+ * @param {number} target the target being sought
+ */
+ilib.bsearch.numbers = function(element, target) {
+	return element - target;
+};
+
+/**
+ * Do a proper modulo function. The Javascript % operator will give the truncated
+ * division algorithm, but for calendrical calculations, we need the Euclidean
+ * division algorithm where the remainder of any division, whether the dividend
+ * is negative or not, is always a positive number between 0 and the modulus.<p>
+ * 
+ * Depends directive: !depends utils.js
+ * 
+ * @param {number} dividend the number being divided
+ * @param {number} modulus the number dividing the dividend. This should always be a positive number.
+ * @return the remainder of dividing the dividend by the modulus.  
+ */
+ilib.mod = function (dividend, modulus) {
+	if (modulus == 0) {
+		return 0;
+	}
+	var x = dividend % modulus;
+	return (x < 0) ? x + modulus : x;
+};
+
+/**
+ * Merge the properties of object2 into object1 in a deep manner and return a merged
+ * object. If the property exists in both objects, the value in object2 will overwrite 
+ * the value in object1. If a property exists in object1, but not in object2, its value
+ * will not be touched. If a property exists in object2, but not in object1, it will be 
+ * added to the merged result.<p>
+ * 
+ * Name1 and name2 are for creating debug output only. They are not necessary.<p>
+ * 
+ * Depends directive: !depends utils.js
+ * 
+ * @param {*} object1 the object to merge into
+ * @param {*} object2 the object to merge
+ * @param {string=} name1 name of the object being merged into
+ * @param {string=} name2 name of the object being merged in
+ * @returns {Object} the merged object
+ */
+ilib.merge = function (object1, object2, name1, name2) {
+	var prop = undefined,
+		newObj = {};
+	for (prop in object1) {
+		if (prop && typeof(object1[prop]) !== 'undefined') {
+			newObj[prop] = object1[prop];
+		}
+	}
+	for (prop in object2) {
+		if (prop && typeof(object2[prop]) !== 'undefined') {
+			if (object1[prop] instanceof Array && object2[prop] instanceof Array) {
+				newObj[prop] = new Array();
+				newObj[prop] = newObj[prop].concat(object1[prop]);
+				newObj[prop] = newObj[prop].concat(object2[prop]);
+			} else if (typeof(object1[prop]) === 'object' && typeof(object2[prop]) === 'object') {
+				newObj[prop] = ilib.merge(object1[prop], object2[prop]);
+			} else {
+				// for debugging. Used to determine whether or not json files are overriding their parents unnecessarily
+				if (name1 && name2 && newObj[prop] == object2[prop]) {
+					console.log("Property " + prop + " in " + name1 + " is being overridden by the same value in " + name2);
+				}
+				newObj[prop] = object2[prop];
+			}
+		}
+	}
+	return newObj;
+};
+
+/**
+ * Find and merge all the locale data for a particular prefix in the given locale
+ * and return it as a single javascript object. This merges the data in the 
+ * correct order:
+ * 
+ * <ol>
+ * <li>shared data (usually English)
+ * <li>data for language
+ * <li>data for language + region
+ * <li>data for language + region + script
+ * <li>data for language + region + script + variant
+ * </ol>
+ * 
+ * It is okay for any of the above to be missing. This function will just skip the 
+ * missing data. However, if everything except the shared data is missing, this 
+ * function returns undefined, allowing the caller to go and dynamically load the
+ * data instead.
+ *  
+ * @param {string} prefix prefix under ilib.data of the data to merge
+ * @param {ilib.Locale} locale locale of the data being sought
+ * @returns {Object|undefined} the merged locale data
+ */
+ilib.mergeLocData = function (prefix, locale) {
+	var data = undefined;
+	var loc = locale || new ilib.Locale();
+	var foundLocaleData = false;
+	var property = prefix;
+	data = ilib.data[prefix] || {};
+	if (loc.getLanguage()) {
+		property = prefix + '_' + loc.getLanguage();
+		if (ilib.data[property]) {
+			foundLocaleData = true;
+			data = ilib.merge(data, ilib.data[property]);
+		}
+	}
+	if (loc.getRegion()) {
+		property += '_' + loc.getRegion();
+		if (ilib.data[property]) {
+			foundLocaleData = true;
+			data = ilib.merge(data, ilib.data[property]);
+		}
+	}
+	if (loc.getScript()) {
+		property += '_' + loc.getScript();
+		if (ilib.data[property]) {
+			foundLocaleData = true;
+			data = ilib.merge(data, ilib.data[property]);
+		}
+	}
+	if (loc.getVariant()) {
+		property += '_' + loc.getVariant();
+		if (ilib.data[property]) {
+			foundLocaleData = true;
+			data = ilib.merge(data, ilib.data[property]);
+		}
+	}
+	return foundLocaleData ? data : undefined;
+};
+
+/**
+ * Return an array of relative path names for the json
+ * files that represent the data for the given locale.
+ * @param {string} prefix the prefix dir for all the path names
+ * @param {ilib.Locale} locale load the json files for this locale
+ * @param {string} basename the base name of each json file to load
+ * @returns {Array.<string>} An array of relative path names
+ * for the json files that contain the locale data
+ */
+ilib.getLocFiles = function(prefix, locale, basename) {
+	var dir = (prefix && prefix.length > 0) ? prefix + "/" : "";
+	var files = [];
+	var filename = basename || "resources";
+	var loc = locale || new ilib.Locale();
+	files.push(dir + filename + ".json");
+	dir += loc.getLanguage() + "/";
+	files.push(dir + filename + ".json");
+	if (loc.getRegion()) {
+		dir += loc.getRegion() + "/";
+		files.push(dir + filename + ".json");
+		if (loc.getScript()) {
+			dir += loc.getScript() + "/";
+			files.push(dir + filename + ".json");
+			if (loc.getVariant()) {
+				dir += loc.getVariant() + "/";
+				files.push(dir + filename + ".json");
+			}
+		}
+	}
+	
+	return files;
+};
+
+/**
+ * Return true if the given object has no properties.<p>
+ * 
+ * Depends directive: !depends utils.js
+ * 
+ * @param {Object} obj the object to check
+ * @returns {boolean} true if the given object has no properties, false otherwise
+ */
+ilib.isEmpty = function (obj) {
+	var prop = undefined;
+	
+	if (!obj) {
+		return true;
+	}
+	
+	for (prop in obj) {
+		if (prop && obj[prop]) {
+			return false;
+		}
+	}
+	return true;
+};
+
+
+/**
+ * Perform a shallow copy of the source object to the target object. This only 
+ * copies the assignments of the source properties to the target properties, 
+ * but not recursively from there.<p>
+ * 
+ * Depends directive: !depends utils.js
+ * 
+ * @param {Object} source the source object to copy properties from
+ * @param {Object} target the target object to copy properties into
+ */
+ilib.shallowCopy = function (source, target) {
+	var prop = undefined;
+	if (source && target) {
+		for (prop in source) {
+			if (prop !== undefined && source[prop]) {
+				target[prop] = source[prop];
+			}
+		}
+	}
+};
+
+/**
+ * Return the sign of the given number. If the sign is negative, this function
+ * returns -1. If the sign is positive or zero, this function returns 1.
+ * @param {number} num the number to test
+ * @returns {number} -1 if the number is negative, and 1 otherwise
+ */
+ilib.signum = function (num) {
+	var n = num;
+	if (typeof(num) === 'string') {
+		n = parseInt(num, 10);
+	} else if (typeof(num) !== 'number') {
+		return 1;
+	}
+	return (n < 0) ? -1 : 1;
+};
+
+
+/**
+ * @private
+ */
+ilib._roundFnc = {
+	/**
+	 * @private
+	 * @param {number} num number to round
+	 * @returns {number} rounded number
+	 */
+	floor: function (num) {
+		return Math.floor(num);
+	},
+	
+	/**
+	 * @private
+	 * @param {number} num number to round
+	 * @returns {number} rounded number
+	 */
+	ceiling: function (num) {
+		return Math.ceil(num);
+	},
+	
+	/**
+	 * @private
+	 * @param {number} num number to round
+	 * @returns {number} rounded number
+	 */
+	down: function (num) {
+		return (num < 0) ? Math.ceil(num) : Math.floor(num);
+	},
+	
+	/**
+	 * @private
+	 * @param {number} num number to round
+	 * @returns {number} rounded number
+	 */
+	up: function (num) {
+		return (num < 0) ? Math.floor(num) : Math.ceil(num);
+	},
+	
+	/**
+	 * @private
+	 * @param {number} num number to round
+	 * @returns {number} rounded number
+	 */
+	halfup: function (num) {
+		return (num < 0) ? Math.ceil(num - 0.5) : Math.floor(num + 0.5);
+	},
+	
+	/**
+	 * @private
+	 * @param {number} num number to round
+	 * @returns {number} rounded number
+	 */
+	halfdown: function (num) {
+		return (num < 0) ? Math.floor(num + 0.5) : Math.ceil(num - 0.5);
+	},
+	
+	/**
+	 * @private
+	 * @param {number} num number to round
+	 * @returns {number} rounded number
+	 */
+	halfeven: function (num) {
+		return (Math.floor(num) % 2 === 0) ? Math.ceil(num - 0.5) : Math.floor(num + 0.5);
+	},
+	
+	/**
+	 * @private
+	 * @param {number} num number to round
+	 * @returns {number} rounded number
+	 */
+	halfodd: function (num) {
+		return (Math.floor(num) % 2 !== 0) ? Math.ceil(num - 0.5) : Math.floor(num + 0.5);
+	}
+};
+
+ilib.data.plurals = {
+    "version": {
+        "@number": "$Revision: 7657 $"
+    },
+    "generation": {
+        "@date": "$Date: 2012-08-29 13:20:56 -0500 (Wed, 29 Aug 2012) $"
+    },
+    "plurals": {
+        "az": "",
+        "bm": "",
+        "bo": "",
+        "dz": "",
+        "fa": "",
+        "id": "",
+        "ig": "",
+        "ii": "",
+        "hu": "",
+        "ja": "",
+        "jv": "",
+        "ka": "",
+        "kde": "",
+        "kea": "",
+        "km": "",
+        "kn": "",
+        "ko": "",
+        "lo": "",
+        "ms": "",
+        "my": "",
+        "sah": "",
+        "ses": "",
+        "sg": "",
+        "th": "",
+        "to": "",
+        "tr": "",
+        "vi": "",
+        "wo": "",
+        "yo": "",
+        "zh": "",
+        "af": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "ak": {
+            "one": {
+                "inrange": [
+                    "n",
+                    [
+                        [0,1]
+                    ]
+                ]
+            }
+        },
+        "am": {
+            "one": {
+                "inrange": [
+                    "n",
+                    [
+                        [0,1]
+                    ]
+                ]
+            }
+        },
+        "ar": {
+            "few": {
+                "inrange": [
+                    {
+                        "mod": [
+                            "n",
+                            100
+                        ]
+                    },
+                    [
+                        [3,10]
+                    ]
+                ]
+            },
+            "many": {
+                "inrange": [
+                    {
+                        "mod": [
+                            "n",
+                            100
+                        ]
+                    },
+                    [
+                        [11,99]
+                    ]
+                ]
+            },
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            },
+            "two": {
+                "is": [
+                    "n",
+                    2
+                ]
+            },
+            "zero": {
+                "is": [
+                    "n",
+                    0
+                ]
+            }
+        },
+        "asa": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "ast": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "be": {
+            "few": {
+                "and": [
+                    {
+                        "inrange": [
+                            {
+                                "mod": [
+                                    "n",
+                                    10
+                                ]
+                            },
+                            [
+                                [2,4]
+                            ]
+                        ]
+                    },
+                    {
+                        "notin": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            [
+                                [12,14]
+                            ]
+                        ]
+                    }
+                ]
+            },
+            "many": {
+                "or": [
+                    {
+                        "or": [
+                            {
+                                "is": [
+                                    {
+                                        "mod": [
+                                            "n",
+                                            10
+                                        ]
+                                    },
+                                    0
+                                ]
+                            },
+                            {
+                                "inrange": [
+                                    {
+                                        "mod": [
+                                            "n",
+                                            10
+                                        ]
+                                    },
+                                    [
+                                        [5,9]
+                                    ]
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "inrange": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            [
+                                [11,14]
+                            ]
+                        ]
+                    }
+                ]
+            },
+            "one": {
+                "and": [
+                    {
+                        "is": [
+                            {
+                                "mod": [
+                                    "n",
+                                    10
+                                ]
+                            },
+                            1
+                        ]
+                    },
+                    {
+                        "isnot": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            11
+                        ]
+                    }
+                ]
+            }
+        },
+        "bem": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "bez": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "bg": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "bh": {
+            "one": {
+                "inrange": [
+                    "n",
+                    [
+                        [0,1]
+                    ]
+                ]
+            }
+        },
+        "bn": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "br": {
+            "few": {
+                "and": [
+                    {
+                        "inrange": [
+                            {
+                                "mod": [
+                                    "n",
+                                    10
+                                ]
+                            },
+                            [
+                                [3,4],
+                                9
+                            ]
+                        ]
+                    },
+                    {
+                        "notin": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            [
+                                [10,19],
+                                [70,79],
+                                [90,99]
+                            ]
+                        ]
+                    }
+                ]
+            },
+            "many": {
+                "and": [
+                    {
+                        "isnot": [
+                            "n",
+                            0
+                        ]
+                    },
+                    {
+                        "is": [
+                            {
+                                "mod": [
+                                    "n",
+                                    1000000
+                                ]
+                            },
+                            0
+                        ]
+                    }
+                ]
+            },
+            "one": {
+                "and": [
+                    {
+                        "is": [
+                            {
+                                "mod": [
+                                    "n",
+                                    10
+                                ]
+                            },
+                            1
+                        ]
+                    },
+                    {
+                        "notin": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            [
+                                11,
+                                71,
+                                91
+                            ]
+                        ]
+                    }
+                ]
+            },
+            "two": {
+                "and": [
+                    {
+                        "is": [
+                            {
+                                "mod": [
+                                    "n",
+                                    10
+                                ]
+                            },
+                            2
+                        ]
+                    },
+                    {
+                        "notin": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            [
+                                12,
+                                72,
+                                92
+                            ]
+                        ]
+                    }
+                ]
+            }
+        },
+        "brx": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "bs": {
+            "few": {
+                "and": [
+                    {
+                        "inrange": [
+                            {
+                                "mod": [
+                                    "n",
+                                    10
+                                ]
+                            },
+                            [
+                                [2,4]
+                            ]
+                        ]
+                    },
+                    {
+                        "notin": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            [
+                                [12,14]
+                            ]
+                        ]
+                    }
+                ]
+            },
+            "many": {
+                "or": [
+                    {
+                        "or": [
+                            {
+                                "is": [
+                                    {
+                                        "mod": [
+                                            "n",
+                                            10
+                                        ]
+                                    },
+                                    0
+                                ]
+                            },
+                            {
+                                "inrange": [
+                                    {
+                                        "mod": [
+                                            "n",
+                                            10
+                                        ]
+                                    },
+                                    [
+                                        [5,9]
+                                    ]
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "inrange": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            [
+                                [11,14]
+                            ]
+                        ]
+                    }
+                ]
+            },
+            "one": {
+                "and": [
+                    {
+                        "is": [
+                            {
+                                "mod": [
+                                    "n",
+                                    10
+                                ]
+                            },
+                            1
+                        ]
+                    },
+                    {
+                        "isnot": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            11
+                        ]
+                    }
+                ]
+            }
+        },
+        "ca": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "cgg": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "chr": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "ckb": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "cs": {
+            "few": {
+                "inrange": [
+                    "n",
+                    [
+                        [2,4]
+                    ]
+                ]
+            },
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "cy": {
+            "few": {
+                "is": [
+                    "n",
+                    3
+                ]
+            },
+            "many": {
+                "is": [
+                    "n",
+                    6
+                ]
+            },
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            },
+            "two": {
+                "is": [
+                    "n",
+                    2
+                ]
+            },
+            "zero": {
+                "is": [
+                    "n",
+                    0
+                ]
+            }
+        },
+        "da": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "de": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "dv": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "ee": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "el": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "en": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "eo": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "es": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "et": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "eu": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "ff": {
+            "one": {
+                "and": [
+                    {
+                        "within": [
+                            "n",
+                            [
+                                [0,2]
+                            ]
+                        ]
+                    },
+                    {
+                        "isnot": [
+                            "n",
+                            2
+                        ]
+                    }
+                ]
+            }
+        },
+        "fi": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "fil": {
+            "one": {
+                "inrange": [
+                    "n",
+                    [
+                        [0,1]
+                    ]
+                ]
+            }
+        },
+        "fo": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "fr": {
+            "one": {
+                "and": [
+                    {
+                        "within": [
+                            "n",
+                            [
+                                [0,2]
+                            ]
+                        ]
+                    },
+                    {
+                        "isnot": [
+                            "n",
+                            2
+                        ]
+                    }
+                ]
+            }
+        },
+        "fur": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "fy": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "ga": {
+            "few": {
+                "inrange": [
+                    "n",
+                    [
+                        [3,6]
+                    ]
+                ]
+            },
+            "many": {
+                "inrange": [
+                    "n",
+                    [
+                        [7,10]
+                    ]
+                ]
+            },
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            },
+            "two": {
+                "is": [
+                    "n",
+                    2
+                ]
+            }
+        },
+        "gd": {
+            "few": {
+                "inrange": [
+                    "n",
+                    [
+                        [
+                            [3,10]
+                        ],
+                        [
+                            [13,19]
+                        ]
+                    ]
+                ]
+            },
+            "one": {
+                "inrange": [
+                    "n",
+                    [
+                        1,
+                        11
+                    ]
+                ]
+            },
+            "two": {
+                "inrange": [
+                    "n",
+                    [
+                        2,
+                        12
+                    ]
+                ]
+            }
+        },
+        "gl": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "gsw": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "gu": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "guw": {
+            "one": {
+                "inrange": [
+                    "n",
+                    [
+                        [0,1]
+                    ]
+                ]
+            }
+        },
+        "gv": {
+            "one": {
+                "or": [
+                    {
+                        "inrange": [
+                            {
+                                "mod": [
+                                    "n",
+                                    10
+                                ]
+                            },
+                            [
+                                [1,2]
+                            ]
+                        ]
+                    },
+                    {
+                        "is": [
+                            {
+                                "mod": [
+                                    "n",
+                                    20
+                                ]
+                            },
+                            0
+                        ]
+                    }
+                ]
+            }
+        },
+        "ha": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "haw": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "he": {
+            "many": {
+                "and": [
+                    {
+                        "isnot": [
+                            "n",
+                            0
+                        ]
+                    },
+                    {
+                        "is": [
+                            {
+                                "mod": [
+                                    "n",
+                                    10
+                                ]
+                            },
+                            0
+                        ]
+                    }
+                ]
+            },
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            },
+            "two": {
+                "is": [
+                    "n",
+                    2
+                ]
+            }
+        },
+        "hi": {
+            "one": {
+                "inrange": [
+                    "n",
+                    [
+                        0,
+                        1
+                    ]
+                ]
+            }
+        },
+        "hr": {
+            "few": {
+                "and": [
+                    {
+                        "inrange": [
+                            {
+                                "mod": [
+                                    "n",
+                                    10
+                                ]
+                            },
+                            [
+                                [2,4]
+                            ]
+                        ]
+                    },
+                    {
+                        "notin": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            [
+                                [12,14]
+                            ]
+                        ]
+                    }
+                ]
+            },
+            "many": {
+                "or": [
+                    {
+                        "or": [
+                            {
+                                "is": [
+                                    {
+                                        "mod": [
+                                            "n",
+                                            10
+                                        ]
+                                    },
+                                    0
+                                ]
+                            },
+                            {
+                                "inrange": [
+                                    {
+                                        "mod": [
+                                            "n",
+                                            10
+                                        ]
+                                    },
+                                    [
+                                        [5,9]
+                                    ]
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "inrange": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            [
+                                [11,14]
+                            ]
+                        ]
+                    }
+                ]
+            },
+            "one": {
+                "and": [
+                    {
+                        "is": [
+                            {
+                                "mod": [
+                                    "n",
+                                    10
+                                ]
+                            },
+                            1
+                        ]
+                    },
+                    {
+                        "isnot": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            11
+                        ]
+                    }
+                ]
+            }
+        },
+        "is": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "it": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "iu": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            },
+            "two": {
+                "is": [
+                    "n",
+                    2
+                ]
+            }
+        },
+        "jgo": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "jmc": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "kab": {
+            "one": {
+                "and": [
+                    {
+                        "within": [
+                            "n",
+                            [
+                                [0,2]
+                            ]
+                        ]
+                    },
+                    {
+                        "isnot": [
+                            "n",
+                            2
+                        ]
+                    }
+                ]
+            }
+        },
+        "kaj": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "kcg": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "kk": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "kkj": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "kl": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "ks": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "ksb": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "ksh": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            },
+            "zero": {
+                "is": [
+                    "n",
+                    0
+                ]
+            }
+        },
+        "ku": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "kw": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            },
+            "two": {
+                "is": [
+                    "n",
+                    2
+                ]
+            }
+        },
+        "ky": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "lag": {
+            "one": {
+                "and": [
+                    {
+                        "and": [
+                            {
+                                "within": [
+                                    "n",
+                                    [
+                                        [0,2]
+                                    ]
+                                ]
+                            },
+                            {
+                                "isnot": [
+                                    "n",
+                                    0
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "isnot": [
+                            "n",
+                            2
+                        ]
+                    }
+                ]
+            },
+            "zero": {
+                "is": [
+                    "n",
+                    0
+                ]
+            }
+        },
+        "lb": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "lg": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "ln": {
+            "one": {
+                "inrange": [
+                    "n",
+                    [
+                        [0,1]
+                    ]
+                ]
+            }
+        },
+        "lt": {
+            "few": {
+                "and": [
+                    {
+                        "inrange": [
+                            {
+                                "mod": [
+                                    "n",
+                                    10
+                                ]
+                            },
+                            [
+                                [2,9]
+                            ]
+                        ]
+                    },
+                    {
+                        "notin": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            [
+                                [11,19]
+                            ]
+                        ]
+                    }
+                ]
+            },
+            "one": {
+                "and": [
+                    {
+                        "is": [
+                            {
+                                "mod": [
+                                    "n",
+                                    10
+                                ]
+                            },
+                            1
+                        ]
+                    },
+                    {
+                        "notin": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            [
+                                [11,19]
+                            ]
+                        ]
+                    }
+                ]
+            }
+        },
+        "lv": {
+            "one": {
+                "and": [
+                    {
+                        "is": [
+                            {
+                                "mod": [
+                                    "n",
+                                    10
+                                ]
+                            },
+                            1
+                        ]
+                    },
+                    {
+                        "isnot": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            11
+                        ]
+                    }
+                ]
+            },
+            "zero": {
+                "is": [
+                    "n",
+                    0
+                ]
+            }
+        },
+        "mas": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "mg": {
+            "one": {
+                "inrange": [
+                    "n",
+                    [
+                        [0,1]
+                    ]
+                ]
+            }
+        },
+        "mgo": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "mk": {
+            "one": {
+                "and": [
+                    {
+                        "is": [
+                            {
+                                "mod": [
+                                    "n",
+                                    10
+                                ]
+                            },
+                            1
+                        ]
+                    },
+                    {
+                        "isnot": [
+                            "n",
+                            11
+                        ]
+                    }
+                ]
+            }
+        },
+        "ml": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "mn": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "mo": {
+            "few": {
+                "or": [
+                    {
+                        "is": [
+                            "n",
+                            0
+                        ]
+                    },
+                    {
+	                    "and": [
+	                        {
+	                        	"isnot": [
+	                        		"n",
+	                        		1
+	                        	]
+	                        },
+		                    {
+		                        "inrange": [
+		                            {
+		                                "mod": [
+		                                    "n",
+		                                    100
+		                                ]
+		                            },
+		                            [
+		                                [1,19]
+		                            ]
+		                        ]
+		                    }
+		                ]
+                    }
+                ]
+            },
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "mr": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "mt": {
+            "few": {
+                "or": [
+                    {
+                        "is": [
+                            "n",
+                            0
+                        ]
+                    },
+                    {
+                        "inrange": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            [
+                                [2,10]
+                            ]
+                        ]
+                    }
+                ]
+            },
+            "many": {
+                "inrange": [
+                    {
+                        "mod": [
+                            "n",
+                            100
+                        ]
+                    },
+                    [
+                        [11,19]
+                    ]
+                ]
+            },
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "nah": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "naq": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            },
+            "two": {
+                "is": [
+                    "n",
+                    2
+                ]
+            }
+        },
+        "nb": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "nd": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "ne": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "nl": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "nn": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "nnh": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "no": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "nr": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "nso": {
+            "one": {
+                "inrange": [
+                    "n",
+                    [
+                        [0,1]
+                    ]
+                ]
+            }
+        },
+        "ny": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "nyn": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "om": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "or": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "os": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "pa": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "pap": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "pl": {
+            "few": {
+                "and": [
+                    {
+                        "inrange": [
+                            {
+                                "mod": [
+                                    "n",
+                                    10
+                                ]
+                            },
+                            [
+                                [2,4]
+                            ]
+                        ]
+                    },
+                    {
+                        "notin": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            [
+                                [12,14]
+                            ]
+                        ]
+                    }
+                ]
+            },
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            },
+            "many": {
+                "or": [
+                   {
+                       "and": [
+                           {
+                               "isnot": [
+                                   "n",
+                                   1
+                               ]
+                           },
+                           {
+                               "inrange": [
+                                   {
+                                       "mod": [
+                                           "n",
+                                           10
+                                       ]
+                                   },
+                                   [[0,1]]
+                               ]
+                           }
+                       ]
+                   },
+                   {
+                       "or": [
+                           {
+                               "inrange": [
+                                   {
+                                       "mod": [
+                                           "n",
+                                           10
+                                       ]
+                                   },
+                                   [[5,9]]
+                               ]
+                           },
+                           {
+                               "inrange": [
+                                   {
+                                       "mod": [
+                                           "n",
+                                           100
+                                       ]
+                                   },
+                                   [[12,14]]
+                               ]
+                           }
+                       ]
+                   }
+               ]
+           }
+        },
+        "ps": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "pt": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "rm": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "ro": {
+            "few": {
+                "or": [
+                    {
+                        "is": [
+                            "n",
+                            0
+                        ]
+                    },
+                    {
+	                    "and": [
+	                        {
+	                        	"isnot": [
+	                        		"n",
+	                        		1
+	                        	]
+	                        },
+		                    {
+		                        "inrange": [
+		                            {
+		                                "mod": [
+		                                    "n",
+		                                    100
+		                                ]
+		                            },
+		                            [
+		                                [1,19]
+		                            ]
+		                        ]
+		                    }
+		                ]
+                    }
+                ]
+            },
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "rof": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "ru": {
+            "few": {
+                "and": [
+                    {
+                        "inrange": [
+                            {
+                                "mod": [
+                                    "n",
+                                    10
+                                ]
+                            },
+                            [
+                                [2,4]
+                            ]
+                        ]
+                    },
+                    {
+                        "notin": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            [
+                                [12,14]
+                            ]
+                        ]
+                    }
+                ]
+            },
+            "many": {
+                "or": [
+                    {
+                        "or": [
+                            {
+                                "is": [
+                                    {
+                                        "mod": [
+                                            "n",
+                                            10
+                                        ]
+                                    },
+                                    0
+                                ]
+                            },
+                            {
+                                "inrange": [
+                                    {
+                                        "mod": [
+                                            "n",
+                                            10
+                                        ]
+                                    },
+                                    [
+                                        [5,9]
+                                    ]
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "inrange": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            [
+                                [11,14]
+                            ]
+                        ]
+                    }
+                ]
+            },
+            "one": {
+                "and": [
+                    {
+                        "is": [
+                            {
+                                "mod": [
+                                    "n",
+                                    10
+                                ]
+                            },
+                            1
+                        ]
+                    },
+                    {
+                        "isnot": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            11
+                        ]
+                    }
+                ]
+            }
+        },
+        "rwk": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "saq": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "se": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            },
+            "two": {
+                "is": [
+                    "n",
+                    2
+                ]
+            }
+        },
+        "seh": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "sh": {
+            "few": {
+                "and": [
+                    {
+                        "inrange": [
+                            {
+                                "mod": [
+                                    "n",
+                                    10
+                                ]
+                            },
+                            [
+                                [2,4]
+                            ]
+                        ]
+                    },
+                    {
+                        "notin": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            [
+                                [12,14]
+                            ]
+                        ]
+                    }
+                ]
+            },
+            "many": {
+                "or": [
+                    {
+                        "or": [
+                            {
+                                "is": [
+                                    {
+                                        "mod": [
+                                            "n",
+                                            10
+                                        ]
+                                    },
+                                    0
+                                ]
+                            },
+                            {
+                                "inrange": [
+                                    {
+                                        "mod": [
+                                            "n",
+                                            10
+                                        ]
+                                    },
+                                    [
+                                        [5,9]
+                                    ]
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "inrange": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            [
+                                [11,14]
+                            ]
+                        ]
+                    }
+                ]
+            },
+            "one": {
+                "and": [
+                    {
+                        "is": [
+                            {
+                                "mod": [
+                                    "n",
+                                    10
+                                ]
+                            },
+                            1
+                        ]
+                    },
+                    {
+                        "isnot": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            11
+                        ]
+                    }
+                ]
+            }
+        },
+        "shi": {
+            "few": {
+                "inrange": [
+                    "n",
+                    [
+                        [2,10]
+                    ]
+                ]
+            },
+            "one": {
+                "within": [
+                    "n",
+                    [
+                        [0,1]
+                    ]
+                ]
+            }
+        },
+        "sk": {
+            "few": {
+                "inrange": [
+                    "n",
+                    [
+                        [2,4]
+                    ]
+                ]
+            },
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "sl": {
+            "few": {
+                "inrange": [
+                    {
+                        "mod": [
+                            "n",
+                            100
+                        ]
+                    },
+                    [
+                        [3,4]
+                    ]
+                ]
+            },
+            "one": {
+                "is": [
+                    {
+                        "mod": [
+                            "n",
+                            100
+                        ]
+                    },
+                    1
+                ]
+            },
+            "two": {
+                "is": [
+                    {
+                        "mod": [
+                            "n",
+                            100
+                        ]
+                    },
+                    2
+                ]
+            }
+        },
+        "sma": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            },
+            "two": {
+                "is": [
+                    "n",
+                    2
+                ]
+            }
+        },
+        "smi": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            },
+            "two": {
+                "is": [
+                    "n",
+                    2
+                ]
+            }
+        },
+        "smj": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            },
+            "two": {
+                "is": [
+                    "n",
+                    2
+                ]
+            }
+        },
+        "smn": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            },
+            "two": {
+                "is": [
+                    "n",
+                    2
+                ]
+            }
+        },
+        "sms": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            },
+            "two": {
+                "is": [
+                    "n",
+                    2
+                ]
+            }
+        },
+        "sn": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "so": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "sq": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "sr": {
+            "few": {
+                "and": [
+                    {
+                        "inrange": [
+                            {
+                                "mod": [
+                                    "n",
+                                    10
+                                ]
+                            },
+                            [
+                                [2,4]
+                            ]
+                        ]
+                    },
+                    {
+                        "notin": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            [
+                                [12,14]
+                            ]
+                        ]
+                    }
+                ]
+            },
+            "many": {
+                "or": [
+                    {
+                        "or": [
+                            {
+                                "is": [
+                                    {
+                                        "mod": [
+                                            "n",
+                                            10
+                                        ]
+                                    },
+                                    0
+                                ]
+                            },
+                            {
+                                "inrange": [
+                                    {
+                                        "mod": [
+                                            "n",
+                                            10
+                                        ]
+                                    },
+                                    [
+                                        [5,9]
+                                    ]
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "inrange": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            [
+                                [11,14]
+                            ]
+                        ]
+                    }
+                ]
+            },
+            "one": {
+                "and": [
+                    {
+                        "is": [
+                            {
+                                "mod": [
+                                    "n",
+                                    10
+                                ]
+                            },
+                            1
+                        ]
+                    },
+                    {
+                        "isnot": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            11
+                        ]
+                    }
+                ]
+            }
+        },
+        "ss": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "ssy": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "st": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "sv": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "sw": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "syr": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "ta": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "te": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "teo": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "ti": {
+            "one": {
+                "inrange": [
+                    "n",
+                    [
+                        [0,1]
+                    ]
+                ]
+            }
+        },
+        "tig": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "tk": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "tl": {
+            "one": {
+                "inrange": [
+                    "n",
+                    [
+                        [0,1]
+                    ]
+                ]
+            }
+        },
+        "tn": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "ts": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "tzm": {
+            "one": {
+                "or": [
+                    {
+                        "inrange": [
+                            "n",
+                            [
+                                [0,1]
+                            ]
+                        ]
+                    },
+                    {
+                        "inrange": [
+                            "n",
+                            [
+                                [11,99]
+                            ]
+                        ]
+                    }
+                ]
+            }
+        },
+        "uk": {
+            "few": {
+                "and": [
+                    {
+                        "inrange": [
+                            {
+                                "mod": [
+                                    "n",
+                                    10
+                                ]
+                            },
+                            [
+                                [2,4]
+                            ]
+                        ]
+                    },
+                    {
+                        "notin": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            [
+                                [12,14]
+                            ]
+                        ]
+                    }
+                ]
+            },
+            "many": {
+                "or": [
+                    {
+                        "or": [
+                            {
+                                "is": [
+                                    {
+                                        "mod": [
+                                            "n",
+                                            10
+                                        ]
+                                    },
+                                    0
+                                ]
+                            },
+                            {
+                                "inrange": [
+                                    {
+                                        "mod": [
+                                            "n",
+                                            10
+                                        ]
+                                    },
+                                    [
+                                        [5,9]
+                                    ]
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "inrange": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            [
+                                [11,14]
+                            ]
+                        ]
+                    }
+                ]
+            },
+            "one": {
+                "and": [
+                    {
+                        "is": [
+                            {
+                                "mod": [
+                                    "n",
+                                    10
+                                ]
+                            },
+                            1
+                        ]
+                    },
+                    {
+                        "isnot": [
+                            {
+                                "mod": [
+                                    "n",
+                                    100
+                                ]
+                            },
+                            11
+                        ]
+                    }
+                ]
+            }
+        },
+        "ur": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "ve": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "vo": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "vun": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "wa": {
+            "one": {
+                "inrange": [
+                    "n",
+                    [
+                        [0,1]
+                    ]
+                ]
+            }
+        },
+        "wae": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "xh": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "xog": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        },
+        "zu": {
+            "one": {
+                "is": [
+                    "n",
+                    1
+                ]
+            }
+        }
+    }
+};
+/*
  * strings.js - ilib string subclass definition
  * 
  * Copyright © 2012, JEDLSoft
@@ -733,7 +3782,9 @@ ilib.Date.prototype = {
  * limitations under the License.
  */
 
-// !depends ilibglobal.js locale.js
+// !depends ilibglobal.js util/utils.js locale.js
+
+// !data plurals
 
 /**
  * @class
@@ -758,6 +3809,7 @@ ilib.String = function (string) {
 	}
 	this.length = this.str.length;
 	this.cpLength = -1;
+	this.localeSpec = ilib.getLocale();
 };
 
 /**
@@ -981,6 +4033,170 @@ ilib.String._compose = function (lead, trail) {
 	return (ilib.data.norm.nfc && ilib.data.norm.nfc[c]);
 };
 
+/**
+ * @protected
+ */
+ilib.String._fncs = {
+	/**
+	 * @private
+	 * @param {Object} obj
+	 * @returns {string|undefined}
+	 */
+	firstProp: function (obj) {
+		for (var p in obj) {
+			if (p && obj[p]) {
+				return p;
+			}
+		}
+		return undefined; // should never get here
+	},
+	
+	/**
+	 * @private
+	 * @param {Object} obj
+	 * @param {number} n
+	 * @returns {?}
+	 */
+	getValue: function (obj, n) {
+		if (typeof(obj) === 'object') {
+			var subrule = ilib.String._fncs.firstProp(obj);
+			return ilib.String._fncs[subrule](obj[subrule], n);
+		} else if (typeof(obj) === 'string') {
+			return n;
+		} else {
+			return obj;
+		}
+	},
+	
+	/**
+	 * @private
+	 * @param {number} n
+	 * @param {Array.<number|Array.<number>>} range
+	 * @returns {boolean}
+	 */
+	matchRangeContinuous: function(n, range) {
+		for (var num in range) {
+			if (typeof(num) !== 'undefined' && typeof(range[num]) !== 'undefined') {
+				var obj = /** @type {Object|null|undefined} */ range[num];
+				if (typeof(obj) === 'number') {
+					if (n === range[num]) {
+						return true;
+					}
+				} else if (Object.prototype.toString.call(obj) === '[object Array]') {
+					if (n >= obj[0] && n <= obj[1]) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	},
+
+	/**
+	 * @private
+	 * @param {number} n
+	 * @param {Array.<number|Array.<number>>} range
+	 * @returns {boolean}
+	 */
+	matchRange: function(n, range) {
+		if (Math.floor(n) !== n) {
+			return false;
+		}
+		return ilib.String._fncs.matchRangeContinuous(n, range);
+	},
+	
+	/**
+	 * @private
+	 * @param {Object} rule
+	 * @param {number} n
+	 * @returns {boolean}
+	 */
+	is: function(rule, n) {
+		var left = ilib.String._fncs.getValue(rule[0], n);
+		var right = ilib.String._fncs.getValue(rule[1], n);
+		return left == right;
+		// return ilib.String._fncs.getValue(rule[0]) == ilib.String._fncs.getValue(rule[1]);
+	},
+	
+	/**
+	 * @private
+	 * @param {Object} rule
+	 * @param {number} n
+	 * @returns {boolean}
+	 */
+	isnot: function(rule, n) {
+		return ilib.String._fncs.getValue(rule[0], n) != ilib.String._fncs.getValue(rule[1], n);
+	},
+	
+	/**
+	 * @private
+	 * @param {Object} rule
+	 * @param {number} n
+	 * @returns {boolean}
+	 */
+	inrange: function(rule, n) {
+		return ilib.String._fncs.matchRange(ilib.String._fncs.getValue(rule[0], n), rule[1]);
+	},
+	
+	/**
+	 * @private
+	 * @param {Object} rule
+	 * @param {number} n
+	 * @returns {boolean}
+	 */
+	notin: function(rule, n) {
+		return !ilib.String._fncs.matchRange(ilib.String._fncs.getValue(rule[0], n), rule[1]);
+	},
+	
+	/**
+	 * @private
+	 * @param {Object} rule
+	 * @param {number} n
+	 * @returns {boolean}
+	 */
+	within: function(rule, n) {
+		return ilib.String._fncs.matchRangeContinuous(ilib.String._fncs.getValue(rule[0], n), rule[1]);		
+	},
+	
+	/**
+	 * @private
+	 * @param {Object} rule
+	 * @param {number} n
+	 * @returns {number}
+	 */
+	mod: function(rule, n) {
+		return ilib.mod(ilib.String._fncs.getValue(rule[0], n), ilib.String._fncs.getValue(rule[1], n));
+	},
+	
+	/**
+	 * @private
+	 * @param {Object} rule
+	 * @param {number} n
+	 * @returns {number}
+	 */
+	n: function(rule, n) {
+		return n;
+	},
+	
+	/**
+	 * @private
+	 * @param {Object} rule
+	 * @param {number} n
+	 * @returns {boolean}
+	 */
+	or: function(rule, n) {
+		return ilib.String._fncs.getValue(rule[0], n) || ilib.String._fncs.getValue(rule[1], n);
+	},
+	
+	/**
+	 * @param {Object} rule
+	 * @param {number} n
+	 * @returns {boolean}
+	 */
+	and: function(rule, n) {
+		return ilib.String._fncs.getValue(rule[0], n) && ilib.String._fncs.getValue(rule[1], n);
+	}
+};
 
 ilib.String.prototype = {
 	/**
@@ -1139,10 +4355,30 @@ ilib.String.prototype = {
 	 * <li><i>&lt;x</i> - match any number that is less than x
 	 * <li><i>&lt;=x</i> - match any number that is less than or equal to x
 	 * <li><i>start-end</i> - match any number in the range [start,end)
+	 * <li><i>zero</i> - match any number in the class "zero". (See below for
+	 * a description of number classes.)
+	 * <li><i>one</i> - match any number in the class "one"
+	 * <li><i>two</i> - match any number in the class "two"
+	 * <li><i>few</i> - match any number in the class "few"
+	 * <li><i>many</i> - match any number in the class "many"
 	 * </ul>
 	 * 
-	 * If the argument index is a boolean, the values "true" and "false" may appear
-	 * as the choice patterns.<p>
+	 * A number class defines a set of numbers that receive a particular syntax
+	 * in the strings. For example, in Slovenian, integers ending in the digit
+	 * "1" are in the "one" class, including 1, 21, 31, ... 101, 111, etc.
+	 * Similarly, integers ending in the digit "2" are in the "two" class. 
+	 * Integers ending in the digits "3" or "4" are in the "few" class, and
+	 * every other integer is handled by the default string.<p>
+	 * 
+	 * The definition of what numbers are included in a class is locale-dependent.
+	 * They are defined in the data file plurals.json. If your string is in a
+	 * different locale than the default for ilib, you should call the setLocale()
+	 * method of the string instance before calling this method.<p> 
+	 * 
+	 * <b>Other Pattern Types</b><p>
+	 * 
+	 * If the argument index is a boolean, the string values "true" and "false" 
+	 * may appear as the choice patterns.<p>
 	 * 
 	 * If the argument index is of type string, then the choice patterns may contain
 	 * regular expressions, or static strings as degenerate regexps.
@@ -1221,19 +4457,36 @@ ilib.String.prototype = {
 								i = limits.length;
 							}
 						} else {
-							var dash = limits[i].indexOf("-");
-							if (dash !== -1) {							
-								// range
-								var start = limits[i].substring(0, dash);
-								var end = limits[i].substring(dash+1);							
-								if (arg >= parseInt(start, 10) && arg <= parseInt(end, 10)) {								
-									result = new ilib.String(strings[i]);
-									i = limits.length;
-								}
-							} else if (arg === parseInt(limits[i], 10)) {							
-								// exact amount
-								result = new ilib.String(strings[i]);
-								i = limits.length;
+							this.locale = this.locale || new ilib.Locale(this.localeSpec);
+							switch (limits[i]) {
+								case "zero":
+								case "one":
+								case "two":
+								case "few":
+								case "many":
+									// CLDR locale-dependent number classes
+									var rule = ilib.data.plurals.plurals[this.locale.getLanguage()][limits[i]];
+									if (ilib.String._fncs.getValue(rule, arg)) {
+										result = new ilib.String(strings[i]);
+										i = limits.length;
+									}
+									break;
+								default:
+									var dash = limits[i].indexOf("-");
+									if (dash !== -1) {							
+										// range
+										var start = limits[i].substring(0, dash);
+										var end = limits[i].substring(dash+1);							
+										if (arg >= parseInt(start, 10) && arg <= parseInt(end, 10)) {								
+											result = new ilib.String(strings[i]);
+											i = limits.length;
+										}
+									} else if (arg === parseInt(limits[i], 10)) {							
+										// exact amount
+										result = new ilib.String(strings[i]);
+										i = limits.length;
+									}
+									break;
 							}
 						}
 						break;
@@ -1858,6 +5111,23 @@ ilib.String.prototype = {
 	},
 	
 	/**
+	 * Set the locale to use when processing choice formats. The locale
+	 * affects how number classes are interpretted. In some cultures,
+	 * the limit "few" maps to "any integer that ends in the digits 2 to 9" and
+	 * in yet others, "few" maps to "any integer that ends in the digits
+	 * 3 or 4".
+	 * @param {ilib.Locale|string} locale locale to use when processing choice
+	 * formats with this string
+	 */
+	setLocale: function (locale) {
+		if (typeof(locale) === 'object') {
+			this.locale = locale;
+		} else {
+			this.localeSpec = locale;
+		}
+	},
+	
+	/**
 	 * Return the number of code points in this string. This may be different
 	 * than the number of characters, as the UTF-16 encoding that Javascript
 	 * uses for its basis returns surrogate pairs separately. Two 2-byte 
@@ -2357,390 +5627,6 @@ ilib.Cal.prototype = {
 	 */
 	isLeapYear: function(year) {
 		throw "Cannot call methods of abstract class ilib.Cal";
-	}
-};
-
-/*
- * util/utils.js - Misc utility routines
- * 
- * Copyright © 2012, JEDLSoft
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-// !depends ilibglobal.js
-
-/**
- * Binary search a sorted array for a particular target value.
- * If the exact value is not found, it returns the index of the smallest 
- * entry that is greater than the given target value.<p> 
- * 
- * The comparator
- * parameter is a function that knows how to compare elements of the 
- * array and the target. The function should return a value greater than 0
- * if the array element is greater than the target, a value less than 0 if
- * the array element is less than the target, and 0 if the array element 
- * and the target are equivalent.<p>
- * 
- * If the comparator function is not specified, this function assumes
- * the array and the target are numeric values and should be compared 
- * as such.<p>
- * 
- * Depends directive: !depends utils.js
- * 
- * 
- * @param {*} target element being sought 
- * @param {Array} arr the array being searched
- * @param {?function(*,*)=} comparator a comparator that is appropriate for comparing two entries
- * in the array  
- * @return the index of the array into which the value would fit if 
- * inserted, or -1 if given array is not an array or the target is not 
- * a number
- */
-ilib.bsearch = function(target, arr, comparator) {
-	if (typeof(arr) === 'undefined' || !arr || typeof(target) === 'undefined') {
-		return -1;
-	}
-	
-	var high = arr.length - 1,
-		low = 0,
-		mid = 0,
-		value,
-		cmp = comparator || ilib.bsearch.numbers;
-	
-	while (low <= high) {
-		mid = Math.floor((high+low)/2);
-		value = cmp(arr[mid], target);
-		if (value > 0) {
-			high = mid - 1;
-		} else if (value < 0) {
-			low = mid + 1;
-		} else {
-			return mid;
-		}
-	}
-	
-	return low;
-};
-
-/**
- * @private
- * Returns whether or not the given element is greater than, less than,
- * or equal to the given target.<p>
- * 
- * Depends directive: !depends utils.js
- * 
- * @param {number} element the element being tested
- * @param {number} target the target being sought
- */
-ilib.bsearch.numbers = function(element, target) {
-	return element - target;
-};
-
-/**
- * Do a proper modulo function. The Javascript % operator will give the truncated
- * division algorithm, but for calendrical calculations, we need the Euclidean
- * division algorithm where the remainder of any division, whether the dividend
- * is negative or not, is always a positive number between 0 and the modulus.<p>
- * 
- * Depends directive: !depends utils.js
- * 
- * @param {number} dividend the number being divided
- * @param {number} modulus the number dividing the dividend. This should always be a positive number.
- * @return the remainder of dividing the dividend by the modulus.  
- */
-ilib.mod = function (dividend, modulus) {
-	if (modulus == 0) {
-		return 0;
-	}
-	var x = dividend % modulus;
-	return (x < 0) ? x + modulus : x;
-};
-
-/**
- * Merge the properties of object2 into object1 in a deep manner and return a merged
- * object. If the property exists in both objects, the value in object2 will overwrite 
- * the value in object1. If a property exists in object1, but not in object2, its value
- * will not be touched. If a property exists in object2, but not in object1, it will be 
- * added to the merged result.<p>
- * 
- * Name1 and name2 are for creating debug output only. They are not necessary.<p>
- * 
- * Depends directive: !depends utils.js
- * 
- * @param {*} object1 the object to merge into
- * @param {*} object2 the object to merge
- * @param {string=} name1 name of the object being merged into
- * @param {string=} name2 name of the object being merged in
- * @returns {Object} the merged object
- */
-ilib.merge = function (object1, object2, name1, name2) {
-	var prop = undefined,
-		newObj = {};
-	for (prop in object1) {
-		if (prop && typeof(object1[prop]) !== 'undefined') {
-			newObj[prop] = object1[prop];
-		}
-	}
-	for (prop in object2) {
-		if (prop && typeof(object2[prop]) !== 'undefined') {
-			if (object1[prop] instanceof Array && object2[prop] instanceof Array) {
-				newObj[prop] = new Array();
-				newObj[prop] = newObj[prop].concat(object1[prop]);
-				newObj[prop] = newObj[prop].concat(object2[prop]);
-			} else if (typeof(object1[prop]) === 'object' && typeof(object2[prop]) === 'object') {
-				newObj[prop] = ilib.merge(object1[prop], object2[prop]);
-			} else {
-				// for debugging. Used to determine whether or not json files are overriding their parents unnecessarily
-				if (name1 && name2 && newObj[prop] == object2[prop]) {
-					console.log("Property " + prop + " in " + name1 + " is being overridden by the same value in " + name2);
-				}
-				newObj[prop] = object2[prop];
-			}
-		}
-	}
-	return newObj;
-};
-
-/**
- * Find and merge all the locale data for a particular prefix in the given locale
- * and return it as a single javascript object. This merges the data in the 
- * correct order:
- * 
- * <ol>
- * <li>shared data (usually English)
- * <li>data for language
- * <li>data for language + region
- * <li>data for language + region + script
- * <li>data for language + region + script + variant
- * </ol>
- * 
- * It is okay for any of the above to be missing. This function will just skip the 
- * missing data. However, if everything except the shared data is missing, this 
- * function returns undefined, allowing the caller to go and dynamically load the
- * data instead.
- *  
- * @param {string} prefix prefix under ilib.data of the data to merge
- * @param {ilib.Locale} locale locale of the data being sought
- * @returns {Object|undefined} the merged locale data
- */
-ilib.mergeLocData = function (prefix, locale) {
-	var data = undefined;
-	var loc = locale || new ilib.Locale();
-	var foundLocaleData = false;
-	var property = prefix;
-	data = ilib.data[prefix] || {};
-	if (loc.getLanguage()) {
-		property = prefix + '_' + loc.getLanguage();
-		if (ilib.data[property]) {
-			foundLocaleData = true;
-			data = ilib.merge(data, ilib.data[property]);
-		}
-	}
-	if (loc.getRegion()) {
-		property += '_' + loc.getRegion();
-		if (ilib.data[property]) {
-			foundLocaleData = true;
-			data = ilib.merge(data, ilib.data[property]);
-		}
-	}
-	if (loc.getScript()) {
-		property += '_' + loc.getScript();
-		if (ilib.data[property]) {
-			foundLocaleData = true;
-			data = ilib.merge(data, ilib.data[property]);
-		}
-	}
-	if (loc.getVariant()) {
-		property += '_' + loc.getVariant();
-		if (ilib.data[property]) {
-			foundLocaleData = true;
-			data = ilib.merge(data, ilib.data[property]);
-		}
-	}
-	return foundLocaleData ? data : undefined;
-};
-
-/**
- * Return an array of relative path names for the json
- * files that represent the data for the given locale.
- * @param {string} prefix the prefix dir for all the path names
- * @param {ilib.Locale} locale load the json files for this locale
- * @param {string} basename the base name of each json file to load
- * @returns {Array.<string>} An array of relative path names
- * for the json files that contain the locale data
- */
-ilib.getLocFiles = function(prefix, locale, basename) {
-	var dir = (prefix && prefix.length > 0) ? prefix + "/" : "";
-	var files = [];
-	var filename = basename || "resources";
-	var loc = locale || new ilib.Locale();
-	files.push(dir + filename + ".json");
-	dir += loc.getLanguage() + "/";
-	files.push(dir + filename + ".json");
-	if (loc.getRegion()) {
-		dir += loc.getRegion() + "/";
-		files.push(dir + filename + ".json");
-		if (loc.getScript()) {
-			dir += loc.getScript() + "/";
-			files.push(dir + filename + ".json");
-			if (loc.getVariant()) {
-				dir += loc.getVariant() + "/";
-				files.push(dir + filename + ".json");
-			}
-		}
-	}
-	
-	return files;
-};
-
-/**
- * Return true if the given object has no properties.<p>
- * 
- * Depends directive: !depends utils.js
- * 
- * @param {Object} obj the object to check
- * @returns {boolean} true if the given object has no properties, false otherwise
- */
-ilib.isEmpty = function (obj) {
-	var prop = undefined;
-	
-	if (!obj) {
-		return true;
-	}
-	
-	for (prop in obj) {
-		if (prop && obj[prop]) {
-			return false;
-		}
-	}
-	return true;
-};
-
-
-/**
- * Perform a shallow copy of the source object to the target object. This only 
- * copies the assignments of the source properties to the target properties, 
- * but not recursively from there.<p>
- * 
- * Depends directive: !depends utils.js
- * 
- * @param {Object} source the source object to copy properties from
- * @param {Object} target the target object to copy properties into
- */
-ilib.shallowCopy = function (source, target) {
-	var prop = undefined;
-	if (source && target) {
-		for (prop in source) {
-			if (prop !== undefined && source[prop]) {
-				target[prop] = source[prop];
-			}
-		}
-	}
-};
-
-/**
- * Return the sign of the given number. If the sign is negative, this function
- * returns -1. If the sign is positive or zero, this function returns 1.
- * @param {number} num the number to test
- * @returns {number} -1 if the number is negative, and 1 otherwise
- */
-ilib.signum = function (num) {
-	var n = num;
-	if (typeof(num) === 'string') {
-		n = parseInt(num, 10);
-	} else if (typeof(num) !== 'number') {
-		return 1;
-	}
-	return (n < 0) ? -1 : 1;
-};
-
-
-/**
- * @private
- */
-ilib._roundFnc = {
-	/**
-	 * @private
-	 * @param {number} num number to round
-	 * @returns {number} rounded number
-	 */
-	floor: function (num) {
-		return Math.floor(num);
-	},
-	
-	/**
-	 * @private
-	 * @param {number} num number to round
-	 * @returns {number} rounded number
-	 */
-	ceiling: function (num) {
-		return Math.ceil(num);
-	},
-	
-	/**
-	 * @private
-	 * @param {number} num number to round
-	 * @returns {number} rounded number
-	 */
-	down: function (num) {
-		return (num < 0) ? Math.ceil(num) : Math.floor(num);
-	},
-	
-	/**
-	 * @private
-	 * @param {number} num number to round
-	 * @returns {number} rounded number
-	 */
-	up: function (num) {
-		return (num < 0) ? Math.floor(num) : Math.ceil(num);
-	},
-	
-	/**
-	 * @private
-	 * @param {number} num number to round
-	 * @returns {number} rounded number
-	 */
-	halfup: function (num) {
-		return (num < 0) ? Math.ceil(num - 0.5) : Math.floor(num + 0.5);
-	},
-	
-	/**
-	 * @private
-	 * @param {number} num number to round
-	 * @returns {number} rounded number
-	 */
-	halfdown: function (num) {
-		return (num < 0) ? Math.floor(num + 0.5) : Math.ceil(num - 0.5);
-	},
-	
-	/**
-	 * @private
-	 * @param {number} num number to round
-	 * @returns {number} rounded number
-	 */
-	halfeven: function (num) {
-		return (Math.floor(num) % 2 === 0) ? Math.ceil(num - 0.5) : Math.floor(num + 0.5);
-	},
-	
-	/**
-	 * @private
-	 * @param {number} num number to round
-	 * @returns {number} rounded number
-	 */
-	halfodd: function (num) {
-		return (Math.floor(num) % 2 !== 0) ? Math.ceil(num - 0.5) : Math.floor(num + 0.5);
 	}
 };
 
@@ -5060,10 +7946,16 @@ ilib.data.sysres = {
 	"EE6": "Sa",
 	"E6": "S",
 	"ordinalChoice": "1#1st|2#2nd|3#3rd|21#21st|22#22nd|23#23rd|31#31st|#{num}th",
-	"a0": "am",
-	"a1": "pm",
+	"a0": "AM",
+	"a1": "PM",
 	"G-1": "BCE",
 	"G1": "CE",
+	
+	"separatorFull": ", ",
+	"finalSeparatorFull": ", and ",
+	"separatorShort":" ",
+	"separatorMedium":" ",
+	"separatorLong":", ",
 	
 	"N1-hebrew": "N",
 	"N2-hebrew": "I",
@@ -11762,7 +14654,11 @@ ilib.data.currency = {
 /**
  * @class
  * Create a new currency information instance. Instances of this class encode 
- * information about a particular currency.<p> 
+ * information about a particular currency.<p>
+ * 
+ * Note: that if you are looking to format currency for display, please see
+ * the number formatting class {ilib.NumFmt}. This class only gives information
+ * about currencies.<p> 
  * 
  * The options can contain any of the following properties:
  * 
