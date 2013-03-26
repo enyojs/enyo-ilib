@@ -1,6 +1,6 @@
 {
 	"currency": "TZS",
 	"region.name": "Tanzania",
-	timezone: "Africa/Dar_es_Salaam",
+	"timezone": "Africa/Dar_es_Salaam",
 	"locale": "en-TZ"
 }
