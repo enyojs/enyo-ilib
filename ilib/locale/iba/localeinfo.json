@@ -1,4 +1,5 @@
 {
+	"language.name": "Iban",
 	"scripts": ["Latn"],
 	"locale": "iba"
 }

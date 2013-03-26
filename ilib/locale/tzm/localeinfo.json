@@ -1,4 +1,5 @@
 {
+	"language.name": "Central Atlas Tamazight",
 	"scripts": ["Latn","Tfng"],
 	"locale": "tzm"
 }

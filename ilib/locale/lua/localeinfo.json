@@ -1,4 +1,5 @@
 {
+	"language.name": "Luba-Lulua",
 	"scripts": ["Latn"],
 	"locale": "lua"
 }

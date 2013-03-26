@@ -1,4 +1,5 @@
 {
+	"language.name": "Santali",
 	"scripts": ["Latn","Beng","Deva","Olck","Orya"],
 	"locale": "sat"
 }

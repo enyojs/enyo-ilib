@@ -1,4 +1,5 @@
 {
+	"language.name": "Coptic",
 	"scripts": ["Arab","Copt","Grek"],
 	"locale": "cop"
 }

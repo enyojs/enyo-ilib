@@ -1,4 +1,5 @@
 {
+	"language.name": "Hmong",
 	"scripts": ["Latn","Hmng"],
 	"locale": "hmn"
 }

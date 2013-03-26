@@ -1,4 +1,5 @@
 {
+	"language.name": "Ingush",
 	"scripts": ["Cyrl","Arab","Latn"],
 	"locale": "inh"
 }

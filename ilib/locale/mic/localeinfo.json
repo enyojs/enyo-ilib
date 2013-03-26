@@ -1,4 +1,5 @@
 {
+	"language.name": "Micmac",
 	"scripts": ["Latn"],
 	"locale": "mic"
 }

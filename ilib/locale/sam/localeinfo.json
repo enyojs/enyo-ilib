@@ -1,4 +1,5 @@
 {
+	"language.name": "Samaritan Aramaic",
 	"scripts": ["Hebr","Samr"],
 	"locale": "sam"
 }

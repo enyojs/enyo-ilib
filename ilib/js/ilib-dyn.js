@@ -41,11 +41,7 @@ ilib.data = {
         nfd: {},
         nfkd: {},
         ccc: {}
-    },
-    localeInfo: {},
-    resourceCache: {},
-    dateformatCache: {},
-    nameInfo: {}
+    }
 };
 
 window["ilib"] = ilib;
@@ -222,8 +218,8 @@ ilib.getTimeZone = function() {
  *        });
  *     }
  * }
- * ilib.setLoaderCallback(function(paths, callback) {
- *    if (typeof(callback) === 'undefined') {
+ * ilib.setLoaderCallback(function(paths, sync, callback) {
+ *    if (sync) {
  *        var ret = [];
  *        // synchronous
  *        paths.forEach(function (path) {
@@ -240,7 +236,7 @@ ilib.getTimeZone = function() {
  * }.bind(this)); // bind to "this" so that "this" is relative to your own instance
  * </pre>
  * 
- * @param {function(Object,Array.<string>,function(Object))} loader function to call to 
+ * @param {function(Array.<string>,Boolean,function(Object))} loader function to call to 
  * load the requested data.
  * @returns {boolean} true if the loader was installed correctly, or false
  * if not
@@ -929,29 +925,43 @@ ilib.mergeLocData = function (prefix, locale) {
 /**
  * Return an array of relative path names for the json
  * files that represent the data for the given locale.
- * @param {string} prefix the prefix dir for all the path names
  * @param {ilib.Locale} locale load the json files for this locale
- * @param {string} basename the base name of each json file to load
+ * @param {string=} basename the base name of each json file to load
  * @returns {Array.<string>} An array of relative path names
  * for the json files that contain the locale data
  */
-ilib.getLocFiles = function(prefix, locale, basename) {
-	var dir = (prefix && prefix.length > 0) ? prefix + "/" : "";
+ilib.getLocFiles = function(locale, basename) {
+	var dir = "";
 	var files = [];
 	var filename = basename || "resources";
 	var loc = locale || new ilib.Locale();
-	files.push(dir + filename + ".json");
+	files.push(filename + ".json");
 	dir += loc.getLanguage() + "/";
 	files.push(dir + filename + ".json");
+	if (loc.getVariant()) {
+		var dir2 = dir;
+		dir2 += loc.getVariant() + "/";
+		files.push(dir2 + filename + ".json");
+	}
 	if (loc.getRegion()) {
-		dir += loc.getRegion() + "/";
-		files.push(dir + filename + ".json");
-		if (loc.getScript()) {
-			dir += loc.getScript() + "/";
-			files.push(dir + filename + ".json");
+		var dir2 = dir;
+		dir2 += loc.getRegion() + "/";
+		files.push(dir2 + filename + ".json");
+		if (loc.getVariant()) {
+			dir2 += loc.getVariant() + "/";
+			files.push(dir2 + filename + ".json");
+		}
+	}
+	if (loc.getScript()) {
+		var dir2 = dir;
+		dir2 += loc.getScript() + "/";
+		files.push(dir2 + filename + ".json");
+		if (loc.getRegion()) {
+			dir2 += loc.getRegion() + "/";
+			files.push(dir2 + filename + ".json");
 			if (loc.getVariant()) {
-				dir += loc.getVariant() + "/";
-				files.push(dir + filename + ".json");
+				dir2 += loc.getVariant() + "/";
+				files.push(dir2 + filename + ".json");
 			}
 		}
 	}
@@ -4034,7 +4044,8 @@ ilib.String._compose = function (lead, trail) {
 };
 
 /**
- * @protected
+ * @private
+ * @static
  */
 ilib.String._fncs = {
 	/**
@@ -5210,7 +5221,12 @@ ilib.data.localeinfo = {
  * load any missing locale data using the ilib loader callback.
  * When the constructor is done (even if the data is already preassembled), the 
  * onLoad function is called with the current instance as a parameter, so this
- * callback can be used with preassembled or dynamic loading or a mix of the two. 
+ * callback can be used with preassembled or dynamic loading or a mix of the two.
+ * 
+ * <li>sync - tell whether to load any missing locale data synchronously or 
+ * asynchronously. If this option is given as "false", then the "onLoad"
+ * callback must be given, as the instance returned from this constructor will
+ * not be usable for a while. 
  * </ul>
  * 
  * If this copy of ilib is pre-assembled and all the data is already available, 
@@ -5229,6 +5245,8 @@ ilib.data.localeinfo = {
  * the current locale
  */
 ilib.LocaleInfo = function(locale, options) {
+	var sync = true;
+	
 	/* these are all the defaults. Essentially, en-US */
 	this.info = ilib.data.localeinfo;
 	
@@ -5245,27 +5263,37 @@ ilib.LocaleInfo = function(locale, options) {
 			break;
 	}
 	
+	if (options) {
+		if (typeof(options.sync) !== 'undefined') {
+			sync = (options.sync == true);
+		}
+	}
+
+	if (!ilib.LocaleInfo.cache) {
+		ilib.LocaleInfo.cache = {};
+	}
+
 	var spec = this.locale.getSpec().replace(/-/g, "_");
-	if (typeof(ilib.data.localeInfo[spec]) === 'undefined') {
+	if (typeof(ilib.LocaleInfo.cache[spec]) === 'undefined') {
 		this.info = ilib.mergeLocData("localeinfo", this.locale);
 		if (this.info) {
-			ilib.data.localeInfo[spec] = this.info;
+			ilib.LocaleInfo.cache[spec] = this.info;
 			if (options && typeof(options.onLoad) === 'function') {
 				options.onLoad(this);
 			}
 		} else if (typeof(ilib._load) === 'function') {
 			// locale is not preassembled, so attempt to load it dynamically
-			var files = ilib.getLocFiles("locale", this.locale, "localeinfo");
+			var files = ilib.getLocFiles(this.locale, "localeinfo");
 			
-			ilib._load(files, function(arr) {
+			ilib._load(files, sync, function(arr) {
 				this.info = {};
 				for (var i = 0; i < arr.length; i++) {
 					if (typeof(arr[i]) !== 'undefined') {
 						this.info = ilib.merge(this.info, arr[i]);
 					}
 				}
-				
-				ilib.data.localeInfo[spec] = this.info;
+	
+				ilib.LocaleInfo.cache[spec] = this.info;
 				
 				if (options && typeof(options.onLoad) === 'function') {
 					options.onLoad(this);
@@ -5274,13 +5302,13 @@ ilib.LocaleInfo = function(locale, options) {
 		} else {
 			// no data other than the generic shared data
 			this.info = ilib.data.localeinfo;
-			ilib.data.localeInfo[spec] = this.info;
+			ilib.LocaleInfo.cache[spec] = this.info;
 			if (options && typeof(options.onLoad) === 'function') {
 				options.onLoad(this);
 			}
 		}
 	} else {
-		this.info = ilib.data.localeInfo[spec];
+		this.info = ilib.LocaleInfo.cache[spec];
 		if (options && typeof(options.onLoad) === 'function') {
 			options.onLoad(this);
 		}
@@ -6625,6 +6653,11 @@ calendar/gregoriandate.js
  * load any missing locale data using the ilib loader callback.
  * When the data is loaded, the onLoad function is called with the current 
  * instance as a parameter. 
+ * 
+ * <li>sync - tell whether to load any missing locale data synchronously or 
+ * asynchronously. If this option is given as "false", then the "onLoad"
+ * callback must be given, as the instance returned from this constructor will
+ * not be usable for a while. 
  * </ul>
  * 
  * There is currently no way in the ECMAscript
@@ -6678,6 +6711,7 @@ calendar/gregoriandate.js
  * @param {Object} options Options guiding the construction of this time zone instance
  */
 ilib.TimeZone = function(options) {
+	var sync = true;
 	this.locale = new ilib.Locale();
 	this.isLocal = false;
 	
@@ -6710,12 +6744,17 @@ ilib.TimeZone = function(options) {
 			this.offset = (typeof(options.offset) === 'string') ? parseInt(options.offset, 10) : options.offset;
 			this.id = this.getDisplayName(undefined, undefined);
 		}
+		
+		if (typeof(options.sync) !== 'undefined') {
+			sync = (options.sync == true);
+		}
 	}
 
 	//console.log("timezone: locale is " + this.locale);
 	
 	if (!this.id) {
 		var li = new ilib.LocaleInfo(this.locale, {
+			sync: sync,
 			onLoad: function (li) {
 				this.id = li.getTimeZone() || "Etc/UTC";
 				this._inittz();
@@ -7219,6 +7258,48 @@ ilib.TimeZone.prototype.useDaylightTime = function () {
 		typeof(this.zone.e) !== 'undefined');
 };
 
+ilib.data.pseudomap = {
+	"a": "à",	
+	"c": "ç",	
+	"d": "ð",	
+	"e": "ë",	
+	"g": "ğ",	
+	"h": "ĥ",
+	"i": "í",	
+	"j": "ĵ",	
+	"k": "ķ",	
+	"l": "ľ",	
+	"n": "ñ",	
+	"o": "õ",	
+	"p": "þ",	
+	"r": "ŕ",	
+	"s": "š",	
+	"t": "ţ",	
+	"u": "ü",	
+	"w": "ŵ",	
+	"y": "ÿ",	
+	"z": "ž",	
+	"A": "Ã",
+	"B": "ß",
+	"C": "Ç",	
+	"D": "Ð",	
+	"E": "Ë",	
+	"G": "Ĝ",	
+	"H": "Ħ",
+	"I": "Ï",	
+	"J": "Ĵ",	
+	"K": "ĸ",	
+	"L": "Ľ",	
+	"N": "Ň",	
+	"O": "Ø",	
+	"R": "Ŗ",	
+	"S": "Š",	
+	"T": "Ť",	
+	"U": "Ú",	
+	"W": "Ŵ",	
+	"Y": "Ŷ",	
+	"Z": "Ż"	
+};
 /*
  * resources.js - Resource bundle definition
  * 
@@ -7239,6 +7320,8 @@ ilib.TimeZone.prototype.useDaylightTime = function () {
  */
 
 // !depends ilibglobal.js locale.js strings.js util/utils.js
+
+// !data pseudomap
 
 /**
  * @class
@@ -7371,10 +7454,10 @@ ilib.TimeZone.prototype.useDaylightTime = function () {
  * @param {?Object} options Options controlling how the bundle is created
  */
 ilib.ResBundle = function (options) {
-	var lookupLocale, spec;
+	var lookupLocale, spec, sync = true;
 	
 	this.locale = new ilib.Locale();	// use the default locale
-	this.baseName = "resources";
+	this.baseName = "strings";
 	this.type = "text";
 	
 	if (options) {
@@ -7390,48 +7473,56 @@ ilib.ResBundle = function (options) {
 			this.type = options.type;
 		}
 		this.lengthen = options.lengthen || false;
+		
+		if (typeof(options.sync) !== 'undefined') {
+			sync = (options.sync == true);
+		}
 	}
 	
 	this.map = {};
 
+	if (!ilib.ResBundle.cache) {
+		ilib.ResBundle.cache = {};
+	}
+
 	lookupLocale = this.locale.isPseudo() ? new ilib.Locale() : this.locale;
 	spec = lookupLocale.getSpec().replace(/-/g, '_');
 	
-	if (typeof(ilib.data.resourceCache[this.baseName]) === 'undefined') {
-		ilib.data.resourceCache[this.baseName] = {};
+	if (typeof(ilib.ResBundle.cache[this.baseName]) === 'undefined') {
+		ilib.ResBundle.cache[this.baseName] = {};
 	}
 	
-	if (typeof(ilib.data.resourceCache[this.baseName][spec]) !== 'undefined') {
-		this.map = ilib.data.resourceCache[this.baseName][spec];
+	if (typeof(ilib.ResBundle.cache[this.baseName][spec]) !== 'undefined') {
+		this.map = ilib.ResBundle.cache[this.baseName][spec];
 		if (options && typeof(options.onLoad) === 'function') {
 			options.onLoad(this);
 		}
 	} else {
 		this.map = ilib.mergeLocData(this.baseName, lookupLocale);
 		if (this.map) {
-			ilib.data.resourceCache[this.baseName][spec] = this.map;
+			ilib.ResBundle.cache[this.baseName][spec] = this.map;
 			if (options && typeof(options.onLoad) === 'function') {
 				options.onLoad(this);
 			}
 		} else if (typeof(ilib._load) === 'function') {
 			// locale is not preassembled, so attempt to load it dynamically
-			var files = ilib.getLocFiles("resources", this.locale, "strings");
+			var files = ilib.getLocFiles(this.locale, this.baseName);
 			
-			ilib._load(files, function(arr) {
+			ilib._load(files, sync, function(arr) {
 				this.map = {};
 				for (var i = 0; i < arr.length; i++) {
 					if (typeof(arr[i]) !== 'undefined') {
 						this.map = ilib.merge(this.map, arr[i]);
 					}
 				}
-				ilib.data.resourceCache[this.baseName][spec] = this.map;
+				ilib.ResBundle.cache[this.baseName][spec] = this.map;
 				if (options && typeof(options.onLoad) === 'function') {
 					options.onLoad(this);
 				}
 			}.bind(this));
 		} else {
 			this.map = ilib.data[this.baseName] || {};
-			ilib.data.resourceCache[this.baseName][spec] = this.map;
+			ilib.ResBundle.cache[this.baseName][spec] = this.map;
 			if (options && typeof(options.onLoad) === 'function') {
 				options.onLoad(this);
 			}
@@ -7442,55 +7533,6 @@ ilib.ResBundle = function (options) {
 	//if (!this.locale.isPseudo() && ilib.isEmpty(this.map)) {
 	//	console.log("Resources for bundle " + this.baseName + " locale " + this.locale.toString() + " are not available.");
 	//}
-};
-
-/**
- * @private
- * @const
- * @type Object.<string, string> 
- * Mapping for psuedo-translation 
- */
-ilib.ResBundle._pseudoMap = {
-	"a": "à",	
-	"c": "ç",	
-	"d": "ð",	
-	"e": "ë",	
-	"g": "ğ",	
-	"h": "ĥ",
-	"i": "í",	
-	"j": "ĵ",	
-	"k": "ķ",	
-	"l": "ľ",	
-	"n": "ñ",	
-	"o": "õ",	
-	"p": "þ",	
-	"r": "ŕ",	
-	"s": "š",	
-	"t": "ţ",	
-	"u": "ü",	
-	"w": "ŵ",	
-	"y": "ÿ",	
-	"z": "ž",	
-	"A": "Ã",
-	"B": "ß",
-	"C": "Ç",	
-	"D": "Ð",	
-	"E": "Ë",	
-	"G": "Ĝ",	
-	"H": "Ħ",
-	"I": "Ï",	
-	"J": "Ĵ",	
-	"K": "ĸ",	
-	"L": "Ľ",	
-	"N": "Ň",	
-	"O": "Ø",	
-	"R": "Ŗ",	
-	"S": "Š",	
-	"T": "Ť",	
-	"U": "Ú",	
-	"W": "Ŵ",	
-	"Y": "Ŷ",	
-	"Z": "Ż"	
 };
 
 ilib.ResBundle.prototype = {
@@ -7560,11 +7602,11 @@ ilib.ResBundle.prototype = {
 							ret += str.charAt(i);
 						}
 					} else {
-						ret += ilib.ResBundle._pseudoMap[str.charAt(i)] || str.charAt(i);
+						ret += ilib.data.pseudomap[str.charAt(i)] || str.charAt(i);
 					}
 				}
 			} else {
-				ret += ilib.ResBundle._pseudoMap[str.charAt(i)] || str.charAt(i);
+				ret += ilib.data.pseudomap[str.charAt(i)] || str.charAt(i);
 			}
 		}
 		if (this.lengthen) {
@@ -8344,7 +8386,12 @@ timezone.js
  * load any missing locale data using the ilib loader callback.
  * When the constructor is done (even if the data is already preassembled), the 
  * onLoad function is called with the current instance as a parameter, so this
- * callback can be used with preassembled or dynamic loading or a mix of the two. 
+ * callback can be used with preassembled or dynamic loading or a mix of the two.
+ * 
+ * <li>sync - tell whether to load any missing locale data synchronously or 
+ * asynchronously. If this option is given as "false", then the "onLoad"
+ * callback must be given, as the instance returned from this constructor will
+ * not be usable for a while. 
  * </ul>
  * 
  * Any substring containing letters within single or double quotes will be used 
@@ -8380,7 +8427,7 @@ timezone.js
  * @param {Object} options options governing the way this date formatter instance works
  */
 ilib.DateFmt = function(options) {
-	var arr, i, bad, formats;
+	var arr, i, bad, formats, sync = true;
 	
 	this.locale = new ilib.Locale();
 	this.type = "date";
@@ -8468,9 +8515,18 @@ ilib.DateFmt = function(options) {
 				id: options.timezone
 			});
 		}
+		
+		if (typeof(options.sync) !== 'undefined') {
+			sync = (options.sync == true);
+		}
 	}
-	
+
+	if (!ilib.DateFmt.cache) {
+		ilib.DateFmt.cache = {};
+	}
+
 	new ilib.LocaleInfo(this.locale, {
+		sync: sync,
 		onLoad: function (li) {
 			this.locinfo = li;
 			
@@ -8499,18 +8555,19 @@ ilib.DateFmt = function(options) {
 			new ilib.ResBundle({
 				locale: this.locale,
 				name: "sysres",
+				sync: sync,
 				onLoad: function (rb) {
 					this.sysres = rb;
 					if (!this.template) {
 						var spec = this.locale.getSpec().replace(/-/g, '_');
-						if (typeof(ilib.data.dateformatCache[spec]) !== 'undefined') {
-							formats = ilib.data.dateformatCache[spec];
+						if (typeof(ilib.DateFmt.cache[spec]) !== 'undefined') {
+							formats = ilib.DateFmt.cache[spec];
 						} else {
 							formats = ilib.mergeLocData("dateformats", this.locale);
 							if (!formats) {
 								if (typeof(ilib._load) === 'function') {
-									var files = ilib.getLocFiles("locale", this.locale, "dateformats");
-									ilib._load(files, function(arr) {
+									var files = ilib.getLocFiles(this.locale, "dateformats");
+									ilib._load(files, sync, function(arr) {
 										formats = {};
 										for (var i = 0; i < arr.length; i++) {
 											if (typeof(arr[i]) !== 'undefined') {
@@ -8529,7 +8586,7 @@ ilib.DateFmt = function(options) {
 							}
 						}
 						this._initTemplate(formats);
-						ilib.data.dateformatCache[spec] = formats;
+						ilib.DateFmt.cache[spec] = formats;
 					}
 					this._massageTemplate();
 					if (options && typeof(options.onLoad) === 'function') {
@@ -9330,6 +9387,11 @@ datefmt.js
  * When the constructor is done (even if the data is already preassembled), the 
  * onLoad function is called with the current instance as a parameter, so this
  * callback can be used with preassembled or dynamic loading or a mix of the two. 
+ * 
+ * <li>sync - tell whether to load any missing locale data synchronously or 
+ * asynchronously. If this option is given as "false", then the "onLoad"
+ * callback must be given, as the instance returned from this constructor will
+ * not be usable for a while. 
  * </ul>
  * <p>
  * 
@@ -9339,6 +9401,7 @@ datefmt.js
  * @param {Object} options options governing the way this date range formatter instance works
  */
 ilib.DateRngFmt = function(options) {
+	var sync = true;
 	this.locale = new ilib.Locale();
 	this.length = "s";
 	
@@ -9356,10 +9419,14 @@ ilib.DateRngFmt = function(options) {
 				this.length = options.length.charAt(0);
 			}
 		}
+		if (typeof(options.sync) !== 'undefined') {
+			sync = (options.sync == true);
+		}
 	}
 	
 	var opts = {};
 	ilib.shallowCopy(options, opts);
+	opts.sync = true;
 	/**
 	 * @private
 	 */
@@ -13666,6 +13733,11 @@ ctype.isspace.js
  * When the constructor is done (even if the data is already preassembled), the 
  * onLoad function is called with the current instance as a parameter, so this
  * callback can be used with preassembled or dynamic loading or a mix of the two. 
+ * 
+ * <li>sync - tell whether to load any missing locale data synchronously or 
+ * asynchronously. If this option is given as "false", then the "onLoad"
+ * callback must be given, as the instance returned from this constructor will
+ * not be usable for a while. 
  * </ul>
  * <p>
  * 
@@ -13676,7 +13748,7 @@ ctype.isspace.js
  * @param {Object} options Options controlling how the instance should be created 
  */
 ilib.Number = function (str, options) {
-	var li, i, stripped = "";
+	var i, stripped = "", sync = true;
 	
 	this.locale = new ilib.Locale();
 	this.type = "number";
@@ -13696,10 +13768,14 @@ ilib.Number = function (str, options) {
 					break;
 			}
 		}
+		if (typeof(options.sync) !== 'undefined') {
+			sync = (options.sync == true);
+		}
 	}
 	
 	
 	new ilib.LocaleInfo(this.locale, {
+		sync: sync,
 		onLoad: function (li) {
 			this.decimal = li.getDecimalSeparator();
 			
@@ -13774,6 +13850,7 @@ ilib.Number = function (str, options) {
 					new ilib.Currency({
 						locale: this.locale, 
 						sign: stripped,
+						sync: sync,
 						onLoad: function (cur) {
 							this.currency = cur;
 							if (options && typeof(options.onLoad) === 'function') {
@@ -14929,6 +15006,7 @@ strings.js
  * set, then the standard legal rounding rules for the locale are followed. If the type
  * is "number" or "percentage" and the <i>roundingMode</i> property is not set, then the 
  * default mode is "halfdown".</i>.
+ * 
  * <li><i>style</i> - When the type of this formatter is "currency", the currency amount
  * can be formatted in the following styles: "common" and "iso". The common style is the
  * one commonly used in every day writing where the currency unit is represented using a 
@@ -14945,13 +15023,19 @@ strings.js
  * which give the power of 10 in the exponent. Note that if you specify a maximum number
  * of integral digits, the formatter with a standard style will give you standard 
  * formatting for smaller numbers and scientific notation for larger numbers. The default
- * is standard style if this is not specified. 
+ * is standard style if this is not specified.
+ *  
  * <li><i>onLoad</i> - a callback function to call when the format data is fully 
  * loaded. When the onLoad option is given, this class will attempt to
  * load any missing locale data using the ilib loader callback.
  * When the constructor is done (even if the data is already preassembled), the 
  * onLoad function is called with the current instance as a parameter, so this
  * callback can be used with preassembled or dynamic loading or a mix of the two. 
+ * 
+ * <li>sync - tell whether to load any missing locale data synchronously or 
+ * asynchronously. If this option is given as "false", then the "onLoad"
+ * callback must be given, as the instance returned from this constructor will
+ * not be usable for a while. 
  * </ul>
  * <p>
  * 
@@ -14961,6 +15045,7 @@ strings.js
  * @param {Object.<string,*>} options A set of options that govern how the formatter will behave 
  */
 ilib.NumFmt = function (options) {
+	var sync = true;
 	this.locale = new ilib.Locale();
 	this.type = "number";
 	
@@ -14992,9 +15077,14 @@ ilib.NumFmt = function (options) {
 		}
 		
 		this.roundingMode = options.roundingMode;
+
+		if (typeof(options.sync) !== 'undefined') {
+			sync = (options.sync == true);
+		}
 	}
 	
 	new ilib.LocaleInfo(this.locale, {
+		sync: sync,
 		onLoad: function (li) {
 			this.localeInfo = li;
 
@@ -15008,6 +15098,7 @@ ilib.NumFmt = function (options) {
 				new ilib.Currency({
 					locale: this.locale,
 					code: this.currency,
+					sync: sync,
 					onLoad: function (cur) {
 						this.currencyInfo = cur;
 						if (this.style !== "common" && this.style !== "iso") {
@@ -15394,12 +15485,18 @@ localeinfo.js
  * or as a regular time as on a clock. eg. text is "1 hour, 15 minutes", whereas clock is "1:15:00". Valid
  * values for this property are "text" or "clock". Default if this property is not specified
  * is "text".
+ * 
  * <li><i>onLoad</i> - a callback function to call when the format data is fully 
  * loaded. When the onLoad option is given, this class will attempt to
  * load any missing locale data using the ilib loader callback.
  * When the constructor is done (even if the data is already preassembled), the 
  * onLoad function is called with the current instance as a parameter, so this
  * callback can be used with preassembled or dynamic loading or a mix of the two. 
+ * 
+ * <li>sync - tell whether to load any missing locale data synchronously or 
+ * asynchronously. If this option is given as "false", then the "onLoad"
+ * callback must be given, as the instance returned from this constructor will
+ * not be usable for a while. 
  * </ul>
  * <p>
  * 
@@ -15409,6 +15506,8 @@ localeinfo.js
  * @param {?Object} options options governing the way this date formatter instance works
  */
 ilib.DurFmt = function(options) {
+	var sync = true;
+	
 	this.locale = new ilib.Locale();
 	this.length = "short";
 	this.style = "text";
@@ -15432,11 +15531,16 @@ ilib.DurFmt = function(options) {
 				this.style = options.style;
 			}
 		}
+		
+		if (typeof(options.sync) !== 'undefined') {
+			sync = (options.sync == true);
+		}
 	}
 	
 	new ilib.ResBundle({
 		locale: this.locale,
 		name: "sysres",
+		sync: sync,
 		onLoad: function (sysres) {
 			switch (this.length) {
 				case 'short':
@@ -15505,18 +15609,21 @@ ilib.DurFmt = function(options) {
 					locale: this.locale,
 					type: "time",
 					time: "ms",
+					sync: sync,
 					onLoad: function (fmtMS) {
 						this.timeFmtMS = fmtMS;
 						new ilib.DateFmt({
 							locale: this.locale,
 							type: "time",
 							time: "hm",
+							sync: sync,
 							onLoad: function (fmtHM) {
 								this.timeFmtHM = fmtHM;		
 								new ilib.DateFmt({
 									locale: this.locale,
 									type: "time",
 									time: "hms",
+									sync: sync,
 									onLoad: function (fmtHMS) {
 										this.timeFmtHMS = fmtHMS;		
 
@@ -16090,6 +16197,1307 @@ ilib.CType.isXdigit = function (ch) {
 	return ilib.CType._inRange(ch, 'xdigit', ilib.data.ctype);
 };
 
+ilib.data.name = {
+	"components": {
+		"short": {
+			"g": 1,
+			"f": 1
+		},
+		"medium": {
+			"g": 1,
+			"m": 1,
+			"f": 1
+		},
+		"long": {
+			"p": 1,
+			"g": 1,
+			"m": 1,
+			"f": 1
+		},
+		"full": {
+			"p": 1,
+			"g": 1,
+			"m": 1,
+			"f": 1,
+			"s": 1
+		}
+	},
+	"format": "{prefix} {givenName} {middleName} {familyName}{suffix}",
+	"sortByHeadWord": false,
+	"nameStyle": "western",
+	"conjunctions": {
+		"and1": "and",
+		"and2": "and",
+		"or1": "or",
+		"or2": "or"
+	},
+	"auxillaries": {
+		"mac": 1,
+		"mc": 1,
+
+		"von": 1,
+		"von der": 1,
+		"von den": 1,
+		"vom": 1,
+		"zu": 1,
+		"zum": 1,
+		"zur": 1,
+		"von und zu": 1,
+
+		"van": 1,
+		"van der": 1,
+        "van de": 1,
+        "van der": 1,
+        "van den": 1,
+        "de": 1,
+        "den": 1,
+        "vande": 1,
+        "vander": 1,
+        
+        "di": 1,
+	    "de": 1,
+	    "da": 1,
+	    "della": 1,
+		"dalla": 1,
+		"la": 1,
+		"lo": 1,
+		"li": 1, 
+		"del": 1,
+        
+        "des": 1,
+        "le": 1,
+        "les": 1,
+		"du": 1,
+
+        "de la": 1,
+        "del": 1,
+        "de los": 1,
+        "de las": 1,
+
+		"do": 1,
+		"abu": 1,
+		"ibn": 1,
+		"bar": 1,
+		"ter": 1,
+		"ben": 1,
+		"bin": 1
+	},
+	"prefixes": [
+		"doctor",
+		"dr",
+		"mr",
+		"mrs",
+		"ms",
+		"mister",
+		"madame",
+		"madamoiselle",
+		"miss",
+		
+		"herr",
+		"hr",
+		"frau",
+		"fr",
+		"fraulein",
+		"frl",
+		
+		"monsieur",
+		"mssr",
+		"mdm",
+		"mlle",
+		
+		"señor",
+        "señora",
+        "señorita",
+        "sr",
+        "sra",
+        "srta",
+        
+        "meneer",
+        "mevrouw"
+	],
+	"suffixes": [
+		",",
+		"junior",
+		"jr",
+		"senior",
+		"sr",
+		"i",
+		"iii",
+		"iii",
+		"iv",
+		"v",
+		"vi",
+		"vii",
+		"viii",
+		"ix",
+		"x",
+		"2nd",
+		"3rd",
+		"4th",
+		"5th",
+		"6th",
+		"7th",
+		"8th",
+		"9th",
+		"10th",
+		"esq",
+		"phd",
+		"md",
+		"ddm",
+		"dds"
+	]
+}
+;
+/*
+ * nameprs.js - Person name parser
+ * 
+ * Copyright © 2012, JEDL Software, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* !depends 
+ilibglobal.js 
+locale.js
+util/utils.js 
+ctype.isalpha.js 
+ctype.isideo.js 
+ctype.ispunct.js 
+ctype.isspace.js 
+*/
+
+// !data name
+
+// notes:
+// icelandic given names: http://en.wiktionary.org/wiki/Appendix:Icelandic_given_names
+// danish approved given names: http://www.familiestyrelsen.dk/samliv/navne/
+// http://www.mentalfloss.com/blogs/archives/59277
+// other countries with first name restrictions: Norway, China, New Zealand, Japan, Sweden, Germany, Hungary
+
+/**
+ * @class
+ * A class to parse names of people. Different locales have different conventions when it
+ * comes to naming people.<p>
+ * 
+ * The options can contain any of the following properties:
+ * 
+ * <ul>
+ * <li><i>locale</i> - use the rules and conventions of the given locale in order to parse
+ * the name
+ * <li><i>style</i> - explicitly use the named style to parse the name. Valid values so 
+ * far are "western" and "asian". If this property is not specified, then the style will 
+ * be gleaned from the name itself. This class will count the total number of Latin or Asian 
+ * characters. If the majority of the characters are in one style, that style will be 
+ * used to parse the whole name. 
+ * <li><i>order</i> - explicitly use the given order for names. In some locales, such
+ * as Russian, names may be written equally validly as "givenName familyName" or "familyName
+ * givenName". This option tells the parser which order to prefer, and overrides the 
+ * default order for the locale. Valid values are "gf" (given-family) or "fg" (family-given).
+ * 
+ * <li>onLoad - a callback function to call when the name info is fully 
+ * loaded and the name has been parsed. When the onLoad option is given, the name object 
+ * will attempt to load any missing locale data using the ilib loader callback.
+ * When the constructor is done (even if the data is already preassembled), the 
+ * onLoad function is called with the current instance as a parameter, so this
+ * callback can be used with preassembled or dynamic loading or a mix of the two.
+ * 
+ * <li>sync - tell whether to load any missing locale data synchronously or 
+ * asynchronously. If this option is given as "false", then the "onLoad"
+ * callback must be given, as the instance returned from this constructor will
+ * not be usable for a while. 
+ * </ul>
+ * 
+ * When the parser has completed its parsing, it fills in the fields listed below.<p>
+ * 
+ * For names that include auxilliary words, such as the family name "van der Heijden", all 
+ * of the auxilliary words ("van der") will be included in the field.<p>
+ * 
+ * For names in Spanish locales, it is assumed that the family name is doubled. That is,
+ * a person may have a paternal family name followed by a maternal family name. All
+ * family names will be listed in the familyName field as normal, separated by spaces. 
+ * When formatting the short version of such names, only the paternal family name will 
+ * be used.
+ * 
+ * @constructor
+ * @param {string|ilib.Name=} name the name to parse
+ * @param {Object=} options Options governing the construction of this name instance
+ */
+ilib.Name = function(name, options) {
+	var sync = true;
+	
+	if (typeof(name) === 'object') {
+		// copy constructor
+		/**
+		 * The prefixes for this name
+		 * @type string
+		 */
+		this.prefix = name.prefix;
+		/**
+		 * The given (personal) name in this name.
+		 * @type string
+		 */
+		this.givenName = name.givenName;
+		/**
+		 * The middle names used in this name. If there are multiple middle names, they all 
+		 * appear in this field separated by spaces. 
+		 * @type string
+		 */
+		this.middleName = name.middleName;
+		/**
+		 * The family names in this name. If there are multiple family names, they all 
+		 * appear in this field separated by spaces.
+		 * @type string
+		 */
+		this.familyName = name.familyName;
+		/**
+		 * The suffixes for this name. If there are multiple suffixes, they all 
+		 * appear in this field separated by spaces.
+		 * @type string
+		 */
+		this.suffix = name.suffix;
+		
+		// private properties
+		this.locale = name.locale;
+		this.style = name.style;
+		this.order = name.order;
+		return;
+	}
+
+	if (options) {
+		if (options.locale) {
+			this.locale = (typeof(options.locale) === 'string') ? new ilib.Locale(options.locale) : options.locale;
+		}
+		
+		if (options.style && (options.style === "asian" || options.style === "western")) {
+			this.style = options.style;
+		}
+		
+		if (options.order && (options.order === "gf" || options.order === "fg")) {
+			this.order = options.order;
+		}
+		
+		if (typeof(options.sync) !== 'undefined') {
+			sync = (options.sync == true);
+		}
+	}
+
+	if (!ilib.Name.cache) {
+		ilib.Name.cache = {};
+	}
+
+	this.locale = this.locale || new ilib.Locale();
+	var spec = this.locale.getSpec().replace(/-/g, "_");
+	if (typeof(ilib.Name.cache[spec]) === 'undefined') {
+		/**
+		 * @private
+		 * @type {{sortByHeadWord:boolean,conjunctions:Object,auxillaries:Object,prefixes:Object,suffixes:Object,knownFamilyNames:Object,nameStyle:string}}
+		 */
+		this.info = /** @type {{sortByHeadWord:boolean,conjunctions:Object,auxillaries:Object,prefixes:Object,suffixes:Object,knownFamilyNames:Object,nameStyle:string}} */ ilib.mergeLocData("name", this.locale);
+		if (this.info) {
+			ilib.Name.cache[spec] = this.info;
+			this._init(name);
+			if (options && typeof(options.onLoad) === 'function') {
+				options.onLoad(this);
+			}
+		} else if (typeof(ilib._load) === 'function') {
+			// locale is not preassembled, so attempt to load it dynamically
+			var files = ilib.getLocFiles(this.locale, "name");
+			
+			ilib._load(files, sync, function(arr) {
+				this.info = {};
+				for (var i = 0; i < arr.length; i++) {
+					if (typeof(arr[i]) !== 'undefined') {
+						this.info = ilib.merge(this.info, arr[i]);
+					}
+				}
+				
+				ilib.Name.cache[spec] = this.info;
+				this._init(name);
+				if (options && typeof(options.onLoad) === 'function') {
+					options.onLoad(this);
+				}
+			}.bind(this));
+		} else {
+			// no data other than the generic shared data
+			this.info = ilib.data.name;
+			ilib.Name.cache[spec] = this.info;
+			this._init(name);
+			if (options && typeof(options.onLoad) === 'function') {
+				options.onLoad(this);
+			}
+		}
+	} else {
+		this.info = ilib.Name.cache[spec];
+		this._init(name);
+		if (options && typeof(options.onLoad) === 'function') {
+			options.onLoad(this);
+		}
+	}
+};
+
+/**
+ * @static
+ * @protected
+ */
+ilib.Name._isAsianName = function (name) {
+	// the idea is to count the number of asian chars and the number
+	// of latin chars. If one is greater than the other, choose
+	// that style.
+	var asian = 0, latin = 0, i;
+	
+	if (name && name.length > 0) {
+		for (i = 0; i < name.length; i++) {
+			if (ilib.CType.isAlpha(name.charAt(i))) {
+				latin++;
+			} else if (ilib.CType.isIdeo(name.charAt(i))) {
+				asian++;
+			}
+		}
+		
+		return latin < asian;
+	}
+
+	return false;
+};
+
+/**
+ * @static
+ * @protected
+ * Return true if any Latin letters are found in the string. Return
+ * false if all the characters are non-Latin.
+ */
+ilib.Name._isEuroName = function(name) {
+	var c, 
+		n = new ilib.String(name),
+		it = n.charIterator();
+	
+	while (it.hasNext()) {
+		c = it.next();
+		
+		if (!ilib.CType.isIdeo(c) && 
+			 !ilib.CType.isPunct(c) &&
+			 !ilib.CType.isSpace(c)) {
+			return true;
+		}
+	}
+	
+	return false;
+};
+
+ilib.Name.prototype = {
+    /**
+     * @protected
+     */
+    _init: function (name) {
+    	var parts, prefixArray, prefix, prefixLower,
+			suffixArray, suffix, suffixLower,
+			asianName, i, info, hpSuffix;
+
+    	if (name) {
+    		// for DFISH-12905, pick off the part that the LDAP server automatically adds to our names in HP emails
+    		i = name.search(/\s*[,\(\[\{<]/);
+    		if (i !== -1) {
+    			hpSuffix = name.substring(i);
+    			hpSuffix = hpSuffix.replace(/\s+/g, ' ');	// compress multiple whitespaces
+    			suffixArray = hpSuffix.split(" ");
+    			var conjunctionIndex = this._findLastConjunction(suffixArray);
+    			if (conjunctionIndex > -1) {
+    				// it's got conjunctions in it, so this is not really a suffix
+    				hpSuffix = undefined;
+    			} else {
+    				name = name.substring(0,i);
+    			}
+    		}
+    		
+    		if (this.info.nameStyle === "asian") {
+    			asianName = !ilib.Name._isEuroName(name);
+    			info = asianName ? this.info : ilib.data.name;
+    		} else {
+    			asianName = ilib.Name._isAsianName(name);
+	    		info = asianName ? ilib.data.name : this.info;
+    		}
+    		
+    		if (asianName) {
+    			// all-asian names
+    			name = name.replace(/\s+/g, '');	// eliminate all whitespaces
+    			parts = name.trim().split('');
+    		} else {
+    			name = name.replace(/, /g, ' , ');
+    			name = name.replace(/\s+/g, ' ');	// compress multiple whitespaces
+    			parts = name.trim().split(' ');
+    		}
+    		
+    		// check for prefixes
+    		if (parts.length > 1) {
+    			for (i = parts.length; i > 0; i--) {
+    				prefixArray = parts.slice(0, i);
+    				prefix = prefixArray.join(asianName ? '' : ' ');
+    				prefixLower = prefix.toLowerCase();
+    				prefixLower = prefixLower.replace(/[,\.]/g, '');  // ignore commas and periods
+    			
+    				if (info.prefixes && info.prefixes.indexOf(prefixLower) > -1) {
+    					if (this.prefix) {
+    						if (!asianName) {
+    							this.prefix += ' ';
+    						} 
+    						this.prefix += prefix;
+    					} else {
+    						this.prefix = prefix;
+    					}
+    					parts = parts.slice(i);
+    					i = parts.length;
+    				}
+    			}
+    		}
+    		
+    		// check for suffixes
+    		if (parts.length > 1) {
+    			for (i = parts.length; i > 0; i--) {
+    				suffixArray = parts.slice(-i);
+    				suffix = suffixArray.join(asianName ? '' : ' ');
+    				suffixLower = suffix.toLowerCase();
+    				suffixLower = suffixLower.replace(/[\.]/g, '');  // ignore periods
+    				
+    				if (info.suffixes && info.suffixes.indexOf(suffixLower) > -1) {
+    					if (this.suffix) {
+    						if (!asianName && !ilib.CType.isPunct(this.suffix.charAt(0))) {
+    							this.suffix = ' ' + this.suffix;
+    						}
+    						this.suffix = suffix + this.suffix;
+    					} else {
+    						this.suffix = suffix;
+    					}
+    					parts = parts.slice(0, parts.length-i);
+    					i = parts.length;
+    				}
+    			}
+    		}
+    		
+    		if (hpSuffix) {
+    			this.suffix = (this.suffix && this.suffix + hpSuffix) || hpSuffix;
+    		}
+
+    		// adjoin auxillary words to their headwords
+    		if (parts.length > 1 && !asianName ) {
+    			parts = this._joinAuxillaries(parts, asianName);
+    		}
+    		
+    		if (asianName) {
+    			this._parseAsianName(parts);
+    		} else {
+    			this._parseWesternName(parts);
+    		}
+    		
+    		this._joinNameArrays();
+    	}
+    },
+    
+	/**
+	 * @return {number} 
+	 *
+	_findSequence: function(parts, hash, isAsian) {
+		var sequence, sequenceLower, sequenceArray, aux = [], i, ret = {};
+		
+		if (parts.length > 0 && hash) {
+			//console.info("_findSequence: finding sequences");
+			for (var start = 0; start < parts.length-1; start++) {
+				for ( i = parts.length; i > start; i-- ) {
+					sequenceArray = parts.slice(start, i);
+					sequence = sequenceArray.join(isAsian ? '' : ' ');
+					sequenceLower = sequence.toLowerCase();
+					sequenceLower = sequenceLower.replace(/[,\.]/g, '');  // ignore commas and periods
+					
+					//console.info("_findSequence: checking sequence: '" + sequenceLower + "'");
+					
+					if ( sequenceLower in hash ) {
+						ret.match = sequenceArray;
+						ret.start = start;
+						ret.end = i;
+						return ret;
+						//console.info("_findSequence: Found sequence '" + sequence + "' New parts list is " + JSON.stringify(parts));
+					}
+				}
+			}
+		}
+	
+		return undefined;
+	},
+	*/
+	
+	/**
+	 * @protected
+	 */
+	_findPrefix: function (parts, names, isAsian) {
+		var i, prefix, prefixLower, prefixArray, aux = [];
+		
+		if (parts.length > 0 && names) {
+			for (i = parts.length; i > 0; i--) {
+				prefixArray = parts.slice(0, i);
+				prefix = prefixArray.join(isAsian ? '' : ' ');
+				prefixLower = prefix.toLowerCase();
+				prefixLower = prefixLower.replace(/[,\.]/g, '');  // ignore commas and periods
+				
+				if (prefixLower in names) {
+					aux = aux.concat(isAsian ? prefix : prefixArray);
+					parts = parts.slice(i);
+					i = parts.length + 1;
+				}
+			}
+		}
+		
+		return aux;
+	},
+
+	/**
+	 * @protected
+	 */
+	_findSuffix: function (parts, names, isAsian) {
+		var i, j, seq = "";
+		
+		for (i = 0; i < names.length; i++) {
+			if (parts.length >= names[i].length) {
+				j = 0;
+				while (j < names[i].length && parts[parts.length-j] === names[i][names[i].length-j]) {
+					j++;
+				}
+				if (j >= names[i].length) {
+					seq = parts.slice(parts.length-j).join(isAsian ? "" : " ") + (isAsian ? "" : " ") + seq;
+					parts = parts.slice(0, parts.length-j);
+					i = -1; // restart the search
+				}
+			}
+		}
+
+		this.suffix = seq;
+		return parts;
+	},
+
+	/**
+	 * @protected
+	 * Find the last instance of 'and' in the name
+	 * @param {Array.<string>} parts
+	 * @returns {number}
+	 */
+	_findLastConjunction: function _findLastConjunction(parts) {
+		var conjunctionIndex = -1, index, part;
+		
+		for (index = 0; index < parts.length; index++) {
+			part = parts[index];
+			if (typeof(part) === 'string') {
+				part = part.toLowerCase();
+				// also recognize English
+				if ("and" === part || "or" === part || "&" === part || "+" === part) {
+					conjunctionIndex = index;
+				}
+				if (this.info.conjunctions.and1 === part || 
+					this.info.conjunctions.and2 === part || 
+					this.info.conjunctions.or1 === part ||
+					this.info.conjunctions.or2 === part || 
+					("&" === part) || 
+					("+" === part)) {
+					conjunctionIndex = index;
+				}
+			}
+		}
+		return conjunctionIndex;
+	},
+
+	/**
+	 * @protected
+	 * @param {Array.<string>} parts the current array of name parts
+	 * @param {boolean} isAsian true if the name is being parsed as an Asian name
+	 * @return {Array.<string>} the remaining parts after the prefixes have been removed
+	 */
+	_extractPrefixes: function (parts, isAsian) {
+		var i = this._findPrefix(parts, this.info.prefixes, isAsian);
+		if (i > 0) {
+			this.prefix = parts.slice(0, i).join(isAsian ? "" : " ");
+			return parts.slice(i);
+		}
+		// prefixes not found, so just return the array unmodified
+		return parts;
+	},
+
+	/**
+	 * @protected
+	 * @param {Array.<string>} parts the current array of name parts
+	 * @param {boolean} isAsian true if the name is being parsed as an Asian name
+	 * @return {Array.<string>} the remaining parts after the suffices have been removed
+	 */
+	_extractSuffixes: function (parts, isAsian) {
+		var i = this._findSuffix(parts, this.info.suffixes, isAsian);
+		if (i > 0) {
+			this.suffix = parts.slice(i).join(isAsian ? "" : " ");
+			return parts.slice(0,i);
+		}
+		// suffices not found, so just return the array unmodified
+		return parts;
+	},
+	
+	/**
+	 * @protected
+	 * Adjoin auxillary words to their head words.
+	 * @param {Array.<string>} parts the current array of name parts
+	 * @param {boolean} isAsian true if the name is being parsed as an Asian name
+	 * @return {Array.<string>} the parts after the auxillary words have been plucked onto their head word
+	 */
+	_joinAuxillaries: function (parts, isAsian) {
+		var start, i, prefixArray, prefix, prefixLower;
+		
+		if (this.info.auxillaries && (parts.length > 2 || this.prefix)) {
+			for (start = 0; start < parts.length-1; start++) {
+				for (i = parts.length; i > start; i--) {
+					prefixArray = parts.slice(start, i);
+					prefix = prefixArray.join(' ');
+					prefixLower = prefix.toLowerCase();
+					prefixLower = prefixLower.replace(/[,\.]/g, '');  // ignore commas and periods
+					
+					if (prefixLower in this.info.auxillaries) {
+						parts.splice(start, i+1-start, prefixArray.concat(parts[i]));
+						i = start;
+					}
+				}
+			}
+		}
+		
+		return parts;
+	},
+
+	/**
+	 * @protected
+	 * Recursively join an array or string into a long string.
+	 */
+	_joinArrayOrString: function _joinArrayOrString(part) {
+		var i;
+		if (typeof(part) === 'object') {
+			for (i = 0; i < part.length; i++) {
+				part[i] = this._joinArrayOrString(part[i]);
+			}
+			var ret = "";
+			part.forEach(function (segment) {
+				if (ret.length > 0 && !ilib.CType.isPunct(segment.charAt(0))) {
+					ret += ' ';
+				}
+				ret += segment;
+			});
+			return ret;
+		}
+		return part;
+	},
+	
+	/**
+	 * @protected
+	 */
+	_joinNameArrays: function _joinNameArrays() {
+		var prop;
+		for (prop in this) {
+			if (this[prop] !== undefined && typeof(this[prop]) === 'object' && this[prop] instanceof Array) {
+				this[prop] = this._joinArrayOrString(this[prop]);
+			}
+		}
+	},
+
+	/**
+	 * @protected
+	 */
+	_parseAsianName: function (parts) {
+		var familyNameArray = this._findPrefix(parts, this.info.knownFamilyNames, true);
+		
+		if (familyNameArray && familyNameArray.length > 0) {
+			this.familyName = familyNameArray.join('');
+			this.givenName = parts.slice(this.familyName.length).join('');
+		} else if (this.suffix || this.prefix) {
+			this.familyName = parts.join('');
+		} else {
+			this.givenName = parts.join('');
+		}
+	},
+	
+	/**
+	 * @protected
+	 */
+	_parseSpanishName: function (parts) {
+		var conjunctionIndex;
+		
+		if (parts.length === 1) {
+			if (this.prefix || typeof(parts[0]) === 'object') {
+				this.familyName = parts[0];
+			} else {
+				this.givenName = parts[0];
+			}
+		} else if (parts.length === 2) {
+			// we do G F
+			this.givenName = parts[0];
+			this.familyName = parts[1];
+		} else if (parts.length === 3) {
+			conjunctionIndex = this._findLastConjunction(parts);
+			// if there's an 'and' in the middle spot, put everything in the first name
+			if (conjunctionIndex === 1) {
+				this.givenName = parts;
+			} else {
+				// else, do G F F
+				this.givenName = parts[0];
+				this.familyName = parts.slice(1);
+			}
+		} else if (parts.length > 3) {
+			//there are at least 4 parts to this name
+			
+			conjunctionIndex = this._findLastConjunction(parts);
+			if (conjunctionIndex > 0) {
+				// if there's a conjunction that's not the first token, put everything up to and 
+				// including the token after it into the first name, the last 2 tokens into
+				// the family name (if they exist) and everything else in to the middle name
+				// 0 1 2 3 4 5
+				// G A G
+				// G A G F
+				// G G A G
+				// G A G F F
+				// G G A G F
+				// G G G A G
+				// G A G M F F
+				// G G A G F F
+				// G G G A G F
+				// G G G G A G
+				this.givenName = parts.splice(0,conjunctionIndex+2);
+				if (parts.length > 1) {
+					this.familyName = parts.splice(parts.length-2, 2);
+					if ( parts.length > 0 ) {
+						this.middleName = parts;
+					}
+				} else if (parts.length === 1) {
+					this.familyName = parts[0];
+				}
+			} else {
+				this.givenName = parts.splice(0,1);
+				this.familyName = parts.splice(parts.length-2, 2);
+				this.middleName = parts;
+			}
+		}
+	},
+
+	/**
+	 * @protected
+	 */
+	_parseWesternName: function (parts) {
+		if (this.locale.getLanguage() === "es") {
+			// in spain and mexico, we parse names differently than in the rest of the world 
+			// because of the double family names
+			this._parseSpanishName(parts);
+		} else if (this.locale.getLanguage() === "ru") {
+			/*
+			 * In Russian, names can be given equally validly as given-family 
+			 * or family-given. Use the value of the "order" property of the
+			 * constructor options to give the default when the order is ambiguous.
+			 */
+			// TODO: this._parseRussianName(parts);
+		} else {
+			/* Western names are parsed as follows, and rules are applied in this 
+			 * order:
+			 * 
+			 * G
+			 * G F
+			 * G M F
+			 * G M M F
+			 * P F
+			 * P G F 
+			 */
+			var conjunctionIndex;
+			
+			if (parts.length === 1) {
+				if (this.prefix || typeof(parts[0]) === 'object') {
+					// already has a prefix, so assume it goes with the family name like "Dr. Roberts" or
+					// it is a name with auxillaries, which is almost always a family name
+					this.familyName = parts[0];
+				} else {
+					this.givenName = parts[0];
+				}
+			} else if (parts.length === 2) {
+				// we do G F
+				this.givenName = parts[0];
+				this.familyName = parts[1];
+			} else if (parts.length >= 3) {
+				//find the first instance of 'and' in the name
+				conjunctionIndex = this._findLastConjunction(parts);
+		
+				if (conjunctionIndex > 0) {
+					// if there's a conjunction that's not the first token, put everything up to and 
+					// including the token after it into the first name, the last token into
+					// the family name (if it exists) and everything else in to the middle name
+					// 0 1 2 3 4 5
+					// G A G M M F
+					// G G A G M F
+					// G G G A G F
+					// G G G G A G
+					this.givenName = parts.slice(0,conjunctionIndex+2);
+					if (conjunctionIndex + 1 < parts.length - 1) {
+						this.familyName = parts.splice(parts.length-1, 1);
+						if (conjunctionIndex + 2 < parts.length - 1) {
+							this.middleName = parts.slice(conjunctionIndex + 2, parts.length - conjunctionIndex - 3);
+						}
+					}
+				} else {
+					this.givenName = parts[0];
+					this.middleName = parts.slice(1, parts.length-1);
+					this.familyName = parts[parts.length-1];
+				}
+			}
+		}
+	},
+
+	/**
+	 * When sorting names with auxiliary words (like "van der" or "de los"), determine
+	 * which is the "head word" and return a string that can be easily sorted by head
+	 * word. In English, names are always sorted by initial characters. In places like
+	 * the Netherlands or Germany, family names are sorted by the head word of a list
+	 * of names rather than the first element of that name.
+	 * @return {string|undefined} a string containing the family name[s] to be used for sorting
+	 * in the current locale, or undefined if there is no family name in this object
+	 */
+	getSortFamilyName: function() {
+		var name,
+			auxillaries, 
+			auxString, 
+			parts,
+			i;
+		
+		// no name to sort by
+		if (!this.familyName) {
+			return undefined;
+		}
+		
+		// first break the name into parts
+		if (this.info) {
+			if (this.info.sortByHeadWord) {
+				if (typeof(this.familyName) === 'string') {
+					name = this.familyName.replace(/\s+/g, ' ');	// compress multiple whitespaces
+					parts = name.trim().split(' ');
+				} else {
+					// already split
+					parts = /** @type Array */ this.familyName;
+				}
+				
+				auxillaries = this._findPrefix(parts, this.info.auxillaries, false);
+				if (auxillaries && auxillaries.length > 0) {
+					if (typeof(this.familyName) === 'string') {
+						auxString = auxillaries.join(' ');
+						name = this.familyName.substring(auxString.length+1) + ', ' + auxString;
+					} else {
+						name = parts.slice(auxillaries.length).join(' ') + 
+							', ' + 
+							parts.slice(0,auxillaries.length).join(' ');
+					}
+				}
+			} else if (this.info.knownFamilyNames && this.familyName) {
+				parts = this.familyName.split('');
+				var familyNameArray = this._findPrefix(parts, this.info.knownFamilyNames, true);
+				name = "";
+				for (i = 0; i < familyNameArray.length; i++) {
+					name += (this.info.knownFamilyNames[familyNameArray[i]] || "");
+				}
+			}
+		}
+	
+		return name || this.familyName;
+	},
+	
+	getHeadFamilyName: function() {
+	},
+	
+	/** 
+	 * @protected
+	 * Return a shallow copy of the current instance.
+	 */
+	clone: function () {
+		var other = new ilib.Name();
+		ilib.shallowCopy(this, other);
+		return other;
+	}
+};
+
+
+/*
+ * namefmt.js - Format person names for display
+ * 
+ * Copyright © 2012, JEDL Software, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* !depends 
+ilibglobal.js
+locale.js
+strings.js
+nameprs.js
+ctype.ispunct.js
+*/
+
+// !data name
+
+/**
+ * @class
+ * Creates a formatter that can format person name instances (ilib.Name) for display to
+ * a user. The options may contain the following properties:
+ * 
+ * <ul>
+ * <li><i>locale</i> - Use the conventions of the given locale to construct the name format. 
+ * <li><i>style</i> - Format the name with the given style. The value of this property
+ * should be one of the following strings: 
+ *   <ul>
+ *     <li><i>short</i> - Format a short name with just the given and family names.
+ *     <li><i>medium</i> - Format a medium-length name with the given, middle, and family names.
+ *     <li><i>long</i> - Format a long name with all names available in the given name object, including
+ *     prefixes and suffixes.
+ *   </ul>
+ * <li><i>components</i> - Format the name with the given components in the correct
+ * order for those components. Components are encoded as a string of letters representing
+ * the desired components:
+ *   <ul>
+ *     <li><i>p</i> - prefixes
+ *     <li><i>g</i> - given name
+ *     <li><i>m</i> - middle names
+ *     <li><i>f</i> - family name
+ *     <li><i>s</i> - suffixes
+ *   </ul>
+ * <p>
+ * 
+ * For example, the string "pf" would mean to only format any prefixes and family names 
+ * together and leave out all the other parts of the name.<p>
+ * 
+ * The components can be listed in any order in the string. The <i>components</i> option 
+ * overrides the <i>style</i> option if both are specified.
+
+ * <li>onLoad - a callback function to call when the locale info object is fully 
+ * loaded. When the onLoad option is given, the localeinfo object will attempt to
+ * load any missing locale data using the ilib loader callback.
+ * When the constructor is done (even if the data is already preassembled), the 
+ * onLoad function is called with the current instance as a parameter, so this
+ * callback can be used with preassembled or dynamic loading or a mix of the two.
+ * 
+ * <li>sync - tell whether to load any missing locale data synchronously or 
+ * asynchronously. If this option is given as "false", then the "onLoad"
+ * callback must be given, as the instance returned from this constructor will
+ * not be usable for a while. 
+ * </ul>
+ * 
+ * Formatting names is a locale-dependent function, as the order of the components 
+ * depends on the locale. The following explains some of the details:<p>
+ * 
+ * <ul>
+ * <li>In Western countries, the given name comes first, followed by a space, followed 
+ * by the family name. In Asian countries, the family name comes first, followed immediately
+ * by the given name with no space. But, that format is only used with Asian names written
+ * in ideographic characters. In Asian countries, especially ones where both an Asian and 
+ * a Western language are used (Hong Kong, Singapore, etc.), the convention is often to 
+ * follow the language of the name. That is, Asian names are written in Asian style, and 
+ * Western names are written in Western style. This class follows that convention as
+ * well. 
+ * <li>In other Asian countries, Asian names
+ * written in Latin script are written with Asian ordering. eg. "Xu Ping-an" instead
+ * of the more Western order "Ping-an Xu", as the order is thought to go with the style
+ * that is appropriate for the name rather than the style for the language being written.
+ * <li>In some Spanish speaking countries, people often take both their maternal and
+ * paternal last names as their own family name. When formatting a short or medium style
+ * of that family name, only the paternal name is used. In the long style, all the names
+ * are used. eg. "Juan Julio Raul Lopez Ortiz" took the name "Lopez" from his father and 
+ * the name "Ortiz" from his mother. His family name would be "Lopez Ortiz". The formatted
+ * short style of his name would be simply "Juan Lopez" which only uses his paternal
+ * family name of "Lopez".
+ * <li>In many Western languages, it is common to use auxillary words in family names. For
+ * example, the family name of "Ludwig von Beethoven" in German is "von Beethoven", not 
+ * "Beethoven". This class ensures that the family name is formatted correctly with 
+ * all auxillary words.   
+ * </ul>
+ * 
+ * @constructor
+ * @param {Object} options A set of options that govern how the formatter will behave
+ */
+ilib.NameFmt = function(options) {
+	var sync = true;
+	
+	this.style = "short";
+	
+	if (options) {
+		if (options.locale) {
+			this.locale = (typeof(options.locale) === 'string') ? new ilib.Locale(options.locale) : options.locale;
+		}
+		
+		if (options.style) {
+			this.style = options.style;
+		}
+		
+		if (options.components) {
+			this.components = options.components;
+		}
+		
+		if (typeof(options.sync) !== 'undefined') {
+			sync = (options.sync == true);
+		}
+	}
+	
+	// set up defaults in case we need them
+	this.defaultEuroTemplate = new ilib.String("{prefix} {givenName} {middleName} {familyName}{suffix}");
+	this.defaultAsianTemplate = new ilib.String("{prefix}{familyName}{givenName}{middleName}{suffix}");
+	this.useFirstFamilyName = false;
+
+	switch (this.style) {
+		default:
+		case "s":
+		case "short":
+			this.style = "short";
+			break;
+		case "m":
+		case "medium":
+			this.style = "medium";
+			break;
+		case "l":
+		case "long":
+			this.style = "long";
+			break;
+		case "f":
+		case "full":
+			this.style = "full";
+			break;
+	}
+
+	if (!ilib.Name.cache) {
+		ilib.Name.cache = {};
+	}
+
+	this.locale = this.locale || new ilib.Locale();
+	var spec = this.locale.getSpec().replace(/-/g, "_");
+	if (typeof(ilib.Name.cache[spec]) === 'undefined') {
+		/**
+		 * @private
+		 */
+		this.info = ilib.mergeLocData("name", this.locale);
+		if (this.info) {
+			ilib.Name.cache[spec] = this.info;
+			this._init();
+			if (options && typeof(options.onLoad) === 'function') {
+				options.onLoad(this);
+			}
+		} else if (typeof(ilib._load) === 'function') {
+			// locale is not preassembled, so attempt to load it dynamically
+			var files = ilib.getLocFiles(this.locale, "name");
+			
+			ilib._load(files, sync, function(arr) {
+				this.info = {};
+				for (var i = 0; i < arr.length; i++) {
+					if (typeof(arr[i]) !== 'undefined') {
+						this.info = ilib.merge(this.info, arr[i]);
+					}
+				}
+				
+				ilib.Name.cache[spec] = this.info;
+				this._init();
+				if (options && typeof(options.onLoad) === 'function') {
+					options.onLoad(this);
+				}
+			}.bind(this));
+		} else {
+			// no data other than the generic shared data
+			this.info = ilib.data.name;
+			ilib.Name.cache[spec] = this.info;
+			this._init();
+			if (options && typeof(options.onLoad) === 'function') {
+				options.onLoad(this);
+			}
+		}
+	} else {
+		this.info = ilib.Name.cache[spec];
+		this._init();
+		if (options && typeof(options.onLoad) === 'function') {
+			options.onLoad(this);
+		}
+	}
+};
+
+ilib.NameFmt.prototype = {
+	/**                          
+	 * @protected
+	 */
+	_init: function() {
+		if (this.components) {
+			var valids = {"p":1,"g":1,"m":1,"f":1,"s":1},
+				arr = this.components.split("");
+			this.comps = {};
+			for (var i = 0; i < arr.length; i++) {
+				if (valids[arr[i].toLowerCase()]) {
+					this.comps[arr[i].toLowerCase()] = true;
+				}
+			}
+		} else {
+			this.comps = this.info.components[this.style];
+		}
+
+		this.template = new ilib.String(this.info.format);
+		
+		if (this.locale.language === "es" && (this.style !== "long" && this.style !== "full")) {
+			this.useFirstFamilyName = true;	// in spanish, they have 2 family names, the maternal and paternal
+		}
+
+		this.isAsianLocale = (this.info.nameStyle === "asian");
+	},
+
+	/**
+	 * @protected
+	 * adjoin auxillary words to their head words
+	 */
+	_adjoinAuxillaries: function (parts, namePrefix) {
+		var start, i, prefixArray, prefix, prefixLower;
+		
+		//console.info("_adjoinAuxillaries: finding and adjoining aux words in " + parts.join(' '));
+		
+		if ( this.info.auxillaries && (parts.length > 2 || namePrefix) ) {
+			for ( start = 0; start < parts.length-1; start++ ) {
+				for ( i = parts.length; i > start; i-- ) {
+					prefixArray = parts.slice(start, i);
+					prefix = prefixArray.join(' ');
+					prefixLower = prefix.toLowerCase();
+					prefixLower = prefixLower.replace(/[,\.]/g, '');  // ignore commas and periods
+					
+					//console.info("_adjoinAuxillaries: checking aux prefix: '" + prefixLower + "' which is " + start + " to " + i);
+					
+					if ( prefixLower in this.info.auxillaries ) {
+						//console.info("Found! Old parts list is " + JSON.stringify(parts));
+						parts.splice(start, i+1-start, prefixArray.concat(parts[i]));
+						//console.info("_adjoinAuxillaries: Found! New parts list is " + JSON.stringify(parts));
+						i = start;
+					}
+				}
+			}
+		}
+		
+		//console.info("_adjoinAuxillaries: done. Result is " + JSON.stringify(parts));
+
+		return parts;
+	},
+
+	/**
+	 * Return the locale for this formatter instance.
+	 * @return {ilib.Locale} the locale instance for this formatter
+	 */
+	getLocale: function () {
+		return this.locale;
+	},
+	
+	/**
+	 * Return the style of names returned by this formatter
+	 * @return {string} the style of names returned by this formatter
+	 */
+	getStyle: function () {
+		return this.style;
+	},
+	
+	/**
+	 * Return the list of components used to format names in this formatter
+	 * @return {string} the list of components
+	 */
+	getComponents: function () {
+		return this.components;
+	},
+	
+	/**
+	 * Format the name for display in the current locale with the options set up
+	 * in the constructor of this formatter instance.<p>
+	 * 
+	 * If the name does not contain all the parts required for the style, those parts
+	 * will be left blank.<p>
+	 * 
+	 * There are two basic styles of formatting: European, and Asian. If this formatter object
+	 * is set for European style, but an Asian name is passed to the format method, then this
+	 * method will format the Asian name with a generic Asian template. Similarly, if the
+	 * formatter is set for an Asian style, and a European name is passed to the format method,
+	 * the formatter will use a generic European template.<p>
+	 * 
+	 * This means it is always safe to format any name with a formatter for any locale. You should
+	 * always get something at least reasonable as output.<p>
+	 * 
+	 * @param {ilib.Name} name the name to format
+	 * @return {string|undefined} the name formatted according to the style of this formatter instance
+	 */
+	format: function(name) {
+		var formatted, temp, modified, isAsianName;
+		
+		if (!name || typeof(name) !== 'object') {
+			return undefined;
+		}
+		
+		if ((!name.givenName || ilib.Name._isEuroName(name.givenName)) &&
+				 (!name.middleName || ilib.Name._isEuroName(name.middleName)) &&
+				 (!name.familyName || ilib.Name._isEuroName(name.familyName))) {
+			isAsianName = false;	// this is a euro name, even if the locale is asian
+			modified = name.clone();
+			
+			// handle the case where there is no space if there is punctuation in the suffix like ", Phd". 
+			// Otherwise, put a space in to transform "PhD" to " PhD"
+			/*
+			console.log("suffix is " + modified.suffix);
+			if ( modified.suffix ) {
+				console.log("first char is " + modified.suffix.charAt(0));
+				console.log("isPunct(modified.suffix.charAt(0)) is " + ilib.CType.isPunct(modified.suffix.charAt(0)));
+			}
+			*/
+			if (modified.suffix && ilib.CType.isPunct(modified.suffix.charAt(0)) === false) {
+				modified.suffix = ' ' + modified.suffix; 
+			}
+			
+			if (this.useFirstFamilyName && name.familyName) {
+				var familyNameParts = modified.familyName.trim().split(' ');
+				if (familyNameParts.length > 1) {
+					familyNameParts = this._adjoinAuxillaries(familyNameParts, name.prefix);
+				}	//in spain and mexico, we parse names differently than in the rest of the world
+	
+				modified.familyName = familyNameParts[0];
+			}
+		
+			modified._joinNameArrays();
+		} else {
+			isAsianName = true;
+			modified = name;
+		}
+		
+		if (!this.template || isAsianName !== this.isAsianLocale) {
+			temp = isAsianName ? this.defaultAsianTemplate : this.defaultEuroTemplate;
+		} else {
+			temp = this.template;
+		}
+		
+		var parts = {
+			prefix: this.comps["p"] && modified.prefix || "",
+			givenName: this.comps["g"] && modified.givenName || "",
+			middleName: this.comps["m"] && modified.middleName || "",
+			familyName: this.comps["f"] && modified.familyName || "",
+			suffix: this.comps["s"] && modified.suffix || ""
+		};
+		
+		formatted = temp.format(parts);
+		return formatted.replace(/\s+/g, ' ').trim();
+	}
+};
+
 /**
  * @license
  * Copyright © 2012, JEDLSoft
@@ -16151,4 +17559,6 @@ ctype.ispunct.js
 ctype.isspace.js
 ctype.isupper.js
 ctype.isxdigit.js
+nameprs.js
+namefmt.js
 */
