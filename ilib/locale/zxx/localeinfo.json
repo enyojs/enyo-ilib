@@ -1,0 +1,20 @@
+{
+	"currency": "USD",
+	"units": "metric",
+	"clock": "24",
+	"calendar": "gregorian",
+	"firstDayOfWeek": 0,
+	"language.name": "No linguistic content",
+	"numfmt": {
+		"decimalChar": ".",
+		"groupChar": ",",
+		"groupSize": 3,
+		"pctFmt": "{n}%"
+	},
+	"paperSizes": {
+		"regular": "8x11",
+		"photo": "3x5"
+	},
+	"scripts": ["Latn"],
+	"locale": "zxx"
+}

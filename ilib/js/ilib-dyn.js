@@ -1,7 +1,7 @@
 /*
  * ilibglobal.js - define the ilib name space
  * 
- * Copyright © 2012, JEDLSoft
+ * Copyright © 2012-2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -92,8 +92,9 @@ ilib.getLocale = function () {
 					ilib.locale = lang.substring(0,3) + lang.substring(3,5).toUpperCase();
 				}
 			}
-		} else if (typeof(webos) !== 'undefined' && typeof(webos.locales) !== 'undefined') {
-			ilib.locale = webos.locales.ui;
+		} else if (typeof(PalmSystem) !== 'undefined' && typeof(PalmSystem.locales) !== 'undefined') {
+			// webOS
+			ilib.locale = PalmSystem.locales.UI;
 		} else if (typeof(environment) !== 'undefined' && typeof(environment.user) !== 'undefined') {
 			// running under rhino
 			ilib.locale = environment.user.language + '-' + environment.user.country;
@@ -143,9 +144,9 @@ ilib.getTimeZone = function() {
 		if (typeof(navigator) !== 'undefined' && typeof(navigator.timezone) !== 'undefined') {
 			// running in a browser
 			ilib.tz = navigator.timezone;
-		} else	if (typeof(webos) !== 'undefined' && typeof(webos.timezone) !== 'undefined') {
+		} else	if (typeof(PalmSystem) !== 'undefined' && typeof(PalmSystem.timezone) !== 'undefined') {
 			// running in webkit on webOS
-			ilib.tz = webos.timezone;
+			ilib.tz = PalmSystem.timezone;
 		} else if (typeof(environment) !== 'undefined' && typeof(environment.user) !== 'undefined') {
 			// running under rhino
 			ilib.tz = environment.user.timezone;
@@ -218,7 +219,8 @@ ilib.getTimeZone = function() {
  *        });
  *     }
  * }
- * ilib.setLoaderCallback(function(paths, sync, callback) {
+ * // bind to "this" so that "this" is relative to your own instance
+ * ilib.setLoaderCallback(ilib.bind(this, function(paths, sync, callback) {
  *    if (sync) {
  *        var ret = [];
  *        // synchronous
@@ -233,7 +235,7 @@ ilib.getTimeZone = function() {
  *    // asynchronous
  *    var results = [];
  *    loadFiles(this, paths, results, callback);
- * }.bind(this)); // bind to "this" so that "this" is relative to your own instance
+ * }));
  * </pre>
  * 
  * @param {function(Array.<string>,Boolean,function(Object))} loader function to call to 
@@ -320,8 +322,8 @@ ilib.setLoaderCallback = function(loader) {
  */
 ilib.Locale = function(language, region, variant, script) {
 	if (typeof(region) === 'undefined') {
-		this.spec = language || ilib.getLocale();
-		var parts = this.spec.split('-');
+		var spec = language || ilib.getLocale();
+		var parts = spec.split('-');
         for ( var i = 0; i < parts.length; i++ ) {
         	if (ilib.Locale._isLanguageCode(parts[i])) {
     			/** 
@@ -354,33 +356,52 @@ ilib.Locale = function(language, region, variant, script) {
         this.script = this.script || undefined;
         this.variant = this.variant || undefined;
 	} else {
-		this.language = language.toLowerCase();
-		this.region = region.toUpperCase();
-		this.variant = variant;
-		this.script = script;
-
-		this.spec = this.language || "";
-		
-		if (this.region) {
-			if (this.spec.length > 0) {
-				this.spec += "-";
-			}
-			this.spec += region;
+		if (language) {
+			language = language.trim();
+			this.language = language.length > 0 ? language.toLowerCase() : undefined;
+		} else {
+			this.language = undefined;
 		}
-		
-		if (this.script) {
-			if (this.spec.length > 0) {
-				this.spec += "-";
-			}
-			this.spec += "-" + this.script;
+		if (region) {
+			region = region.trim();
+			this.region = region.length > 0 ? region.toUpperCase() : undefined;
+		} else {
+			this.region = undefined;
 		}
-		
-		if (this.variant) {
-			if (this.spec.length > 0) {
-				this.spec += "-";
-			}
-			this.spec += "-" + this.variant;
+		if (variant) {
+			variant = variant.trim();
+			this.variant = variant.length > 0 ? variant : undefined;
+		} else {
+			this.variant = undefined;
 		}
+		if (script) {
+			script = script.trim();
+			this.script = script.length > 0 ? script : undefined;
+		} else {
+			this.script = undefined;
+		}
+	}
+	this.spec = this.language || "";
+	
+	if (this.script) {
+		if (this.spec.length > 0) {
+			this.spec += "-";
+		}
+		this.spec += this.script;
+	}
+	
+	if (this.region) {
+		if (this.spec.length > 0) {
+			this.spec += "-";
+		}
+		this.spec += this.region;
+	}
+	
+	if (this.variant) {
+		if (this.spec.length > 0) {
+			this.spec += "-";
+		}
+		this.spec += this.variant;
 	}
 };
 
@@ -417,7 +438,7 @@ ilib.Locale._notUpper = function(str) {
  * @returns {boolean} true if the string could syntactically be a language code.
  */
 ilib.Locale._isLanguageCode = function(str) {
-	if (str.length < 2 || str.length > 3) {
+	if (typeof(str) === 'undefined' || str.length < 2 || str.length > 3) {
 		return false;
 	}
 
@@ -439,7 +460,7 @@ ilib.Locale._isLanguageCode = function(str) {
  * @returns {boolean} true if the string could syntactically be a language code.
  */
 ilib.Locale._isRegionCode = function (str) {
-	if (str.length != 2) {
+	if (typeof(str) === 'undefined' || str.length !== 2) {
 		return false;
 	}
 	
@@ -462,7 +483,7 @@ ilib.Locale._isRegionCode = function (str) {
  */
 ilib.Locale._isScriptCode = function(str)
 {
-	if (str.length != 4 || ilib.Locale._notUpper(str.charAt(0))) {
+	if (typeof(str) === 'undefined' || str.length !== 4 || ilib.Locale._notUpper(str.charAt(0))) {
 		return false;
 	}
 	
@@ -732,6 +753,50 @@ ilib.Date.prototype = {
 // !depends ilibglobal.js
 
 /**
+ * If Function.prototype.bind does not exist in this JS engine, this
+ * function reimplements it in terms of older JS functions.
+ * bind() doesn't exist in many older browsers.
+ * 
+ * @param {Object} scope object that the method should operate on
+ * @param {function(?)} method method to call
+ * @returns {function(?)|undefined} function that calls the given method 
+ * in the given scope with all of its arguments properly attached, or
+ * undefined if there was a problem with the arguments
+ */
+ilib.bind = function(scope, method/*, bound arguments*/){
+	if (!scope || !method) {
+		return undefined;
+	}
+	
+	/** @protected 
+	 * @param {Arguments} inArrayLike
+	 * @param {number=} inOffset
+	 */
+	function cloneArray(inArrayLike, inOffset) {
+		var arr = [];
+		for(var i = inOffset || 0, l = inArrayLike.length; i<l; i++){
+			arr.push(inArrayLike[i]);
+		}
+		return arr;
+	}
+
+	if (typeof(method) === 'function') {
+		var func, args = cloneArray(arguments, 2);
+		if (typeof(method.bind) === 'function') {
+			func = method.bind.apply(method, [scope].concat(args));
+		} else {
+			func = function() {
+				var nargs = cloneArray(arguments);
+				// invoke with collected args
+				return method.apply(scope, args.concat(nargs));
+			};
+		}
+		return func;
+	}
+	return undefined;
+};
+
+/**
  * Binary search a sorted array for a particular target value.
  * If the exact value is not found, it returns the index of the smallest 
  * entry that is greater than the given target value.<p> 
@@ -883,7 +948,7 @@ ilib.merge = function (object1, object2, name1, name2) {
  *  
  * @param {string} prefix prefix under ilib.data of the data to merge
  * @param {ilib.Locale} locale locale of the data being sought
- * @returns {Object|undefined} the merged locale data
+ * @returns {Object?} the merged locale data
  */
 ilib.mergeLocData = function (prefix, locale) {
 	var data = undefined;
@@ -891,6 +956,7 @@ ilib.mergeLocData = function (prefix, locale) {
 	var foundLocaleData = false;
 	var property = prefix;
 	data = ilib.data[prefix] || {};
+	
 	if (loc.getLanguage()) {
 		property = prefix + '_' + loc.getLanguage();
 		if (ilib.data[property]) {
@@ -898,35 +964,127 @@ ilib.mergeLocData = function (prefix, locale) {
 			data = ilib.merge(data, ilib.data[property]);
 		}
 	}
+	
 	if (loc.getRegion()) {
-		property += '_' + loc.getRegion();
+		property = prefix + '_' + loc.getRegion();
 		if (ilib.data[property]) {
 			foundLocaleData = true;
 			data = ilib.merge(data, ilib.data[property]);
 		}
 	}
-	if (loc.getScript()) {
-		property += '_' + loc.getScript();
+	
+	if (loc.getLanguage()) {
+		property = prefix + '_' + loc.getLanguage();
+		
+		if (loc.getScript()) {
+			property = prefix + '_' + loc.getLanguage() + '_' + loc.getScript();
+			if (ilib.data[property]) {
+				foundLocaleData = true;
+				data = ilib.merge(data, ilib.data[property]);
+			}
+		}
+		
+		if (loc.getRegion()) {
+			property = prefix + '_' + loc.getLanguage() + '_' + loc.getRegion();
+			if (ilib.data[property]) {
+				foundLocaleData = true;
+				data = ilib.merge(data, ilib.data[property]);
+			}
+		}
+		
+	}
+	
+	if (loc.getRegion() && loc.getVariant()) {
+		property = prefix + '_' + loc.getLanguage() + '_' + loc.getVariant();
 		if (ilib.data[property]) {
 			foundLocaleData = true;
 			data = ilib.merge(data, ilib.data[property]);
 		}
 	}
-	if (loc.getVariant()) {
-		property += '_' + loc.getVariant();
+
+	if (loc.getLanguage() && loc.getScript() && loc.getRegion()) {
+		property = prefix + '_' + loc.getLanguage() + '_' + loc.getScript() + '_' + loc.getRegion();
 		if (ilib.data[property]) {
 			foundLocaleData = true;
 			data = ilib.merge(data, ilib.data[property]);
 		}
 	}
+
+	if (loc.getLanguage() && loc.getRegion() && loc.getVariant()) {
+		property = prefix + '_' + loc.getLanguage() + '_' + loc.getRegion() + '_' + loc.getVariant();
+		if (ilib.data[property]) {
+			foundLocaleData = true;
+			data = ilib.merge(data, ilib.data[property]);
+		}
+	}
+
+	if (loc.getLanguage() && loc.getScript() && loc.getRegion() && loc.getVariant()) {
+		property = prefix + '_' + loc.getLanguage() + '_' + loc.getScript() + '_' + loc.getRegion() + '_' + loc.getVariant();
+		if (ilib.data[property]) {
+			foundLocaleData = true;
+			data = ilib.merge(data, ilib.data[property]);
+		}
+	}
+
 	return foundLocaleData ? data : undefined;
 };
 
 /**
  * Return an array of relative path names for the json
- * files that represent the data for the given locale.
+ * files that represent the data for the given locale. Only
+ * language and region are top-level directories.
+ * 
+ * Variations
+ * 
+ * only language and region specified:
+ * 
+ * language
+ * region
+ * language/region
+ * 
+ * only language and script specified:
+ * 
+ * language
+ * language/script
+ * 
+ * only script and region specified:
+ * 
+ * region
+ * 
+ * only region and variant specified:
+ * 
+ * region
+ * region/variant
+ *
+ * only language, script, and region specified:
+ * 
+ * language
+ * region
+ * language/script
+ * language/region
+ * language/script/region
+ * 
+ * only language, region, and variant specified:
+ * 
+ * language
+ * region
+ * language/region
+ * region/variant
+ * language/region/variant
+ * 
+ * all parts specified:
+ * 
+ * language
+ * region
+ * language/script
+ * language/region
+ * region/variant
+ * language/script/region
+ * language/region/variant
+ * language/script/region/variant
+ * 
  * @param {ilib.Locale} locale load the json files for this locale
- * @param {string=} basename the base name of each json file to load
+ * @param {string?} basename the base name of each json file to load
  * @returns {Array.<string>} An array of relative path names
  * for the json files that contain the locale data
  */
@@ -934,8 +1092,58 @@ ilib.getLocFiles = function(locale, basename) {
 	var dir = "";
 	var files = [];
 	var filename = basename || "resources";
+	filename += ".json";
 	var loc = locale || new ilib.Locale();
-	files.push(filename + ".json");
+	
+	var language = loc.getLanguage();
+	var region = loc.getRegion();
+	var script = loc.getScript();
+	var variant = loc.getVariant();
+	
+	files.push(filename); // generic shared file
+	
+	if (language) {
+		dir = language + "/";
+		files.push(dir + filename);
+	}
+	
+	if (region) {
+		dir = region + "/";
+		files.push(dir + filename);
+	}
+	
+	if (language) {
+		if (script) {
+			dir = language + "/" + script + "/";
+			files.push(dir + filename);
+		}
+		if (region) {
+			dir = language + "/" + region + "/";
+			files.push(dir + filename);
+		}
+	}
+	
+	if (region && variant) {
+		dir = region + "/" + variant + "/";
+		files.push(dir + filename);
+	}
+
+	if (language && script && region) {
+		dir = language + "/" + script + "/" + region + "/";
+		files.push(dir + filename);
+	}
+
+	if (language && region && variant) {
+		dir = language + "/" + region + "/" + variant + "/";
+		files.push(dir + filename);
+	}
+
+	if (language && script && region && variant) {
+		dir = language + "/" + script + "/" + region + "/" + variant + "/";
+		files.push(dir + filename);
+	}
+	
+	/*
 	dir += loc.getLanguage() + "/";
 	files.push(dir + filename + ".json");
 	if (loc.getVariant()) {
@@ -965,6 +1173,7 @@ ilib.getLocFiles = function(locale, basename) {
 			}
 		}
 	}
+	*/
 	
 	return files;
 };
@@ -1107,6 +1316,56 @@ ilib._roundFnc = {
 		return (Math.floor(num) % 2 !== 0) ? Math.ceil(num - 0.5) : Math.floor(num + 0.5);
 	}
 };
+
+
+/**
+ * Find locale data or load it in. If the data with the given name is preassembled, it will
+ * find the data in ilib.data. If the data is not preassembled but there is a loader function,
+ * this function will call it to load the data. Otherwise, the callback will be called with
+ * undefined as the data. This function will create a cache under the given class object.
+ * If data was successfully loaded, it will be set into the cache so that future access to 
+ * the same data for the same locale is much quicker. 
+ * 
+ * @param {Object} object The class attempting to load data. The cache is stored inside of here.
+ * @param {ilib.Locale} locale The locale to use to find or load the data.
+ * @param {string} name The name of the locale data to load.
+ * @param {boolean} sync Whether or not to load the data synchronously
+ * @param {function(?)=} callback Call back function to call when the data is available.
+ */
+ilib.loadData = function(object, locale, name, sync, callback) {
+	if (!object.cache) {
+		object.cache = {};
+	}
+
+	var spec = locale.getSpec().replace(/-/g, '_');
+	if (typeof(object.cache[spec]) === 'undefined') {
+		var data = ilib.mergeLocData(name, locale);
+		if (data) {
+			object.cache[spec] = data;
+			callback(data);
+		} else if (typeof(ilib._load) === 'function') {
+			// the data is not preassembled, so attempt to load it dynamically
+			var files = ilib.getLocFiles(locale, name);
+			
+			ilib._load(files, sync, ilib.bind(this, function(arr) {
+				data = {};
+				for (var i = 0; i < arr.length; i++) {
+					if (typeof(arr[i]) !== 'undefined') {
+						data = ilib.merge(data, arr[i]);
+					}
+				}
+				
+				callback(data);
+			}));
+		} else {
+			// no data other than the generic shared data
+			callback(data);
+		}
+	} else {
+		callback(object.cache[spec]);
+	}
+};
+
 
 ilib.data.plurals = {
     "version": {
@@ -3776,7 +4035,7 @@ ilib.data.plurals = {
 /*
  * strings.js - ilib string subclass definition
  * 
- * Copyright © 2012, JEDLSoft
+ * Copyright © 2012-2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -5182,10 +5441,12 @@ ilib.data.localeinfo = {
 	"locale": "."
 }
 ;
+ilib.data.likelylocales = {"aa":"aa-Latn-ET","ab":"ab-Cyrl-GE","ady":"ady-Cyrl-RU","af":"af-Latn-ZA","agq":"agq-Latn-CM","ak":"ak-Latn-GH","am":"am-Ethi-ET","ar":"ar-Arab-EG","as":"as-Beng-IN","asa":"asa-Latn-TZ","ast":"ast-Latn-ES","av":"av-Cyrl-RU","ay":"ay-Latn-BO","az":"az-Latn-AZ","az-Arab":"az-Arab-IR","az-IR":"az-Arab-IR","ba":"ba-Cyrl-RU","bas":"bas-Latn-CM","be":"be-Cyrl-BY","bem":"bem-Latn-ZM","bez":"bez-Latn-TZ","bg":"bg-Cyrl-BG","bi":"bi-Latn-VU","bm":"bm-Latn-ML","bn":"bn-Beng-BD","bo":"bo-Tibt-CN","br":"br-Latn-FR","brx":"brx-Deva-IN","bs":"bs-Latn-BA","byn":"byn-Ethi-ER","ca":"ca-Latn-ES","cch":"cch-Latn-NG","ce":"ce-Cyrl-RU","ceb":"ceb-Latn-PH","cgg":"cgg-Latn-UG","ch":"ch-Latn-GU","chk":"chk-Latn-FM","chr":"chr-Cher-US","ckb":"ckb-Arab-IQ","cs":"cs-Latn-CZ","csb":"csb-Latn-PL","cy":"cy-Latn-GB","da":"da-Latn-DK","dav":"dav-Latn-KE","de":"de-Latn-DE","dje":"dje-Latn-NE","dua":"dua-Latn-CM","dv":"dv-Thaa-MV","dyo":"dyo-Latn-SN","dz":"dz-Tibt-BT","ebu":"ebu-Latn-KE","ee":"ee-Latn-GH","efi":"efi-Latn-NG","el":"el-Grek-GR","en":"en-Latn-US","eo":"eo-Latn-001","es":"es-Latn-ES","et":"et-Latn-EE","eu":"eu-Latn-ES","ewo":"ewo-Latn-CM","fa":"fa-Arab-IR","ff":"ff-Latn-SN","fi":"fi-Latn-FI","fil":"fil-Latn-PH","fj":"fj-Latn-FJ","fo":"fo-Latn-FO","fr":"fr-Latn-FR","fur":"fur-Latn-IT","fy":"fy-Latn-NL","ga":"ga-Latn-IE","gaa":"gaa-Latn-GH","gag":"gag-Latn-MD","gd":"gd-Latn-GB","gil":"gil-Latn-KI","gl":"gl-Latn-ES","gn":"gn-Latn-PY","gsw":"gsw-Latn-CH","gu":"gu-Gujr-IN","guz":"guz-Latn-KE","gv":"gv-Latn-GB","gv-Latn":"gv-Latn-IM","ha":"ha-Latn-NG","haw":"haw-Latn-US","he":"he-Hebr-IL","hi":"hi-Deva-IN","hil":"hil-Latn-PH","ho":"ho-Latn-PG","hr":"hr-Latn-HR","ht":"ht-Latn-HT","hu":"hu-Latn-HU","hy":"hy-Armn-AM","ia":"ia-Latn-001","id":"id-Latn-ID","ig":"ig-Latn-NG","ii":"ii-Yiii-CN","ilo":"ilo-Latn-PH","inh":"inh-Cyrl-RU","is":"is-Latn-IS","it":"it-Latn-IT","ja":"ja-Jpan-JP","jgo":"jgo-Latn-CM","jmc":"jmc-Latn-TZ","jv":"jv-Latn-ID","ka":"ka-Geor-GE","kab":"kab-Latn-DZ","kaj":"kaj-Latn-NG","kam":"kam-Latn-KE","kbd":"kbd-Cyrl-RU","kcg":"kcg-Latn-NG","kde":"kde-Latn-TZ","kea":"kea-Latn-CV","kg":"kg-Latn-CD","kha":"kha-Latn-IN","khq":"khq-Latn-ML","ki":"ki-Latn-KE","kj":"kj-Latn-NA","kk":"kk-Cyrl-KZ","kkj":"kkj-Latn-CM","kl":"kl-Latn-GL","kln":"kln-Latn-KE","km":"km-Khmr-KH","kn":"kn-Knda-IN","ko":"ko-Kore-KR","koi":"koi-Cyrl-RU","kok":"kok-Deva-IN","kos":"kos-Latn-FM","kpe":"kpe-Latn-LR","kpv":"kpv-Cyrl-RU","krc":"krc-Cyrl-RU","ks":"ks-Arab-IN","ksb":"ksb-Latn-TZ","ksf":"ksf-Latn-CM","ksh":"ksh-Latn-DE","ku":"ku-Latn-TR","ku-Arab":"ku-Arab-IQ","ku-IQ":"ku-Arab-IQ","kum":"kum-Cyrl-RU","kv":"kv-Cyrl-RU","kw":"kw-Latn-GB","ky":"ky-Cyrl-KG","la":"la-Latn-VA","lag":"lag-Latn-TZ","lah":"lah-Arab-PK","lb":"lb-Latn-LU","lbe":"lbe-Cyrl-RU","lez":"lez-Cyrl-RU","lg":"lg-Latn-UG","ln":"ln-Latn-CD","lo":"lo-Laoo-LA","lt":"lt-Latn-LT","lu":"lu-Latn-CD","lua":"lua-Latn-CD","luo":"luo-Latn-KE","luy":"luy-Latn-KE","lv":"lv-Latn-LV","mai":"mai-Deva-IN","mas":"mas-Latn-KE","mdf":"mdf-Cyrl-RU","mdh":"mdh-Latn-PH","mer":"mer-Latn-KE","mfe":"mfe-Latn-MU","mg":"mg-Latn-MG","mgh":"mgh-Latn-MZ","mgo":"mgo-Latn-CM","mh":"mh-Latn-MH","mi":"mi-Latn-NZ","mk":"mk-Cyrl-MK","ml":"ml-Mlym-IN","mn":"mn-Cyrl-MN","mn-CN":"mn-Mong-CN","mn-Mong":"mn-Mong-CN","mr":"mr-Deva-IN","ms":"ms-Latn-MY","mt":"mt-Latn-MT","mua":"mua-Latn-CM","my":"my-Mymr-MM","myv":"myv-Cyrl-RU","na":"na-Latn-NR","naq":"naq-Latn-NA","nb":"nb-Latn-NO","nd":"nd-Latn-ZW","nds":"nds-Latn-DE","ne":"ne-Deva-NP","niu":"niu-Latn-NU","nl":"nl-Latn-NL","nmg":"nmg-Latn-CM","nn":"nn-Latn-NO","nnh":"nnh-Latn-CM","nr":"nr-Latn-ZA","nso":"nso-Latn-ZA","nus":"nus-Latn-SD","ny":"ny-Latn-MW","nyn":"nyn-Latn-UG","oc":"oc-Latn-FR","om":"om-Latn-ET","or":"or-Orya-IN","os":"os-Cyrl-GE","pa":"pa-Guru-IN","pa-Arab":"pa-Arab-PK","pa-PK":"pa-Arab-PK","pag":"pag-Latn-PH","pap":"pap-Latn-AN","pau":"pau-Latn-PW","pl":"pl-Latn-PL","pon":"pon-Latn-FM","ps":"ps-Arab-AF","pt":"pt-Latn-BR","qu":"qu-Latn-PE","rm":"rm-Latn-CH","rn":"rn-Latn-BI","ro":"ro-Latn-RO","rof":"rof-Latn-TZ","ru":"ru-Cyrl-RU","rw":"rw-Latn-RW","rwk":"rwk-Latn-TZ","sa":"sa-Deva-IN","sah":"sah-Cyrl-RU","saq":"saq-Latn-KE","sat":"sat-Latn-IN","sbp":"sbp-Latn-TZ","sd":"sd-Arab-IN","se":"se-Latn-NO","seh":"seh-Latn-MZ","ses":"ses-Latn-ML","sg":"sg-Latn-CF","shi":"shi-Tfng-MA","shi-MA":"shi-Latn-MA","si":"si-Sinh-LK","sid":"sid-Latn-ET","sk":"sk-Latn-SK","sl":"sl-Latn-SI","sm":"sm-Latn-WS","sn":"sn-Latn-ZW","so":"so-Latn-SO","sq":"sq-Latn-AL","sr":"sr-Cyrl-RS","sr-ME":"sr-Latn-ME","ss":"ss-Latn-ZA","ssy":"ssy-Latn-ER","st":"st-Latn-ZA","su":"su-Latn-ID","sv":"sv-Latn-SE","sw":"sw-Latn-TZ","swc":"swc-Latn-CD","ta":"ta-Taml-IN","te":"te-Telu-IN","teo":"teo-Latn-UG","tet":"tet-Latn-TL","tg":"tg-Cyrl-TJ","th":"th-Thai-TH","ti":"ti-Ethi-ET","tig":"tig-Ethi-ER","tk":"tk-Latn-TM","tkl":"tkl-Latn-TK","tl":"tl-Latn-PH","tn":"tn-Latn-ZA","to":"to-Latn-TO","tpi":"tpi-Latn-PG","tr":"tr-Latn-TR","trv":"trv-Latn-TW","ts":"ts-Latn-ZA","tsg":"tsg-Latn-PH","tt":"tt-Cyrl-RU","tvl":"tvl-Latn-TV","twq":"twq-Latn-NE","ty":"ty-Latn-PF","tyv":"tyv-Cyrl-RU","tzm":"tzm-Latn-MA","udm":"udm-Cyrl-RU","ug":"ug-Arab-CN","uk":"uk-Cyrl-UA","uli":"uli-Latn-FM","und":"en-Latn-US","AD":"ca-Latn-AD","AE":"ar-Arab-AE","AF":"fa-Arab-AF","AL":"sq-Latn-AL","AM":"hy-Armn-AM","AN":"pap-Latn-AN","AO":"pt-Latn-AO","AR":"es-Latn-AR","Arab":"ar-Arab-EG","Arab-CN":"ug-Arab-CN","Arab-IN":"ur-Arab-IN","Arab-NG":"ha-Arab-NG","Arab-PK":"ur-Arab-PK","Armi":"arc-Armi-IR","Armn":"hy-Armn-AM","AS":"sm-Latn-AS","AT":"de-Latn-AT","Avst":"ae-Avst-IR","AW":"nl-Latn-AW","AX":"sv-Latn-AX","AZ":"az-Latn-AZ","BA":"bs-Latn-BA","Bali":"ban-Bali-ID","Bamu":"bax-Bamu-CM","Batk":"bbc-Batk-ID","BD":"bn-Beng-BD","BE":"nl-Latn-BE","Beng":"bn-Beng-BD","BF":"fr-Latn-BF","BG":"bg-Cyrl-BG","BH":"ar-Arab-BH","BI":"rn-Latn-BI","BJ":"fr-Latn-BJ","BL":"fr-Latn-BL","BN":"ms-Latn-BN","BO":"es-Latn-BO","Bopo":"zh-Bopo-TW","BR":"pt-Latn-BR","Brah":"pra-Brah-IN","Brai":"und-Brai-FR","BT":"dz-Tibt-BT","Bugi":"bug-Bugi-ID","Buhd":"bku-Buhd-PH","BY":"be-Cyrl-BY","Cakm":"ccp-Cakm-BD","Cans":"cr-Cans-CA","Cari":"xcr-Cari-TR","CD":"sw-Latn-CD","CF":"fr-Latn-CF","CG":"fr-Latn-CG","CH":"de-Latn-CH","Cham":"cjm-Cham-VN","Cher":"chr-Cher-US","CI":"fr-Latn-CI","CL":"es-Latn-CL","CM":"fr-Latn-CM","CN":"zh-Hans-CN","CO":"es-Latn-CO","Copt":"cop-Copt-EG","CP":"fr-Latn-CP","Cprt":"grc-Cprt-CY","CR":"es-Latn-CR","CU":"es-Latn-CU","CV":"pt-Latn-CV","CY":"el-Grek-CY","Cyrl":"ru-Cyrl-RU","Cyrl-BA":"sr-Cyrl-BA","Cyrl-GE":"ab-Cyrl-GE","CZ":"cs-Latn-CZ","DE":"de-Latn-DE","Deva":"hi-Deva-IN","DJ":"aa-Latn-DJ","DK":"da-Latn-DK","DO":"es-Latn-DO","DZ":"ar-Arab-DZ","EA":"es-Latn-EA","EC":"es-Latn-EC","EE":"et-Latn-EE","EG":"ar-Arab-EG","Egyp":"egy-Egyp-EG","EH":"ar-Arab-EH","ER":"ti-Ethi-ER","ES":"es-Latn-ES","Ethi":"am-Ethi-ET","FI":"fi-Latn-FI","FM":"chk-Latn-FM","FO":"fo-Latn-FO","FR":"fr-Latn-FR","GA":"fr-Latn-GA","GE":"ka-Geor-GE","Geor":"ka-Geor-GE","GF":"fr-Latn-GF","GH":"ak-Latn-GH","GL":"kl-Latn-GL","Glag":"cu-Glag-BG","GN":"fr-Latn-GN","Goth":"got-Goth-UA","GP":"fr-Latn-GP","GQ":"es-Latn-GQ","GR":"el-Grek-GR","Grek":"el-Grek-GR","GT":"es-Latn-GT","Gujr":"gu-Gujr-IN","Guru":"pa-Guru-IN","GW":"pt-Latn-GW","Hang":"ko-Hang-KR","Hani":"zh-Hans-CN","Hano":"hnn-Hano-PH","Hans":"zh-Hans-CN","Hant":"zh-Hant-TW","Hebr":"he-Hebr-IL","Hira":"ja-Hira-JP","HK":"zh-Hant-HK","HN":"es-Latn-HN","HR":"hr-Latn-HR","HT":"ht-Latn-HT","HU":"hu-Latn-HU","IC":"es-Latn-IC","ID":"id-Latn-ID","IL":"he-Hebr-IL","IN":"hi-Deva-IN","IQ":"ar-Arab-IQ","IR":"fa-Arab-IR","IS":"is-Latn-IS","IT":"it-Latn-IT","Ital":"ett-Ital-IT","Java":"jv-Java-ID","JO":"ar-Arab-JO","JP":"ja-Jpan-JP","Jpan":"ja-Jpan-JP","Kali":"eky-Kali-MM","Kana":"ja-Kana-JP","KG":"ky-Cyrl-KG","KH":"km-Khmr-KH","Khar":"pra-Khar-PK","Khmr":"km-Khmr-KH","KM":"ar-Arab-KM","Knda":"kn-Knda-IN","Kore":"ko-Kore-KR","KP":"ko-Kore-KP","KR":"ko-Kore-KR","Kthi":"bh-Kthi-IN","KW":"ar-Arab-KW","KZ":"ru-Cyrl-KZ","LA":"lo-Laoo-LA","Lana":"nod-Lana-TH","Laoo":"lo-Laoo-LA","Latn-CN":"za-Latn-CN","Latn-CY":"tr-Latn-CY","Latn-DZ":"fr-Latn-DZ","Latn-ER":"aa-Latn-ER","Latn-KM":"fr-Latn-KM","Latn-MA":"fr-Latn-MA","Latn-MK":"sq-Latn-MK","Latn-MR":"fr-Latn-MR","Latn-SY":"fr-Latn-SY","Latn-TN":"fr-Latn-TN","LB":"ar-Arab-LB","Lepc":"lep-Lepc-IN","LI":"de-Latn-LI","Limb":"lif-Limb-IN","Linb":"grc-Linb-GR","Lisu":"lis-Lisu-CN","LK":"si-Sinh-LK","LS":"st-Latn-LS","LT":"lt-Latn-LT","LU":"fr-Latn-LU","LV":"lv-Latn-LV","LY":"ar-Arab-LY","Lyci":"xlc-Lyci-TR","Lydi":"xld-Lydi-TR","MA":"ar-Arab-MA","Mand":"myz-Mand-IR","MC":"fr-Latn-MC","MD":"ro-Latn-MD","ME":"sr-Latn-ME","Merc":"xmr-Merc-SD","Mero":"xmr-Mero-SD","MF":"fr-Latn-MF","MG":"mg-Latn-MG","MK":"mk-Cyrl-MK","ML":"bm-Latn-ML","Mlym":"ml-Mlym-IN","MM":"my-Mymr-MM","MN":"mn-Cyrl-MN","MO":"zh-Hant-MO","Mong":"mn-Mong-CN","MQ":"fr-Latn-MQ","MR":"ar-Arab-MR","MT":"mt-Latn-MT","Mtei":"mni-Mtei-IN","MU":"mfe-Latn-MU","MV":"dv-Thaa-MV","MX":"es-Latn-MX","MY":"ms-Latn-MY","Mymr":"my-Mymr-MM","MZ":"pt-Latn-MZ","NA":"kj-Latn-NA","NC":"fr-Latn-NC","NE":"ha-Latn-NE","NI":"es-Latn-NI","Nkoo":"man-Nkoo-GN","NL":"nl-Latn-NL","NO":"nb-Latn-NO","NP":"ne-Deva-NP","Ogam":"sga-Ogam-IE","Olck":"sat-Olck-IN","OM":"ar-Arab-OM","Orkh":"otk-Orkh-MN","Orya":"or-Orya-IN","Osma":"so-Osma-SO","PA":"es-Latn-PA","PE":"es-Latn-PE","PF":"fr-Latn-PF","PG":"tpi-Latn-PG","PH":"fil-Latn-PH","Phag":"lzh-Phag-CN","Phli":"pal-Phli-IR","Phnx":"phn-Phnx-LB","PK":"ur-Arab-PK","PL":"pl-Latn-PL","Plrd":"hmd-Plrd-CN","PM":"fr-Latn-PM","PR":"es-Latn-PR","Prti":"xpr-Prti-IR","PS":"ar-Arab-PS","PT":"pt-Latn-PT","PW":"pau-Latn-PW","PY":"gn-Latn-PY","QA":"ar-Arab-QA","RE":"fr-Latn-RE","Rjng":"rej-Rjng-ID","RO":"ro-Latn-RO","RS":"sr-Cyrl-RS","RU":"ru-Cyrl-RU","Runr":"non-Runr-SE","RW":"rw-Latn-RW","SA":"ar-Arab-SA","Samr":"smp-Samr-IL","Sarb":"xsa-Sarb-YE","Saur":"saz-Saur-IN","SC":"fr-Latn-SC","SD":"ar-Arab-SD","SE":"sv-Latn-SE","Shaw":"en-Shaw-GB","Shrd":"sa-Shrd-IN","SI":"sl-Latn-SI","Sinh":"si-Sinh-LK","SJ":"nb-Latn-SJ","SK":"sk-Latn-SK","SM":"it-Latn-SM","SN":"fr-Latn-SN","SO":"so-Latn-SO","Sora":"srb-Sora-IN","SR":"nl-Latn-SR","ST":"pt-Latn-ST","Sund":"su-Sund-ID","SV":"es-Latn-SV","SY":"ar-Arab-SY","Sylo":"syl-Sylo-BD","Syrc":"syr-Syrc-SY","Tagb":"tbw-Tagb-PH","Takr":"doi-Takr-IN","Tale":"tdd-Tale-CN","Talu":"khb-Talu-CN","Taml":"ta-Taml-IN","Tavt":"blt-Tavt-VN","TD":"fr-Latn-TD","Telu":"te-Telu-IN","Tfng":"shi-Tfng-TN","TG":"fr-Latn-TG","Tglg":"fil-Tglg-PH","TH":"th-Thai-TH","Thaa":"dv-Thaa-MV","Thai":"th-Thai-TH","Tibt":"bo-Tibt-CN","TJ":"tg-Cyrl-TJ","TK":"tkl-Latn-TK","TL":"pt-Latn-TL","TM":"tk-Latn-TM","TN":"ar-Arab-TN","TO":"to-Latn-TO","TR":"tr-Latn-TR","TV":"tvl-Latn-TV","TW":"zh-Hant-TW","TZ":"sw-Latn-TZ","UA":"uk-Cyrl-UA","UG":"sw-Latn-UG","Ugar":"uga-Ugar-SY","UY":"es-Latn-UY","UZ":"uz-Cyrl-UZ","VA":"la-Latn-VA","Vaii":"vai-Vaii-LR","VE":"es-Latn-VE","VN":"vi-Latn-VN","VU":"bi-Latn-VU","WF":"fr-Latn-WF","WS":"sm-Latn-WS","Xpeo":"peo-Xpeo-IR","Xsux":"akk-Xsux-IQ","YE":"ar-Arab-YE","Yiii":"ii-Yiii-CN","YT":"fr-Latn-YT","ur":"ur-Arab-PK","uz":"uz-Cyrl-UZ","uz-AF":"uz-Arab-AF","uz-Arab":"uz-Arab-AF","vai":"vai-Vaii-LR","ve":"ve-Latn-ZA","vi":"vi-Latn-VN","vo":"vo-Latn-001","vun":"vun-Latn-TZ","wae":"wae-Latn-CH","wal":"wal-Ethi-ET","war":"war-Latn-PH","wo":"wo-Latn-SN","xh":"xh-Latn-ZA","xog":"xog-Latn-UG","yap":"yap-Latn-FM","yav":"yav-Latn-CM","yi":"yi-Hebr-IL","yo":"yo-Latn-NG","za":"za-Latn-CN","zh":"zh-Hans-CN","zh-Hani":"zh-Hans-CN","zh-Hant":"zh-Hant-TW","zh-HK":"zh-Hant-HK","zh-MO":"zh-Hant-MO","zh-TW":"zh-Hant-TW","zu":"zu-Latn-ZA"}
+;
 /*
  * localeinfo.js - Encode locale-specific defaults
  * 
- * Copyright © 2012, JEDLSoft
+ * Copyright © 2012-2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -5203,7 +5464,7 @@ ilib.data.localeinfo = {
 
 // !depends ilibglobal.js locale.js
 
-// !data localeinfo
+// !data localeinfo likelylocales
 
 /**
  * @class
@@ -5285,7 +5546,7 @@ ilib.LocaleInfo = function(locale, options) {
 			// locale is not preassembled, so attempt to load it dynamically
 			var files = ilib.getLocFiles(this.locale, "localeinfo");
 			
-			ilib._load(files, sync, function(arr) {
+			ilib._load(files, sync, ilib.bind(this, function(arr) {
 				this.info = {};
 				for (var i = 0; i < arr.length; i++) {
 					if (typeof(arr[i]) !== 'undefined') {
@@ -5298,7 +5559,7 @@ ilib.LocaleInfo = function(locale, options) {
 				if (options && typeof(options.onLoad) === 'function') {
 					options.onLoad(this);
 				}
-			}.bind(this));
+			}));
 		} else {
 			// no data other than the generic shared data
 			this.info = ilib.data.localeinfo;
@@ -5496,6 +5757,28 @@ ilib.LocaleInfo.prototype = {
 	 */
 	getAllScripts: function() {
 		return this.info.scripts || ["Latn"];
+	},
+	
+	/**
+	 * Return an ilib.Locale instance that is fully specified based on partial information
+	 * given to the constructor of this locale info instance. For example, if the locale
+	 * spec given to this locale info instance is simply "ru" (for the Russian language), 
+	 * then it will fill in the missing region and script tags and return a locale with 
+	 * the specifier "ru-RU-Cyrl". (ie. Russian language, Russian Federation, Cyrillic).
+	 * Any one or two of the language, script, or region parts may be left unspecified,
+	 * and the other one or two parts will be filled in automatically. If this
+	 * class has no information about the given locale, then the locale of this
+	 * locale info instance is returned unchanged.
+	 * 
+	 * @returns {ilib.Locale} the most likely completion of the partial locale given
+	 * to the constructor of this locale info instance
+	 */
+	getLikelyLocale: function () {
+		if (typeof(ilib.data.likelylocales[this.locale.getSpec()]) === 'undefined') {
+			return this.locale;
+		}
+		
+		return new ilib.Locale(ilib.data.likelylocales[this.locale.getSpec()]);
 	}
 };
 
@@ -5898,7 +6181,7 @@ ilib.Cal._constructors["gregorian"] = ilib.Cal.Gregorian;
 /*
  * gregoriandate.js - Represent a date in the Gregorian calendar
  * 
- * Copyright © 2012, JEDLSoft
+ * Copyright © 2012-2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -6597,7 +6880,7 @@ ilib.data.timezones = {"Europe/Sofia":{"o":"2:0","f":"EE{c}T","e":{"m":10,"r":"l
 /*
  * timezone.js - Definition of a time zone class
  * 
- * Copyright © 2012, JEDLSoft
+ * Copyright © 2012-2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -6755,14 +7038,14 @@ ilib.TimeZone = function(options) {
 	if (!this.id) {
 		var li = new ilib.LocaleInfo(this.locale, {
 			sync: sync,
-			onLoad: function (li) {
+			onLoad: ilib.bind(this, function (li) {
 				this.id = li.getTimeZone() || "Etc/UTC";
 				this._inittz();
 				
 				if (options && typeof(options.onLoad) === 'function') {
 					options.onLoad(this);
 				}
-			}.bind(this)
+			})
 		});
 	} else {
 		this._inittz();
@@ -7303,7 +7586,7 @@ ilib.data.pseudomap = {
 /*
  * resources.js - Resource bundle definition
  * 
- * Copyright © 2012, JEDLSoft
+ * Copyright © 2012-2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -7508,7 +7791,7 @@ ilib.ResBundle = function (options) {
 			// locale is not preassembled, so attempt to load it dynamically
 			var files = ilib.getLocFiles(this.locale, this.baseName);
 			
-			ilib._load(files, sync, function(arr) {
+			ilib._load(files, sync, ilib.bind(this, function(arr) {
 				this.map = {};
 				for (var i = 0; i < arr.length; i++) {
 					if (typeof(arr[i]) !== 'undefined') {
@@ -7519,7 +7802,7 @@ ilib.ResBundle = function (options) {
 				if (options && typeof(options.onLoad) === 'function') {
 					options.onLoad(this);
 				}
-			}.bind(this));
+			}));
 		} else {
 			this.map = ilib.data[this.baseName] || {};
 			ilib.ResBundle.cache[this.baseName][spec] = this.map;
@@ -8527,7 +8810,7 @@ ilib.DateFmt = function(options) {
 
 	new ilib.LocaleInfo(this.locale, {
 		sync: sync,
-		onLoad: function (li) {
+		onLoad: ilib.bind(this, function (li) {
 			this.locinfo = li;
 			
 			// get the default calendar name from the locale, and if the locale doesn't define
@@ -8556,7 +8839,7 @@ ilib.DateFmt = function(options) {
 				locale: this.locale,
 				name: "sysres",
 				sync: sync,
-				onLoad: function (rb) {
+				onLoad: ilib.bind(this, function (rb) {
 					this.sysres = rb;
 					if (!this.template) {
 						var spec = this.locale.getSpec().replace(/-/g, '_');
@@ -8567,7 +8850,7 @@ ilib.DateFmt = function(options) {
 							if (!formats) {
 								if (typeof(ilib._load) === 'function') {
 									var files = ilib.getLocFiles(this.locale, "dateformats");
-									ilib._load(files, sync, function(arr) {
+									ilib._load(files, sync, ilib.bind(this, function(arr) {
 										formats = {};
 										for (var i = 0; i < arr.length; i++) {
 											if (typeof(arr[i]) !== 'undefined') {
@@ -8579,7 +8862,7 @@ ilib.DateFmt = function(options) {
 										if (options && typeof(options.onLoad) === 'function') {
 											options.onLoad(this);
 										}
-									}.bind(this));
+									}));
 									return;
 								}
 								formats = ilib.data.dateformats;
@@ -8592,9 +8875,9 @@ ilib.DateFmt = function(options) {
 					if (options && typeof(options.onLoad) === 'function') {
 						options.onLoad(this);
 					}
-				}.bind(this)
+				})
 			});	
-		}.bind(this)
+		})
 	});
 };
 
@@ -9430,7 +9713,7 @@ ilib.DateRngFmt = function(options) {
 	/**
 	 * @private
 	 */
-	opts.onLoad = function (fmt) {
+	opts.onLoad = ilib.bind(this, function (fmt) {
 		this.dateFmt = fmt;
 		if (fmt) {
 			this.locinfo = this.dateFmt.locinfo;
@@ -9455,7 +9738,7 @@ ilib.DateRngFmt = function(options) {
 				options.onLoad(this);
 			}
 		}
-	}.bind(this);
+	});
 
 	// delegate a bunch of the formatting to this formatter
 	new ilib.DateFmt(opts);
@@ -11596,7 +11879,7 @@ ilib.Cal._constructors["julian"] = ilib.Cal.Julian;
 /*
  * juliandate.js - Represent a date in the Julian calendar
  * 
- * Copyright © 2012, JEDLSoft
+ * Copyright © 2012-2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13671,7 +13954,7 @@ ilib.CType.isSpace = function (ch) {
 /*
  * numprs.js - Parse a number in any locale
  * 
- * Copyright © 2012, JEDLSoft
+ * Copyright © 2012-2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13776,7 +14059,7 @@ ilib.Number = function (str, options) {
 	
 	new ilib.LocaleInfo(this.locale, {
 		sync: sync,
-		onLoad: function (li) {
+		onLoad: ilib.bind(this, function (li) {
 			this.decimal = li.getDecimalSeparator();
 			
 			switch (typeof(str)) {
@@ -13851,12 +14134,12 @@ ilib.Number = function (str, options) {
 						locale: this.locale, 
 						sign: stripped,
 						sync: sync,
-						onLoad: function (cur) {
+						onLoad: ilib.bind(this, function (cur) {
 							this.currency = cur;
 							if (options && typeof(options.onLoad) === 'function') {
 								options.onLoad(this);
 							}				
-						}.bind(this)
+						})
 					});
 					return;
 			}
@@ -13864,7 +14147,7 @@ ilib.Number = function (str, options) {
 			if (options && typeof(options.onLoad) === 'function') {
 				options.onLoad(this);
 			}
-		}.bind(this)
+		})
 	});
 };
 
@@ -14806,7 +15089,7 @@ ilib.Currency = function (options) {
 	this.locale = this.locale || new ilib.Locale();
 	
 	new ilib.LocaleInfo(this.locale, {
-		onLoad: function (li) {
+		onLoad: ilib.bind(this, function (li) {
 			this.locinfo = li;
 	    	if (this.code) {
 	    		currInfo = currencies[this.code];
@@ -14850,7 +15133,7 @@ ilib.Currency = function (options) {
 			if (options && typeof(options.onLoad) === 'function') {
 				options.onLoad(this);
 			}
-		}.bind(this)
+		})
 	});
 };
 
@@ -14926,7 +15209,7 @@ ilib.Currency.prototype = {
 /*
  * numfmt.js - Number formatter definition
  * 
- * Copyright © 2012, JEDLSoft
+ * Copyright © 2012-2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15085,7 +15368,7 @@ ilib.NumFmt = function (options) {
 	
 	new ilib.LocaleInfo(this.locale, {
 		sync: sync,
-		onLoad: function (li) {
+		onLoad: ilib.bind(this, function (li) {
 			this.localeInfo = li;
 
 			if (this.type === "currency") {
@@ -15099,7 +15382,7 @@ ilib.NumFmt = function (options) {
 					locale: this.locale,
 					code: this.currency,
 					sync: sync,
-					onLoad: function (cur) {
+					onLoad: ilib.bind(this, function (cur) {
 						this.currencyInfo = cur;
 						if (this.style !== "common" && this.style !== "iso") {
 							this.style = "common";
@@ -15122,7 +15405,7 @@ ilib.NumFmt = function (options) {
 						if (options && typeof(options.onLoad) === 'function') {
 							options.onLoad(this);
 						}
-					}.bind(this)
+					})
 				});
 				return;
 			} else if (this.type === "percentage") {
@@ -15134,7 +15417,7 @@ ilib.NumFmt = function (options) {
 			if (options && typeof(options.onLoad) === 'function') {
 				options.onLoad(this);
 			}
-		}.bind(this)
+		})
 	});
 };
 
@@ -15419,7 +15702,7 @@ ilib.NumFmt.prototype = {
 /*
  * durfmt.js - Date formatter definition
  * 
- * Copyright © 2012, JEDLSoft
+ * Copyright © 2012-2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15541,7 +15824,7 @@ ilib.DurFmt = function(options) {
 		locale: this.locale,
 		name: "sysres",
 		sync: sync,
-		onLoad: function (sysres) {
+		onLoad: ilib.bind(this, function (sysres) {
 			switch (this.length) {
 				case 'short':
 					this.components = {
@@ -15610,21 +15893,21 @@ ilib.DurFmt = function(options) {
 					type: "time",
 					time: "ms",
 					sync: sync,
-					onLoad: function (fmtMS) {
+					onLoad: ilib.bind(this, function (fmtMS) {
 						this.timeFmtMS = fmtMS;
 						new ilib.DateFmt({
 							locale: this.locale,
 							type: "time",
 							time: "hm",
 							sync: sync,
-							onLoad: function (fmtHM) {
+							onLoad: ilib.bind(this, function (fmtHM) {
 								this.timeFmtHM = fmtHM;		
 								new ilib.DateFmt({
 									locale: this.locale,
 									type: "time",
 									time: "hms",
 									sync: sync,
-									onLoad: function (fmtHMS) {
+									onLoad: ilib.bind(this, function (fmtHMS) {
 										this.timeFmtHMS = fmtHMS;		
 
 										// munge with the template to make sure that the hours are not formatted mod 12
@@ -15636,11 +15919,11 @@ ilib.DurFmt = function(options) {
 										if (options && typeof(options.onLoad) === 'function') {
 											options.onLoad(this);
 										}
-									}.bind(this)
+									})
 								});
-							}.bind(this)
+							})
 						});
-					}.bind(this)
+					})
 				});
 				return;
 			}
@@ -15648,7 +15931,7 @@ ilib.DurFmt = function(options) {
 			if (options && typeof(options.onLoad) === 'function') {
 				options.onLoad(this);
 			}
-		}.bind(this)
+		})
 	});
 };
 
@@ -16351,7 +16634,7 @@ ilib.data.name = {
 /*
  * nameprs.js - Person name parser
  * 
- * Copyright © 2012, JEDL Software, Inc.
+ * Copyright © 2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16514,7 +16797,7 @@ ilib.Name = function(name, options) {
 			// locale is not preassembled, so attempt to load it dynamically
 			var files = ilib.getLocFiles(this.locale, "name");
 			
-			ilib._load(files, sync, function(arr) {
+			ilib._load(files, sync, ilib.bind(this, function(arr) {
 				this.info = {};
 				for (var i = 0; i < arr.length; i++) {
 					if (typeof(arr[i]) !== 'undefined') {
@@ -16527,7 +16810,7 @@ ilib.Name = function(name, options) {
 				if (options && typeof(options.onLoad) === 'function') {
 					options.onLoad(this);
 				}
-			}.bind(this));
+			}));
 		} else {
 			// no data other than the generic shared data
 			this.info = ilib.data.name;
@@ -17129,7 +17412,7 @@ ilib.Name.prototype = {
 /*
  * namefmt.js - Format person names for display
  * 
- * Copyright © 2012, JEDL Software, Inc.
+ * Copyright © 2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17187,7 +17470,7 @@ ctype.ispunct.js
  * 
  * The components can be listed in any order in the string. The <i>components</i> option 
  * overrides the <i>style</i> option if both are specified.
-
+ *
  * <li>onLoad - a callback function to call when the locale info object is fully 
  * loaded. When the onLoad option is given, the localeinfo object will attempt to
  * load any missing locale data using the ilib loader callback.
@@ -17302,7 +17585,7 @@ ilib.NameFmt = function(options) {
 			// locale is not preassembled, so attempt to load it dynamically
 			var files = ilib.getLocFiles(this.locale, "name");
 			
-			ilib._load(files, sync, function(arr) {
+			ilib._load(files, sync, ilib.bind(this, function(arr) {
 				this.info = {};
 				for (var i = 0; i < arr.length; i++) {
 					if (typeof(arr[i]) !== 'undefined') {
@@ -17315,7 +17598,7 @@ ilib.NameFmt = function(options) {
 				if (options && typeof(options.onLoad) === 'function') {
 					options.onLoad(this);
 				}
-			}.bind(this));
+			}));
 		} else {
 			// no data other than the generic shared data
 			this.info = ilib.data.name;
@@ -17498,9 +17781,688 @@ ilib.NameFmt.prototype = {
 	}
 };
 
+ilib.data.address = {};
+ilib.data.countries = {"afghanistan":"AF","aland islands":"AX","åland islands":"AX","albania":"AL","algeria":"DZ","american samoa":"AS","andorra":"AD","angola":"AO","anguilla":"AI","antigua and barbuda":"AG","antigua & barbuda":"AG","antigua":"AG","barbuda":"AG","argentina":"AR","armenia":"AM","aruba":"AW","australia":"AU","austria":"AT","azerbaijan":"AZ","bahamas":"BS","the bahamas":"BS","bahrain":"BH","bangladesh":"BD","barbados":"BB","belarus":"BY","belgium":"BE","belize":"BZ","benin":"BJ","bermuda":"BM","bhutan":"BT","bolivia, plurinational state of":"BO","plurinational state of bolivia":"BO","bolivia":"BO","bosnia and herzegovina":"BA","bosnia & herzegovina":"BA","bosnia":"BA","herzegovina":"BA","botswana":"BW","bouvet island":"BV","brazil":"BR","british indian ocean territory":"IO","brunei darussalam":"BN","brunei":"BN","bulgaria":"BG","burkina faso":"BF","burundi":"BI","cambodia":"KH","cameroon":"CM","canada":"CA","cape verde":"CV","cape verde islands":"CV","cayman islands":"KY","caymans":"KY","central african republic":"CF","c.a.r.":"CF","car":"CF","chad":"TD","chile":"CL","people's republic of china":"CN","republic of china":"TW","p. r. of china":"CN","p. r. china":"CN","p.r. of china":"CN","pr china":"CN","R.O.C.":"TW","ROC":"TW","prc":"CN","china":"CN","christmas island":"CX","cocos (keeling) islands":"CC","cocos islands":"CC","cocos and keeling islands":"CC","cocos & keeling islands":"CC","colombia":"CO","comoros":"KM","congo":"CD","congo, the democratic republic of the":"CD","congo, democratic republic of the":"CD","the democratic republic of the congo":"CD","democratic republic of the congo":"CD","drc":"CD","cook islands":"CK","costa rica":"CR","cote d'ivoire":"CI","côte d'ivoire":"CI","ivory coast":"CI","croatia":"HR","cuba":"CU","cyprus":"CY","the czech republic":"CZ","czech republic":"CZ","denmark":"DK","djibouti":"DJ","dominica":"DM","dominican republic":"DO","d.r.":"DO","dr":"DO","ecuador":"EC","egypt":"EG","el salvador":"SV","equatorial guinea":"GQ","eritrea":"ER","estonia":"EE","ethiopia":"ET","falkland islands":"FK","falklands":"FK","malvinas":"FK","faroe islands":"FO","faroes":"FO","fiji":"FJ","finland":"FI","france":"FR","french guiana":"GF","french polynesia":"PF","polynesia":"PF","french southern territories":"TF","gabon":"GA","gabonese republic":"GA","gambia":"GM","republic of the gambia":"GM","georgia":"GE","germany":"DE","ghana":"GH","gibraltar":"GI","greece":"GR","greenland":"GL","grenada":"GD","guadeloupe":"GP","guam":"GU","guatemala":"GT","guernsey":"GG","guinea":"GN","guinea-bissau":"GW","republic of guinea-bissau":"GW","guyana":"GY","cooperative republic of guyana":"GY","haiti":"HT","heard island and mcdonald islands":"HM","heard island & mcdonald islands":"HM","heard and mcdonald islands":"HM","heard island":"HM","mcdonald islands":"HM","holy see":"VA","vatican city state":"VA","vatican city":"VA","vatican":"VA","honduras":"HN","hong kong":"HK","hungary":"HU","iceland":"IS","india":"IN","indonesia":"ID","iran, islamic republic of":"IR","islamic republic of iran":"IR","iran":"IR","iraq":"IQ","republic of ireland":"IE","ireland":"IE","éire":"IE","isle of man":"IM","israel":"IL","italy":"IT","jamaica":"JM","japan":"JP","jersey":"JE","jordan":"JO","kazakhstan":"KZ","kenya":"KE","republic of kenya":"KE","kiribati":"KI","korea, democratic people's republic of":"KP","democratic people's republic of korea":"KP","dprk":"KP","north korea":"KP","korea, republic of":"KR","republic of korea":"KR","south korea":"KR","korea":"KR","kuwait":"KW","kyrgyzstan":"KG","lao people's democratic republic":"LA","laos":"LA","latvia":"LV","lebanon":"LB","lesotho":"LS","liberia":"LR","libyan arab jamahiriya":"LY","libya":"LY","liechtenstein":"LI","lithuania":"LT","luxembourg":"LU","macao":"MO","macedonia, the former yugoslav republic of":"MK","macedonia, former yugoslav republic of":"MK","the former yugoslav republic of macedonia":"MK","former yugoslav republic of macedonia":"MK","f.y.r.o.m.":"MK","fyrom":"MK","macedonia":"MK","madagascar":"MG","malawi":"MW","malaysia":"MY","maldives":"MV","mali":"ML","republic of mali":"ML","malta":"MT","marshall islands":"MH","marshalls":"MH","martinique":"MQ","mauritania":"MR","mauritius":"MU","mayotte":"YT","mexico":"MX","micronesia, federated states of":"FM","federated states of micronesia":"FM","micronesia":"FM","moldova, republic of":"MD","republic of moldova":"MD","moldova":"MD","monaco":"MC","mongolia":"MN","montenegro":"ME","montserrat":"MS","morocco":"MA","mozambique":"MZ","myanmar":"MM","namibia":"NA","nauru":"NR","nepal":"NP","holland":"NL","netherlands antilles":"AN","the netherlands":"NL","netherlands":"NL","new caledonia":"NC","new zealand":"NZ","nicaragua":"NI","niger":"NE","nigeria":"NG","norfolk island":"NF","northern mariana islands":"MP","marianas":"MP","norway":"NO","oman":"OM","pakistan":"PK","palau":"PW","palestinian territory, occupied":"PS","occupied palestinian territory":"PS","palestinian territory":"PS","palestinian authority":"PS","palestine":"PS","panama":"PA","papua new guinea":"PG","png":"PG","paraguay":"PY","peru":"PE","the philippines":"PH","philippines":"PH","pitcairn":"PN","poland":"PL","portugal":"PT","puerto rico":"PR","qatar":"QA","reunion":"RE","réunion":"RE","romania":"RO","russian federation":"RU","russia":"RU","rwanda":"RW","saint barthélemy":"BL","saint barthelemy":"BL","saint barts":"BL","st. barthélemy":"BL","st. barthelemy":"BL","st. barts":"BL","st barthélemy":"BL","st barthelemy":"BL","st barts":"BL","saint helena, ascension and tristan da cunha":"SH","saint helena, ascension & tristan da cunha":"SH","saint helena":"SH","st. helena, ascension and tristan da cunha":"SH","st. helena, ascension & tristan da cunha":"SH","st. helena":"SH","st helena, ascension and tristan da cunha":"SH","st helena, ascension & tristan da cunha":"SH","st helena":"SH","ascension":"SH","tristan da cunha":"SH","saint kitts and nevis":"KN","saint kitts & nevis":"KN","saint kitts":"KN","st. kitts and nevis":"KN","st. kitts & nevis":"KN","st. kitts":"KN","st kitts and nevis":"KN","st kitts & nevis":"KN","st kitts":"KN","nevis":"KN","saint lucia":"LC","st. lucia":"LC","st lucia":"LC","saint martin":"MF","st. martin":"MF","st martin":"MF","saint pierre and miquelon":"PM","saint pierre & miquelon":"PM","saint pierre":"PM","st. pierre and miquelon":"PM","st. pierre & miquelon":"PM","st. pierre":"PM","st pierre and miquelon":"PM","st pierre & miquelon":"PM","st pierre":"PM","miquelon":"PM","saint vincent and the grenadines":"VC","saint vincent & the grenadines":"VC","saint vincent":"VC","st. vincent and the grenadines":"VC","st. vincent & the grenadines":"VC","st. vincent":"VC","st vincent and the grenadines":"VC","st vincent & the grenadines":"VC","st vincent":"VC","the grenadines":"VC","grenadines":"VC","samoa":"WS","san marino":"SM","sao tome and principe":"ST","sao tome & principe":"ST","sao tome":"ST","principe":"ST","saudi arabia":"SA","arabia":"SA","senegal":"SN","sénégal":"SN","serbia":"RS","seychelles":"SC","sierra leone":"SL","the republic of singapore":"SG","republic of singapore":"SG","singapore":"SG","slovakia":"SK","slovenia":"SI","solomon islands":"SB","solomons":"SB","somalia":"SO","south africa":"ZA","south georgia and the south sandwich islands":"GS","south georgia & the south sandwich islands":"GS","south georgia":"GS","the south sandwich islands":"GS","south sandwich islands":"GS","spain":"ES","sri lanka":"LK","the sudan":"SD","sudan":"SD","suriname":"SR","svalbard and jan mayen":"SJ","svalbard & jan mayen":"SJ","svalbard":"SJ","jan mayen":"SJ","swaziland":"SZ","sweden":"SE","switzerland":"CH","syrian arab republic":"SY","syria":"SY","taiwan":"TW","tajikistan":"TJ","tanzania, united republic of":"TZ","united republic of tanzania":"TZ","tanzania":"TZ","thailand":"TH","timor-leste":"TL","east timor":"TL","togo":"TG","tokelau":"TK","tonga":"TO","trinidad and tobago":"TT","trinidad & tobago":"TT","trinidad":"TT","tobago":"TT","tunisia":"TN","turkey":"TR","turkmenistan":"TM","turks and caicos islands":"TC","turks & caicos islands":"TC","turks islands":"TC","turk islands":"TC","caicos islands":"TC","caico islands":"TC","tuvalu":"TV","uganda":"UG","ukraine":"UA","united arab emirates":"AE","u.a.e.":"AE","uae":"AE","dubai":"AE","united kingdom":"GB","u.k.":"GB","uk":"GB","great britain":"GB","g.b.":"GB","gb":"GB","england":"GB","scotland":"GB","wales":"GB","united states":"US","united states of america":"US","u.s.a.":"US","usa":"US","united states minor outlying islands":"UM","uruguay":"UY","uzbekistan":"UZ","vanuatu":"VU","venezuela, bolivarian republic of":"VE","bolivarian republic of venezuela":"VE","venezuela":"VE","viet nam":"VN","vietnam":"VN","british virgin islands":"VG","virgin islands, british":"VG","bvis":"VG","b.v.i.":"VG","bvi":"VG","virgin islands, us":"VI","the us virgin islands":"VI","us virgin islands":"VI","virgin islands":"VI","usvi":"VI","wallis and futuna":"WF","wallis & futuna":"WF","wallis":"WF","futuna":"WF","western sahara":"EH","yemen":"YE","zambia":"ZM","zimbabwe":"ZW"};
+ilib.data.nativecountries = {"افغانستان":"AF","ålandsøerne":"AX","shqipëri":"AL","algérie":"DZ","الجزائر":"DZ","principat d'andorra":"AD","república de angola":"AO","repubilika ya ngola":"AO","Հայաստան":"AM","österreich":"AT","azərbaycan":"AZ","البحرين":"BH","বাংলাদেশ":"BD","গণপ্রজাতন্ত্রী বাংলাদেশ":"BD","gônoprojatontri bangladesh":"BD","беларусь":"BY","belgië":"BE","la belgique":"BE","belgique":"BE","république du bénin":"BJ","bénin":"BJ","འབྲུག་ཡུལ་":"BT","bulivya mamallaqta":"BO","estado plurinacional de bolivia":"BO","wuliwya suyu":"BO","bosna i hercegovina":"BA","босна и херцеговина":"BA","lefatshe la botswana":"BW","bouvetøya":"BV","brasil":"BR","negara brunei darussalam":"BN","българия":"BG","republika y'u burundi":"BI","république du burundi":"BI","ព្រះរាជាណាចក្រកម្ពុជា":"KH","preăh réachéanachâk kâmpŭchéa":"KH","kâmpŭchéa":"KH","cameroun":"CM","cabo verde":"CV","islas de cabo verde":"CV","république centrafricaine":"CF","ködörösêse tî bêafrîka":"CF","république du tchad":"TD","tchad":"TD","جمهورية تشاد":"TD","ǧumhūriyyat tšād":"TD","tšād":"TD","中华人民共和国中国":"CN","共和國的中國":"TW","台灣的":"TW","中国":"CN","union des comores":"KM","udzima wa komori":"KM","الاتحاد القمري":"KM","al-ittiḥād al-qumurī/qamarī":"KM","république du congo":"CG","repubilika ya kongo":"CG","republiki ya kongó":"CG","kongo":"CG","kongó":"CG","république démocratique du congo":"CD","kūki 'āirani":"CK","cote-d'ivoire":"CI","côte-d'ivoire":"CI","hrvatska":"HR","κυπριακή δημοκρατία":"CY","kypriakí dimokratía":"CY","kıbrıs cumhuriyeti":"CY","česká republika":"CZ","danmark":"DK","جمهورية جيبوتي":"DJ","jumhūriyyat jībūtī":"DJ","république de djibouti":"DJ","jamhuuriyadda jabuuti":"DJ","gabuutih ummuuno":"DJ","jībūtī":"DJ","djibouti":"DJ","jabuuti":"DJ","gabuutih":"DJ","Commonwealth de la Dominique":"DM","Dominique":"DM","república dominicana":"DO","مصر":"EG","república de guinea ecuatorial":"GQ","république de guinée équatoriale":"GQ","guinea ecuatorial":"GQ","guinée équatoriale":"GQ","ሃገረ ኤርትራ":"ER","hagere ertra":"ER","دولة إرتريا":"ER","dawlat iritrīya":"ER","eesti":"EE","የኢትዮጵያ ፌዴራላዊ ዲሞክራሲያዊ ሪፐብሊክ":"ET","ye-ītyōṗṗyā fēdēralāwī dīmōkrāsīyāwī rīpeblīk":"ET","የኢትዮጵያ":"ET","ye-ītyōṗṗyā":"ET","malvinas":"FK","færøerne":"FO","matanitu ko viti":"FJ","fijī ripablik":"FJ","फ़िजी गणराज्य":"FJ","suomi":"FI","guyane française":"GF","polynésie française":"PF","terres australes françaises":"TF","république gabonaise":"GA","საქართველოს":"GE","deutschland":"DE","ελλάδα":"GR","grønland":"GL","république de guinée":"GN","república da guiné-bissau":"GW","haïti":"HT","ayiti":"HT","santa sede":"VA","città del vaticano":"VA","vaticano":"VA","香港的":"HK","magyarország":"HU","ísland":"IS","भारत":"IN","جمهوری اسلامی ایران":"IR","ایران":"IR","العراق":"IQ","éire":"IE","ישראל":"IL","italia":"IT","日本":"JP","الأردن":"JO","Казахстан":"KZ","jamhuri ya kenya":"KE","ribaberiki kiribati":"KI","조선 민주주의 인민 공화국":"KP","북한":"KP","대한민국":"KR","한국":"KR","الكويت":"KW","кыргыз республикасы":"KG","kırgız respublikası":"KG","кыргызская республика":"KG","kyrgyzskaya respublika":"KG","ສາທາລະນະລັດ ປະຊາທິປະໄຕ ປະຊາຊົນລາວ":"LA","sathalanalat paxathipatai paxaxon lao":"LA","latvija":"LV","لبنان":"LB","muso oa lesotho":"LS","ليبيا":"LY","lietuva":"LT","luxemburg":"LU","macau":"MO","澳门":"MO","澳門":"MO","поранешна југословенска република македонија":"MK","македонија":"MK","repoblikan'i madagasikara":"MG","république de madagascar":"MG","chalo cha malawi":"MW","dziko la malaŵi":"MW","malaŵi":"MW","ދިވެހިރާއްޖޭގެ ޖުމްހޫރިއްޔާ":"MV","dhivehi raa'jeyge jumhooriyya":"MV","république du mali":"ML","mali ka fasojamana":"ML","الجمهورية الإسلامية الموريتانية":"MR","al-ǧumhūriyyah al-ʾislāmiyyah al-mūrītāniyyah":"MR","république islamique de mauritanie":"MR","republik bu lislaamu bu gànnaar":"MR","republik moris":"MU","république de maurice":"MU","méxico":"MX","republica moldova":"MD","mongγol ulus":"MN","монгол улс":"MN","mongol uls":"MN","crna gora":"ME","црна гора":"ME","مغربي":"MA","república de moçambique":"MZ","moçambique":"MZ","pyidaunzu thanmăda myăma nainngandaw":"MM","burma":"MM","republiek van namibië":"NA","republik namibia":"NA","namibië":"NA","ripublik naoero":"NR","सङ्घीय लोकतान्त्रिक गणतन्त्र नेपाल":"NP","sanghiya loktāntrik ganatantra nepāl":"NP","nepāl":"NP","nederland":"NL","nouvelle-calédonie":"NC","la calédonie":"NC","calédonie":"NC","aotearoa":"NZ","jamhuriyar nijar":"NE","nijar":"NE","jamhuriyar tarayyar najeriya":"NG","njíkọtá ọchíchìiwú nàịjíríà":"NG","àpapọ̀ olómìnira ilẹ̀ nàìjíríà":"NG","nàịjíríà":"NG","nàìjíríà":"NG","norge":"NO","سلطنة عمان":"OM","پاکستان":"PK","beluu ęr a belau":"PW","belau":"PW","panamá":"PA","independen stet bilong papua niugini":"PG","papua niugini":"PG","perú":"PE","las filipinas":"PH","filipinas":"PH","polska":"PL","قطر":"QA","românia":"RO","русский Федерации":"RU","россия":"RU","repubulika y'u rwanda":"RW","république du rwanda":"RW","saint-barthélemy":"BL","saint barth":"BL","saint-martin":"MF","sint maarten":"MF","saint-pierre-et-miquelon":"PM","malo sa'oloto tuto'atasi o samoa":"WS","san marino":"SM","sao tome and principe":"ST","sao tome & principe":"ST","sao tome":"ST","principe":"ST","السعودية جزيره العرب":"SA","arabia":"SA","senegal":"SN","sénégal":"SN","serbia":"RS","seychelles":"SC","sierra leone":"SL","新加坡共和国":"SG","新加坡的":"SG","slovensko":"SK","slovenija":"SI","solomon islands":"SB","solomons":"SB","somalia":"SO","suid-afrika":"ZA","españa":"ES","sri lanka":"LK","the sudan":"SD","sudan":"SD","suriname":"SR","svalbard and jan mayen":"SJ","svalbard & jan mayen":"SJ","svalbard":"SJ","jan mayen":"SJ","swaziland":"SZ","sverige":"SE","die schweiz":"CH","schweiz":"CH","la suisse":"CH","suisse":"CH","svizzera":"CH","سوريا":"SY","taiwan, province of china":"TW","taiwan":"TW","tajikistan":"TJ","tanzania, united republic of":"TZ","united republic of tanzania":"TZ","tanzania":"TZ","ประเทศไทย":"TH","timor-leste":"TL","east timor":"TL","togo":"TG","tokelau":"TK","tonga":"TO","trinidad and tobago":"TT","trinidad & tobago":"TT","trinidad":"TT","tobago":"TT","تونس":"TN","türkiye":"TR","turkmenistan":"TM","tuvalu":"TV","uganda":"UG","україна":"UA","الامارات العربية المتحدة":"AE","دبي":"AE","albain":"GB","cymru":"GB","uruguay":"UY","uzbekistan":"UZ","vanuatu":"VU","việt nam":"VN","western sahara":"EH","يمني":"YE","zambia":"ZM","zimbabwe":"ZW"};
+/**
+ * addressprs.js - Represent a mailing address
+ * 
+ * Copyright © 2013, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*globals console RegExp */
+
+/* !depends 
+ilibglobal.js 
+locale.js 
+ctype.isideo.js 
+ctype.isascii.js
+ctype.isdigit.js
+*/
+
+// !data address countries nativecountries ctrynames
+
+/**
+ * @constructor
+ * @class
+ * 
+ * Create a new Address instance and parse a physical address.<p>
+ * 
+ * This function parses a physical address written in a free-form string. 
+ * It returns an object with a number of properties from the list below 
+ * that it may have extracted from that address.<p>
+ * 
+ * The following is a list of properties that the algorithm will return:<p>
+ * 
+ * <ul>
+ * <li>streetAddress: The street address, including house numbers and all.
+ * <li>locality: The locality of this address (usually a city or town). 
+ * <li>region: The region where the locality is located. In the US, this
+ * corresponds to states. In other countries, this may be provinces,
+ * cantons, prefectures, etc. In some smaller countries, there are no
+ * such divisions.
+ * <li>postalCode: Country-specific code for expediting mail. In the US, 
+ * this is the zip code.
+ * <li>country: The country of the address.
+ * <li>countryCode: The ISO 3166 2-letter region code for the destination
+ * country in this address.
+ * </ul> 
+ * 
+ * The above properties will not necessarily appear in the instance. For 
+ * any individual property, if the free-form address does not contain 
+ * that property or it cannot be parsed out, the it is left out.<p>
+ * 
+ * The options parameter may contain any of the following properties:
+ * 
+ * <ul>
+ * <li>locale - locale or localeSpec to use to parse the address. If not 
+ * specified, this function will use the current ilib locale
+ * 
+ * <li>onLoad - a callback function to call when the address info for the
+ * locale is fully loaded and the address has been parsed. When the onLoad 
+ * option is given, the address object 
+ * will attempt to load any missing locale data using the ilib loader callback.
+ * When the constructor is done (even if the data is already preassembled), the 
+ * onLoad function is called with the current instance as a parameter, so this
+ * callback can be used with preassembled or dynamic loading or a mix of the two. 
+ * 
+ * <li>sync - tell whether to load any missing locale data synchronously or 
+ * asynchronously. If this option is given as "false", then the "onLoad"
+ * callback must be given, as the instance returned from this constructor will
+ * not be usable for a while. 
+ * </ul>
+ * 
+ * When an address cannot be parsed properly, the entire address will be placed
+ * into the streetAddress property.<p>
+ * 
+ * When the freeformAddress is another ilib.Address, this will act like a copy
+ * constructor.<p>
+ * 
+ * @param {string|ilib.Address} freeformAddress free-form address to parse, or a
+ * javascript object containing the fields
+ * @params {Object} options options to the parser
+ */
+ilib.Address = function (freeformAddress, options) {
+	var address;
+
+	if (!freeformAddress) {
+		return undefined;
+	}
+
+	this.sync = true;
+	
+	if (options) {
+		if (options.locale) {
+			this.locale = (typeof(options.locale) === 'string') ? new ilib.Locale(options.locale) : options.locale;
+		}
+		
+		if (typeof(options.sync) !== 'undefined') {
+			this.sync = (options.sync == true);
+		}
+	}
+
+	this.locale = this.locale || new ilib.Locale();
+	// initialize from an already parsed object
+	if (typeof(freeformAddress) === 'object') {
+		/**
+		 * @type {string|undefined} The street address, including house numbers and all
+		 */
+		this.streetAddress = freeformAddress.streetAddress;
+		/**
+		 * @type {string|undefined} The locality of this address (usually a city or town) 
+		 */
+		this.locality = freeformAddress.locality;
+		/**
+		 * @type {string|undefined} The region (province, canton, prefecture, state, etc.) where
+		 * the address is located.
+		 */
+		this.region = freeformAddress.region;
+		/**
+		 * @type {string|undefined} Country-specific code for expediting mail. In the US,
+		 * this is the zip code.
+		 */
+		this.postalCode = freeformAddress.postalCode;
+		/**
+		 * @type {string|undefined} The country of the address.
+		 */
+		this.country = freeformAddress.country;
+		if (freeformAddress.countryCode) {
+			/**
+			 * @type {string} The ISO 3166 2-letter region code for the destination
+			 * country in this address.
+			 */
+			this.countryCode = freeformAddress.countryCode;
+		}
+		if (freeformAddress.format) {
+			/**
+			 * @type {string}
+			 */
+			this.format = freeformAddress.format;
+		}
+		return this;
+	}
+
+	address = freeformAddress.replace(/[ \t\r]+/g, " ").trim();
+	address = address.replace(/[\s\n]+$/, "");
+	address = address.replace(/^[\s\n]+/, "");
+	//console.log("\n\n-------------\nAddress is '" + address + "'");
+	
+	this.lines = address.split(/[,，\n]/g);
+	this.removeEmptyLines(this.lines);
+	
+	if (typeof(ilib.Address.ctry) === 'undefined') {
+		ilib.Address.ctry = {}; // make sure not to conflict with the address info
+	}
+	ilib.loadData(ilib.Address.ctry, this.locale, "ctrynames", this.sync,
+		/** @type function(Object=):undefined */
+		ilib.bind(this, /** @type function() */ function(ctrynames) {
+			this._determineDest(ctrynames, options.onLoad);
+		}
+	));
+};
+
+/** @protected */
+ilib.Address.prototype = {
+	/**
+	 * @private
+	 * @param {Object?} ctrynames
+	 */
+	_findDest: function (ctrynames) {
+		var match;
+		
+		for (var countryName in ctrynames) {
+			if (countryName && countryName !== "generated") {
+				// find the longest match in the current table
+				// ctrynames contains the country names mapped to region code
+				// for efficiency, only test for things longer than the current match
+				if (!match || match.text.length < countryName.length) {
+					var temp = this._findCountry(countryName);
+					if (temp) {
+						match = temp;
+						this.country = match.text;
+						this.countryCode = ctrynames[countryName];
+					}
+				}
+			}
+		}
+		return match;
+	},
+	
+	/**
+	 * @private
+	 * @param {Object?} localizedCountries
+	 * @param {function(ilib.Address):undefined} callback
+	 */
+	_determineDest: function (localizedCountries, callback) {
+		var match;
+		
+		/*
+		 * First, find the name of the destination country, as that determines how to parse
+		 * the rest of the address. For any address, there are three possible ways 
+		 * that the name of the country could be written:
+		 * 1. In the current language
+		 * 2. In its own native language
+		 * 3. In English
+		 * We'll try all three.
+		 */
+		var tables = [];
+		if (localizedCountries) {
+			tables.push(localizedCountries);
+		}
+		tables.push(ilib.data.nativecountries);
+		tables.push(ilib.data.countries);
+		
+		for (var i = 0; i < tables.length; i++) {
+			match = this._findDest(tables[i]);
+			
+			if (match) {
+				this.lines[match.line] = this.lines[match.line].substring(0, match.start) + this.lines[match.line].substring(match.start + match.text.length);
+
+				this._init(callback);
+				return;
+			}
+		}
+		
+		// no country, so try parsing it as if we were in the same country
+		this.country = undefined;
+		this.countryCode = this.locale.getRegion();
+		this._init(callback);
+	},
+
+	/**
+	 * @private
+	 * @param {function(ilib.Address):undefined} callback
+	 */
+	_init: function(callback) {
+		ilib.loadData(ilib.Address, new ilib.Locale(this.countryCode), "address", this.sync, 
+				/** @type function(Object=):undefined */ ilib.bind(this, function(info) {
+			if (!info || ilib.isEmpty(info)) {
+				// load the "unknown" locale instead
+				ilib.loadData(ilib.Address, new ilib.Locale("XX"), "address", this.sync, 
+						/** @type function(Object=):undefined */ ilib.bind(this, function(info) {
+					this.info = info;
+					this._parseAddress();
+					if (typeof(callback) === 'function') {
+						callback(this);
+					}	
+				}));
+			} else {
+				this.info = info;
+				this._parseAddress();
+				if (typeof(callback) === 'function') {
+					callback(this);
+				}
+			}
+		}));
+	},
+
+	/**
+	 * @private
+	 */
+	_parseAddress: function() {
+		// clean it up first
+		var i, 
+			asianChars = 0, 
+			latinChars = 0,
+			startAt,
+			infoFields,
+			field,
+			pattern,
+			matchFunction,
+			match,
+			fieldNumber;
+		
+		// for locales that support both latin and asian character addresses, 
+		// decide if we are parsing an asian or latin script address
+		if (this.info && this.info.multiformat) {
+			for (var j = 0; j < this.lines.length; j++) {
+				var line = this.lines[j];
+				// TODO: use a char iterator here
+				for (i = 0; i < line.length; i++) {
+					if (ilib.CType.isIdeo(line.charAt(i))) {
+						asianChars++;
+					} else if (ilib.CType.isAscii(line.charAt(i)) && !ilib.CType.isDigit(line.charAt(i))) {
+						latinChars++;
+					}
+				}
+			}
+			
+			this.format = (asianChars >= latinChars) ? "asian" : "latin";
+			startAt = this.info.startAt[this.format];
+			infoFields = this.info.fields[this.format];
+			// console.log("multiformat locale: format is now " + this.format);
+		} else {
+			startAt = (this.info && this.info.startAt) || "end";
+			infoFields = this.info.fields;
+		}
+		this.compare = (startAt === "end") ? this.endsWith : this.startsWith;
+		
+		//console.log("this.lines is: " + JSON.stringify(this.lines));
+		
+		for (i = 0; i < infoFields.length && this.lines.length > 0; i++) {
+			/** @type {{name:string, line:string, pattern:(string|Array.<string>), matchGroup:number}} */
+			field = infoFields[i];
+			this.removeEmptyLines(this.lines);
+			//console.log("Searching for field " + field.name);
+			if (field.pattern) {
+				if (typeof(field.pattern) === 'string') {
+					pattern = new RegExp(field.pattern, "img");
+					matchFunction = this.matchRegExp;
+				} else {
+					pattern = field.pattern;
+					matchFunction = this.matchPattern;
+				}
+					
+				switch (field.line) {
+				case 'startAtFirst':
+					for (fieldNumber = 0; fieldNumber < this.lines.length; fieldNumber++) {
+						match = matchFunction(this, this.lines[fieldNumber], pattern, field.matchGroup, startAt);
+						if (match) {
+							break;
+						}
+					}
+					break;
+				case 'startAtLast':
+					for (fieldNumber = this.lines.length-1; fieldNumber >= 0; fieldNumber--) {
+						match = matchFunction(this, this.lines[fieldNumber], pattern, field.matchGroup, startAt);
+						if (match) {
+							break;
+						}
+					}
+					break;
+				case 'first':
+					fieldNumber = 0;
+					match = matchFunction(this, this.lines[fieldNumber], pattern, field.matchGroup, startAt);
+					break;
+				case 'last':
+				default:
+					fieldNumber = this.lines.length - 1;
+					match = matchFunction(this, this.lines[fieldNumber], pattern, field.matchGroup, startAt);
+					break;
+				}
+				if (match) {
+					// console.log("found match for " + field.name + ": " + JSON.stringify(match));
+					// console.log("remaining line is " + match.line);
+					this.lines[fieldNumber] = match.line;
+					this[field.name] = match.match;
+				}
+			} else {
+				// if nothing is given, default to taking the whole field
+				this[field.name] = this.lines.splice(fieldNumber,1)[0].trim();
+				//console.log("typeof(this[fieldName]) is " + typeof(this[fieldName]) + " and value is " + JSON.stringify(this[fieldName]));
+			}
+		}
+			
+		// all the left overs go in the street address field
+		this.removeEmptyLines(this.lines);
+		if (this.lines.length > 0) {
+			//console.log("this.lines is " + JSON.stringify(this.lines) + " and splicing to get streetAddress");
+			var joinString = (this.format && this.format === "asian") ? "" : ", ";
+			this.streetAddress = this.lines.join(joinString).trim();
+		}
+		
+		this.lines = undefined;
+		//console.log("final result is " + JSON.stringify(this));
+	},
+	
+	/**
+	 * @protected
+	 * Find the named country either at the end or the beginning of the address.
+	 */
+	_findCountry: function(name) {
+		var start = -1, match, line = 0;
+		
+		if (this.lines.length > 0) {
+			start = this.startsWith(this.lines[line], name);
+			if (start === -1) {
+				line = this.lines.length-1;
+				start = this.endsWith(this.lines[line], name);
+			}
+			if (start !== -1) {
+				match = {
+					text: this.lines[line].substring(start, start + name.length),
+					line: line,
+					start: start
+				};
+			}
+		}
+		
+		return match;
+	},
+	
+	endsWith: function (subject, query) {
+		var start = subject.length-query.length,
+			i,
+			pat;
+		//console.log("endsWith: checking " + query + " against " + subject);
+		for (i = 0; i < query.length; i++) {
+			if (subject.charAt(start+i).toLowerCase() !== query.charAt(i).toLowerCase()) {
+				return -1;
+			}
+		}
+		if (start > 0) {
+			pat = /\s/;
+			if (!pat.test(subject.charAt(start-1))) {
+				// make sure if we are not at the beginning of the string, that the match is 
+				// not the end of some other word
+				return -1;
+			}
+		}
+		return start;
+	},
+	
+	startsWith: function (subject, query) {
+		var i;
+		// console.log("startsWith: checking " + query + " against " + subject);
+		for (i = 0; i < query.length; i++) {
+			if (subject.charAt(i).toLowerCase() !== query.charAt(i).toLowerCase()) {
+				return -1;
+			}
+		}
+		return 0;
+	},
+	
+	removeEmptyLines: function (arr) {
+		var i = 0;
+		
+		while (i < arr.length) {
+			if (arr[i]) {
+				arr[i] = arr[i].trim();
+				if (arr[i].length === 0) {
+					arr.splice(i,1);
+				} else {
+					i++;
+				}
+			} else {
+				arr.splice(i,1);
+			}
+		}
+	},
+	
+	matchRegExp: function(address, line, expression, matchGroup, startAt) {
+		var lastMatch,
+			match,
+			ret = {},
+			last;
+		
+		//console.log("searching for regexp " + expression.source + " in line " + line);
+		
+		match = expression.exec(line);
+		if (startAt === 'end') {
+			while (match !== null && match.length > 0) {
+				//console.log("found matches " + JSON.stringify(match));
+				lastMatch = match;
+				match = expression.exec(line);
+			}
+			match = lastMatch;
+		}
+		
+		if (match && match !== null) {
+			//console.log("found matches " + JSON.stringify(match));
+			matchGroup = matchGroup || 0;
+			if (match[matchGroup] !== undefined) {
+				ret.match = match[matchGroup].trim();
+				last = (startAt === 'end') ? line.lastIndexOf(match[matchGroup]) : line.indexOf(match[matchGroup]); 
+				// console.log("last is " + last);
+				ret.line = line.slice(0,last);
+				if (address.format !== "asian") {
+					ret.line += " ";
+				}
+				ret.line += line.slice(last+match[matchGroup].length);
+				ret.line = ret.line.trim();
+				//console.log("found match " + ret.match + " from matchgroup " + matchGroup + " and rest of line is " + ret.line);
+				return ret;
+			}
+		//} else {
+			//console.log("no match");
+		}
+		
+		return undefined;
+	},
+	
+	matchPattern: function(address, line, pattern, matchGroup) {
+		var start,
+			j,
+			ret = {};
+		
+		//console.log("searching in line " + line);
+		
+		// search an array of possible fixed strings
+		//console.log("Using fixed set of strings.");
+		for (j = 0; j < pattern.length; j++) {
+			start = address.compare(line, pattern[j]); 
+			if (start !== -1) {
+				ret.match = line.substring(start, start+pattern[j].length);
+				ret.line = line.substring(0,start).trim();
+				//console.log("found match " + ret.match + " and rest of line is " + ret.line);
+				return ret;
+			}
+		}
+		
+		return undefined;
+	}
+};
+/*
+ * addressfmt.js - Format an address
+ * 
+ * Copyright © 2013, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* !depends 
+ilibglobal.js 
+locale.js
+addressprs.js
+*/
+
+// !data address
+
+/**
+ * @constructor
+ * @class
+ * 
+ * Create a new formatter object to format physical addresses in a particular way.
+ *
+ * The options object may contain the following properties, both of which are optional:
+ *
+ * <ul>
+ * <li>*locale* - the locale to use to format this address. If not specified, it uses the default locale
+ * 
+ * <li>*style* - the style of this address. The default style for each country usually includes all valid 
+ * fields for that country.
+ * 
+ * <li>onLoad - a callback function to call when the address info for the
+ * locale is fully loaded and the address has been parsed. When the onLoad 
+ * option is given, the address formatter object 
+ * will attempt to load any missing locale data using the ilib loader callback.
+ * When the constructor is done (even if the data is already preassembled), the 
+ * onLoad function is called with the current instance as a parameter, so this
+ * callback can be used with preassembled or dynamic loading or a mix of the two. 
+ * 
+ * <li>sync - tell whether to load any missing locale data synchronously or 
+ * asynchronously. If this option is given as "false", then the "onLoad"
+ * callback must be given, as the instance returned from this constructor will
+ * not be usable for a while. 
+ * </ul>
+ * 
+ * @param {Object} options options that configure how this formatter should work
+ * Returns a formatter instance that can format multiple addresses.
+ */
+ilib.AddressFmt = function(options) {
+	this.sync = true;
+	this.styleName = 'default';
+	
+	if (options) {
+		if (options.locale) {
+			this.locale = (typeof(options.locale) === 'string') ? new ilib.Locale(options.locale) : options.locale;
+		}
+		
+		if (typeof(options.sync) !== 'undefined') {
+			this.sync = (options.sync == true);
+		}
+		
+		if (options.style) {
+			this.styleName = options.style;
+		}
+	}
+
+	// console.log("Creating formatter for region: " + this.locale.region);
+	ilib.loadData(ilib.Address, this.locale, "address", this.sync, /** @type function(Object?):undefined */ ilib.bind(this, function(info) {
+		if (!info || ilib.isEmpty(info)) {
+			// load the "unknown" locale instead
+			ilib.loadData(ilib.Address, new ilib.Locale("XX"), "address", this.sync, /** @type function(Object?):undefined */ ilib.bind(this, function(info) {
+				this.info = info;
+				this._init();
+				if (typeof(options.onLoad) === 'function') {
+					options.onLoad(this);
+				}	
+			}));
+		} else {
+			this.info = info;
+			this._init();
+			if (typeof(options.onLoad) === 'function') {
+				options.onLoad(this);
+			}
+		}
+	}));
+};
+
+/**
+ * @private
+ */
+ilib.AddressFmt.prototype._init = function () {
+	this.style = this.info && this.info.formats && this.info.formats[this.styleName];
+	
+	// use generic default -- should not happen, but just in case...
+	this.style = this.style || (this.info && this.info.formats["default"]) || "{streetAddress}\n{locality} {region} {postalCode}\n{country}";
+};
+
+/**
+ * This function formats a physical address (ilib.Address instance) for display. 
+ * Whitespace is trimmed from the beginning and end of final resulting string, and 
+ * multiple consecutive whitespace characters in the middle of the string are 
+ * compressed down to 1 space character.
+ * 
+ * If the Address instance is for a locale that is different than the locale for this
+ * formatter, then a hybrid address is produced. The country name is located in the
+ * correct spot for the current formatter's locale, but the rest of the fields are
+ * formatted according to the default style of the locale of the actual address.
+ * 
+ * Example: a mailing address in China, but formatted for the US might produce the words
+ * "People's Republic of China" in English at the last line of the address, and the 
+ * Chinese-style address will appear in the first line of the address. In the US, the
+ * country is on the last line, but in China the country is usually on the first line.
+ *
+ * @param {ilib.Address} address Address to format
+ * @eturns {string} Returns a string containing the formatted address
+ */
+ilib.AddressFmt.prototype.format = function (address) {
+	var ret, template, other, format;
+	
+	if (!address) {
+		return "";
+	}
+	// console.log("formatting address: " + JSON.stringify(address));
+	if (address.countryCode && 
+			address.countryCode !== this.locale.region && 
+			ilib.Locale._isRegionCode(this.locale.region) && 
+			this.locale.region !== "XX") {
+		// we are formatting an address that is sent from this country to another country,
+		// so only the country should be in this locale, and the rest should be in the other
+		// locale
+		// console.log("formatting for another locale. Loading in its settings: " + address.countryCode);
+		other = new ilib.AddressFmt({
+			locale: new ilib.Locale(address.countryCode), 
+			style: this.styleName
+		});
+		return other.format(address);
+	}
+	
+	format = address.format ? this.style[address.format] : this.style;
+	// console.log("Using format: " + format);
+	// make sure we have a blank string for any missing parts so that
+	// those template parts get blanked out
+	var params = {
+		country: address.country || "",
+		region: address.region || "",
+		locality: address.locality || "",
+		streetAddress: address.streetAddress || "",
+		postalCode: address.postalCode || ""
+	};
+	template = new ilib.String(format);
+	ret = template.format(params);
+	ret = ret.replace(/[ \t]+/g, ' ');
+	return ret.replace(/\n+/g, '\n').trim();
+};
+
 /**
  * @license
- * Copyright © 2012, JEDLSoft
+ * Copyright © 2012-2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17561,4 +18523,6 @@ ctype.isupper.js
 ctype.isxdigit.js
 nameprs.js
 namefmt.js
+addressprs.js
+addressfmt.js
 */

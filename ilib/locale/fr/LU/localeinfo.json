@@ -1,5 +1,4 @@
 {
-	"currency": "EUR",
 	"numfmt": {
 		"decimalChar": ",",
 		"groupChar": ".",
@@ -7,7 +6,5 @@
 		"pctFmt": "{n}%",
 		"pctChar": "%"
 	},
-	"region.name": "Luxembourg",
-	"timezone": "Europe/Luxembourg",
 	"locale": "fr-LU"
 }

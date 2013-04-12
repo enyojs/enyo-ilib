@@ -19,6 +19,5 @@
 		"pctFmt": "{n}%"
 	},
 	"scripts": ["Latn"],
-	"timezone": "Europe/Paris",
 	"locale": "fr"
 }

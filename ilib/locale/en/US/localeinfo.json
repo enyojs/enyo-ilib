@@ -1,12 +1,3 @@
 {
-	"clock": "12",
-	"currency": "USD",
-	"paperSizes": {
-		"regular": "8x11",
-		"photo": "3x5"
-	},
-	"region.name": "United States",
-	"timezone": "America/New_York",
-	"units": "uscustomary",
 	"locale": "en-US"
 }

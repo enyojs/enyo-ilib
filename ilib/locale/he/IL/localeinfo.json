@@ -1,8 +1,5 @@
 {
 	"calendar": "hebrew",
 	"firstDayOfWeek": 6,
-	"currency": "ILS",
-	"region.name": "Israel",
-	"timezone": "Asia/Jerusalem",
 	"locale": "he-IL"
 }
