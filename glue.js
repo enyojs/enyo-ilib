@@ -16,7 +16,7 @@
 	function loadFiles(context, paths, results, callback) {
 		if (paths.length > 0) {
 			var path = paths.shift();
-			var file = "/usr/palm/ilib/" + path;
+			var file = "lib/enyo-ilib/ilib/locale/" + path;
 			var ajax = new enyo.Ajax({url: file});
 			var resultFunc = function(inSender, json) {
 				results.push((typeof(json) === 'object') ? json : undefined);
@@ -48,7 +48,7 @@
 			// synchronous
 			paths.forEach(function (path) {
 				var ajax = new enyo.Ajax({
-					url: "/usr/palm/ilib/" + path,
+					url: "lib/enyo-ilib/ilib/locale/" + path,
 					sync: true
 				});
 	
@@ -100,3 +100,18 @@ $L = (function() {
 	});
 	return lfunc;
 })();
+
+/**
+ * Set the locale for the strings that $L loads. This may reload the 
+ * string resources if necessary.
+ */
+$L.setLocale = function (spec) {
+	if (spec !== $L.rb.getLocale().getSpec()) {
+		$L.rb = new ilib.ResBundle({
+			locale: spec,
+			type: "html",
+			name: "strings",
+			lengthen: true		// if pseudo-localizing, this tells it to lengthen strings
+		});
+	}
+};
