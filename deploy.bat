@@ -24,6 +24,7 @@ GOTO :EOF
 :OK
 
 REM copy assets
-XCOPY %SOURCE%ilib\locale\*.* %TARGET% /Q /E 
+mkdir %TARGET%\ilib\locale
+XCOPY %SOURCE%\ilib\locale\*.* %TARGET%\ilib\locale /Q /E 
 
 ENDLOCAL
