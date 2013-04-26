@@ -9,7 +9,8 @@
 		"decimalChar": ".",
 		"groupChar": ",",
 		"groupSize": 3,
-		"pctFmt": "{n}%"
+		"pctFmt": "{n}%",
+		"roundingMode": "halfeven"
 	},
 	"paperSizes": {
 		"regular": "8x11",
