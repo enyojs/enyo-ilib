@@ -1071,7 +1071,20 @@ ilib.mergeLocData = function (prefix, locale) {
 /**
  * Return an array of relative path names for the json
  * files that represent the data for the given locale. Only
- * language and region are top-level directories.
+ * language and region are top-level directories.<p>
+ * 
+ * Note that to prevent the situation where a directory for
+ * a language exists next to the directory for a region where
+ * the language code and region code differ only by case, the 
+ * plain region directories are located under the special 
+ * "undefined" language directory which has the ISO code "und".
+ * The reason is that some platforms have case-insensitive 
+ * file systems, and you cannot have 2 directories with the 
+ * same name which only differ by case. For example, "es" is
+ * the ISO 639 code for the language "Spanish" and "ES" is
+ * the ISO 3166 code for the region "Spain", so both the
+ * directories cannot exist underneath "locale". The region
+ * therefore will be loaded from "und/ES" instead.<p>  
  * 
  * Variations
  * 
@@ -1147,7 +1160,7 @@ ilib.getLocFiles = function(locale, basename) {
 	}
 	
 	if (region) {
-		dir = region + "/";
+		dir = "und/" + region + "/";
 		files.push(dir + filename);
 	}
 	
@@ -1163,7 +1176,7 @@ ilib.getLocFiles = function(locale, basename) {
 	}
 	
 	if (region && variant) {
-		dir = region + "/" + variant + "/";
+		dir = "und/" + region + "/" + variant + "/";
 		files.push(dir + filename);
 	}
 
@@ -1181,38 +1194,6 @@ ilib.getLocFiles = function(locale, basename) {
 		dir = language + "/" + script + "/" + region + "/" + variant + "/";
 		files.push(dir + filename);
 	}
-	
-	/*
-	dir += loc.getLanguage() + "/";
-	files.push(dir + filename + ".json");
-	if (loc.getVariant()) {
-		var dir2 = dir;
-		dir2 += loc.getVariant() + "/";
-		files.push(dir2 + filename + ".json");
-	}
-	if (loc.getRegion()) {
-		var dir2 = dir;
-		dir2 += loc.getRegion() + "/";
-		files.push(dir2 + filename + ".json");
-		if (loc.getVariant()) {
-			dir2 += loc.getVariant() + "/";
-			files.push(dir2 + filename + ".json");
-		}
-	}
-	if (loc.getScript()) {
-		var dir2 = dir;
-		dir2 += loc.getScript() + "/";
-		files.push(dir2 + filename + ".json");
-		if (loc.getRegion()) {
-			dir2 += loc.getRegion() + "/";
-			files.push(dir2 + filename + ".json");
-			if (loc.getVariant()) {
-				dir2 += loc.getVariant() + "/";
-				files.push(dir2 + filename + ".json");
-			}
-		}
-	}
-	*/
 	
 	return files;
 };
@@ -7564,46 +7545,46 @@ ilib.TimeZone.prototype.useDaylightTime = function () {
 };
 
 ilib.data.pseudomap = {
-	"a": "à",	
-	"c": "ç",	
-	"d": "ð",	
-	"e": "ë",	
-	"g": "ğ",	
+	"a": "à",
+	"c": "ç",
+	"d": "ð",
+	"e": "ë",
+	"g": "ğ",
 	"h": "ĥ",
-	"i": "í",	
-	"j": "ĵ",	
-	"k": "ķ",	
-	"l": "ľ",	
-	"n": "ñ",	
-	"o": "õ",	
-	"p": "þ",	
-	"r": "ŕ",	
-	"s": "š",	
-	"t": "ţ",	
-	"u": "ü",	
-	"w": "ŵ",	
-	"y": "ÿ",	
-	"z": "ž",	
+	"i": "í",
+	"j": "ĵ",
+	"k": "ķ",
+	"l": "ľ",
+	"n": "ñ",
+	"o": "õ",
+	"p": "þ",
+	"r": "ŕ",
+	"s": "š",
+	"t": "ţ",
+	"u": "ü",
+	"w": "ŵ",
+	"y": "ÿ",
+	"z": "ž",
 	"A": "Ã",
 	"B": "ß",
-	"C": "Ç",	
-	"D": "Ð",	
-	"E": "Ë",	
-	"G": "Ĝ",	
+	"C": "Ç",
+	"D": "Ð",
+	"E": "Ë",
+	"G": "Ĝ",
 	"H": "Ħ",
-	"I": "Ï",	
-	"J": "Ĵ",	
-	"K": "ĸ",	
-	"L": "Ľ",	
-	"N": "Ň",	
-	"O": "Ø",	
-	"R": "Ŗ",	
-	"S": "Š",	
-	"T": "Ť",	
-	"U": "Ú",	
-	"W": "Ŵ",	
-	"Y": "Ŷ",	
-	"Z": "Ż"	
+	"I": "Ï",
+	"J": "Ĵ",
+	"K": "ĸ",
+	"L": "Ľ",
+	"N": "Ň",
+	"O": "Ø",
+	"R": "Ŗ",
+	"S": "Š",
+	"T": "Ť",
+	"U": "Ú",
+	"W": "Ŵ",
+	"Y": "Ŷ",
+	"Z": "Ż"
 };
 /*
  * resources.js - Resource bundle definition
@@ -17825,16 +17806,16 @@ ctype.isdigit.js
  * The following is a list of properties that the algorithm will return:<p>
  * 
  * <ul>
- * <li>streetAddress: The street address, including house numbers and all.
- * <li>locality: The locality of this address (usually a city or town). 
- * <li>region: The region where the locality is located. In the US, this
+ * <li><i>streetAddress</i>: The street address, including house numbers and all.
+ * <li><i>locality</i>: The locality of this address (usually a city or town). 
+ * <li><i>region</i>: The region where the locality is located. In the US, this
  * corresponds to states. In other countries, this may be provinces,
  * cantons, prefectures, etc. In some smaller countries, there are no
  * such divisions.
- * <li>postalCode: Country-specific code for expediting mail. In the US, 
+ * <li><i>postalCode</i>: Country-specific code for expediting mail. In the US, 
  * this is the zip code.
- * <li>country: The country of the address.
- * <li>countryCode: The ISO 3166 2-letter region code for the destination
+ * <li><i>country</i>: The country of the address.
+ * <li><i>countryCode</i>: The ISO 3166 2-letter region code for the destination
  * country in this address.
  * </ul> 
  * 
@@ -17845,10 +17826,10 @@ ctype.isdigit.js
  * The options parameter may contain any of the following properties:
  * 
  * <ul>
- * <li>locale - locale or localeSpec to use to parse the address. If not 
+ * <li><i>locale</i> - locale or localeSpec to use to parse the address. If not 
  * specified, this function will use the current ilib locale
  * 
- * <li>onLoad - a callback function to call when the address info for the
+ * <li><i>onLoad</i> - a callback function to call when the address info for the
  * locale is fully loaded and the address has been parsed. When the onLoad 
  * option is given, the address object 
  * will attempt to load any missing locale data using the ilib loader callback.
@@ -17856,7 +17837,7 @@ ctype.isdigit.js
  * onLoad function is called with the current instance as a parameter, so this
  * callback can be used with preassembled or dynamic loading or a mix of the two. 
  * 
- * <li>sync - tell whether to load any missing locale data synchronously or 
+ * <li><i>sync</i> - tell whether to load any missing locale data synchronously or 
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
  * not be usable for a while. 
@@ -18353,12 +18334,12 @@ addressprs.js
  * The options object may contain the following properties, both of which are optional:
  *
  * <ul>
- * <li>*locale* - the locale to use to format this address. If not specified, it uses the default locale
+ * <li><i>locale</i> - the locale to use to format this address. If not specified, it uses the default locale
  * 
- * <li>*style* - the style of this address. The default style for each country usually includes all valid 
+ * <li><i>style</i> - the style of this address. The default style for each country usually includes all valid 
  * fields for that country.
  * 
- * <li>onLoad - a callback function to call when the address info for the
+ * <li><i>onLoad</i> - a callback function to call when the address info for the
  * locale is fully loaded and the address has been parsed. When the onLoad 
  * option is given, the address formatter object 
  * will attempt to load any missing locale data using the ilib loader callback.
@@ -18366,7 +18347,7 @@ addressprs.js
  * onLoad function is called with the current instance as a parameter, so this
  * callback can be used with preassembled or dynamic loading or a mix of the two. 
  * 
- * <li>sync - tell whether to load any missing locale data synchronously or 
+ * <li><i>sync</i> - tell whether to load any missing locale data synchronously or 
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
  * not be usable for a while. 
