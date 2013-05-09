@@ -10,10 +10,11 @@
 	 * @param {Object} context function to call this method in the context of
 	 * @param {Array.<string>} paths array of strings containing relative paths for required locale data files 
 	 * @param {Array} results empty array in which to place the resulting json when it is loaded from a file
+	 * @param {Object} params An object full of parameters that the caller is passing to this function to help load the files
 	 * @param {function(Array.<Object>)} callback callback to call when this function is finished attempting 
 	 * to load all the files that exist and can be loaded
 	 */
-	function loadFiles(context, paths, results, callback) {
+	function loadFiles(context, paths, results, params, callback) {
 		if (paths.length > 0) {
 			var path = paths.shift();
 			var file = "lib/enyo-ilib/ilib/locale/" + path;
@@ -21,7 +22,7 @@
 			var resultFunc = function(inSender, json) {
 				results.push((typeof(json) === 'object') ? json : undefined);
 				if (paths.length > 0) {
-					loadFiles(context, paths, results, callback);
+					loadFiles(context, paths, results, params, callback);
 				} else {
 					// only the bottom item on the stack will call 
 					// the callback
@@ -42,32 +43,58 @@
 		}
 	}
 	
-	ilib.setLoaderCallback(enyo.bind(this, function(paths, sync, callback) {
+	ilib.setLoaderCallback(enyo.bind(this, function(paths, sync, params, callback) {
 		if (sync) {
 			var ret = [];
 			// synchronous
-			paths.forEach(function (path) {
-				var ajax = new enyo.Ajax({
-					url: "lib/enyo-ilib/ilib/locale/" + path,
-					sync: true
+			if (ilib._getPlatform() === "webos") {
+				// running on a webos device
+				paths.forEach(function (path) {
+					var json;
+					try {
+						jsonString = palmGetResource("/usr/palm/applications/com.palm.app.moondemo2/lib/enyo-ilib/ilib/locale/" + path, "const json");		// get the object from the shared cache
+						json = (typeof(jsonString) === 'string') ? JSON.parse(jsonString) : jsonString;
+					} catch ( e1 ) {
+						json = undefined;
+					}
+					if (!json) {
+						try {
+							jsonString = palmGetResource("/usr/palm/applications/com.palm.app.moondemo2/resources/" + path, "const json");		// get the object from the shared cache
+							json = (typeof(jsonString) === 'string') ? JSON.parse(jsonString) : jsonString;
+						} catch ( e2 ) {
+							json = undefined;
+						}
+					}
+					ret.push(json);
 				});
-	
-				var handler = function(inSender, json) {
-					ret.push((typeof(json) === 'object') ? json : undefined);
-				};
-				ajax.response(this, handler);
-				ajax.error(this, function(inSender, json) {
-					var ajax2 = new enyo.Ajax({
-						url: "resources/" + path,
+			} else {
+				// running on the desktop build or the browser
+				paths.forEach(function (path) {
+					// console.log("browser/sync: attempting to load lib/enyo-ilib/ilib/locale/" + path);
+					var ajax = new enyo.Ajax({
+						url: "lib/enyo-ilib/ilib/locale/" + path,
 						sync: true
 					});
-					ajax2.response(this, handler);
-					ajax2.error(this, handler);
-					ajax2.go();
+		
+					var handler = function(inSender, json) {
+						// console.log((json ? "success" : "failed"));
+						ret.push((typeof(json) === 'object') ? json : undefined);
+					};
+					ajax.response(this, handler);
+					ajax.error(this, function(inSender, json) {
+						// console.log("browser/sync: Now attempting to load resources/" + path);
+						var ajax2 = new enyo.Ajax({
+							url: "resources/" + path,
+							sync: true
+						});
+						ajax2.response(this, handler);
+						ajax2.error(this, handler);
+						ajax2.go();
+					});
+					ajax.go();
 				});
-				ajax.go();
-			});
-	
+			}
+			
 			if (typeof(callback) === 'function') {
 				callback.call(this, ret);
 			}
@@ -76,7 +103,7 @@
 	
 		// asynchronous
 		var results = [];
-		loadFiles(this, paths, results, callback);
+		loadFiles(this, paths, results, params, callback);
 	}));
 })();
 
