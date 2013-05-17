@@ -19,7 +19,9 @@
 			var path = paths.shift();
 			var file = "lib/enyo-ilib/ilib/locale/" + path;
 			var ajax = new enyo.Ajax({url: file});
+			//console.log("moondemo2: browser/async: attempting to load lib/enyo-ilib/ilib/locale/" + path);
 			var resultFunc = function(inSender, json) {
+				//console.log("moondemo2: " + (json ? "success" : "failed"));
 				results.push((typeof(json) === 'object') ? json : undefined);
 				if (paths.length > 0) {
 					loadFiles(context, paths, results, params, callback);
@@ -31,6 +33,7 @@
 			};
 			ajax.response(this, resultFunc);
 			ajax.error(this, function(inSender, json) {
+				//console.log("moondemo2: browser/async: attempting to load resources/" + path);
 				// not there? Try the standard place instead
 				var file = "resources/" + path;
 				var ajax2 = new enyo.Ajax({url: file});
@@ -43,28 +46,56 @@
 		}
 	}
 	
+	function _calculateAppRootPath() {
+		var appRootPath;
+
+		var re = /file:\/\/\/.*\/(.*)\//;
+		var match = document.baseURI.match(re);
+		if (match) {
+			// console.log("baseURI = " + document.baseURI);
+			appRootPath = match[0];
+		} else {
+			re = /http:\/\/.*\//;
+			match = document.baseURI.match(re);
+			// console.log(document.baseURI);
+			appRootPath = match[0];
+		}
+		// console.info("Application Root Path: " + appRootPath);
+		return appRootPath;
+	}
+	
 	ilib.setLoaderCallback(enyo.bind(this, function(paths, sync, params, callback) {
 		if (sync) {
 			var ret = [];
 			// synchronous
 			if (ilib._getPlatform() === "webos") {
+				var root = _calculateAppRootPath();
 				// running on a webos device
 				paths.forEach(function (path) {
 					var json;
 					try {
-						jsonString = palmGetResource("/usr/palm/applications/com.palm.app.moondemo2/lib/enyo-ilib/ilib/locale/" + path, "const json");		// get the object from the shared cache
+						//console.log("webos/sync: attempting to load " + root + "/lib/enyo-ilib/ilib/locale/" + path);
+						jsonString = palmGetResource(root + "lib/enyo-ilib/ilib/locale/" + path, "const json");		// get the object from the shared cache
 						json = (typeof(jsonString) === 'string') ? JSON.parse(jsonString) : jsonString;
 					} catch ( e1 ) {
 						json = undefined;
 					}
 					if (!json) {
 						try {
-							jsonString = palmGetResource("/usr/palm/applications/com.palm.app.moondemo2/resources/" + path, "const json");		// get the object from the shared cache
+							//console.log("webos/sync: attempting to load " + root + "/resources/" + path);
+							jsonString = palmGetResource(root + "resources/" + path, "const json");		// get the object from the shared cache
 							json = (typeof(jsonString) === 'string') ? JSON.parse(jsonString) : jsonString;
 						} catch ( e2 ) {
 							json = undefined;
 						}
 					}
+					/*
+					if (json) {
+						console.log("success."); // json is " + JSON.stringify(json));
+					} else {
+						console.log("failed.");
+					}
+					*/
 					ret.push(json);
 				});
 			} else {
@@ -105,6 +136,18 @@
 		var results = [];
 		loadFiles(this, paths, results, params, callback);
 	}));
+	
+	// This is temporary special code for webOS to be able to test apps with a font that works
+	// in other locales. 
+	var li = new ilib.LocaleInfo(); // for the current locale
+	if (li.getScript() !== "Latn" || li.getLocale().getLanguage() === "vi") {
+		// allow enyo to define other fonts for non-Latin languages, or Vietnamese which
+		// is Latin-based, but the characters with multiple accents don't appear in the
+		// regular fonts, creating a strange "ransom note" look with a mix of fonts in the
+		// same word. So, treat it like a non-Latin language in order to get all the characters
+		// to display with the same font.
+		// enyo.dom.getFirstElementByTagName("body").className += " enyo-non-latin";
+	}
 })();
 
 /*
@@ -120,9 +163,11 @@ $L = (function() {
 		var str = $L.rb.getString(string); 
 		return str.toString();
 	};
+	var locale = new ilib.Locale();
 	lfunc.rb = new ilib.ResBundle({
 		type: "html",
 		name: "strings",
+		missing: locale.getLanguage() === "en" ? "source" : "pseudo",
 		lengthen: true		// if pseudo-localizing, this tells it to lengthen strings
 	});
 	return lfunc;
@@ -138,6 +183,7 @@ $L.setLocale = function (spec) {
 			locale: spec,
 			type: "html",
 			name: "strings",
+			missing: locale.getLanguage() === "en" ? "source" : "pseudo",
 			lengthen: true		// if pseudo-localizing, this tells it to lengthen strings
 		});
 	}
