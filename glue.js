@@ -137,6 +137,11 @@
 		loadFiles(this, paths, results, params, callback);
 	}));
 	
+	if (typeof(window.UILocale) !== 'undefined') {
+		// this is a hack until GF-1581 is fixed
+		ilib.setLocale(window.UILocale);
+	}
+
 	// This is temporary special code for webOS to be able to test apps with a font that works
 	// in other locales. 
 	var li = new ilib.LocaleInfo(); // for the current locale
@@ -146,7 +151,9 @@
 		// regular fonts, creating a strange "ransom note" look with a mix of fonts in the
 		// same word. So, treat it like a non-Latin language in order to get all the characters
 		// to display with the same font.
-		// enyo.dom.getFirstElementByTagName("body").className += " enyo-non-latin";
+		enyo.ready(function () {
+			enyo.dom.getFirstElementByTagName("body").className += " enyo-non-latin";
+		});
 	}
 })();
 
@@ -155,10 +162,6 @@
  * comes with by default.
  */
 $L = (function() {
-	if (typeof(window.UILocale) !== 'undefined') {
-		// this is a hack until GF-1581 is fixed
-		ilib.setLocale(window.UILocale);
-	}
 	var lfunc = function (string) {
 		var str = $L.rb.getString(string); 
 		return str.toString();
