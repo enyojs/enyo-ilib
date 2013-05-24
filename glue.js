@@ -46,86 +46,35 @@
 		}
 	}
 	
-	function _calculateAppRootPath() {
-		var appRootPath;
-
-		var re = /file:\/\/\/.*\/(.*)\//;
-		var match = document.baseURI.match(re);
-		if (match) {
-			// console.log("baseURI = " + document.baseURI);
-			appRootPath = match[0];
-		} else {
-			re = /http:\/\/.*\//;
-			match = document.baseURI.match(re);
-			// console.log(document.baseURI);
-			appRootPath = match[0];
-		}
-		// console.info("Application Root Path: " + appRootPath);
-		return appRootPath;
-	}
-	
 	ilib.setLoaderCallback(enyo.bind(this, function(paths, sync, params, callback) {
 		if (sync) {
 			var ret = [];
 			// synchronous
-			if (ilib._getPlatform() === "webos") {
-				var root = _calculateAppRootPath();
-				// running on a webos device
-				paths.forEach(function (path) {
-					var json;
-					try {
-						//console.log("webos/sync: attempting to load " + root + "/lib/enyo-ilib/ilib/locale/" + path);
-						jsonString = palmGetResource(root + "lib/enyo-ilib/ilib/locale/" + path, "const json");		// get the object from the shared cache
-						json = (typeof(jsonString) === 'string') ? JSON.parse(jsonString) : jsonString;
-					} catch ( e1 ) {
-						json = undefined;
-					}
-					if (!json) {
-						try {
-							//console.log("webos/sync: attempting to load " + root + "/resources/" + path);
-							jsonString = palmGetResource(root + "resources/" + path, "const json");		// get the object from the shared cache
-							json = (typeof(jsonString) === 'string') ? JSON.parse(jsonString) : jsonString;
-						} catch ( e2 ) {
-							json = undefined;
-						}
-					}
-					/*
-					if (json) {
-						console.log("success."); // json is " + JSON.stringify(json));
-					} else {
-						console.log("failed.");
-					}
-					*/
-					ret.push(json);
+			paths.forEach(function (path) {
+				// console.log("browser/sync: attempting to load lib/enyo-ilib/ilib/locale/" + path);
+				var ajax = new enyo.Ajax({
+					url: "lib/enyo-ilib/ilib/locale/" + path,
+					sync: true
 				});
-			} else {
-				// running on the desktop build or the browser
-				paths.forEach(function (path) {
-					// console.log("browser/sync: attempting to load lib/enyo-ilib/ilib/locale/" + path);
-					var ajax = new enyo.Ajax({
-						url: "lib/enyo-ilib/ilib/locale/" + path,
+	
+				var handler = function(inSender, json) {
+					// console.log((json ? "success" : "failed"));
+					ret.push((typeof(json) === 'object') ? json : undefined);
+				};
+				ajax.response(this, handler);
+				ajax.error(this, function(inSender, json) {
+					// console.log("browser/sync: Now attempting to load resources/" + path);
+					var ajax2 = new enyo.Ajax({
+						url: "resources/" + path,
 						sync: true
 					});
-		
-					var handler = function(inSender, json) {
-						// console.log((json ? "success" : "failed"));
-						ret.push((typeof(json) === 'object') ? json : undefined);
-					};
-					ajax.response(this, handler);
-					ajax.error(this, function(inSender, json) {
-						// console.log("browser/sync: Now attempting to load resources/" + path);
-						var ajax2 = new enyo.Ajax({
-							url: "resources/" + path,
-							sync: true
-						});
-						ajax2.response(this, handler);
-						ajax2.error(this, handler);
-						ajax2.go();
-					});
-					ajax.go();
+					ajax2.response(this, handler);
+					ajax2.error(this, handler);
+					ajax2.go();
 				});
-			}
-			
+				ajax.go();
+			});
+		
 			if (typeof(callback) === 'function') {
 				callback.call(this, ret);
 			}
@@ -145,16 +94,44 @@
 	// This is temporary special code for webOS to be able to test apps with a font that works
 	// in other locales. 
 	var li = new ilib.LocaleInfo(); // for the current locale
-	if (li.getScript() !== "Latn" || li.getLocale().getLanguage() === "vi") {
-		// allow enyo to define other fonts for non-Latin languages, or Vietnamese which
-		// is Latin-based, but the characters with multiple accents don't appear in the
-		// regular fonts, creating a strange "ransom note" look with a mix of fonts in the
-		// same word. So, treat it like a non-Latin language in order to get all the characters
-		// to display with the same font.
-		enyo.ready(function () {
-			enyo.dom.getFirstElementByTagName("body").className += " enyo-non-latin";
-		});
-	}
+	var locale = li.getLocale();
+	enyo.ready(function () {
+		var base = " enyo-locale-";
+		if (li.getScript() !== "Latn" || locale.getLanguage() === "vi") {
+			// allow enyo to define other fonts for non-Latin languages, or Vietnamese which
+			// is Latin-based, but the characters with multiple accents don't appear in the
+			// regular fonts, creating a strange "ransom note" look with a mix of fonts in the
+			// same word. So, treat it like a non-Latin language in order to get all the characters
+			// to display with the same font.
+			enyo.dom.getFirstElementByTagName("body").className += base + "non-latin";
+		}
+		
+		// allow enyo to apply right-to-left styles to the app and widgets if necessary
+		// uncomment when script info is available in ilib
+		//var script = new ilib.ScriptInfo(li.getDefaultScript());
+		//if (script.getScriptDirection() === "rtl") {
+		//	enyo.dom.getFirstElementByTagName("body").className += base + "rtl";
+		//}
+		
+		// allow enyo or the apps to give CSS classes that are specific to the language, country, or script
+		if (locale.getLanguage()) {
+			enyo.dom.getFirstElementByTagName("body").className += base + locale.getLanguage();
+			if (locale.getScript()) {
+				enyo.dom.getFirstElementByTagName("body").className += base + locale.getLanguage() + "-" + locale.getScript();
+				if (locale.getRegion()) {
+					enyo.dom.getFirstElementByTagName("body").className += base + locale.getLanguage() + "-" + locale.getScript() + "-" + locale.getRegion();
+				}
+			} else if (locale.getRegion()) {
+				enyo.dom.getFirstElementByTagName("body").className += base + locale.getLanguage() + "-" + locale.getRegion();
+			} 
+		}
+		if (locale.getScript()) {
+			enyo.dom.getFirstElementByTagName("body").className += base + locale.getScript();
+		}			
+		if (locale.getRegion()) {
+			enyo.dom.getFirstElementByTagName("body").className += base + locale.getRegion();
+		}
+	});
 })();
 
 /*
