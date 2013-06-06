@@ -469,6 +469,18 @@ ilib.Locale._notUpper = function(str) {
 
 /**
  * @private
+ * Tell whether or not the str does not start with a digit char.
+ * @param {string} str the char to check
+ * @return {boolean} true if the char is a not an upper case ASCII char
+ */
+ilib.Locale._notDigit = function(str) {
+	// do this with ASCII only so we don't have to depend on the CType functions
+	var ch = str.charCodeAt(0);
+	return ch < 48 || ch > 57;
+};
+
+/**
+ * @private
  * Tell whether or not the given string has the correct syntax to be 
  * an ISO 639 language code.
  * 
@@ -492,19 +504,27 @@ ilib.Locale._isLanguageCode = function(str) {
 /**
  * @private
  * Tell whether or not the given string has the correct syntax to be 
- * an ISO 639 language code.
+ * an ISO 3166 2-letter region code or M.49 3-digit region code.
  * 
  * @param {string} str the string to parse
  * @return {boolean} true if the string could syntactically be a language code.
  */
 ilib.Locale._isRegionCode = function (str) {
-	if (typeof(str) === 'undefined' || str.length !== 2) {
+	if (typeof(str) === 'undefined' || str.length < 2 || str.length > 3) {
 		return false;
 	}
 	
-	for (var i = 0; i < str.length; i++) {
-		if (ilib.Locale._notUpper(str.charAt(i))) {
-			return false;
+	if (str.length === 2) {
+		for (var i = 0; i < str.length; i++) {
+			if (ilib.Locale._notUpper(str.charAt(i))) {
+				return false;
+			}
+		}
+	} else {
+		for (var i = 0; i < str.length; i++) {
+			if (ilib.Locale._notDigit(str.charAt(i))) {
+				return false;
+			}
 		}
 	}
 	
@@ -14630,7 +14650,7 @@ ilib.data.currency = {
 	"INR": {
 		"name": "Indian Rupee",
 		"decimals": 2,
-		"sign": "INR"
+		"sign": "₹"
 	},
 	"IQD": {
 		"name": "Iraqi Dinar",
@@ -15675,7 +15695,7 @@ ilib.NumFmt.prototype = {
 	
 	/**
 	 * Format a number according to the settings of this number formatter instance.
-	 * @param num {number|string|Number|ilib.Number} a floating point number to format
+	 * @param {number|string|Number|ilib.Number} num a floating point number to format
 	 * @return {string} a string containing the formatted number
 	 */
 	format: function (num) {
@@ -16571,6 +16591,135 @@ ilib.CType.isXdigit = function (ch) {
 	return ilib.CType._inRange(ch, 'xdigit', ilib.data.ctype);
 };
 
+ilib.data.scripts = {"Afak":{"nb":439,"nm":"Afaka","lid":"Afaka"},"Aghb":{"nb":239,"nm":"Caucasian Albanian","lid":"Caucasian_Albanian"},"Arab":{"nb":160,"nm":"Arabic","lid":"Arabic","rtl":true,"ime":false,"casing":false},"Armi":{"nb":124,"nm":"Imperial Aramaic","lid":"Imperial_Aramaic","rtl":true,"ime":false,"casing":false},"Armn":{"nb":230,"nm":"Armenian","lid":"Armenian","rtl":false,"ime":false,"casing":true},"Avst":{"nb":134,"nm":"Avestan","lid":"Avestan","rtl":true,"ime":false,"casing":false},"Bali":{"nb":360,"nm":"Balinese","lid":"Balinese","rtl":false,"ime":false,"casing":false},"Bamu":{"nb":435,"nm":"Bamum","lid":"Bamum","rtl":false,"ime":true,"casing":false},"Bass":{"nb":259,"nm":"Bassa Vah","lid":"Bassa_Vah"},"Batk":{"nb":365,"nm":"Batak","lid":"Batak","rtl":false,"ime":false,"casing":false},"Beng":{"nb":325,"nm":"Bengali","lid":"Bengali","rtl":false,"ime":false,"casing":false},"Blis":{"nb":550,"nm":"Blissymbols","lid":"Blissymbols"},"Bopo":{"nb":285,"nm":"Bopomofo","lid":"Bopomofo","rtl":false,"ime":false,"casing":false},"Brah":{"nb":300,"nm":"Brahmi","lid":"Brahmi","rtl":false,"ime":false,"casing":false},"Brai":{"nb":570,"nm":"Braille","lid":"Braille","rtl":false,"ime":false,"casing":false},"Bugi":{"nb":367,"nm":"Buginese","lid":"Buginese","rtl":false,"ime":false,"casing":false},"Buhd":{"nb":372,"nm":"Buhid","lid":"Buhid","rtl":false,"ime":false,"casing":false},"Cakm":{"nb":349,"nm":"Chakma","lid":"Chakma","rtl":false,"ime":false,"casing":false},"Cans":{"nb":440,"nm":"Unified Canadian Aboriginal Syllabics","lid":"Canadian_Aboriginal","rtl":false,"ime":true,"casing":false},"Cari":{"nb":201,"nm":"Carian","lid":"Carian","rtl":false,"ime":false,"casing":false},"Cham":{"nb":358,"nm":"Cham","lid":"Cham","rtl":false,"ime":false,"casing":false},"Cher":{"nb":445,"nm":"Cherokee","lid":"Cherokee","rtl":false,"ime":false,"casing":false},"Cirt":{"nb":291,"nm":"Cirth","lid":"Cirth"},"Copt":{"nb":204,"nm":"Coptic","lid":"Coptic","rtl":false,"ime":false,"casing":true},"Cprt":{"nb":403,"nm":"Cypriot","lid":"Cypriot","rtl":true,"ime":false,"casing":false},"Cyrl":{"nb":220,"nm":"Cyrillic","lid":"Cyrillic","rtl":false,"ime":false,"casing":true},"Cyrs":{"nb":221,"nm":"Cyrillic (Old Church Slavonic variant)","lid":"Cyrillic_(Old_Church_Slavonic_variant)"},"Deva":{"nb":315,"nm":"Devanagari (Nagari)","lid":"Devanagari","rtl":false,"ime":false,"casing":false},"Dsrt":{"nb":250,"nm":"Deseret (Mormon)","lid":"Deseret","rtl":false,"ime":false,"casing":true},"Dupl":{"nb":755,"nm":"Duployan shorthand, Duployan stenography","lid":"Duployan_shorthand,_Duployan_stenography"},"Egyd":{"nb":70,"nm":"Egyptian demotic","lid":"Egyptian_demotic"},"Egyh":{"nb":60,"nm":"Egyptian hieratic","lid":"Egyptian_hieratic"},"Egyp":{"nb":50,"nm":"Egyptian hieroglyphs","lid":"Egyptian_Hieroglyphs","rtl":false,"ime":true,"casing":false},"Elba":{"nb":226,"nm":"Elbasan","lid":"Elbasan"},"Ethi":{"nb":430,"nm":"Ethiopic (Geʻez)","lid":"Ethiopic","rtl":false,"ime":true,"casing":false},"Geor":{"nb":240,"nm":"Georgian (Mkhedruli)","lid":"Georgian","rtl":false,"ime":false,"casing":false},"Geok":{"nb":241,"nm":"Khutsuri (Asomtavruli and Nuskhuri)","lid":"Georgian"},"Glag":{"nb":225,"nm":"Glagolitic","lid":"Glagolitic","rtl":false,"ime":false,"casing":true},"Goth":{"nb":206,"nm":"Gothic","lid":"Gothic","rtl":false,"ime":false,"casing":false},"Gran":{"nb":343,"nm":"Grantha","lid":"Grantha"},"Grek":{"nb":200,"nm":"Greek","lid":"Greek","rtl":false,"ime":false,"casing":true},"Gujr":{"nb":320,"nm":"Gujarati","lid":"Gujarati","rtl":false,"ime":false,"casing":false},"Guru":{"nb":310,"nm":"Gurmukhi","lid":"Gurmukhi","rtl":false,"ime":false,"casing":false},"Hang":{"nb":286,"nm":"Hangul (Hangŭl, Hangeul)","lid":"Hangul","rtl":false,"ime":true,"casing":false},"Hani":{"nb":500,"nm":"Han (Hanzi, Kanji, Hanja)","lid":"Han","rtl":false,"ime":true,"casing":false},"Hano":{"nb":371,"nm":"Hanunoo (Hanunóo)","lid":"Hanunoo","rtl":false,"ime":false,"casing":false},"Hans":{"nb":501,"nm":"Han (Simplified variant)","lid":"Han_(Simplified_variant)","rtl":false,"ime":true,"casing":false},"Hant":{"nb":502,"nm":"Han (Traditional variant)","lid":"Han_(Traditional_variant)","rtl":false,"ime":true,"casing":false},"Hebr":{"nb":125,"nm":"Hebrew","lid":"Hebrew","rtl":true,"ime":false,"casing":false},"Hira":{"nb":410,"nm":"Hiragana","lid":"Hiragana","rtl":false,"ime":false,"casing":false},"Hluw":{"nb":80,"nm":"Anatolian Hieroglyphs (Luwian Hieroglyphs, Hittite Hieroglyphs)","lid":"Anatolian_Hieroglyphs_(Luwian_Hieroglyphs,_Hittite_Hieroglyphs)"},"Hmng":{"nb":450,"nm":"Pahawh Hmong","lid":"Pahawh_Hmong"},"Hrkt":{"nb":412,"nm":"Japanese syllabaries (alias for Hiragana + Katakana)","lid":"Katakana_Or_Hiragana"},"Hung":{"nb":176,"nm":"Old Hungarian (Hungarian Runic)","lid":"Old_Hungarian_(Hungarian_Runic)"},"Inds":{"nb":610,"nm":"Indus (Harappan)","lid":"Indus_(Harappan)"},"Ital":{"nb":210,"nm":"Old Italic (Etruscan, Oscan, etc.)","lid":"Old_Italic","rtl":false,"ime":false,"casing":false},"Java":{"nb":361,"nm":"Javanese","lid":"Javanese","rtl":false,"ime":false,"casing":false},"Jpan":{"nb":413,"nm":"Japanese (alias for Han + Hiragana + Katakana)","lid":"Japanese_(alias_for_Han_+_Hiragana_+_Katakana)","rtl":false,"ime":false,"casing":false},"Jurc":{"nb":510,"nm":"Jurchen","lid":"Jurchen"},"Kali":{"nb":357,"nm":"Kayah Li","lid":"Kayah_Li","rtl":false,"ime":false,"casing":false},"Kana":{"nb":411,"nm":"Katakana","lid":"Katakana","rtl":false,"ime":false,"casing":false},"Khar":{"nb":305,"nm":"Kharoshthi","lid":"Kharoshthi","rtl":true,"ime":false,"casing":false},"Khmr":{"nb":355,"nm":"Khmer","lid":"Khmer","rtl":false,"ime":false,"casing":false},"Khoj":{"nb":322,"nm":"Khojki","lid":"Khojki"},"Knda":{"nb":345,"nm":"Kannada","lid":"Kannada","rtl":false,"ime":false,"casing":false},"Kore":{"nb":287,"nm":"Korean (alias for Hangul + Han)","lid":"Korean_(alias_for_Hangul_+_Han)","rtl":false,"ime":true,"casing":false},"Kpel":{"nb":436,"nm":"Kpelle","lid":"Kpelle"},"Kthi":{"nb":317,"nm":"Kaithi","lid":"Kaithi","rtl":false,"ime":false,"casing":false},"Lana":{"nb":351,"nm":"Tai Tham (Lanna)","lid":"Tai_Tham","rtl":false,"ime":false,"casing":false},"Laoo":{"nb":356,"nm":"Lao","lid":"Lao","rtl":false,"ime":false,"casing":false},"Latf":{"nb":217,"nm":"Latin (Fraktur variant)","lid":"Latin_(Fraktur_variant)"},"Latg":{"nb":216,"nm":"Latin (Gaelic variant)","lid":"Latin_(Gaelic_variant)"},"Latn":{"nb":215,"nm":"Latin","lid":"Latin","rtl":false,"ime":false,"casing":true},"Lepc":{"nb":335,"nm":"Lepcha (Róng)","lid":"Lepcha","rtl":false,"ime":false,"casing":false},"Limb":{"nb":336,"nm":"Limbu","lid":"Limbu","rtl":false,"ime":false,"casing":false},"Lina":{"nb":400,"nm":"Linear A","lid":"Linear_A"},"Linb":{"nb":401,"nm":"Linear B","lid":"Linear_B","rtl":false,"ime":true,"casing":false},"Lisu":{"nb":399,"nm":"Lisu (Fraser)","lid":"Lisu","rtl":false,"ime":true,"casing":false},"Loma":{"nb":437,"nm":"Loma","lid":"Loma"},"Lyci":{"nb":202,"nm":"Lycian","lid":"Lycian","rtl":false,"ime":false,"casing":false},"Lydi":{"nb":116,"nm":"Lydian","lid":"Lydian","rtl":true,"ime":false,"casing":false},"Mahj":{"nb":314,"nm":"Mahajani","lid":"Mahajani"},"Mand":{"nb":140,"nm":"Mandaic, Mandaean","lid":"Mandaic","rtl":true,"ime":false,"casing":false},"Mani":{"nb":139,"nm":"Manichaean","lid":"Manichaean"},"Maya":{"nb":90,"nm":"Mayan hieroglyphs","lid":"Mayan_hieroglyphs"},"Mend":{"nb":438,"nm":"Mende","lid":"Mende"},"Merc":{"nb":101,"nm":"Meroitic Cursive","lid":"Meroitic_Cursive","rtl":true,"ime":false,"casing":false},"Mero":{"nb":100,"nm":"Meroitic Hieroglyphs","lid":"Meroitic_Hieroglyphs","rtl":true,"ime":false,"casing":false},"Mlym":{"nb":347,"nm":"Malayalam","lid":"Malayalam","rtl":false,"ime":false,"casing":false},"Moon":{"nb":218,"nm":"Moon (Moon code, Moon script, Moon type)","lid":"Moon_(Moon_code,_Moon_script,_Moon_type)"},"Mong":{"nb":145,"nm":"Mongolian","lid":"Mongolian","rtl":false,"ime":false,"casing":false},"Mroo":{"nb":199,"nm":"Mro, Mru","lid":"Mro,_Mru"},"Mtei":{"nb":337,"nm":"Meitei Mayek (Meithei, Meetei)","lid":"Meetei_Mayek","rtl":false,"ime":false,"casing":false},"Mymr":{"nb":350,"nm":"Myanmar (Burmese)","lid":"Myanmar","rtl":false,"ime":false,"casing":false},"Narb":{"nb":106,"nm":"Old North Arabian (Ancient North Arabian)","lid":"Old_North_Arabian_(Ancient_North_Arabian)"},"Nbat":{"nb":159,"nm":"Nabataean","lid":"Nabataean"},"Nkgb":{"nb":420,"nm":"Nakhi Geba ('Na-'Khi ²Ggŏ-¹baw, Naxi Geba)","lid":"Nakhi_Geba_('Na-'Khi_²Ggŏ-¹baw,_Naxi_Geba)"},"Nkoo":{"nb":165,"nm":"N’Ko","lid":"Nko","rtl":true,"ime":false,"casing":false},"Nshu":{"nb":499,"nm":"Nüshu","lid":"Nüshu"},"Ogam":{"nb":212,"nm":"Ogham","lid":"Ogham","rtl":false,"ime":false,"casing":false},"Olck":{"nb":261,"nm":"Ol Chiki (Ol Cemet’, Ol, Santali)","lid":"Ol_Chiki","rtl":false,"ime":false,"casing":false},"Orkh":{"nb":175,"nm":"Old Turkic, Orkhon Runic","lid":"Old_Turkic","rtl":true,"ime":false,"casing":false},"Orya":{"nb":327,"nm":"Oriya","lid":"Oriya","rtl":false,"ime":false,"casing":false},"Osma":{"nb":260,"nm":"Osmanya","lid":"Osmanya","rtl":false,"ime":false,"casing":false},"Palm":{"nb":126,"nm":"Palmyrene","lid":"Palmyrene"},"Perm":{"nb":227,"nm":"Old Permic","lid":"Old_Permic"},"Phag":{"nb":331,"nm":"Phags-pa","lid":"Phags_Pa","rtl":false,"ime":false,"casing":false},"Phli":{"nb":131,"nm":"Inscriptional Pahlavi","lid":"Inscriptional_Pahlavi","rtl":true,"ime":false,"casing":false},"Phlp":{"nb":132,"nm":"Psalter Pahlavi","lid":"Psalter_Pahlavi"},"Phlv":{"nb":133,"nm":"Book Pahlavi","lid":"Book_Pahlavi"},"Phnx":{"nb":115,"nm":"Phoenician","lid":"Phoenician","rtl":true,"ime":false,"casing":false},"Plrd":{"nb":282,"nm":"Miao (Pollard)","lid":"Miao","rtl":false,"ime":false,"casing":false},"Prti":{"nb":130,"nm":"Inscriptional Parthian","lid":"Inscriptional_Parthian","rtl":true,"ime":false,"casing":false},"Qaaa":{"nb":900,"nm":"Reserved for private use (start)","lid":"Reserved_for_private_use_(start)"},"Qabx":{"nb":949,"nm":"Reserved for private use (end)","lid":"Reserved_for_private_use_(end)"},"Rjng":{"nb":363,"nm":"Rejang (Redjang, Kaganga)","lid":"Rejang","rtl":false,"ime":false,"casing":false},"Roro":{"nb":620,"nm":"Rongorongo","lid":"Rongorongo"},"Runr":{"nb":211,"nm":"Runic","lid":"Runic","rtl":false,"ime":false,"casing":false},"Samr":{"nb":123,"nm":"Samaritan","lid":"Samaritan","rtl":true,"ime":false,"casing":false},"Sara":{"nb":292,"nm":"Sarati","lid":"Sarati"},"Sarb":{"nb":105,"nm":"Old South Arabian","lid":"Old_South_Arabian","rtl":true,"ime":false,"casing":false},"Saur":{"nb":344,"nm":"Saurashtra","lid":"Saurashtra","rtl":false,"ime":false,"casing":false},"Sgnw":{"nb":95,"nm":"SignWriting","lid":"SignWriting"},"Shaw":{"nb":281,"nm":"Shavian (Shaw)","lid":"Shavian","rtl":false,"ime":false,"casing":false},"Shrd":{"nb":319,"nm":"Sharada, Śāradā","lid":"Sharada","rtl":false,"ime":false,"casing":false},"Sind":{"nb":318,"nm":"Khudawadi, Sindhi","lid":"Khudawadi,_Sindhi"},"Sinh":{"nb":348,"nm":"Sinhala","lid":"Sinhala","rtl":false,"ime":false,"casing":false},"Sora":{"nb":398,"nm":"Sora Sompeng","lid":"Sora_Sompeng","rtl":false,"ime":false,"casing":false},"Sund":{"nb":362,"nm":"Sundanese","lid":"Sundanese","rtl":false,"ime":false,"casing":false},"Sylo":{"nb":316,"nm":"Syloti Nagri","lid":"Syloti_Nagri","rtl":false,"ime":false,"casing":false},"Syrc":{"nb":135,"nm":"Syriac","lid":"Syriac","rtl":true,"ime":false,"casing":false},"Syre":{"nb":138,"nm":"Syriac (Estrangelo variant)","lid":"Syriac_(Estrangelo_variant)"},"Syrj":{"nb":137,"nm":"Syriac (Western variant)","lid":"Syriac_(Western_variant)"},"Syrn":{"nb":136,"nm":"Syriac (Eastern variant)","lid":"Syriac_(Eastern_variant)"},"Tagb":{"nb":373,"nm":"Tagbanwa","lid":"Tagbanwa","rtl":false,"ime":false,"casing":false},"Takr":{"nb":321,"nm":"Takri, Ṭākrī, Ṭāṅkrī","lid":"Takri","rtl":false,"ime":false,"casing":false},"Tale":{"nb":353,"nm":"Tai Le","lid":"Tai_Le","rtl":false,"ime":false,"casing":false},"Talu":{"nb":354,"nm":"New Tai Lue","lid":"New_Tai_Lue","rtl":false,"ime":false,"casing":false},"Taml":{"nb":346,"nm":"Tamil","lid":"Tamil","rtl":false,"ime":false,"casing":false},"Tang":{"nb":520,"nm":"Tangut","lid":"Tangut"},"Tavt":{"nb":359,"nm":"Tai Viet","lid":"Tai_Viet","rtl":false,"ime":false,"casing":false},"Telu":{"nb":340,"nm":"Telugu","lid":"Telugu","rtl":false,"ime":false,"casing":false},"Teng":{"nb":290,"nm":"Tengwar","lid":"Tengwar"},"Tfng":{"nb":120,"nm":"Tifinagh (Berber)","lid":"Tifinagh","rtl":false,"ime":false,"casing":false},"Tglg":{"nb":370,"nm":"Tagalog (Baybayin, Alibata)","lid":"Tagalog","rtl":false,"ime":false,"casing":false},"Thaa":{"nb":170,"nm":"Thaana","lid":"Thaana","rtl":true,"ime":false,"casing":false},"Thai":{"nb":352,"nm":"Thai","lid":"Thai","rtl":false,"ime":false,"casing":false},"Tibt":{"nb":330,"nm":"Tibetan","lid":"Tibetan","rtl":false,"ime":false,"casing":false},"Tirh":{"nb":326,"nm":"Tirhuta","lid":"Tirhuta"},"Ugar":{"nb":40,"nm":"Ugaritic","lid":"Ugaritic","rtl":false,"ime":false,"casing":false},"Vaii":{"nb":470,"nm":"Vai","lid":"Vai","rtl":false,"ime":true,"casing":false},"Visp":{"nb":280,"nm":"Visible Speech","lid":"Visible_Speech"},"Wara":{"nb":262,"nm":"Warang Citi (Varang Kshiti)","lid":"Warang_Citi_(Varang_Kshiti)"},"Wole":{"nb":480,"nm":"Woleai","lid":"Woleai"},"Xpeo":{"nb":30,"nm":"Old Persian","lid":"Old_Persian","rtl":false,"ime":false,"casing":false},"Xsux":{"nb":20,"nm":"Cuneiform, Sumero-Akkadian","lid":"Cuneiform","rtl":false,"ime":true,"casing":false},"Yiii":{"nb":460,"nm":"Yi","lid":"Yi","rtl":false,"ime":true,"casing":false},"Zinh":{"nb":994,"nm":"Code for inherited script","lid":"Inherited","rtl":false,"ime":false,"casing":false},"Zmth":{"nb":995,"nm":"Mathematical notation","lid":"Mathematical_notation"},"Zsym":{"nb":996,"nm":"Symbols","lid":"Symbols"},"Zxxx":{"nb":997,"nm":"Code for unwritten documents","lid":"Code_for_unwritten_documents"},"Zyyy":{"nb":998,"nm":"Code for undetermined script","lid":"Common","rtl":false,"ime":false,"casing":false},"Zzzz":{"nb":999,"nm":"Code for uncoded script","lid":"Unknown","rtl":false,"ime":false,"casing":false}};
+/*
+ * scriptinfo.js - information about scripts
+ * 
+ * Copyright © 2012-2013, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// !depends ilibglobal.js
+
+// !data scripts
+
+/**
+ * @class
+ * Create a new script info instance. This class encodes information about
+ * scripts, which are sets of characters used in a writing system.<p>
+ * 
+ * Depends directive: !depends scriptinfo.js
+ * 
+ * @constructor
+ * @param {string} script The ISO 15924 4-letter identifier for the script
+ */
+ilib.ScriptInfo = function(script) {
+	this.script = script;
+	this.info = ilib.data.scripts && ilib.data.scripts[script];
+};
+
+/**
+ * @static
+ * Return an array of all ISO 15924 4-letter identifier script identifiers that
+ * this copy of ilib knows about.
+ * @return {Array.<string>} an array of all script identifiers that this copy of
+ * ilib knows about
+ */
+ilib.ScriptInfo.getAllScripts = function() {
+	var ret = [],
+		script = undefined,
+		scripts = ilib.data.scripts;
+	
+	for (script in scripts) {
+		if (script && scripts[script]) {
+			ret.push(script);
+		}
+	}
+	
+	return ret;
+};
+
+ilib.ScriptInfo.prototype = {
+	/**
+	 * Return the 4-letter ISO 15924 identifier associated
+	 * with this script.
+	 * @return {string} the 4-letter ISO code for this script
+	 */
+	getCode: function () {
+		return this.info && this.script;
+	},
+	
+	/**
+	 * Get the ISO 15924 code number associated with this
+	 * script.
+	 * 
+	 * @return {number} the ISO 15924 code number
+	 */
+	getCodeNumber: function () {
+		return this.info && this.info.nb || 0;
+	},
+	
+	/**
+	 * Get the name of this script in English.
+	 * 
+	 * @return {string} the name of this script in English
+	 */
+	getName: function () {
+		return this.info && this.info.nm;
+	},
+	
+	/**
+	 * Get the long identifier assciated with this script.
+	 * 
+	 * @return {string} the long identifier of this script
+	 */
+	getLongCode: function () {
+		return this.info && this.info.lid;
+	},
+	
+	/**
+	 * Return the usual direction that text in this script is written
+	 * in. Possible return values are "rtl" for right-to-left,
+	 * "ltr" for left-to-right, and "ttb" for top-to-bottom.
+	 * 
+	 * @return {string} the usual direction that text in this script is
+	 * written in
+	 */
+	getScriptDirection: function() {
+		return (typeof(this.info.rtl) !== 'undefined' && this.info.rtl) ? "rtl" : "ltr";
+	},
+	
+	/**
+	 * Return true if this script typically requires an input method engine
+	 * to enter its characters.
+	 * 
+	 * @return {boolean} true if this script typically requires an IME
+	 */
+	getNeedsIME: function () {
+		return this.info.ime ? true : false; // converts undefined to false
+	},
+	
+	/**
+	 * Return true if this script uses lower- and upper-case characters.
+	 * 
+	 * @return {boolean} true if this script uses letter case
+	 */
+	getCasing: function () {
+		return this.info.casing ? true : false; // converts undefined to false
+	}
+};
 ilib.data.name = {
 	"components": {
 		"short": {
@@ -18550,6 +18699,356 @@ ilib.AddressFmt.prototype.format = function (address) {
 	return ret.replace(/\n+/g, '\n').trim();
 };
 
+/*
+ * collate.js - Collation routines
+ * 
+ * Copyright © 2013, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// !depends locale.js ilibglobal.js
+
+// !data collation
+
+/**
+ * @class
+ * A class that implements a locale-sensitive comparator function 
+ * for use with sorting function. The comparator function
+ * assumes that the strings it is comparing contain Unicode characters
+ * encoded in UTF-16.<p>
+ * 
+ * Collations usually depend only on the language, because most collation orders 
+ * are shared between locales that speak the same language. There are, however, a
+ * number of instances where a locale collates differently than other locales
+ * that share the same language. There are also a number of instances where a
+ * locale collates differently based on the script used. This object can handle
+ * these cases automatically if a full locale is specified in the options rather
+ * than just a language code.<p>
+ * 
+ * <h2>Options</h2>
+ * 
+ * The options parameter can contain any of the following properties:
+ * 
+ * <ul>
+ * <li><i>locale</i> - String|Locale. The locale which the comparator function 
+ * will collate with. Default: the current iLib locale.
+ * 
+ * <li><i>level</i> - String. Strength of collator. This is one of "primary", "secondary", 
+ * "tertiary", or "quaternary". Default: "primary"
+ *   <ol>
+ *   <li>primary - Only the primary distinctions between characters are significant.
+ *   Another way of saying that is that the collator will be case-, accent-, and 
+ *   variation-insensitive, and only distinguish between the base characters
+ *   <li>secondary - Both the primary and secondary distinctions between characters
+ *   are significant. That is, the collator will be accent- and variation-insensitive
+ *   and will distinguish between base characters and character case.
+ *   <li>tertiary - The primary, secondary, and tertiary distinctions between
+ *   characters are all significant. That is, the collator will be 
+ *   variation-insensitive, but accent-, case-, and base-character-sensitive. 
+ *   <li>quaternary - All distinctions between characters are significant. That is,
+ *   the algorithm is base character-, case-, accent-, and variation-sensitive.
+ *   </ol>
+ *   
+ * <li><i>upperFirst</i> - boolean. When collating case-sensitively in a script that
+ * has the concept of case, put upper-case
+ * characters first, otherwise lower-case will come first. Default: true
+ * 
+ * <li><i>reverse</i> - boolean. Return the list sorted in reverse order. When the
+ * upperFirst option is also set to true, upper-case characters would then come at 
+ * the end of the list. Default: false.
+ * 
+ * <li><i>scriptOrder</i> - string. When collating strings in multiple scripts,
+ * this property specifies what order those scripts should be sorted. The default
+ * Unicode Collation Algorithm (UCA) already has a default order for scripts, but
+ * this can be tailored via this property. The value of this option is a 
+ * space-separated list of ISO 15924 scripts codes. If a code is specified in this
+ * property, its default data must be included using the JS assembly tool. If the
+ * data is not included, the ordering for the script will be ignored. Default:
+ * the default order defined by the UCA. 
+ * 
+ * <li><i>style</i> - The value of the style parameter is dependent on the locale.
+ * For some locales, there are different styles of collating strings depending
+ * on what kind of strings are being collated or what the preference of the user 
+ * is. For example, in German, there is a phonebook order and a dictionary ordering
+ * that sort the same array of strings slightly differently.
+ * The static method ilib.Collator.getStyles will return a list of styles that ilib
+ * currently knows about for any given locale. If the value of the style option is 
+ * not recognized for a locale, it will be ignored. Default style is "standard".<p>
+ * 
+ * <li>onLoad - a callback function to call when the collator object is fully 
+ * loaded. When the onLoad option is given, the collator object will attempt to
+ * load any missing locale data using the ilib loader callback.
+ * When the constructor is done (even if the data is already preassembled), the 
+ * onLoad function is called with the current instance as a parameter, so this
+ * callback can be used with preassembled or dynamic loading or a mix of the two.
+ * 
+ * <li>sync - tell whether to load any missing locale data synchronously or 
+ * asynchronously. If this option is given as "false", then the "onLoad"
+ * callback must be given, as the instance returned from this constructor will
+ * not be usable for a while. 
+ *
+ * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ * loader callback function when locale data is missing. The parameters are not
+ * interpretted or modified in any way. They are simply passed along. The object 
+ * may contain any property/value pairs as long as the calling code is in
+ * agreement with the loader callback function as to what those parameters mean.
+ * </ul>
+ * 
+ * <h2>Operation</h2>
+ * 
+ * The Collator constructor returns a collator object tailored with the above 
+ * options. The object contains an internal compare() method which compares two 
+ * strings according to those options. This can be used directly to compare
+ * two strings, but is not useful for passing to the javascript sort function
+ * because then it will not have its collation data available. Instead, use the 
+ * getComparator() method to retrieve a function that is bound to the collator
+ * object. (You could also bind it yourself using ilib.bind()). The bound function 
+ * can be used with the standard Javascript array sorting algorithm, or as a 
+ * comparator with your own sorting algorithm.<p>
+ * 
+ * Example using the standard Javascript array sorting call with the bound
+ * function:<p>
+ * 
+ * <code>
+ * <pre>
+ * var arr = ["ö", "oe", "ü", "o", "a", "ae", "u", "ß", "ä"];
+ * var collator = ilib.Collator({locale: 'de-DE', style: "dictionary"});
+ * arr.sort(collator.getComparator());
+ * console.log(JSON.stringify(arr));
+ * </pre>
+ * </code>
+ * <p>
+ * 
+ * Would give the output:<p>
+ * 
+ * <code>
+ * <pre>
+ * ["a", "ae", "ä", "o", "oe", "ö", "ß", "u", "ü"]
+ * </pre>
+ * </code>
+ * 
+ * When sorting an array of Javascript objects according to one of the 
+ * string properties of the objects, wrap the collator's compare function 
+ * in your own comparator function that knows the structure of the objects
+ * being sorted:<p>
+ * 
+ * <code>
+ * <pre>
+ * var collator = ilib.Collator({locale: 'de-DE'});
+ * var myComparator = function (collator) {
+ *   var comparator = collator.getComparator();
+ *   // left and right are your own objects
+ *   return function (left, right) {
+ *   	return comparator(left.x.y.textProperty, right.x.y.textProperty);
+ *   };
+ * };
+ * arr.sort(myComparator(collator));
+ * </pre>
+ * </code>
+ * <p>
+ * 
+ * <h2>Sort Keys</h2>
+ * 
+ * The collator class also has a method to retrieve the sort key for a
+ * string. The sort key is an array of values that represent how each  
+ * character in the string should be collated according to the characteristics
+ * of the collation algorithm and the given options. Thus, sort keys can be 
+ * compared directly value-for-value with other sort keys that were generated 
+ * by the same collator, and the resulting ordering is guaranteed to be the 
+ * same as if the original strings were compared by the collator.
+ * Sort keys generated by different collators are not guaranteed to give
+ * any reasonable results when compared together unless the two collators 
+ * were constructed with 
+ * exactly the same options and therefore end up representing the exact same 
+ * collation sequence.<p>
+ * 
+ * A good rule of thumb is that you would use a sort key if you had 10 or more
+ * items to sort or if your array might be resorted arbitrarily. For example, if your 
+ * user interface was displaying a table with 100 rows in it, and each row had
+ * 4 sortable text columns which could be sorted in acending or descending order,
+ * the recommended practice would be to generate a sort key for each of the 4
+ * sortable fields in each row and store that in the Javascript representation of the
+ * table data. Then, when the user clicks on a column header to resort the
+ * table according to that column, the resorting would be relatively quick 
+ * because it would only be comparing arrays of values, and not recalculating 
+ * the collation values for each character in each string for every comparison.<p>
+ * 
+ * For tables that are large, it is usually a better idea to do the sorting
+ * on the server side, especially if the table is the result of a database
+ * query. In this case, the table is usually a view of the cursor of a large
+ * results set, and only a few entries are sent to the front end at a time.
+ * In order to sort the set efficiently, it should be done on the database
+ * level instead.
+ * 
+ * <h2>Data</h2>
+ * 
+ * Doing correct collation entails a huge amount of mapping data, much of which is
+ * not necessary when collating in one language with one script, which is the most
+ * common case. Thus, ilib implements a number of ways to include the data you
+ * need or leave out the data you don't need using the JS assembly tool:
+ * 
+ * <ol>
+ * <li>Full multilingual data - if you are sorting multilingual data and need to collate 
+ * text written in multiple scripts, you can use the directive "!data collation/ducet" to 
+ * load in the full collation data.  This allows the collator to perform the entire 
+ * Unicode Collation Algorithm (UCA) based on the Default Unicode Collation Element 
+ * Table (DUCET). The data is very large, on the order of multiple megabytes, but 
+ * sometimes it is necessary.
+ * <li>A few scripts - if you are sorting text written in only a few scripts, you may 
+ * want to include only the data for those scripts. Each ISO 15924 script code has its
+ * own data available in a separate file, so you can use the data directive to include
+ * only the data for the scripts you need. For example, use  
+ * "!data collation/Latn" to retrieve the collation information for the Latin script.
+ * Because the "ducet" table mentioned in the previous point is a superset of the 
+ * tables for all other scripts, you do not need to include explicitly the data for 
+ * any particular script when using "ducet". That is, you either include "ducet" or 
+ * you include a specific list of scripts.
+ * <li>Only one script - if you are sorting text written only in one script, you can
+ * either include the data directly as in the previous point, or you can rely on the 
+ * locale to include the correct data for you. In this case, you can use the directive
+ * "!data collate" to load in the locale's collation data for its most common script.
+ * </ol>
+ *   
+ * With any of the above ways of including the data, the collator will only perform the
+ * correct language-sensitive sorting for the given locale. All other scripts will be
+ * sorted in the default manner according to the UCA. For example, if you include the
+ * "ducet" data and pass in "de-DE" (German for Germany) as the locale spec, then
+ * only the Latin script (the default script for German) will be sorted according to
+ * German rules. All other scripts in the DUCET, such as Japanese or Arabic, will use 
+ * the default UCA collation rules.<p>
+ * 
+ * If this collator encounters a character for which it has no collation data, it will
+ * sort those characters by pure Unicode value after all characters for which it does have
+ * collation data. For example, if you only loaded in the German collation data (ie. the
+ * data for the Latin script tailored to German) to sort a list of person names, but that
+ * list happens to include the names of a few Japanese people written in Japanese 
+ * characters, the Japanese names will sort at the end of the list after all German names,
+ * and will sort according to the Unicode values of the characters.
+ * 
+ * @param {Object} options options governing how the resulting comparator 
+ * function will operate
+ */
+ilib.Collator = function(options) {
+	// TODO: fill in the collator constructor function
+};
+
+ilib.Collator.prototype = {
+	/**
+	 * Return a comparator function that can compare two strings together
+	 * according to the rules of this collator instance. The function 
+	 * returns a negative number if the left 
+	 * string comes before right, a positive number if the right string comes 
+	 * before the left, and zero if left and right are equivalent. If the
+	 * reverse property was given as true to the collator constructor, this 
+	 * function will
+	 * switch the sign of those values to cause sorting to happen in the
+	 * reverse order.
+	 * 
+	 * @return {function(string,string):number} a comparator function that 
+	 * can compare two strings together according to the rules of this 
+	 * collator instance
+	 */
+	getComparator: function() {
+		// bind the function to this instance so that we have the collation
+		// rules available to do the work
+		return /** @type function(string,string):number */ ilib.bind(this, this.compare);
+	},
+	
+	/**
+	 * Compare two strings together according to the rules of this 
+	 * collator instance. Do not use this function directly with 
+	 * Array.sort, as it will not have its collation data available
+	 * and therefore will not function properly. Use the function
+	 * returned by getComparator() instead.
+	 * 
+	 * @param {string} left the left string to compare
+	 * @param {string} right the right string to compare
+	 * @return {number} a negative number if left comes before right, a
+	 * positive number if right comes before left, and zero if left and 
+	 * right are equivalent according to this collator
+	 */
+	compare: function (left, right) {
+		// TODO: fill in the full comparison algorithm here
+		return (left < right) ? -1 : ((left > right) ? 1 : 0);
+	},
+	
+	/**
+	 * Return a sort key string for the given string. The sort key
+	 * string is a list of values that represent each character 
+	 * in the original string. The sort key
+	 * values for any particular character consists of 3 numbers that
+	 * encode the primary, secondary, and tertiary characteristics
+	 * of that character. The values of each characteristic are 
+	 * modified according to the strength of this collator instance 
+	 * to give the correct collation order. The idea is that this
+	 * sort key string is directly comparable byte-for-byte to 
+	 * other sort key strings generated by this collator without
+	 * any further knowledge of the collation rules for the locale.
+	 * More formally, if a < b according to the rules of this collation, 
+	 * then it is guaranteed that sortkey(a) < sortkey(b) when compared
+	 * byte-for-byte. The sort key string can therefore be used
+	 * without the collator to sort an array of strings efficiently
+	 * because the work of determining the applicability of various
+	 * collation rules is done once up-front when generating 
+	 * the sort key.<p>
+	 * 
+	 * The sort key string can be treated as a regular, albeit somewhat
+	 * odd-looking, string. That is, it can be pass to regular 
+	 * Javascript functions without problems.  
+	 * 
+	 * @param {string} str the original string to generate the sort key for
+	 * @return {string} a sort key string for the given string
+	 */
+	sortKey: function (str) {
+		// TODO: fill in the full sort key algorithm here
+		return str;
+	}
+};
+
+/**
+ * Retrieve the list of collation style names that are available for the 
+ * given locale. This list varies depending on the locale, and depending
+ * on whether or not the data for that locale was assembled into this copy
+ * of ilib.
+ * 
+ * @param {ilib.Locale|string=} locale The locale for which the available
+ * styles are being sought
+ * @return Array.<string> an array of style names that are available for
+ * the given locale
+ */
+ilib.Collator.getAvailableStyles = function (locale) {
+	return [ "standard" ];
+};
+
+/**
+ * Retrieve the list of ISO 15924 script codes that are available in this
+ * copy of ilib. This list varies depending on whether or not the data for 
+ * various scripts was assembled into this copy of ilib. If the "ducet"
+ * data is assembled into this copy of ilib, this method will report the
+ * entire list of scripts as being available. If a collator instance is
+ * instantiated with a script code that is not on the list returned by this
+ * function, it will be ignored and text in that script will be sorted by
+ * numeric Unicode values of the characters.
+ * 
+ * @return Array.<string> an array of ISO 15924 script codes that are 
+ * available
+ */
+ilib.Collator.getAvailableScripts = function () {
+	return [ "Latn" ];
+};
+
 /**
  * @license
  * Copyright © 2012-2013, JEDLSoft
@@ -18611,8 +19110,10 @@ ctype.ispunct.js
 ctype.isspace.js
 ctype.isupper.js
 ctype.isxdigit.js
+scriptinfo.js
 nameprs.js
 namefmt.js
 addressprs.js
 addressfmt.js
+collate.js
 */
