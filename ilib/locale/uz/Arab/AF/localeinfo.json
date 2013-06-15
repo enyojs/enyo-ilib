@@ -1,3 +1,4 @@
 {
+"numfmt" :{"decimalChar":"٫","groupChar":"٬","pctChar":"٪"},
 	"locale": "uz-AF-Arab"
 }

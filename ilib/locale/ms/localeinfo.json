@@ -1,9 +1,10 @@
 {
+"clock" :"12",
 	"language.name": "Malay",
 "numfmt": {
 	"decimalChar": ",",
 	"groupChar": ".",
-	"groupSize": 3,
+	"prigroupSize": 3,
 	"pctFmt": "{n}%",
 	"pctChar": "%"
 },

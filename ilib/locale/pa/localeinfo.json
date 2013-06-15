@@ -1,5 +1,7 @@
 {
+"clock" :"12",
 	"language.name": "Punjabi",
+"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s} {n}","secgroupSize":2},
 	"scripts": ["Guru","Arab"],
 	"locale": "pa"
 }

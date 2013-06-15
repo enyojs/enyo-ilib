@@ -1,4 +1,5 @@
 {
+"clock" :"12",
 	"units": "metric",
 	"clock": "24",
 	"calendar": "gregorian",
@@ -6,9 +7,7 @@
 	"language.name": "English",
 	"numfmt": {
 		"decimalChar": ".",
-		"groupChar": ",",
-		"groupSize": 3,
-		"pctFmt": "{n}%"
+		"groupChar": ","
 	},
 	"scripts": ["Latn","Dsrt","Shaw"],
 	"locale": "en"

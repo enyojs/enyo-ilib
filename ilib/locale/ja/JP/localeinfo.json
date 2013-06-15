@@ -1,3 +1,4 @@
 {
+"numfmt" :{"groupChar":",","prigroupSize":3,"pctFmt":"{n}%","curFmt":"{s}{n}","secgroupSize":0},
 	"locale": "ja-JP"
 }

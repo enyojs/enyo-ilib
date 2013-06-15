@@ -1,0 +1,4 @@
+{
+"numfmt" :{"decimalChar":",","groupChar":" ","pctFmt":"{n}%","curFmt":"{n} {s}","secgroupSize":0},
+	"locale": "kk-Cyrl"
+}

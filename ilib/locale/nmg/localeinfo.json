@@ -1,5 +1,6 @@
 {
 	"language.name": "Kwasio",
+"numfmt" :{"groupChar":" ","curFmt":"{n} {s}","secgroupSize":0},
 	"scripts": ["Latn"],
 	"locale": "nmg"
 }

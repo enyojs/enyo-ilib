@@ -1,5 +1,6 @@
 {
 	"language.name": "Norwegian Bokmål",
+"numfmt" :{"groupChar":" ","pctFmt":"{n} %","curFmt":"{s} {n}","secgroupSize":0},
 	"scripts": ["Latn"],
 	"locale": "nb"
 }

@@ -1,5 +1,6 @@
 {
 	"language.name": "Assamese",
+"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s} {n}","secgroupSize":2},
 	"scripts": ["Beng"],
 	"locale": "as"
 }

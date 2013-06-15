@@ -1,5 +1,7 @@
 {
+"clock" :"12",
 	"language.name": "Kashmiri",
+"numfmt" :{"decimalChar":"٫","groupChar":"٬","pctChar":"٪","curFmt":"{s} {n}","secgroupSize":2},
 	"scripts": ["Arab","Deva"],
 	"locale": "ks"
 }

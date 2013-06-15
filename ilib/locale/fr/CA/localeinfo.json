@@ -3,5 +3,6 @@
 		"regular": "8x11",
 		"photo": "3x5"
 	},
+"numfmt" :{"groupChar":" ","pctFmt":"{n} %","curFmt":"{n} {s}","secgroupSize":0,"negativecurFmt":"({n} {s})"},
 	"locale": "fr-CA"
 }

@@ -1,5 +1,7 @@
 {
+"clock" :"12",
 	"language.name": "Gujarati",
+"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s}{n}","secgroupSize":0,"negativecurFmt":"({s}{n})"},
 	"scripts": ["Gujr"],
 	"locale": "gu"
 }

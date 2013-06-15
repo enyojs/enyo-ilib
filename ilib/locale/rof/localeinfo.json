@@ -1,5 +1,7 @@
 {
+"clock" :"12",
 	"language.name": "Rombo",
+"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s}{n}","secgroupSize":0},
 	"scripts": ["Latn"],
 	"locale": "rof"
 }

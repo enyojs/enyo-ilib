@@ -1,5 +1,7 @@
 {
+"clock" :"12",
 	"language.name": "Khmer",
+"numfmt" :{"curFmt":"{s}{n}","secgroupSize":0,"negativecurFmt":"({s}{n})"},
 	"scripts": ["Khmr"],
 	"locale": "km"
 }

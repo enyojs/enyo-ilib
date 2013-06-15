@@ -1,5 +1,7 @@
 {
+"clock" :"12",
 	"language.name": "Bengali",
+"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{n}{s}","secgroupSize":2,"negativecurFmt":"({n}{s})"},
 	"scripts": ["Beng"],
 	"locale": "bn"
 }

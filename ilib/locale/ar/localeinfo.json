@@ -1,9 +1,10 @@
 {
-	"calendar": "islamic",	"language.name": "Arabic",
+	"calendar": "islamic","clock" :"12",
+	"language.name": "Arabic",
 	"numfmt": {
 		"decimalChar": "٫",
 		"groupChar": "٬",
-		"groupSize": 3,
+		"prigroupSize": 3,
 		"pctFmt": "{n}%"
 	},
 	"scripts": ["Arab","Syrc"],

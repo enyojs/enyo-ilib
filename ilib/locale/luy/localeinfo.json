@@ -1,5 +1,7 @@
 {
+"clock" :"12",
 	"language.name": "Luyia",
+"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s}{n}","secgroupSize":0,"negativecurFmt":"{s}- {n}"},
 	"scripts": ["Latn"],
 	"locale": "luy"
 }

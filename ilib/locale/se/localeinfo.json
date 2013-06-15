@@ -1,5 +1,6 @@
 {
 	"language.name": "Northern Sami",
+"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s} {n}","secgroupSize":0},
 	"scripts": ["Latn","Cyrl"],
 	"locale": "se"
 }

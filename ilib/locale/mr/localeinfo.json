@@ -1,5 +1,7 @@
 {
+"clock" :"12",
 	"language.name": "Marathi",
+"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s}{n}","secgroupSize":0,"negativecurFmt":"({s}{n})"},
 	"scripts": ["Deva"],
 	"locale": "mr"
 }

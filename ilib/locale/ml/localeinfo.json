@@ -1,5 +1,7 @@
 {
+"clock" :"12",
 	"language.name": "Malayalam",
+"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{n}{s}","secgroupSize":2},
 	"scripts": ["Mlym"],
 	"locale": "ml"
 }

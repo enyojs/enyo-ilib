@@ -1,5 +1,6 @@
 {
 	"language.name": "Lao",
+"numfmt" :{"curFmt":"{s}{n}","secgroupSize":0,"negativecurFmt":"{s}-{n}"},
 	"scripts": ["Laoo"],
 	"locale": "lo"
 }

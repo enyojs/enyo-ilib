@@ -1,5 +1,6 @@
 {
 	"language.name": "Sichuan Yi",
+"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s} {n}","secgroupSize":0},
 	"scripts": ["Yiii","Latn"],
 	"locale": "ii"
 }

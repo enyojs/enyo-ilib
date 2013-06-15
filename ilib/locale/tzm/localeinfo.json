@@ -1,5 +1,7 @@
 {
+"clock" :"12",
 	"language.name": "Central Atlas Tamazight",
+"numfmt" :{"groupChar":" ","curFmt":"{n} {s}","secgroupSize":0},
 	"scripts": ["Latn","Tfng"],
 	"locale": "tzm"
 }

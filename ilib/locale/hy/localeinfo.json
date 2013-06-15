@@ -1,5 +1,6 @@
 {
 	"language.name": "Armenian",
+"numfmt" :{"prigroupSize":2,"curFmt":"{n} {s}","secgroupSize":0},
 	"scripts": ["Armn"],
 	"locale": "hy"
 }

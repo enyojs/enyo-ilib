@@ -1,5 +1,6 @@
 {
 	"language.name": "Tongan",
+"numfmt" :{"decimalChar":".","groupChar":",","prigroupSize":2,"pctFmt":"‎{n}%","curFmt":"{s} {n}","secgroupSize":0},
 	"scripts": ["Latn"],
 	"locale": "to"
 }

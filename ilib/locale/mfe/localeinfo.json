@@ -1,5 +1,6 @@
 {
 	"language.name": "Morisyen",
+"numfmt" :{"decimalChar":".","groupChar":" ","curFmt":"{s} {n}","secgroupSize":0},
 	"scripts": ["Latn"],
 	"locale": "mfe"
 }

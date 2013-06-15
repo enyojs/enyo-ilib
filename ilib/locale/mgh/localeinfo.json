@@ -1,5 +1,7 @@
 {
+"clock" :"12",
 	"language.name": "Makhuwa-Meetto",
+"numfmt" :{"curFmt":"{s} {n}","secgroupSize":0},
 	"scripts": ["Latn"],
 	"locale": "mgh"
 }

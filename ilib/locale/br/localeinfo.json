@@ -1,5 +1,6 @@
 {
 	"language.name": "Breton",
+"numfmt" :{"groupChar":" ","curFmt":"{s} {n}","secgroupSize":0},
 	"scripts": ["Latn"],
 	"locale": "br"
 }

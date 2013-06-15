@@ -1,5 +1,6 @@
 {
 	"language.name": "Nepali",
+"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s} {n}","secgroupSize":0},
 	"scripts": ["Deva"],
 	"locale": "ne"
 }

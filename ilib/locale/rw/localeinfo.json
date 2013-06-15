@@ -1,5 +1,6 @@
 {
 	"language.name": "Kinyarwanda",
+"numfmt" :{"curFmt":"{s} {n}","secgroupSize":0},
 	"scripts": ["Latn"],
 	"locale": "rw"
 }

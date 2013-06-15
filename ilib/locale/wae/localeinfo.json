@@ -1,5 +1,6 @@
 {
 	"language.name": "Walser",
+"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s} {n}","secgroupSize":0},
 	"scripts": ["Latn"],
 	"locale": "wae"
 }

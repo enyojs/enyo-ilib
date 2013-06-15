@@ -1,3 +1,4 @@
 {
+"numfmt" :{"groupChar":" ","curFmt":"{s}{n}","secgroupSize":0},
 	"locale": "sq-AL"
 }

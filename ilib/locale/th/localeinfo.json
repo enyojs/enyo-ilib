@@ -1,5 +1,7 @@
 {
+	"calendar": "buddhist",
 	"language.name": "Thai",
+"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s}{n}","secgroupSize":0,"negativecurFmt":"({s}{n})"},
 	"scripts": ["Thai"],
 	"locale": "th"
 }

@@ -1,3 +1,5 @@
 {
+"clock" :"24",
+"numfmt" :{"curFmt":"{s}{n}","secgroupSize":0},
 	"locale": "en-GI"
 }

@@ -1,5 +1,6 @@
 {
 	"language.name": "Kabyle",
+"numfmt" :{"groupChar":" ","curFmt":"{n}{s}","secgroupSize":0},
 	"scripts": ["Latn"],
 	"locale": "kab"
 }

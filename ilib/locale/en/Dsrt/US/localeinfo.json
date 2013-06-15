@@ -1,3 +1,5 @@
 {
+"clock" :"24",
+"numfmt" :{"curFmt":"{s} {n}"},
 	"locale": "en-US-Dsrt"
 }

@@ -1,5 +1,6 @@
 {
 	"language.name": "Hausa",
+"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s} {n}","secgroupSize":0},
 	"scripts": ["Arab","Latn"],
 	"locale": "ha"
 }

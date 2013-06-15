@@ -1,3 +1,4 @@
 {
+"numfmt" :{"decimalChar":",","groupChar":".","curFmt":"{s} {n}","secgroupSize":0,"negativenumFmt":";{n}-","negativecurFmt":"{s} {n}-"},
 	"locale": "ar-MA"
 }

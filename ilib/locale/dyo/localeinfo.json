@@ -1,5 +1,6 @@
 {
 	"language.name": "Jola-Fonyi",
+"numfmt" :{"groupChar":" ","curFmt":"{n} {s}","secgroupSize":0},
 	"scripts": ["Arab","Latn"],
 	"locale": "dyo"
 }

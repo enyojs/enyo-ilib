@@ -1,5 +1,7 @@
 {
+"clock" :"12",
 	"language.name": "Amharic",
+"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s}{n}","secgroupSize":0,"negativecurFmt":"({s}{n})"},
 	"scripts": ["Ethi"],
 	"locale": "am"
 }

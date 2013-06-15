@@ -1,5 +1,7 @@
 {
+"clock" :"12",
 	"language.name": "Sinhala",
+"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s} {n}","secgroupSize":2},
 	"scripts": ["Sinh"],
 	"locale": "si"
 }

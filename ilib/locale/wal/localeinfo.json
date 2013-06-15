@@ -1,5 +1,6 @@
 {
 	"language.name": "Wolaytta",
+"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s} {n}","secgroupSize":0},
 	"scripts": ["Ethi"],
 	"locale": "wal"
 }

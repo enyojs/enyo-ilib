@@ -1,3 +1,4 @@
 {
+"numfmt" :{"curFmt":"{s}{n}","secgroupSize":0,"negativecurFmt":"({s}{n})"},
 	"locale": "en-BM"
 }

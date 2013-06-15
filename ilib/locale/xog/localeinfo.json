@@ -1,5 +1,7 @@
 {
+"clock" :"12",
 	"language.name": "Soga",
+"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{n} {s}","secgroupSize":0},
 	"scripts": ["Latn"],
 	"locale": "xog"
 }

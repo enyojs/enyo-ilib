@@ -1,5 +1,6 @@
 {
 	"language.name": "Sakha",
+"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s} {n}","secgroupSize":0},
 	"scripts": ["Cyrl"],
 	"locale": "sah"
 }

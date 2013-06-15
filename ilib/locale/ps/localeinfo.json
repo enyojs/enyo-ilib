@@ -1,5 +1,6 @@
 {
 	"language.name": "Pashto",
+"numfmt" :{"decimalChar":"٫","groupChar":"٬","pctChar":"٪","curFmt":"{n} {s}","secgroupSize":0},
 	"scripts": ["Arab"],
 	"locale": "ps"
 }

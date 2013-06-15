@@ -1,5 +1,6 @@
 {
 	"language.name": "Swati",
+"numfmt" :{"groupChar":" ","curFmt":"{s}{n}","secgroupSize":0},
 	"scripts": ["Latn"],
 	"locale": "ss"
 }

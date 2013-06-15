@@ -1,5 +1,6 @@
 {
 	"language.name": "Kako",
+"numfmt" :{"curFmt":"{s} {n}","secgroupSize":0},
 	"scripts": ["Latn"],
 	"locale": "kkj"
 }

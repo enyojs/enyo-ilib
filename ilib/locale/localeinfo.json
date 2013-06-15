@@ -6,13 +6,12 @@
 	},
 	"units": "metric",
 	"calendar": "gregorian",
-	"firstDayOfWeek": 0,
 	"currency": "USD",
 	"timezone": "Etc/UTC",
 	"numfmt": {
 		"decimalChar": ",",
 		"groupChar": ".",
-		"groupSize": 3,
+		"prigroupSize": 3,
 		"pctFmt": "{n}%",
 		"pctChar": "%",
 		"roundingMode": "halfdown"

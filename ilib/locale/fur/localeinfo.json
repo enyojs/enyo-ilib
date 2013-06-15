@@ -1,5 +1,6 @@
 {
 	"language.name": "Friulian",
+"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s} {n}","secgroupSize":0},
 	"scripts": ["Latn"],
 	"locale": "fur"
 }

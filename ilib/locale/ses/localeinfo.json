@@ -1,5 +1,6 @@
 {
 	"language.name": "Koyraboro Senni",
+"numfmt" :{"decimalChar":".","groupChar":" ","curFmt":"{n}{s}","secgroupSize":0},
 	"scripts": ["Latn"],
 	"locale": "ses"
 }

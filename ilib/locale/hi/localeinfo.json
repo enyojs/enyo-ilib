@@ -1,5 +1,7 @@
 {
+"clock" :"12",
 	"language.name": "Hindi",
+"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s} {n}","secgroupSize":2},
 	"scripts": ["Deva"],
 	"locale": "hi"
 }

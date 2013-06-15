@@ -1,5 +1,6 @@
 {
 	"language.name": "Lingala",
+"numfmt" :{"curFmt":"{n} {s}","secgroupSize":0},
 	"scripts": ["Latn"],
 	"locale": "ln"
 }
