@@ -29,7 +29,7 @@ var ilib = ilib || {};
  */
 ilib.getVersion = function () {
     // increment this for each release
-    return "1.3";
+    return "2.0";
 };
 
 /*
@@ -1089,9 +1089,8 @@ ilib.mergeLocData = function (prefix, locale) {
 };
 
 /**
- * Return an array of relative path names for the json
- * files that represent the data for the given locale. Only
- * language and region are top-level directories.<p>
+ * Return an array of relative path names for the
+ * files that represent the data for the given locale.<p>
  * 
  * Note that to prevent the situation where a directory for
  * a language exists next to the directory for a region where
@@ -1106,65 +1105,80 @@ ilib.mergeLocData = function (prefix, locale) {
  * directories cannot exist underneath "locale". The region
  * therefore will be loaded from "und/ES" instead.<p>  
  * 
- * Variations
+ * <h4>Variations</h4>
  * 
- * only language and region specified:
+ * With only language and region specified, the following
+ * sequence of paths will be generated:<p>
  * 
+ * <pre>
  * language
- * region
+ * und/region
  * language/region
+ * </pre>
  * 
- * only language and script specified:
+ * With only language and script specified:<p>
  * 
+ * <pre>
  * language
  * language/script
+ * </pre>
  * 
- * only script and region specified:
+ * With only script and region specified:<p>
  * 
- * region
+ * <pre>
+ * und/region  
+ * </pre>
  * 
- * only region and variant specified:
+ * With only region and variant specified:<p>
  * 
- * region
+ * <pre>
+ * und/region
  * region/variant
- *
- * only language, script, and region specified:
+ * </pre>
  * 
+ * With only language, script, and region specified:<p>
+ * 
+ * <pre>
  * language
- * region
+ * und/region
  * language/script
  * language/region
  * language/script/region
+ * </pre>
  * 
- * only language, region, and variant specified:
+ * With only language, region, and variant specified:<p>
  * 
+ * <pre>
  * language
- * region
+ * und/region
  * language/region
  * region/variant
  * language/region/variant
+ * </pre>
  * 
- * all parts specified:
+ * With all parts specified:<p>
  * 
+ * <pre>
  * language
- * region
+ * und/region
  * language/script
  * language/region
  * region/variant
  * language/script/region
  * language/region/variant
  * language/script/region/variant
+ * </pre>
  * 
- * @param {ilib.Locale} locale load the json files for this locale
- * @param {string?} basename the base name of each json file to load
+ * @param {ilib.Locale} locale load the files for this locale
+ * @param {string?} name the file name of each file to load without
+ * any path
  * @return {Array.<string>} An array of relative path names
- * for the json files that contain the locale data
+ * for the files that contain the locale data
  */
-ilib.getLocFiles = function(locale, basename) {
+ilib.getLocFiles = function(locale, name) {
 	var dir = "";
 	var files = [];
-	var filename = basename || "resources";
-	filename += ".json";
+	var filename = name || "resources.json";
 	var loc = locale || new ilib.Locale();
 	
 	var language = loc.getLanguage();
@@ -1364,49 +1378,110 @@ ilib._roundFnc = {
  * this function will call it to load the data. Otherwise, the callback will be called with
  * undefined as the data. This function will create a cache under the given class object.
  * If data was successfully loaded, it will be set into the cache so that future access to 
- * the same data for the same locale is much quicker. 
+ * the same data for the same locale is much quicker.<p>
  * 
- * @param {Object} object The class attempting to load data. The cache is stored inside of here.
- * @param {ilib.Locale} locale The locale to use to find or load the data.
- * @param {string} name The name of the locale data to load.
- * @param {boolean} sync Whether or not to load the data synchronouslyo
- * @param {Object} params An object with parameters to pass to the loader function
- * @param {function(?)=} callback Call back function to call when the data is available.
+ * The parameters can specify any of the following properties:<p>
+ * 
+ * <ul>
+ * <li><i>name</i> - String. The name of the file being loaded.
+ * <li><i>object</i> - Object. The class attempting to load data. The cache is stored inside of here.
+ * <li><i>locale</i> - ilib.Locale. The name of the locale data to load. Default is the current locale.
+ * <li><i>type</i> - String. Type of file to load. This can be "json" or "other" type. Default: "json" 
+ * <li><i>loadParams</i> - Object. An object with parameters to pass to the loader function
+ * <li><i>sync</i> - boolean. Whether or not to load the data synchronously
+ * <li><i>callback</i> - function(?)=. callback Call back function to call when the data is available.
+ * Data is not returned from this method, so a callback function is mandatory.
+ * </ul>
+ * 
+ * @param {Object} params Parameters configuring how to load the files (see above)
  */
-ilib.loadData = function(object, locale, name, sync, params, callback) {
-	if (!object.cache) {
+ilib.loadData = function(params) {
+	var name = "resources.json",
+		object = undefined, 
+		locale = new ilib.Locale(ilib.getLocale()), 
+		sync = false, 
+		type = "json",
+		loadParams = {},
+		callback = undefined;
+	
+	if (!params || typeof(params.callback) !== 'function') {
+		return;
+	}
+
+	if (params.name) {
+		name = params.name;
+	}
+	if (params.object) {
+		object = params.object;
+	}
+	if (params.locale) {
+		locale = (typeof(params.locale) === 'string') ? new ilib.Locale(params.locale) : params.locale;
+	}			
+	if (params.type) {
+		type = params.type;
+	}
+	if (params.loadParams) {
+		loadParams = params.loadParams;
+	}
+	if (params.sync) {
+		sync = params.sync;
+	}
+	
+	callback = params.callback;
+	
+	if (object && !object.cache) {
 		object.cache = {};
 	}
 
 	var spec = locale.getSpec().replace(/-/g, '_');
-	if (typeof(object.cache[spec]) === 'undefined') {
-		var data = ilib.mergeLocData(name, locale);
+	if (!object || typeof(object.cache[spec]) === 'undefined') {
+		var basename = name.substring(0,name.lastIndexOf("."));
+		var data = ilib.mergeLocData(basename, locale);
 		if (data) {
-			object.cache[spec] = data;
+			if (object) {
+				object.cache[spec] = data;
+			}
 			callback(data);
 		} else if (typeof(ilib._load) === 'function') {
 			// the data is not preassembled, so attempt to load it dynamically
 			var files = ilib.getLocFiles(locale, name);
+			if (type !== "json") {
+				loadParams.returnOne = true;
+				loadParams.nonLocale = true;
+			}
 			
-			ilib._load(files, sync, params, ilib.bind(this, function(arr) {
-				data = {};
-				for (var i = 0; i < arr.length; i++) {
-					if (typeof(arr[i]) !== 'undefined') {
-						data = ilib.merge(data, arr[i]);
+			ilib._load(files, sync, loadParams, ilib.bind(this, function(arr) {
+				if (type === "json") {
+					data = {};
+					for (var i = 0; i < arr.length; i++) {
+						if (typeof(arr[i]) !== 'undefined') {
+							data = ilib.merge(data, arr[i]);
+						}
 					}
+					
+					if (object) {
+						object.cache[spec] = data;
+					}
+					callback(data);
+				} else {
+					// only returns the most locale-specific file in 0th element
+					if (object) {
+						object.cache[spec] = arr[arr.length-1];
+					}
+					callback(arr[arr.length-1]);
 				}
-				
-				callback(data);
 			}));
 		} else {
 			// no data other than the generic shared data
+			if (object) {
+				object.cache[spec] = data;
+			}
 			callback(data);
 		}
 	} else {
 		callback(object.cache[spec]);
 	}
 };
-
 
 ilib.data.plurals = {
     "version": {
@@ -5585,17 +5660,24 @@ ilib.LocaleInfo = function(locale, options) {
 		ilib.LocaleInfo.cache = {};
 	}
 
-	ilib.loadData(ilib.LocaleInfo, this.locale, "localeinfo", sync, this.loadParams, ilib.bind(this, function (info) {
-		if (!info) {
-			info = ilib.data.localeinfo;
-			var spec = this.locale.getSpec().replace(/-/g, "_");
-			ilib.LocaleInfo.cache[spec] = info;
-		}
-		this.info = info;
-		if (options && typeof(options.onLoad) === 'function') {
-			options.onLoad(this);
-		}
-	}));
+	ilib.loadData({
+		object: ilib.LocaleInfo, 
+		locale: this.locale, 
+		name: "localeinfo.json", 
+		sync: sync, 
+		loadParams: this.loadParams, 
+		callback: ilib.bind(this, function (info) {
+			if (!info) {
+				info = ilib.data.localeinfo;
+				var spec = this.locale.getSpec().replace(/-/g, "_");
+				ilib.LocaleInfo.cache[spec] = info;
+			}
+			this.info = info;
+			if (options && typeof(options.onLoad) === 'function') {
+				options.onLoad(this);
+			}
+		})
+	});
 };
 
 ilib.LocaleInfo.prototype = {
@@ -7911,38 +7993,45 @@ ilib.ResBundle = function (options) {
 
 	lookupLocale = this.locale.isPseudo() ? new ilib.Locale("en-US") : this.locale;
 
-	ilib.loadData(ilib.ResBundle[this.baseName], lookupLocale, this.baseName, this.sync, this.loadParams, ilib.bind(this, function (map) {
-		if (!map) {
-			map = ilib.data[this.baseName] || {};
-			spec = lookupLocale.getSpec().replace(/-/g, '_');
-			ilib.ResBundle[this.baseName].cache[spec] = map;
-		}
-		this.map = map;
-		if (this.locale.isPseudo()) {
-			if (!ilib.ResBundle.pseudomap) {
-				ilib.ResBundle.pseudomap = {};
+	ilib.loadData({
+		object: ilib.ResBundle[this.baseName], 
+		locale: lookupLocale, 
+		name: this.baseName + ".json", 
+		sync: this.sync, 
+		loadParmas: this.loadParams, 
+		callback: ilib.bind(this, function (map) {
+			if (!map) {
+				map = ilib.data[this.baseName] || {};
+				spec = lookupLocale.getSpec().replace(/-/g, '_');
+				ilib.ResBundle[this.baseName].cache[spec] = map;
 			}
-
-			this._loadPseudo(this.locale, options.onLoad);
-		} else if (this.missing === "pseudo") {
-			if (!ilib.ResBundle.pseudomap) {
-				ilib.ResBundle.pseudomap = {};
+			this.map = map;
+			if (this.locale.isPseudo()) {
+				if (!ilib.ResBundle.pseudomap) {
+					ilib.ResBundle.pseudomap = {};
+				}
+	
+				this._loadPseudo(this.locale, options.onLoad);
+			} else if (this.missing === "pseudo") {
+				if (!ilib.ResBundle.pseudomap) {
+					ilib.ResBundle.pseudomap = {};
+				}
+	
+				new ilib.LocaleInfo(this.locale, {
+					sync: this.sync,
+					loadParams: this.loadParams,
+					onLoad: ilib.bind(this, function (li) {
+						var pseudoLocale = new ilib.Locale("zxx", "XX", undefined, li.getDefaultScript());
+						this._loadPseudo(pseudoLocale, options.onLoad);
+					})
+				});
+			} else {
+				if (options && typeof(options.onLoad) === 'function') {
+					options.onLoad(this);
+				}
 			}
-
-			new ilib.LocaleInfo(this.locale, {
-				sync: this.sync,
-				loadParams: this.loadParams,
-				onLoad: ilib.bind(this, function (li) {
-					var pseudoLocale = new ilib.Locale("zxx", "XX", undefined, li.getDefaultScript());
-					this._loadPseudo(pseudoLocale, options.onLoad);
-				})
-			});
-		} else {
-			if (options && typeof(options.onLoad) === 'function') {
-				options.onLoad(this);
-			}
-		}
-	}));
+		})
+	});
 
 	// console.log("Merged resources " + this.locale.toString() + " are: " + JSON.stringify(this.map));
 	//if (!this.locale.isPseudo() && ilib.isEmpty(this.map)) {
@@ -7955,17 +8044,24 @@ ilib.ResBundle.prototype = {
      * @protected
      */
     _loadPseudo: function (pseudoLocale, onLoad) {
-		ilib.loadData(ilib.ResBundle.pseudomap, pseudoLocale, "pseudomap", this.sync, this.loadParams, ilib.bind(this, function (map) {
-			if (!map || ilib.isEmpty(map)) {
-				map = ilib.data.pseudomap;
-				var spec = pseudoLocale.getSpec().replace(/-/g, '_');
-				ilib.ResBundle.pseudomap.cache[spec] = map;
-			}
-			this.pseudomap = map;
-			if (typeof(onLoad) === 'function') {
-				onLoad(this);
-			}	
-		}));
+		ilib.loadData({
+			object: ilib.ResBundle.pseudomap, 
+			locale: pseudoLocale, 
+			name: "pseudomap.json", 
+			sync: this.sync, 
+			loadParams: this.loadParams, 
+			callback: ilib.bind(this, function (map) {
+				if (!map || ilib.isEmpty(map)) {
+					map = ilib.data.pseudomap;
+					var spec = pseudoLocale.getSpec().replace(/-/g, '_');
+					ilib.ResBundle.pseudomap.cache[spec] = map;
+				}
+				this.pseudomap = map;
+				if (typeof(onLoad) === 'function') {
+					onLoad(this);
+				}	
+			})
+		});
     },
     
 	/**
@@ -9022,18 +9118,25 @@ ilib.DateFmt = function(options) {
 					this.sysres = rb;
 					
 					if (!this.template) {
-						ilib.loadData(ilib.DateFmt, this.locale, "dateformats", sync, loadParams, ilib.bind(this, function (formats) {
-							if (!formats) {
-								formats = ilib.data.dateformats;
-								var spec = this.locale.getSpec().replace(/-/g, '_');
-								ilib.DateFmt.cache[spec] = formats;
-							}
-							this._initTemplate(formats);
-							this._massageTemplate();
-							if (options && typeof(options.onLoad) === 'function') {
-								options.onLoad(this);
-							}
-						}));
+						ilib.loadData({
+							object: ilib.DateFmt, 
+							locale: this.locale, 
+							name: "dateformats.json", 
+							sync: sync, 
+							loadParams: loadParams, 
+							callback: ilib.bind(this, function (formats) {
+								if (!formats) {
+									formats = ilib.data.dateformats;
+									var spec = this.locale.getSpec().replace(/-/g, '_');
+									ilib.DateFmt.cache[spec] = formats;
+								}
+								this._initTemplate(formats);
+								this._massageTemplate();
+								if (options && typeof(options.onLoad) === 'function') {
+									options.onLoad(this);
+								}
+							})
+						});
 					} else {
 						this._massageTemplate();
 						if (options && typeof(options.onLoad) === 'function') {
@@ -17133,18 +17236,25 @@ ilib.Name = function(name, options) {
 
 	this.locale = this.locale || new ilib.Locale();
 	
-	ilib.loadData(ilib.Name, this.locale, "name", sync, this.loadParams, ilib.bind(this, function (info) {
-		if (!info) {
-			info = ilib.data.name;
-			var spec = this.locale.getSpec().replace(/-/g, "_");
-			ilib.Name.cache[spec] = info;
-		}
-		this.info = info;
-		this._init(name);
-		if (options && typeof(options.onLoad) === 'function') {
-			options.onLoad(this);
-		}
-	}));
+	ilib.loadData({
+		object: ilib.Name, 
+		locale: this.locale, 
+		name: "name.json", 
+		sync: sync, 
+		loadParams: this.loadParams, 
+		callback: ilib.bind(this, function (info) {
+			if (!info) {
+				info = ilib.data.name;
+				var spec = this.locale.getSpec().replace(/-/g, "_");
+				ilib.Name.cache[spec] = info;
+			}
+			this.info = info;
+			this._init(name);
+			if (options && typeof(options.onLoad) === 'function') {
+				options.onLoad(this);
+			}
+		})
+	});
 };
 
 /**
@@ -17901,18 +18011,25 @@ ilib.NameFmt = function(options) {
 
 	this.locale = this.locale || new ilib.Locale();
 	
-	ilib.loadData(ilib.Name, this.locale, "name", sync, this.loadParams, ilib.bind(this, function (info) {
-		if (!info) {
-			info = ilib.data.name;
-			var spec = this.locale.getSpec().replace(/-/g, "_");
-			ilib.Name.cache[spec] = info;
-		}
-		this.info = info;
-		this._init();
-		if (options && typeof(options.onLoad) === 'function') {
-			options.onLoad(this);
-		}
-	}));
+	ilib.loadData({
+		object: ilib.Name, 
+		locale: this.locale, 
+		name: "name.json", 
+		sync: sync, 
+		loadParams: this.loadParams, 
+		callback: ilib.bind(this, function (info) {
+			if (!info) {
+				info = ilib.data.name;
+				var spec = this.locale.getSpec().replace(/-/g, "_");
+				ilib.Name.cache[spec] = info;
+			}
+			this.info = info;
+			this._init();
+			if (options && typeof(options.onLoad) === 'function') {
+				options.onLoad(this);
+			}
+		})
+	});
 };
 
 ilib.NameFmt.prototype = {
@@ -18269,12 +18386,16 @@ ilib.Address = function (freeformAddress, options) {
 	if (typeof(ilib.Address.ctry) === 'undefined') {
 		ilib.Address.ctry = {}; // make sure not to conflict with the address info
 	}
-	ilib.loadData(ilib.Address.ctry, this.locale, "ctrynames", this.sync, this.loadParams, 
-		/** @type function(Object=):undefined */
-		ilib.bind(this, /** @type function() */ function(ctrynames) {
+	ilib.loadData({
+		name: "ctrynames.json", 
+		object: ilib.Address.ctry, 
+		locale: this.locale, 
+		sync: this.sync, 
+		loadParams: this.loadParams, 
+		callback: /** @type function(Object=):undefined */ ilib.bind(this, /** @type function() */ function(ctrynames) {
 			this._determineDest(ctrynames, options.onLoad);
-		}
-	));
+		})
+	});
 };
 
 /** @protected */
@@ -18350,26 +18471,38 @@ ilib.Address.prototype = {
 	 * @param {function(ilib.Address):undefined} callback
 	 */
 	_init: function(callback) {
-		ilib.loadData(ilib.Address, new ilib.Locale(this.countryCode), "address", this.sync, this.loadParams, 
-				/** @type function(Object=):undefined */ ilib.bind(this, function(info) {
-			if (!info || ilib.isEmpty(info)) {
-				// load the "unknown" locale instead
-				ilib.loadData(ilib.Address, new ilib.Locale("XX"), "address", this.sync, this.loadParams, 
-						/** @type function(Object=):undefined */ ilib.bind(this, function(info) {
+		ilib.loadData({
+			object: ilib.Address, 
+			locale: new ilib.Locale(this.countryCode), 
+			name: "address.json", 
+			sync: this.sync, 
+			loadParams: this.loadParams,
+			callback: /** @type function(Object=):undefined */ ilib.bind(this, function(info) {
+				if (!info || ilib.isEmpty(info)) {
+					// load the "unknown" locale instead
+					ilib.loadData({
+						object: ilib.Address, 
+						locale: new ilib.Locale("XX"), 
+						name: "address.json", 
+						sync: this.sync, 
+						loadParams: this.loadParams,
+						callback: /** @type function(Object=):undefined */ ilib.bind(this, function(info) {
+							this.info = info;
+							this._parseAddress();
+							if (typeof(callback) === 'function') {
+								callback(this);
+							}	
+						})
+					});
+				} else {
 					this.info = info;
 					this._parseAddress();
 					if (typeof(callback) === 'function') {
 						callback(this);
-					}	
-				}));
-			} else {
-				this.info = info;
-				this._parseAddress();
-				if (typeof(callback) === 'function') {
-					callback(this);
+					}
 				}
-			}
-		}));
+			})
+		});
 	},
 
 	/**
@@ -18708,24 +18841,38 @@ ilib.AddressFmt = function(options) {
 	}
 
 	// console.log("Creating formatter for region: " + this.locale.region);
-	ilib.loadData(ilib.Address, this.locale, "address", this.sync, this.loadParams, /** @type function(Object?):undefined */ ilib.bind(this, function(info) {
-		if (!info || ilib.isEmpty(info)) {
-			// load the "unknown" locale instead
-			ilib.loadData(ilib.Address, new ilib.Locale("XX"), "address", this.sync, this.loadParams, /** @type function(Object?):undefined */ ilib.bind(this, function(info) {
+	ilib.loadData({
+		name: "address.json",
+		object: ilib.Address, 
+		locale: this.locale,
+		sync: this.sync, 
+		loadParams: this.loadParams, 
+		callback: /** @type function(Object?):undefined */ ilib.bind(this, function(info) {
+			if (!info || ilib.isEmpty(info)) {
+				// load the "unknown" locale instead
+				ilib.loadData({
+					name: "address.json",
+					object: ilib.Address, 
+					locale: new ilib.Locale("XX"),
+					sync: this.sync, 
+					loadParams: this.loadParams, 
+					callback: /** @type function(Object?):undefined */ ilib.bind(this, function(info) {
+						this.info = info;
+						this._init();
+						if (typeof(options.onLoad) === 'function') {
+							options.onLoad(this);
+						}
+					})
+				});
+			} else {
 				this.info = info;
 				this._init();
 				if (typeof(options.onLoad) === 'function') {
 					options.onLoad(this);
-				}	
-			}));
-		} else {
-			this.info = info;
-			this._init();
-			if (typeof(options.onLoad) === 'function') {
-				options.onLoad(this);
+				}
 			}
-		}
-	}));
+		})
+	});
 };
 
 /**
