@@ -16,10 +16,8 @@
 	 */
 	function loadFiles(context, paths, results, params, callback) {
 		if (paths.length > 0) {
-			var libRoot = enyo.path.rewrite("$lib");
 			var path = paths.shift();
-			var file = libRoot + "enyo-ilib/ilib/locale/" + path;
-			var ajax = new enyo.Ajax({url: file});
+			var ajax = new enyo.Ajax({url: enyo.path.rewrite("$lib/enyo-ilib/ilib/locale/" + path)});
 			//console.log("moondemo2: browser/async: attempting to load lib/enyo-ilib/ilib/locale/" + path);
 			var resultFunc = function(inSender, json) {
 				//console.log("moondemo2: " + (json ? "success" : "failed"));
@@ -53,9 +51,8 @@
 			// synchronous
 			paths.forEach(function (path) {
 				// console.log("browser/sync: attempting to load lib/enyo-ilib/ilib/locale/" + path);
-				var libRoot = enyo.path.rewrite("$lib");
 				var ajax = new enyo.Ajax({
-					url: libRoot + "enyo-ilib/ilib/locale/" + path,
+					url: enyo.path.rewrite("$lib/enyo-ilib/ilib/locale/" + path),
 					sync: true
 				});
 
