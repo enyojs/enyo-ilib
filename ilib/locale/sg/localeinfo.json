@@ -1,6 +1,1 @@
-{
-	"language.name": "Sango",
-"numfmt" :{"curFmt":"{s}{n}","secgroupSize":0,"negativecurFmt":"{s}-{n}"},
-	"scripts": ["Latn"],
-	"locale": "sg"
-}
+{"language.name":"Sango","scripts":["Latn"],"locale":"sg"}

@@ -1,7 +1,1 @@
-{
-"clock" :"12",
-	"language.name": "Sinhala",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s} {n}","secgroupSize":2},
-	"scripts": ["Sinh"],
-	"locale": "si"
-}
+{"clock":"12","language.name":"Sinhala","numfmt":{"decimalChar":".","groupChar":",","secgroupSize":2,"currencyFormats":{"common":"{s} {n}"}},"scripts":["Sinh"],"locale":"si"}

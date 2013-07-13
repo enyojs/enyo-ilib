@@ -1,6 +1,1 @@
-{
-	"currency": "TWD",
-	"region.name": "Taiwan",
-	"timezone": "Asia/Taipei",
-	"locale": "und-TW"
-}
+{"currency":"TWD","firstDayOfWeek":0,"region.name":"Taiwan","timezone":"Asia/Taipei","locale":"TW"}

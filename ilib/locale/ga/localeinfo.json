@@ -1,6 +1,1 @@
-{
-	"language.name": "Irish",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s}{n}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "ga"
-}
+{"language.name":"Irish","numfmt":{"decimalChar":".","groupChar":","},"scripts":["Latn"],"locale":"ga"}

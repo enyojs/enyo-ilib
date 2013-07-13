@@ -1,6 +1,1 @@
-{
-	"clock": "12",	"currency": "ZWL",
-	"region.name": "Zimbabwe",
-	"timezone": "Africa/Harare",
-	"locale": "und-ZW"
-}
+{"currency":"ZWL","firstDayOfWeek":0,"region.name":"Zimbabwe","timezone":"Africa/Harare","locale":"ZW"}

@@ -1,6 +1,1 @@
-{
-	"currency": "ISK",
-	"region.name": "Iceland",
-	"timezone": "Atlantic/Reykjavik",
-	"locale": "und-IS"
-}
+{"currency":"ISK","firstDayOfWeek":1,"region.name":"Iceland","timezone":"Atlantic/Reykjavik","locale":"IS"}

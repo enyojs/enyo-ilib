@@ -1,6 +1,1 @@
-{
-	"language.name": "Basaa",
-"numfmt" :{"groupChar":" ","pctFmt":"{n} %","curFmt":"{n} {s}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "bas"
-}
+{"language.name":"Basaa","numfmt":{"groupChar":" ","currencyFormats":{"common":"{n} {s}"},"pctFmt":"{n} %"},"scripts":["Latn"],"locale":"bas"}

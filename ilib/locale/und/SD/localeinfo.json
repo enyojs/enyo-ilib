@@ -1,6 +1,1 @@
-{
-	"currency": "SDG",
-	"region.name": "Sudan",
-	"timezone": "Africa/Khartoum",
-	"locale": "und-SD"
-}
+{"currency":"SDG","firstDayOfWeek":6,"region.name":"Sudan","timezone":"Africa/Khartoum","locale":"SD"}

@@ -1,6 +1,1 @@
-{
-	"currency": "FJD",
-	"region.name": "Fiji",
-	"timezone": "Pacific/Fiji",
-	"locale": "und-FJ"
-}
+{"currency":"FJD","firstDayOfWeek":1,"region.name":"Fiji","timezone":"Pacific/Fiji","locale":"FJ"}

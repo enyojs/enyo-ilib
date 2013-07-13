@@ -1,12 +1,1 @@
-{
-	"language.name": "Czech",
-	"numfmt": {
-		"decimalChar": ",",
-		"groupChar": " ",
-		"prigroupSize": 3,
-		"pctFmt": "{n}%",
-		"pctChar": "%"
-	},
-	"scripts": ["Latn"],
-	"locale": "cs"
-}
+{"language.name":"Czech","numfmt":{"groupChar":" ","currencyFormats":{"common":"{n} {s}"},"pctFmt":"{n} %"},"scripts":["Latn"],"locale":"cs"}

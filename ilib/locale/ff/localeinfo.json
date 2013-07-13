@@ -1,6 +1,1 @@
-{
-	"language.name": "Fulah",
-"numfmt" :{"groupChar":" ","curFmt":"{n} {s}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "ff"
-}
+{"language.name":"Fulah","numfmt":{"groupChar":" ","currencyFormats":{"common":"{n} {s}"}},"scripts":["Latn"],"locale":"ff"}

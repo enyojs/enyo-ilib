@@ -1,6 +1,1 @@
-{
-	"language.name": "Blin",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s} {n}","secgroupSize":0},
-	"scripts": ["Ethi"],
-	"locale": "byn"
-}
+{"language.name":"Blin","numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"common":"{s} {n}"}},"scripts":["Ethi"],"locale":"byn"}

@@ -1,6 +1,1 @@
-{
-	"currency": "EUR",
-	"region.name": "French Guiana",
-	"timezone": "America/Cayenne",
-	"locale": "und-GF"
-}
+{"currency":"EUR","firstDayOfWeek":1,"region.name":"French Guiana","timezone":"America/Cayenne","locale":"GF"}

@@ -1,6 +1,1 @@
-{
-	"language.name": "Kabuverdianu",
-"numfmt" :{"curFmt":"{n}{s}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "kea"
-}
+{"language.name":"Kabuverdianu","numfmt":{"currencyFormats":{"common":"{n}{s}"}},"scripts":["Latn"],"locale":"kea"}

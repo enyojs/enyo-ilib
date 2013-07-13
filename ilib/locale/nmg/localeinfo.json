@@ -1,6 +1,1 @@
-{
-	"language.name": "Kwasio",
-"numfmt" :{"groupChar":" ","curFmt":"{n} {s}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "nmg"
-}
+{"language.name":"Kwasio","numfmt":{"groupChar":" ","currencyFormats":{"common":"{n} {s}"}},"scripts":["Latn"],"locale":"nmg"}

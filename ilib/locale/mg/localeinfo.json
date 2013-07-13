@@ -1,6 +1,1 @@
-{
-	"language.name": "Malagasy",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s}{n}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "mg"
-}
+{"language.name":"Malagasy","numfmt":{"decimalChar":".","groupChar":","},"scripts":["Latn"],"locale":"mg"}

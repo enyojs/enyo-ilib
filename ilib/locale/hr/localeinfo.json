@@ -1,13 +1,1 @@
-{
-	"language.name": "Croatian",
-"numfmt": {
-	"decimalChar": ",",
-	"groupChar": ".",
-	"prigroupSize": 3,
-	"pctFmt": "{n}%",
-	"pctChar": "%"
-},
-
-	"scripts": ["Latn"],
-	"locale": "hr"
-}
+{"language.name":"Croatian","numfmt":{"currencyFormats":{"common":"{n} {s}"}},"scripts":["Latn"],"locale":"hr"}

@@ -1,11 +1,1 @@
-{
-	"language.name": "Slovak",
-	"numfmt": {
-		"decimalChar": ",",
-		"groupChar": " ",
-		"prigroupSize": 3,
-		"pctFmt": "{n} %"
-	},
-	"scripts": ["Latn"],
-	"locale": "sk"
-}
+{"language.name":"Slovak","numfmt":{"groupChar":" ","currencyFormats":{"common":"{n} {s}"},"pctFmt":"{n} %"},"scripts":["Latn"],"locale":"sk"}

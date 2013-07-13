@@ -1,12 +1,1 @@
-{
-	"calendar": "islamic","clock" :"12",
-	"language.name": "Arabic",
-	"numfmt": {
-		"decimalChar": "٫",
-		"groupChar": "٬",
-		"prigroupSize": 3,
-		"pctFmt": "{n}%"
-	},
-	"scripts": ["Arab","Syrc"],
-	"locale": "ar"
-}
+{"clock":"12","language.name":"Arabic","numfmt":{"script":"Arab","decimalChar":"٫","groupChar":"٬","pctChar":"٪","exponential":"اس","currencyFormats":{"common":"{s} {n}","commonNegative":"{s} {n}-"},"negativenumFmt":"{n}-","digits":"٠١٢٣٤٥٦٧٨٩"},"scripts":["Arab","Syrc"],"locale":"ar"}

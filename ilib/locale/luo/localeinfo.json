@@ -1,7 +1,1 @@
-{
-"clock" :"12",
-	"language.name": "Luo",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{n}{s}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "luo"
-}
+{"clock":"12","language.name":"Luo","numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"common":"{n}{s}"}},"scripts":["Latn"],"locale":"luo"}

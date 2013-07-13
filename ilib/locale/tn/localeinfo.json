@@ -1,6 +1,1 @@
-{
-	"language.name": "Tswana",
-"numfmt" :{"groupChar":" ","curFmt":"{s}{n}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "tn"
-}
+{"language.name":"Tswana","numfmt":{"groupChar":" "},"scripts":["Latn"],"locale":"tn"}

@@ -1,13 +1,1 @@
-{
-	"language.name": "Serbian",
-"numfmt": {
-	"decimalChar": ",",
-	"groupChar": ".",
-	"prigroupSize": 3,
-	"pctFmt": "{n}%",
-	"pctChar": "%"
-},
-
-	"scripts": ["Cyrl","Latn"],
-	"locale": "sr"
-}
+{"language.name":"Serbian","numfmt":{"currencyFormats":{"common":"{n} {s}"}},"scripts":["Cyrl","Latn"],"locale":"sr"}

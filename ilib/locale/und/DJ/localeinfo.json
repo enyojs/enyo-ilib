@@ -1,6 +1,1 @@
-{
-	"currency": "DJF",
-	"region.name": "Djibouti",
-	"timezone": "Africa/Djibouti",
-	"locale": "und-DJ"
-}
+{"currency":"DJF","firstDayOfWeek":6,"region.name":"Djibouti","timezone":"Africa/Djibouti","locale":"DJ"}

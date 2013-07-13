@@ -1,7 +1,1 @@
-{
-"clock" :"12",
-	"language.name": "Langi",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s} {n}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "lag"
-}
+{"clock":"12","language.name":"Langi","numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"common":"{s} {n}"}},"scripts":["Latn"],"locale":"lag"}

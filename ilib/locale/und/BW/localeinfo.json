@@ -1,6 +1,1 @@
-{
-	"currency": "BWP",
-	"region.name": "Botswana",
-	"timezone": "Africa/Gaborone",
-	"locale": "und-BW"
-}
+{"currency":"BWP","firstDayOfWeek":0,"region.name":"Botswana","timezone":"Africa/Gaborone","locale":"BW"}

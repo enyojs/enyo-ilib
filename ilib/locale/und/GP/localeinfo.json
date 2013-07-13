@@ -1,6 +1,1 @@
-{
-	"currency": "EUR",
-	"region.name": "Guadeloupe",
-	"timezone": "America/Guadeloupe",
-	"locale": "und-GP"
-}
+{"currency":"EUR","firstDayOfWeek":1,"region.name":"Guadeloupe","timezone":"America/Guadeloupe","locale":"GP"}

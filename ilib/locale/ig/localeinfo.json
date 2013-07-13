@@ -1,7 +1,1 @@
-{
-"clock" :"12",
-	"language.name": "Igbo",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s}{n}","secgroupSize":0,"negativecurFmt":"({s}{n})"},
-	"scripts": ["Latn"],
-	"locale": "ig"
-}
+{"clock":"12","language.name":"Igbo","numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"commonNegative":"({s}{n})"}},"scripts":["Latn"],"locale":"ig"}

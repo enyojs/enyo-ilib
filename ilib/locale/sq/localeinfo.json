@@ -1,14 +1,1 @@
-{
-	"clock": "12",
-	"language.name": "Albanian",
-"numfmt": {
-	"decimalChar": ",",
-	"groupChar": ".",
-	"prigroupSize": 3,
-	"pctFmt": "{n}%",
-	"pctChar": "%"
-},
-
-	"scripts": ["Latn"],
-	"locale": "sq"
-}
+{"clock":"12","language.name":"Albanian","numfmt":{"groupChar":" "},"scripts":["Latn"],"locale":"sq"}

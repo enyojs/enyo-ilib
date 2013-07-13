@@ -1,6 +1,1 @@
-{
-	"currency": "RSD",
-	"region.name": "Serbia",
-	"timezone": "Europe/Belgrade",
-	"locale": "und-RS"
-}
+{"currency":"RSD","firstDayOfWeek":1,"region.name":"Serbia","timezone":"Europe/Belgrade","locale":"RS"}

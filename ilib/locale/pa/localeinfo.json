@@ -1,7 +1,1 @@
-{
-"clock" :"12",
-	"language.name": "Punjabi",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s} {n}","secgroupSize":2},
-	"scripts": ["Guru","Arab"],
-	"locale": "pa"
-}
+{"clock":"12","language.name":"Punjabi","native_numfmt":{"script":"Guru","decimalChar":".","groupChar":",","pctChar":"%","exponential":"E","prigroupSize":3,"secgroupSize":2,"currencyFormats":{"common":"{s} {n}"},"pctFmt":"{n}%","roundingMode":"halfdown","digits":"੦੧੨੩੪੫੬੭੮੯"},"numfmt":{"decimalChar":".","groupChar":",","secgroupSize":2,"currencyFormats":{"common":"{s} {n}"}},"scripts":["Guru","Arab"],"locale":"pa"}

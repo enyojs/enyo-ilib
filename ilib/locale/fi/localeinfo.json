@@ -1,12 +1,1 @@
-{
-	"firstDayOfWeek": 1,
-	"language.name": "Finnish",
-	"numfmt": {
-		"decimalChar": ",",
-		"groupChar": " ",
-		"prigroupSize": 3,
-		"pctFmt": "{n} %"
-	},
-	"scripts": ["Latn"],
-	"locale": "fi"
-}
+{"language.name":"Finnish","numfmt":{"groupChar":" ","currencyFormats":{"common":"{n} {s}"},"pctFmt":"{n} %"},"scripts":["Latn"],"locale":"fi"}

@@ -1,7 +1,1 @@
-{
-	"calendar": "buddhist",
-	"language.name": "Thai",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s}{n}","secgroupSize":0,"negativecurFmt":"({s}{n})"},
-	"scripts": ["Thai"],
-	"locale": "th"
-}
+{"calendar":"buddhist","language.name":"Thai","native_numfmt":{"script":"Thai","decimalChar":".","groupChar":",","pctChar":"%","exponential":"E","prigroupSize":3,"currencyFormats":{"common":"{s}{n}","commonNegative":"({s}{n})"},"pctFmt":"{n}%","roundingMode":"halfdown","digits":"๐๑๒๓๔๕๖๗๘๙"},"numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"commonNegative":"({s}{n})"}},"scripts":["Thai"],"locale":"th"}

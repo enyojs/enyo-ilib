@@ -1,13 +1,1 @@
-{
-	"language.name": "Icelandic",
-"numfmt": {
-	"decimalChar": ",",
-	"groupChar": ".",
-	"prigroupSize": 3,
-	"pctFmt": "{n}%",
-	"pctChar": "%"
-},
-
-	"scripts": ["Latn"],
-	"locale": "is"
-}
+{"language.name":"Icelandic","numfmt":{"currencyFormats":{"commonNegative":"({s}{n})"}},"scripts":["Latn"],"locale":"is"}

@@ -1,6 +1,1 @@
-{
-	"currency": "IQD",
-	"region.name": "Iraq",
-	"timezone": "Asia/Baghdad",
-	"locale": "und-IQ"
-}
+{"currency":"IQD","firstDayOfWeek":6,"region.name":"Iraq","timezone":"Asia/Baghdad","locale":"IQ"}

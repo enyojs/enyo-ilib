@@ -1,6 +1,1 @@
-{
-	"language.name": "Manx",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s}{n}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "gv"
-}
+{"language.name":"Manx","numfmt":{"decimalChar":".","groupChar":","},"scripts":["Latn"],"locale":"gv"}

@@ -1,13 +1,1 @@
-{
-	"language.name": "Galician",
-"numfmt": {
-	"decimalChar": ",",
-	"groupChar": ".",
-	"prigroupSize": 3,
-	"pctFmt": "{n}%",
-	"pctChar": "%"
-},
-
-	"scripts": ["Latn"],
-	"locale": "gl"
-}
+{"language.name":"Galician","numfmt":{"currencyFormats":{"commonNegative":"({s}{n})"}},"scripts":["Latn"],"locale":"gl"}

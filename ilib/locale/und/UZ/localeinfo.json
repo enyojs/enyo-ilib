@@ -1,6 +1,1 @@
-{
-	"currency": "UZS",
-	"region.name": "Uzbekistan",
-	"timezone": "Asia/Samarkand",
-	"locale": "und-UZ"
-}
+{"currency":"UZS","firstDayOfWeek":1,"region.name":"Uzbekistan","timezone":"Asia/Samarkand","locale":"UZ"}

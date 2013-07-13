@@ -1,7 +1,1 @@
-{
-"clock" :"12",
-	"language.name": "Telugu",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s}{n}","secgroupSize":0,"negativecurFmt":"({s}{n})"},
-	"scripts": ["Telu"],
-	"locale": "te"
-}
+{"clock":"12","language.name":"Telugu","native_numfmt":{"script":"Telu","decimalChar":".","groupChar":",","pctChar":"%","exponential":"E","prigroupSize":3,"currencyFormats":{"common":"{s}{n}","commonNegative":"({s}{n})"},"pctFmt":"{n}%","roundingMode":"halfdown","digits":"౦౧౨౩౪౫౬౭౮౯"},"numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"commonNegative":"({s}{n})"}},"scripts":["Telu"],"locale":"te"}

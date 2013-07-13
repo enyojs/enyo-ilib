@@ -1,6 +1,1 @@
-{
-	"currency": "CHF",
-	"region.name": "Liechtenstein",
-	"timezone": "Europe/Vaduz",
-	"locale": "und-LI"
-}
+{"currency":"CHF","firstDayOfWeek":1,"region.name":"Liechtenstein","timezone":"Europe/Vaduz","locale":"LI"}

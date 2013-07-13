@@ -1483,6 +1483,30 @@ ilib.loadData = function(params) {
 	}
 };
 
+/**
+ * @static
+ * 
+ * Map a string to the given set of alternate characters. If the target set
+ * does not contain a particular character in the input string, then that
+ * character will be copied to the output unmapped.
+ * 
+ * @param {string} str a string to map to an alternate set of characters
+ * @param {Array.<string>|Object} map a mapping to alternate characters
+ * @return {string} the source string where each character is mapped to alternate characters
+ */
+ilib.mapString = function (str, map) {
+	var mapped = "";
+	if (map && str) {
+		for (var i = 0; i < str.length; i++) {
+			var c = str.charAt(i); // TODO use a char iterator?
+			mapped += map[c] || c; 
+		}
+	} else {
+		mapped = str;
+	}
+	return mapped;
+};
+
 ilib.data.plurals = {
     "version": {
         "@number": "$Revision: 7657 $"
@@ -5535,27 +5559,7 @@ ilib.String.prototype = {
 		return this.cpLength;	
 	}
 };
-ilib.data.localeinfo = {
-	"clock": "24",
-	"currencyFormats": {
-		"common": "{s}{n}",
-		"iso": "{s} {n}"
-	},
-	"units": "metric",
-	"calendar": "gregorian",
-	"currency": "USD",
-	"timezone": "Etc/UTC",
-	"numfmt": {
-		"decimalChar": ",",
-		"groupChar": ".",
-		"prigroupSize": 3,
-		"pctFmt": "{n}%",
-		"pctChar": "%",
-		"roundingMode": "halfdown"
-	},
-	"locale": "."
-}
-;
+ilib.data.localeinfo = {"calendar":"gregorian","clock":"24","currency":"USD","firstDayOfWeek":1,"numfmt":{"script":"Latn","decimalChar":",","groupChar":".","prigroupSize":3,"pctFmt":"{n}%","pctChar":"%","roundingMode":"halfdown","exponential":"e","currencyFormats":{"common":"{s}{n}","commonNegative":"{s}-{n}"}},"timezone":"Etc/UTC","units":"metric"};
 ilib.data.likelylocales = {"aa":"aa-Latn-ET","ab":"ab-Cyrl-GE","ady":"ady-Cyrl-RU","af":"af-Latn-ZA","agq":"agq-Latn-CM","ak":"ak-Latn-GH","am":"am-Ethi-ET","ar":"ar-Arab-EG","as":"as-Beng-IN","asa":"asa-Latn-TZ","ast":"ast-Latn-ES","av":"av-Cyrl-RU","ay":"ay-Latn-BO","az":"az-Latn-AZ","az-Arab":"az-Arab-IR","az-IR":"az-Arab-IR","ba":"ba-Cyrl-RU","bas":"bas-Latn-CM","be":"be-Cyrl-BY","bem":"bem-Latn-ZM","bez":"bez-Latn-TZ","bg":"bg-Cyrl-BG","bi":"bi-Latn-VU","bm":"bm-Latn-ML","bn":"bn-Beng-BD","bo":"bo-Tibt-CN","br":"br-Latn-FR","brx":"brx-Deva-IN","bs":"bs-Latn-BA","byn":"byn-Ethi-ER","ca":"ca-Latn-ES","cch":"cch-Latn-NG","ce":"ce-Cyrl-RU","ceb":"ceb-Latn-PH","cgg":"cgg-Latn-UG","ch":"ch-Latn-GU","chk":"chk-Latn-FM","chr":"chr-Cher-US","ckb":"ckb-Arab-IQ","cs":"cs-Latn-CZ","csb":"csb-Latn-PL","cy":"cy-Latn-GB","da":"da-Latn-DK","dav":"dav-Latn-KE","de":"de-Latn-DE","dje":"dje-Latn-NE","dua":"dua-Latn-CM","dv":"dv-Thaa-MV","dyo":"dyo-Latn-SN","dz":"dz-Tibt-BT","ebu":"ebu-Latn-KE","ee":"ee-Latn-GH","efi":"efi-Latn-NG","el":"el-Grek-GR","en":"en-Latn-US","eo":"eo-Latn-001","es":"es-Latn-ES","et":"et-Latn-EE","eu":"eu-Latn-ES","ewo":"ewo-Latn-CM","fa":"fa-Arab-IR","ff":"ff-Latn-SN","fi":"fi-Latn-FI","fil":"fil-Latn-PH","fj":"fj-Latn-FJ","fo":"fo-Latn-FO","fr":"fr-Latn-FR","fur":"fur-Latn-IT","fy":"fy-Latn-NL","ga":"ga-Latn-IE","gaa":"gaa-Latn-GH","gag":"gag-Latn-MD","gd":"gd-Latn-GB","gil":"gil-Latn-KI","gl":"gl-Latn-ES","gn":"gn-Latn-PY","gsw":"gsw-Latn-CH","gu":"gu-Gujr-IN","guz":"guz-Latn-KE","gv":"gv-Latn-GB","gv-Latn":"gv-Latn-IM","ha":"ha-Latn-NG","haw":"haw-Latn-US","he":"he-Hebr-IL","hi":"hi-Deva-IN","hil":"hil-Latn-PH","ho":"ho-Latn-PG","hr":"hr-Latn-HR","ht":"ht-Latn-HT","hu":"hu-Latn-HU","hy":"hy-Armn-AM","ia":"ia-Latn-001","id":"id-Latn-ID","ig":"ig-Latn-NG","ii":"ii-Yiii-CN","ilo":"ilo-Latn-PH","inh":"inh-Cyrl-RU","is":"is-Latn-IS","it":"it-Latn-IT","ja":"ja-Jpan-JP","jgo":"jgo-Latn-CM","jmc":"jmc-Latn-TZ","jv":"jv-Latn-ID","ka":"ka-Geor-GE","kab":"kab-Latn-DZ","kaj":"kaj-Latn-NG","kam":"kam-Latn-KE","kbd":"kbd-Cyrl-RU","kcg":"kcg-Latn-NG","kde":"kde-Latn-TZ","kea":"kea-Latn-CV","kg":"kg-Latn-CD","kha":"kha-Latn-IN","khq":"khq-Latn-ML","ki":"ki-Latn-KE","kj":"kj-Latn-NA","kk":"kk-Cyrl-KZ","kkj":"kkj-Latn-CM","kl":"kl-Latn-GL","kln":"kln-Latn-KE","km":"km-Khmr-KH","kn":"kn-Knda-IN","ko":"ko-Kore-KR","koi":"koi-Cyrl-RU","kok":"kok-Deva-IN","kos":"kos-Latn-FM","kpe":"kpe-Latn-LR","kpv":"kpv-Cyrl-RU","krc":"krc-Cyrl-RU","ks":"ks-Arab-IN","ksb":"ksb-Latn-TZ","ksf":"ksf-Latn-CM","ksh":"ksh-Latn-DE","ku":"ku-Latn-TR","ku-Arab":"ku-Arab-IQ","ku-IQ":"ku-Arab-IQ","kum":"kum-Cyrl-RU","kv":"kv-Cyrl-RU","kw":"kw-Latn-GB","ky":"ky-Cyrl-KG","la":"la-Latn-VA","lag":"lag-Latn-TZ","lah":"lah-Arab-PK","lb":"lb-Latn-LU","lbe":"lbe-Cyrl-RU","lez":"lez-Cyrl-RU","lg":"lg-Latn-UG","ln":"ln-Latn-CD","lo":"lo-Laoo-LA","lt":"lt-Latn-LT","lu":"lu-Latn-CD","lua":"lua-Latn-CD","luo":"luo-Latn-KE","luy":"luy-Latn-KE","lv":"lv-Latn-LV","mai":"mai-Deva-IN","mas":"mas-Latn-KE","mdf":"mdf-Cyrl-RU","mdh":"mdh-Latn-PH","mer":"mer-Latn-KE","mfe":"mfe-Latn-MU","mg":"mg-Latn-MG","mgh":"mgh-Latn-MZ","mgo":"mgo-Latn-CM","mh":"mh-Latn-MH","mi":"mi-Latn-NZ","mk":"mk-Cyrl-MK","ml":"ml-Mlym-IN","mn":"mn-Cyrl-MN","mn-CN":"mn-Mong-CN","mn-Mong":"mn-Mong-CN","mr":"mr-Deva-IN","ms":"ms-Latn-MY","mt":"mt-Latn-MT","mua":"mua-Latn-CM","my":"my-Mymr-MM","myv":"myv-Cyrl-RU","na":"na-Latn-NR","naq":"naq-Latn-NA","nb":"nb-Latn-NO","nd":"nd-Latn-ZW","nds":"nds-Latn-DE","ne":"ne-Deva-NP","niu":"niu-Latn-NU","nl":"nl-Latn-NL","nmg":"nmg-Latn-CM","nn":"nn-Latn-NO","nnh":"nnh-Latn-CM","nr":"nr-Latn-ZA","nso":"nso-Latn-ZA","nus":"nus-Latn-SD","ny":"ny-Latn-MW","nyn":"nyn-Latn-UG","oc":"oc-Latn-FR","om":"om-Latn-ET","or":"or-Orya-IN","os":"os-Cyrl-GE","pa":"pa-Guru-IN","pa-Arab":"pa-Arab-PK","pa-PK":"pa-Arab-PK","pag":"pag-Latn-PH","pap":"pap-Latn-AN","pau":"pau-Latn-PW","pl":"pl-Latn-PL","pon":"pon-Latn-FM","ps":"ps-Arab-AF","pt":"pt-Latn-BR","qu":"qu-Latn-PE","rm":"rm-Latn-CH","rn":"rn-Latn-BI","ro":"ro-Latn-RO","rof":"rof-Latn-TZ","ru":"ru-Cyrl-RU","rw":"rw-Latn-RW","rwk":"rwk-Latn-TZ","sa":"sa-Deva-IN","sah":"sah-Cyrl-RU","saq":"saq-Latn-KE","sat":"sat-Latn-IN","sbp":"sbp-Latn-TZ","sd":"sd-Arab-IN","se":"se-Latn-NO","seh":"seh-Latn-MZ","ses":"ses-Latn-ML","sg":"sg-Latn-CF","shi":"shi-Tfng-MA","shi-MA":"shi-Latn-MA","si":"si-Sinh-LK","sid":"sid-Latn-ET","sk":"sk-Latn-SK","sl":"sl-Latn-SI","sm":"sm-Latn-WS","sn":"sn-Latn-ZW","so":"so-Latn-SO","sq":"sq-Latn-AL","sr":"sr-Cyrl-RS","sr-ME":"sr-Latn-ME","ss":"ss-Latn-ZA","ssy":"ssy-Latn-ER","st":"st-Latn-ZA","su":"su-Latn-ID","sv":"sv-Latn-SE","sw":"sw-Latn-TZ","swc":"swc-Latn-CD","ta":"ta-Taml-IN","te":"te-Telu-IN","teo":"teo-Latn-UG","tet":"tet-Latn-TL","tg":"tg-Cyrl-TJ","th":"th-Thai-TH","ti":"ti-Ethi-ET","tig":"tig-Ethi-ER","tk":"tk-Latn-TM","tkl":"tkl-Latn-TK","tl":"tl-Latn-PH","tn":"tn-Latn-ZA","to":"to-Latn-TO","tpi":"tpi-Latn-PG","tr":"tr-Latn-TR","trv":"trv-Latn-TW","ts":"ts-Latn-ZA","tsg":"tsg-Latn-PH","tt":"tt-Cyrl-RU","tvl":"tvl-Latn-TV","twq":"twq-Latn-NE","ty":"ty-Latn-PF","tyv":"tyv-Cyrl-RU","tzm":"tzm-Latn-MA","udm":"udm-Cyrl-RU","ug":"ug-Arab-CN","uk":"uk-Cyrl-UA","uli":"uli-Latn-FM","und":"en-Latn-US","AD":"ca-Latn-AD","AE":"ar-Arab-AE","AF":"fa-Arab-AF","AL":"sq-Latn-AL","AM":"hy-Armn-AM","AN":"pap-Latn-AN","AO":"pt-Latn-AO","AR":"es-Latn-AR","Arab":"ar-Arab-EG","Arab-CN":"ug-Arab-CN","Arab-IN":"ur-Arab-IN","Arab-NG":"ha-Arab-NG","Arab-PK":"ur-Arab-PK","Armi":"arc-Armi-IR","Armn":"hy-Armn-AM","AS":"sm-Latn-AS","AT":"de-Latn-AT","Avst":"ae-Avst-IR","AW":"nl-Latn-AW","AX":"sv-Latn-AX","AZ":"az-Latn-AZ","BA":"bs-Latn-BA","Bali":"ban-Bali-ID","Bamu":"bax-Bamu-CM","Batk":"bbc-Batk-ID","BD":"bn-Beng-BD","BE":"nl-Latn-BE","Beng":"bn-Beng-BD","BF":"fr-Latn-BF","BG":"bg-Cyrl-BG","BH":"ar-Arab-BH","BI":"rn-Latn-BI","BJ":"fr-Latn-BJ","BL":"fr-Latn-BL","BN":"ms-Latn-BN","BO":"es-Latn-BO","Bopo":"zh-Bopo-TW","BR":"pt-Latn-BR","Brah":"pra-Brah-IN","Brai":"und-Brai-FR","BT":"dz-Tibt-BT","Bugi":"bug-Bugi-ID","Buhd":"bku-Buhd-PH","BY":"be-Cyrl-BY","Cakm":"ccp-Cakm-BD","Cans":"cr-Cans-CA","Cari":"xcr-Cari-TR","CD":"sw-Latn-CD","CF":"fr-Latn-CF","CG":"fr-Latn-CG","CH":"de-Latn-CH","Cham":"cjm-Cham-VN","Cher":"chr-Cher-US","CI":"fr-Latn-CI","CL":"es-Latn-CL","CM":"fr-Latn-CM","CN":"zh-Hans-CN","CO":"es-Latn-CO","Copt":"cop-Copt-EG","CP":"fr-Latn-CP","Cprt":"grc-Cprt-CY","CR":"es-Latn-CR","CU":"es-Latn-CU","CV":"pt-Latn-CV","CY":"el-Grek-CY","Cyrl":"ru-Cyrl-RU","Cyrl-BA":"sr-Cyrl-BA","Cyrl-GE":"ab-Cyrl-GE","CZ":"cs-Latn-CZ","DE":"de-Latn-DE","Deva":"hi-Deva-IN","DJ":"aa-Latn-DJ","DK":"da-Latn-DK","DO":"es-Latn-DO","DZ":"ar-Arab-DZ","EA":"es-Latn-EA","EC":"es-Latn-EC","EE":"et-Latn-EE","EG":"ar-Arab-EG","Egyp":"egy-Egyp-EG","EH":"ar-Arab-EH","ER":"ti-Ethi-ER","ES":"es-Latn-ES","Ethi":"am-Ethi-ET","FI":"fi-Latn-FI","FM":"chk-Latn-FM","FO":"fo-Latn-FO","FR":"fr-Latn-FR","GA":"fr-Latn-GA","GE":"ka-Geor-GE","Geor":"ka-Geor-GE","GF":"fr-Latn-GF","GH":"ak-Latn-GH","GL":"kl-Latn-GL","Glag":"cu-Glag-BG","GN":"fr-Latn-GN","Goth":"got-Goth-UA","GP":"fr-Latn-GP","GQ":"es-Latn-GQ","GR":"el-Grek-GR","Grek":"el-Grek-GR","GT":"es-Latn-GT","Gujr":"gu-Gujr-IN","Guru":"pa-Guru-IN","GW":"pt-Latn-GW","Hang":"ko-Hang-KR","Hani":"zh-Hans-CN","Hano":"hnn-Hano-PH","Hans":"zh-Hans-CN","Hant":"zh-Hant-TW","Hebr":"he-Hebr-IL","Hira":"ja-Hira-JP","HK":"zh-Hant-HK","HN":"es-Latn-HN","HR":"hr-Latn-HR","HT":"ht-Latn-HT","HU":"hu-Latn-HU","IC":"es-Latn-IC","ID":"id-Latn-ID","IL":"he-Hebr-IL","IN":"hi-Deva-IN","IQ":"ar-Arab-IQ","IR":"fa-Arab-IR","IS":"is-Latn-IS","IT":"it-Latn-IT","Ital":"ett-Ital-IT","Java":"jv-Java-ID","JO":"ar-Arab-JO","JP":"ja-Jpan-JP","Jpan":"ja-Jpan-JP","Kali":"eky-Kali-MM","Kana":"ja-Kana-JP","KG":"ky-Cyrl-KG","KH":"km-Khmr-KH","Khar":"pra-Khar-PK","Khmr":"km-Khmr-KH","KM":"ar-Arab-KM","Knda":"kn-Knda-IN","Kore":"ko-Kore-KR","KP":"ko-Kore-KP","KR":"ko-Kore-KR","Kthi":"bh-Kthi-IN","KW":"ar-Arab-KW","KZ":"ru-Cyrl-KZ","LA":"lo-Laoo-LA","Lana":"nod-Lana-TH","Laoo":"lo-Laoo-LA","Latn-CN":"za-Latn-CN","Latn-CY":"tr-Latn-CY","Latn-DZ":"fr-Latn-DZ","Latn-ER":"aa-Latn-ER","Latn-KM":"fr-Latn-KM","Latn-MA":"fr-Latn-MA","Latn-MK":"sq-Latn-MK","Latn-MR":"fr-Latn-MR","Latn-SY":"fr-Latn-SY","Latn-TN":"fr-Latn-TN","LB":"ar-Arab-LB","Lepc":"lep-Lepc-IN","LI":"de-Latn-LI","Limb":"lif-Limb-IN","Linb":"grc-Linb-GR","Lisu":"lis-Lisu-CN","LK":"si-Sinh-LK","LS":"st-Latn-LS","LT":"lt-Latn-LT","LU":"fr-Latn-LU","LV":"lv-Latn-LV","LY":"ar-Arab-LY","Lyci":"xlc-Lyci-TR","Lydi":"xld-Lydi-TR","MA":"ar-Arab-MA","Mand":"myz-Mand-IR","MC":"fr-Latn-MC","MD":"ro-Latn-MD","ME":"sr-Latn-ME","Merc":"xmr-Merc-SD","Mero":"xmr-Mero-SD","MF":"fr-Latn-MF","MG":"mg-Latn-MG","MK":"mk-Cyrl-MK","ML":"bm-Latn-ML","Mlym":"ml-Mlym-IN","MM":"my-Mymr-MM","MN":"mn-Cyrl-MN","MO":"zh-Hant-MO","Mong":"mn-Mong-CN","MQ":"fr-Latn-MQ","MR":"ar-Arab-MR","MT":"mt-Latn-MT","Mtei":"mni-Mtei-IN","MU":"mfe-Latn-MU","MV":"dv-Thaa-MV","MX":"es-Latn-MX","MY":"ms-Latn-MY","Mymr":"my-Mymr-MM","MZ":"pt-Latn-MZ","NA":"kj-Latn-NA","NC":"fr-Latn-NC","NE":"ha-Latn-NE","NI":"es-Latn-NI","Nkoo":"man-Nkoo-GN","NL":"nl-Latn-NL","NO":"nb-Latn-NO","NP":"ne-Deva-NP","Ogam":"sga-Ogam-IE","Olck":"sat-Olck-IN","OM":"ar-Arab-OM","Orkh":"otk-Orkh-MN","Orya":"or-Orya-IN","Osma":"so-Osma-SO","PA":"es-Latn-PA","PE":"es-Latn-PE","PF":"fr-Latn-PF","PG":"tpi-Latn-PG","PH":"fil-Latn-PH","Phag":"lzh-Phag-CN","Phli":"pal-Phli-IR","Phnx":"phn-Phnx-LB","PK":"ur-Arab-PK","PL":"pl-Latn-PL","Plrd":"hmd-Plrd-CN","PM":"fr-Latn-PM","PR":"es-Latn-PR","Prti":"xpr-Prti-IR","PS":"ar-Arab-PS","PT":"pt-Latn-PT","PW":"pau-Latn-PW","PY":"gn-Latn-PY","QA":"ar-Arab-QA","RE":"fr-Latn-RE","Rjng":"rej-Rjng-ID","RO":"ro-Latn-RO","RS":"sr-Cyrl-RS","RU":"ru-Cyrl-RU","Runr":"non-Runr-SE","RW":"rw-Latn-RW","SA":"ar-Arab-SA","Samr":"smp-Samr-IL","Sarb":"xsa-Sarb-YE","Saur":"saz-Saur-IN","SC":"fr-Latn-SC","SD":"ar-Arab-SD","SE":"sv-Latn-SE","Shaw":"en-Shaw-GB","Shrd":"sa-Shrd-IN","SI":"sl-Latn-SI","Sinh":"si-Sinh-LK","SJ":"nb-Latn-SJ","SK":"sk-Latn-SK","SM":"it-Latn-SM","SN":"fr-Latn-SN","SO":"so-Latn-SO","Sora":"srb-Sora-IN","SR":"nl-Latn-SR","ST":"pt-Latn-ST","Sund":"su-Sund-ID","SV":"es-Latn-SV","SY":"ar-Arab-SY","Sylo":"syl-Sylo-BD","Syrc":"syr-Syrc-SY","Tagb":"tbw-Tagb-PH","Takr":"doi-Takr-IN","Tale":"tdd-Tale-CN","Talu":"khb-Talu-CN","Taml":"ta-Taml-IN","Tavt":"blt-Tavt-VN","TD":"fr-Latn-TD","Telu":"te-Telu-IN","Tfng":"shi-Tfng-TN","TG":"fr-Latn-TG","Tglg":"fil-Tglg-PH","TH":"th-Thai-TH","Thaa":"dv-Thaa-MV","Thai":"th-Thai-TH","Tibt":"bo-Tibt-CN","TJ":"tg-Cyrl-TJ","TK":"tkl-Latn-TK","TL":"pt-Latn-TL","TM":"tk-Latn-TM","TN":"ar-Arab-TN","TO":"to-Latn-TO","TR":"tr-Latn-TR","TV":"tvl-Latn-TV","TW":"zh-Hant-TW","TZ":"sw-Latn-TZ","UA":"uk-Cyrl-UA","UG":"sw-Latn-UG","Ugar":"uga-Ugar-SY","UY":"es-Latn-UY","UZ":"uz-Cyrl-UZ","VA":"la-Latn-VA","Vaii":"vai-Vaii-LR","VE":"es-Latn-VE","VN":"vi-Latn-VN","VU":"bi-Latn-VU","WF":"fr-Latn-WF","WS":"sm-Latn-WS","Xpeo":"peo-Xpeo-IR","Xsux":"akk-Xsux-IQ","YE":"ar-Arab-YE","Yiii":"ii-Yiii-CN","YT":"fr-Latn-YT","ur":"ur-Arab-PK","uz":"uz-Cyrl-UZ","uz-AF":"uz-Arab-AF","uz-Arab":"uz-Arab-AF","vai":"vai-Vaii-LR","ve":"ve-Latn-ZA","vi":"vi-Latn-VN","vo":"vo-Latn-001","vun":"vun-Latn-TZ","wae":"wae-Latn-CH","wal":"wal-Ethi-ET","war":"war-Latn-PH","wo":"wo-Latn-SN","xh":"xh-Latn-ZA","xog":"xog-Latn-UG","yap":"yap-Latn-FM","yav":"yav-Latn-CM","yi":"yi-Hebr-IL","yo":"yo-Latn-NG","za":"za-Latn-CN","zh":"zh-Hans-CN","zh-Hani":"zh-Hans-CN","zh-Hant":"zh-Hant-TW","zh-HK":"zh-Hant-HK","zh-MO":"zh-Hant-MO","zh-TW":"zh-Hant-TW","zu":"zu-Latn-ZA"}
 ;
 /*
@@ -5672,6 +5676,35 @@ ilib.LocaleInfo = function(locale, options) {
 				var spec = this.locale.getSpec().replace(/-/g, "_");
 				ilib.LocaleInfo.cache[spec] = info;
 			}
+			/**
+			 * @private
+			 * @type {{
+			 * 	timezone:string,
+			 * 	units:string,
+			 *	calendar:string,
+			 *	clock:string,
+			 *	currency:string,
+			 *	firstDayOfWeek:string,
+			 * 	numfmt:Object.<{
+			 * 		currencyFormats:Object.<{
+			 * 			common:string,
+			 * 			commonNegative:string,
+			 * 			iso:string,
+			 * 			isoNegative:string
+			 * 		}>,
+			 * 		script:string,
+			 * 		decimalChar:string,
+			 * 		groupChar:string,
+			 * 		prigroupSize:number,
+			 * 		secgroupSize:number,
+			 * 		pctFmt:string,
+			 * 		negativepctFmt:string,
+			 * 		pctChar:string,
+			 * 		roundingMode:string,
+			 * 		exponential:string
+			 *	}>
+			 * }}
+			 */
 			this.info = info;
 			if (options && typeof(options.onLoad) === 'function') {
 				options.onLoad(this);
@@ -5750,12 +5783,29 @@ ilib.LocaleInfo.prototype = {
 	},
 	
 	/**
+	 * Return the decimal separator for formatted numbers in this locale for native script.
+	 * @returns {string} the decimal separator char
+	 */
+	getNativeDecimalSeparator: function () {
+		return (this.info.native_numfmt && this.info.native_numfmt.decimalChar) || this.info.numfmt.decimalChar;
+	},
+	
+	/**
 	 * Return the separator character used to separate groups of digits on the 
 	 * integer side of the decimal character.
 	 * @returns {string} the grouping separator char
 	 */
 	getGroupingSeparator: function () {
 		return this.info.numfmt.groupChar;
+	},
+
+	/**
+	 * Return the separator character used to separate groups of digits on the 
+	 * integer side of the decimal character for the native script if present other than the default script.
+	 * @returns {string} the grouping separator char
+	 */
+	getNativeGroupingSeparator: function () {
+		return (this.info.native_numfmt && this.info.native_numfmt.groupChar) || this.info.numfmt.groupChar;
 	},
 	
 	/**
@@ -5766,7 +5816,7 @@ ilib.LocaleInfo.prototype = {
 	 * @returns {number} the number of digits in a primary grouping, or 0 for no grouping
 	 */
 	getPrimaryGroupingDigits: function () {
-		return (typeof(this.info.numfmt.prigroupSize) !== 'undefined' ?  this.info.numfmt.prigroupSize : this.info.numfmt.groupSize) || 0;
+		return (typeof(this.info.numfmt.prigroupSize) !== 'undefined' && this.info.numfmt.prigroupSize) || 0;
 	},
 
 	/**
@@ -5796,9 +5846,15 @@ ilib.LocaleInfo.prototype = {
 		return this.info.numfmt.pctFmt;
 	},
 
-	getCurrencyFormat: function () {
-		return this.info.numfmt.curFmt;
+	/**
+	 * Return the format template used to format percentages in this locale
+	 * with negative amounts.
+	 * @returns {string} the format template for formatting percentages
+	 */
+	getNegativePercentageFormat: function () {
+		return this.info.numfmt.negativepctFmt;
 	},
+
 	/**
 	 * Return the symbol used for percentages in this locale.
 	 * @returns {string} the symbol used for percentages in this locale
@@ -5808,6 +5864,38 @@ ilib.LocaleInfo.prototype = {
 	},
 
 	/**
+	 * Return the symbol used for exponential in this locale.
+	 * @returns {string} the symbol used for exponential in this locale
+	 */
+	getExponential: function () {
+		return this.info.numfmt.exponential;
+	},
+
+	/**
+	 * Return the symbol used for exponential in this locale for native script.
+	 * @returns {string} the symbol used for exponential in this locale for native script
+	 */
+	getNativeExponential: function () {
+		return (this.info.native_numfmt && this.info.native_numfmt.exponential) || this.info.numfmt.exponential;
+	},
+
+	/**
+	 * Return the symbol used for percentages in this locale for native script.
+	 * @returns {string} the symbol used for percentages in this locale for native script
+	 */
+	getNativePercentageSymbol: function () {
+		return (this.info.native_numfmt && this.info.native_numfmt.pctChar) || this.info.numfmt.pctChar || "%";
+	
+	},
+	/**
+	 * Return the format template used to format negative numbers in this locale.
+	 * @returns {string} the format template for formatting negative numbers
+	 */
+	getNegativeNumberFormat: function () { 
+		return this.info.numfmt.negativenumFmt;
+	},
+	
+	/**
 	 * Return an object containing the format templates for formatting currencies
 	 * in this locale. The object has a number of properties in it that each are
 	 * a particular style of format. Normally, this contains a "common" and an "iso"
@@ -5815,9 +5903,9 @@ ilib.LocaleInfo.prototype = {
 	 * @returns {Object} an object containing the format templates for currencies
 	 */
 	getCurrencyFormats: function () {
-		return this.info.currencyFormats;
+		return this.info.numfmt.currencyFormats;
 	},
-
+	
 	/**
 	 * Return the currency that is legal in the locale, or which is most commonly 
 	 * used in regular commerce.
@@ -5825,6 +5913,24 @@ ilib.LocaleInfo.prototype = {
 	 */
 	getCurrency: function () {
 		return this.info.currency;
+	},
+	
+	/**
+	 * Return the digits of the default script if they are defined.
+	 * If not defined, the default should be the regular "Arabic numerals"
+	 * used in the Latin script. (0-9)
+	 * @returns {string|undefined} the digits used in the default script 
+	 */
+	getDigits: function () {
+		return this.info.numfmt.digits;
+	},
+	
+	/**
+	 * Return the digits of the native script if they are defined. 
+	 * @returns {string|undefined} the digits used in the default script 
+	 */
+	getNativeDigits: function () {
+		return this.info.native_numfmt && this.info.native_numfmt.digits;
 	},
 	
 	/**
@@ -7998,7 +8104,7 @@ ilib.ResBundle = function (options) {
 		locale: lookupLocale, 
 		name: this.baseName + ".json", 
 		sync: this.sync, 
-		loadParmas: this.loadParams, 
+		loadParams: this.loadParams, 
 		callback: ilib.bind(this, function (map) {
 			if (!map) {
 				map = ilib.data[this.baseName] || {};
@@ -8394,19 +8500,36 @@ ilib.data.dateformats = {
 			}
 		},
 		"time": {
-			"ahmsz": "H:mm:ssa z",
-			"ahms": "H:mm:ssa",
-			"hmsz": "H:mm:ss z",
-			"hms": "H:mm:ss",
-			"ahmz": "H:mma z",
-			"ahm": "H:mma",
-			"hmz": "H:mm z",
-			"ah": "Ha",
-			"hm": "H:mm",
-			"ms": "mm:ss",
-			"h": "H",
-			"m": "mm",
-			"s": "ss"
+			"12": {
+				"ahmsz": "h:mm:ssa z",
+				"ahms": "h:mm:ssa",
+				"hmsz": "h:mm:ss z",
+				"hms": "h:mm:ss",
+				"ahmz": "h:mma z",
+				"ahm": "h:mma",
+				"hmz": "h:mm z",
+				"ah": "ha",
+				"hm": "h:mm",
+				"ms": "mm:ss",
+				"h": "h",
+				"m": "mm",
+				"s": "ss"
+			},
+			"24": {
+				"ahmsz": "H:mm:ss z",
+				"ahms": "H:mm:ss",
+				"hmsz": "H:mm:ss z",
+				"hms": "H:mm:ss",
+				"ahmz": "H:mm z",
+				"ahm": "H:mm",
+				"hmz": "H:mm z",
+				"ah": "H",
+				"hm": "H:mm",
+				"ms": "mm:ss",
+				"h": "H",
+				"m": "mm",
+				"s": "ss"
+			}
 		},
 		"range": {
 			"c00": {
@@ -8462,7 +8585,8 @@ ilib.data.dateformats = {
 	},
 	"islamic": "gregorian",
 	"hebrew": "gregorian",
-	"julian": "gregorian"
+	"julian": "gregorian",
+	"buddhist": "gregorian"
 };
 ilib.data.sysres = {
 	"MMMM1": "January",
@@ -8754,6 +8878,7 @@ resources.js
 calendar.js
 localeinfo.js
 timezone.js
+localeinfo.js
 */
 
 // !data dateformats sysres
@@ -8935,6 +9060,9 @@ timezone.js
  * <li><i>Z</i> - RFC 822 time zone
  * </ul>
  * 
+ *<li><i>useNative</i> - the flag used to determaine whether to use the native script settings 
+ * for formatting the numbers .
+ *
  * <li>onLoad - a callback function to call when the date format object is fully 
  * loaded. When the onLoad option is given, the DateFmt object will attempt to
  * load any missing locale data using the ilib loader callback.
@@ -8990,7 +9118,7 @@ ilib.DateFmt = function(options) {
 	this.length = "s";
 	this.dateComponents = "dmy";
 	this.timeComponents = "ahm";
-	
+	this.useNative=false;
 	if (options) {
 		if (options.locale) {
 			this.locale = (typeof(options.locale) === 'string') ? new ilib.Locale(options.locale) : options.locale;
@@ -9071,7 +9199,9 @@ ilib.DateFmt = function(options) {
 				id: options.timezone
 			});
 		}
-		
+		if (typeof(options.useNative) !== 'undefined') {
+			this.useNative = options.useNative;
+		}
 		if (typeof(options.sync) !== 'undefined') {
 			sync = (options.sync == true);
 		}
@@ -9101,6 +9231,7 @@ ilib.DateFmt = function(options) {
 					break;
 			}
 
+			/*
 			if (this.timeComponents &&
 					(this.clock === '24' || 
 					(!this.clock && this.locinfo.getClock() === "24"))) {
@@ -9108,6 +9239,7 @@ ilib.DateFmt = function(options) {
 				// requested it in the time component option
 				this.timeComponents = this.timeComponents.replace("a", "");
 			}
+			*/
 			
 			// load the strings used to translate the components
 			new ilib.ResBundle({
@@ -9129,6 +9261,10 @@ ilib.DateFmt = function(options) {
 									formats = ilib.data.dateformats;
 									var spec = this.locale.getSpec().replace(/-/g, '_');
 									ilib.DateFmt.cache[spec] = formats;
+								}
+								if (typeof(this.clock) === 'undefined') {
+									// default to the locale instead
+									this.clock = this.locinfo.getClock();
 								}
 								this._initTemplate(formats);
 								this._massageTemplate();
@@ -9180,14 +9316,14 @@ ilib.DateFmt.prototype = {
 			switch (this.type) {
 				case "datetime":
 					this.template = (this.formats && this._getLengthFormat(this.formats.order, this.length)) || "{date} {time}";
-					this.template = this.template.replace("{date}", this._getFormat(this.formats.date, this.dateComponents, this.length));
-					this.template = this.template.replace("{time}", this._getFormat(this.formats.time, this.timeComponents, this.length));
+					this.template = this.template.replace("{date}", this._getFormat(this.formats.date, this.dateComponents, this.length) || "");
+					this.template = this.template.replace("{time}", this._getFormat(this.formats.time[this.clock], this.timeComponents, this.length) || "");
 					break;
 				case "date":
 					this.template = this._getFormat(this.formats.date, this.dateComponents, this.length);
 					break;
 				case "time":
-					this.template = this._getFormat(this.formats.time, this.timeComponents, this.length);
+					this.template = this._getFormat(this.formats.time[this.clock], this.timeComponents, this.length);
 					break;
 			}
 		} else {
@@ -9250,6 +9386,18 @@ ilib.DateFmt.prototype = {
 		
 		// tokenize it now for easy formatting
 		this.templateArr = this._tokenize(this.template);
+
+		// set up the mapping to native or alternate digits if necessary
+		var digits = this.locinfo.getDigits();
+		if (digits && digits != "0123456789") {
+			this.digits = digits;
+		}
+		if (this.useNative) {
+			digits = this.locinfo.getNativeDigits();
+			if (digits) {
+				this.digits = digits;
+			}
+		}
 	},
     
 	/**
@@ -9558,19 +9706,19 @@ ilib.DateFmt.prototype = {
 				case 'a':
 					if (this.locale.getLanguage() === 'zh') {
 						if (date.hour < 6) {
-							key = "azh0";
+							key = "azh0";	// before dawn
 						} else if (date.hour < 9) {
-							key = "azh1";
+							key = "azh1";	// morning
 						} else if (date.hour < 12) {
-							key = "azh2";
+							key = "azh2";	// late morning/day before noon
 						} else if (date.hour < 13) {
-							key = "azh3";
+							key = "azh3";	// noon hour/midday
 						} else if (date.hour < 18) {
-							key = "azh4";
+							key = "azh4";	// afternoon
 						} else if (date.hour < 21) {
-							key = "azh5";
+							key = "azh5";	// evening time/dusk
 						} else {
-							key = "azh6";
+							key = "azh6";	// night time
 						}
 					} else {
 						key = date.hour < 12 ? "a0" : "a1";
@@ -9622,6 +9770,10 @@ ilib.DateFmt.prototype = {
 					str += templateArr[i].replace(/'/g, "");
 					break;
 			}
+		}
+
+		if (this.digits) {
+			str = ilib.mapString(str, this.digits);
 		}
 		return str;
 	},
@@ -9977,7 +10129,7 @@ ilib.DateRngFmt = function(options) {
 	
 	var opts = {};
 	ilib.shallowCopy(options, opts);
-	opts.sync = true;
+	opts.sync = sync;
 	/**
 	 * @private
 	 */
@@ -9999,7 +10151,7 @@ ilib.DateRngFmt = function(options) {
 					break;
 			}
 			
-			this.timeTemplate = this.dateFmt._getFormat(this.dateFmt.formats.time, this.dateFmt.timeComponents, this.length) || "hh:mm";
+			this.timeTemplate = this.dateFmt._getFormat(this.dateFmt.formats.time[this.dateFmt.clock], this.dateFmt.timeComponents, this.length) || "hh:mm";
 			this.timeTemplateArr = this.dateFmt._tokenize(this.timeTemplate);
 			
 			if (options && typeof(options.onLoad) === 'function') {
@@ -15476,7 +15628,7 @@ ilib.Currency.prototype = {
 
 /*
  * numfmt.js - Number formatter definition
- * 
+ *
  * Copyright © 2012-2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15494,8 +15646,6 @@ ilib.Currency.prototype = {
  */
 
 // !depends ilibglobal.js locale.js strings.js currency.js
-
-
 /*
 !depends 
 ilibglobal.js 
@@ -15511,35 +15661,37 @@ strings.js
 /**
  * @class
  * Create a new number formatter instance. Locales differ in the way that digits
- * in a formatted number are grouped, in the way the decimal character is represented, 
+ * in a formatted number are grouped, in the way the decimal character is represented,
  * etc. Use this formatter to get it right for any locale.<p>
- * 
- * This formatter can format plain numbers, currency amounts, and percentage amounts.<p>  
- * 
+ *
+ * This formatter can format plain numbers, currency amounts, and percentage amounts.<p>
+ *
  * As with all formatters, the recommended
  * practice is to create one formatter and use it multiple times to format various
  * numbers.<p>
- * 
+ *
  * The options can contain any of the following properties:
- * 
+ *
  * <ul>
  * <li><i>locale</i> - use the conventions of the specified locale when figuring out how to
  * format a number.
- * <li><i>type</i> - the type of this formatter. Valid values are "number", "currency", or 
+ * <li><i>type</i> - the type of this formatter. Valid values are "number", "currency", or
  * "percentage". If this property is not specified, the default is "number".
- * <li><i>currency</i> - the ISO 4217 3-letter currency code to use when the formatter type 
- * is "currency". This property is required for currency formatting. If the type property 
+ * <li><i>currency</i> - the ISO 4217 3-letter currency code to use when the formatter type
+ * is "currency". This property is required for currency formatting. If the type property
  * is "currency" and the currency property is not specified, the constructor will throw a
- * an exception. 
+ * an exception.
  * <li><i>maxFractionDigits</i> - the maximum number of digits that should appear in the
  * formatted output after the decimal. A value of -1 means unlimited, and 0 means only print
- * the integral part of the number. 
+ * the integral part of the number.
  * <li><i>minFractionDigits</i> - the minimum number of fractional digits that should
  * appear in the formatted output. If the number does not have enough fractional digits
  * to reach this minimum, the number will be zero-padded at the end to get to the limit.
  * If the type of the formatter is "currency" and this
  * property is not specified, then the minimum fraction digits is set to the normal number
  * of digits used with that currency, which is almost always 0, 2, or 3 digits.
+ * <li><i>useNative</i> - the flag used to determaine whether to use the native script settings
+ * for formatting the numbers .
  * <li><i>roundingMode</i> - When the maxFractionDigits or maxIntegerDigits is specified,
  * this property governs how the least significant digits are rounded to conform to that
  * maximum. The value of this property is a string with one of the following values:
@@ -15555,98 +15707,104 @@ strings.js
  * </ul>
  * When the type of the formatter is "currency" and the <i>roundingMode</i> property is not
  * set, then the standard legal rounding rules for the locale are followed. If the type
- * is "number" or "percentage" and the <i>roundingMode</i> property is not set, then the 
+ * is "number" or "percentage" and the <i>roundingMode</i> property is not set, then the
  * default mode is "halfdown".</i>.
- * 
+ *
  * <li><i>style</i> - When the type of this formatter is "currency", the currency amount
  * can be formatted in the following styles: "common" and "iso". The common style is the
- * one commonly used in every day writing where the currency unit is represented using a 
- * symbol. eg. "$57.35" for fifty-seven dollars and thirty five cents. The iso style is 
+ * one commonly used in every day writing where the currency unit is represented using a
+ * symbol. eg. "$57.35" for fifty-seven dollars and thirty five cents. The iso style is
  * the international style where the currency unit is represented using the ISO 4217 code.
  * eg. "USD 57.35" for the same amount. The default is "common" style if the style is
  * not specified.<p>
- * 
+ *
  * When the type of this formatter is "number",
- * the style can be either "standard" or "scientific". A "standard" style means a fully
- * specified floating point number formatted for the locale, whereas "scientific" uses
+ * the style can be either "standard" or "scientific" or "native". A "standard" style means
+ * a fully specified floating point number formatted for the locale, whereas "scientific" uses
  * scientific notation for all numbers. That is, 1 integral digit, followed by a number
  * of fractional digits, followed by an "e" which denotes exponentiation, followed digits
- * which give the power of 10 in the exponent. Note that if you specify a maximum number
- * of integral digits, the formatter with a standard style will give you standard 
+ * which give the power of 10 in the exponent. The native style will format a floating point
+ * number using the native digits and formatting symbols for the script of the locale. Note
+ * that if you specify a maximum number
+ * of integral digits, the formatter with a standard style will give you standard
  * formatting for smaller numbers and scientific notation for larger numbers. The default
  * is standard style if this is not specified.
- *  
- * <li><i>onLoad</i> - a callback function to call when the format data is fully 
+ *
+ * <li><i>onLoad</i> - a callback function to call when the format data is fully
  * loaded. When the onLoad option is given, this class will attempt to
  * load any missing locale data using the ilib loader callback.
- * When the constructor is done (even if the data is already preassembled), the 
+ * When the constructor is done (even if the data is already preassembled), the
  * onLoad function is called with the current instance as a parameter, so this
- * callback can be used with preassembled or dynamic loading or a mix of the two. 
- * 
- * <li>sync - tell whether to load any missing locale data synchronously or 
+ * callback can be used with preassembled or dynamic loading or a mix of the two.
+ *
+ * <li>sync - tell whether to load any missing locale data synchronously or
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
- * not be usable for a while. 
+ * not be usable for a while.
  * </ul>
  * <p>
- * 
+ *
  * Depends directive: !depends numfmt.js
- * 
+ *
  * @constructor
- * @param {Object.<string,*>} options A set of options that govern how the formatter will behave 
+ * @param {Object.<string,*>} options A set of options that govern how the formatter will behave
  */
 ilib.NumFmt = function (options) {
 	var sync = true;
 	this.locale = new ilib.Locale();
 	this.type = "number";
-	
+	this.useNative = false;
+
 	if (options) {
 		if (options.locale) {
-			this.locale = (typeof(options.locale) === 'string') ? new ilib.Locale(options.locale) : options.locale;
+			this.locale = (typeof (options.locale) === 'string') ? new ilib.Locale(options.locale) : options.locale;
 		}
-		
+
 		if (options.type) {
-			if (options.type === 'number' || 
-				options.type === 'currency' || 
+			if (options.type === 'number' ||
+				options.type === 'currency' ||
 				options.type === 'percentage') {
 				this.type = options.type;
 			}
 		}
-		
+
 		if (options.currency) {
 			this.currency = options.currency;
 		}
-		
-		if (typeof(options.maxFractionDigits) === 'number') {
+
+		if (typeof (options.maxFractionDigits) === 'number') {
 			this.maxFractionDigits = this._toPrimitive(options.maxFractionDigits);
 		}
-		if (typeof(options.minFractionDigits) === 'number') {
+		if (typeof (options.minFractionDigits) === 'number') {
 			this.minFractionDigits = this._toPrimitive(options.minFractionDigits);
 		}
 		if (options.style) {
 			this.style = options.style;
 		}
-		
+		if (options.useNative) {
+			this.useNative = options.useNative;
+		}
 		this.roundingMode = options.roundingMode;
 
-		if (typeof(options.sync) !== 'undefined') {
+		if (typeof (options.sync) !== 'undefined') {
 			sync = (options.sync == true);
 		}
 	}
-	
+
 	new ilib.LocaleInfo(this.locale, {
 		sync: sync,
 		onLoad: ilib.bind(this, function (li) {
 			this.localeInfo = li;
 
-			if (this.type === "currency") {
+			if (this.type === "number") {
+				this.templateNegative = new ilib.String(this.localeInfo.getNegativeNumberFormat() || "-{n}");
+			} else if (this.type === "currency") {
 				var templates;
-				
-				if (!this.currency || typeof(this.currency) != 'string') {
+
+				if (!this.currency || typeof (this.currency) != 'string') {
 					throw "A currency property is required in the options to the number formatter constructor when the type property is set to currency.";
 				}
-				
-				
+
 				new ilib.Currency({
 					locale: this.locale,
 					code: this.currency,
@@ -15656,51 +15814,36 @@ ilib.NumFmt = function (options) {
 						if (this.style !== "common" && this.style !== "iso") {
 							this.style = "common";
 						}
-				
-						
-						if (typeof(this.maxFractionDigits) !== 'number' && typeof(this.minFractionDigits) !== 'number') {
+
+						if (typeof (this.maxFractionDigits) !== 'number' && typeof (this.minFractionDigits) !== 'number') {
 							this.minFractionDigits = this.maxFractionDigits = this.currencyInfo.getFractionDigits();
 						}
-						
-						templates = this.localeInfo.getCurrencyFormat();
-						if(this.style ===  "iso"){
-							templates=this.localeInfo.getCurrencyFormats();
-							this.template = new ilib.String(templates[this.style]);
-							this.sign = (this.style === "iso") ? this.currencyInfo.getCode() : this.currencyInfo.getSign();
-						}
-						else if(typeof(templates) === 'undefined'){
-							
-							templates=this.localeInfo.getCurrencyFormats();
-							this.template = new ilib.String(templates[this.style]);
-							this.sign = (this.style === "iso") ? this.currencyInfo.getCode() : this.currencyInfo.getSign();
-						}
-						else{
-					
-						this.template = new ilib.String(templates);
+
+						templates = this.localeInfo.getCurrencyFormats();
+						this.template = new ilib.String(templates[this.style] || templates.common);
+						this.templateNegative = new ilib.String(templates[this.style + "Negative"] || templates["commonNegative"]);
 						this.sign = (this.style === "iso") ? this.currencyInfo.getCode() : this.currencyInfo.getSign();
-					}	
+						
 						if (!this.roundingMode) {
 							this.roundingMode = this.currencyInfo && this.currencyInfo.roundingMode;
 						}
 
 						this._init();
-						
-						if (options && typeof(options.onLoad) === 'function') {
+
+						if (options && typeof (options.onLoad) === 'function') {
 							options.onLoad(this);
 						}
 					})
 				});
 				return;
 			} else if (this.type === "percentage") {
-			
-				this.template = new ilib.String(this.localeInfo.getPercentageFormat());
-					
+				this.template =  new ilib.String(this.localeInfo.getPercentageFormat() || "{n}%");
+				this.templateNegative = new ilib.String(this.localeInfo.getNegativePercentageFormat() || this.localeInfo.getNegativeNumberFormat() + "%");
 			}
 
-
 			this._init();
-			
-			if (options && typeof(options.onLoad) === 'function') {
+
+			if (options && typeof (options.onLoad) === 'function') {
 				options.onLoad(this);
 			}
 		})
@@ -15708,6 +15851,7 @@ ilib.NumFmt = function (options) {
 };
 
 /**
+ * @static
  * Return an array of available locales that this formatter can format
  * @return {Array.<ilib.Locale>|undefined} an array of available locales
  */
@@ -15722,7 +15866,6 @@ ilib.NumFmt.getAvailableLocales = function () {
  */
 ilib.NumFmt.zeros = "0000000000000000000000000000000000000000000000000000000000000000000000";
 
-
 ilib.NumFmt.prototype = {
 	/**
 	 * @private
@@ -15730,16 +15873,16 @@ ilib.NumFmt.prototype = {
 	_init: function () {
 		if (this.maxFractionDigits < this.minFractionDigits) {
 			this.minFractionDigits = this.maxFractionDigits;
-		}		
-		
+		}
+
 		if (!this.roundingMode) {
 			this.roundingMode = this.localeInfo.getRoundingMode();
 		}
-		
+
 		if (!this.roundingMode) {
 			this.roundingMode = "halfdown";
 		}
-		
+
 		// set up the function, so we only have to figure it out once
 		// and not every time we do format()
 		this.round = ilib._roundFnc[this.roundingMode];
@@ -15747,19 +15890,38 @@ ilib.NumFmt.prototype = {
 			this.roundingMode = "halfdown";
 			this.round = ilib._roundFnc[this.roundingMode];
 		}
+		
+		this.prigroupSize = this.localeInfo.getPrimaryGroupingDigits(),
+		this.secgroupSize = this.localeInfo.getSecondaryGroupingDigits(),
+		this.groupingSeparator = this.useNative ? this.localeInfo.getNativeGroupingSeparator() : this.localeInfo.getGroupingSeparator();
+		this.decimalSeparator = this.useNative ? this.localeInfo.getNativeDecimalSeparator() : this.localeInfo.getDecimalSeparator();
+		
+		if (this.useNative) {
+			var nd = this.localeInfo.getNativeDigits() || this.localeInfo.getDigits();
+			if (nd) {
+				this.digits = nd.split("");
+			}
+		} else {
+			var digitsStr = this.localeInfo.getDigits();
+			if (digitsStr && digitsStr !== "0123456789") {
+				this.digits = digitsStr.split("");
+			}
+		}
+		
+		this.exponentSymbol = this.localeInfo.getExponential() || "e";
 	},
-	
+
 	/*
 	 * @private
 	 */
 	_pad: function (str, length, left) {
-		return (str.length >= length) ? 
-			str : 
-			(left ? 
-				ilib.NumFmt.zeros.substring(0,length-str.length) + str : 
-				str + ilib.NumFmt.zeros.substring(0,length-str.length));  
+		return (str.length >= length) ?
+			str :
+			(left ?
+			ilib.NumFmt.zeros.substring(0, length - str.length) + str :
+			str + ilib.NumFmt.zeros.substring(0, length - str.length));
 	},
-	
+
 	/**
 	 * @private
 	 * @param {Number|ilib.Number|string|number} num object, string, or number to convert to a primitive number
@@ -15767,8 +15929,8 @@ ilib.NumFmt.prototype = {
 	 */
 	_toPrimitive: function (num) {
 		var n = 0;
-		
-		switch (typeof(num)) {
+
+		switch (typeof (num)) {
 		case 'number':
 			n = num;
 			break;
@@ -15781,117 +15943,120 @@ ilib.NumFmt.prototype = {
 			n = /** @type {number} */ num.valueOf();
 			break;
 		}
-		
+
 		return n;
 	},
-	
+
 	/**
 	 * @private
+	 * Format the number using scientific notation as a positive number. Negative
+	 * formatting to be applied later.
 	 * @param {number} num the number to format
-	 * @return {string} the formatted number 
+	 * @return {string} the formatted number
 	 */
 	_formatScientific: function (num) {
 		var n = new Number(num);
 		var formatted;
-		if (typeof(this.maxFractionDigits) !== 'undefined') {
+		if (typeof (this.maxFractionDigits) !== 'undefined') {
 			// if there is fraction digits, round it to the right length first
 			// divide or multiply by 10 by manipulating the exponent so as to
 			// avoid the rounding errors of floating point numbers
-			var e, 
+			var e,
 				factor,
 				str = n.toExponential(),
 				parts = str.split("e"),
 				significant = parts[0];
-			
-			e = parts[1];	
+
+			e = parts[1];
 			factor = Math.pow(10, this.maxFractionDigits);
 			significant = this.round(significant * factor) / factor;
-			formatted = "" + significant + "e" + e;
+			formatted = "" + significant + this.exponentSymbol + e;
 		} else {
 			formatted = n.toExponential(this.minFractionDigits);
+			if (this.exponentSymbol !== 'e') {
+				formatted = formatted.replace(/e/, this.exponentSymbol);
+			}
 		}
 		return formatted;
 	},
-	
+
 	/**
-	 * @private 
+	 * @private
+	 * Formats the number as a positive number. Negative formatting to be applied later.
 	 * @param {number} num the number to format
 	 * @return {string} the formatted number
-	 */ 
+	 */
 	_formatStandard: function (num) {
 		var i;
-		var j,k;
-		// console.log("_formatNumberStandard: formatting number " + num);
-		if (typeof(this.maxFractionDigits) !== 'undefined' && this.maxFractionDigits > -1) {
+		var k;
+
+		if (typeof (this.maxFractionDigits) !== 'undefined' && this.maxFractionDigits > -1) {
 			var factor = Math.pow(10, this.maxFractionDigits);
 			num = this.round(num * factor) / factor;
 		}
 
-		var negative = (num < 0);
-		if (negative) {
-			num = -num;
-		}
-		
+		num = Math.abs(num);
+
 		var parts = ("" + num).split("."),
 			integral = parts[0],
 			fraction = parts[1],
 			cycle,
-			prigroupSize = this.localeInfo.getPrimaryGroupingDigits(),
-			secgroupSize = this.localeInfo.getSecondaryGroupingDigits(),
-			separator = this.localeInfo.getGroupingSeparator(),
 			formatted;
-			
-		integral = Math.abs(integral);
-		integral = integral.toString();
 		
+		integral = integral.toString();
+
 		if (this.minFractionDigits > 0) {
 			fraction = this._pad(fraction || "", this.minFractionDigits, false);
 		}
-		
-		if (secgroupSize > 0) {
-			if (integral.length > prigroupSize) {
-				var size1 = prigroupSize;
+
+		if (this.secgroupSize > 0) {
+			if (integral.length > this.prigroupSize) {
+				var size1 = this.prigroupSize;
 				var size2 = integral.length;
-		       	var size3 = size2 - size1;
-				integral = integral.slice(0, size3) + separator + integral.slice(size3);
-				var num_sec = integral.substring(0,integral.indexOf(separator));
+				var size3 = size2 - size1;
+				integral = integral.slice(0, size3) + this.groupingSeparator + integral.slice(size3);
+				var num_sec = integral.substring(0, integral.indexOf(this.groupingSeparator));
 				k = num_sec.length;
-				while (k > secgroupSize) {
-			    	var secsize1 = secgroupSize;
-				   	var secsize2 = num_sec.length;
+				while (k > this.secgroupSize) {
+					var secsize1 = this.secgroupSize;
+					var secsize2 = num_sec.length;
 					var secsize3 = secsize2 - secsize1;
-					integral = integral.slice(0, secsize3) + separator + integral.slice(secsize3);
-					num_sec = integral.substring(0,integral.indexOf(separator));
-					k = num_sec.length;			
+					integral = integral.slice(0, secsize3) + this.groupingSeparator + integral.slice(secsize3);
+					num_sec = integral.substring(0, integral.indexOf(this.groupingSeparator));
+					k = num_sec.length;
 				}
 			}
 
-			formatted = negative ? "-" : "";
-			formatted = formatted + integral;
-		} else if (prigroupSize !== 0) {
-			cycle = ilib.mod(integral.length-1, prigroupSize);
-			formatted = negative ? "-" : "";
-			for (i = 0; i < integral.length-1; i++) {
+			formatted = integral;
+		} else if (this.prigroupSize !== 0) {
+			cycle = ilib.mod(integral.length - 1, this.prigroupSize);
+
+			formatted = "";
+
+			for (i = 0; i < integral.length - 1; i++) {
 				formatted += integral.charAt(i);
 				if (cycle === 0) {
-					formatted += separator;
+					formatted += this.groupingSeparator;
 				}
-				cycle = ilib.mod(cycle - 1, prigroupSize);
+				cycle = ilib.mod(cycle - 1, this.prigroupSize);
 			}
-			formatted += integral.charAt(integral.length-1);
+			formatted += integral.charAt(integral.length - 1);
 		} else {
-			formatted = (negative ? "-" : "") + integral;
+			formatted = integral;
 		}
-		
+
 		if (fraction && (typeof(this.maxFractionDigits) === 'undefined' || this.maxFractionDigits > 0)) {
-			formatted += this.localeInfo.getDecimalSeparator();
+			formatted += this.decimalSeparator;
 			formatted += fraction;
 		}
 		
-		// console.log("_formatNumberStandard: returning " + formatted);
+		if (this.digits) {
+			formatted = ilib.mapString(formatted, this.digits);
+		}
+		
 		return formatted;
 	},
-	
+
 	/**
 	 * Format a number according to the settings of this number formatter instance.
 	 * @param num {number|string|Number|ilib.Number} a floating point number to format
@@ -15900,35 +16065,43 @@ ilib.NumFmt.prototype = {
 	format: function (num) {
 		var formatted, n;
 
-		if (typeof(num) === 'undefined') {
+		if (typeof (num) === 'undefined') {
 			return "";
 		}
-		
+
 		// convert to a real primitive number type
 		n = this._toPrimitive(num);
-				
+
 		if (this.type === "number") {
-	
-			formatted = (this.style === "scientific") ? 
-					this._formatScientific(n) : 
-					this._formatStandard(n);
-		} else {			
-			formatted = this.template.format({n: this._formatStandard(n), s: this.sign});
+			formatted = (this.style === "scientific") ?
+				this._formatScientific(n) :
+				this._formatStandard(n);
+
+			if (num < 0) {
+				formatted = this.templateNegative.format({n: formatted});
+			}
+		} else {
+			formatted = this._formatStandard(n);
+			var template = (n < 0) ? this.templateNegative : this.template;
+			formatted = template.format({
+				n: formatted,
+				s: this.sign
+			});
 		}
-		
+
 		return formatted;
 	},
-	
+
 	/**
 	 * Return the type of formatter. Valid values are "number", "currency", and
 	 * "percentage".
-	 * 
+	 *
 	 * @return {string} the type of formatter
 	 */
 	getType: function () {
 		return this.type;
 	},
-	
+
 	/**
 	 * Return the locale for this formatter instance.
 	 * @return {ilib.Locale} the locale instance for this formatter
@@ -15936,67 +16109,66 @@ ilib.NumFmt.prototype = {
 	getLocale: function () {
 		return this.locale;
 	},
-	
+
 	/**
-	 * Returns true if this formatter groups together digits in the integral 
-	 * portion of a number, based on the options set up in the constructor. In 
-	 * most western European cultures, this means separating every 3 digits 
+	 * Returns true if this formatter groups together digits in the integral
+	 * portion of a number, based on the options set up in the constructor. In
+	 * most western European cultures, this means separating every 3 digits
 	 * of the integral portion of a number with a particular character.
-	 * 
+	 *
 	 * @return {boolean} true if this formatter groups digits in the integral
 	 * portion of the number
 	 */
 	isGroupingUsed: function () {
-		var c = this.localeInfo.getGroupingSeparator();
-		return (c !== 'undefined' && c.length > 0);
+		return (this.groupingSeparator !== 'undefined' && this.groupingSeparator.length > 0);
 	},
-	
+
 	/**
 	 * Returns the maximum fraction digits set up in the constructor.
-	 * 
+	 *
 	 * @return {number} the maximum number of fractional digits this
 	 * formatter will format, or -1 for no maximum
 	 */
 	getMaxFractionDigits: function () {
-		return typeof(this.maxFractionDigits) !== 'undefined' ? this.maxFractionDigits : -1;
+		return typeof (this.maxFractionDigits) !== 'undefined' ? this.maxFractionDigits : -1;
 	},
-	
+
 	/**
 	 * Returns the minimum fraction digits set up in the constructor. If
 	 * the formatter has the type "currency", then the minimum fraction
 	 * digits is the amount of digits that is standard for the currency
 	 * in question unless overridden in the options to the constructor.
-	 * 
+	 *
 	 * @return {number} the minimum number of fractional digits this
 	 * formatter will format, or -1 for no minimum
 	 */
 	getMinFractionDigits: function () {
-		return typeof(this.minFractionDigits) !== 'undefined' ? this.minFractionDigits : -1;
+		return typeof (this.minFractionDigits) !== 'undefined' ? this.minFractionDigits : -1;
 	},
 
 	/**
 	 * Returns the ISO 4217 code for the currency that this formatter formats.
 	 * IF the typeof this formatter is not "currency", then this method will
 	 * return undefined.
-	 * 
+	 *
 	 * @return {string} the ISO 4217 code for the currency that this formatter
 	 * formats, or undefined if this not a currency formatter
 	 */
 	getCurrency: function () {
 		return this.currencyInfo && this.currencyInfo.getCode();
 	},
-	
+
 	/**
 	 * Returns the rounding mode set up in the constructor. The rounding mode
-	 * controls how numbers are rounded when the integral or fraction digits 
+	 * controls how numbers are rounded when the integral or fraction digits
 	 * of a number are limited.
-	 * 
+	 *
 	 * @return {string} the name of the rounding mode used in this formatter
 	 */
 	getRoundingMode: function () {
 		return this.roundingMode;
 	},
-	
+
 	/**
 	 * If this formatter is a currency formatter, then the style determines how the
 	 * currency is denoted in the formatted output. This method returns the style
@@ -16009,7 +16181,6 @@ ilib.NumFmt.prototype = {
 		return this.style;
 	}
 };
-
 /*
  * durfmt.js - Date formatter definition
  * 

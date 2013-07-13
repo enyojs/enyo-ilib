@@ -1,6 +1,1 @@
-{
-	"language.name": "Ngiemboon",
-"numfmt" :{"curFmt":"{s} {n}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "nnh"
-}
+{"language.name":"Ngiemboon","numfmt":{"currencyFormats":{"common":"{s} {n}"}},"scripts":["Latn"],"locale":"nnh"}

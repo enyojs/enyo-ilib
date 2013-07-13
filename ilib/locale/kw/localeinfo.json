@@ -1,6 +1,1 @@
-{
-	"language.name": "Cornish",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s}{n}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "kw"
-}
+{"language.name":"Cornish","numfmt":{"decimalChar":".","groupChar":","},"scripts":["Latn"],"locale":"kw"}

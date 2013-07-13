@@ -1,6 +1,1 @@
-{
-	"language.name": "Bafia",
-"numfmt" :{"groupChar":" ","curFmt":"{n} {s}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "ksf"
-}
+{"language.name":"Bafia","numfmt":{"groupChar":" ","currencyFormats":{"common":"{n} {s}"}},"scripts":["Latn"],"locale":"ksf"}

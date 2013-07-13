@@ -1,6 +1,1 @@
-{
-	"currency": "EGP",
-	"region.name": "Egypt",
-	"timezone": "Africa/Cairo",
-	"locale": "und-EG"
-}
+{"currency":"EGP","firstDayOfWeek":6,"region.name":"Egypt","timezone":"Africa/Cairo","locale":"EG"}

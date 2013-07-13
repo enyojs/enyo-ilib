@@ -1,6 +1,1 @@
-{
-	"language.name": "Lingala",
-"numfmt" :{"curFmt":"{n} {s}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "ln"
-}
+{"language.name":"Lingala","numfmt":{"currencyFormats":{"common":"{n} {s}"}},"scripts":["Latn"],"locale":"ln"}

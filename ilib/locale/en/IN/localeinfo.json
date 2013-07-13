@@ -1,4 +1,1 @@
-{
-"numfmt" :{"curFmt":"{s} {n}","secgroupSize":2},
-	"locale": "en-IN"
-}
+{"numfmt":{"secgroupSize":2,"currencyFormats":{"common":"{s} {n}"}},"locale":"en-IN"}

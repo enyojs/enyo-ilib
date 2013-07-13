@@ -1,6 +1,1 @@
-{
-	"currency": "ETB",
-	"region.name": "Ethiopia",
-	"timezone": "Africa/Addis_Ababa",
-	"locale": "und-ET"
-}
+{"currency":"ETB","firstDayOfWeek":0,"region.name":"Ethiopia","timezone":"Africa/Addis_Ababa","locale":"ET"}

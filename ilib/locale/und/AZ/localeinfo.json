@@ -1,6 +1,1 @@
-{
-	"currency": "AZN",
-	"region.name": "Azerbaijan",
-	"timezone": "Asia/Baku",
-	"locale": "und-AZ"
-}
+{"currency":"AZN","firstDayOfWeek":1,"region.name":"Azerbaijan","timezone":"Asia/Baku","locale":"AZ"}

@@ -1,6 +1,1 @@
-{
-	"language.name": "Hawaiian",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s}{n}","secgroupSize":0,"negativecurFmt":"({s}{n})"},
-	"scripts": ["Latn"],
-	"locale": "haw"
-}
+{"language.name":"Hawaiian","numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"commonNegative":"({s}{n})"}},"scripts":["Latn"],"locale":"haw"}

@@ -1,6 +1,1 @@
-{
-	"currency": "KRW",
-	"region.name": "South Korea",
-	"timezone": "Asia/Seoul",
-	"locale": "und-KR"
-}
+{"currency":"KRW","firstDayOfWeek":0,"region.name":"South Korea","timezone":"Asia/Seoul","locale":"KR"}
