@@ -1,6 +1,1 @@
-{
-	"language.name": "Ewondo",
-"numfmt" :{"groupChar":" ","curFmt":"{n} {s}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "ewo"
-}
+{"language.name":"Ewondo","numfmt":{"groupChar":" ","currencyFormats":{"common":"{n} {s}"}},"scripts":["Latn"],"locale":"ewo"}

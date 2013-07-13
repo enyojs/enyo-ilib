@@ -1,6 +1,1 @@
-{
-	"currency": "EUR",
-	"region.name": "Belgium",
-	"timezone": "Europe/Brussels",
-	"locale": "und-BE"
-}
+{"currency":"EUR","firstDayOfWeek":1,"region.name":"Belgium","timezone":"Europe/Brussels","locale":"BE"}

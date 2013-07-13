@@ -1,4 +1,1 @@
-{
-"numfmt" :{"curFmt":"{s} {n}"},
-	"locale": "sr-BA-Latn"
-}
+{"numfmt":{"currencyFormats":{"common":"{s} {n}"}},"locale":"sr-Latn-BA"}

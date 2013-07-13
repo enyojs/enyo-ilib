@@ -1,6 +1,1 @@
-{
-	"currency": "BHD",
-	"region.name": "Bahrain",
-	"timezone": "Asia/Bahrain",
-	"locale": "und-BH"
-}
+{"currency":"BHD","firstDayOfWeek":6,"region.name":"Bahrain","timezone":"Asia/Bahrain","locale":"BH"}

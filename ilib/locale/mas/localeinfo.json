@@ -1,7 +1,1 @@
-{
-"clock" :"12",
-	"language.name": "Masai",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s}{n}","secgroupSize":0,"negativecurFmt":"({s}{n})"},
-	"scripts": ["Latn"],
-	"locale": "mas"
-}
+{"clock":"12","language.name":"Masai","numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"commonNegative":"({s}{n})"}},"scripts":["Latn"],"locale":"mas"}

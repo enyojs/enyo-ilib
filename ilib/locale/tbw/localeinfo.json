@@ -1,4 +1,1 @@
-{
-	"scripts": ["Latn","Tagb"],
-	"locale": "tbw"
-}
+{"scripts":["Latn","Tagb"],"locale":"tbw"}

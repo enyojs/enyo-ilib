@@ -1,13 +1,1 @@
-{
-	"language.name": "Romanian",
-"numfmt": {
-	"decimalChar": ",",
-	"groupChar": ".",
-	"prigroupSize": 3,
-	"pctFmt": "{n}%",
-	"pctChar": "%"
-},
-
-	"scripts": ["Latn","Cyrl"],
-	"locale": "ro"
-}
+{"language.name":"Romanian","numfmt":{"currencyFormats":{"common":"{n} {s}"},"pctFmt":"{n} %"},"scripts":["Latn","Cyrl"],"locale":"ro"}

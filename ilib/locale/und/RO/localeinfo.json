@@ -1,6 +1,1 @@
-{
-	"currency": "RON",
-	"region.name": "Romania",
-	"timezone": "Europe/Bucharest",
-	"locale": "und-RO"
-}
+{"currency":"RON","firstDayOfWeek":1,"region.name":"Romania","timezone":"Europe/Bucharest","locale":"RO"}

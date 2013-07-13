@@ -1,6 +1,1 @@
-{
-	"language.name": "Zarma",
-"numfmt" :{"decimalChar":".","groupChar":" ","curFmt":"{n}{s}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "dje"
-}
+{"language.name":"Zarma","numfmt":{"decimalChar":".","groupChar":" ","currencyFormats":{"common":"{n}{s}"}},"scripts":["Latn"],"locale":"dje"}

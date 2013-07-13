@@ -1,6 +1,1 @@
-{
-	"currency": "CNY",
-	"region.name": "China",
-	"timezone": "Asia/Shanghai",
-	"locale": "und-CN"
-}
+{"currency":"CNY","firstDayOfWeek":0,"region.name":"China","timezone":"Asia/Shanghai","locale":"CN"}

@@ -1,12 +1,1 @@
-{
-	"language.name": "Romansh",
-	"numfmt": {
-		"decimalChar": ".",
-		"groupChar": "'",
-		"prigroupSize": 3,
-		"pctFmt": "{n}%",
-		"pctChar": "%"
-	},
-	"scripts": ["Latn"],
-	"locale": "rm"
-}
+{"language.name":"Romansh","numfmt":{"decimalChar":".","groupChar":"’","currencyFormats":{"common":"{n} {s}"},"pctFmt":"{n} %"},"scripts":["Latn"],"locale":"rm"}

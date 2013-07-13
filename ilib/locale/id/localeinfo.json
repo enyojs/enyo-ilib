@@ -1,13 +1,1 @@
-{
-	"language.name": "Indonesian",
-"numfmt": {
-	"decimalChar": ",",
-	"groupChar": ".",
-	"prigroupSize": 3,
-	"pctFmt": "{n}%",
-	"pctChar": "%"
-},
-
-	"scripts": ["Latn","Arab"],
-	"locale": "id"
-}
+{"language.name":"Indonesian","scripts":["Latn","Arab"],"locale":"id"}

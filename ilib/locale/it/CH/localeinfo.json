@@ -1,10 +1,1 @@
-{
-	"numfmt": {
-		"decimalChar": ",",
-		"groupChar": "'",
-		"prigroupSize": 3,
-		"pctFmt": "{n}%",
-		"pctChar": "%"
-	},
-	"locale": "it-CH"
-}
+{"numfmt":{"decimalChar":".","groupChar":"'"},"locale":"it-CH"}

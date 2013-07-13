@@ -1,5 +1,1 @@
-{
-"clock" :"24",
-"numfmt" :{"curFmt":"{s} {n}"},
-	"locale": "en-US-Dsrt"
-}
+{"clock":"24","numfmt":{"currencyFormats":{"common":"{s} {n}"}},"locale":"en-Dsrt-US"}

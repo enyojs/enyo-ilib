@@ -1,6 +1,1 @@
-{
-	"currency": "TMT",
-	"region.name": "Turkmenistan",
-	"timezone": "Asia/Ashgabat",
-	"locale": "und-TM"
-}
+{"currency":"TMT","firstDayOfWeek":1,"region.name":"Turkmenistan","timezone":"Asia/Ashgabat","locale":"TM"}

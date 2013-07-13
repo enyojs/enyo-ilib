@@ -1,6 +1,1 @@
-{
-	"currency": "MDL",
-	"region.name": "Moldova",
-	"timezone": "Europe/Chisinau",
-	"locale": "und-MD"
-}
+{"currency":"MDL","firstDayOfWeek":1,"region.name":"Moldova","timezone":"Europe/Chisinau","locale":"MD"}

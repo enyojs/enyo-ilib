@@ -1,14 +1,1 @@
-{
-	"clock": "12",
-	"language.name": "Greek",
-"numfmt": {
-	"decimalChar": ",",
-	"groupChar": ".",
-	"prigroupSize": 3,
-	"pctFmt": "{n}%",
-	"pctChar": "%"
-},
-
-	"scripts": ["Grek"],
-	"locale": "el"
-}
+{"clock":"12","language.name":"Greek","numfmt":{"exponential":"e","currencyFormats":{"common":"{n} {s}"}},"scripts":["Grek"],"locale":"el"}

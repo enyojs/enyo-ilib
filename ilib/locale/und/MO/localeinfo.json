@@ -1,6 +1,1 @@
-{
-	"currency": "MOP",
-	"region.name": "Macau SAR China",
-	"timezone": "Asia/Macau",
-	"locale": "und-MO"
-}
+{"currency":"MOP","firstDayOfWeek":0,"region.name":"Macau SAR China","timezone":"Asia/Macau","locale":"MO"}

@@ -1,7 +1,1 @@
-{
-"clock" :"12",
-	"language.name": "Tamil",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s} {n}","secgroupSize":2},
-	"scripts": ["Taml"],
-	"locale": "ta"
-}
+{"clock":"12","language.name":"Tamil","native_numfmt":{"script":"tamldec","decimalChar":".","groupChar":",","pctChar":"%","exponential":"E","prigroupSize":3,"secgroupSize":2,"currencyFormats":{"common":"{s} {n}"},"pctFmt":"{n}%","roundingMode":"halfdown","digits":"௦௧௨௩௪௫௬௭௮௯"},"numfmt":{"decimalChar":".","groupChar":",","secgroupSize":2,"currencyFormats":{"common":"{s} {n}"}},"scripts":["Taml"],"locale":"ta"}

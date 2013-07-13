@@ -1,6 +1,1 @@
-{
-	"currency": "AFN",
-	"region.name": "Afghanistan",
-	"timezone": "Asia/Kabul",
-	"locale": "und-AF"
-}
+{"currency":"AFN","firstDayOfWeek":6,"region.name":"Afghanistan","timezone":"Asia/Kabul","locale":"AF"}

@@ -1,5 +1,1 @@
-{
-	"language.name": "Coptic",
-	"scripts": ["Arab","Copt","Grek"],
-	"locale": "cop"
-}
+{"language.name":"Coptic","scripts":["Arab","Copt","Grek"],"locale":"cop"}

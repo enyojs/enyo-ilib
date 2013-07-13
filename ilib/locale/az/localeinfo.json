@@ -1,13 +1,1 @@
-{
-	"language.name": "Azerbaijani",
-"numfmt": {
-	"decimalChar": ",",
-	"groupChar": " ",
-	"prigroupSize": 3,
-	"pctFmt": "{n}%",
-	"pctChar": "%"
-},
-
-	"scripts": ["Arab","Cyrl","Latn"],
-	"locale": "az"
-}
+{"language.name":"Azerbaijani","numfmt":{"currencyFormats":{"common":"{s} {n}"}},"scripts":["Arab","Cyrl","Latn"],"locale":"az"}

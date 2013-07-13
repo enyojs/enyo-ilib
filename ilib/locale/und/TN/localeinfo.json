@@ -1,6 +1,1 @@
-{
-	"currency": "TND",
-	"region.name": "Tunisia",
-	"timezone": "Africa/Tunis",
-	"locale": "und-TN"
-}
+{"currency":"TND","firstDayOfWeek":0,"region.name":"Tunisia","timezone":"Africa/Tunis","locale":"TN"}

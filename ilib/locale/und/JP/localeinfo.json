@@ -1,6 +1,1 @@
-{
-	"currency": "JPY",
-	"region.name": "Japan",
-	"timezone": "Asia/Tokyo",
-	"locale": "und-JP"
-}
+{"currency":"JPY","firstDayOfWeek":0,"region.name":"Japan","timezone":"Asia/Tokyo","locale":"JP"}

@@ -1,6 +1,1 @@
-{
-	"currency": "USD",
-	"region.name": "Guam",
-	"timezone": "Pacific/Guam",
-	"locale": "und-GU"
-}
+{"currency":"USD","firstDayOfWeek":0,"region.name":"Guam","timezone":"Pacific/Guam","locale":"GU"}

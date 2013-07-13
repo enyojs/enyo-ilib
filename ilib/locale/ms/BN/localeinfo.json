@@ -1,4 +1,1 @@
-{
-"numfmt" :{"curFmt":"{s} {n}","secgroupSize":0},
-	"locale": "ms-BN"
-}
+{"numfmt":{"decimalChar":",","groupChar":".","currencyFormats":{"common":"{s} {n}"}},"locale":"ms-BN"}

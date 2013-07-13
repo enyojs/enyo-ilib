@@ -1,6 +1,1 @@
-{
-	"language.name": "Armenian",
-"numfmt" :{"prigroupSize":2,"curFmt":"{n} {s}","secgroupSize":0},
-	"scripts": ["Armn"],
-	"locale": "hy"
-}
+{"language.name":"Armenian","numfmt":{"prigroupSize":2,"currencyFormats":{"common":"{n} {s}"}},"scripts":["Armn"],"locale":"hy"}

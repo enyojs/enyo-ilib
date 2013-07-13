@@ -1,6 +1,1 @@
-{
-	"currency": "EUR",
-	"region.name": "Luxembourg",
-	"timezone": "Europe/Luxembourg",
-	"locale": "und-LU"
-}
+{"currency":"EUR","firstDayOfWeek":1,"region.name":"Luxembourg","timezone":"Europe/Luxembourg","locale":"LU"}

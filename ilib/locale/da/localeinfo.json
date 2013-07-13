@@ -1,12 +1,1 @@
-{
-	"firstDayOfWeek": 1,
-	"language.name": "Danish",
-	"numfmt": {
-		"decimalChar": ",",
-		"groupChar": ".",
-		"prigroupSize": 3,
-		"pctFmt": "{n}%"
-	},
-	"scripts": ["Latn"],
-	"locale": "da"
-}
+{"language.name":"Danish","numfmt":{"currencyFormats":{"common":"{n} {s}"},"pctFmt":"{n} %"},"scripts":["Latn"],"locale":"da"}

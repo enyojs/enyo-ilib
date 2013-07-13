@@ -1,7 +1,1 @@
-{
-"clock" :"12",
-	"language.name": "Somali",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s}{n}","secgroupSize":0},
-	"scripts": ["Latn","Arab","Osma"],
-	"locale": "so"
-}
+{"clock":"12","language.name":"Somali","numfmt":{"decimalChar":".","groupChar":","},"scripts":["Latn","Arab","Osma"],"locale":"so"}

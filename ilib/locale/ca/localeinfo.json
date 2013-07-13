@@ -1,13 +1,1 @@
-{
-	"language.name": "Catalan",
-"numfmt": {
-	"decimalChar": ",",
-	"groupChar": ".",
-	"prigroupSize": 3,
-	"pctFmt": "{n}%",
-	"pctChar": "%"
-},
-
-	"scripts": ["Latn"],
-	"locale": "ca"
-}
+{"language.name":"Catalan","numfmt":{"currencyFormats":{"commonNegative":"({s}{n})"}},"scripts":["Latn"],"locale":"ca"}

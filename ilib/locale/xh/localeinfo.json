@@ -1,6 +1,1 @@
-{
-	"language.name": "Xhosa",
-"numfmt" :{"groupChar":" ","curFmt":"{s}{n}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "xh"
-}
+{"language.name":"Xhosa","numfmt":{"groupChar":" "},"scripts":["Latn"],"locale":"xh"}

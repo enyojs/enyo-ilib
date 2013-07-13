@@ -1,13 +1,1 @@
-{
-	"language.name": "Portuguese",
-"numfmt": {
-	"decimalChar": ",",
-	"groupChar": ".",
-	"prigroupSize": 3,
-	"pctFmt": "{n}%",
-	"pctChar": "%"
-},
-
-	"scripts": ["Latn"],
-	"locale": "pt"
-}
+{"language.name":"Portuguese","numfmt":{"currencyFormats":{"commonNegative":"({s}{n})"}},"scripts":["Latn"],"locale":"pt"}

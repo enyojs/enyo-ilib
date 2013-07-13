@@ -1,13 +1,1 @@
-{
-	"language.name": "Basque",
-"numfmt": {
-	"decimalChar": ",",
-	"groupChar": ".",
-	"prigroupSize": 3,
-	"pctFmt": "{n}%",
-	"pctChar": "%"
-},
-
-	"scripts": ["Latn"],
-	"locale": "eu"
-}
+{"language.name":"Basque","numfmt":{"currencyFormats":{"common":"{n} {s}","commonNegative":"({n} {s})"},"pctFmt":"% {n}"},"scripts":["Latn"],"locale":"eu"}

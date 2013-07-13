@@ -1,6 +1,1 @@
-{
-	"language.name": "Akan",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s}{n}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "ak"
-}
+{"language.name":"Akan","numfmt":{"decimalChar":".","groupChar":","},"scripts":["Latn"],"locale":"ak"}

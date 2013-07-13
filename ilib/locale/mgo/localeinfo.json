@@ -1,6 +1,1 @@
-{
-	"language.name": "Meta'",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s} {n}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "mgo"
-}
+{"language.name":"Meta'","numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"common":"{s} {n}"}},"scripts":["Latn"],"locale":"mgo"}

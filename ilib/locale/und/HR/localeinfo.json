@@ -1,6 +1,1 @@
-{
-	"currency": "HRK",
-	"region.name": "Croatia",
-	"timezone": "Europe/Zagreb",
-	"locale": "und-HR"
-}
+{"currency":"HRK","firstDayOfWeek":1,"region.name":"Croatia","timezone":"Europe/Zagreb","locale":"HR"}

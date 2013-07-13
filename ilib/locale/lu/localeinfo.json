@@ -1,6 +1,1 @@
-{
-	"language.name": "Luba-Katanga",
-"numfmt" :{"curFmt":"{n}{s}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "lu"
-}
+{"language.name":"Luba-Katanga","numfmt":{"currencyFormats":{"common":"{n}{s}"}},"scripts":["Latn"],"locale":"lu"}

@@ -1,6 +1,1 @@
-{
-	"language.name": "Norwegian Bokmål",
-"numfmt" :{"groupChar":" ","pctFmt":"{n} %","curFmt":"{s} {n}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "nb"
-}
+{"language.name":"Norwegian Bokmål","numfmt":{"groupChar":" ","currencyFormats":{"common":"{s} {n}"},"pctFmt":"{n} %"},"scripts":["Latn"],"locale":"nb"}

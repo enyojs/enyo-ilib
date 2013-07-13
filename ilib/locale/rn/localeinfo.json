@@ -1,6 +1,1 @@
-{
-	"language.name": "Rundi",
-"numfmt" :{"pctFmt":"{n} %","curFmt":"{n}{s}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "rn"
-}
+{"language.name":"Rundi","numfmt":{"currencyFormats":{"common":"{n}{s}"},"pctFmt":"{n} %"},"scripts":["Latn"],"locale":"rn"}

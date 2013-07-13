@@ -1,6 +1,1 @@
-{
-	"language.name": "Tsonga",
-"numfmt" :{"groupChar":" ","curFmt":"{s}{n}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "ts"
-}
+{"language.name":"Tsonga","numfmt":{"groupChar":" "},"scripts":["Latn"],"locale":"ts"}

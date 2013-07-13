@@ -1,7 +1,1 @@
-{
-"clock" :"12",
-	"language.name": "Vunjo",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s}{n}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "vun"
-}
+{"clock":"12","language.name":"Vunjo","numfmt":{"decimalChar":".","groupChar":","},"scripts":["Latn"],"locale":"vun"}

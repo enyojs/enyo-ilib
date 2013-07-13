@@ -1,6 +1,1 @@
-{
-	"language.name": "Northern Sami",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s} {n}","secgroupSize":0},
-	"scripts": ["Latn","Cyrl"],
-	"locale": "se"
-}
+{"language.name":"Northern Sami","numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"common":"{s} {n}"}},"scripts":["Latn","Cyrl"],"locale":"se"}

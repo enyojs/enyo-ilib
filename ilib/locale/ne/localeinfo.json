@@ -1,6 +1,1 @@
-{
-	"language.name": "Nepali",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s} {n}","secgroupSize":0},
-	"scripts": ["Deva"],
-	"locale": "ne"
-}
+{"language.name":"Nepali","native_numfmt":{"script":"Deva","decimalChar":".","groupChar":",","pctChar":"%","exponential":"E","prigroupSize":3,"currencyFormats":{"common":"{s} {n}"},"pctFmt":"{n}%","roundingMode":"halfdown","digits":"०१२३४५६७८९"},"numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"common":"{s} {n}"}},"scripts":["Deva"],"locale":"ne"}

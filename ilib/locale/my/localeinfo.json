@@ -1,6 +1,1 @@
-{
-	"language.name": "Burmese",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s} {n}","secgroupSize":0},
-	"scripts": ["Mymr"],
-	"locale": "my"
-}
+{"language.name":"Burmese","numfmt":{"script":"Mymr","decimalChar":".","groupChar":",","currencyFormats":{"common":"{s} {n}"},"digits":"၀၁၂၃၄၅၆၇၈၉"},"scripts":["Mymr"],"locale":"my"}

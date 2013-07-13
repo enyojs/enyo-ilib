@@ -1,6 +1,1 @@
-{
-	"currency": "EUR",
-	"region.name": "Portugal",
-	"timezone": "Europe/Lisbon",
-	"locale": "und-PT"
-}
+{"currency":"EUR","firstDayOfWeek":1,"region.name":"Portugal","timezone":"Europe/Lisbon","locale":"PT"}
