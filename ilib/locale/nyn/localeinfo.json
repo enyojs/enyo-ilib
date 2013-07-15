@@ -1,7 +1,1 @@
-{
-"clock" :"12",
-	"language.name": "Nyankole",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s}{n}","secgroupSize":0,"negativecurFmt":"-{n}{s}"},
-	"scripts": ["Latn"],
-	"locale": "nyn"
-}
+{"clock":"12","language.name":"Nyankole","numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"commonNegative":"-{n}{s}"}},"scripts":["Latn"],"locale":"nyn"}

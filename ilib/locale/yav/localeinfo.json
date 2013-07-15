@@ -1,6 +1,1 @@
-{
-	"language.name": "Yangben",
-"numfmt" :{"groupChar":" ","curFmt":"{n} {s}","secgroupSize":0,"negativecurFmt":"({n} {s})"},
-	"scripts": ["Latn"],
-	"locale": "yav"
-}
+{"language.name":"Yangben","numfmt":{"groupChar":" ","currencyFormats":{"common":"{n} {s}","commonNegative":"({n} {s})"}},"scripts":["Latn"],"locale":"yav"}

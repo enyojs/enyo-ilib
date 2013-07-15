@@ -1,6 +1,1 @@
-{
-	"currency": "BND",
-	"region.name": "Brunei",
-	"timezone": "Asia/Brunei",
-	"locale": "und-BN"
-}
+{"currency":"BND","firstDayOfWeek":1,"region.name":"Brunei","timezone":"Asia/Brunei","locale":"BN"}

@@ -1,6 +1,1 @@
-{
-	"currency": "EUR",
-	"region.name": "Vatican City",
-	"timezone": "Europe/Vatican",
-	"locale": "und-VA"
-}
+{"currency":"EUR","firstDayOfWeek":1,"region.name":"Vatican City","timezone":"Europe/Vatican","locale":"VA"}

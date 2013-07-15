@@ -1,6 +1,1 @@
-{
-	"language.name": "Sena",
-"numfmt" :{"curFmt":"{n}{s}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "seh"
-}
+{"language.name":"Sena","numfmt":{"currencyFormats":{"common":"{n}{s}"}},"scripts":["Latn"],"locale":"seh"}

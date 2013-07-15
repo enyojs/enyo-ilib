@@ -1,13 +1,1 @@
-{
-	"language.name": "Belarusian",
-"numfmt": {
-	"decimalChar": ",",
-	"groupChar": " ",
-	"prigroupSize": 3,
-	"pctFmt": "{n}%",
-	"pctChar": "%"
-},
-
-	"scripts": ["Cyrl"],
-	"locale": "be"
-}
+{"language.name":"Belarusian","numfmt":{"groupChar":" "},"scripts":["Cyrl"],"locale":"be"}

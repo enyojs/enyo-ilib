@@ -1,6 +1,1 @@
-{
-	"currency": "XAF",
-	"region.name": "Cameroon",
-	"timezone": "Africa/Douala",
-	"locale": "und-CM"
-}
+{"currency":"XAF","firstDayOfWeek":1,"region.name":"Cameroon","timezone":"Africa/Douala","locale":"CM"}

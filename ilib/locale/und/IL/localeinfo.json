@@ -1,6 +1,1 @@
-{
-	"currency": "ILS",
-	"region.name": "Israel",
-	"timezone": "Asia/Jerusalem",
-	"locale": "und-IL"
-}
+{"currency":"ILS","firstDayOfWeek":0,"region.name":"Israel","timezone":"Asia/Jerusalem","locale":"IL"}

@@ -1,6 +1,1 @@
-{
-	"language.name": "Jola-Fonyi",
-"numfmt" :{"groupChar":" ","curFmt":"{n} {s}","secgroupSize":0},
-	"scripts": ["Arab","Latn"],
-	"locale": "dyo"
-}
+{"language.name":"Jola-Fonyi","numfmt":{"groupChar":" ","currencyFormats":{"common":"{n} {s}"}},"scripts":["Arab","Latn"],"locale":"dyo"}

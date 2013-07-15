@@ -1,6 +1,1 @@
-{
-	"currency": "MAD",
-	"region.name": "Morocco",
-	"timezone": "Africa/Casablanca",
-	"locale": "und-MA"
-}
+{"currency":"MAD","firstDayOfWeek":6,"region.name":"Morocco","timezone":"Africa/Casablanca","locale":"MA"}

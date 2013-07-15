@@ -1,6 +1,1 @@
-{
-	"currency": "EUR",
-	"region.name": "Spain",
-	"timezone": "Europe/Madrid",
-	"locale": "und-ES"
-}
+{"currency":"EUR","firstDayOfWeek":1,"region.name":"Spain","timezone":"Europe/Madrid","locale":"ES"}

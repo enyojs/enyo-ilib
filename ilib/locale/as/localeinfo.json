@@ -1,6 +1,1 @@
-{
-	"language.name": "Assamese",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s} {n}","secgroupSize":2},
-	"scripts": ["Beng"],
-	"locale": "as"
-}
+{"language.name":"Assamese","numfmt":{"script":"Beng","decimalChar":".","groupChar":",","secgroupSize":2,"currencyFormats":{"common":"{s} {n}"},"digits":"০১২৩৪৫৬৭৮৯"},"scripts":["Beng"],"locale":"as"}

@@ -1,18 +1,1 @@
-{
-	"currencyFormats": {
-		"common": "{n} {s}",
-		"iso": "{n} {s}"
-	},
-	"language.name": "Turkish",
-	"numfmt": {
-		"decimalChar": ",",
-		"groupChar": ".",
-		"prigroupSize": 3,
-		"pctFmt": "% {n}",
-		"pctChar": "%",
-		"roundingMode": "halfup"
-	},
-
-	"scripts": ["Latn","Arab"],
-	"locale": "tr"
-}
+{"language.name":"Turkish","numfmt":{"currencyFormats":{"common":"{n} {s}","commonNegative":"({n} {s})"},"pctFmt":"%{n}"},"scripts":["Latn","Arab"],"locale":"tr"}

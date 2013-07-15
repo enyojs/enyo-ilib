@@ -1,6 +1,1 @@
-{
-	"currency": "WST",
-	"region.name": "Samoa",
-	"timezone": "Pacific/Apia",
-	"locale": "und-WS"
-}
+{"currency":"WST","firstDayOfWeek":0,"region.name":"Samoa","timezone":"Pacific/Apia","locale":"WS"}

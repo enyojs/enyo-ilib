@@ -1,6 +1,1 @@
-{
-	"currency": "MZN",
-	"region.name": "Mozambique",
-	"timezone": "Africa/Maputo",
-	"locale": "und-MZ"
-}
+{"currency":"MZN","firstDayOfWeek":0,"region.name":"Mozambique","timezone":"Africa/Maputo","locale":"MZ"}

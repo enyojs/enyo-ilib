@@ -1,13 +1,1 @@
-{
-	"language.name": "Georgian",
-"numfmt": {
-	"decimalChar": ",",
-	"groupChar": " ",
-	"prigroupSize": 3,
-	"pctFmt": "{n}%",
-	"pctChar": "%"
-},
-
-	"scripts": ["Geor"],
-	"locale": "ka"
-}
+{"language.name":"Georgian","numfmt":{"currencyFormats":{"common":"{n} {s}"},"pctFmt":"{n} %"},"scripts":["Geor"],"locale":"ka"}

@@ -1,6 +1,1 @@
-{
-	"language.name": "Swiss German",
-"numfmt" :{"decimalChar":".","groupChar":"’","pctFmt":"{n} %","curFmt":"{n} {s}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "gsw"
-}
+{"language.name":"Swiss German","numfmt":{"decimalChar":".","groupChar":"’","currencyFormats":{"common":"{n} {s}"},"pctFmt":"{n} %"},"scripts":["Latn"],"locale":"gsw"}

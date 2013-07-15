@@ -1,7 +1,1 @@
-{
-"clock" :"12",
-	"language.name": "Nama",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s}{n}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "naq"
-}
+{"clock":"12","language.name":"Nama","numfmt":{"decimalChar":".","groupChar":","},"scripts":["Latn"],"locale":"naq"}

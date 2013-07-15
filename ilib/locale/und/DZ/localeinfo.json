@@ -1,6 +1,1 @@
-{
-	"currency": "DZD",
-	"region.name": "Algeria",
-	"timezone": "Africa/Algiers",
-	"locale": "und-DZ"
-}
+{"currency":"DZD","firstDayOfWeek":6,"region.name":"Algeria","timezone":"Africa/Algiers","locale":"DZ"}

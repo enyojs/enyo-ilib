@@ -1,7 +1,1 @@
-{
-"clock" :"12",
-	"language.name": "Rwa",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{n}{s}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "rwk"
-}
+{"clock":"12","language.name":"Rwa","numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"common":"{n}{s}"}},"scripts":["Latn"],"locale":"rwk"}

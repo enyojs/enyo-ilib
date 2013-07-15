@@ -1,5 +1,1 @@
-{
-	"language.name": "Pali",
-	"scripts": ["Deva","Sinh","Thai"],
-	"locale": "pi"
-}
+{"language.name":"Pali","scripts":["Deva","Sinh","Thai"],"locale":"pi"}

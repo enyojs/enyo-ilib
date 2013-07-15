@@ -1,13 +1,1 @@
-{
-	"language.name": "Uzbek",
-	"numfmt": {
-		"decimalChar": ",",
-		"groupChar": " ",
-		"prigroupSize": 3,
-		"pctFmt": "{n}%",
-		"pctChar": "%"
-	},
-
-	"scripts": ["Arab","Cyrl","Latn"],
-	"locale": "uz"
-}
+{"language.name":"Uzbek","numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"common":"{s} {n}"}},"scripts":["Arab","Cyrl","Latn"],"locale":"uz"}

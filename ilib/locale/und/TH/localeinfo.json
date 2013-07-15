@@ -1,6 +1,1 @@
-{
-	"currency": "THB",
-	"region.name": "Thailand",
-	"timezone": "Asia/Bangkok",
-	"locale": "und-TH"
-}
+{"currency":"THB","firstDayOfWeek":0,"region.name":"Thailand","timezone":"Asia/Bangkok","locale":"TH"}

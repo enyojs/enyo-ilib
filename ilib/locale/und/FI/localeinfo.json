@@ -1,10 +1,1 @@
-{
-	"currency": "EUR",
-	"paperSizes": {
-		"regular": "A4",
-		"photo": "4x6"
-	},
-	"region.name": "Finland",
-	"timezone": "Europe/Helsinki",
-	"locale": "und-FI"
-}
+{"currency":"EUR","firstDayOfWeek":1,"paperSizes":{"regular":"A4","photo":"4x6"},"region.name":"Finland","timezone":"Europe/Helsinki","locale":"FI"}

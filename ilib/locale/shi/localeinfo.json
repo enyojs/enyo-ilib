@@ -1,6 +1,1 @@
-{
-	"language.name": "Tachelhit",
-"numfmt" :{"groupChar":" ","curFmt":"{n}{s}","secgroupSize":0},
-	"scripts": ["Tfng","Arab","Latn"],
-	"locale": "shi"
-}
+{"language.name":"Tachelhit","numfmt":{"groupChar":" ","currencyFormats":{"common":"{n}{s}"}},"scripts":["Tfng","Arab","Latn"],"locale":"shi"}

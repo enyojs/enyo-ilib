@@ -1,6 +1,1 @@
-{
-	"currency": "CHF",
-	"region.name": "Switzerland",
-	"timezone": "Europe/Zurich",
-	"locale": "und-CH"
-}
+{"currency":"CHF","firstDayOfWeek":1,"region.name":"Switzerland","timezone":"Europe/Zurich","locale":"CH"}

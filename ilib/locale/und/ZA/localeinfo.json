@@ -1,7 +1,1 @@
-{
-	"clock": "12",
-	"currency": "ZAR",
-	"region.name": "South Africa",
-	"timezone": "Africa/Johannesburg",
-	"locale": "und-ZA"
-}
+{"currency":"ZAR","firstDayOfWeek":0,"region.name":"South Africa","timezone":"Africa/Johannesburg","locale":"ZA"}

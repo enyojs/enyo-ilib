@@ -1,12 +1,1 @@
-{
-	"language.name": "Hungarian",
-	"numfmt": {
-		"decimalChar": ",",
-		"groupChar": " ",
-		"prigroupSize": 3,
-		"pctFmt": "{n}%",
-		"pctChar": "%"
-	},
-	"scripts": ["Latn"],
-	"locale": "hu"
-}
+{"language.name":"Hungarian","numfmt":{"groupChar":" ","currencyFormats":{"common":"{n} {s}"}},"scripts":["Latn"],"locale":"hu"}

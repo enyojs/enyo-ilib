@@ -1,6 +1,1 @@
-{
-	"currency": "HUF",
-	"region.name": "Hungary",
-	"timezone": "Europe/Budapest",
-	"locale": "und-HU"
-}
+{"currency":"HUF","firstDayOfWeek":1,"region.name":"Hungary","timezone":"Europe/Budapest","locale":"HU"}

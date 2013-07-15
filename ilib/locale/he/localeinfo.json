@@ -1,12 +1,1 @@
-{
-	"language.name": "Hebrew",
-	"numfmt": {
-		"decimalChar": ".",
-		"groupChar": ",",
-		"prigroupSize": 3,
-		"pctFmt": "{n}%",
-		"pctChar": "%"
-	},
-	"scripts": ["Hebr"],
-	"locale": "he"
-}
+{"language.name":"Hebrew","numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"common":"{n} {s}"}},"scripts":["Hebr"],"locale":"he"}

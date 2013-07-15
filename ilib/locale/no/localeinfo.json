@@ -1,12 +1,1 @@
-{
-	"firstDayOfWeek": 1,
-	"language.name": "Norwegian",
-	"numfmt": {
-		"decimalChar": ",",
-		"groupChar": " ",
-		"prigroupSize": 3,
-		"pctFmt": "{n} %"
-	},
-	"scripts": ["Latn"],
-	"locale": "no"
-}
+{"language.name":"Norwegian","numfmt":{"groupChar":" ","currencyFormats":{"common":"{s} {n}"},"pctFmt":"{n} %"},"scripts":["Latn"],"locale":"no"}

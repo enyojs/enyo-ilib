@@ -1,6 +1,1 @@
-{
-	"currency": "EUR",
-	"region.name": "Slovakia",
-	"timezone": "Europe/Bratislava",
-	"locale": "und-SK"
-}
+{"currency":"EUR","firstDayOfWeek":1,"region.name":"Slovakia","timezone":"Europe/Bratislava","locale":"SK"}

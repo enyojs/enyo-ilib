@@ -1,6 +1,1 @@
-{
-	"language.name": "Koyra Chiini",
-"numfmt" :{"decimalChar":".","groupChar":" ","curFmt":"{n}{s}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "khq"
-}
+{"language.name":"Koyra Chiini","numfmt":{"decimalChar":".","groupChar":" ","currencyFormats":{"common":"{n}{s}"}},"scripts":["Latn"],"locale":"khq"}

@@ -1,11 +1,1 @@
-{
-	"language.name": "Persian",
-	"numfmt": {
-		"decimalChar": "/",
-		"groupChar": ",",
-		"prigroupSize": 3,
-		"pctFmt": "{n} %"
-	},
-	"scripts": ["Arab"],
-	"locale": "fa"
-}
+{"language.name":"Persian","numfmt":{"script":"arabext","decimalChar":"٫","groupChar":"٬","pctChar":"٪","exponential":"×۱۰^","currencyFormats":{"common":"‎{s}{n}","commonNegative":"‎({s}{n})"},"digits":"۰۱۲۳۴۵۶۷۸۹"},"scripts":["Arab"],"locale":"fa"}

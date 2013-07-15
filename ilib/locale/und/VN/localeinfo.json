@@ -1,6 +1,1 @@
-{
-	"currency": "VND",
-	"region.name": "Vietnam",
-	"timezone": "Asia/Ho_Chi_Minh",
-	"locale": "und-VN"
-}
+{"currency":"VND","firstDayOfWeek":1,"region.name":"Vietnam","timezone":"Asia/Ho_Chi_Minh","locale":"VN"}

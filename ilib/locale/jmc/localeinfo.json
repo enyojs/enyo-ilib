@@ -1,7 +1,1 @@
-{
-"clock" :"12",
-	"language.name": "Machame",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s}{n}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "jmc"
-}
+{"clock":"12","language.name":"Machame","numfmt":{"decimalChar":".","groupChar":","},"scripts":["Latn"],"locale":"jmc"}

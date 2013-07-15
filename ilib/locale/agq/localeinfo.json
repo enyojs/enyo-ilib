@@ -1,6 +1,1 @@
-{
-	"language.name": "Aghem",
-"numfmt" :{"groupChar":" ","curFmt":"{n}{s}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "agq"
-}
+{"language.name":"Aghem","numfmt":{"groupChar":" ","currencyFormats":{"common":"{n}{s}"}},"scripts":["Latn"],"locale":"agq"}

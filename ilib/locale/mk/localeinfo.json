@@ -1,13 +1,1 @@
-{
-	"language.name": "Macedonian",
-"numfmt": {
-	"decimalChar": ",",
-	"groupChar": ".",
-	"prigroupSize": 3,
-	"pctFmt": "{n}%",
-	"pctChar": "%"
-},
-
-	"scripts": ["Cyrl"],
-	"locale": "mk"
-}
+{"language.name":"Macedonian","numfmt":{"currencyFormats":{"common":"{s} {n}"}},"scripts":["Cyrl"],"locale":"mk"}

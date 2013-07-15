@@ -1,11 +1,1 @@
-{
-	"language.name": "Polish",
-	"numfmt": {
-		"decimalChar": ",",
-		"groupChar": " ",
-		"prigroupSize": 3,
-		"pctFmt": "{n} %"
-	},
-	"scripts": ["Latn"],
-	"locale": "pl"
-}
+{"language.name":"Polish","numfmt":{"groupChar":" ","currencyFormats":{"common":"{n} {s}","commonNegative":"({n} {s})"}},"scripts":["Latn"],"locale":"pl"}

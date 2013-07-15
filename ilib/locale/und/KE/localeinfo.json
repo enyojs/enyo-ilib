@@ -1,6 +1,1 @@
-{
-	"currency": "KES",
-	"region.name": "Kenya",
-	"timezone": "Africa/Nairobi",
-	"locale": "und-KE"
-}
+{"currency":"KES","firstDayOfWeek":0,"region.name":"Kenya","timezone":"Africa/Nairobi","locale":"KE"}

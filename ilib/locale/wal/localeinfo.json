@@ -1,6 +1,1 @@
-{
-	"language.name": "Wolaytta",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s} {n}","secgroupSize":0},
-	"scripts": ["Ethi"],
-	"locale": "wal"
-}
+{"language.name":"Wolaytta","numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"common":"{s} {n}"}},"scripts":["Ethi"],"locale":"wal"}

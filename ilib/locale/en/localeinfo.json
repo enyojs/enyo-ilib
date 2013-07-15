@@ -1,14 +1,1 @@
-{
-"clock" :"12",
-	"units": "metric",
-	"clock": "24",
-	"calendar": "gregorian",
-	"firstDayOfWeek": 0,
-	"language.name": "English",
-	"numfmt": {
-		"decimalChar": ".",
-		"groupChar": ","
-	},
-	"scripts": ["Latn","Dsrt","Shaw"],
-	"locale": "en"
-}
+{"clock":"12","language.name":"English","numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"commonNegative":"({s}{n})"}},"scripts":["Latn","Dsrt","Shaw"],"locale":"en"}

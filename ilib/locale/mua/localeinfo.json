@@ -1,6 +1,1 @@
-{
-	"language.name": "Mundang",
-"numfmt" :{"curFmt":"{s}{n}","secgroupSize":0,"negativecurFmt":"({s}{n})"},
-	"scripts": ["Latn"],
-	"locale": "mua"
-}
+{"language.name":"Mundang","numfmt":{"currencyFormats":{"commonNegative":"({s}{n})"}},"scripts":["Latn"],"locale":"mua"}

@@ -1,13 +1,1 @@
-{
-	"language.name": "Ukrainian",
-"numfmt": {
-	"decimalChar": ",",
-	"groupChar": " ",
-	"prigroupSize": 3,
-	"pctFmt": "{n}%",
-	"pctChar": "%"
-},
-
-	"scripts": ["Cyrl"],
-	"locale": "uk"
-}
+{"language.name":"Ukrainian","numfmt":{"groupChar":" ","exponential":"Е","currencyFormats":{"common":"{n} {s}"}},"scripts":["Cyrl"],"locale":"uk"}

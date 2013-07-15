@@ -1,7 +1,1 @@
-{
-"clock" :"12",
-	"language.name": "North Ndebele",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s}{n}","secgroupSize":0,"negativecurFmt":"({s}{n})"},
-	"scripts": ["Latn"],
-	"locale": "nd"
-}
+{"clock":"12","language.name":"North Ndebele","numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"commonNegative":"({s}{n})"}},"scripts":["Latn"],"locale":"nd"}

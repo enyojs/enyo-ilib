@@ -1,6 +1,1 @@
-{
-	"language.name": "Congo Swahili",
-"numfmt" :{"curFmt":"{s}{n}","secgroupSize":0},
-	"scripts": ["Latn"],
-	"locale": "swc"
-}
+{"language.name":"Congo Swahili","scripts":["Latn"],"locale":"swc"}

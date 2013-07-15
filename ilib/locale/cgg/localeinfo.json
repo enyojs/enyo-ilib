@@ -1,7 +1,1 @@
-{
-"clock" :"12",
-	"language.name": "Chiga",
-"numfmt" :{"decimalChar":".","groupChar":",","curFmt":"{s}{n}","secgroupSize":0,"negativecurFmt":"-{n}{s}"},
-	"scripts": ["Latn"],
-	"locale": "cgg"
-}
+{"clock":"12","language.name":"Chiga","numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"commonNegative":"-{n}{s}"}},"scripts":["Latn"],"locale":"cgg"}

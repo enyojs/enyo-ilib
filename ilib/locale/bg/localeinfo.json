@@ -1,13 +1,1 @@
-{
-	"language.name": "Bulgarian",
-"numfmt": {
-	"decimalChar": ",",
-	"groupChar": " ",
-	"prigroupSize": 3,
-	"pctFmt": "{n}%",
-	"pctChar": "%"
-},
-
-	"scripts": ["Cyrl"],
-	"locale": "bg"
-}
+{"language.name":"Bulgarian","numfmt":{"groupChar":" ","currencyFormats":{"common":"{n} {s}"}},"scripts":["Cyrl"],"locale":"bg"}

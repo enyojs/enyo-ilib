@@ -1,13 +1,1 @@
-{
-	"language.name": "Slovenian",
-"numfmt": {
-	"decimalChar": ",",
-	"groupChar": ".",
-	"prigroupSize": 3,
-	"pctFmt": "{n}%",
-	"pctChar": "%"
-},
-
-	"scripts": ["Latn"],
-	"locale": "sl"
-}
+{"language.name":"Slovenian","numfmt":{"exponential":"e","currencyFormats":{"commonNegative":"({s}{n})"}},"scripts":["Latn"],"locale":"sl"}
