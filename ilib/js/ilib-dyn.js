@@ -5559,9 +5559,639 @@ ilib.String.prototype = {
 		return this.cpLength;	
 	}
 };
-ilib.data.localeinfo = {"calendar":"gregorian","clock":"24","currency":"USD","firstDayOfWeek":1,"numfmt":{"script":"Latn","decimalChar":",","groupChar":".","prigroupSize":3,"pctFmt":"{n}%","pctChar":"%","roundingMode":"halfdown","exponential":"e","currencyFormats":{"common":"{s}{n}","commonNegative":"{s}-{n}"}},"timezone":"Etc/UTC","units":"metric"};
-ilib.data.likelylocales = {"aa":"aa-Latn-ET","ab":"ab-Cyrl-GE","ady":"ady-Cyrl-RU","af":"af-Latn-ZA","agq":"agq-Latn-CM","ak":"ak-Latn-GH","am":"am-Ethi-ET","ar":"ar-Arab-EG","as":"as-Beng-IN","asa":"asa-Latn-TZ","ast":"ast-Latn-ES","av":"av-Cyrl-RU","ay":"ay-Latn-BO","az":"az-Latn-AZ","az-Arab":"az-Arab-IR","az-IR":"az-Arab-IR","ba":"ba-Cyrl-RU","bas":"bas-Latn-CM","be":"be-Cyrl-BY","bem":"bem-Latn-ZM","bez":"bez-Latn-TZ","bg":"bg-Cyrl-BG","bi":"bi-Latn-VU","bm":"bm-Latn-ML","bn":"bn-Beng-BD","bo":"bo-Tibt-CN","br":"br-Latn-FR","brx":"brx-Deva-IN","bs":"bs-Latn-BA","byn":"byn-Ethi-ER","ca":"ca-Latn-ES","cch":"cch-Latn-NG","ce":"ce-Cyrl-RU","ceb":"ceb-Latn-PH","cgg":"cgg-Latn-UG","ch":"ch-Latn-GU","chk":"chk-Latn-FM","chr":"chr-Cher-US","ckb":"ckb-Arab-IQ","cs":"cs-Latn-CZ","csb":"csb-Latn-PL","cy":"cy-Latn-GB","da":"da-Latn-DK","dav":"dav-Latn-KE","de":"de-Latn-DE","dje":"dje-Latn-NE","dua":"dua-Latn-CM","dv":"dv-Thaa-MV","dyo":"dyo-Latn-SN","dz":"dz-Tibt-BT","ebu":"ebu-Latn-KE","ee":"ee-Latn-GH","efi":"efi-Latn-NG","el":"el-Grek-GR","en":"en-Latn-US","eo":"eo-Latn-001","es":"es-Latn-ES","et":"et-Latn-EE","eu":"eu-Latn-ES","ewo":"ewo-Latn-CM","fa":"fa-Arab-IR","ff":"ff-Latn-SN","fi":"fi-Latn-FI","fil":"fil-Latn-PH","fj":"fj-Latn-FJ","fo":"fo-Latn-FO","fr":"fr-Latn-FR","fur":"fur-Latn-IT","fy":"fy-Latn-NL","ga":"ga-Latn-IE","gaa":"gaa-Latn-GH","gag":"gag-Latn-MD","gd":"gd-Latn-GB","gil":"gil-Latn-KI","gl":"gl-Latn-ES","gn":"gn-Latn-PY","gsw":"gsw-Latn-CH","gu":"gu-Gujr-IN","guz":"guz-Latn-KE","gv":"gv-Latn-GB","gv-Latn":"gv-Latn-IM","ha":"ha-Latn-NG","haw":"haw-Latn-US","he":"he-Hebr-IL","hi":"hi-Deva-IN","hil":"hil-Latn-PH","ho":"ho-Latn-PG","hr":"hr-Latn-HR","ht":"ht-Latn-HT","hu":"hu-Latn-HU","hy":"hy-Armn-AM","ia":"ia-Latn-001","id":"id-Latn-ID","ig":"ig-Latn-NG","ii":"ii-Yiii-CN","ilo":"ilo-Latn-PH","inh":"inh-Cyrl-RU","is":"is-Latn-IS","it":"it-Latn-IT","ja":"ja-Jpan-JP","jgo":"jgo-Latn-CM","jmc":"jmc-Latn-TZ","jv":"jv-Latn-ID","ka":"ka-Geor-GE","kab":"kab-Latn-DZ","kaj":"kaj-Latn-NG","kam":"kam-Latn-KE","kbd":"kbd-Cyrl-RU","kcg":"kcg-Latn-NG","kde":"kde-Latn-TZ","kea":"kea-Latn-CV","kg":"kg-Latn-CD","kha":"kha-Latn-IN","khq":"khq-Latn-ML","ki":"ki-Latn-KE","kj":"kj-Latn-NA","kk":"kk-Cyrl-KZ","kkj":"kkj-Latn-CM","kl":"kl-Latn-GL","kln":"kln-Latn-KE","km":"km-Khmr-KH","kn":"kn-Knda-IN","ko":"ko-Kore-KR","koi":"koi-Cyrl-RU","kok":"kok-Deva-IN","kos":"kos-Latn-FM","kpe":"kpe-Latn-LR","kpv":"kpv-Cyrl-RU","krc":"krc-Cyrl-RU","ks":"ks-Arab-IN","ksb":"ksb-Latn-TZ","ksf":"ksf-Latn-CM","ksh":"ksh-Latn-DE","ku":"ku-Latn-TR","ku-Arab":"ku-Arab-IQ","ku-IQ":"ku-Arab-IQ","kum":"kum-Cyrl-RU","kv":"kv-Cyrl-RU","kw":"kw-Latn-GB","ky":"ky-Cyrl-KG","la":"la-Latn-VA","lag":"lag-Latn-TZ","lah":"lah-Arab-PK","lb":"lb-Latn-LU","lbe":"lbe-Cyrl-RU","lez":"lez-Cyrl-RU","lg":"lg-Latn-UG","ln":"ln-Latn-CD","lo":"lo-Laoo-LA","lt":"lt-Latn-LT","lu":"lu-Latn-CD","lua":"lua-Latn-CD","luo":"luo-Latn-KE","luy":"luy-Latn-KE","lv":"lv-Latn-LV","mai":"mai-Deva-IN","mas":"mas-Latn-KE","mdf":"mdf-Cyrl-RU","mdh":"mdh-Latn-PH","mer":"mer-Latn-KE","mfe":"mfe-Latn-MU","mg":"mg-Latn-MG","mgh":"mgh-Latn-MZ","mgo":"mgo-Latn-CM","mh":"mh-Latn-MH","mi":"mi-Latn-NZ","mk":"mk-Cyrl-MK","ml":"ml-Mlym-IN","mn":"mn-Cyrl-MN","mn-CN":"mn-Mong-CN","mn-Mong":"mn-Mong-CN","mr":"mr-Deva-IN","ms":"ms-Latn-MY","mt":"mt-Latn-MT","mua":"mua-Latn-CM","my":"my-Mymr-MM","myv":"myv-Cyrl-RU","na":"na-Latn-NR","naq":"naq-Latn-NA","nb":"nb-Latn-NO","nd":"nd-Latn-ZW","nds":"nds-Latn-DE","ne":"ne-Deva-NP","niu":"niu-Latn-NU","nl":"nl-Latn-NL","nmg":"nmg-Latn-CM","nn":"nn-Latn-NO","nnh":"nnh-Latn-CM","nr":"nr-Latn-ZA","nso":"nso-Latn-ZA","nus":"nus-Latn-SD","ny":"ny-Latn-MW","nyn":"nyn-Latn-UG","oc":"oc-Latn-FR","om":"om-Latn-ET","or":"or-Orya-IN","os":"os-Cyrl-GE","pa":"pa-Guru-IN","pa-Arab":"pa-Arab-PK","pa-PK":"pa-Arab-PK","pag":"pag-Latn-PH","pap":"pap-Latn-AN","pau":"pau-Latn-PW","pl":"pl-Latn-PL","pon":"pon-Latn-FM","ps":"ps-Arab-AF","pt":"pt-Latn-BR","qu":"qu-Latn-PE","rm":"rm-Latn-CH","rn":"rn-Latn-BI","ro":"ro-Latn-RO","rof":"rof-Latn-TZ","ru":"ru-Cyrl-RU","rw":"rw-Latn-RW","rwk":"rwk-Latn-TZ","sa":"sa-Deva-IN","sah":"sah-Cyrl-RU","saq":"saq-Latn-KE","sat":"sat-Latn-IN","sbp":"sbp-Latn-TZ","sd":"sd-Arab-IN","se":"se-Latn-NO","seh":"seh-Latn-MZ","ses":"ses-Latn-ML","sg":"sg-Latn-CF","shi":"shi-Tfng-MA","shi-MA":"shi-Latn-MA","si":"si-Sinh-LK","sid":"sid-Latn-ET","sk":"sk-Latn-SK","sl":"sl-Latn-SI","sm":"sm-Latn-WS","sn":"sn-Latn-ZW","so":"so-Latn-SO","sq":"sq-Latn-AL","sr":"sr-Cyrl-RS","sr-ME":"sr-Latn-ME","ss":"ss-Latn-ZA","ssy":"ssy-Latn-ER","st":"st-Latn-ZA","su":"su-Latn-ID","sv":"sv-Latn-SE","sw":"sw-Latn-TZ","swc":"swc-Latn-CD","ta":"ta-Taml-IN","te":"te-Telu-IN","teo":"teo-Latn-UG","tet":"tet-Latn-TL","tg":"tg-Cyrl-TJ","th":"th-Thai-TH","ti":"ti-Ethi-ET","tig":"tig-Ethi-ER","tk":"tk-Latn-TM","tkl":"tkl-Latn-TK","tl":"tl-Latn-PH","tn":"tn-Latn-ZA","to":"to-Latn-TO","tpi":"tpi-Latn-PG","tr":"tr-Latn-TR","trv":"trv-Latn-TW","ts":"ts-Latn-ZA","tsg":"tsg-Latn-PH","tt":"tt-Cyrl-RU","tvl":"tvl-Latn-TV","twq":"twq-Latn-NE","ty":"ty-Latn-PF","tyv":"tyv-Cyrl-RU","tzm":"tzm-Latn-MA","udm":"udm-Cyrl-RU","ug":"ug-Arab-CN","uk":"uk-Cyrl-UA","uli":"uli-Latn-FM","und":"en-Latn-US","AD":"ca-Latn-AD","AE":"ar-Arab-AE","AF":"fa-Arab-AF","AL":"sq-Latn-AL","AM":"hy-Armn-AM","AN":"pap-Latn-AN","AO":"pt-Latn-AO","AR":"es-Latn-AR","Arab":"ar-Arab-EG","Arab-CN":"ug-Arab-CN","Arab-IN":"ur-Arab-IN","Arab-NG":"ha-Arab-NG","Arab-PK":"ur-Arab-PK","Armi":"arc-Armi-IR","Armn":"hy-Armn-AM","AS":"sm-Latn-AS","AT":"de-Latn-AT","Avst":"ae-Avst-IR","AW":"nl-Latn-AW","AX":"sv-Latn-AX","AZ":"az-Latn-AZ","BA":"bs-Latn-BA","Bali":"ban-Bali-ID","Bamu":"bax-Bamu-CM","Batk":"bbc-Batk-ID","BD":"bn-Beng-BD","BE":"nl-Latn-BE","Beng":"bn-Beng-BD","BF":"fr-Latn-BF","BG":"bg-Cyrl-BG","BH":"ar-Arab-BH","BI":"rn-Latn-BI","BJ":"fr-Latn-BJ","BL":"fr-Latn-BL","BN":"ms-Latn-BN","BO":"es-Latn-BO","Bopo":"zh-Bopo-TW","BR":"pt-Latn-BR","Brah":"pra-Brah-IN","Brai":"und-Brai-FR","BT":"dz-Tibt-BT","Bugi":"bug-Bugi-ID","Buhd":"bku-Buhd-PH","BY":"be-Cyrl-BY","Cakm":"ccp-Cakm-BD","Cans":"cr-Cans-CA","Cari":"xcr-Cari-TR","CD":"sw-Latn-CD","CF":"fr-Latn-CF","CG":"fr-Latn-CG","CH":"de-Latn-CH","Cham":"cjm-Cham-VN","Cher":"chr-Cher-US","CI":"fr-Latn-CI","CL":"es-Latn-CL","CM":"fr-Latn-CM","CN":"zh-Hans-CN","CO":"es-Latn-CO","Copt":"cop-Copt-EG","CP":"fr-Latn-CP","Cprt":"grc-Cprt-CY","CR":"es-Latn-CR","CU":"es-Latn-CU","CV":"pt-Latn-CV","CY":"el-Grek-CY","Cyrl":"ru-Cyrl-RU","Cyrl-BA":"sr-Cyrl-BA","Cyrl-GE":"ab-Cyrl-GE","CZ":"cs-Latn-CZ","DE":"de-Latn-DE","Deva":"hi-Deva-IN","DJ":"aa-Latn-DJ","DK":"da-Latn-DK","DO":"es-Latn-DO","DZ":"ar-Arab-DZ","EA":"es-Latn-EA","EC":"es-Latn-EC","EE":"et-Latn-EE","EG":"ar-Arab-EG","Egyp":"egy-Egyp-EG","EH":"ar-Arab-EH","ER":"ti-Ethi-ER","ES":"es-Latn-ES","Ethi":"am-Ethi-ET","FI":"fi-Latn-FI","FM":"chk-Latn-FM","FO":"fo-Latn-FO","FR":"fr-Latn-FR","GA":"fr-Latn-GA","GE":"ka-Geor-GE","Geor":"ka-Geor-GE","GF":"fr-Latn-GF","GH":"ak-Latn-GH","GL":"kl-Latn-GL","Glag":"cu-Glag-BG","GN":"fr-Latn-GN","Goth":"got-Goth-UA","GP":"fr-Latn-GP","GQ":"es-Latn-GQ","GR":"el-Grek-GR","Grek":"el-Grek-GR","GT":"es-Latn-GT","Gujr":"gu-Gujr-IN","Guru":"pa-Guru-IN","GW":"pt-Latn-GW","Hang":"ko-Hang-KR","Hani":"zh-Hans-CN","Hano":"hnn-Hano-PH","Hans":"zh-Hans-CN","Hant":"zh-Hant-TW","Hebr":"he-Hebr-IL","Hira":"ja-Hira-JP","HK":"zh-Hant-HK","HN":"es-Latn-HN","HR":"hr-Latn-HR","HT":"ht-Latn-HT","HU":"hu-Latn-HU","IC":"es-Latn-IC","ID":"id-Latn-ID","IL":"he-Hebr-IL","IN":"hi-Deva-IN","IQ":"ar-Arab-IQ","IR":"fa-Arab-IR","IS":"is-Latn-IS","IT":"it-Latn-IT","Ital":"ett-Ital-IT","Java":"jv-Java-ID","JO":"ar-Arab-JO","JP":"ja-Jpan-JP","Jpan":"ja-Jpan-JP","Kali":"eky-Kali-MM","Kana":"ja-Kana-JP","KG":"ky-Cyrl-KG","KH":"km-Khmr-KH","Khar":"pra-Khar-PK","Khmr":"km-Khmr-KH","KM":"ar-Arab-KM","Knda":"kn-Knda-IN","Kore":"ko-Kore-KR","KP":"ko-Kore-KP","KR":"ko-Kore-KR","Kthi":"bh-Kthi-IN","KW":"ar-Arab-KW","KZ":"ru-Cyrl-KZ","LA":"lo-Laoo-LA","Lana":"nod-Lana-TH","Laoo":"lo-Laoo-LA","Latn-CN":"za-Latn-CN","Latn-CY":"tr-Latn-CY","Latn-DZ":"fr-Latn-DZ","Latn-ER":"aa-Latn-ER","Latn-KM":"fr-Latn-KM","Latn-MA":"fr-Latn-MA","Latn-MK":"sq-Latn-MK","Latn-MR":"fr-Latn-MR","Latn-SY":"fr-Latn-SY","Latn-TN":"fr-Latn-TN","LB":"ar-Arab-LB","Lepc":"lep-Lepc-IN","LI":"de-Latn-LI","Limb":"lif-Limb-IN","Linb":"grc-Linb-GR","Lisu":"lis-Lisu-CN","LK":"si-Sinh-LK","LS":"st-Latn-LS","LT":"lt-Latn-LT","LU":"fr-Latn-LU","LV":"lv-Latn-LV","LY":"ar-Arab-LY","Lyci":"xlc-Lyci-TR","Lydi":"xld-Lydi-TR","MA":"ar-Arab-MA","Mand":"myz-Mand-IR","MC":"fr-Latn-MC","MD":"ro-Latn-MD","ME":"sr-Latn-ME","Merc":"xmr-Merc-SD","Mero":"xmr-Mero-SD","MF":"fr-Latn-MF","MG":"mg-Latn-MG","MK":"mk-Cyrl-MK","ML":"bm-Latn-ML","Mlym":"ml-Mlym-IN","MM":"my-Mymr-MM","MN":"mn-Cyrl-MN","MO":"zh-Hant-MO","Mong":"mn-Mong-CN","MQ":"fr-Latn-MQ","MR":"ar-Arab-MR","MT":"mt-Latn-MT","Mtei":"mni-Mtei-IN","MU":"mfe-Latn-MU","MV":"dv-Thaa-MV","MX":"es-Latn-MX","MY":"ms-Latn-MY","Mymr":"my-Mymr-MM","MZ":"pt-Latn-MZ","NA":"kj-Latn-NA","NC":"fr-Latn-NC","NE":"ha-Latn-NE","NI":"es-Latn-NI","Nkoo":"man-Nkoo-GN","NL":"nl-Latn-NL","NO":"nb-Latn-NO","NP":"ne-Deva-NP","Ogam":"sga-Ogam-IE","Olck":"sat-Olck-IN","OM":"ar-Arab-OM","Orkh":"otk-Orkh-MN","Orya":"or-Orya-IN","Osma":"so-Osma-SO","PA":"es-Latn-PA","PE":"es-Latn-PE","PF":"fr-Latn-PF","PG":"tpi-Latn-PG","PH":"fil-Latn-PH","Phag":"lzh-Phag-CN","Phli":"pal-Phli-IR","Phnx":"phn-Phnx-LB","PK":"ur-Arab-PK","PL":"pl-Latn-PL","Plrd":"hmd-Plrd-CN","PM":"fr-Latn-PM","PR":"es-Latn-PR","Prti":"xpr-Prti-IR","PS":"ar-Arab-PS","PT":"pt-Latn-PT","PW":"pau-Latn-PW","PY":"gn-Latn-PY","QA":"ar-Arab-QA","RE":"fr-Latn-RE","Rjng":"rej-Rjng-ID","RO":"ro-Latn-RO","RS":"sr-Cyrl-RS","RU":"ru-Cyrl-RU","Runr":"non-Runr-SE","RW":"rw-Latn-RW","SA":"ar-Arab-SA","Samr":"smp-Samr-IL","Sarb":"xsa-Sarb-YE","Saur":"saz-Saur-IN","SC":"fr-Latn-SC","SD":"ar-Arab-SD","SE":"sv-Latn-SE","Shaw":"en-Shaw-GB","Shrd":"sa-Shrd-IN","SI":"sl-Latn-SI","Sinh":"si-Sinh-LK","SJ":"nb-Latn-SJ","SK":"sk-Latn-SK","SM":"it-Latn-SM","SN":"fr-Latn-SN","SO":"so-Latn-SO","Sora":"srb-Sora-IN","SR":"nl-Latn-SR","ST":"pt-Latn-ST","Sund":"su-Sund-ID","SV":"es-Latn-SV","SY":"ar-Arab-SY","Sylo":"syl-Sylo-BD","Syrc":"syr-Syrc-SY","Tagb":"tbw-Tagb-PH","Takr":"doi-Takr-IN","Tale":"tdd-Tale-CN","Talu":"khb-Talu-CN","Taml":"ta-Taml-IN","Tavt":"blt-Tavt-VN","TD":"fr-Latn-TD","Telu":"te-Telu-IN","Tfng":"shi-Tfng-TN","TG":"fr-Latn-TG","Tglg":"fil-Tglg-PH","TH":"th-Thai-TH","Thaa":"dv-Thaa-MV","Thai":"th-Thai-TH","Tibt":"bo-Tibt-CN","TJ":"tg-Cyrl-TJ","TK":"tkl-Latn-TK","TL":"pt-Latn-TL","TM":"tk-Latn-TM","TN":"ar-Arab-TN","TO":"to-Latn-TO","TR":"tr-Latn-TR","TV":"tvl-Latn-TV","TW":"zh-Hant-TW","TZ":"sw-Latn-TZ","UA":"uk-Cyrl-UA","UG":"sw-Latn-UG","Ugar":"uga-Ugar-SY","UY":"es-Latn-UY","UZ":"uz-Cyrl-UZ","VA":"la-Latn-VA","Vaii":"vai-Vaii-LR","VE":"es-Latn-VE","VN":"vi-Latn-VN","VU":"bi-Latn-VU","WF":"fr-Latn-WF","WS":"sm-Latn-WS","Xpeo":"peo-Xpeo-IR","Xsux":"akk-Xsux-IQ","YE":"ar-Arab-YE","Yiii":"ii-Yiii-CN","YT":"fr-Latn-YT","ur":"ur-Arab-PK","uz":"uz-Cyrl-UZ","uz-AF":"uz-Arab-AF","uz-Arab":"uz-Arab-AF","vai":"vai-Vaii-LR","ve":"ve-Latn-ZA","vi":"vi-Latn-VN","vo":"vo-Latn-001","vun":"vun-Latn-TZ","wae":"wae-Latn-CH","wal":"wal-Ethi-ET","war":"war-Latn-PH","wo":"wo-Latn-SN","xh":"xh-Latn-ZA","xog":"xog-Latn-UG","yap":"yap-Latn-FM","yav":"yav-Latn-CM","yi":"yi-Hebr-IL","yo":"yo-Latn-NG","za":"za-Latn-CN","zh":"zh-Hans-CN","zh-Hani":"zh-Hans-CN","zh-Hant":"zh-Hant-TW","zh-HK":"zh-Hant-HK","zh-MO":"zh-Hant-MO","zh-TW":"zh-Hant-TW","zu":"zu-Latn-ZA"}
-;
+ilib.data.localeinfo = {
+    "calendar": "gregorian",
+    "clock": "24",
+    "currency": "USD",
+    "delimiter": {
+        "quotationStart": "“",
+        "quotationEnd": "”",
+        "alternateQuotationStart": "‘",
+        "alternateQuotationEnd": "’"
+    },
+    "firstDayOfWeek": 1,
+    "numfmt": {
+        "script": "Latn",
+        "decimalChar": ",",
+        "groupChar": ".",
+        "prigroupSize": 3,
+        "pctFmt": "{n}%",
+        "pctChar": "%",
+        "roundingMode": "halfdown",
+        "exponential": "e",
+        "currencyFormats": {
+            "common": "{s}{n}",
+            "commonNegative": "{s}-{n}"
+        }
+    },
+    "timezone": "Etc/UTC",
+    "units": "metric"
+};
+ilib.data.likelylocales = {
+    "aa": "aa-Latn-ET",
+    "ab": "ab-Cyrl-GE",
+    "ady": "ady-Cyrl-RU",
+    "af": "af-Latn-ZA",
+    "agq": "agq-Latn-CM",
+    "ak": "ak-Latn-GH",
+    "am": "am-Ethi-ET",
+    "ar": "ar-Arab-EG",
+    "as": "as-Beng-IN",
+    "asa": "asa-Latn-TZ",
+    "ast": "ast-Latn-ES",
+    "av": "av-Cyrl-RU",
+    "ay": "ay-Latn-BO",
+    "az": "az-Latn-AZ",
+    "az-Arab": "az-Arab-IR",
+    "az-IR": "az-Arab-IR",
+    "ba": "ba-Cyrl-RU",
+    "bas": "bas-Latn-CM",
+    "be": "be-Cyrl-BY",
+    "bem": "bem-Latn-ZM",
+    "bez": "bez-Latn-TZ",
+    "bg": "bg-Cyrl-BG",
+    "bi": "bi-Latn-VU",
+    "bm": "bm-Latn-ML",
+    "bn": "bn-Beng-BD",
+    "bo": "bo-Tibt-CN",
+    "br": "br-Latn-FR",
+    "brx": "brx-Deva-IN",
+    "bs": "bs-Latn-BA",
+    "byn": "byn-Ethi-ER",
+    "ca": "ca-Latn-ES",
+    "cch": "cch-Latn-NG",
+    "ce": "ce-Cyrl-RU",
+    "ceb": "ceb-Latn-PH",
+    "cgg": "cgg-Latn-UG",
+    "ch": "ch-Latn-GU",
+    "chk": "chk-Latn-FM",
+    "chr": "chr-Cher-US",
+    "ckb": "ckb-Arab-IQ",
+    "cs": "cs-Latn-CZ",
+    "csb": "csb-Latn-PL",
+    "cy": "cy-Latn-GB",
+    "da": "da-Latn-DK",
+    "dav": "dav-Latn-KE",
+    "de": "de-Latn-DE",
+    "dje": "dje-Latn-NE",
+    "dua": "dua-Latn-CM",
+    "dv": "dv-Thaa-MV",
+    "dyo": "dyo-Latn-SN",
+    "dz": "dz-Tibt-BT",
+    "ebu": "ebu-Latn-KE",
+    "ee": "ee-Latn-GH",
+    "efi": "efi-Latn-NG",
+    "el": "el-Grek-GR",
+    "en": "en-Latn-US",
+    "eo": "eo-Latn-001",
+    "es": "es-Latn-ES",
+    "et": "et-Latn-EE",
+    "eu": "eu-Latn-ES",
+    "ewo": "ewo-Latn-CM",
+    "fa": "fa-Arab-IR",
+    "ff": "ff-Latn-SN",
+    "fi": "fi-Latn-FI",
+    "fil": "fil-Latn-PH",
+    "fj": "fj-Latn-FJ",
+    "fo": "fo-Latn-FO",
+    "fr": "fr-Latn-FR",
+    "fur": "fur-Latn-IT",
+    "fy": "fy-Latn-NL",
+    "ga": "ga-Latn-IE",
+    "gaa": "gaa-Latn-GH",
+    "gag": "gag-Latn-MD",
+    "gd": "gd-Latn-GB",
+    "gil": "gil-Latn-KI",
+    "gl": "gl-Latn-ES",
+    "gn": "gn-Latn-PY",
+    "gsw": "gsw-Latn-CH",
+    "gu": "gu-Gujr-IN",
+    "guz": "guz-Latn-KE",
+    "gv": "gv-Latn-GB",
+    "gv-Latn": "gv-Latn-IM",
+    "ha": "ha-Latn-NG",
+    "haw": "haw-Latn-US",
+    "he": "he-Hebr-IL",
+    "hi": "hi-Deva-IN",
+    "hil": "hil-Latn-PH",
+    "ho": "ho-Latn-PG",
+    "hr": "hr-Latn-HR",
+    "ht": "ht-Latn-HT",
+    "hu": "hu-Latn-HU",
+    "hy": "hy-Armn-AM",
+    "ia": "ia-Latn-001",
+    "id": "id-Latn-ID",
+    "ig": "ig-Latn-NG",
+    "ii": "ii-Yiii-CN",
+    "ilo": "ilo-Latn-PH",
+    "inh": "inh-Cyrl-RU",
+    "is": "is-Latn-IS",
+    "it": "it-Latn-IT",
+    "ja": "ja-Jpan-JP",
+    "jgo": "jgo-Latn-CM",
+    "jmc": "jmc-Latn-TZ",
+    "jv": "jv-Latn-ID",
+    "ka": "ka-Geor-GE",
+    "kab": "kab-Latn-DZ",
+    "kaj": "kaj-Latn-NG",
+    "kam": "kam-Latn-KE",
+    "kbd": "kbd-Cyrl-RU",
+    "kcg": "kcg-Latn-NG",
+    "kde": "kde-Latn-TZ",
+    "kea": "kea-Latn-CV",
+    "kg": "kg-Latn-CD",
+    "kha": "kha-Latn-IN",
+    "khq": "khq-Latn-ML",
+    "ki": "ki-Latn-KE",
+    "kj": "kj-Latn-NA",
+    "kk": "kk-Cyrl-KZ",
+    "kkj": "kkj-Latn-CM",
+    "kl": "kl-Latn-GL",
+    "kln": "kln-Latn-KE",
+    "km": "km-Khmr-KH",
+    "kn": "kn-Knda-IN",
+    "ko": "ko-Kore-KR",
+    "koi": "koi-Cyrl-RU",
+    "kok": "kok-Deva-IN",
+    "kos": "kos-Latn-FM",
+    "kpe": "kpe-Latn-LR",
+    "kpv": "kpv-Cyrl-RU",
+    "krc": "krc-Cyrl-RU",
+    "ks": "ks-Arab-IN",
+    "ksb": "ksb-Latn-TZ",
+    "ksf": "ksf-Latn-CM",
+    "ksh": "ksh-Latn-DE",
+    "ku": "ku-Latn-TR",
+    "ku-Arab": "ku-Arab-IQ",
+    "ku-IQ": "ku-Arab-IQ",
+    "kum": "kum-Cyrl-RU",
+    "kv": "kv-Cyrl-RU",
+    "kw": "kw-Latn-GB",
+    "ky": "ky-Cyrl-KG",
+    "la": "la-Latn-VA",
+    "lag": "lag-Latn-TZ",
+    "lah": "lah-Arab-PK",
+    "lb": "lb-Latn-LU",
+    "lbe": "lbe-Cyrl-RU",
+    "lez": "lez-Cyrl-RU",
+    "lg": "lg-Latn-UG",
+    "ln": "ln-Latn-CD",
+    "lo": "lo-Laoo-LA",
+    "lt": "lt-Latn-LT",
+    "lu": "lu-Latn-CD",
+    "lua": "lua-Latn-CD",
+    "luo": "luo-Latn-KE",
+    "luy": "luy-Latn-KE",
+    "lv": "lv-Latn-LV",
+    "mai": "mai-Deva-IN",
+    "mas": "mas-Latn-KE",
+    "mdf": "mdf-Cyrl-RU",
+    "mdh": "mdh-Latn-PH",
+    "mer": "mer-Latn-KE",
+    "mfe": "mfe-Latn-MU",
+    "mg": "mg-Latn-MG",
+    "mgh": "mgh-Latn-MZ",
+    "mgo": "mgo-Latn-CM",
+    "mh": "mh-Latn-MH",
+    "mi": "mi-Latn-NZ",
+    "mk": "mk-Cyrl-MK",
+    "ml": "ml-Mlym-IN",
+    "mn": "mn-Cyrl-MN",
+    "mn-CN": "mn-Mong-CN",
+    "mn-Mong": "mn-Mong-CN",
+    "mr": "mr-Deva-IN",
+    "ms": "ms-Latn-MY",
+    "mt": "mt-Latn-MT",
+    "mua": "mua-Latn-CM",
+    "my": "my-Mymr-MM",
+    "myv": "myv-Cyrl-RU",
+    "na": "na-Latn-NR",
+    "naq": "naq-Latn-NA",
+    "nb": "nb-Latn-NO",
+    "nd": "nd-Latn-ZW",
+    "nds": "nds-Latn-DE",
+    "ne": "ne-Deva-NP",
+    "niu": "niu-Latn-NU",
+    "nl": "nl-Latn-NL",
+    "nmg": "nmg-Latn-CM",
+    "nn": "nn-Latn-NO",
+    "nnh": "nnh-Latn-CM",
+    "nr": "nr-Latn-ZA",
+    "nso": "nso-Latn-ZA",
+    "nus": "nus-Latn-SD",
+    "ny": "ny-Latn-MW",
+    "nyn": "nyn-Latn-UG",
+    "oc": "oc-Latn-FR",
+    "om": "om-Latn-ET",
+    "or": "or-Orya-IN",
+    "os": "os-Cyrl-GE",
+    "pa": "pa-Guru-IN",
+    "pa-Arab": "pa-Arab-PK",
+    "pa-PK": "pa-Arab-PK",
+    "pag": "pag-Latn-PH",
+    "pap": "pap-Latn-AN",
+    "pau": "pau-Latn-PW",
+    "pl": "pl-Latn-PL",
+    "pon": "pon-Latn-FM",
+    "ps": "ps-Arab-AF",
+    "pt": "pt-Latn-BR",
+    "qu": "qu-Latn-PE",
+    "rm": "rm-Latn-CH",
+    "rn": "rn-Latn-BI",
+    "ro": "ro-Latn-RO",
+    "rof": "rof-Latn-TZ",
+    "ru": "ru-Cyrl-RU",
+    "rw": "rw-Latn-RW",
+    "rwk": "rwk-Latn-TZ",
+    "sa": "sa-Deva-IN",
+    "sah": "sah-Cyrl-RU",
+    "saq": "saq-Latn-KE",
+    "sat": "sat-Latn-IN",
+    "sbp": "sbp-Latn-TZ",
+    "sd": "sd-Arab-IN",
+    "se": "se-Latn-NO",
+    "seh": "seh-Latn-MZ",
+    "ses": "ses-Latn-ML",
+    "sg": "sg-Latn-CF",
+    "shi": "shi-Tfng-MA",
+    "shi-MA": "shi-Latn-MA",
+    "si": "si-Sinh-LK",
+    "sid": "sid-Latn-ET",
+    "sk": "sk-Latn-SK",
+    "sl": "sl-Latn-SI",
+    "sm": "sm-Latn-WS",
+    "sn": "sn-Latn-ZW",
+    "so": "so-Latn-SO",
+    "sq": "sq-Latn-AL",
+    "sr": "sr-Cyrl-RS",
+    "sr-ME": "sr-Latn-ME",
+    "ss": "ss-Latn-ZA",
+    "ssy": "ssy-Latn-ER",
+    "st": "st-Latn-ZA",
+    "su": "su-Latn-ID",
+    "sv": "sv-Latn-SE",
+    "sw": "sw-Latn-TZ",
+    "swc": "swc-Latn-CD",
+    "ta": "ta-Taml-IN",
+    "te": "te-Telu-IN",
+    "teo": "teo-Latn-UG",
+    "tet": "tet-Latn-TL",
+    "tg": "tg-Cyrl-TJ",
+    "th": "th-Thai-TH",
+    "ti": "ti-Ethi-ET",
+    "tig": "tig-Ethi-ER",
+    "tk": "tk-Latn-TM",
+    "tkl": "tkl-Latn-TK",
+    "tl": "tl-Latn-PH",
+    "tn": "tn-Latn-ZA",
+    "to": "to-Latn-TO",
+    "tpi": "tpi-Latn-PG",
+    "tr": "tr-Latn-TR",
+    "trv": "trv-Latn-TW",
+    "ts": "ts-Latn-ZA",
+    "tsg": "tsg-Latn-PH",
+    "tt": "tt-Cyrl-RU",
+    "tvl": "tvl-Latn-TV",
+    "twq": "twq-Latn-NE",
+    "ty": "ty-Latn-PF",
+    "tyv": "tyv-Cyrl-RU",
+    "tzm": "tzm-Latn-MA",
+    "udm": "udm-Cyrl-RU",
+    "ug": "ug-Arab-CN",
+    "uk": "uk-Cyrl-UA",
+    "uli": "uli-Latn-FM",
+    "und": "en-Latn-US",
+    "AD": "ca-Latn-AD",
+    "AE": "ar-Arab-AE",
+    "AF": "fa-Arab-AF",
+    "AL": "sq-Latn-AL",
+    "AM": "hy-Armn-AM",
+    "AN": "pap-Latn-AN",
+    "AO": "pt-Latn-AO",
+    "AR": "es-Latn-AR",
+    "Arab": "ar-Arab-EG",
+    "Arab-CN": "ug-Arab-CN",
+    "Arab-IN": "ur-Arab-IN",
+    "Arab-NG": "ha-Arab-NG",
+    "Arab-PK": "ur-Arab-PK",
+    "Armi": "arc-Armi-IR",
+    "Armn": "hy-Armn-AM",
+    "AS": "sm-Latn-AS",
+    "AT": "de-Latn-AT",
+    "Avst": "ae-Avst-IR",
+    "AW": "nl-Latn-AW",
+    "AX": "sv-Latn-AX",
+    "AZ": "az-Latn-AZ",
+    "BA": "bs-Latn-BA",
+    "Bali": "ban-Bali-ID",
+    "Bamu": "bax-Bamu-CM",
+    "Batk": "bbc-Batk-ID",
+    "BD": "bn-Beng-BD",
+    "BE": "nl-Latn-BE",
+    "Beng": "bn-Beng-BD",
+    "BF": "fr-Latn-BF",
+    "BG": "bg-Cyrl-BG",
+    "BH": "ar-Arab-BH",
+    "BI": "rn-Latn-BI",
+    "BJ": "fr-Latn-BJ",
+    "BL": "fr-Latn-BL",
+    "BN": "ms-Latn-BN",
+    "BO": "es-Latn-BO",
+    "Bopo": "zh-Bopo-TW",
+    "BR": "pt-Latn-BR",
+    "Brah": "pra-Brah-IN",
+    "Brai": "und-Brai-FR",
+    "BT": "dz-Tibt-BT",
+    "Bugi": "bug-Bugi-ID",
+    "Buhd": "bku-Buhd-PH",
+    "BY": "be-Cyrl-BY",
+    "Cakm": "ccp-Cakm-BD",
+    "Cans": "cr-Cans-CA",
+    "Cari": "xcr-Cari-TR",
+    "CD": "sw-Latn-CD",
+    "CF": "fr-Latn-CF",
+    "CG": "fr-Latn-CG",
+    "CH": "de-Latn-CH",
+    "Cham": "cjm-Cham-VN",
+    "Cher": "chr-Cher-US",
+    "CI": "fr-Latn-CI",
+    "CL": "es-Latn-CL",
+    "CM": "fr-Latn-CM",
+    "CN": "zh-Hans-CN",
+    "CO": "es-Latn-CO",
+    "Copt": "cop-Copt-EG",
+    "CP": "fr-Latn-CP",
+    "Cprt": "grc-Cprt-CY",
+    "CR": "es-Latn-CR",
+    "CU": "es-Latn-CU",
+    "CV": "pt-Latn-CV",
+    "CY": "el-Grek-CY",
+    "Cyrl": "ru-Cyrl-RU",
+    "Cyrl-BA": "sr-Cyrl-BA",
+    "Cyrl-GE": "ab-Cyrl-GE",
+    "CZ": "cs-Latn-CZ",
+    "DE": "de-Latn-DE",
+    "Deva": "hi-Deva-IN",
+    "DJ": "aa-Latn-DJ",
+    "DK": "da-Latn-DK",
+    "DO": "es-Latn-DO",
+    "DZ": "ar-Arab-DZ",
+    "EA": "es-Latn-EA",
+    "EC": "es-Latn-EC",
+    "EE": "et-Latn-EE",
+    "EG": "ar-Arab-EG",
+    "Egyp": "egy-Egyp-EG",
+    "EH": "ar-Arab-EH",
+    "ER": "ti-Ethi-ER",
+    "ES": "es-Latn-ES",
+    "Ethi": "am-Ethi-ET",
+    "FI": "fi-Latn-FI",
+    "FM": "chk-Latn-FM",
+    "FO": "fo-Latn-FO",
+    "FR": "fr-Latn-FR",
+    "GA": "fr-Latn-GA",
+    "GE": "ka-Geor-GE",
+    "Geor": "ka-Geor-GE",
+    "GF": "fr-Latn-GF",
+    "GH": "ak-Latn-GH",
+    "GL": "kl-Latn-GL",
+    "Glag": "cu-Glag-BG",
+    "GN": "fr-Latn-GN",
+    "Goth": "got-Goth-UA",
+    "GP": "fr-Latn-GP",
+    "GQ": "es-Latn-GQ",
+    "GR": "el-Grek-GR",
+    "Grek": "el-Grek-GR",
+    "GT": "es-Latn-GT",
+    "Gujr": "gu-Gujr-IN",
+    "Guru": "pa-Guru-IN",
+    "GW": "pt-Latn-GW",
+    "Hang": "ko-Hang-KR",
+    "Hani": "zh-Hans-CN",
+    "Hano": "hnn-Hano-PH",
+    "Hans": "zh-Hans-CN",
+    "Hant": "zh-Hant-TW",
+    "Hebr": "he-Hebr-IL",
+    "Hira": "ja-Hira-JP",
+    "HK": "zh-Hant-HK",
+    "HN": "es-Latn-HN",
+    "HR": "hr-Latn-HR",
+    "HT": "ht-Latn-HT",
+    "HU": "hu-Latn-HU",
+    "IC": "es-Latn-IC",
+    "ID": "id-Latn-ID",
+    "IL": "he-Hebr-IL",
+    "IN": "hi-Deva-IN",
+    "IQ": "ar-Arab-IQ",
+    "IR": "fa-Arab-IR",
+    "IS": "is-Latn-IS",
+    "IT": "it-Latn-IT",
+    "Ital": "ett-Ital-IT",
+    "Java": "jv-Java-ID",
+    "JO": "ar-Arab-JO",
+    "JP": "ja-Jpan-JP",
+    "Jpan": "ja-Jpan-JP",
+    "Kali": "eky-Kali-MM",
+    "Kana": "ja-Kana-JP",
+    "KG": "ky-Cyrl-KG",
+    "KH": "km-Khmr-KH",
+    "Khar": "pra-Khar-PK",
+    "Khmr": "km-Khmr-KH",
+    "KM": "ar-Arab-KM",
+    "Knda": "kn-Knda-IN",
+    "Kore": "ko-Kore-KR",
+    "KP": "ko-Kore-KP",
+    "KR": "ko-Kore-KR",
+    "Kthi": "bh-Kthi-IN",
+    "KW": "ar-Arab-KW",
+    "KZ": "ru-Cyrl-KZ",
+    "LA": "lo-Laoo-LA",
+    "Lana": "nod-Lana-TH",
+    "Laoo": "lo-Laoo-LA",
+    "Latn-CN": "za-Latn-CN",
+    "Latn-CY": "tr-Latn-CY",
+    "Latn-DZ": "fr-Latn-DZ",
+    "Latn-ER": "aa-Latn-ER",
+    "Latn-KM": "fr-Latn-KM",
+    "Latn-MA": "fr-Latn-MA",
+    "Latn-MK": "sq-Latn-MK",
+    "Latn-MR": "fr-Latn-MR",
+    "Latn-SY": "fr-Latn-SY",
+    "Latn-TN": "fr-Latn-TN",
+    "LB": "ar-Arab-LB",
+    "Lepc": "lep-Lepc-IN",
+    "LI": "de-Latn-LI",
+    "Limb": "lif-Limb-IN",
+    "Linb": "grc-Linb-GR",
+    "Lisu": "lis-Lisu-CN",
+    "LK": "si-Sinh-LK",
+    "LS": "st-Latn-LS",
+    "LT": "lt-Latn-LT",
+    "LU": "fr-Latn-LU",
+    "LV": "lv-Latn-LV",
+    "LY": "ar-Arab-LY",
+    "Lyci": "xlc-Lyci-TR",
+    "Lydi": "xld-Lydi-TR",
+    "MA": "ar-Arab-MA",
+    "Mand": "myz-Mand-IR",
+    "MC": "fr-Latn-MC",
+    "MD": "ro-Latn-MD",
+    "ME": "sr-Latn-ME",
+    "Merc": "xmr-Merc-SD",
+    "Mero": "xmr-Mero-SD",
+    "MF": "fr-Latn-MF",
+    "MG": "mg-Latn-MG",
+    "MK": "mk-Cyrl-MK",
+    "ML": "bm-Latn-ML",
+    "Mlym": "ml-Mlym-IN",
+    "MM": "my-Mymr-MM",
+    "MN": "mn-Cyrl-MN",
+    "MO": "zh-Hant-MO",
+    "Mong": "mn-Mong-CN",
+    "MQ": "fr-Latn-MQ",
+    "MR": "ar-Arab-MR",
+    "MT": "mt-Latn-MT",
+    "Mtei": "mni-Mtei-IN",
+    "MU": "mfe-Latn-MU",
+    "MV": "dv-Thaa-MV",
+    "MX": "es-Latn-MX",
+    "MY": "ms-Latn-MY",
+    "Mymr": "my-Mymr-MM",
+    "MZ": "pt-Latn-MZ",
+    "NA": "kj-Latn-NA",
+    "NC": "fr-Latn-NC",
+    "NE": "ha-Latn-NE",
+    "NI": "es-Latn-NI",
+    "Nkoo": "man-Nkoo-GN",
+    "NL": "nl-Latn-NL",
+    "NO": "nb-Latn-NO",
+    "NP": "ne-Deva-NP",
+    "Ogam": "sga-Ogam-IE",
+    "Olck": "sat-Olck-IN",
+    "OM": "ar-Arab-OM",
+    "Orkh": "otk-Orkh-MN",
+    "Orya": "or-Orya-IN",
+    "Osma": "so-Osma-SO",
+    "PA": "es-Latn-PA",
+    "PE": "es-Latn-PE",
+    "PF": "fr-Latn-PF",
+    "PG": "tpi-Latn-PG",
+    "PH": "fil-Latn-PH",
+    "Phag": "lzh-Phag-CN",
+    "Phli": "pal-Phli-IR",
+    "Phnx": "phn-Phnx-LB",
+    "PK": "ur-Arab-PK",
+    "PL": "pl-Latn-PL",
+    "Plrd": "hmd-Plrd-CN",
+    "PM": "fr-Latn-PM",
+    "PR": "es-Latn-PR",
+    "Prti": "xpr-Prti-IR",
+    "PS": "ar-Arab-PS",
+    "PT": "pt-Latn-PT",
+    "PW": "pau-Latn-PW",
+    "PY": "gn-Latn-PY",
+    "QA": "ar-Arab-QA",
+    "RE": "fr-Latn-RE",
+    "Rjng": "rej-Rjng-ID",
+    "RO": "ro-Latn-RO",
+    "RS": "sr-Cyrl-RS",
+    "RU": "ru-Cyrl-RU",
+    "Runr": "non-Runr-SE",
+    "RW": "rw-Latn-RW",
+    "SA": "ar-Arab-SA",
+    "Samr": "smp-Samr-IL",
+    "Sarb": "xsa-Sarb-YE",
+    "Saur": "saz-Saur-IN",
+    "SC": "fr-Latn-SC",
+    "SD": "ar-Arab-SD",
+    "SE": "sv-Latn-SE",
+    "Shaw": "en-Shaw-GB",
+    "Shrd": "sa-Shrd-IN",
+    "SI": "sl-Latn-SI",
+    "Sinh": "si-Sinh-LK",
+    "SJ": "nb-Latn-SJ",
+    "SK": "sk-Latn-SK",
+    "SM": "it-Latn-SM",
+    "SN": "fr-Latn-SN",
+    "SO": "so-Latn-SO",
+    "Sora": "srb-Sora-IN",
+    "SR": "nl-Latn-SR",
+    "ST": "pt-Latn-ST",
+    "Sund": "su-Sund-ID",
+    "SV": "es-Latn-SV",
+    "SY": "ar-Arab-SY",
+    "Sylo": "syl-Sylo-BD",
+    "Syrc": "syr-Syrc-SY",
+    "Tagb": "tbw-Tagb-PH",
+    "Takr": "doi-Takr-IN",
+    "Tale": "tdd-Tale-CN",
+    "Talu": "khb-Talu-CN",
+    "Taml": "ta-Taml-IN",
+    "Tavt": "blt-Tavt-VN",
+    "TD": "fr-Latn-TD",
+    "Telu": "te-Telu-IN",
+    "Tfng": "shi-Tfng-TN",
+    "TG": "fr-Latn-TG",
+    "Tglg": "fil-Tglg-PH",
+    "TH": "th-Thai-TH",
+    "Thaa": "dv-Thaa-MV",
+    "Thai": "th-Thai-TH",
+    "Tibt": "bo-Tibt-CN",
+    "TJ": "tg-Cyrl-TJ",
+    "TK": "tkl-Latn-TK",
+    "TL": "pt-Latn-TL",
+    "TM": "tk-Latn-TM",
+    "TN": "ar-Arab-TN",
+    "TO": "to-Latn-TO",
+    "TR": "tr-Latn-TR",
+    "TV": "tvl-Latn-TV",
+    "TW": "zh-Hant-TW",
+    "TZ": "sw-Latn-TZ",
+    "UA": "uk-Cyrl-UA",
+    "UG": "sw-Latn-UG",
+    "Ugar": "uga-Ugar-SY",
+    "UY": "es-Latn-UY",
+    "UZ": "uz-Cyrl-UZ",
+    "VA": "la-Latn-VA",
+    "Vaii": "vai-Vaii-LR",
+    "VE": "es-Latn-VE",
+    "VN": "vi-Latn-VN",
+    "VU": "bi-Latn-VU",
+    "WF": "fr-Latn-WF",
+    "WS": "sm-Latn-WS",
+    "Xpeo": "peo-Xpeo-IR",
+    "Xsux": "akk-Xsux-IQ",
+    "YE": "ar-Arab-YE",
+    "Yiii": "ii-Yiii-CN",
+    "YT": "fr-Latn-YT",
+    "ur": "ur-Arab-PK",
+    "uz": "uz-Cyrl-UZ",
+    "uz-AF": "uz-Arab-AF",
+    "uz-Arab": "uz-Arab-AF",
+    "vai": "vai-Vaii-LR",
+    "ve": "ve-Latn-ZA",
+    "vi": "vi-Latn-VN",
+    "vo": "vo-Latn-001",
+    "vun": "vun-Latn-TZ",
+    "wae": "wae-Latn-CH",
+    "wal": "wal-Ethi-ET",
+    "war": "war-Latn-PH",
+    "wo": "wo-Latn-SN",
+    "xh": "xh-Latn-ZA",
+    "xog": "xog-Latn-UG",
+    "yap": "yap-Latn-FM",
+    "yav": "yav-Latn-CM",
+    "yi": "yi-Hebr-IL",
+    "yo": "yo-Latn-NG",
+    "za": "za-Latn-CN",
+    "zh": "zh-Hans-CN",
+    "zh-Hani": "zh-Hans-CN",
+    "zh-Hant": "zh-Hant-TW",
+    "zh-HK": "zh-Hant-HK",
+    "zh-MO": "zh-Hant-MO",
+    "zh-TW": "zh-Hant-TW",
+    "zu": "zu-Latn-ZA"
+};
 /*
  * localeinfo.js - Encode locale-specific defaults
  * 
@@ -5714,7 +6344,25 @@ ilib.LocaleInfo = function(locale, options) {
 };
 
 ilib.LocaleInfo.prototype = {
-	/**
+    /**
+     * Return the name of the locale's language in English.
+     * @returns {string} the name of the locale's language in English
+     */
+    getLanguageName: function () {
+    	return this.info["language.name"];	
+    },
+    
+    /**
+     * Return the name of the locale's region in English. If the locale
+     * has no region, this returns undefined.
+     * 
+     * @returns {string|undefined} the name of the locale's region in English
+     */
+    getRegionName: function () {
+    	return this.info["region.name"];	
+    },
+
+    /**
 	 * Return whether this locale commonly uses the 12- or the 24-hour clock.
 	 *  
 	 * @returns {string} "12" if the locale commonly uses a 12-hour clock, or "24"
@@ -6512,8 +7160,12 @@ ilib.Date.GregDate = function(params) {
 		}
 		
 		if (typeof(params.unixtime) != 'undefined') {
+			// unix time is defined to be UTC
+			this.timezone = "Etc/UTC";
 			this.setTime(parseInt(params.unixtime, 10));
 		} else if (typeof(params.julianday) != 'undefined') {
+			// JD time is defined to be UTC
+			this.timezone = "Etc/UTC";
 			this.setJulianDay(parseFloat(params.julianday));
 		} else if (params.year || params.month || params.day || params.hour ||
 				params.minute || params.second || params.millisecond ) {
@@ -6526,6 +7178,8 @@ ilib.Date.GregDate = function(params) {
 			this.millisecond = parseInt(params.millisecond, 10) || 0;
 		} else if (typeof(params.rd) != 'undefined') {
 			// private parameter. Do not document this!
+			// RD time is defined to be UTC
+			this.timezone = "Etc/UTC";
 			this.setRd(params.rd);
 		} else {
 			// Date.getTime() gets unix time in UTC
@@ -7109,7 +7763,5172 @@ ilib.Date.GregDate.prototype.setTimeZone = function (tzName) {
 
 // register with the factory method
 ilib.Date._constructors["gregorian"] = ilib.Date.GregDate;
-ilib.data.timezones = {"Africa/Douala":{"o":"1:0","f":"WAT","c":"CM","n":"W. Central Africa {c} Time"},"Europe/Sofia":{"o":"2:0","f":"EE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"BG","n":"FLE {c} Time"},"America/Dawson":{"o":"-8:0","f":"P{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"CA","n":"Pacific {c} Time"},"Asia/Yerevan":{"o":"4:0","f":"AMT","c":"AM","n":"Caucasus {c} Time"},"Asia/Bangkok":{"o":"7:0","f":"ICT","c":"TH","n":"SE Asia {c} Time"},"America/Bogota":{"o":"-5:0","f":"CO{c}T","e":{"m":4,"r":"4","t":"0:0"},"s":{"m":5,"r":"3","t":"0:0","v":"1:0","c":"S"},"c":"CO","n":"SA Pacific {c} Time"},"Asia/Colombo":{"o":"5:30","f":"IST","c":"LK","n":"Sri Lanka {c} Time"},"Africa/Kampala":{"o":"3:0","f":"EAT","c":"UG","n":"E. Africa {c} Time"},"Africa/Blantyre":{"o":"2:0","f":"CAT","c":"MW","n":"South Africa {c} Time"},"Europe/Volgograd":{"o":"4:0","f":"VOLT","c":"RU","n":"Russian {c} Time"},"Atlantic/St_Helena":{"o":"0:0","f":"GMT","c":"SH","n":"Greenwich {c} Time"},"Africa/Malabo":{"o":"1:0","f":"WAT","c":"GQ","n":"W. Central Africa {c} Time"},"Asia/Nicosia":{"o":"2:0","f":"EE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"CY","n":"E. Europe {c} Time"},"America/Resolute":{"o":"-6:0","f":"C{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"CA","n":"Central {c} Time"},"America/Danmarkshavn":{"o":"0:0","f":"GMT","c":"GL","n":"UTC"},"America/Anguilla":{"o":"-4:0","f":"AST","c":"AI","n":"SA Western {c} Time"},"America/Regina":{"o":"-6:0","f":"CST","c":"CA","n":"Canada Central {c} Time"},"Asia/Amman":{"o":"2:0","f":"EE{c}T","e":{"m":10,"r":"l5","t":"0:0","z":"s"},"s":{"m":3,"r":"l4","t":"24:0","v":"1:0","c":"S"},"c":"JO","n":"Jordan {c} Time"},"Europe/Brussels":{"o":"1:0","f":"CE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"BE","n":"Romance {c} Time"},"Europe/Simferopol":{"o":"2:0","f":"EE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"UA","n":"FLE {c} Time"},"America/Argentina/Ushuaia":{"o":"-3:0","f":"ART","c":"AR","n":"Argentina {c} Time"},"America/North_Dakota/Center":{"o":"-6:0","f":"C{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"US","n":"Central {c} Time"},"Indian/Kerguelen":{"o":"5:0","f":"TFT","c":"TF","n":"West Asia {c} Time"},"Europe/Istanbul":{"o":"2:0","f":"EE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"TR","n":"Turkey {c} Time"},"Etc/UTC":{"o":"0:0","f":"UTC"},"Pacific/Chuuk":{"o":"10:0","f":"CHUT","c":"FM","n":"West Pacific {c} Time"},"America/Bahia_Banderas":{"o":"-6:0","f":"C{c}T","e":{"m":10,"r":"l0","t":"2:0","c":"S"},"s":{"m":4,"r":"0>1","t":"2:0","v":"1:0","c":"D"},"c":"MX","n":"Central {c} Time (Mexico)"},"Pacific/Rarotonga":{"o":"-10:0","f":"CK{c}T","e":{"m":3,"r":"0>1","t":"0:0"},"s":{"m":10,"r":"l0","t":"0:0","v":"0:30","c":"HS"},"c":"CK","n":"Hawaiian {c} Time"},"Asia/Hebron":{"o":"2:0","f":"EE{c}T","e":{"m":9,"r":"5>21","t":"1:0"},"s":{"m":3,"r":"l4","t":"24:0","v":"1:0","c":"S"},"c":"PS","n":"Egypt {c} Time"},"Australia/Broken_Hill":{"o":"9:30","f":"CST","s":{"m":10,"r":"0>1","t":"2:0","z":"s","v":"1:0"},"e":{"m":4,"r":"0>1","t":"2:0","z":"s"},"c":"AU","n":"Cen. Australia {c} Time"},"PST8PDT":{"o":"-8:0","f":"P{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"n":"Pacific {c} Time"},"Antarctica/Casey":{"o":"8:0","f":"WST","c":"AQ","n":"W. Australia {c} Time"},"Europe/Stockholm":{"o":"1:0","f":"CE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"SE","n":"W. Europe {c} Time"},"Africa/Bamako":{"o":"0:0","f":"GMT","c":"ML","n":"Greenwich {c} Time"},"America/St_Johns":{"o":"-3:30","f":"N{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"CA","n":"Newfoundland {c} Time"},"Africa/Dar_es_Salaam":{"o":"3:0","f":"EAT","c":"TZ","n":"E. Africa {c} Time"},"Asia/Novosibirsk":{"o":"7:0","f":"NOVT","c":"RU","n":"N. Central Asia {c} Time"},"Asia/Sakhalin":{"o":"11:0","f":"SAKT","c":"RU","n":"Vladivostok {c} Time"},"America/Argentina/Tucuman":{"o":"-3:0","f":"AR{c}T","e":{"m":3,"r":"0>15","t":"0:0"},"s":{"m":10,"r":"0>15","t":"0:0","v":"1:0","c":"S"},"c":"AR","n":"Argentina {c} Time"},"Europe/Budapest":{"o":"1:0","f":"CE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"HU","n":"Central Europe {c} Time"},"America/Curacao":{"o":"-4:0","f":"AST","c":"CW","n":"SA Western {c} Time"},"Africa/Tunis":{"o":"1:0","f":"CE{c}T","e":{"m":10,"r":"l0","t":"2:0","z":"s"},"s":{"m":3,"r":"l0","t":"2:0","z":"s","v":"1:0","c":"S"},"c":"TN","n":"W. Central Africa {c} Time"},"Pacific/Guam":{"o":"10:0","f":"ChST","c":"GU","n":"West Pacific {c} Time"},"Africa/Asmara":{"o":"3:0","f":"EAT","c":"ER","n":"E. Africa {c} Time"},"Africa/Maseru":{"o":"2:0","f":"SAST","c":"LS","n":"South Africa {c} Time"},"America/Asuncion":{"o":"-4:0","f":"PY{c}T","e":{"m":3,"r":"0>22","t":"0:0"},"s":{"m":10,"r":"0>1","t":"0:0","v":"1:0","c":"S"},"c":"PY","n":"Paraguay {c} Time"},"America/Indiana/Winamac":{"o":"-5:0","f":"E{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"US","n":"Eastern {c} Time"},"Europe/Vaduz":{"o":"1:0","f":"CE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"LI","n":"W. Europe {c} Time"},"Asia/Ulaanbaatar":{"o":"8:0","f":"ULA{c}T","s":{"m":3,"r":"l6","t":"2:0","v":"1:0","c":"S"},"e":{"m":9,"r":"l6","t":"2:0"},"c":"MN","n":"Ulaanbaatar {c} Time"},"Asia/Vientiane":{"o":"7:0","f":"ICT","c":"LA","n":"SE Asia {c} Time"},"Africa/Niamey":{"o":"1:0","f":"WAT","c":"NE","n":"W. Central Africa {c} Time"},"Asia/Brunei":{"o":"8:0","f":"BNT","c":"BN","n":"Singapore {c} Time"},"America/Thunder_Bay":{"o":"-5:0","f":"E{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"CA","n":"Eastern {c} Time"},"Africa/Djibouti":{"o":"3:0","f":"EAT","c":"DJ","n":"E. Africa {c} Time"},"Asia/Tbilisi":{"o":"4:0","f":"GET","c":"GE","n":"Georgian {c} Time"},"America/Merida":{"o":"-6:0","f":"C{c}T","e":{"m":10,"r":"l0","t":"2:0","c":"S"},"s":{"m":4,"r":"0>1","t":"2:0","v":"1:0","c":"D"},"c":"MX","n":"Central {c} Time (Mexico)"},"America/Recife":{"o":"-3:0","f":"BRT","c":"BR","n":"SA Eastern {c} Time"},"Indian/Reunion":{"o":"4:0","f":"RET","c":"RE","n":"Mauritius {c} Time"},"Asia/Oral":{"o":"5:0","f":"ORAT","c":"KZ","n":"West Asia {c} Time"},"Africa/Lusaka":{"o":"2:0","f":"CAT","c":"ZM","n":"South Africa {c} Time"},"America/Tortola":{"o":"-4:0","f":"AST","c":"VG","n":"SA Western {c} Time"},"Africa/Ouagadougou":{"o":"0:0","f":"GMT","c":"BF","n":"Greenwich {c} Time"},"Asia/Kuching":{"o":"8:0","f":"MYT","c":"MY","n":"Singapore {c} Time"},"America/Tegucigalpa":{"o":"-6:0","f":"C{c}T","e":{"m":8,"r":"1>1","t":"0:0","c":"S"},"s":{"m":5,"r":"0>1","t":"0:0","v":"1:0","c":"D"},"c":"HN","n":"Central America {c} Time"},"Asia/Novokuznetsk":{"o":"7:0","f":"NOVT","c":"RU","n":"N. Central Asia {c} Time"},"Europe/Vilnius":{"o":"2:0","f":"EE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"LT","n":"FLE {c} Time"},"Asia/Bishkek":{"o":"6:0","f":"KGT","c":"KG","n":"Central Asia {c} Time"},"America/Moncton":{"o":"-4:0","f":"A{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"CA","n":"Atlantic {c} Time"},"America/Maceio":{"o":"-3:0","f":"BRT","c":"BR","n":"SA Eastern {c} Time"},"Africa/Dakar":{"o":"0:0","f":"GMT","c":"SN","n":"Greenwich {c} Time"},"America/Belize":{"o":"-6:0","f":"C{c}T","e":{"m":2,"r":"12","t":"0:0","c":"S"},"s":{"m":12,"r":"18","t":"0:0","v":"1:0","c":"D"},"c":"BZ","n":"Central America {c} Time"},"Etc/GMT":{"o":"0:0","f":"GMT","n":"UTC"},"America/Cuiaba":{"o":"-4:0","f":"AM{c}T","e":{"m":2,"r":"0>15","t":"0:0"},"s":{"m":10,"r":"0>15","t":"0:0","v":"1:0","c":"S"},"c":"BR","n":"Central Brazilian {c} Time"},"Asia/Tashkent":{"o":"5:0","f":"UZT","c":"UZ","n":"West Asia {c} Time"},"Atlantic/Canary":{"o":"0:0","f":"WE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"ES","n":"GMT {c} Time"},"America/Rankin_Inlet":{"o":"-6:0","f":"C{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"CA","n":"Central {c} Time"},"Asia/Jerusalem":{"o":"2:0","f":"I{c}T","e":{"m":10,"r":"0>2","t":"2:0","c":"S"},"s":{"m":3,"r":"5>23","t":"2:0","v":"1:0","c":"D"},"c":"IL","n":"Israel {c} Time"},"Antarctica/Rothera":{"o":"-3:0","f":"ROTT","c":"AQ","n":"SA Eastern {c} Time"},"Indian/Cocos":{"o":"6:30","f":"CCT","c":"CC","n":"Myanmar {c} Time"},"America/Glace_Bay":{"o":"-4:0","f":"A{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"CA","n":"Atlantic {c} Time"},"Atlantic/Cape_Verde":{"o":"-1:0","f":"CVT","c":"CV","n":"Cape Verde {c} Time"},"America/Cambridge_Bay":{"o":"-7:0","f":"M{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"CA","n":"Mountain {c} Time"},"Indian/Mauritius":{"o":"4:0","f":"MU{c}T","e":{"m":3,"r":"l0","t":"2:0"},"s":{"m":10,"r":"l0","t":"2:0","v":"1:0","c":"S"},"c":"MU","n":"Mauritius {c} Time"},"Etc/GMT-14":{"o":"14:0","f":"GMT-14"},"Etc/GMT-13":{"o":"13:0","f":"GMT-13","n":"Tonga {c} Time"},"Australia/Brisbane":{"o":"10:0","f":"EST","e":{"m":3,"r":"0>1","t":"2:0","z":"s"},"s":{"m":10,"r":"l0","t":"2:0","z":"s","v":"1:0"},"c":"AU","n":"E. Australia {c} Time"},"Etc/GMT-12":{"o":"12:0","f":"GMT-12","n":"UTC+12"},"Etc/GMT-11":{"o":"11:0","f":"GMT-11","n":"Central Pacific {c} Time"},"America/Grenada":{"o":"-4:0","f":"AST","c":"GD","n":"SA Western {c} Time"},"Etc/GMT-10":{"o":"10:0","f":"GMT-10","n":"West Pacific {c} Time"},"Antarctica/Vostok":{"o":"6:0","f":"VOST","c":"AQ","n":"Central Asia {c} Time"},"Etc/GMT+11":{"o":"-11:0","f":"GMT+11","n":"UTC-11"},"Etc/GMT+12":{"o":"-12:0","f":"GMT+12","n":"Dateline {c} Time"},"Pacific/Auckland":{"o":"12:0","f":"NZ{c}T","e":{"m":4,"r":"0>1","t":"2:0","z":"s","c":"S"},"s":{"m":9,"r":"l0","t":"2:0","z":"s","v":"1:0","c":"D"},"c":"NZ","n":"New Zealand {c} Time"},"Antarctica/DumontDUrville":{"o":"10:0","f":"DDUT","c":"AQ","n":"West Pacific {c} Time"},"Etc/GMT+10":{"o":"-10:0","f":"GMT+10","n":"Hawaiian {c} Time"},"Africa/Nairobi":{"o":"3:0","f":"EAT","c":"KE","n":"E. Africa {c} Time"},"Pacific/Norfolk":{"o":"11:30","f":"NFT","c":"NF"},"Europe/Paris":{"o":"1:0","f":"CE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"FR","n":"Romance {c} Time"},"Asia/Irkutsk":{"o":"9:0","f":"IRKT","c":"RU","n":"North Asia East {c} Time"},"Pacific/Apia":{"o":"13:0","f":"WS{c}T","e":{"m":4,"r":"0>1","t":"4:0"},"s":{"m":9,"r":"l0","t":"3:0","v":"1:00","c":"D"},"c":"WS","n":"Samoa {c} Time"},"America/Caracas":{"o":"-4:30","f":"VET","c":"VE","n":"Venezuela {c} Time"},"Pacific/Chatham":{"o":"12:45","f":"CHA{c}T","e":{"m":4,"r":"0>1","t":"2:45","z":"s","c":"S"},"s":{"m":9,"r":"l0","t":"2:45","z":"s","v":"1:0","c":"D"},"c":"NZ"},"Africa/Maputo":{"o":"2:0","f":"CAT","c":"MZ","n":"South Africa {c} Time"},"America/Metlakatla":{"o":"-8:0","f":"MeST","c":"US"},"Atlantic/South_Georgia":{"o":"-2:0","f":"GST","c":"GS","n":"UTC-02"},"Asia/Baghdad":{"o":"3:0","f":"A{c}T","e":{"m":10,"r":"1","t":"3:0","z":"s","c":"S"},"s":{"m":4,"r":"1","t":"3:0","z":"s","v":"1:0","c":"D"},"c":"IQ","n":"Arabic {c} Time"},"Pacific/Saipan":{"o":"10:0","f":"ChST","c":"MP","n":"West Pacific {c} Time"},"Asia/Dhaka":{"o":"6:0","f":"BD{c}T","e":{"m":12,"r":"31","t":"23:59"},"s":{"m":6,"r":"19","t":"23:0","v":"1:0","c":"S"},"c":"BD","n":"Bangladesh {c} Time"},"Asia/Singapore":{"o":"8:0","f":"SGT","c":"SG","n":"Singapore {c} Time"},"Africa/Cairo":{"o":"2:0","f":"EE{c}T","e":{"m":9,"r":"l4","t":"23:0","z":"s"},"s":{"m":9,"r":"10","t":"0:0","v":"1:0","c":"S"},"c":"EG","n":"Egypt {c} Time"},"Europe/Belgrade":{"o":"1:0","f":"CE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"RS","n":"Central Europe {c} Time"},"Europe/Moscow":{"o":"4:0","f":"MSK","c":"RU","n":"Russian {c} Time"},"America/Inuvik":{"o":"-7:0","f":"M{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"CA","n":"Mountain {c} Time"},"Pacific/Funafuti":{"o":"12:0","f":"TVT","c":"TV","n":"UTC+12"},"Africa/Bissau":{"o":"0:0","f":"GMT","c":"GW","n":"Greenwich {c} Time"},"Atlantic/Faroe":{"o":"0:0","f":"WE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"FO","n":"GMT {c} Time"},"Asia/Taipei":{"o":"8:0","f":"C{c}T","e":{"m":9,"r":"30","t":"0:0","c":"S"},"s":{"m":6,"r":"30","t":"0:0","v":"1:0","c":"D"},"c":"TW","n":"Taipei {c} Time"},"America/Argentina/Catamarca":{"o":"-3:0","f":"ART","c":"AR","n":"Argentina {c} Time"},"Pacific/Majuro":{"o":"12:0","f":"MHT","c":"MH","n":"UTC+12"},"EET":{"o":"2:0","f":"EE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"}},"Indian/Comoro":{"o":"3:0","f":"EAT","c":"KM","n":"E. Africa {c} Time"},"America/Manaus":{"o":"-4:0","f":"AMT","c":"BR","n":"SA Western {c} Time"},"Asia/Shanghai":{"o":"8:0","f":"C{c}T","s":{"m":4,"r":"0>10","t":"0:0","v":"1:0","c":"D"},"e":{"m":9,"r":"0>11","t":"0:0","c":"S"},"c":"CN","n":"China {c} Time"},"America/Indiana/Vevay":{"o":"-5:0","f":"E{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"US","n":"US Eastern {c} Time"},"Australia/Hobart":{"o":"10:0","f":"EST","e":{"m":4,"r":"0>1","t":"2:0","z":"s"},"s":{"m":10,"r":"0>1","t":"2:0","z":"s","v":"1:0"},"c":"AU","n":"Tasmania {c} Time"},"Asia/Dili":{"o":"9:0","f":"TLT","c":"TL","n":"Tokyo {c} Time"},"America/Indiana/Marengo":{"o":"-5:0","f":"E{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"US","n":"US Eastern {c} Time"},"Asia/Aqtobe":{"o":"5:0","f":"AQTT","c":"KZ","n":"West Asia {c} Time"},"Australia/Sydney":{"o":"10:0","f":"EST","s":{"m":10,"r":"0>1","t":"2:0","z":"s","v":"1:0"},"e":{"m":4,"r":"0>1","t":"2:0","z":"s"},"c":"AU","n":"AUS Eastern {c} Time"},"Indian/Chagos":{"o":"6:0","f":"IOT","c":"IO","n":"Central Asia {c} Time"},"America/Phoenix":{"o":"-7:0","f":"MST","c":"US","n":"US Mountain {c} Time"},"Europe/Luxembourg":{"o":"1:0","f":"CE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"LU","n":"W. Europe {c} Time"},"Asia/Makassar":{"o":"8:0","f":"CIT","c":"ID","n":"Singapore {c} Time"},"Asia/Phnom_Penh":{"o":"7:0","f":"ICT","c":"KH","n":"SE Asia {c} Time"},"Australia/Currie":{"o":"10:0","f":"EST","e":{"m":4,"r":"0>1","t":"2:0","z":"s"},"s":{"m":10,"r":"0>1","t":"2:0","z":"s","v":"1:0"},"c":"AU","n":"Tasmania {c} Time"},"America/Cancun":{"o":"-6:0","f":"C{c}T","e":{"m":10,"r":"l0","t":"2:0","c":"S"},"s":{"m":4,"r":"0>1","t":"2:0","v":"1:0","c":"D"},"c":"MX","n":"Central {c} Time (Mexico)"},"America/Argentina/Cordoba":{"o":"-3:0","f":"AR{c}T","e":{"m":3,"r":"0>15","t":"0:0"},"s":{"m":10,"r":"0>15","t":"0:0","v":"1:0","c":"S"},"c":"AR","n":"Argentina {c} Time"},"Asia/Baku":{"o":"4:0","f":"AZ{c}T","e":{"m":10,"r":"l0","t":"5:0"},"s":{"m":3,"r":"l0","t":"4:0","v":"1:0","c":"S"},"c":"AZ","n":"Azerbaijan {c} Time"},"Asia/Seoul":{"o":"9:0","f":"K{c}T","e":{"m":10,"r":"0>8","t":"0:0","c":"S"},"s":{"m":5,"r":"0>8","t":"0:0","v":"1:0","c":"D"},"c":"KR","n":"Korea {c} Time"},"WET":{"o":"0:0","f":"WE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"}},"Antarctica/McMurdo":{"o":"12:0","f":"NZ{c}T","e":{"m":4,"r":"0>1","t":"2:0","z":"s","c":"S"},"s":{"m":9,"r":"l0","t":"2:0","z":"s","v":"1:0","c":"D"},"c":"AQ","n":"New Zealand {c} Time"},"Europe/Rome":{"o":"1:0","f":"CE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"IT","n":"W. Europe {c} Time"},"America/Lima":{"o":"-5:0","f":"PE{c}T","e":{"m":4,"r":"1","t":"0:0"},"s":{"m":1,"r":"1","t":"0:0","v":"1:0","c":"S"},"c":"PE","n":"SA Pacific {c} Time"},"Atlantic/Stanley":{"o":"-3:0","f":"FKST","c":"FK","n":"SA Eastern {c} Time"},"America/Dawson_Creek":{"o":"-7:0","f":"MST","c":"CA","n":"US Mountain {c} Time"},"Asia/Anadyr":{"o":"12:0","f":"ANAT","c":"RU","n":"Magadan {c} Time"},"Europe/Helsinki":{"o":"2:0","f":"EE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"FI","n":"FLE {c} Time"},"America/Matamoros":{"o":"-6:0","f":"C{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"MX","n":"Central {c} Time"},"America/Argentina/San_Juan":{"o":"-3:0","f":"ART","c":"AR","n":"Argentina {c} Time"},"America/Denver":{"o":"-7:0","f":"M{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"US","n":"Mountain {c} Time"},"Australia/Eucla":{"o":"8:45","f":"CWST","e":{"m":3,"r":"l0","t":"2:0","z":"s"},"s":{"m":10,"r":"l0","t":"2:0","z":"s","v":"1:0"},"c":"AU"},"America/Detroit":{"o":"-5:0","f":"E{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"US","n":"Eastern {c} Time"},"America/Campo_Grande":{"o":"-4:0","f":"AM{c}T","e":{"m":2,"r":"0>15","t":"0:0"},"s":{"m":10,"r":"0>15","t":"0:0","v":"1:0","c":"S"},"c":"BR","n":"Central Brazilian {c} Time"},"America/Indiana/Tell_City":{"o":"-6:0","f":"C{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"US","n":"Central {c} Time"},"America/Hermosillo":{"o":"-7:0","f":"MST","c":"MX","n":"US Mountain {c} Time"},"America/Whitehorse":{"o":"-8:0","f":"P{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"CA","n":"Pacific {c} Time"},"America/Boise":{"o":"-7:0","f":"M{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"US","n":"Mountain {c} Time"},"America/St_Kitts":{"o":"-4:0","f":"AST","c":"KN","n":"SA Western {c} Time"},"America/Pangnirtung":{"o":"-5:0","f":"E{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"CA","n":"Eastern {c} Time"},"MET":{"o":"1:0","f":"ME{c}T","e":{"m":10,"r":"l0","t":"2:0","z":"s"},"s":{"m":3,"r":"l0","t":"2:0","z":"s","v":"1:0","c":"S"}},"Asia/Tehran":{"o":"3:30","f":"IR{c}T","e":{"m":9,"r":"21","t":"0:0","c":"S"},"s":{"m":3,"r":"21","t":"0:0","v":"1:0","c":"D"},"c":"IR","n":"Iran {c} Time"},"Asia/Almaty":{"o":"6:0","f":"ALMT","c":"KZ","n":"Central Asia {c} Time"},"America/Santa_Isabel":{"o":"-8:0","f":"P{c}T","e":{"m":10,"r":"l0","t":"2:0","c":"S"},"s":{"m":4,"r":"0>1","t":"2:0","v":"1:0","c":"D"},"c":"MX","n":"Pacific {c} Time (Mexico)"},"America/Chicago":{"o":"-6:0","f":"C{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"US","n":"Central {c} Time"},"Asia/Ho_Chi_Minh":{"o":"7:0","f":"ICT","c":"VN","n":"SE Asia {c} Time"},"America/Boa_Vista":{"o":"-4:0","f":"AMT","c":"BR","n":"SA Western {c} Time"},"America/Mazatlan":{"o":"-7:0","f":"M{c}T","e":{"m":10,"r":"l0","t":"2:0","c":"S"},"s":{"m":4,"r":"0>1","t":"2:0","v":"1:0","c":"D"},"c":"MX","n":"Mountain {c} Time (Mexico)"},"America/Indiana/Petersburg":{"o":"-5:0","f":"E{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"US","n":"Eastern {c} Time"},"America/Iqaluit":{"o":"-5:0","f":"E{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"CA","n":"Eastern {c} Time"},"Africa/Algiers":{"o":"1:0","f":"CET","c":"DZ","n":"W. Central Africa {c} Time"},"America/Araguaina":{"o":"-3:0","f":"BR{c}T","e":{"m":2,"r":"0>15","t":"0:0"},"s":{"m":10,"r":"0>15","t":"0:0","v":"1:0","c":"S"},"c":"BR","n":"SA Eastern {c} Time"},"America/St_Lucia":{"o":"-4:0","f":"AST","c":"LC","n":"SA Western {c} Time"},"Pacific/Kiritimati":{"o":"14:0","f":"LINT","c":"KI"},"Asia/Yakutsk":{"o":"10:0","f":"YAKT","c":"RU","n":"Yakutsk {c} Time"},"Indian/Mahe":{"o":"4:0","f":"SCT","c":"SC","n":"Mauritius {c} Time"},"Asia/Hong_Kong":{"o":"8:0","f":"HK{c}T","e":{"m":10,"r":"0>16","t":"3:30"},"s":{"m":5,"r":"0>8","t":"3:30","v":"1:0","c":"S"},"c":"HK","n":"China {c} Time"},"America/Panama":{"o":"-5:0","f":"EST","c":"PA","n":"SA Pacific {c} Time"},"Europe/Gibraltar":{"o":"1:0","f":"CE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"GI","n":"W. Europe {c} Time"},"America/Scoresbysund":{"o":"-1:0","f":"EG{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"GL","n":"Azores {c} Time"},"America/Aruba":{"o":"-4:0","f":"AST","c":"AW","n":"SA Western {c} Time"},"Asia/Muscat":{"o":"4:0","f":"GST","c":"OM","n":"Arabian {c} Time"},"Africa/Freetown":{"o":"0:0","f":"{c}","e":{"m":9,"r":"1","t":"0:0","c":"GMT"},"s":{"m":6,"r":"1","t":"0:0","v":"1:0","c":"SLST"},"c":"SL","n":"Greenwich {c} Time"},"America/Argentina/San_Luis":{"o":"-4:0","f":"WAR{c}T","s":{"m":10,"r":"0>8","t":"0:0","v":"1:0","c":"S"},"e":{"m":3,"r":"0>8","t":"0:0"},"c":"AR","n":"Argentina {c} Time"},"America/Paramaribo":{"o":"-3:0","f":"SRT","c":"SR","n":"SA Eastern {c} Time"},"Australia/Lindeman":{"o":"10:0","f":"EST","e":{"m":3,"r":"0>1","t":"2:0","z":"s"},"s":{"m":10,"r":"l0","t":"2:0","z":"s","v":"1:0"},"c":"AU","n":"E. Australia {c} Time"},"Asia/Hovd":{"o":"7:0","f":"HOV{c}T","s":{"m":3,"r":"l6","t":"2:0","v":"1:0","c":"S"},"e":{"m":9,"r":"l6","t":"2:0"},"c":"MN","n":"SE Asia {c} Time"},"America/Bahia":{"o":"-3:0","f":"BRT","c":"BR","n":"Bahia {c} Time"},"Pacific/Pohnpei":{"o":"11:0","f":"PONT","c":"FM","n":"Central Pacific {c} Time"},"Pacific/Guadalcanal":{"o":"11:0","f":"SBT","c":"SB","n":"Central Pacific {c} Time"},"Australia/Perth":{"o":"8:0","f":"WST","e":{"m":3,"r":"l0","t":"2:0","z":"s"},"s":{"m":10,"r":"l0","t":"2:0","z":"s","v":"1:0"},"c":"AU","n":"W. Australia {c} Time"},"Pacific/Pago_Pago":{"o":"-11:0","f":"SST","c":"AS","n":"UTC-11"},"Factory":{"o":"0:0","f":"\"Local"},"America/Edmonton":{"o":"-7:0","f":"M{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"CA","n":"Mountain {c} Time"},"Antarctica/Syowa":{"o":"3:0","f":"SYOT","c":"AQ","n":"E. Africa {c} Time"},"America/Los_Angeles":{"o":"-8:0","f":"P{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"US","n":"Pacific {c} Time"},"America/Creston":{"o":"-7:0","f":"MST","c":"CA","n":"US Mountain {c} Time"},"Africa/Nouakchott":{"o":"0:0","f":"GMT","c":"MR","n":"Greenwich {c} Time"},"America/Noronha":{"o":"-2:0","f":"FNT","c":"BR","n":"UTC-02"},"Asia/Riyadh89":{"o":"3:7","f":"zzz"},"Asia/Riyadh88":{"o":"3:7","f":"zzz"},"America/La_Paz":{"o":"-4:0","f":"BOT","c":"BO","n":"SA Western {c} Time"},"America/Dominica":{"o":"-4:0","f":"AST","c":"DM","n":"SA Western {c} Time"},"Asia/Riyadh87":{"o":"3:7","f":"zzz"},"Antarctica/Macquarie":{"o":"11:0","f":"MIST","c":"AU","n":"Central Pacific {c} Time"},"MST7MDT":{"o":"-7:0","f":"M{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"n":"Mountain {c} Time"},"Africa/Ceuta":{"o":"1:0","f":"CE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"ES","n":"Romance {c} Time"},"Africa/El_Aaiun":{"o":"0:0","f":"WET","c":"EH","n":"Greenwich {c} Time"},"Africa/Luanda":{"o":"1:0","f":"WAT","c":"AO","n":"W. Central Africa {c} Time"},"Europe/Andorra":{"o":"1:0","f":"CE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"AD","n":"W. Europe {c} Time"},"Africa/Addis_Ababa":{"o":"3:0","f":"EAT","c":"ET","n":"E. Africa {c} Time"},"America/Atikokan":{"o":"-5:0","f":"EST","c":"CA","n":"SA Pacific {c} Time"},"America/Argentina/Salta":{"o":"-3:0","f":"ART","c":"AR","n":"Argentina {c} Time"},"Asia/Beirut":{"o":"2:0","f":"EE{c}T","e":{"m":10,"r":"l0","t":"0:0"},"s":{"m":3,"r":"l0","t":"0:0","v":"1:0","c":"S"},"c":"LB","n":"Middle East {c} Time"},"Africa/Brazzaville":{"o":"1:0","f":"WAT","c":"CG","n":"W. Central Africa {c} Time"},"Pacific/Nauru":{"o":"12:0","f":"NRT","c":"NR","n":"UTC+12"},"America/Guadeloupe":{"o":"-4:0","f":"AST","c":"GP","n":"SA Western {c} Time"},"Africa/Bangui":{"o":"1:0","f":"WAT","c":"CF","n":"W. Central Africa {c} Time"},"Asia/Kamchatka":{"o":"12:0","f":"PETT","c":"RU","n":"Magadan {c} Time"},"Asia/Aqtau":{"o":"5:0","f":"AQTT","c":"KZ","n":"West Asia {c} Time"},"America/Eirunepe":{"o":"-4:0","f":"AMT","c":"BR","n":"SA Western {c} Time"},"Antarctica/Palmer":{"o":"-4:0","f":"CL{c}T","s":{"m":9,"r":"0>2","t":"4:0","z":"u","v":"1:0","c":"S"},"e":{"m":4,"r":"0>23","t":"3:0","z":"u"},"c":"AQ","n":"Pacific SA {c} Time"},"Africa/Lubumbashi":{"o":"2:0","f":"CAT","c":"CD","n":"South Africa {c} Time"},"Asia/Kolkata":{"o":"5:30","f":"IST","c":"IN","n":"India {c} Time"},"America/Monterrey":{"o":"-6:0","f":"C{c}T","e":{"m":10,"r":"l0","t":"2:0","c":"S"},"s":{"m":4,"r":"0>1","t":"2:0","v":"1:0","c":"D"},"c":"MX","n":"Central {c} Time (Mexico)"},"Pacific/Galapagos":{"o":"-6:0","f":"GALT","c":"EC","n":"Central America {c} Time"},"Europe/London":{"o":"0:0","f":"GMT/BST","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"GB","n":"GMT {c} Time"},"Europe/Samara":{"o":"4:0","f":"SAMT","c":"RU","n":"Russian {c} Time"},"Europe/Monaco":{"o":"1:0","f":"CE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"MC","n":"W. Europe {c} Time"},"Atlantic/Bermuda":{"o":"-4:0","f":"A{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"BM","n":"Atlantic {c} Time"},"America/Indiana/Indianapolis":{"o":"-5:0","f":"E{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"US","n":"US Eastern {c} Time"},"Indian/Christmas":{"o":"7:0","f":"CXT","c":"CX","n":"SE Asia {c} Time"},"Pacific/Tarawa":{"o":"12:0","f":"GILT","c":"KI","n":"UTC+12"},"America/Yakutat":{"o":"-9:0","f":"AK{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"US","n":"Alaskan {c} Time"},"America/St_Vincent":{"o":"-4:0","f":"AST","c":"VC","n":"SA Western {c} Time"},"Europe/Vienna":{"o":"1:0","f":"CE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"AT","n":"W. Europe {c} Time"},"America/Port-au-Prince":{"o":"-5:0","f":"E{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"HT","n":"SA Pacific {c} Time"},"America/New_York":{"o":"-5:0","f":"E{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"US","n":"Eastern {c} Time"},"Africa/Mogadishu":{"o":"3:0","f":"EAT","c":"SO","n":"E. Africa {c} Time"},"Asia/Qatar":{"o":"3:0","f":"AST","c":"QA","n":"Arab {c} Time"},"Pacific/Niue":{"o":"-11:0","f":"NUT","c":"NU","n":"UTC-11"},"Africa/Gaborone":{"o":"2:0","f":"CAT","c":"BW","n":"South Africa {c} Time"},"America/Antigua":{"o":"-4:0","f":"AST","c":"AG","n":"SA Western {c} Time"},"Australia/Lord_Howe":{"o":"10:30","f":"LHST","s":{"m":10,"r":"0>1","t":"2:0","v":"0:30"},"e":{"m":4,"r":"0>1","t":"2:0"},"c":"AU"},"Europe/Lisbon":{"o":"0:0","f":"WE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"PT","n":"GMT {c} Time"},"Europe/Zurich":{"o":"1:0","f":"CE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"CH","n":"W. Europe {c} Time"},"America/Montevideo":{"o":"-3:0","f":"UY{c}T","e":{"m":3,"r":"0>8","t":"2:0"},"s":{"m":10,"r":"0>1","t":"2:0","v":"1:0","c":"S"},"c":"UY","n":"Montevideo {c} Time"},"America/Winnipeg":{"o":"-6:0","f":"C{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"CA","n":"Central {c} Time"},"America/Guyana":{"o":"-4:0","f":"GYT","c":"GY","n":"SA Western {c} Time"},"America/Santarem":{"o":"-3:0","f":"BRT","c":"BR","n":"SA Eastern {c} Time"},"Asia/Macau":{"o":"8:0","f":"C{c}T","s":{"m":4,"r":"0>10","t":"0:0","v":"1:0","c":"D"},"e":{"m":9,"r":"0>11","t":"0:0","c":"S"},"c":"MO","n":"China {c} Time"},"Europe/Dublin":{"o":"0:0","f":"GMT/IST","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"IE","n":"GMT {c} Time"},"Asia/Vladivostok":{"o":"11:0","f":"VLAT","c":"RU","n":"Vladivostok {c} Time"},"Europe/Zaporozhye":{"o":"2:0","f":"EE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"UA","n":"FLE {c} Time"},"Indian/Mayotte":{"o":"3:0","f":"EAT","c":"YT","n":"E. Africa {c} Time"},"America/Tijuana":{"o":"-8:0","f":"P{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"MX","n":"Pacific {c} Time"},"Africa/Ndjamena":{"o":"1:0","f":"WAT","c":"TD","n":"W. Central Africa {c} Time"},"Africa/Monrovia":{"o":"0:0","f":"GMT","c":"LR","n":"Greenwich {c} Time"},"Pacific/Tahiti":{"o":"-10:0","f":"TAHT","c":"PF","n":"Hawaiian {c} Time"},"Asia/Qyzylorda":{"o":"6:0","f":"QYZT","c":"KZ","n":"Central Asia {c} Time"},"America/Thule":{"o":"-4:0","f":"A{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"GL","n":"Atlantic {c} Time"},"Europe/Copenhagen":{"o":"1:0","f":"CE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"DK","n":"Romance {c} Time"},"Europe/Amsterdam":{"o":"1:0","f":"CE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"NL","n":"W. Europe {c} Time"},"Asia/Thimphu":{"o":"6:0","f":"BTT","c":"BT","n":"Bangladesh {c} Time"},"America/Chihuahua":{"o":"-7:0","f":"M{c}T","e":{"m":10,"r":"l0","t":"2:0","c":"S"},"s":{"m":4,"r":"0>1","t":"2:0","v":"1:0","c":"D"},"c":"MX","n":"Mountain {c} Time (Mexico)"},"America/Yellowknife":{"o":"-7:0","f":"M{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"CA","n":"Mountain {c} Time"},"Africa/Windhoek":{"o":"1:0","f":"WA{c}T","e":{"m":4,"r":"0>1","t":"2:0"},"s":{"m":9,"r":"0>1","t":"2:0","v":"1:0","c":"S"},"c":"NA","n":"Namibia {c} Time"},"America/Cayman":{"o":"-5:0","f":"EST","c":"KY","n":"SA Pacific {c} Time"},"Antarctica/Davis":{"o":"7:0","f":"DAVT","c":"AQ","n":"SE Asia {c} Time"},"Europe/Berlin":{"o":"1:0","f":"CE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"DE","n":"W. Europe {c} Time"},"Asia/Omsk":{"o":"7:0","f":"OMST","c":"RU","n":"N. Central Asia {c} Time"},"Africa/Kinshasa":{"o":"1:0","f":"WAT","c":"CD","n":"W. Central Africa {c} Time"},"Asia/Kathmandu":{"o":"5:45","f":"NPT","c":"NP","n":"Nepal {c} Time"},"Europe/Chisinau":{"o":"2:0","f":"EE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"MD","n":"GTB {c} Time"},"Asia/Choibalsan":{"o":"8:0","f":"CHO{c}T","s":{"m":3,"r":"l6","t":"2:0","v":"1:0","c":"S"},"e":{"m":9,"r":"l6","t":"2:0"},"c":"MN","n":"Ulaanbaatar {c} Time"},"Etc/UCT":{"o":"0:0","f":"UCT"},"CET":{"o":"1:0","f":"CE{c}T","e":{"m":10,"r":"l0","t":"2:0","z":"s"},"s":{"m":3,"r":"l0","t":"2:0","z":"s","v":"1:0","c":"S"}},"Europe/Prague":{"o":"1:0","f":"CE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"CZ","n":"Central Europe {c} Time"},"America/Toronto":{"o":"-5:0","f":"E{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"CA","n":"Eastern {c} Time"},"Africa/Harare":{"o":"2:0","f":"CAT","c":"ZW","n":"South Africa {c} Time"},"America/Montserrat":{"o":"-4:0","f":"AST","c":"MS","n":"SA Western {c} Time"},"Pacific/Honolulu":{"o":"-10:0","f":"HST","c":"US","n":"Hawaiian {c} Time"},"America/Miquelon":{"o":"-3:0","f":"PM{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"PM"},"Africa/Sao_Tome":{"o":"0:0","f":"GMT","c":"ST","n":"Greenwich {c} Time"},"America/Kentucky/Louisville":{"o":"-5:0","f":"E{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"US","n":"Eastern {c} Time"},"Asia/Pyongyang":{"o":"9:0","f":"KST","c":"KP","n":"Korea {c} Time"},"America/Porto_Velho":{"o":"-4:0","f":"AMT","c":"BR","n":"SA Western {c} Time"},"America/Costa_Rica":{"o":"-6:0","f":"C{c}T","e":{"m":3,"r":"15","t":"0:0","c":"S"},"s":{"m":1,"r":"6>15","t":"0:0","v":"1:0","c":"D"},"c":"CR","n":"Central America {c} Time"},"America/Fortaleza":{"o":"-3:0","f":"BRT","c":"BR","n":"SA Eastern {c} Time"},"America/Mexico_City":{"o":"-6:0","f":"C{c}T","e":{"m":10,"r":"l0","t":"2:0","c":"S"},"s":{"m":4,"r":"0>1","t":"2:0","v":"1:0","c":"D"},"c":"MX","n":"Central {c} Time (Mexico)"},"America/El_Salvador":{"o":"-6:0","f":"C{c}T","e":{"m":9,"r":"l0","t":"0:0","c":"S"},"s":{"m":5,"r":"0>1","t":"0:0","v":"1:0","c":"D"},"c":"SV","n":"Central America {c} Time"},"Europe/Kaliningrad":{"o":"3:0","f":"FET","c":"RU","n":"Kaliningrad {c} Time"},"Asia/Kashgar":{"o":"8:0","f":"C{c}T","s":{"m":4,"r":"0>10","t":"0:0","v":"1:0","c":"D"},"e":{"m":9,"r":"0>11","t":"0:0","c":"S"},"c":"CN","n":"China {c} Time"},"Asia/Damascus":{"o":"2:0","f":"EE{c}T","e":{"m":10,"r":"l5","t":"0:0"},"s":{"m":3,"r":"l5","t":"0:0","v":"1:0","c":"S"},"c":"SY","n":"Syria {c} Time"},"America/Port_of_Spain":{"o":"-4:0","f":"AST","c":"TT","n":"SA Western {c} Time"},"America/Kentucky/Monticello":{"o":"-5:0","f":"E{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"US","n":"Eastern {c} Time"},"CST6CDT":{"o":"-6:0","f":"C{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"n":"Central {c} Time"},"America/Halifax":{"o":"-4:0","f":"A{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"CA","n":"Atlantic {c} Time"},"Asia/Karachi":{"o":"5:0","f":"PK{c}T","e":{"m":11,"r":"1","t":"0:0"},"s":{"m":4,"r":"15","t":"0:0","v":"1:0","c":"S"},"c":"PK","n":"Pakistan {c} Time"},"America/Managua":{"o":"-6:0","f":"C{c}T","e":{"m":10,"r":"0>1","t":"1:0","c":"S"},"s":{"m":4,"r":"30","t":"2:0","v":"1:0","c":"D"},"c":"NI","n":"Central America {c} Time"},"EST5EDT":{"o":"-5:0","f":"E{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"n":"Eastern {c} Time"},"America/North_Dakota/Beulah":{"o":"-6:0","f":"C{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"US","n":"Central {c} Time"},"Pacific/Wallis":{"o":"12:0","f":"WFT","c":"WF","n":"UTC+12"},"America/Nome":{"o":"-9:0","f":"AK{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"US","n":"Alaskan {c} Time"},"Africa/Bujumbura":{"o":"2:0","f":"CAT","c":"BI","n":"South Africa {c} Time"},"Asia/Khandyga":{"o":"10:0","f":"YAKT","c":"RU"},"America/Rio_Branco":{"o":"-4:0","f":"AMT","c":"BR","n":"SA Western {c} Time"},"America/Santiago":{"o":"-4:0","f":"CL{c}T","s":{"m":9,"r":"0>2","t":"4:0","z":"u","v":"1:0","c":"S"},"e":{"m":4,"r":"0>23","t":"3:0","z":"u"},"c":"CL","n":"Pacific SA {c} Time"},"America/Vancouver":{"o":"-8:0","f":"P{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"CA","n":"Pacific {c} Time"},"Asia/Bahrain":{"o":"3:0","f":"AST","c":"BH","n":"Arab {c} Time"},"America/Indiana/Vincennes":{"o":"-5:0","f":"E{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"US","n":"Eastern {c} Time"},"Pacific/Enderbury":{"o":"13:0","f":"PHOT","c":"KI","n":"Tonga {c} Time"},"Pacific/Wake":{"o":"12:0","f":"WAKT","c":"UM","n":"UTC+12"},"Europe/Oslo":{"o":"1:0","f":"CE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"NO","n":"W. Europe {c} Time"},"America/Guatemala":{"o":"-6:0","f":"C{c}T","e":{"m":10,"r":"1","t":"0:0","c":"S"},"s":{"m":4,"r":"30","t":"0:0","v":"1:0","c":"D"},"c":"GT","n":"Central America {c} Time"},"America/Montreal":{"o":"-5:0","f":"E{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"CA","n":"Eastern {c} Time"},"Asia/Dubai":{"o":"4:0","f":"GST","c":"AE","n":"Arabian {c} Time"},"Asia/Harbin":{"o":"8:0","f":"C{c}T","s":{"m":4,"r":"0>10","t":"0:0","v":"1:0","c":"D"},"e":{"m":9,"r":"0>11","t":"0:0","c":"S"},"c":"CN","n":"China {c} Time"},"Africa/Johannesburg":{"o":"2:0","f":"SAST","e":{"m":3,"r":"0>15","t":"2:0"},"s":{"m":9,"r":"0>15","t":"2:0","v":"1:0"},"c":"ZA","n":"South Africa {c} Time"},"Europe/Tallinn":{"o":"2:0","f":"EE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"EE","n":"FLE {c} Time"},"America/Ojinaga":{"o":"-7:0","f":"M{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"MX","n":"Mountain {c} Time"},"Europe/Uzhgorod":{"o":"2:0","f":"EE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"UA","n":"FLE {c} Time"},"Asia/Ust-Nera":{"o":"11:0","f":"VLAT","c":"RU"},"America/Barbados":{"o":"-4:0","f":"A{c}T","e":{"m":9,"r":"25","t":"2:0","c":"S"},"s":{"m":4,"r":"0>15","t":"2:0","v":"1:0","c":"D"},"c":"BB","n":"SA Western {c} Time"},"Asia/Urumqi":{"o":"8:0","f":"C{c}T","s":{"m":4,"r":"0>10","t":"0:0","v":"1:0","c":"D"},"e":{"m":9,"r":"0>11","t":"0:0","c":"S"},"c":"CN","n":"China {c} Time"},"Asia/Gaza":{"o":"2:0","f":"EE{c}T","e":{"m":9,"r":"5>21","t":"1:0"},"s":{"m":3,"r":"l4","t":"24:0","v":"1:0","c":"S"},"c":"PS","n":"Egypt {c} Time"},"Atlantic/Azores":{"o":"-1:0","f":"AZO{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"PT","n":"Azores {c} Time"},"Asia/Kuwait":{"o":"3:0","f":"AST","c":"KW","n":"Arab {c} Time"},"Africa/Lagos":{"o":"1:0","f":"WAT","c":"NG","n":"W. Central Africa {c} Time"},"Africa/Porto-Novo":{"o":"1:0","f":"WAT","c":"BJ","n":"W. Central Africa {c} Time"},"Africa/Accra":{"o":"0:0","f":"{c}","e":{"m":12,"r":"31","t":"0:0","c":"GMT"},"s":{"m":9,"r":"1","t":"0:0","v":"0:20","c":"GHST"},"c":"GH","n":"Greenwich {c} Time"},"Pacific/Port_Moresby":{"o":"10:0","f":"PGT","c":"PG","n":"West Pacific {c} Time"},"America/Blanc-Sablon":{"o":"-4:0","f":"AST","c":"CA","n":"SA Western {c} Time"},"Africa/Juba":{"o":"3:0","f":"EAT","c":"SS","n":"E. Africa {c} Time"},"America/Indiana/Knox":{"o":"-6:0","f":"C{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"US","n":"Central {c} Time"},"Europe/Kiev":{"o":"2:0","f":"EE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"UA","n":"FLE {c} Time"},"Pacific/Noumea":{"o":"11:0","f":"NC{c}T","e":{"m":3,"r":"2","t":"2:0","z":"s"},"s":{"m":12,"r":"1","t":"2:0","z":"s","v":"1:0","c":"S"},"c":"NC","n":"Central Pacific {c} Time"},"Asia/Dushanbe":{"o":"5:0","f":"TJT","c":"TJ","n":"West Asia {c} Time"},"HST":{"o":"-10:0","f":"HST"},"America/Jamaica":{"o":"-5:0","f":"EST","c":"JM","n":"SA Pacific {c} Time"},"Asia/Tokyo":{"o":"9:0","f":"J{c}T","s":{"m":5,"r":"0>1","t":"2:0","v":"1:0","c":"D"},"e":{"m":9,"r":"6>8","t":"2:0","c":"S"},"c":"JP","n":"Tokyo {c} Time"},"Indian/Maldives":{"o":"5:0","f":"MVT","c":"MV","n":"West Asia {c} Time"},"Africa/Abidjan":{"o":"0:0","f":"GMT","c":"CI","n":"Greenwich {c} Time"},"Pacific/Pitcairn":{"o":"-8:0","f":"PST","c":"PN"},"Europe/Malta":{"o":"1:0","f":"CE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"MT","n":"W. Europe {c} Time"},"Europe/Madrid":{"o":"1:0","f":"CE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"ES","n":"Romance {c} Time"},"Atlantic/Reykjavik":{"o":"0:0","f":"GMT","c":"IS","n":"Greenwich {c} Time"},"Asia/Magadan":{"o":"12:0","f":"MAGT","c":"RU","n":"Magadan {c} Time"},"Asia/Kabul":{"o":"4:30","f":"AFT","c":"AF","n":"Afghanistan {c} Time"},"America/Argentina/Rio_Gallegos":{"o":"-3:0","f":"ART","c":"AR","n":"Argentina {c} Time"},"Australia/Melbourne":{"o":"10:0","f":"EST","s":{"m":10,"r":"0>1","t":"2:0","z":"s","v":"1:0"},"e":{"m":4,"r":"0>1","t":"2:0","z":"s"},"c":"AU","n":"AUS Eastern {c} Time"},"Indian/Antananarivo":{"o":"3:0","f":"EAT","c":"MG","n":"E. Africa {c} Time"},"Asia/Pontianak":{"o":"7:0","f":"WIT","c":"ID","n":"SE Asia {c} Time"},"Africa/Mbabane":{"o":"2:0","f":"SAST","c":"SZ","n":"South Africa {c} Time"},"Pacific/Kwajalein":{"o":"12:0","f":"MHT","c":"MH","n":"UTC+12"},"Africa/Banjul":{"o":"0:0","f":"GMT","c":"GM","n":"Greenwich {c} Time"},"America/Argentina/Jujuy":{"o":"-3:0","f":"ART","c":"AR","n":"Argentina {c} Time"},"America/Anchorage":{"o":"-9:0","f":"AK{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"US","n":"Alaskan {c} Time"},"America/Argentina/La_Rioja":{"o":"-3:0","f":"ART","c":"AR","n":"Argentina {c} Time"},"Africa/Tripoli":{"o":"1:0","f":"CE{c}T","e":{"m":10,"r":"l5","t":"2:0"},"s":{"m":3,"r":"l5","t":"1:0","v":"1:0","c":"S"},"c":"LY","n":"South Africa {c} Time"},"Africa/Khartoum":{"o":"3:0","f":"EAT","c":"SD","n":"E. Africa {c} Time"},"Pacific/Marquesas":{"o":"-9:30","f":"MART","c":"PF"},"Asia/Rangoon":{"o":"6:30","f":"MMT","c":"MM","n":"Myanmar {c} Time"},"Europe/Bucharest":{"o":"2:0","f":"EE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"RO","n":"GTB {c} Time"},"Europe/Athens":{"o":"2:0","f":"EE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"GR","n":"GTB {c} Time"},"America/Puerto_Rico":{"o":"-4:0","f":"AST","c":"PR","n":"SA Western {c} Time"},"America/Nassau":{"o":"-5:0","f":"E{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"BS","n":"Eastern {c} Time"},"America/Swift_Current":{"o":"-6:0","f":"CST","c":"CA","n":"Canada Central {c} Time"},"America/Havana":{"o":"-5:0","f":"C{c}T","s":{"m":3,"r":"0>8","t":"0:0","z":"s","v":"1:0","c":"D"},"e":{"m":11,"r":"0>1","t":"0:0","z":"s","c":"S"},"c":"CU"},"Asia/Jayapura":{"o":"9:0","f":"EIT","c":"ID","n":"Tokyo {c} Time"},"Pacific/Gambier":{"o":"-9:0","f":"GAMT","c":"PF"},"America/Argentina/Mendoza":{"o":"-3:0","f":"ART","c":"AR","n":"Argentina {c} Time"},"America/Rainy_River":{"o":"-6:0","f":"C{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"CA","n":"Central {c} Time"},"America/Belem":{"o":"-3:0","f":"BRT","c":"BR","n":"SA Eastern {c} Time"},"America/Sao_Paulo":{"o":"-3:0","f":"BR{c}T","e":{"m":2,"r":"0>15","t":"0:0"},"s":{"m":10,"r":"0>15","t":"0:0","v":"1:0","c":"S"},"c":"BR","n":"E. South America {c} Time"},"Pacific/Easter":{"o":"-6:0","f":"EAS{c}T","s":{"m":9,"r":"0>2","t":"4:0","z":"u","v":"1:0","c":"S"},"e":{"m":4,"r":"0>23","t":"3:0","z":"u"},"c":"CL"},"America/Menominee":{"o":"-6:0","f":"C{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"US","n":"Central {c} Time"},"America/Juneau":{"o":"-9:0","f":"AK{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"US","n":"Alaskan {c} Time"},"Pacific/Fakaofo":{"o":"13:0","f":"TKT","c":"TK","n":"Tonga {c} Time"},"America/Martinique":{"o":"-4:0","f":"AST","c":"MQ","n":"SA Western {c} Time"},"Africa/Conakry":{"o":"0:0","f":"GMT","c":"GN","n":"Greenwich {c} Time"},"America/North_Dakota/New_Salem":{"o":"-6:0","f":"C{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"US","n":"Central {c} Time"},"America/Adak":{"o":"-10:0","f":"HA{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"US"},"America/Godthab":{"o":"-3:0","f":"WG{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"GL","n":"Greenland {c} Time"},"Africa/Libreville":{"o":"1:0","f":"WAT","c":"GA","n":"W. Central Africa {c} Time"},"Pacific/Kosrae":{"o":"11:0","f":"KOST","c":"FM","n":"Central Pacific {c} Time"},"America/St_Thomas":{"o":"-4:0","f":"AST","c":"VI","n":"SA Western {c} Time"},"Etc/GMT+7":{"o":"-7:0","f":"GMT+7","n":"US Mountain {c} Time"},"Etc/GMT+6":{"o":"-6:0","f":"GMT+6","n":"Central America {c} Time"},"Etc/GMT+5":{"o":"-5:0","f":"GMT+5","n":"SA Pacific {c} Time"},"Europe/Minsk":{"o":"3:0","f":"FET","c":"BY","n":"Kaliningrad {c} Time"},"Etc/GMT+4":{"o":"-4:0","f":"GMT+4","n":"SA Western {c} Time"},"Etc/GMT+3":{"o":"-3:0","f":"GMT+3","n":"SA Eastern {c} Time"},"Pacific/Efate":{"o":"11:0","f":"VU{c}T","e":{"m":1,"r":"0>23","t":"0:0"},"s":{"m":10,"r":"0>23","t":"0:0","v":"1:0","c":"S"},"c":"VU","n":"Central Pacific {c} Time"},"MST":{"o":"-7:0","f":"MST"},"Etc/GMT+2":{"o":"-2:0","f":"GMT+2","n":"UTC-02"},"Etc/GMT+1":{"o":"-1:0","f":"GMT+1","n":"Cape Verde {c} Time"},"Asia/Yekaterinburg":{"o":"6:0","f":"YEKT","c":"RU","n":"Ekaterinburg {c} Time"},"Pacific/Tongatapu":{"o":"13:0","f":"TO{c}T","e":{"m":1,"r":"l0","t":"2:0"},"s":{"m":11,"r":"0>1","t":"2:0","v":"1:0","c":"S"},"c":"TO","n":"Tonga {c} Time"},"Europe/Riga":{"o":"2:0","f":"EE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"LV","n":"FLE {c} Time"},"America/Guayaquil":{"o":"-5:0","f":"ECT","c":"EC","n":"SA Pacific {c} Time"},"America/Grand_Turk":{"o":"-5:0","f":"E{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"TC","n":"Eastern {c} Time"},"Asia/Manila":{"o":"8:0","f":"PH{c}T","e":{"m":9,"r":"21","t":"0:0"},"s":{"m":3,"r":"22","t":"0:0","v":"1:0","c":"S"},"c":"PH","n":"Singapore {c} Time"},"Asia/Jakarta":{"o":"7:0","f":"WIT","c":"ID","n":"SE Asia {c} Time"},"Asia/Ashgabat":{"o":"5:0","f":"TMT","c":"TM","n":"West Asia {c} Time"},"Africa/Kigali":{"o":"2:0","f":"CAT","c":"RW","n":"South Africa {c} Time"},"America/Santo_Domingo":{"o":"-4:0","f":"AST","c":"DO","n":"SA Western {c} Time"},"America/Argentina/Buenos_Aires":{"o":"-3:0","f":"AR{c}T","e":{"m":3,"r":"0>15","t":"0:0"},"s":{"m":10,"r":"0>15","t":"0:0","v":"1:0","c":"S"},"c":"AR","n":"Argentina {c} Time"},"Antarctica/Mawson":{"o":"5:0","f":"MAWT","c":"AQ","n":"West Asia {c} Time"},"EST":{"o":"-5:0","f":"EST"},"America/Goose_Bay":{"o":"-4:0","f":"A{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"CA","n":"Atlantic {c} Time"},"Europe/Tirane":{"o":"1:0","f":"CE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"AL","n":"Central Europe {c} Time"},"America/Nipigon":{"o":"-5:0","f":"E{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"CA","n":"Eastern {c} Time"},"Asia/Chongqing":{"o":"8:0","f":"C{c}T","s":{"m":4,"r":"0>10","t":"0:0","v":"1:0","c":"D"},"e":{"m":9,"r":"0>11","t":"0:0","c":"S"},"c":"CN","n":"China {c} Time"},"America/Cayenne":{"o":"-3:0","f":"GFT","c":"GF","n":"SA Eastern {c} Time"},"Asia/Samarkand":{"o":"5:0","f":"UZT","c":"UZ","n":"West Asia {c} Time"},"Pacific/Fiji":{"o":"12:0","f":"FJ{c}T","e":{"m":1,"r":"0>18","t":"3:0"},"s":{"m":10,"r":"0>18","t":"2:0","v":"1:0","c":"S"},"c":"FJ","n":"Fiji {c} Time"},"Australia/Darwin":{"o":"9:30","f":"CST","e":{"m":3,"r":"l0","t":"2:0"},"s":{"m":10,"r":"3","t":"2:0","v":"1:0"},"c":"AU","n":"AUS Central {c} Time"},"Etc/GMT-1":{"o":"1:0","f":"GMT-1","n":"W. Central Africa {c} Time"},"Australia/Adelaide":{"o":"9:30","f":"CST","s":{"m":10,"r":"0>1","t":"2:0","z":"s","v":"1:0"},"e":{"m":4,"r":"0>1","t":"2:0","z":"s"},"c":"AU","n":"Cen. Australia {c} Time"},"Etc/GMT-5":{"o":"5:0","f":"GMT-5","n":"West Asia {c} Time"},"Etc/GMT-4":{"o":"4:0","f":"GMT-4","n":"Arabian {c} Time"},"Asia/Riyadh":{"o":"3:0","f":"AST","c":"SA","n":"Arab {c} Time"},"Etc/GMT-3":{"o":"3:0","f":"GMT-3","n":"E. Africa {c} Time"},"Etc/GMT-2":{"o":"2:0","f":"GMT-2","n":"South Africa {c} Time"},"Asia/Aden":{"o":"3:0","f":"AST","c":"YE","n":"Arab {c} Time"},"Etc/GMT-9":{"o":"9:0","f":"GMT-9","n":"Tokyo {c} Time"},"Asia/Krasnoyarsk":{"o":"8:0","f":"KRAT","c":"RU","n":"North Asia {c} Time"},"Africa/Casablanca":{"o":"0:0","f":"WE{c}T","s":{"m":4,"r":"l0","t":"2:0","v":"1:0","c":"S"},"e":{"m":9,"r":"l0","t":"3:0"},"c":"MA","n":"Morocco {c} Time"},"Etc/GMT-8":{"o":"8:0","f":"GMT-8","n":"Singapore {c} Time"},"Etc/GMT-7":{"o":"7:0","f":"GMT-7","n":"SE Asia {c} Time"},"Pacific/Johnston":{"o":"-10:0","f":"HST","c":"UM","n":"Hawaiian {c} Time"},"Etc/GMT-6":{"o":"6:0","f":"GMT-6","n":"Central Asia {c} Time"},"Pacific/Midway":{"o":"-11:0","f":"SST","c":"UM","n":"UTC-11"},"Etc/GMT+8":{"o":"-8:0","f":"GMT+8"},"Etc/GMT+9":{"o":"-9:0","f":"GMT+9"},"Pacific/Palau":{"o":"9:0","f":"PWT","c":"PW","n":"Tokyo {c} Time"},"Asia/Kuala_Lumpur":{"o":"8:0","f":"MYT","c":"MY","n":"Singapore {c} Time"},"Europe/Warsaw":{"o":"1:0","f":"CE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"PL","n":"Central European {c} Time"},"Africa/Lome":{"o":"0:0","f":"GMT","c":"TG","n":"Greenwich {c} Time"},"Atlantic/Madeira":{"o":"0:0","f":"WE{c}T","e":{"m":10,"r":"l0","t":"1:0","z":"u"},"s":{"m":3,"r":"l0","t":"1:0","z":"u","v":"1:0","c":"S"},"c":"PT","n":"GMT {c} Time"},"America/Sitka":{"o":"-9:0","f":"AK{c}T","e":{"m":11,"r":"0>1","t":"2:0","c":"S"},"s":{"m":3,"r":"0>8","t":"2:0","v":"1:0","c":"D"},"c":"US","n":"Alaskan {c} Time"}};
+ilib.data.timezones = {
+    "Africa/Douala": {
+        "o": "1:0",
+        "f": "WAT",
+        "c": "CM",
+        "n": "W. Central Africa {c} Time"
+    },
+    "Europe/Sofia": {
+        "o": "2:0",
+        "f": "EE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "BG",
+        "n": "FLE {c} Time"
+    },
+    "America/Dawson": {
+        "o": "-8:0",
+        "f": "P{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "CA",
+        "n": "Pacific {c} Time"
+    },
+    "Asia/Yerevan": {
+        "o": "4:0",
+        "f": "AMT",
+        "c": "AM",
+        "n": "Caucasus {c} Time"
+    },
+    "Asia/Bangkok": {
+        "o": "7:0",
+        "f": "ICT",
+        "c": "TH",
+        "n": "SE Asia {c} Time"
+    },
+    "America/Bogota": {
+        "o": "-5:0",
+        "f": "CO{c}T",
+        "e": {
+            "m": 4,
+            "r": "4",
+            "t": "0:0"
+        },
+        "s": {
+            "m": 5,
+            "r": "3",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "CO",
+        "n": "SA Pacific {c} Time"
+    },
+    "Asia/Colombo": {
+        "o": "5:30",
+        "f": "IST",
+        "c": "LK",
+        "n": "Sri Lanka {c} Time"
+    },
+    "Africa/Kampala": {
+        "o": "3:0",
+        "f": "EAT",
+        "c": "UG",
+        "n": "E. Africa {c} Time"
+    },
+    "Africa/Blantyre": {
+        "o": "2:0",
+        "f": "CAT",
+        "c": "MW",
+        "n": "South Africa {c} Time"
+    },
+    "Europe/Volgograd": {
+        "o": "4:0",
+        "f": "VOLT",
+        "c": "RU",
+        "n": "Russian {c} Time"
+    },
+    "Atlantic/St_Helena": {
+        "o": "0:0",
+        "f": "GMT",
+        "c": "SH",
+        "n": "Greenwich {c} Time"
+    },
+    "Africa/Malabo": {
+        "o": "1:0",
+        "f": "WAT",
+        "c": "GQ",
+        "n": "W. Central Africa {c} Time"
+    },
+    "Asia/Nicosia": {
+        "o": "2:0",
+        "f": "EE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "CY",
+        "n": "E. Europe {c} Time"
+    },
+    "America/Resolute": {
+        "o": "-6:0",
+        "f": "C{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "CA",
+        "n": "Central {c} Time"
+    },
+    "America/Danmarkshavn": {
+        "o": "0:0",
+        "f": "GMT",
+        "c": "GL",
+        "n": "UTC"
+    },
+    "America/Anguilla": {
+        "o": "-4:0",
+        "f": "AST",
+        "c": "AI",
+        "n": "SA Western {c} Time"
+    },
+    "America/Regina": {
+        "o": "-6:0",
+        "f": "CST",
+        "c": "CA",
+        "n": "Canada Central {c} Time"
+    },
+    "Asia/Amman": {
+        "o": "2:0",
+        "f": "EE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l5",
+            "t": "0:0",
+            "z": "s"
+        },
+        "s": {
+            "m": 3,
+            "r": "l4",
+            "t": "24:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "JO",
+        "n": "Jordan {c} Time"
+    },
+    "Europe/Brussels": {
+        "o": "1:0",
+        "f": "CE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "BE",
+        "n": "Romance {c} Time"
+    },
+    "Europe/Simferopol": {
+        "o": "2:0",
+        "f": "EE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "UA",
+        "n": "FLE {c} Time"
+    },
+    "America/Argentina/Ushuaia": {
+        "o": "-3:0",
+        "f": "ART",
+        "c": "AR",
+        "n": "Argentina {c} Time"
+    },
+    "America/North_Dakota/Center": {
+        "o": "-6:0",
+        "f": "C{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "US",
+        "n": "Central {c} Time"
+    },
+    "Indian/Kerguelen": {
+        "o": "5:0",
+        "f": "TFT",
+        "c": "TF",
+        "n": "West Asia {c} Time"
+    },
+    "Europe/Istanbul": {
+        "o": "2:0",
+        "f": "EE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "TR",
+        "n": "Turkey {c} Time"
+    },
+    "Etc/UTC": {
+        "o": "0:0",
+        "f": "UTC"
+    },
+    "Pacific/Chuuk": {
+        "o": "10:0",
+        "f": "CHUT",
+        "c": "FM",
+        "n": "West Pacific {c} Time"
+    },
+    "America/Bahia_Banderas": {
+        "o": "-6:0",
+        "f": "C{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 4,
+            "r": "0>1",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "MX",
+        "n": "Central {c} Time (Mexico)"
+    },
+    "Pacific/Rarotonga": {
+        "o": "-10:0",
+        "f": "CK{c}T",
+        "e": {
+            "m": 3,
+            "r": "0>1",
+            "t": "0:0"
+        },
+        "s": {
+            "m": 10,
+            "r": "l0",
+            "t": "0:0",
+            "v": "0:30",
+            "c": "HS"
+        },
+        "c": "CK",
+        "n": "Hawaiian {c} Time"
+    },
+    "Asia/Hebron": {
+        "o": "2:0",
+        "f": "EE{c}T",
+        "e": {
+            "m": 9,
+            "r": "5>21",
+            "t": "1:0"
+        },
+        "s": {
+            "m": 3,
+            "r": "l4",
+            "t": "24:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "PS",
+        "n": "Egypt {c} Time"
+    },
+    "Australia/Broken_Hill": {
+        "o": "9:30",
+        "f": "CST",
+        "s": {
+            "m": 10,
+            "r": "0>1",
+            "t": "2:0",
+            "z": "s",
+            "v": "1:0"
+        },
+        "e": {
+            "m": 4,
+            "r": "0>1",
+            "t": "2:0",
+            "z": "s"
+        },
+        "c": "AU",
+        "n": "Cen. Australia {c} Time"
+    },
+    "PST8PDT": {
+        "o": "-8:0",
+        "f": "P{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "n": "Pacific {c} Time"
+    },
+    "Antarctica/Casey": {
+        "o": "8:0",
+        "f": "WST",
+        "c": "AQ",
+        "n": "W. Australia {c} Time"
+    },
+    "Europe/Stockholm": {
+        "o": "1:0",
+        "f": "CE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "SE",
+        "n": "W. Europe {c} Time"
+    },
+    "Africa/Bamako": {
+        "o": "0:0",
+        "f": "GMT",
+        "c": "ML",
+        "n": "Greenwich {c} Time"
+    },
+    "America/St_Johns": {
+        "o": "-3:30",
+        "f": "N{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "CA",
+        "n": "Newfoundland {c} Time"
+    },
+    "Africa/Dar_es_Salaam": {
+        "o": "3:0",
+        "f": "EAT",
+        "c": "TZ",
+        "n": "E. Africa {c} Time"
+    },
+    "Asia/Novosibirsk": {
+        "o": "7:0",
+        "f": "NOVT",
+        "c": "RU",
+        "n": "N. Central Asia {c} Time"
+    },
+    "Asia/Sakhalin": {
+        "o": "11:0",
+        "f": "SAKT",
+        "c": "RU",
+        "n": "Vladivostok {c} Time"
+    },
+    "America/Argentina/Tucuman": {
+        "o": "-3:0",
+        "f": "AR{c}T",
+        "e": {
+            "m": 3,
+            "r": "0>15",
+            "t": "0:0"
+        },
+        "s": {
+            "m": 10,
+            "r": "0>15",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "AR",
+        "n": "Argentina {c} Time"
+    },
+    "Europe/Budapest": {
+        "o": "1:0",
+        "f": "CE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "HU",
+        "n": "Central Europe {c} Time"
+    },
+    "America/Curacao": {
+        "o": "-4:0",
+        "f": "AST",
+        "c": "CW",
+        "n": "SA Western {c} Time"
+    },
+    "Africa/Tunis": {
+        "o": "1:0",
+        "f": "CE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "2:0",
+            "z": "s"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "2:0",
+            "z": "s",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "TN",
+        "n": "W. Central Africa {c} Time"
+    },
+    "Pacific/Guam": {
+        "o": "10:0",
+        "f": "ChST",
+        "c": "GU",
+        "n": "West Pacific {c} Time"
+    },
+    "Africa/Asmara": {
+        "o": "3:0",
+        "f": "EAT",
+        "c": "ER",
+        "n": "E. Africa {c} Time"
+    },
+    "Africa/Maseru": {
+        "o": "2:0",
+        "f": "SAST",
+        "c": "LS",
+        "n": "South Africa {c} Time"
+    },
+    "America/Asuncion": {
+        "o": "-4:0",
+        "f": "PY{c}T",
+        "e": {
+            "m": 3,
+            "r": "0>22",
+            "t": "0:0"
+        },
+        "s": {
+            "m": 10,
+            "r": "0>1",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "PY",
+        "n": "Paraguay {c} Time"
+    },
+    "America/Indiana/Winamac": {
+        "o": "-5:0",
+        "f": "E{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "US",
+        "n": "Eastern {c} Time"
+    },
+    "Europe/Vaduz": {
+        "o": "1:0",
+        "f": "CE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "LI",
+        "n": "W. Europe {c} Time"
+    },
+    "Asia/Ulaanbaatar": {
+        "o": "8:0",
+        "f": "ULA{c}T",
+        "s": {
+            "m": 3,
+            "r": "l6",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "e": {
+            "m": 9,
+            "r": "l6",
+            "t": "2:0"
+        },
+        "c": "MN",
+        "n": "Ulaanbaatar {c} Time"
+    },
+    "Asia/Vientiane": {
+        "o": "7:0",
+        "f": "ICT",
+        "c": "LA",
+        "n": "SE Asia {c} Time"
+    },
+    "Africa/Niamey": {
+        "o": "1:0",
+        "f": "WAT",
+        "c": "NE",
+        "n": "W. Central Africa {c} Time"
+    },
+    "Asia/Brunei": {
+        "o": "8:0",
+        "f": "BNT",
+        "c": "BN",
+        "n": "Singapore {c} Time"
+    },
+    "America/Thunder_Bay": {
+        "o": "-5:0",
+        "f": "E{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "CA",
+        "n": "Eastern {c} Time"
+    },
+    "Africa/Djibouti": {
+        "o": "3:0",
+        "f": "EAT",
+        "c": "DJ",
+        "n": "E. Africa {c} Time"
+    },
+    "Asia/Tbilisi": {
+        "o": "4:0",
+        "f": "GET",
+        "c": "GE",
+        "n": "Georgian {c} Time"
+    },
+    "America/Merida": {
+        "o": "-6:0",
+        "f": "C{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 4,
+            "r": "0>1",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "MX",
+        "n": "Central {c} Time (Mexico)"
+    },
+    "America/Recife": {
+        "o": "-3:0",
+        "f": "BRT",
+        "c": "BR",
+        "n": "SA Eastern {c} Time"
+    },
+    "Indian/Reunion": {
+        "o": "4:0",
+        "f": "RET",
+        "c": "RE",
+        "n": "Mauritius {c} Time"
+    },
+    "Asia/Oral": {
+        "o": "5:0",
+        "f": "ORAT",
+        "c": "KZ",
+        "n": "West Asia {c} Time"
+    },
+    "Africa/Lusaka": {
+        "o": "2:0",
+        "f": "CAT",
+        "c": "ZM",
+        "n": "South Africa {c} Time"
+    },
+    "America/Tortola": {
+        "o": "-4:0",
+        "f": "AST",
+        "c": "VG",
+        "n": "SA Western {c} Time"
+    },
+    "Africa/Ouagadougou": {
+        "o": "0:0",
+        "f": "GMT",
+        "c": "BF",
+        "n": "Greenwich {c} Time"
+    },
+    "Asia/Kuching": {
+        "o": "8:0",
+        "f": "MYT",
+        "c": "MY",
+        "n": "Singapore {c} Time"
+    },
+    "America/Tegucigalpa": {
+        "o": "-6:0",
+        "f": "C{c}T",
+        "e": {
+            "m": 8,
+            "r": "1>1",
+            "t": "0:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 5,
+            "r": "0>1",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "HN",
+        "n": "Central America {c} Time"
+    },
+    "Asia/Novokuznetsk": {
+        "o": "7:0",
+        "f": "NOVT",
+        "c": "RU",
+        "n": "N. Central Asia {c} Time"
+    },
+    "Europe/Vilnius": {
+        "o": "2:0",
+        "f": "EE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "LT",
+        "n": "FLE {c} Time"
+    },
+    "Asia/Bishkek": {
+        "o": "6:0",
+        "f": "KGT",
+        "c": "KG",
+        "n": "Central Asia {c} Time"
+    },
+    "America/Moncton": {
+        "o": "-4:0",
+        "f": "A{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "CA",
+        "n": "Atlantic {c} Time"
+    },
+    "America/Maceio": {
+        "o": "-3:0",
+        "f": "BRT",
+        "c": "BR",
+        "n": "SA Eastern {c} Time"
+    },
+    "Africa/Dakar": {
+        "o": "0:0",
+        "f": "GMT",
+        "c": "SN",
+        "n": "Greenwich {c} Time"
+    },
+    "America/Belize": {
+        "o": "-6:0",
+        "f": "C{c}T",
+        "e": {
+            "m": 2,
+            "r": "12",
+            "t": "0:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 12,
+            "r": "18",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "BZ",
+        "n": "Central America {c} Time"
+    },
+    "Etc/GMT": {
+        "o": "0:0",
+        "f": "GMT",
+        "n": "UTC"
+    },
+    "America/Cuiaba": {
+        "o": "-4:0",
+        "f": "AM{c}T",
+        "e": {
+            "m": 2,
+            "r": "0>15",
+            "t": "0:0"
+        },
+        "s": {
+            "m": 10,
+            "r": "0>15",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "BR",
+        "n": "Central Brazilian {c} Time"
+    },
+    "Asia/Tashkent": {
+        "o": "5:0",
+        "f": "UZT",
+        "c": "UZ",
+        "n": "West Asia {c} Time"
+    },
+    "Atlantic/Canary": {
+        "o": "0:0",
+        "f": "WE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "ES",
+        "n": "GMT {c} Time"
+    },
+    "America/Rankin_Inlet": {
+        "o": "-6:0",
+        "f": "C{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "CA",
+        "n": "Central {c} Time"
+    },
+    "Asia/Jerusalem": {
+        "o": "2:0",
+        "f": "I{c}T",
+        "e": {
+            "m": 10,
+            "r": "0>2",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "5>23",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "IL",
+        "n": "Israel {c} Time"
+    },
+    "Antarctica/Rothera": {
+        "o": "-3:0",
+        "f": "ROTT",
+        "c": "AQ",
+        "n": "SA Eastern {c} Time"
+    },
+    "Indian/Cocos": {
+        "o": "6:30",
+        "f": "CCT",
+        "c": "CC",
+        "n": "Myanmar {c} Time"
+    },
+    "America/Glace_Bay": {
+        "o": "-4:0",
+        "f": "A{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "CA",
+        "n": "Atlantic {c} Time"
+    },
+    "Atlantic/Cape_Verde": {
+        "o": "-1:0",
+        "f": "CVT",
+        "c": "CV",
+        "n": "Cape Verde {c} Time"
+    },
+    "America/Cambridge_Bay": {
+        "o": "-7:0",
+        "f": "M{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "CA",
+        "n": "Mountain {c} Time"
+    },
+    "Indian/Mauritius": {
+        "o": "4:0",
+        "f": "MU{c}T",
+        "e": {
+            "m": 3,
+            "r": "l0",
+            "t": "2:0"
+        },
+        "s": {
+            "m": 10,
+            "r": "l0",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "MU",
+        "n": "Mauritius {c} Time"
+    },
+    "Etc/GMT-14": {
+        "o": "14:0",
+        "f": "GMT-14"
+    },
+    "Etc/GMT-13": {
+        "o": "13:0",
+        "f": "GMT-13",
+        "n": "Tonga {c} Time"
+    },
+    "Australia/Brisbane": {
+        "o": "10:0",
+        "f": "EST",
+        "e": {
+            "m": 3,
+            "r": "0>1",
+            "t": "2:0",
+            "z": "s"
+        },
+        "s": {
+            "m": 10,
+            "r": "l0",
+            "t": "2:0",
+            "z": "s",
+            "v": "1:0"
+        },
+        "c": "AU",
+        "n": "E. Australia {c} Time"
+    },
+    "Etc/GMT-12": {
+        "o": "12:0",
+        "f": "GMT-12",
+        "n": "UTC+12"
+    },
+    "Etc/GMT-11": {
+        "o": "11:0",
+        "f": "GMT-11",
+        "n": "Central Pacific {c} Time"
+    },
+    "America/Grenada": {
+        "o": "-4:0",
+        "f": "AST",
+        "c": "GD",
+        "n": "SA Western {c} Time"
+    },
+    "Etc/GMT-10": {
+        "o": "10:0",
+        "f": "GMT-10",
+        "n": "West Pacific {c} Time"
+    },
+    "Antarctica/Vostok": {
+        "o": "6:0",
+        "f": "VOST",
+        "c": "AQ",
+        "n": "Central Asia {c} Time"
+    },
+    "Etc/GMT+11": {
+        "o": "-11:0",
+        "f": "GMT+11",
+        "n": "UTC-11"
+    },
+    "Etc/GMT+12": {
+        "o": "-12:0",
+        "f": "GMT+12",
+        "n": "Dateline {c} Time"
+    },
+    "Pacific/Auckland": {
+        "o": "12:0",
+        "f": "NZ{c}T",
+        "e": {
+            "m": 4,
+            "r": "0>1",
+            "t": "2:0",
+            "z": "s",
+            "c": "S"
+        },
+        "s": {
+            "m": 9,
+            "r": "l0",
+            "t": "2:0",
+            "z": "s",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "NZ",
+        "n": "New Zealand {c} Time"
+    },
+    "Antarctica/DumontDUrville": {
+        "o": "10:0",
+        "f": "DDUT",
+        "c": "AQ",
+        "n": "West Pacific {c} Time"
+    },
+    "Etc/GMT+10": {
+        "o": "-10:0",
+        "f": "GMT+10",
+        "n": "Hawaiian {c} Time"
+    },
+    "Africa/Nairobi": {
+        "o": "3:0",
+        "f": "EAT",
+        "c": "KE",
+        "n": "E. Africa {c} Time"
+    },
+    "Pacific/Norfolk": {
+        "o": "11:30",
+        "f": "NFT",
+        "c": "NF"
+    },
+    "Europe/Paris": {
+        "o": "1:0",
+        "f": "CE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "FR",
+        "n": "Romance {c} Time"
+    },
+    "Asia/Irkutsk": {
+        "o": "9:0",
+        "f": "IRKT",
+        "c": "RU",
+        "n": "North Asia East {c} Time"
+    },
+    "Pacific/Apia": {
+        "o": "13:0",
+        "f": "WS{c}T",
+        "e": {
+            "m": 4,
+            "r": "0>1",
+            "t": "4:0"
+        },
+        "s": {
+            "m": 9,
+            "r": "l0",
+            "t": "3:0",
+            "v": "1:00",
+            "c": "D"
+        },
+        "c": "WS",
+        "n": "Samoa {c} Time"
+    },
+    "America/Caracas": {
+        "o": "-4:30",
+        "f": "VET",
+        "c": "VE",
+        "n": "Venezuela {c} Time"
+    },
+    "Pacific/Chatham": {
+        "o": "12:45",
+        "f": "CHA{c}T",
+        "e": {
+            "m": 4,
+            "r": "0>1",
+            "t": "2:45",
+            "z": "s",
+            "c": "S"
+        },
+        "s": {
+            "m": 9,
+            "r": "l0",
+            "t": "2:45",
+            "z": "s",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "NZ"
+    },
+    "Africa/Maputo": {
+        "o": "2:0",
+        "f": "CAT",
+        "c": "MZ",
+        "n": "South Africa {c} Time"
+    },
+    "America/Metlakatla": {
+        "o": "-8:0",
+        "f": "MeST",
+        "c": "US"
+    },
+    "Atlantic/South_Georgia": {
+        "o": "-2:0",
+        "f": "GST",
+        "c": "GS",
+        "n": "UTC-02"
+    },
+    "Asia/Baghdad": {
+        "o": "3:0",
+        "f": "A{c}T",
+        "e": {
+            "m": 10,
+            "r": "1",
+            "t": "3:0",
+            "z": "s",
+            "c": "S"
+        },
+        "s": {
+            "m": 4,
+            "r": "1",
+            "t": "3:0",
+            "z": "s",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "IQ",
+        "n": "Arabic {c} Time"
+    },
+    "Pacific/Saipan": {
+        "o": "10:0",
+        "f": "ChST",
+        "c": "MP",
+        "n": "West Pacific {c} Time"
+    },
+    "Asia/Dhaka": {
+        "o": "6:0",
+        "f": "BD{c}T",
+        "e": {
+            "m": 12,
+            "r": "31",
+            "t": "23:59"
+        },
+        "s": {
+            "m": 6,
+            "r": "19",
+            "t": "23:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "BD",
+        "n": "Bangladesh {c} Time"
+    },
+    "Asia/Singapore": {
+        "o": "8:0",
+        "f": "SGT",
+        "c": "SG",
+        "n": "Singapore {c} Time"
+    },
+    "Africa/Cairo": {
+        "o": "2:0",
+        "f": "EE{c}T",
+        "e": {
+            "m": 9,
+            "r": "l4",
+            "t": "23:0",
+            "z": "s"
+        },
+        "s": {
+            "m": 9,
+            "r": "10",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "EG",
+        "n": "Egypt {c} Time"
+    },
+    "Europe/Belgrade": {
+        "o": "1:0",
+        "f": "CE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "RS",
+        "n": "Central Europe {c} Time"
+    },
+    "Europe/Moscow": {
+        "o": "4:0",
+        "f": "MSK",
+        "c": "RU",
+        "n": "Russian {c} Time"
+    },
+    "America/Inuvik": {
+        "o": "-7:0",
+        "f": "M{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "CA",
+        "n": "Mountain {c} Time"
+    },
+    "Pacific/Funafuti": {
+        "o": "12:0",
+        "f": "TVT",
+        "c": "TV",
+        "n": "UTC+12"
+    },
+    "Africa/Bissau": {
+        "o": "0:0",
+        "f": "GMT",
+        "c": "GW",
+        "n": "Greenwich {c} Time"
+    },
+    "Atlantic/Faroe": {
+        "o": "0:0",
+        "f": "WE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "FO",
+        "n": "GMT {c} Time"
+    },
+    "Asia/Taipei": {
+        "o": "8:0",
+        "f": "C{c}T",
+        "e": {
+            "m": 9,
+            "r": "30",
+            "t": "0:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 6,
+            "r": "30",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "TW",
+        "n": "Taipei {c} Time"
+    },
+    "America/Argentina/Catamarca": {
+        "o": "-3:0",
+        "f": "ART",
+        "c": "AR",
+        "n": "Argentina {c} Time"
+    },
+    "Pacific/Majuro": {
+        "o": "12:0",
+        "f": "MHT",
+        "c": "MH",
+        "n": "UTC+12"
+    },
+    "EET": {
+        "o": "2:0",
+        "f": "EE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        }
+    },
+    "Indian/Comoro": {
+        "o": "3:0",
+        "f": "EAT",
+        "c": "KM",
+        "n": "E. Africa {c} Time"
+    },
+    "America/Manaus": {
+        "o": "-4:0",
+        "f": "AMT",
+        "c": "BR",
+        "n": "SA Western {c} Time"
+    },
+    "Asia/Shanghai": {
+        "o": "8:0",
+        "f": "C{c}T",
+        "s": {
+            "m": 4,
+            "r": "0>10",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "e": {
+            "m": 9,
+            "r": "0>11",
+            "t": "0:0",
+            "c": "S"
+        },
+        "c": "CN",
+        "n": "China {c} Time"
+    },
+    "America/Indiana/Vevay": {
+        "o": "-5:0",
+        "f": "E{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "US",
+        "n": "US Eastern {c} Time"
+    },
+    "Australia/Hobart": {
+        "o": "10:0",
+        "f": "EST",
+        "e": {
+            "m": 4,
+            "r": "0>1",
+            "t": "2:0",
+            "z": "s"
+        },
+        "s": {
+            "m": 10,
+            "r": "0>1",
+            "t": "2:0",
+            "z": "s",
+            "v": "1:0"
+        },
+        "c": "AU",
+        "n": "Tasmania {c} Time"
+    },
+    "Asia/Dili": {
+        "o": "9:0",
+        "f": "TLT",
+        "c": "TL",
+        "n": "Tokyo {c} Time"
+    },
+    "America/Indiana/Marengo": {
+        "o": "-5:0",
+        "f": "E{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "US",
+        "n": "US Eastern {c} Time"
+    },
+    "Asia/Aqtobe": {
+        "o": "5:0",
+        "f": "AQTT",
+        "c": "KZ",
+        "n": "West Asia {c} Time"
+    },
+    "Australia/Sydney": {
+        "o": "10:0",
+        "f": "EST",
+        "s": {
+            "m": 10,
+            "r": "0>1",
+            "t": "2:0",
+            "z": "s",
+            "v": "1:0"
+        },
+        "e": {
+            "m": 4,
+            "r": "0>1",
+            "t": "2:0",
+            "z": "s"
+        },
+        "c": "AU",
+        "n": "AUS Eastern {c} Time"
+    },
+    "Indian/Chagos": {
+        "o": "6:0",
+        "f": "IOT",
+        "c": "IO",
+        "n": "Central Asia {c} Time"
+    },
+    "America/Phoenix": {
+        "o": "-7:0",
+        "f": "MST",
+        "c": "US",
+        "n": "US Mountain {c} Time"
+    },
+    "Europe/Luxembourg": {
+        "o": "1:0",
+        "f": "CE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "LU",
+        "n": "W. Europe {c} Time"
+    },
+    "Asia/Makassar": {
+        "o": "8:0",
+        "f": "CIT",
+        "c": "ID",
+        "n": "Singapore {c} Time"
+    },
+    "Asia/Phnom_Penh": {
+        "o": "7:0",
+        "f": "ICT",
+        "c": "KH",
+        "n": "SE Asia {c} Time"
+    },
+    "Australia/Currie": {
+        "o": "10:0",
+        "f": "EST",
+        "e": {
+            "m": 4,
+            "r": "0>1",
+            "t": "2:0",
+            "z": "s"
+        },
+        "s": {
+            "m": 10,
+            "r": "0>1",
+            "t": "2:0",
+            "z": "s",
+            "v": "1:0"
+        },
+        "c": "AU",
+        "n": "Tasmania {c} Time"
+    },
+    "America/Cancun": {
+        "o": "-6:0",
+        "f": "C{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 4,
+            "r": "0>1",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "MX",
+        "n": "Central {c} Time (Mexico)"
+    },
+    "America/Argentina/Cordoba": {
+        "o": "-3:0",
+        "f": "AR{c}T",
+        "e": {
+            "m": 3,
+            "r": "0>15",
+            "t": "0:0"
+        },
+        "s": {
+            "m": 10,
+            "r": "0>15",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "AR",
+        "n": "Argentina {c} Time"
+    },
+    "Asia/Baku": {
+        "o": "4:0",
+        "f": "AZ{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "5:0"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "4:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "AZ",
+        "n": "Azerbaijan {c} Time"
+    },
+    "Asia/Seoul": {
+        "o": "9:0",
+        "f": "K{c}T",
+        "e": {
+            "m": 10,
+            "r": "0>8",
+            "t": "0:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 5,
+            "r": "0>8",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "KR",
+        "n": "Korea {c} Time"
+    },
+    "WET": {
+        "o": "0:0",
+        "f": "WE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        }
+    },
+    "Antarctica/McMurdo": {
+        "o": "12:0",
+        "f": "NZ{c}T",
+        "e": {
+            "m": 4,
+            "r": "0>1",
+            "t": "2:0",
+            "z": "s",
+            "c": "S"
+        },
+        "s": {
+            "m": 9,
+            "r": "l0",
+            "t": "2:0",
+            "z": "s",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "AQ",
+        "n": "New Zealand {c} Time"
+    },
+    "Europe/Rome": {
+        "o": "1:0",
+        "f": "CE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "IT",
+        "n": "W. Europe {c} Time"
+    },
+    "America/Lima": {
+        "o": "-5:0",
+        "f": "PE{c}T",
+        "e": {
+            "m": 4,
+            "r": "1",
+            "t": "0:0"
+        },
+        "s": {
+            "m": 1,
+            "r": "1",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "PE",
+        "n": "SA Pacific {c} Time"
+    },
+    "Atlantic/Stanley": {
+        "o": "-3:0",
+        "f": "FKST",
+        "c": "FK",
+        "n": "SA Eastern {c} Time"
+    },
+    "America/Dawson_Creek": {
+        "o": "-7:0",
+        "f": "MST",
+        "c": "CA",
+        "n": "US Mountain {c} Time"
+    },
+    "Asia/Anadyr": {
+        "o": "12:0",
+        "f": "ANAT",
+        "c": "RU",
+        "n": "Magadan {c} Time"
+    },
+    "Europe/Helsinki": {
+        "o": "2:0",
+        "f": "EE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "FI",
+        "n": "FLE {c} Time"
+    },
+    "America/Matamoros": {
+        "o": "-6:0",
+        "f": "C{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "MX",
+        "n": "Central {c} Time"
+    },
+    "America/Argentina/San_Juan": {
+        "o": "-3:0",
+        "f": "ART",
+        "c": "AR",
+        "n": "Argentina {c} Time"
+    },
+    "America/Denver": {
+        "o": "-7:0",
+        "f": "M{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "US",
+        "n": "Mountain {c} Time"
+    },
+    "Australia/Eucla": {
+        "o": "8:45",
+        "f": "CWST",
+        "e": {
+            "m": 3,
+            "r": "l0",
+            "t": "2:0",
+            "z": "s"
+        },
+        "s": {
+            "m": 10,
+            "r": "l0",
+            "t": "2:0",
+            "z": "s",
+            "v": "1:0"
+        },
+        "c": "AU"
+    },
+    "America/Detroit": {
+        "o": "-5:0",
+        "f": "E{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "US",
+        "n": "Eastern {c} Time"
+    },
+    "America/Campo_Grande": {
+        "o": "-4:0",
+        "f": "AM{c}T",
+        "e": {
+            "m": 2,
+            "r": "0>15",
+            "t": "0:0"
+        },
+        "s": {
+            "m": 10,
+            "r": "0>15",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "BR",
+        "n": "Central Brazilian {c} Time"
+    },
+    "America/Indiana/Tell_City": {
+        "o": "-6:0",
+        "f": "C{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "US",
+        "n": "Central {c} Time"
+    },
+    "America/Hermosillo": {
+        "o": "-7:0",
+        "f": "MST",
+        "c": "MX",
+        "n": "US Mountain {c} Time"
+    },
+    "America/Whitehorse": {
+        "o": "-8:0",
+        "f": "P{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "CA",
+        "n": "Pacific {c} Time"
+    },
+    "America/Boise": {
+        "o": "-7:0",
+        "f": "M{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "US",
+        "n": "Mountain {c} Time"
+    },
+    "America/St_Kitts": {
+        "o": "-4:0",
+        "f": "AST",
+        "c": "KN",
+        "n": "SA Western {c} Time"
+    },
+    "America/Pangnirtung": {
+        "o": "-5:0",
+        "f": "E{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "CA",
+        "n": "Eastern {c} Time"
+    },
+    "MET": {
+        "o": "1:0",
+        "f": "ME{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "2:0",
+            "z": "s"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "2:0",
+            "z": "s",
+            "v": "1:0",
+            "c": "S"
+        }
+    },
+    "Asia/Tehran": {
+        "o": "3:30",
+        "f": "IR{c}T",
+        "e": {
+            "m": 9,
+            "r": "21",
+            "t": "0:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "21",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "IR",
+        "n": "Iran {c} Time"
+    },
+    "Asia/Almaty": {
+        "o": "6:0",
+        "f": "ALMT",
+        "c": "KZ",
+        "n": "Central Asia {c} Time"
+    },
+    "America/Santa_Isabel": {
+        "o": "-8:0",
+        "f": "P{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 4,
+            "r": "0>1",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "MX",
+        "n": "Pacific {c} Time (Mexico)"
+    },
+    "America/Chicago": {
+        "o": "-6:0",
+        "f": "C{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "US",
+        "n": "Central {c} Time"
+    },
+    "Asia/Ho_Chi_Minh": {
+        "o": "7:0",
+        "f": "ICT",
+        "c": "VN",
+        "n": "SE Asia {c} Time"
+    },
+    "America/Boa_Vista": {
+        "o": "-4:0",
+        "f": "AMT",
+        "c": "BR",
+        "n": "SA Western {c} Time"
+    },
+    "America/Mazatlan": {
+        "o": "-7:0",
+        "f": "M{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 4,
+            "r": "0>1",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "MX",
+        "n": "Mountain {c} Time (Mexico)"
+    },
+    "America/Indiana/Petersburg": {
+        "o": "-5:0",
+        "f": "E{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "US",
+        "n": "Eastern {c} Time"
+    },
+    "America/Iqaluit": {
+        "o": "-5:0",
+        "f": "E{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "CA",
+        "n": "Eastern {c} Time"
+    },
+    "Africa/Algiers": {
+        "o": "1:0",
+        "f": "CET",
+        "c": "DZ",
+        "n": "W. Central Africa {c} Time"
+    },
+    "America/Araguaina": {
+        "o": "-3:0",
+        "f": "BR{c}T",
+        "e": {
+            "m": 2,
+            "r": "0>15",
+            "t": "0:0"
+        },
+        "s": {
+            "m": 10,
+            "r": "0>15",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "BR",
+        "n": "SA Eastern {c} Time"
+    },
+    "America/St_Lucia": {
+        "o": "-4:0",
+        "f": "AST",
+        "c": "LC",
+        "n": "SA Western {c} Time"
+    },
+    "Pacific/Kiritimati": {
+        "o": "14:0",
+        "f": "LINT",
+        "c": "KI"
+    },
+    "Asia/Yakutsk": {
+        "o": "10:0",
+        "f": "YAKT",
+        "c": "RU",
+        "n": "Yakutsk {c} Time"
+    },
+    "Indian/Mahe": {
+        "o": "4:0",
+        "f": "SCT",
+        "c": "SC",
+        "n": "Mauritius {c} Time"
+    },
+    "Asia/Hong_Kong": {
+        "o": "8:0",
+        "f": "HK{c}T",
+        "e": {
+            "m": 10,
+            "r": "0>16",
+            "t": "3:30"
+        },
+        "s": {
+            "m": 5,
+            "r": "0>8",
+            "t": "3:30",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "HK",
+        "n": "China {c} Time"
+    },
+    "America/Panama": {
+        "o": "-5:0",
+        "f": "EST",
+        "c": "PA",
+        "n": "SA Pacific {c} Time"
+    },
+    "Europe/Gibraltar": {
+        "o": "1:0",
+        "f": "CE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "GI",
+        "n": "W. Europe {c} Time"
+    },
+    "America/Scoresbysund": {
+        "o": "-1:0",
+        "f": "EG{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "GL",
+        "n": "Azores {c} Time"
+    },
+    "America/Aruba": {
+        "o": "-4:0",
+        "f": "AST",
+        "c": "AW",
+        "n": "SA Western {c} Time"
+    },
+    "Asia/Muscat": {
+        "o": "4:0",
+        "f": "GST",
+        "c": "OM",
+        "n": "Arabian {c} Time"
+    },
+    "Africa/Freetown": {
+        "o": "0:0",
+        "f": "{c}",
+        "e": {
+            "m": 9,
+            "r": "1",
+            "t": "0:0",
+            "c": "GMT"
+        },
+        "s": {
+            "m": 6,
+            "r": "1",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "SLST"
+        },
+        "c": "SL",
+        "n": "Greenwich {c} Time"
+    },
+    "America/Argentina/San_Luis": {
+        "o": "-4:0",
+        "f": "WAR{c}T",
+        "s": {
+            "m": 10,
+            "r": "0>8",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "e": {
+            "m": 3,
+            "r": "0>8",
+            "t": "0:0"
+        },
+        "c": "AR",
+        "n": "Argentina {c} Time"
+    },
+    "America/Paramaribo": {
+        "o": "-3:0",
+        "f": "SRT",
+        "c": "SR",
+        "n": "SA Eastern {c} Time"
+    },
+    "Australia/Lindeman": {
+        "o": "10:0",
+        "f": "EST",
+        "e": {
+            "m": 3,
+            "r": "0>1",
+            "t": "2:0",
+            "z": "s"
+        },
+        "s": {
+            "m": 10,
+            "r": "l0",
+            "t": "2:0",
+            "z": "s",
+            "v": "1:0"
+        },
+        "c": "AU",
+        "n": "E. Australia {c} Time"
+    },
+    "Asia/Hovd": {
+        "o": "7:0",
+        "f": "HOV{c}T",
+        "s": {
+            "m": 3,
+            "r": "l6",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "e": {
+            "m": 9,
+            "r": "l6",
+            "t": "2:0"
+        },
+        "c": "MN",
+        "n": "SE Asia {c} Time"
+    },
+    "America/Bahia": {
+        "o": "-3:0",
+        "f": "BRT",
+        "c": "BR",
+        "n": "Bahia {c} Time"
+    },
+    "Pacific/Pohnpei": {
+        "o": "11:0",
+        "f": "PONT",
+        "c": "FM",
+        "n": "Central Pacific {c} Time"
+    },
+    "Pacific/Guadalcanal": {
+        "o": "11:0",
+        "f": "SBT",
+        "c": "SB",
+        "n": "Central Pacific {c} Time"
+    },
+    "Australia/Perth": {
+        "o": "8:0",
+        "f": "WST",
+        "e": {
+            "m": 3,
+            "r": "l0",
+            "t": "2:0",
+            "z": "s"
+        },
+        "s": {
+            "m": 10,
+            "r": "l0",
+            "t": "2:0",
+            "z": "s",
+            "v": "1:0"
+        },
+        "c": "AU",
+        "n": "W. Australia {c} Time"
+    },
+    "Pacific/Pago_Pago": {
+        "o": "-11:0",
+        "f": "SST",
+        "c": "AS",
+        "n": "UTC-11"
+    },
+    "Factory": {
+        "o": "0:0",
+        "f": "\"Local"
+    },
+    "America/Edmonton": {
+        "o": "-7:0",
+        "f": "M{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "CA",
+        "n": "Mountain {c} Time"
+    },
+    "Antarctica/Syowa": {
+        "o": "3:0",
+        "f": "SYOT",
+        "c": "AQ",
+        "n": "E. Africa {c} Time"
+    },
+    "America/Los_Angeles": {
+        "o": "-8:0",
+        "f": "P{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "US",
+        "n": "Pacific {c} Time"
+    },
+    "America/Creston": {
+        "o": "-7:0",
+        "f": "MST",
+        "c": "CA",
+        "n": "US Mountain {c} Time"
+    },
+    "Africa/Nouakchott": {
+        "o": "0:0",
+        "f": "GMT",
+        "c": "MR",
+        "n": "Greenwich {c} Time"
+    },
+    "America/Noronha": {
+        "o": "-2:0",
+        "f": "FNT",
+        "c": "BR",
+        "n": "UTC-02"
+    },
+    "Asia/Riyadh89": {
+        "o": "3:7",
+        "f": "zzz"
+    },
+    "Asia/Riyadh88": {
+        "o": "3:7",
+        "f": "zzz"
+    },
+    "America/La_Paz": {
+        "o": "-4:0",
+        "f": "BOT",
+        "c": "BO",
+        "n": "SA Western {c} Time"
+    },
+    "America/Dominica": {
+        "o": "-4:0",
+        "f": "AST",
+        "c": "DM",
+        "n": "SA Western {c} Time"
+    },
+    "Asia/Riyadh87": {
+        "o": "3:7",
+        "f": "zzz"
+    },
+    "Antarctica/Macquarie": {
+        "o": "11:0",
+        "f": "MIST",
+        "c": "AU",
+        "n": "Central Pacific {c} Time"
+    },
+    "MST7MDT": {
+        "o": "-7:0",
+        "f": "M{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "n": "Mountain {c} Time"
+    },
+    "Africa/Ceuta": {
+        "o": "1:0",
+        "f": "CE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "ES",
+        "n": "Romance {c} Time"
+    },
+    "Africa/El_Aaiun": {
+        "o": "0:0",
+        "f": "WET",
+        "c": "EH",
+        "n": "Greenwich {c} Time"
+    },
+    "Africa/Luanda": {
+        "o": "1:0",
+        "f": "WAT",
+        "c": "AO",
+        "n": "W. Central Africa {c} Time"
+    },
+    "Europe/Andorra": {
+        "o": "1:0",
+        "f": "CE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "AD",
+        "n": "W. Europe {c} Time"
+    },
+    "Africa/Addis_Ababa": {
+        "o": "3:0",
+        "f": "EAT",
+        "c": "ET",
+        "n": "E. Africa {c} Time"
+    },
+    "America/Atikokan": {
+        "o": "-5:0",
+        "f": "EST",
+        "c": "CA",
+        "n": "SA Pacific {c} Time"
+    },
+    "America/Argentina/Salta": {
+        "o": "-3:0",
+        "f": "ART",
+        "c": "AR",
+        "n": "Argentina {c} Time"
+    },
+    "Asia/Beirut": {
+        "o": "2:0",
+        "f": "EE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "0:0"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "LB",
+        "n": "Middle East {c} Time"
+    },
+    "Africa/Brazzaville": {
+        "o": "1:0",
+        "f": "WAT",
+        "c": "CG",
+        "n": "W. Central Africa {c} Time"
+    },
+    "Pacific/Nauru": {
+        "o": "12:0",
+        "f": "NRT",
+        "c": "NR",
+        "n": "UTC+12"
+    },
+    "America/Guadeloupe": {
+        "o": "-4:0",
+        "f": "AST",
+        "c": "GP",
+        "n": "SA Western {c} Time"
+    },
+    "Africa/Bangui": {
+        "o": "1:0",
+        "f": "WAT",
+        "c": "CF",
+        "n": "W. Central Africa {c} Time"
+    },
+    "Asia/Kamchatka": {
+        "o": "12:0",
+        "f": "PETT",
+        "c": "RU",
+        "n": "Magadan {c} Time"
+    },
+    "Asia/Aqtau": {
+        "o": "5:0",
+        "f": "AQTT",
+        "c": "KZ",
+        "n": "West Asia {c} Time"
+    },
+    "America/Eirunepe": {
+        "o": "-4:0",
+        "f": "AMT",
+        "c": "BR",
+        "n": "SA Western {c} Time"
+    },
+    "Antarctica/Palmer": {
+        "o": "-4:0",
+        "f": "CL{c}T",
+        "s": {
+            "m": 9,
+            "r": "0>2",
+            "t": "4:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "e": {
+            "m": 4,
+            "r": "0>23",
+            "t": "3:0",
+            "z": "u"
+        },
+        "c": "AQ",
+        "n": "Pacific SA {c} Time"
+    },
+    "Africa/Lubumbashi": {
+        "o": "2:0",
+        "f": "CAT",
+        "c": "CD",
+        "n": "South Africa {c} Time"
+    },
+    "Asia/Kolkata": {
+        "o": "5:30",
+        "f": "IST",
+        "c": "IN",
+        "n": "India {c} Time"
+    },
+    "America/Monterrey": {
+        "o": "-6:0",
+        "f": "C{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 4,
+            "r": "0>1",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "MX",
+        "n": "Central {c} Time (Mexico)"
+    },
+    "Pacific/Galapagos": {
+        "o": "-6:0",
+        "f": "GALT",
+        "c": "EC",
+        "n": "Central America {c} Time"
+    },
+    "Europe/London": {
+        "o": "0:0",
+        "f": "GMT/BST",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "GB",
+        "n": "GMT {c} Time"
+    },
+    "Europe/Samara": {
+        "o": "4:0",
+        "f": "SAMT",
+        "c": "RU",
+        "n": "Russian {c} Time"
+    },
+    "Europe/Monaco": {
+        "o": "1:0",
+        "f": "CE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "MC",
+        "n": "W. Europe {c} Time"
+    },
+    "Atlantic/Bermuda": {
+        "o": "-4:0",
+        "f": "A{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "BM",
+        "n": "Atlantic {c} Time"
+    },
+    "America/Indiana/Indianapolis": {
+        "o": "-5:0",
+        "f": "E{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "US",
+        "n": "US Eastern {c} Time"
+    },
+    "Indian/Christmas": {
+        "o": "7:0",
+        "f": "CXT",
+        "c": "CX",
+        "n": "SE Asia {c} Time"
+    },
+    "Pacific/Tarawa": {
+        "o": "12:0",
+        "f": "GILT",
+        "c": "KI",
+        "n": "UTC+12"
+    },
+    "America/Yakutat": {
+        "o": "-9:0",
+        "f": "AK{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "US",
+        "n": "Alaskan {c} Time"
+    },
+    "America/St_Vincent": {
+        "o": "-4:0",
+        "f": "AST",
+        "c": "VC",
+        "n": "SA Western {c} Time"
+    },
+    "Europe/Vienna": {
+        "o": "1:0",
+        "f": "CE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "AT",
+        "n": "W. Europe {c} Time"
+    },
+    "America/Port-au-Prince": {
+        "o": "-5:0",
+        "f": "E{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "HT",
+        "n": "SA Pacific {c} Time"
+    },
+    "America/New_York": {
+        "o": "-5:0",
+        "f": "E{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "US",
+        "n": "Eastern {c} Time"
+    },
+    "Africa/Mogadishu": {
+        "o": "3:0",
+        "f": "EAT",
+        "c": "SO",
+        "n": "E. Africa {c} Time"
+    },
+    "Asia/Qatar": {
+        "o": "3:0",
+        "f": "AST",
+        "c": "QA",
+        "n": "Arab {c} Time"
+    },
+    "Pacific/Niue": {
+        "o": "-11:0",
+        "f": "NUT",
+        "c": "NU",
+        "n": "UTC-11"
+    },
+    "Africa/Gaborone": {
+        "o": "2:0",
+        "f": "CAT",
+        "c": "BW",
+        "n": "South Africa {c} Time"
+    },
+    "America/Antigua": {
+        "o": "-4:0",
+        "f": "AST",
+        "c": "AG",
+        "n": "SA Western {c} Time"
+    },
+    "Australia/Lord_Howe": {
+        "o": "10:30",
+        "f": "LHST",
+        "s": {
+            "m": 10,
+            "r": "0>1",
+            "t": "2:0",
+            "v": "0:30"
+        },
+        "e": {
+            "m": 4,
+            "r": "0>1",
+            "t": "2:0"
+        },
+        "c": "AU"
+    },
+    "Europe/Lisbon": {
+        "o": "0:0",
+        "f": "WE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "PT",
+        "n": "GMT {c} Time"
+    },
+    "Europe/Zurich": {
+        "o": "1:0",
+        "f": "CE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "CH",
+        "n": "W. Europe {c} Time"
+    },
+    "America/Montevideo": {
+        "o": "-3:0",
+        "f": "UY{c}T",
+        "e": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0"
+        },
+        "s": {
+            "m": 10,
+            "r": "0>1",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "UY",
+        "n": "Montevideo {c} Time"
+    },
+    "America/Winnipeg": {
+        "o": "-6:0",
+        "f": "C{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "CA",
+        "n": "Central {c} Time"
+    },
+    "America/Guyana": {
+        "o": "-4:0",
+        "f": "GYT",
+        "c": "GY",
+        "n": "SA Western {c} Time"
+    },
+    "America/Santarem": {
+        "o": "-3:0",
+        "f": "BRT",
+        "c": "BR",
+        "n": "SA Eastern {c} Time"
+    },
+    "Asia/Macau": {
+        "o": "8:0",
+        "f": "C{c}T",
+        "s": {
+            "m": 4,
+            "r": "0>10",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "e": {
+            "m": 9,
+            "r": "0>11",
+            "t": "0:0",
+            "c": "S"
+        },
+        "c": "MO",
+        "n": "China {c} Time"
+    },
+    "Europe/Dublin": {
+        "o": "0:0",
+        "f": "GMT/IST",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "IE",
+        "n": "GMT {c} Time"
+    },
+    "Asia/Vladivostok": {
+        "o": "11:0",
+        "f": "VLAT",
+        "c": "RU",
+        "n": "Vladivostok {c} Time"
+    },
+    "Europe/Zaporozhye": {
+        "o": "2:0",
+        "f": "EE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "UA",
+        "n": "FLE {c} Time"
+    },
+    "Indian/Mayotte": {
+        "o": "3:0",
+        "f": "EAT",
+        "c": "YT",
+        "n": "E. Africa {c} Time"
+    },
+    "America/Tijuana": {
+        "o": "-8:0",
+        "f": "P{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "MX",
+        "n": "Pacific {c} Time"
+    },
+    "Africa/Ndjamena": {
+        "o": "1:0",
+        "f": "WAT",
+        "c": "TD",
+        "n": "W. Central Africa {c} Time"
+    },
+    "Africa/Monrovia": {
+        "o": "0:0",
+        "f": "GMT",
+        "c": "LR",
+        "n": "Greenwich {c} Time"
+    },
+    "Pacific/Tahiti": {
+        "o": "-10:0",
+        "f": "TAHT",
+        "c": "PF",
+        "n": "Hawaiian {c} Time"
+    },
+    "Asia/Qyzylorda": {
+        "o": "6:0",
+        "f": "QYZT",
+        "c": "KZ",
+        "n": "Central Asia {c} Time"
+    },
+    "America/Thule": {
+        "o": "-4:0",
+        "f": "A{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "GL",
+        "n": "Atlantic {c} Time"
+    },
+    "Europe/Copenhagen": {
+        "o": "1:0",
+        "f": "CE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "DK",
+        "n": "Romance {c} Time"
+    },
+    "Europe/Amsterdam": {
+        "o": "1:0",
+        "f": "CE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "NL",
+        "n": "W. Europe {c} Time"
+    },
+    "Asia/Thimphu": {
+        "o": "6:0",
+        "f": "BTT",
+        "c": "BT",
+        "n": "Bangladesh {c} Time"
+    },
+    "America/Chihuahua": {
+        "o": "-7:0",
+        "f": "M{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 4,
+            "r": "0>1",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "MX",
+        "n": "Mountain {c} Time (Mexico)"
+    },
+    "America/Yellowknife": {
+        "o": "-7:0",
+        "f": "M{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "CA",
+        "n": "Mountain {c} Time"
+    },
+    "Africa/Windhoek": {
+        "o": "1:0",
+        "f": "WA{c}T",
+        "e": {
+            "m": 4,
+            "r": "0>1",
+            "t": "2:0"
+        },
+        "s": {
+            "m": 9,
+            "r": "0>1",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "NA",
+        "n": "Namibia {c} Time"
+    },
+    "America/Cayman": {
+        "o": "-5:0",
+        "f": "EST",
+        "c": "KY",
+        "n": "SA Pacific {c} Time"
+    },
+    "Antarctica/Davis": {
+        "o": "7:0",
+        "f": "DAVT",
+        "c": "AQ",
+        "n": "SE Asia {c} Time"
+    },
+    "Europe/Berlin": {
+        "o": "1:0",
+        "f": "CE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "DE",
+        "n": "W. Europe {c} Time"
+    },
+    "Asia/Omsk": {
+        "o": "7:0",
+        "f": "OMST",
+        "c": "RU",
+        "n": "N. Central Asia {c} Time"
+    },
+    "Africa/Kinshasa": {
+        "o": "1:0",
+        "f": "WAT",
+        "c": "CD",
+        "n": "W. Central Africa {c} Time"
+    },
+    "Asia/Kathmandu": {
+        "o": "5:45",
+        "f": "NPT",
+        "c": "NP",
+        "n": "Nepal {c} Time"
+    },
+    "Europe/Chisinau": {
+        "o": "2:0",
+        "f": "EE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "MD",
+        "n": "GTB {c} Time"
+    },
+    "Asia/Choibalsan": {
+        "o": "8:0",
+        "f": "CHO{c}T",
+        "s": {
+            "m": 3,
+            "r": "l6",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "e": {
+            "m": 9,
+            "r": "l6",
+            "t": "2:0"
+        },
+        "c": "MN",
+        "n": "Ulaanbaatar {c} Time"
+    },
+    "Etc/UCT": {
+        "o": "0:0",
+        "f": "UCT"
+    },
+    "CET": {
+        "o": "1:0",
+        "f": "CE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "2:0",
+            "z": "s"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "2:0",
+            "z": "s",
+            "v": "1:0",
+            "c": "S"
+        }
+    },
+    "Europe/Prague": {
+        "o": "1:0",
+        "f": "CE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "CZ",
+        "n": "Central Europe {c} Time"
+    },
+    "America/Toronto": {
+        "o": "-5:0",
+        "f": "E{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "CA",
+        "n": "Eastern {c} Time"
+    },
+    "Africa/Harare": {
+        "o": "2:0",
+        "f": "CAT",
+        "c": "ZW",
+        "n": "South Africa {c} Time"
+    },
+    "America/Montserrat": {
+        "o": "-4:0",
+        "f": "AST",
+        "c": "MS",
+        "n": "SA Western {c} Time"
+    },
+    "Pacific/Honolulu": {
+        "o": "-10:0",
+        "f": "HST",
+        "c": "US",
+        "n": "Hawaiian {c} Time"
+    },
+    "America/Miquelon": {
+        "o": "-3:0",
+        "f": "PM{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "PM"
+    },
+    "Africa/Sao_Tome": {
+        "o": "0:0",
+        "f": "GMT",
+        "c": "ST",
+        "n": "Greenwich {c} Time"
+    },
+    "America/Kentucky/Louisville": {
+        "o": "-5:0",
+        "f": "E{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "US",
+        "n": "Eastern {c} Time"
+    },
+    "Asia/Pyongyang": {
+        "o": "9:0",
+        "f": "KST",
+        "c": "KP",
+        "n": "Korea {c} Time"
+    },
+    "America/Porto_Velho": {
+        "o": "-4:0",
+        "f": "AMT",
+        "c": "BR",
+        "n": "SA Western {c} Time"
+    },
+    "America/Costa_Rica": {
+        "o": "-6:0",
+        "f": "C{c}T",
+        "e": {
+            "m": 3,
+            "r": "15",
+            "t": "0:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 1,
+            "r": "6>15",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "CR",
+        "n": "Central America {c} Time"
+    },
+    "America/Fortaleza": {
+        "o": "-3:0",
+        "f": "BRT",
+        "c": "BR",
+        "n": "SA Eastern {c} Time"
+    },
+    "America/Mexico_City": {
+        "o": "-6:0",
+        "f": "C{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 4,
+            "r": "0>1",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "MX",
+        "n": "Central {c} Time (Mexico)"
+    },
+    "America/El_Salvador": {
+        "o": "-6:0",
+        "f": "C{c}T",
+        "e": {
+            "m": 9,
+            "r": "l0",
+            "t": "0:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 5,
+            "r": "0>1",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "SV",
+        "n": "Central America {c} Time"
+    },
+    "Europe/Kaliningrad": {
+        "o": "3:0",
+        "f": "FET",
+        "c": "RU",
+        "n": "Kaliningrad {c} Time"
+    },
+    "Asia/Kashgar": {
+        "o": "8:0",
+        "f": "C{c}T",
+        "s": {
+            "m": 4,
+            "r": "0>10",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "e": {
+            "m": 9,
+            "r": "0>11",
+            "t": "0:0",
+            "c": "S"
+        },
+        "c": "CN",
+        "n": "China {c} Time"
+    },
+    "Asia/Damascus": {
+        "o": "2:0",
+        "f": "EE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l5",
+            "t": "0:0"
+        },
+        "s": {
+            "m": 3,
+            "r": "l5",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "SY",
+        "n": "Syria {c} Time"
+    },
+    "America/Port_of_Spain": {
+        "o": "-4:0",
+        "f": "AST",
+        "c": "TT",
+        "n": "SA Western {c} Time"
+    },
+    "America/Kentucky/Monticello": {
+        "o": "-5:0",
+        "f": "E{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "US",
+        "n": "Eastern {c} Time"
+    },
+    "CST6CDT": {
+        "o": "-6:0",
+        "f": "C{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "n": "Central {c} Time"
+    },
+    "America/Halifax": {
+        "o": "-4:0",
+        "f": "A{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "CA",
+        "n": "Atlantic {c} Time"
+    },
+    "Asia/Karachi": {
+        "o": "5:0",
+        "f": "PK{c}T",
+        "e": {
+            "m": 11,
+            "r": "1",
+            "t": "0:0"
+        },
+        "s": {
+            "m": 4,
+            "r": "15",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "PK",
+        "n": "Pakistan {c} Time"
+    },
+    "America/Managua": {
+        "o": "-6:0",
+        "f": "C{c}T",
+        "e": {
+            "m": 10,
+            "r": "0>1",
+            "t": "1:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 4,
+            "r": "30",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "NI",
+        "n": "Central America {c} Time"
+    },
+    "EST5EDT": {
+        "o": "-5:0",
+        "f": "E{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "n": "Eastern {c} Time"
+    },
+    "America/North_Dakota/Beulah": {
+        "o": "-6:0",
+        "f": "C{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "US",
+        "n": "Central {c} Time"
+    },
+    "Pacific/Wallis": {
+        "o": "12:0",
+        "f": "WFT",
+        "c": "WF",
+        "n": "UTC+12"
+    },
+    "America/Nome": {
+        "o": "-9:0",
+        "f": "AK{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "US",
+        "n": "Alaskan {c} Time"
+    },
+    "Africa/Bujumbura": {
+        "o": "2:0",
+        "f": "CAT",
+        "c": "BI",
+        "n": "South Africa {c} Time"
+    },
+    "Asia/Khandyga": {
+        "o": "10:0",
+        "f": "YAKT",
+        "c": "RU"
+    },
+    "America/Rio_Branco": {
+        "o": "-4:0",
+        "f": "AMT",
+        "c": "BR",
+        "n": "SA Western {c} Time"
+    },
+    "America/Santiago": {
+        "o": "-4:0",
+        "f": "CL{c}T",
+        "s": {
+            "m": 9,
+            "r": "0>2",
+            "t": "4:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "e": {
+            "m": 4,
+            "r": "0>23",
+            "t": "3:0",
+            "z": "u"
+        },
+        "c": "CL",
+        "n": "Pacific SA {c} Time"
+    },
+    "America/Vancouver": {
+        "o": "-8:0",
+        "f": "P{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "CA",
+        "n": "Pacific {c} Time"
+    },
+    "Asia/Bahrain": {
+        "o": "3:0",
+        "f": "AST",
+        "c": "BH",
+        "n": "Arab {c} Time"
+    },
+    "America/Indiana/Vincennes": {
+        "o": "-5:0",
+        "f": "E{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "US",
+        "n": "Eastern {c} Time"
+    },
+    "Pacific/Enderbury": {
+        "o": "13:0",
+        "f": "PHOT",
+        "c": "KI",
+        "n": "Tonga {c} Time"
+    },
+    "Pacific/Wake": {
+        "o": "12:0",
+        "f": "WAKT",
+        "c": "UM",
+        "n": "UTC+12"
+    },
+    "Europe/Oslo": {
+        "o": "1:0",
+        "f": "CE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "NO",
+        "n": "W. Europe {c} Time"
+    },
+    "America/Guatemala": {
+        "o": "-6:0",
+        "f": "C{c}T",
+        "e": {
+            "m": 10,
+            "r": "1",
+            "t": "0:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 4,
+            "r": "30",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "GT",
+        "n": "Central America {c} Time"
+    },
+    "America/Montreal": {
+        "o": "-5:0",
+        "f": "E{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "CA",
+        "n": "Eastern {c} Time"
+    },
+    "Asia/Dubai": {
+        "o": "4:0",
+        "f": "GST",
+        "c": "AE",
+        "n": "Arabian {c} Time"
+    },
+    "Asia/Harbin": {
+        "o": "8:0",
+        "f": "C{c}T",
+        "s": {
+            "m": 4,
+            "r": "0>10",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "e": {
+            "m": 9,
+            "r": "0>11",
+            "t": "0:0",
+            "c": "S"
+        },
+        "c": "CN",
+        "n": "China {c} Time"
+    },
+    "Africa/Johannesburg": {
+        "o": "2:0",
+        "f": "SAST",
+        "e": {
+            "m": 3,
+            "r": "0>15",
+            "t": "2:0"
+        },
+        "s": {
+            "m": 9,
+            "r": "0>15",
+            "t": "2:0",
+            "v": "1:0"
+        },
+        "c": "ZA",
+        "n": "South Africa {c} Time"
+    },
+    "Europe/Tallinn": {
+        "o": "2:0",
+        "f": "EE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "EE",
+        "n": "FLE {c} Time"
+    },
+    "America/Ojinaga": {
+        "o": "-7:0",
+        "f": "M{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "MX",
+        "n": "Mountain {c} Time"
+    },
+    "Europe/Uzhgorod": {
+        "o": "2:0",
+        "f": "EE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "UA",
+        "n": "FLE {c} Time"
+    },
+    "Asia/Ust-Nera": {
+        "o": "11:0",
+        "f": "VLAT",
+        "c": "RU"
+    },
+    "America/Barbados": {
+        "o": "-4:0",
+        "f": "A{c}T",
+        "e": {
+            "m": 9,
+            "r": "25",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 4,
+            "r": "0>15",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "BB",
+        "n": "SA Western {c} Time"
+    },
+    "Asia/Urumqi": {
+        "o": "8:0",
+        "f": "C{c}T",
+        "s": {
+            "m": 4,
+            "r": "0>10",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "e": {
+            "m": 9,
+            "r": "0>11",
+            "t": "0:0",
+            "c": "S"
+        },
+        "c": "CN",
+        "n": "China {c} Time"
+    },
+    "Asia/Gaza": {
+        "o": "2:0",
+        "f": "EE{c}T",
+        "e": {
+            "m": 9,
+            "r": "5>21",
+            "t": "1:0"
+        },
+        "s": {
+            "m": 3,
+            "r": "l4",
+            "t": "24:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "PS",
+        "n": "Egypt {c} Time"
+    },
+    "Atlantic/Azores": {
+        "o": "-1:0",
+        "f": "AZO{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "PT",
+        "n": "Azores {c} Time"
+    },
+    "Asia/Kuwait": {
+        "o": "3:0",
+        "f": "AST",
+        "c": "KW",
+        "n": "Arab {c} Time"
+    },
+    "Africa/Lagos": {
+        "o": "1:0",
+        "f": "WAT",
+        "c": "NG",
+        "n": "W. Central Africa {c} Time"
+    },
+    "Africa/Porto-Novo": {
+        "o": "1:0",
+        "f": "WAT",
+        "c": "BJ",
+        "n": "W. Central Africa {c} Time"
+    },
+    "Africa/Accra": {
+        "o": "0:0",
+        "f": "{c}",
+        "e": {
+            "m": 12,
+            "r": "31",
+            "t": "0:0",
+            "c": "GMT"
+        },
+        "s": {
+            "m": 9,
+            "r": "1",
+            "t": "0:0",
+            "v": "0:20",
+            "c": "GHST"
+        },
+        "c": "GH",
+        "n": "Greenwich {c} Time"
+    },
+    "Pacific/Port_Moresby": {
+        "o": "10:0",
+        "f": "PGT",
+        "c": "PG",
+        "n": "West Pacific {c} Time"
+    },
+    "America/Blanc-Sablon": {
+        "o": "-4:0",
+        "f": "AST",
+        "c": "CA",
+        "n": "SA Western {c} Time"
+    },
+    "Africa/Juba": {
+        "o": "3:0",
+        "f": "EAT",
+        "c": "SS",
+        "n": "E. Africa {c} Time"
+    },
+    "America/Indiana/Knox": {
+        "o": "-6:0",
+        "f": "C{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "US",
+        "n": "Central {c} Time"
+    },
+    "Europe/Kiev": {
+        "o": "2:0",
+        "f": "EE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "UA",
+        "n": "FLE {c} Time"
+    },
+    "Pacific/Noumea": {
+        "o": "11:0",
+        "f": "NC{c}T",
+        "e": {
+            "m": 3,
+            "r": "2",
+            "t": "2:0",
+            "z": "s"
+        },
+        "s": {
+            "m": 12,
+            "r": "1",
+            "t": "2:0",
+            "z": "s",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "NC",
+        "n": "Central Pacific {c} Time"
+    },
+    "Asia/Dushanbe": {
+        "o": "5:0",
+        "f": "TJT",
+        "c": "TJ",
+        "n": "West Asia {c} Time"
+    },
+    "HST": {
+        "o": "-10:0",
+        "f": "HST"
+    },
+    "America/Jamaica": {
+        "o": "-5:0",
+        "f": "EST",
+        "c": "JM",
+        "n": "SA Pacific {c} Time"
+    },
+    "Asia/Tokyo": {
+        "o": "9:0",
+        "f": "J{c}T",
+        "s": {
+            "m": 5,
+            "r": "0>1",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "e": {
+            "m": 9,
+            "r": "6>8",
+            "t": "2:0",
+            "c": "S"
+        },
+        "c": "JP",
+        "n": "Tokyo {c} Time"
+    },
+    "Indian/Maldives": {
+        "o": "5:0",
+        "f": "MVT",
+        "c": "MV",
+        "n": "West Asia {c} Time"
+    },
+    "Africa/Abidjan": {
+        "o": "0:0",
+        "f": "GMT",
+        "c": "CI",
+        "n": "Greenwich {c} Time"
+    },
+    "Pacific/Pitcairn": {
+        "o": "-8:0",
+        "f": "PST",
+        "c": "PN"
+    },
+    "Europe/Malta": {
+        "o": "1:0",
+        "f": "CE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "MT",
+        "n": "W. Europe {c} Time"
+    },
+    "Europe/Madrid": {
+        "o": "1:0",
+        "f": "CE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "ES",
+        "n": "Romance {c} Time"
+    },
+    "Atlantic/Reykjavik": {
+        "o": "0:0",
+        "f": "GMT",
+        "c": "IS",
+        "n": "Greenwich {c} Time"
+    },
+    "Asia/Magadan": {
+        "o": "12:0",
+        "f": "MAGT",
+        "c": "RU",
+        "n": "Magadan {c} Time"
+    },
+    "Asia/Kabul": {
+        "o": "4:30",
+        "f": "AFT",
+        "c": "AF",
+        "n": "Afghanistan {c} Time"
+    },
+    "America/Argentina/Rio_Gallegos": {
+        "o": "-3:0",
+        "f": "ART",
+        "c": "AR",
+        "n": "Argentina {c} Time"
+    },
+    "Australia/Melbourne": {
+        "o": "10:0",
+        "f": "EST",
+        "s": {
+            "m": 10,
+            "r": "0>1",
+            "t": "2:0",
+            "z": "s",
+            "v": "1:0"
+        },
+        "e": {
+            "m": 4,
+            "r": "0>1",
+            "t": "2:0",
+            "z": "s"
+        },
+        "c": "AU",
+        "n": "AUS Eastern {c} Time"
+    },
+    "Indian/Antananarivo": {
+        "o": "3:0",
+        "f": "EAT",
+        "c": "MG",
+        "n": "E. Africa {c} Time"
+    },
+    "Asia/Pontianak": {
+        "o": "7:0",
+        "f": "WIT",
+        "c": "ID",
+        "n": "SE Asia {c} Time"
+    },
+    "Africa/Mbabane": {
+        "o": "2:0",
+        "f": "SAST",
+        "c": "SZ",
+        "n": "South Africa {c} Time"
+    },
+    "Pacific/Kwajalein": {
+        "o": "12:0",
+        "f": "MHT",
+        "c": "MH",
+        "n": "UTC+12"
+    },
+    "Africa/Banjul": {
+        "o": "0:0",
+        "f": "GMT",
+        "c": "GM",
+        "n": "Greenwich {c} Time"
+    },
+    "America/Argentina/Jujuy": {
+        "o": "-3:0",
+        "f": "ART",
+        "c": "AR",
+        "n": "Argentina {c} Time"
+    },
+    "America/Anchorage": {
+        "o": "-9:0",
+        "f": "AK{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "US",
+        "n": "Alaskan {c} Time"
+    },
+    "America/Argentina/La_Rioja": {
+        "o": "-3:0",
+        "f": "ART",
+        "c": "AR",
+        "n": "Argentina {c} Time"
+    },
+    "Africa/Tripoli": {
+        "o": "1:0",
+        "f": "CE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l5",
+            "t": "2:0"
+        },
+        "s": {
+            "m": 3,
+            "r": "l5",
+            "t": "1:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "LY",
+        "n": "South Africa {c} Time"
+    },
+    "Africa/Khartoum": {
+        "o": "3:0",
+        "f": "EAT",
+        "c": "SD",
+        "n": "E. Africa {c} Time"
+    },
+    "Pacific/Marquesas": {
+        "o": "-9:30",
+        "f": "MART",
+        "c": "PF"
+    },
+    "Asia/Rangoon": {
+        "o": "6:30",
+        "f": "MMT",
+        "c": "MM",
+        "n": "Myanmar {c} Time"
+    },
+    "Europe/Bucharest": {
+        "o": "2:0",
+        "f": "EE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "RO",
+        "n": "GTB {c} Time"
+    },
+    "Europe/Athens": {
+        "o": "2:0",
+        "f": "EE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "GR",
+        "n": "GTB {c} Time"
+    },
+    "America/Puerto_Rico": {
+        "o": "-4:0",
+        "f": "AST",
+        "c": "PR",
+        "n": "SA Western {c} Time"
+    },
+    "America/Nassau": {
+        "o": "-5:0",
+        "f": "E{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "BS",
+        "n": "Eastern {c} Time"
+    },
+    "America/Swift_Current": {
+        "o": "-6:0",
+        "f": "CST",
+        "c": "CA",
+        "n": "Canada Central {c} Time"
+    },
+    "America/Havana": {
+        "o": "-5:0",
+        "f": "C{c}T",
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "0:0",
+            "z": "s",
+            "v": "1:0",
+            "c": "D"
+        },
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "0:0",
+            "z": "s",
+            "c": "S"
+        },
+        "c": "CU"
+    },
+    "Asia/Jayapura": {
+        "o": "9:0",
+        "f": "EIT",
+        "c": "ID",
+        "n": "Tokyo {c} Time"
+    },
+    "Pacific/Gambier": {
+        "o": "-9:0",
+        "f": "GAMT",
+        "c": "PF"
+    },
+    "America/Argentina/Mendoza": {
+        "o": "-3:0",
+        "f": "ART",
+        "c": "AR",
+        "n": "Argentina {c} Time"
+    },
+    "America/Rainy_River": {
+        "o": "-6:0",
+        "f": "C{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "CA",
+        "n": "Central {c} Time"
+    },
+    "America/Belem": {
+        "o": "-3:0",
+        "f": "BRT",
+        "c": "BR",
+        "n": "SA Eastern {c} Time"
+    },
+    "America/Sao_Paulo": {
+        "o": "-3:0",
+        "f": "BR{c}T",
+        "e": {
+            "m": 2,
+            "r": "0>15",
+            "t": "0:0"
+        },
+        "s": {
+            "m": 10,
+            "r": "0>15",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "BR",
+        "n": "E. South America {c} Time"
+    },
+    "Pacific/Easter": {
+        "o": "-6:0",
+        "f": "EAS{c}T",
+        "s": {
+            "m": 9,
+            "r": "0>2",
+            "t": "4:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "e": {
+            "m": 4,
+            "r": "0>23",
+            "t": "3:0",
+            "z": "u"
+        },
+        "c": "CL"
+    },
+    "America/Menominee": {
+        "o": "-6:0",
+        "f": "C{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "US",
+        "n": "Central {c} Time"
+    },
+    "America/Juneau": {
+        "o": "-9:0",
+        "f": "AK{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "US",
+        "n": "Alaskan {c} Time"
+    },
+    "Pacific/Fakaofo": {
+        "o": "13:0",
+        "f": "TKT",
+        "c": "TK",
+        "n": "Tonga {c} Time"
+    },
+    "America/Martinique": {
+        "o": "-4:0",
+        "f": "AST",
+        "c": "MQ",
+        "n": "SA Western {c} Time"
+    },
+    "Africa/Conakry": {
+        "o": "0:0",
+        "f": "GMT",
+        "c": "GN",
+        "n": "Greenwich {c} Time"
+    },
+    "America/North_Dakota/New_Salem": {
+        "o": "-6:0",
+        "f": "C{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "US",
+        "n": "Central {c} Time"
+    },
+    "America/Adak": {
+        "o": "-10:0",
+        "f": "HA{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "US"
+    },
+    "America/Godthab": {
+        "o": "-3:0",
+        "f": "WG{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "GL",
+        "n": "Greenland {c} Time"
+    },
+    "Africa/Libreville": {
+        "o": "1:0",
+        "f": "WAT",
+        "c": "GA",
+        "n": "W. Central Africa {c} Time"
+    },
+    "Pacific/Kosrae": {
+        "o": "11:0",
+        "f": "KOST",
+        "c": "FM",
+        "n": "Central Pacific {c} Time"
+    },
+    "America/St_Thomas": {
+        "o": "-4:0",
+        "f": "AST",
+        "c": "VI",
+        "n": "SA Western {c} Time"
+    },
+    "Etc/GMT+7": {
+        "o": "-7:0",
+        "f": "GMT+7",
+        "n": "US Mountain {c} Time"
+    },
+    "Etc/GMT+6": {
+        "o": "-6:0",
+        "f": "GMT+6",
+        "n": "Central America {c} Time"
+    },
+    "Etc/GMT+5": {
+        "o": "-5:0",
+        "f": "GMT+5",
+        "n": "SA Pacific {c} Time"
+    },
+    "Europe/Minsk": {
+        "o": "3:0",
+        "f": "FET",
+        "c": "BY",
+        "n": "Kaliningrad {c} Time"
+    },
+    "Etc/GMT+4": {
+        "o": "-4:0",
+        "f": "GMT+4",
+        "n": "SA Western {c} Time"
+    },
+    "Etc/GMT+3": {
+        "o": "-3:0",
+        "f": "GMT+3",
+        "n": "SA Eastern {c} Time"
+    },
+    "Pacific/Efate": {
+        "o": "11:0",
+        "f": "VU{c}T",
+        "e": {
+            "m": 1,
+            "r": "0>23",
+            "t": "0:0"
+        },
+        "s": {
+            "m": 10,
+            "r": "0>23",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "VU",
+        "n": "Central Pacific {c} Time"
+    },
+    "MST": {
+        "o": "-7:0",
+        "f": "MST"
+    },
+    "Etc/GMT+2": {
+        "o": "-2:0",
+        "f": "GMT+2",
+        "n": "UTC-02"
+    },
+    "Etc/GMT+1": {
+        "o": "-1:0",
+        "f": "GMT+1",
+        "n": "Cape Verde {c} Time"
+    },
+    "Asia/Yekaterinburg": {
+        "o": "6:0",
+        "f": "YEKT",
+        "c": "RU",
+        "n": "Ekaterinburg {c} Time"
+    },
+    "Pacific/Tongatapu": {
+        "o": "13:0",
+        "f": "TO{c}T",
+        "e": {
+            "m": 1,
+            "r": "l0",
+            "t": "2:0"
+        },
+        "s": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "TO",
+        "n": "Tonga {c} Time"
+    },
+    "Europe/Riga": {
+        "o": "2:0",
+        "f": "EE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "LV",
+        "n": "FLE {c} Time"
+    },
+    "America/Guayaquil": {
+        "o": "-5:0",
+        "f": "ECT",
+        "c": "EC",
+        "n": "SA Pacific {c} Time"
+    },
+    "America/Grand_Turk": {
+        "o": "-5:0",
+        "f": "E{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "TC",
+        "n": "Eastern {c} Time"
+    },
+    "Asia/Manila": {
+        "o": "8:0",
+        "f": "PH{c}T",
+        "e": {
+            "m": 9,
+            "r": "21",
+            "t": "0:0"
+        },
+        "s": {
+            "m": 3,
+            "r": "22",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "PH",
+        "n": "Singapore {c} Time"
+    },
+    "Asia/Jakarta": {
+        "o": "7:0",
+        "f": "WIT",
+        "c": "ID",
+        "n": "SE Asia {c} Time"
+    },
+    "Asia/Ashgabat": {
+        "o": "5:0",
+        "f": "TMT",
+        "c": "TM",
+        "n": "West Asia {c} Time"
+    },
+    "Africa/Kigali": {
+        "o": "2:0",
+        "f": "CAT",
+        "c": "RW",
+        "n": "South Africa {c} Time"
+    },
+    "America/Santo_Domingo": {
+        "o": "-4:0",
+        "f": "AST",
+        "c": "DO",
+        "n": "SA Western {c} Time"
+    },
+    "America/Argentina/Buenos_Aires": {
+        "o": "-3:0",
+        "f": "AR{c}T",
+        "e": {
+            "m": 3,
+            "r": "0>15",
+            "t": "0:0"
+        },
+        "s": {
+            "m": 10,
+            "r": "0>15",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "AR",
+        "n": "Argentina {c} Time"
+    },
+    "Antarctica/Mawson": {
+        "o": "5:0",
+        "f": "MAWT",
+        "c": "AQ",
+        "n": "West Asia {c} Time"
+    },
+    "EST": {
+        "o": "-5:0",
+        "f": "EST"
+    },
+    "America/Goose_Bay": {
+        "o": "-4:0",
+        "f": "A{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "CA",
+        "n": "Atlantic {c} Time"
+    },
+    "Europe/Tirane": {
+        "o": "1:0",
+        "f": "CE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "AL",
+        "n": "Central Europe {c} Time"
+    },
+    "America/Nipigon": {
+        "o": "-5:0",
+        "f": "E{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "CA",
+        "n": "Eastern {c} Time"
+    },
+    "Asia/Chongqing": {
+        "o": "8:0",
+        "f": "C{c}T",
+        "s": {
+            "m": 4,
+            "r": "0>10",
+            "t": "0:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "e": {
+            "m": 9,
+            "r": "0>11",
+            "t": "0:0",
+            "c": "S"
+        },
+        "c": "CN",
+        "n": "China {c} Time"
+    },
+    "America/Cayenne": {
+        "o": "-3:0",
+        "f": "GFT",
+        "c": "GF",
+        "n": "SA Eastern {c} Time"
+    },
+    "Asia/Samarkand": {
+        "o": "5:0",
+        "f": "UZT",
+        "c": "UZ",
+        "n": "West Asia {c} Time"
+    },
+    "Pacific/Fiji": {
+        "o": "12:0",
+        "f": "FJ{c}T",
+        "e": {
+            "m": 1,
+            "r": "0>18",
+            "t": "3:0"
+        },
+        "s": {
+            "m": 10,
+            "r": "0>18",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "FJ",
+        "n": "Fiji {c} Time"
+    },
+    "Australia/Darwin": {
+        "o": "9:30",
+        "f": "CST",
+        "e": {
+            "m": 3,
+            "r": "l0",
+            "t": "2:0"
+        },
+        "s": {
+            "m": 10,
+            "r": "3",
+            "t": "2:0",
+            "v": "1:0"
+        },
+        "c": "AU",
+        "n": "AUS Central {c} Time"
+    },
+    "Etc/GMT-1": {
+        "o": "1:0",
+        "f": "GMT-1",
+        "n": "W. Central Africa {c} Time"
+    },
+    "Australia/Adelaide": {
+        "o": "9:30",
+        "f": "CST",
+        "s": {
+            "m": 10,
+            "r": "0>1",
+            "t": "2:0",
+            "z": "s",
+            "v": "1:0"
+        },
+        "e": {
+            "m": 4,
+            "r": "0>1",
+            "t": "2:0",
+            "z": "s"
+        },
+        "c": "AU",
+        "n": "Cen. Australia {c} Time"
+    },
+    "Etc/GMT-5": {
+        "o": "5:0",
+        "f": "GMT-5",
+        "n": "West Asia {c} Time"
+    },
+    "Etc/GMT-4": {
+        "o": "4:0",
+        "f": "GMT-4",
+        "n": "Arabian {c} Time"
+    },
+    "Asia/Riyadh": {
+        "o": "3:0",
+        "f": "AST",
+        "c": "SA",
+        "n": "Arab {c} Time"
+    },
+    "Etc/GMT-3": {
+        "o": "3:0",
+        "f": "GMT-3",
+        "n": "E. Africa {c} Time"
+    },
+    "Etc/GMT-2": {
+        "o": "2:0",
+        "f": "GMT-2",
+        "n": "South Africa {c} Time"
+    },
+    "Asia/Aden": {
+        "o": "3:0",
+        "f": "AST",
+        "c": "YE",
+        "n": "Arab {c} Time"
+    },
+    "Etc/GMT-9": {
+        "o": "9:0",
+        "f": "GMT-9",
+        "n": "Tokyo {c} Time"
+    },
+    "Asia/Krasnoyarsk": {
+        "o": "8:0",
+        "f": "KRAT",
+        "c": "RU",
+        "n": "North Asia {c} Time"
+    },
+    "Africa/Casablanca": {
+        "o": "0:0",
+        "f": "WE{c}T",
+        "s": {
+            "m": 4,
+            "r": "l0",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "S"
+        },
+        "e": {
+            "m": 9,
+            "r": "l0",
+            "t": "3:0"
+        },
+        "c": "MA",
+        "n": "Morocco {c} Time"
+    },
+    "Etc/GMT-8": {
+        "o": "8:0",
+        "f": "GMT-8",
+        "n": "Singapore {c} Time"
+    },
+    "Etc/GMT-7": {
+        "o": "7:0",
+        "f": "GMT-7",
+        "n": "SE Asia {c} Time"
+    },
+    "Pacific/Johnston": {
+        "o": "-10:0",
+        "f": "HST",
+        "c": "UM",
+        "n": "Hawaiian {c} Time"
+    },
+    "Etc/GMT-6": {
+        "o": "6:0",
+        "f": "GMT-6",
+        "n": "Central Asia {c} Time"
+    },
+    "Pacific/Midway": {
+        "o": "-11:0",
+        "f": "SST",
+        "c": "UM",
+        "n": "UTC-11"
+    },
+    "Etc/GMT+8": {
+        "o": "-8:0",
+        "f": "GMT+8"
+    },
+    "Etc/GMT+9": {
+        "o": "-9:0",
+        "f": "GMT+9"
+    },
+    "Pacific/Palau": {
+        "o": "9:0",
+        "f": "PWT",
+        "c": "PW",
+        "n": "Tokyo {c} Time"
+    },
+    "Asia/Kuala_Lumpur": {
+        "o": "8:0",
+        "f": "MYT",
+        "c": "MY",
+        "n": "Singapore {c} Time"
+    },
+    "Europe/Warsaw": {
+        "o": "1:0",
+        "f": "CE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "PL",
+        "n": "Central European {c} Time"
+    },
+    "Africa/Lome": {
+        "o": "0:0",
+        "f": "GMT",
+        "c": "TG",
+        "n": "Greenwich {c} Time"
+    },
+    "Atlantic/Madeira": {
+        "o": "0:0",
+        "f": "WE{c}T",
+        "e": {
+            "m": 10,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u"
+        },
+        "s": {
+            "m": 3,
+            "r": "l0",
+            "t": "1:0",
+            "z": "u",
+            "v": "1:0",
+            "c": "S"
+        },
+        "c": "PT",
+        "n": "GMT {c} Time"
+    },
+    "America/Sitka": {
+        "o": "-9:0",
+        "f": "AK{c}T",
+        "e": {
+            "m": 11,
+            "r": "0>1",
+            "t": "2:0",
+            "c": "S"
+        },
+        "s": {
+            "m": 3,
+            "r": "0>8",
+            "t": "2:0",
+            "v": "1:0",
+            "c": "D"
+        },
+        "c": "US",
+        "n": "Alaskan {c} Time"
+    }
+};
 /*
  * timezone.js - Definition of a time zone class
  * 
@@ -7863,7 +13682,7 @@ ilib.data.pseudomap = {
  * limitations under the License.
  */
 
-// !depends ilibglobal.js locale.js strings.js util/utils.js
+// !depends ilibglobal.js locale.js localeinfo.js strings.js util/utils.js
 
 // !data pseudomap
 
@@ -8342,7 +14161,7 @@ ilib.ResBundle.prototype = {
 	 * if the translation is not found and the source is undefined 
 	 */
 	getString: function (source, key, escapeMode) {
-		if (!source && !key) return undefined;
+		if (!source && !key) return new ilib.String("");
 
 		var trans;
 		if (this.locale.isPseudo()) {
@@ -9118,7 +14937,7 @@ ilib.DateFmt = function(options) {
 	this.length = "s";
 	this.dateComponents = "dmy";
 	this.timeComponents = "ahm";
-	this.useNative=false;
+	this.useNative= false;
 	if (options) {
 		if (options.locale) {
 			this.locale = (typeof(options.locale) === 'string') ? new ilib.Locale(options.locale) : options.locale;
@@ -10660,8 +16479,12 @@ ilib.Date.HebrewDate = function(params) {
 		}
 
 		if (typeof(params.unixtime) != 'undefined') {
+			// unix time is defined to be UTC
+			this.timezone = "Etc/UTC";
 			this.setTime(parseInt(params.unixtime, 10));
 		} else if (typeof(params.julianday) != 'undefined') {
+			// JD time is defined to be UTC
+			this.timezone = "Etc/UTC";
 			this.setJulianDay(parseFloat(params.julianday));
 		} else if (params.year || params.month || params.day || params.hour ||
 				params.minute || params.second || params.millisecond || params.parts ) {
@@ -10730,6 +16553,8 @@ ilib.Date.HebrewDate = function(params) {
 			this.dayOfYear = parseInt(params.dayOfYear, 10);
 		} else if (typeof(params.rd) != 'undefined') {
 			// private parameter. Do not document this!
+			// RD time is defined to be UTC
+			this.timezone = "Etc/UTC";
 			this.setRd(params.rd);
 		} else {
 			// Date.getTime() gets unix time in UTC
@@ -11610,8 +17435,12 @@ ilib.Date.IslamicDate = function(params) {
 		}
 
 		if (typeof(params.unixtime) != 'undefined') {
+			// unix time is defined to be UTC
+			this.timezone = "Etc/UTC";
 			this.setTime(parseInt(params.unixtime, 10));
 		} else if (typeof(params.julianday) != 'undefined') {
+			// JD time is defined to be UTC
+			this.timezone = "Etc/UTC";
 			this.setJulianDay(parseFloat(params.julianday));
 		} else if (params.year || params.month || params.day || params.hour ||
 				params.minute || params.second || params.millisecond ) {
@@ -11665,6 +17494,8 @@ ilib.Date.IslamicDate = function(params) {
 			this.dayOfYear = parseInt(params.dayOfYear, 10);
 		} else if (typeof(params.rd) != 'undefined') {
 			// private parameter. Do not document this!
+			// RD time is defined to be UTC
+			this.timezone = "Etc/UTC";
 			this.setRd(params.rd);
 		} else {
 			// Date.getTime() gets unix time in UTC
@@ -12392,8 +18223,12 @@ ilib.Date.JulDate = function(params) {
 		}
 
 		if (typeof(params.unixtime) != 'undefined') {
+			// unix time is defined to be UTC
+			this.timezone = "Etc/UTC";
 			this.setTime(parseInt(params.unixtime, 10));
 		} else if (typeof(params.julianday) != 'undefined') {
+			// JD time is defined to be UTC
+			this.timezone = "Etc/UTC";
 			this.setJulianDay(parseFloat(params.julianday));
 		} else if (params.year || params.month || params.day || params.hour ||
 				params.minute || params.second || params.millisecond ) {
@@ -12435,6 +18270,8 @@ ilib.Date.JulDate = function(params) {
 			this.millisecond = parseInt(params.millisecond, 10) || 0;
 		} else if (typeof(params.rd) != 'undefined') {
 			// private parameter. Do not document this!
+			// RD time is defined to be UTC
+			this.timezone = "Etc/UTC";
 			this.setRd(params.rd);
 		} else {
 			// Date.getTime() gets unix time in UTC
@@ -14332,7 +20169,45 @@ ilib.CType.isDigit = function (ch) {
 	return ilib.CType._inRange(ch, 'digit', ilib.data.ctype);
 };
 
-ilib.data.ctype_z = {"Zs":[[32],[160],[5760],[6158],[8192,8202],[8239],[8287],[12288]],"Zl":[[8232]],"Zp":[[8233]]};
+ilib.data.ctype_z = {
+    "Zs": [
+        [
+            32
+        ],
+        [
+            160
+        ],
+        [
+            5760
+        ],
+        [
+            6158
+        ],
+        [
+            8192,
+            8202
+        ],
+        [
+            8239
+        ],
+        [
+            8287
+        ],
+        [
+            12288
+        ]
+    ],
+    "Zl": [
+        [
+            8232
+        ]
+    ],
+    "Zp": [
+        [
+            8233
+        ]
+    ]
+};
 /*
  * ctype.isspace.js - Character type is space char
  * 
@@ -16181,6 +22056,7 @@ ilib.NumFmt.prototype = {
 		return this.style;
 	}
 };
+
 /*
  * durfmt.js - Date formatter definition
  * 
@@ -16520,7 +22396,5464 @@ ilib.DurFmt.prototype.getStyle = function () {
 	return this.style;
 };
 
-ilib.data.ctype_l = {"Lu":[[65,90],[192,214],[216,222],[256],[258],[260],[262],[264],[266],[268],[270],[272],[274],[276],[278],[280],[282],[284],[286],[288],[290],[292],[294],[296],[298],[300],[302],[304],[306],[308],[310],[313],[315],[317],[319],[321],[323],[325],[327],[330],[332],[334],[336],[338],[340],[342],[344],[346],[348],[350],[352],[354],[356],[358],[360],[362],[364],[366],[368],[370],[372],[374],[376,377],[379],[381],[385,386],[388],[390,391],[393,395],[398,401],[403,404],[406,408],[412,413],[415,416],[418],[420],[422,423],[425],[428],[430,431],[433,435],[437],[439,440],[444],[452],[455],[458],[461],[463],[465],[467],[469],[471],[473],[475],[478],[480],[482],[484],[486],[488],[490],[492],[494],[497],[500],[502,504],[506],[508],[510],[512],[514],[516],[518],[520],[522],[524],[526],[528],[530],[532],[534],[536],[538],[540],[542],[544],[546],[548],[550],[552],[554],[556],[558],[560],[562],[570,571],[573,574],[577],[579,582],[584],[586],[588],[590],[880],[882],[886],[902],[904,906],[908],[910,911],[913,929],[931,939],[975],[978,980],[984],[986],[988],[990],[992],[994],[996],[998],[1000],[1002],[1004],[1006],[1012],[1015],[1017,1018],[1021,1071],[1120],[1122],[1124],[1126],[1128],[1130],[1132],[1134],[1136],[1138],[1140],[1142],[1144],[1146],[1148],[1150],[1152],[1162],[1164],[1166],[1168],[1170],[1172],[1174],[1176],[1178],[1180],[1182],[1184],[1186],[1188],[1190],[1192],[1194],[1196],[1198],[1200],[1202],[1204],[1206],[1208],[1210],[1212],[1214],[1216,1217],[1219],[1221],[1223],[1225],[1227],[1229],[1232],[1234],[1236],[1238],[1240],[1242],[1244],[1246],[1248],[1250],[1252],[1254],[1256],[1258],[1260],[1262],[1264],[1266],[1268],[1270],[1272],[1274],[1276],[1278],[1280],[1282],[1284],[1286],[1288],[1290],[1292],[1294],[1296],[1298],[1300],[1302],[1304],[1306],[1308],[1310],[1312],[1314],[1316],[1318],[1329,1366],[4256,4293],[4295],[4301],[7680],[7682],[7684],[7686],[7688],[7690],[7692],[7694],[7696],[7698],[7700],[7702],[7704],[7706],[7708],[7710],[7712],[7714],[7716],[7718],[7720],[7722],[7724],[7726],[7728],[7730],[7732],[7734],[7736],[7738],[7740],[7742],[7744],[7746],[7748],[7750],[7752],[7754],[7756],[7758],[7760],[7762],[7764],[7766],[7768],[7770],[7772],[7774],[7776],[7778],[7780],[7782],[7784],[7786],[7788],[7790],[7792],[7794],[7796],[7798],[7800],[7802],[7804],[7806],[7808],[7810],[7812],[7814],[7816],[7818],[7820],[7822],[7824],[7826],[7828],[7838],[7840],[7842],[7844],[7846],[7848],[7850],[7852],[7854],[7856],[7858],[7860],[7862],[7864],[7866],[7868],[7870],[7872],[7874],[7876],[7878],[7880],[7882],[7884],[7886],[7888],[7890],[7892],[7894],[7896],[7898],[7900],[7902],[7904],[7906],[7908],[7910],[7912],[7914],[7916],[7918],[7920],[7922],[7924],[7926],[7928],[7930],[7932],[7934],[7944,7951],[7960,7965],[7976,7983],[7992,7999],[8008,8013],[8025],[8027],[8029],[8031],[8040,8047],[8120,8123],[8136,8139],[8152,8155],[8168,8172],[8184,8187],[8450],[8455],[8459,8461],[8464,8466],[8469],[8473,8477],[8484],[8486],[8488],[8490,8493],[8496,8499],[8510,8511],[8517],[8579],[11264,11310],[11360],[11362,11364],[11367],[11369],[11371],[11373,11376],[11378],[11381],[11390,11392],[11394],[11396],[11398],[11400],[11402],[11404],[11406],[11408],[11410],[11412],[11414],[11416],[11418],[11420],[11422],[11424],[11426],[11428],[11430],[11432],[11434],[11436],[11438],[11440],[11442],[11444],[11446],[11448],[11450],[11452],[11454],[11456],[11458],[11460],[11462],[11464],[11466],[11468],[11470],[11472],[11474],[11476],[11478],[11480],[11482],[11484],[11486],[11488],[11490],[11499],[11501],[11506],[42560],[42562],[42564],[42566],[42568],[42570],[42572],[42574],[42576],[42578],[42580],[42582],[42584],[42586],[42588],[42590],[42592],[42594],[42596],[42598],[42600],[42602],[42604],[42624],[42626],[42628],[42630],[42632],[42634],[42636],[42638],[42640],[42642],[42644],[42646],[42786],[42788],[42790],[42792],[42794],[42796],[42798],[42802],[42804],[42806],[42808],[42810],[42812],[42814],[42816],[42818],[42820],[42822],[42824],[42826],[42828],[42830],[42832],[42834],[42836],[42838],[42840],[42842],[42844],[42846],[42848],[42850],[42852],[42854],[42856],[42858],[42860],[42862],[42873],[42875],[42877,42878],[42880],[42882],[42884],[42886],[42891],[42893],[42896],[42898],[42912],[42914],[42916],[42918],[42920],[42922],[65313,65338],[66560,66599],[119808,119833],[119860,119885],[119912,119937],[119964],[119966,119967],[119970],[119973,119974],[119977,119980],[119982,119989],[120016,120041],[120068,120069],[120071,120074],[120077,120084],[120086,120092],[120120,120121],[120123,120126],[120128,120132],[120134],[120138,120144],[120172,120197],[120224,120249],[120276,120301],[120328,120353],[120380,120405],[120432,120457],[120488,120512],[120546,120570],[120604,120628],[120662,120686],[120720,120744],[120778]],"Ll":[[97,122],[181],[223,246],[248,255],[257],[259],[261],[263],[265],[267],[269],[271],[273],[275],[277],[279],[281],[283],[285],[287],[289],[291],[293],[295],[297],[299],[301],[303],[305],[307],[309],[311,312],[314],[316],[318],[320],[322],[324],[326],[328,329],[331],[333],[335],[337],[339],[341],[343],[345],[347],[349],[351],[353],[355],[357],[359],[361],[363],[365],[367],[369],[371],[373],[375],[378],[380],[382,384],[387],[389],[392],[396,397],[402],[405],[409,411],[414],[417],[419],[421],[424],[426,427],[429],[432],[436],[438],[441,442],[445,447],[454],[457],[460],[462],[464],[466],[468],[470],[472],[474],[476,477],[479],[481],[483],[485],[487],[489],[491],[493],[495,496],[499],[501],[505],[507],[509],[511],[513],[515],[517],[519],[521],[523],[525],[527],[529],[531],[533],[535],[537],[539],[541],[543],[545],[547],[549],[551],[553],[555],[557],[559],[561],[563,569],[572],[575,576],[578],[583],[585],[587],[589],[591,659],[661,687],[881],[883],[887],[891,893],[912],[940,974],[976,977],[981,983],[985],[987],[989],[991],[993],[995],[997],[999],[1001],[1003],[1005],[1007,1011],[1013],[1016],[1019,1020],[1072,1119],[1121],[1123],[1125],[1127],[1129],[1131],[1133],[1135],[1137],[1139],[1141],[1143],[1145],[1147],[1149],[1151],[1153],[1163],[1165],[1167],[1169],[1171],[1173],[1175],[1177],[1179],[1181],[1183],[1185],[1187],[1189],[1191],[1193],[1195],[1197],[1199],[1201],[1203],[1205],[1207],[1209],[1211],[1213],[1215],[1218],[1220],[1222],[1224],[1226],[1228],[1230,1231],[1233],[1235],[1237],[1239],[1241],[1243],[1245],[1247],[1249],[1251],[1253],[1255],[1257],[1259],[1261],[1263],[1265],[1267],[1269],[1271],[1273],[1275],[1277],[1279],[1281],[1283],[1285],[1287],[1289],[1291],[1293],[1295],[1297],[1299],[1301],[1303],[1305],[1307],[1309],[1311],[1313],[1315],[1317],[1319],[1377,1415],[7424,7467],[7531,7543],[7545,7578],[7681],[7683],[7685],[7687],[7689],[7691],[7693],[7695],[7697],[7699],[7701],[7703],[7705],[7707],[7709],[7711],[7713],[7715],[7717],[7719],[7721],[7723],[7725],[7727],[7729],[7731],[7733],[7735],[7737],[7739],[7741],[7743],[7745],[7747],[7749],[7751],[7753],[7755],[7757],[7759],[7761],[7763],[7765],[7767],[7769],[7771],[7773],[7775],[7777],[7779],[7781],[7783],[7785],[7787],[7789],[7791],[7793],[7795],[7797],[7799],[7801],[7803],[7805],[7807],[7809],[7811],[7813],[7815],[7817],[7819],[7821],[7823],[7825],[7827],[7829,7837],[7839],[7841],[7843],[7845],[7847],[7849],[7851],[7853],[7855],[7857],[7859],[7861],[7863],[7865],[7867],[7869],[7871],[7873],[7875],[7877],[7879],[7881],[7883],[7885],[7887],[7889],[7891],[7893],[7895],[7897],[7899],[7901],[7903],[7905],[7907],[7909],[7911],[7913],[7915],[7917],[7919],[7921],[7923],[7925],[7927],[7929],[7931],[7933],[7935,7943],[7952,7957],[7968,7975],[7984,7991],[8000,8005],[8016,8023],[8032,8039],[8048,8061],[8064,8071],[8080,8087],[8096,8103],[8112,8116],[8118,8119],[8126],[8130,8132],[8134,8135],[8144,8147],[8150,8151],[8160,8167],[8178,8180],[8182,8183],[8458],[8462,8463],[8467],[8495],[8500],[8505],[8508,8509],[8518,8521],[8526],[8580],[11312,11358],[11361],[11365,11366],[11368],[11370],[11372],[11377],[11379,11380],[11382,11387],[11393],[11395],[11397],[11399],[11401],[11403],[11405],[11407],[11409],[11411],[11413],[11415],[11417],[11419],[11421],[11423],[11425],[11427],[11429],[11431],[11433],[11435],[11437],[11439],[11441],[11443],[11445],[11447],[11449],[11451],[11453],[11455],[11457],[11459],[11461],[11463],[11465],[11467],[11469],[11471],[11473],[11475],[11477],[11479],[11481],[11483],[11485],[11487],[11489],[11491,11492],[11500],[11502],[11507],[11520,11557],[11559],[11565],[42561],[42563],[42565],[42567],[42569],[42571],[42573],[42575],[42577],[42579],[42581],[42583],[42585],[42587],[42589],[42591],[42593],[42595],[42597],[42599],[42601],[42603],[42605],[42625],[42627],[42629],[42631],[42633],[42635],[42637],[42639],[42641],[42643],[42645],[42647],[42787],[42789],[42791],[42793],[42795],[42797],[42799,42801],[42803],[42805],[42807],[42809],[42811],[42813],[42815],[42817],[42819],[42821],[42823],[42825],[42827],[42829],[42831],[42833],[42835],[42837],[42839],[42841],[42843],[42845],[42847],[42849],[42851],[42853],[42855],[42857],[42859],[42861],[42863],[42865,42872],[42874],[42876],[42879],[42881],[42883],[42885],[42887],[42892],[42894],[42897],[42899],[42913],[42915],[42917],[42919],[42921],[43002],[64256,64262],[64275,64279],[65345,65370],[66600,66639],[119834,119859],[119886,119892],[119894,119911],[119938,119963],[119990,119993],[119995],[119997,120003],[120005,120015],[120042,120067],[120094,120119],[120146,120171],[120198,120223],[120250,120275],[120302,120327],[120354,120379],[120406,120431],[120458,120485],[120514,120538],[120540,120545],[120572,120596],[120598,120603],[120630,120654],[120656,120661],[120688,120712],[120714,120719],[120746,120770],[120772,120777],[120779]],"Lt":[[453],[456],[459],[498],[8072,8079],[8088,8095],[8104,8111],[8124],[8140],[8188]],"Lm":[[688,705],[710,721],[736,740],[748],[750],[884],[890],[1369],[1600],[1765,1766],[2036,2037],[2042],[2074],[2084],[2088],[2417],[3654],[3782],[4348],[6103],[6211],[6823],[7288,7293],[7468,7530],[7544],[7579,7615],[8305],[8319],[8336,8348],[11388,11389],[11631],[11823],[12293],[12337,12341],[12347],[12445,12446],[12540,12542],[40981],[42232,42237],[42508],[42623],[42775,42783],[42864],[42888],[43000,43001],[43471],[43632],[43741],[43763,43764],[65392],[65438,65439],[94099,94111]],"Lo":[[170],[186],[443],[448,451],[660],[1488,1514],[1520,1522],[1568,1599],[1601,1610],[1646,1647],[1649,1747],[1749],[1774,1775],[1786,1788],[1791],[1808],[1810,1839],[1869,1957],[1969],[1994,2026],[2048,2069],[2112,2136],[2208],[2210,2220],[2308,2361],[2365],[2384],[2392,2401],[2418,2423],[2425,2431],[2437,2444],[2447,2448],[2451,2472],[2474,2480],[2482],[2486,2489],[2493],[2510],[2524,2525],[2527,2529],[2544,2545],[2565,2570],[2575,2576],[2579,2600],[2602,2608],[2610,2611],[2613,2614],[2616,2617],[2649,2652],[2654],[2674,2676],[2693,2701],[2703,2705],[2707,2728],[2730,2736],[2738,2739],[2741,2745],[2749],[2768],[2784,2785],[2821,2828],[2831,2832],[2835,2856],[2858,2864],[2866,2867],[2869,2873],[2877],[2908,2909],[2911,2913],[2929],[2947],[2949,2954],[2958,2960],[2962,2965],[2969,2970],[2972],[2974,2975],[2979,2980],[2984,2986],[2990,3001],[3024],[3077,3084],[3086,3088],[3090,3112],[3114,3123],[3125,3129],[3133],[3160,3161],[3168,3169],[3205,3212],[3214,3216],[3218,3240],[3242,3251],[3253,3257],[3261],[3294],[3296,3297],[3313,3314],[3333,3340],[3342,3344],[3346,3386],[3389],[3406],[3424,3425],[3450,3455],[3461,3478],[3482,3505],[3507,3515],[3517],[3520,3526],[3585,3632],[3634,3635],[3648,3653],[3713,3714],[3716],[3719,3720],[3722],[3725],[3732,3735],[3737,3743],[3745,3747],[3749],[3751],[3754,3755],[3757,3760],[3762,3763],[3773],[3776,3780],[3804,3807],[3840],[3904,3911],[3913,3948],[3976,3980],[4096,4138],[4159],[4176,4181],[4186,4189],[4193],[4197,4198],[4206,4208],[4213,4225],[4238],[4304,4346],[4349,4680],[4682,4685],[4688,4694],[4696],[4698,4701],[4704,4744],[4746,4749],[4752,4784],[4786,4789],[4792,4798],[4800],[4802,4805],[4808,4822],[4824,4880],[4882,4885],[4888,4954],[4992,5007],[5024,5108],[5121,5740],[5743,5759],[5761,5786],[5792,5866],[5888,5900],[5902,5905],[5920,5937],[5952,5969],[5984,5996],[5998,6000],[6016,6067],[6108],[6176,6210],[6212,6263],[6272,6312],[6314],[6320,6389],[6400,6428],[6480,6509],[6512,6516],[6528,6571],[6593,6599],[6656,6678],[6688,6740],[6917,6963],[6981,6987],[7043,7072],[7086,7087],[7098,7141],[7168,7203],[7245,7247],[7258,7287],[7401,7404],[7406,7409],[7413,7414],[8501,8504],[11568,11623],[11648,11670],[11680,11686],[11688,11694],[11696,11702],[11704,11710],[11712,11718],[11720,11726],[11728,11734],[11736,11742],[12294],[12348],[12353,12438],[12447],[12449,12538],[12543],[12549,12589],[12593,12686],[12704,12730],[12784,12799],[13312,19893],[19968,40908],[40960,40980],[40982,42124],[42192,42231],[42240,42507],[42512,42527],[42538,42539],[42606],[42656,42725],[43003,43009],[43011,43013],[43015,43018],[43020,43042],[43072,43123],[43138,43187],[43250,43255],[43259],[43274,43301],[43312,43334],[43360,43388],[43396,43442],[43520,43560],[43584,43586],[43588,43595],[43616,43631],[43633,43638],[43642],[43648,43695],[43697],[43701,43702],[43705,43709],[43712],[43714],[43739,43740],[43744,43754],[43762],[43777,43782],[43785,43790],[43793,43798],[43808,43814],[43816,43822],[43968,44002],[44032,55203],[55216,55238],[55243,55291],[63744,64109],[64112,64217],[64285],[64287,64296],[64298,64310],[64312,64316],[64318],[64320,64321],[64323,64324],[64326,64433],[64467,64829],[64848,64911],[64914,64967],[65008,65019],[65136,65140],[65142,65276],[65382,65391],[65393,65437],[65440,65470],[65474,65479],[65482,65487],[65490,65495],[65498,65500],[65536,65547],[65549,65574],[65576,65594],[65596,65597],[65599,65613],[65616,65629],[65664,65786],[66176,66204],[66208,66256],[66304,66334],[66352,66368],[66370,66377],[66432,66461],[66464,66499],[66504,66511],[66640,66717],[67584,67589],[67592],[67594,67637],[67639,67640],[67644],[67647,67669],[67840,67861],[67872,67897],[67968,68023],[68030,68031],[68096],[68112,68115],[68117,68119],[68121,68147],[68192,68220],[68352,68405],[68416,68437],[68448,68466],[68608,68680],[69635,69687],[69763,69807],[69840,69864],[69891,69926],[70019,70066],[70081,70084],[71296,71338],[73728,74606],[77824,78894],[92160,92728],[93952,94020],[94032],[110592,110593],[126464,126467],[126469,126495],[126497,126498],[126500],[126503],[126505,126514],[126516,126519],[126521],[126523],[126530],[126535],[126537],[126539],[126541,126543],[126545,126546],[126548],[126551],[126553],[126555],[126557],[126559],[126561,126562],[126564],[126567,126570],[126572,126578],[126580,126583],[126585,126588],[126590],[126592,126601],[126603,126619],[126625,126627],[126629,126633],[126635,126651],[131072,173782],[173824,177972],[177984,178205],[194560,195101]]};
+ilib.data.ctype_l = {
+    "Lu": [
+        [
+            65,
+            90
+        ],
+        [
+            192,
+            214
+        ],
+        [
+            216,
+            222
+        ],
+        [
+            256
+        ],
+        [
+            258
+        ],
+        [
+            260
+        ],
+        [
+            262
+        ],
+        [
+            264
+        ],
+        [
+            266
+        ],
+        [
+            268
+        ],
+        [
+            270
+        ],
+        [
+            272
+        ],
+        [
+            274
+        ],
+        [
+            276
+        ],
+        [
+            278
+        ],
+        [
+            280
+        ],
+        [
+            282
+        ],
+        [
+            284
+        ],
+        [
+            286
+        ],
+        [
+            288
+        ],
+        [
+            290
+        ],
+        [
+            292
+        ],
+        [
+            294
+        ],
+        [
+            296
+        ],
+        [
+            298
+        ],
+        [
+            300
+        ],
+        [
+            302
+        ],
+        [
+            304
+        ],
+        [
+            306
+        ],
+        [
+            308
+        ],
+        [
+            310
+        ],
+        [
+            313
+        ],
+        [
+            315
+        ],
+        [
+            317
+        ],
+        [
+            319
+        ],
+        [
+            321
+        ],
+        [
+            323
+        ],
+        [
+            325
+        ],
+        [
+            327
+        ],
+        [
+            330
+        ],
+        [
+            332
+        ],
+        [
+            334
+        ],
+        [
+            336
+        ],
+        [
+            338
+        ],
+        [
+            340
+        ],
+        [
+            342
+        ],
+        [
+            344
+        ],
+        [
+            346
+        ],
+        [
+            348
+        ],
+        [
+            350
+        ],
+        [
+            352
+        ],
+        [
+            354
+        ],
+        [
+            356
+        ],
+        [
+            358
+        ],
+        [
+            360
+        ],
+        [
+            362
+        ],
+        [
+            364
+        ],
+        [
+            366
+        ],
+        [
+            368
+        ],
+        [
+            370
+        ],
+        [
+            372
+        ],
+        [
+            374
+        ],
+        [
+            376,
+            377
+        ],
+        [
+            379
+        ],
+        [
+            381
+        ],
+        [
+            385,
+            386
+        ],
+        [
+            388
+        ],
+        [
+            390,
+            391
+        ],
+        [
+            393,
+            395
+        ],
+        [
+            398,
+            401
+        ],
+        [
+            403,
+            404
+        ],
+        [
+            406,
+            408
+        ],
+        [
+            412,
+            413
+        ],
+        [
+            415,
+            416
+        ],
+        [
+            418
+        ],
+        [
+            420
+        ],
+        [
+            422,
+            423
+        ],
+        [
+            425
+        ],
+        [
+            428
+        ],
+        [
+            430,
+            431
+        ],
+        [
+            433,
+            435
+        ],
+        [
+            437
+        ],
+        [
+            439,
+            440
+        ],
+        [
+            444
+        ],
+        [
+            452
+        ],
+        [
+            455
+        ],
+        [
+            458
+        ],
+        [
+            461
+        ],
+        [
+            463
+        ],
+        [
+            465
+        ],
+        [
+            467
+        ],
+        [
+            469
+        ],
+        [
+            471
+        ],
+        [
+            473
+        ],
+        [
+            475
+        ],
+        [
+            478
+        ],
+        [
+            480
+        ],
+        [
+            482
+        ],
+        [
+            484
+        ],
+        [
+            486
+        ],
+        [
+            488
+        ],
+        [
+            490
+        ],
+        [
+            492
+        ],
+        [
+            494
+        ],
+        [
+            497
+        ],
+        [
+            500
+        ],
+        [
+            502,
+            504
+        ],
+        [
+            506
+        ],
+        [
+            508
+        ],
+        [
+            510
+        ],
+        [
+            512
+        ],
+        [
+            514
+        ],
+        [
+            516
+        ],
+        [
+            518
+        ],
+        [
+            520
+        ],
+        [
+            522
+        ],
+        [
+            524
+        ],
+        [
+            526
+        ],
+        [
+            528
+        ],
+        [
+            530
+        ],
+        [
+            532
+        ],
+        [
+            534
+        ],
+        [
+            536
+        ],
+        [
+            538
+        ],
+        [
+            540
+        ],
+        [
+            542
+        ],
+        [
+            544
+        ],
+        [
+            546
+        ],
+        [
+            548
+        ],
+        [
+            550
+        ],
+        [
+            552
+        ],
+        [
+            554
+        ],
+        [
+            556
+        ],
+        [
+            558
+        ],
+        [
+            560
+        ],
+        [
+            562
+        ],
+        [
+            570,
+            571
+        ],
+        [
+            573,
+            574
+        ],
+        [
+            577
+        ],
+        [
+            579,
+            582
+        ],
+        [
+            584
+        ],
+        [
+            586
+        ],
+        [
+            588
+        ],
+        [
+            590
+        ],
+        [
+            880
+        ],
+        [
+            882
+        ],
+        [
+            886
+        ],
+        [
+            902
+        ],
+        [
+            904,
+            906
+        ],
+        [
+            908
+        ],
+        [
+            910,
+            911
+        ],
+        [
+            913,
+            929
+        ],
+        [
+            931,
+            939
+        ],
+        [
+            975
+        ],
+        [
+            978,
+            980
+        ],
+        [
+            984
+        ],
+        [
+            986
+        ],
+        [
+            988
+        ],
+        [
+            990
+        ],
+        [
+            992
+        ],
+        [
+            994
+        ],
+        [
+            996
+        ],
+        [
+            998
+        ],
+        [
+            1000
+        ],
+        [
+            1002
+        ],
+        [
+            1004
+        ],
+        [
+            1006
+        ],
+        [
+            1012
+        ],
+        [
+            1015
+        ],
+        [
+            1017,
+            1018
+        ],
+        [
+            1021,
+            1071
+        ],
+        [
+            1120
+        ],
+        [
+            1122
+        ],
+        [
+            1124
+        ],
+        [
+            1126
+        ],
+        [
+            1128
+        ],
+        [
+            1130
+        ],
+        [
+            1132
+        ],
+        [
+            1134
+        ],
+        [
+            1136
+        ],
+        [
+            1138
+        ],
+        [
+            1140
+        ],
+        [
+            1142
+        ],
+        [
+            1144
+        ],
+        [
+            1146
+        ],
+        [
+            1148
+        ],
+        [
+            1150
+        ],
+        [
+            1152
+        ],
+        [
+            1162
+        ],
+        [
+            1164
+        ],
+        [
+            1166
+        ],
+        [
+            1168
+        ],
+        [
+            1170
+        ],
+        [
+            1172
+        ],
+        [
+            1174
+        ],
+        [
+            1176
+        ],
+        [
+            1178
+        ],
+        [
+            1180
+        ],
+        [
+            1182
+        ],
+        [
+            1184
+        ],
+        [
+            1186
+        ],
+        [
+            1188
+        ],
+        [
+            1190
+        ],
+        [
+            1192
+        ],
+        [
+            1194
+        ],
+        [
+            1196
+        ],
+        [
+            1198
+        ],
+        [
+            1200
+        ],
+        [
+            1202
+        ],
+        [
+            1204
+        ],
+        [
+            1206
+        ],
+        [
+            1208
+        ],
+        [
+            1210
+        ],
+        [
+            1212
+        ],
+        [
+            1214
+        ],
+        [
+            1216,
+            1217
+        ],
+        [
+            1219
+        ],
+        [
+            1221
+        ],
+        [
+            1223
+        ],
+        [
+            1225
+        ],
+        [
+            1227
+        ],
+        [
+            1229
+        ],
+        [
+            1232
+        ],
+        [
+            1234
+        ],
+        [
+            1236
+        ],
+        [
+            1238
+        ],
+        [
+            1240
+        ],
+        [
+            1242
+        ],
+        [
+            1244
+        ],
+        [
+            1246
+        ],
+        [
+            1248
+        ],
+        [
+            1250
+        ],
+        [
+            1252
+        ],
+        [
+            1254
+        ],
+        [
+            1256
+        ],
+        [
+            1258
+        ],
+        [
+            1260
+        ],
+        [
+            1262
+        ],
+        [
+            1264
+        ],
+        [
+            1266
+        ],
+        [
+            1268
+        ],
+        [
+            1270
+        ],
+        [
+            1272
+        ],
+        [
+            1274
+        ],
+        [
+            1276
+        ],
+        [
+            1278
+        ],
+        [
+            1280
+        ],
+        [
+            1282
+        ],
+        [
+            1284
+        ],
+        [
+            1286
+        ],
+        [
+            1288
+        ],
+        [
+            1290
+        ],
+        [
+            1292
+        ],
+        [
+            1294
+        ],
+        [
+            1296
+        ],
+        [
+            1298
+        ],
+        [
+            1300
+        ],
+        [
+            1302
+        ],
+        [
+            1304
+        ],
+        [
+            1306
+        ],
+        [
+            1308
+        ],
+        [
+            1310
+        ],
+        [
+            1312
+        ],
+        [
+            1314
+        ],
+        [
+            1316
+        ],
+        [
+            1318
+        ],
+        [
+            1329,
+            1366
+        ],
+        [
+            4256,
+            4293
+        ],
+        [
+            4295
+        ],
+        [
+            4301
+        ],
+        [
+            7680
+        ],
+        [
+            7682
+        ],
+        [
+            7684
+        ],
+        [
+            7686
+        ],
+        [
+            7688
+        ],
+        [
+            7690
+        ],
+        [
+            7692
+        ],
+        [
+            7694
+        ],
+        [
+            7696
+        ],
+        [
+            7698
+        ],
+        [
+            7700
+        ],
+        [
+            7702
+        ],
+        [
+            7704
+        ],
+        [
+            7706
+        ],
+        [
+            7708
+        ],
+        [
+            7710
+        ],
+        [
+            7712
+        ],
+        [
+            7714
+        ],
+        [
+            7716
+        ],
+        [
+            7718
+        ],
+        [
+            7720
+        ],
+        [
+            7722
+        ],
+        [
+            7724
+        ],
+        [
+            7726
+        ],
+        [
+            7728
+        ],
+        [
+            7730
+        ],
+        [
+            7732
+        ],
+        [
+            7734
+        ],
+        [
+            7736
+        ],
+        [
+            7738
+        ],
+        [
+            7740
+        ],
+        [
+            7742
+        ],
+        [
+            7744
+        ],
+        [
+            7746
+        ],
+        [
+            7748
+        ],
+        [
+            7750
+        ],
+        [
+            7752
+        ],
+        [
+            7754
+        ],
+        [
+            7756
+        ],
+        [
+            7758
+        ],
+        [
+            7760
+        ],
+        [
+            7762
+        ],
+        [
+            7764
+        ],
+        [
+            7766
+        ],
+        [
+            7768
+        ],
+        [
+            7770
+        ],
+        [
+            7772
+        ],
+        [
+            7774
+        ],
+        [
+            7776
+        ],
+        [
+            7778
+        ],
+        [
+            7780
+        ],
+        [
+            7782
+        ],
+        [
+            7784
+        ],
+        [
+            7786
+        ],
+        [
+            7788
+        ],
+        [
+            7790
+        ],
+        [
+            7792
+        ],
+        [
+            7794
+        ],
+        [
+            7796
+        ],
+        [
+            7798
+        ],
+        [
+            7800
+        ],
+        [
+            7802
+        ],
+        [
+            7804
+        ],
+        [
+            7806
+        ],
+        [
+            7808
+        ],
+        [
+            7810
+        ],
+        [
+            7812
+        ],
+        [
+            7814
+        ],
+        [
+            7816
+        ],
+        [
+            7818
+        ],
+        [
+            7820
+        ],
+        [
+            7822
+        ],
+        [
+            7824
+        ],
+        [
+            7826
+        ],
+        [
+            7828
+        ],
+        [
+            7838
+        ],
+        [
+            7840
+        ],
+        [
+            7842
+        ],
+        [
+            7844
+        ],
+        [
+            7846
+        ],
+        [
+            7848
+        ],
+        [
+            7850
+        ],
+        [
+            7852
+        ],
+        [
+            7854
+        ],
+        [
+            7856
+        ],
+        [
+            7858
+        ],
+        [
+            7860
+        ],
+        [
+            7862
+        ],
+        [
+            7864
+        ],
+        [
+            7866
+        ],
+        [
+            7868
+        ],
+        [
+            7870
+        ],
+        [
+            7872
+        ],
+        [
+            7874
+        ],
+        [
+            7876
+        ],
+        [
+            7878
+        ],
+        [
+            7880
+        ],
+        [
+            7882
+        ],
+        [
+            7884
+        ],
+        [
+            7886
+        ],
+        [
+            7888
+        ],
+        [
+            7890
+        ],
+        [
+            7892
+        ],
+        [
+            7894
+        ],
+        [
+            7896
+        ],
+        [
+            7898
+        ],
+        [
+            7900
+        ],
+        [
+            7902
+        ],
+        [
+            7904
+        ],
+        [
+            7906
+        ],
+        [
+            7908
+        ],
+        [
+            7910
+        ],
+        [
+            7912
+        ],
+        [
+            7914
+        ],
+        [
+            7916
+        ],
+        [
+            7918
+        ],
+        [
+            7920
+        ],
+        [
+            7922
+        ],
+        [
+            7924
+        ],
+        [
+            7926
+        ],
+        [
+            7928
+        ],
+        [
+            7930
+        ],
+        [
+            7932
+        ],
+        [
+            7934
+        ],
+        [
+            7944,
+            7951
+        ],
+        [
+            7960,
+            7965
+        ],
+        [
+            7976,
+            7983
+        ],
+        [
+            7992,
+            7999
+        ],
+        [
+            8008,
+            8013
+        ],
+        [
+            8025
+        ],
+        [
+            8027
+        ],
+        [
+            8029
+        ],
+        [
+            8031
+        ],
+        [
+            8040,
+            8047
+        ],
+        [
+            8120,
+            8123
+        ],
+        [
+            8136,
+            8139
+        ],
+        [
+            8152,
+            8155
+        ],
+        [
+            8168,
+            8172
+        ],
+        [
+            8184,
+            8187
+        ],
+        [
+            8450
+        ],
+        [
+            8455
+        ],
+        [
+            8459,
+            8461
+        ],
+        [
+            8464,
+            8466
+        ],
+        [
+            8469
+        ],
+        [
+            8473,
+            8477
+        ],
+        [
+            8484
+        ],
+        [
+            8486
+        ],
+        [
+            8488
+        ],
+        [
+            8490,
+            8493
+        ],
+        [
+            8496,
+            8499
+        ],
+        [
+            8510,
+            8511
+        ],
+        [
+            8517
+        ],
+        [
+            8579
+        ],
+        [
+            11264,
+            11310
+        ],
+        [
+            11360
+        ],
+        [
+            11362,
+            11364
+        ],
+        [
+            11367
+        ],
+        [
+            11369
+        ],
+        [
+            11371
+        ],
+        [
+            11373,
+            11376
+        ],
+        [
+            11378
+        ],
+        [
+            11381
+        ],
+        [
+            11390,
+            11392
+        ],
+        [
+            11394
+        ],
+        [
+            11396
+        ],
+        [
+            11398
+        ],
+        [
+            11400
+        ],
+        [
+            11402
+        ],
+        [
+            11404
+        ],
+        [
+            11406
+        ],
+        [
+            11408
+        ],
+        [
+            11410
+        ],
+        [
+            11412
+        ],
+        [
+            11414
+        ],
+        [
+            11416
+        ],
+        [
+            11418
+        ],
+        [
+            11420
+        ],
+        [
+            11422
+        ],
+        [
+            11424
+        ],
+        [
+            11426
+        ],
+        [
+            11428
+        ],
+        [
+            11430
+        ],
+        [
+            11432
+        ],
+        [
+            11434
+        ],
+        [
+            11436
+        ],
+        [
+            11438
+        ],
+        [
+            11440
+        ],
+        [
+            11442
+        ],
+        [
+            11444
+        ],
+        [
+            11446
+        ],
+        [
+            11448
+        ],
+        [
+            11450
+        ],
+        [
+            11452
+        ],
+        [
+            11454
+        ],
+        [
+            11456
+        ],
+        [
+            11458
+        ],
+        [
+            11460
+        ],
+        [
+            11462
+        ],
+        [
+            11464
+        ],
+        [
+            11466
+        ],
+        [
+            11468
+        ],
+        [
+            11470
+        ],
+        [
+            11472
+        ],
+        [
+            11474
+        ],
+        [
+            11476
+        ],
+        [
+            11478
+        ],
+        [
+            11480
+        ],
+        [
+            11482
+        ],
+        [
+            11484
+        ],
+        [
+            11486
+        ],
+        [
+            11488
+        ],
+        [
+            11490
+        ],
+        [
+            11499
+        ],
+        [
+            11501
+        ],
+        [
+            11506
+        ],
+        [
+            42560
+        ],
+        [
+            42562
+        ],
+        [
+            42564
+        ],
+        [
+            42566
+        ],
+        [
+            42568
+        ],
+        [
+            42570
+        ],
+        [
+            42572
+        ],
+        [
+            42574
+        ],
+        [
+            42576
+        ],
+        [
+            42578
+        ],
+        [
+            42580
+        ],
+        [
+            42582
+        ],
+        [
+            42584
+        ],
+        [
+            42586
+        ],
+        [
+            42588
+        ],
+        [
+            42590
+        ],
+        [
+            42592
+        ],
+        [
+            42594
+        ],
+        [
+            42596
+        ],
+        [
+            42598
+        ],
+        [
+            42600
+        ],
+        [
+            42602
+        ],
+        [
+            42604
+        ],
+        [
+            42624
+        ],
+        [
+            42626
+        ],
+        [
+            42628
+        ],
+        [
+            42630
+        ],
+        [
+            42632
+        ],
+        [
+            42634
+        ],
+        [
+            42636
+        ],
+        [
+            42638
+        ],
+        [
+            42640
+        ],
+        [
+            42642
+        ],
+        [
+            42644
+        ],
+        [
+            42646
+        ],
+        [
+            42786
+        ],
+        [
+            42788
+        ],
+        [
+            42790
+        ],
+        [
+            42792
+        ],
+        [
+            42794
+        ],
+        [
+            42796
+        ],
+        [
+            42798
+        ],
+        [
+            42802
+        ],
+        [
+            42804
+        ],
+        [
+            42806
+        ],
+        [
+            42808
+        ],
+        [
+            42810
+        ],
+        [
+            42812
+        ],
+        [
+            42814
+        ],
+        [
+            42816
+        ],
+        [
+            42818
+        ],
+        [
+            42820
+        ],
+        [
+            42822
+        ],
+        [
+            42824
+        ],
+        [
+            42826
+        ],
+        [
+            42828
+        ],
+        [
+            42830
+        ],
+        [
+            42832
+        ],
+        [
+            42834
+        ],
+        [
+            42836
+        ],
+        [
+            42838
+        ],
+        [
+            42840
+        ],
+        [
+            42842
+        ],
+        [
+            42844
+        ],
+        [
+            42846
+        ],
+        [
+            42848
+        ],
+        [
+            42850
+        ],
+        [
+            42852
+        ],
+        [
+            42854
+        ],
+        [
+            42856
+        ],
+        [
+            42858
+        ],
+        [
+            42860
+        ],
+        [
+            42862
+        ],
+        [
+            42873
+        ],
+        [
+            42875
+        ],
+        [
+            42877,
+            42878
+        ],
+        [
+            42880
+        ],
+        [
+            42882
+        ],
+        [
+            42884
+        ],
+        [
+            42886
+        ],
+        [
+            42891
+        ],
+        [
+            42893
+        ],
+        [
+            42896
+        ],
+        [
+            42898
+        ],
+        [
+            42912
+        ],
+        [
+            42914
+        ],
+        [
+            42916
+        ],
+        [
+            42918
+        ],
+        [
+            42920
+        ],
+        [
+            42922
+        ],
+        [
+            65313,
+            65338
+        ],
+        [
+            66560,
+            66599
+        ],
+        [
+            119808,
+            119833
+        ],
+        [
+            119860,
+            119885
+        ],
+        [
+            119912,
+            119937
+        ],
+        [
+            119964
+        ],
+        [
+            119966,
+            119967
+        ],
+        [
+            119970
+        ],
+        [
+            119973,
+            119974
+        ],
+        [
+            119977,
+            119980
+        ],
+        [
+            119982,
+            119989
+        ],
+        [
+            120016,
+            120041
+        ],
+        [
+            120068,
+            120069
+        ],
+        [
+            120071,
+            120074
+        ],
+        [
+            120077,
+            120084
+        ],
+        [
+            120086,
+            120092
+        ],
+        [
+            120120,
+            120121
+        ],
+        [
+            120123,
+            120126
+        ],
+        [
+            120128,
+            120132
+        ],
+        [
+            120134
+        ],
+        [
+            120138,
+            120144
+        ],
+        [
+            120172,
+            120197
+        ],
+        [
+            120224,
+            120249
+        ],
+        [
+            120276,
+            120301
+        ],
+        [
+            120328,
+            120353
+        ],
+        [
+            120380,
+            120405
+        ],
+        [
+            120432,
+            120457
+        ],
+        [
+            120488,
+            120512
+        ],
+        [
+            120546,
+            120570
+        ],
+        [
+            120604,
+            120628
+        ],
+        [
+            120662,
+            120686
+        ],
+        [
+            120720,
+            120744
+        ],
+        [
+            120778
+        ]
+    ],
+    "Ll": [
+        [
+            97,
+            122
+        ],
+        [
+            181
+        ],
+        [
+            223,
+            246
+        ],
+        [
+            248,
+            255
+        ],
+        [
+            257
+        ],
+        [
+            259
+        ],
+        [
+            261
+        ],
+        [
+            263
+        ],
+        [
+            265
+        ],
+        [
+            267
+        ],
+        [
+            269
+        ],
+        [
+            271
+        ],
+        [
+            273
+        ],
+        [
+            275
+        ],
+        [
+            277
+        ],
+        [
+            279
+        ],
+        [
+            281
+        ],
+        [
+            283
+        ],
+        [
+            285
+        ],
+        [
+            287
+        ],
+        [
+            289
+        ],
+        [
+            291
+        ],
+        [
+            293
+        ],
+        [
+            295
+        ],
+        [
+            297
+        ],
+        [
+            299
+        ],
+        [
+            301
+        ],
+        [
+            303
+        ],
+        [
+            305
+        ],
+        [
+            307
+        ],
+        [
+            309
+        ],
+        [
+            311,
+            312
+        ],
+        [
+            314
+        ],
+        [
+            316
+        ],
+        [
+            318
+        ],
+        [
+            320
+        ],
+        [
+            322
+        ],
+        [
+            324
+        ],
+        [
+            326
+        ],
+        [
+            328,
+            329
+        ],
+        [
+            331
+        ],
+        [
+            333
+        ],
+        [
+            335
+        ],
+        [
+            337
+        ],
+        [
+            339
+        ],
+        [
+            341
+        ],
+        [
+            343
+        ],
+        [
+            345
+        ],
+        [
+            347
+        ],
+        [
+            349
+        ],
+        [
+            351
+        ],
+        [
+            353
+        ],
+        [
+            355
+        ],
+        [
+            357
+        ],
+        [
+            359
+        ],
+        [
+            361
+        ],
+        [
+            363
+        ],
+        [
+            365
+        ],
+        [
+            367
+        ],
+        [
+            369
+        ],
+        [
+            371
+        ],
+        [
+            373
+        ],
+        [
+            375
+        ],
+        [
+            378
+        ],
+        [
+            380
+        ],
+        [
+            382,
+            384
+        ],
+        [
+            387
+        ],
+        [
+            389
+        ],
+        [
+            392
+        ],
+        [
+            396,
+            397
+        ],
+        [
+            402
+        ],
+        [
+            405
+        ],
+        [
+            409,
+            411
+        ],
+        [
+            414
+        ],
+        [
+            417
+        ],
+        [
+            419
+        ],
+        [
+            421
+        ],
+        [
+            424
+        ],
+        [
+            426,
+            427
+        ],
+        [
+            429
+        ],
+        [
+            432
+        ],
+        [
+            436
+        ],
+        [
+            438
+        ],
+        [
+            441,
+            442
+        ],
+        [
+            445,
+            447
+        ],
+        [
+            454
+        ],
+        [
+            457
+        ],
+        [
+            460
+        ],
+        [
+            462
+        ],
+        [
+            464
+        ],
+        [
+            466
+        ],
+        [
+            468
+        ],
+        [
+            470
+        ],
+        [
+            472
+        ],
+        [
+            474
+        ],
+        [
+            476,
+            477
+        ],
+        [
+            479
+        ],
+        [
+            481
+        ],
+        [
+            483
+        ],
+        [
+            485
+        ],
+        [
+            487
+        ],
+        [
+            489
+        ],
+        [
+            491
+        ],
+        [
+            493
+        ],
+        [
+            495,
+            496
+        ],
+        [
+            499
+        ],
+        [
+            501
+        ],
+        [
+            505
+        ],
+        [
+            507
+        ],
+        [
+            509
+        ],
+        [
+            511
+        ],
+        [
+            513
+        ],
+        [
+            515
+        ],
+        [
+            517
+        ],
+        [
+            519
+        ],
+        [
+            521
+        ],
+        [
+            523
+        ],
+        [
+            525
+        ],
+        [
+            527
+        ],
+        [
+            529
+        ],
+        [
+            531
+        ],
+        [
+            533
+        ],
+        [
+            535
+        ],
+        [
+            537
+        ],
+        [
+            539
+        ],
+        [
+            541
+        ],
+        [
+            543
+        ],
+        [
+            545
+        ],
+        [
+            547
+        ],
+        [
+            549
+        ],
+        [
+            551
+        ],
+        [
+            553
+        ],
+        [
+            555
+        ],
+        [
+            557
+        ],
+        [
+            559
+        ],
+        [
+            561
+        ],
+        [
+            563,
+            569
+        ],
+        [
+            572
+        ],
+        [
+            575,
+            576
+        ],
+        [
+            578
+        ],
+        [
+            583
+        ],
+        [
+            585
+        ],
+        [
+            587
+        ],
+        [
+            589
+        ],
+        [
+            591,
+            659
+        ],
+        [
+            661,
+            687
+        ],
+        [
+            881
+        ],
+        [
+            883
+        ],
+        [
+            887
+        ],
+        [
+            891,
+            893
+        ],
+        [
+            912
+        ],
+        [
+            940,
+            974
+        ],
+        [
+            976,
+            977
+        ],
+        [
+            981,
+            983
+        ],
+        [
+            985
+        ],
+        [
+            987
+        ],
+        [
+            989
+        ],
+        [
+            991
+        ],
+        [
+            993
+        ],
+        [
+            995
+        ],
+        [
+            997
+        ],
+        [
+            999
+        ],
+        [
+            1001
+        ],
+        [
+            1003
+        ],
+        [
+            1005
+        ],
+        [
+            1007,
+            1011
+        ],
+        [
+            1013
+        ],
+        [
+            1016
+        ],
+        [
+            1019,
+            1020
+        ],
+        [
+            1072,
+            1119
+        ],
+        [
+            1121
+        ],
+        [
+            1123
+        ],
+        [
+            1125
+        ],
+        [
+            1127
+        ],
+        [
+            1129
+        ],
+        [
+            1131
+        ],
+        [
+            1133
+        ],
+        [
+            1135
+        ],
+        [
+            1137
+        ],
+        [
+            1139
+        ],
+        [
+            1141
+        ],
+        [
+            1143
+        ],
+        [
+            1145
+        ],
+        [
+            1147
+        ],
+        [
+            1149
+        ],
+        [
+            1151
+        ],
+        [
+            1153
+        ],
+        [
+            1163
+        ],
+        [
+            1165
+        ],
+        [
+            1167
+        ],
+        [
+            1169
+        ],
+        [
+            1171
+        ],
+        [
+            1173
+        ],
+        [
+            1175
+        ],
+        [
+            1177
+        ],
+        [
+            1179
+        ],
+        [
+            1181
+        ],
+        [
+            1183
+        ],
+        [
+            1185
+        ],
+        [
+            1187
+        ],
+        [
+            1189
+        ],
+        [
+            1191
+        ],
+        [
+            1193
+        ],
+        [
+            1195
+        ],
+        [
+            1197
+        ],
+        [
+            1199
+        ],
+        [
+            1201
+        ],
+        [
+            1203
+        ],
+        [
+            1205
+        ],
+        [
+            1207
+        ],
+        [
+            1209
+        ],
+        [
+            1211
+        ],
+        [
+            1213
+        ],
+        [
+            1215
+        ],
+        [
+            1218
+        ],
+        [
+            1220
+        ],
+        [
+            1222
+        ],
+        [
+            1224
+        ],
+        [
+            1226
+        ],
+        [
+            1228
+        ],
+        [
+            1230,
+            1231
+        ],
+        [
+            1233
+        ],
+        [
+            1235
+        ],
+        [
+            1237
+        ],
+        [
+            1239
+        ],
+        [
+            1241
+        ],
+        [
+            1243
+        ],
+        [
+            1245
+        ],
+        [
+            1247
+        ],
+        [
+            1249
+        ],
+        [
+            1251
+        ],
+        [
+            1253
+        ],
+        [
+            1255
+        ],
+        [
+            1257
+        ],
+        [
+            1259
+        ],
+        [
+            1261
+        ],
+        [
+            1263
+        ],
+        [
+            1265
+        ],
+        [
+            1267
+        ],
+        [
+            1269
+        ],
+        [
+            1271
+        ],
+        [
+            1273
+        ],
+        [
+            1275
+        ],
+        [
+            1277
+        ],
+        [
+            1279
+        ],
+        [
+            1281
+        ],
+        [
+            1283
+        ],
+        [
+            1285
+        ],
+        [
+            1287
+        ],
+        [
+            1289
+        ],
+        [
+            1291
+        ],
+        [
+            1293
+        ],
+        [
+            1295
+        ],
+        [
+            1297
+        ],
+        [
+            1299
+        ],
+        [
+            1301
+        ],
+        [
+            1303
+        ],
+        [
+            1305
+        ],
+        [
+            1307
+        ],
+        [
+            1309
+        ],
+        [
+            1311
+        ],
+        [
+            1313
+        ],
+        [
+            1315
+        ],
+        [
+            1317
+        ],
+        [
+            1319
+        ],
+        [
+            1377,
+            1415
+        ],
+        [
+            7424,
+            7467
+        ],
+        [
+            7531,
+            7543
+        ],
+        [
+            7545,
+            7578
+        ],
+        [
+            7681
+        ],
+        [
+            7683
+        ],
+        [
+            7685
+        ],
+        [
+            7687
+        ],
+        [
+            7689
+        ],
+        [
+            7691
+        ],
+        [
+            7693
+        ],
+        [
+            7695
+        ],
+        [
+            7697
+        ],
+        [
+            7699
+        ],
+        [
+            7701
+        ],
+        [
+            7703
+        ],
+        [
+            7705
+        ],
+        [
+            7707
+        ],
+        [
+            7709
+        ],
+        [
+            7711
+        ],
+        [
+            7713
+        ],
+        [
+            7715
+        ],
+        [
+            7717
+        ],
+        [
+            7719
+        ],
+        [
+            7721
+        ],
+        [
+            7723
+        ],
+        [
+            7725
+        ],
+        [
+            7727
+        ],
+        [
+            7729
+        ],
+        [
+            7731
+        ],
+        [
+            7733
+        ],
+        [
+            7735
+        ],
+        [
+            7737
+        ],
+        [
+            7739
+        ],
+        [
+            7741
+        ],
+        [
+            7743
+        ],
+        [
+            7745
+        ],
+        [
+            7747
+        ],
+        [
+            7749
+        ],
+        [
+            7751
+        ],
+        [
+            7753
+        ],
+        [
+            7755
+        ],
+        [
+            7757
+        ],
+        [
+            7759
+        ],
+        [
+            7761
+        ],
+        [
+            7763
+        ],
+        [
+            7765
+        ],
+        [
+            7767
+        ],
+        [
+            7769
+        ],
+        [
+            7771
+        ],
+        [
+            7773
+        ],
+        [
+            7775
+        ],
+        [
+            7777
+        ],
+        [
+            7779
+        ],
+        [
+            7781
+        ],
+        [
+            7783
+        ],
+        [
+            7785
+        ],
+        [
+            7787
+        ],
+        [
+            7789
+        ],
+        [
+            7791
+        ],
+        [
+            7793
+        ],
+        [
+            7795
+        ],
+        [
+            7797
+        ],
+        [
+            7799
+        ],
+        [
+            7801
+        ],
+        [
+            7803
+        ],
+        [
+            7805
+        ],
+        [
+            7807
+        ],
+        [
+            7809
+        ],
+        [
+            7811
+        ],
+        [
+            7813
+        ],
+        [
+            7815
+        ],
+        [
+            7817
+        ],
+        [
+            7819
+        ],
+        [
+            7821
+        ],
+        [
+            7823
+        ],
+        [
+            7825
+        ],
+        [
+            7827
+        ],
+        [
+            7829,
+            7837
+        ],
+        [
+            7839
+        ],
+        [
+            7841
+        ],
+        [
+            7843
+        ],
+        [
+            7845
+        ],
+        [
+            7847
+        ],
+        [
+            7849
+        ],
+        [
+            7851
+        ],
+        [
+            7853
+        ],
+        [
+            7855
+        ],
+        [
+            7857
+        ],
+        [
+            7859
+        ],
+        [
+            7861
+        ],
+        [
+            7863
+        ],
+        [
+            7865
+        ],
+        [
+            7867
+        ],
+        [
+            7869
+        ],
+        [
+            7871
+        ],
+        [
+            7873
+        ],
+        [
+            7875
+        ],
+        [
+            7877
+        ],
+        [
+            7879
+        ],
+        [
+            7881
+        ],
+        [
+            7883
+        ],
+        [
+            7885
+        ],
+        [
+            7887
+        ],
+        [
+            7889
+        ],
+        [
+            7891
+        ],
+        [
+            7893
+        ],
+        [
+            7895
+        ],
+        [
+            7897
+        ],
+        [
+            7899
+        ],
+        [
+            7901
+        ],
+        [
+            7903
+        ],
+        [
+            7905
+        ],
+        [
+            7907
+        ],
+        [
+            7909
+        ],
+        [
+            7911
+        ],
+        [
+            7913
+        ],
+        [
+            7915
+        ],
+        [
+            7917
+        ],
+        [
+            7919
+        ],
+        [
+            7921
+        ],
+        [
+            7923
+        ],
+        [
+            7925
+        ],
+        [
+            7927
+        ],
+        [
+            7929
+        ],
+        [
+            7931
+        ],
+        [
+            7933
+        ],
+        [
+            7935,
+            7943
+        ],
+        [
+            7952,
+            7957
+        ],
+        [
+            7968,
+            7975
+        ],
+        [
+            7984,
+            7991
+        ],
+        [
+            8000,
+            8005
+        ],
+        [
+            8016,
+            8023
+        ],
+        [
+            8032,
+            8039
+        ],
+        [
+            8048,
+            8061
+        ],
+        [
+            8064,
+            8071
+        ],
+        [
+            8080,
+            8087
+        ],
+        [
+            8096,
+            8103
+        ],
+        [
+            8112,
+            8116
+        ],
+        [
+            8118,
+            8119
+        ],
+        [
+            8126
+        ],
+        [
+            8130,
+            8132
+        ],
+        [
+            8134,
+            8135
+        ],
+        [
+            8144,
+            8147
+        ],
+        [
+            8150,
+            8151
+        ],
+        [
+            8160,
+            8167
+        ],
+        [
+            8178,
+            8180
+        ],
+        [
+            8182,
+            8183
+        ],
+        [
+            8458
+        ],
+        [
+            8462,
+            8463
+        ],
+        [
+            8467
+        ],
+        [
+            8495
+        ],
+        [
+            8500
+        ],
+        [
+            8505
+        ],
+        [
+            8508,
+            8509
+        ],
+        [
+            8518,
+            8521
+        ],
+        [
+            8526
+        ],
+        [
+            8580
+        ],
+        [
+            11312,
+            11358
+        ],
+        [
+            11361
+        ],
+        [
+            11365,
+            11366
+        ],
+        [
+            11368
+        ],
+        [
+            11370
+        ],
+        [
+            11372
+        ],
+        [
+            11377
+        ],
+        [
+            11379,
+            11380
+        ],
+        [
+            11382,
+            11387
+        ],
+        [
+            11393
+        ],
+        [
+            11395
+        ],
+        [
+            11397
+        ],
+        [
+            11399
+        ],
+        [
+            11401
+        ],
+        [
+            11403
+        ],
+        [
+            11405
+        ],
+        [
+            11407
+        ],
+        [
+            11409
+        ],
+        [
+            11411
+        ],
+        [
+            11413
+        ],
+        [
+            11415
+        ],
+        [
+            11417
+        ],
+        [
+            11419
+        ],
+        [
+            11421
+        ],
+        [
+            11423
+        ],
+        [
+            11425
+        ],
+        [
+            11427
+        ],
+        [
+            11429
+        ],
+        [
+            11431
+        ],
+        [
+            11433
+        ],
+        [
+            11435
+        ],
+        [
+            11437
+        ],
+        [
+            11439
+        ],
+        [
+            11441
+        ],
+        [
+            11443
+        ],
+        [
+            11445
+        ],
+        [
+            11447
+        ],
+        [
+            11449
+        ],
+        [
+            11451
+        ],
+        [
+            11453
+        ],
+        [
+            11455
+        ],
+        [
+            11457
+        ],
+        [
+            11459
+        ],
+        [
+            11461
+        ],
+        [
+            11463
+        ],
+        [
+            11465
+        ],
+        [
+            11467
+        ],
+        [
+            11469
+        ],
+        [
+            11471
+        ],
+        [
+            11473
+        ],
+        [
+            11475
+        ],
+        [
+            11477
+        ],
+        [
+            11479
+        ],
+        [
+            11481
+        ],
+        [
+            11483
+        ],
+        [
+            11485
+        ],
+        [
+            11487
+        ],
+        [
+            11489
+        ],
+        [
+            11491,
+            11492
+        ],
+        [
+            11500
+        ],
+        [
+            11502
+        ],
+        [
+            11507
+        ],
+        [
+            11520,
+            11557
+        ],
+        [
+            11559
+        ],
+        [
+            11565
+        ],
+        [
+            42561
+        ],
+        [
+            42563
+        ],
+        [
+            42565
+        ],
+        [
+            42567
+        ],
+        [
+            42569
+        ],
+        [
+            42571
+        ],
+        [
+            42573
+        ],
+        [
+            42575
+        ],
+        [
+            42577
+        ],
+        [
+            42579
+        ],
+        [
+            42581
+        ],
+        [
+            42583
+        ],
+        [
+            42585
+        ],
+        [
+            42587
+        ],
+        [
+            42589
+        ],
+        [
+            42591
+        ],
+        [
+            42593
+        ],
+        [
+            42595
+        ],
+        [
+            42597
+        ],
+        [
+            42599
+        ],
+        [
+            42601
+        ],
+        [
+            42603
+        ],
+        [
+            42605
+        ],
+        [
+            42625
+        ],
+        [
+            42627
+        ],
+        [
+            42629
+        ],
+        [
+            42631
+        ],
+        [
+            42633
+        ],
+        [
+            42635
+        ],
+        [
+            42637
+        ],
+        [
+            42639
+        ],
+        [
+            42641
+        ],
+        [
+            42643
+        ],
+        [
+            42645
+        ],
+        [
+            42647
+        ],
+        [
+            42787
+        ],
+        [
+            42789
+        ],
+        [
+            42791
+        ],
+        [
+            42793
+        ],
+        [
+            42795
+        ],
+        [
+            42797
+        ],
+        [
+            42799,
+            42801
+        ],
+        [
+            42803
+        ],
+        [
+            42805
+        ],
+        [
+            42807
+        ],
+        [
+            42809
+        ],
+        [
+            42811
+        ],
+        [
+            42813
+        ],
+        [
+            42815
+        ],
+        [
+            42817
+        ],
+        [
+            42819
+        ],
+        [
+            42821
+        ],
+        [
+            42823
+        ],
+        [
+            42825
+        ],
+        [
+            42827
+        ],
+        [
+            42829
+        ],
+        [
+            42831
+        ],
+        [
+            42833
+        ],
+        [
+            42835
+        ],
+        [
+            42837
+        ],
+        [
+            42839
+        ],
+        [
+            42841
+        ],
+        [
+            42843
+        ],
+        [
+            42845
+        ],
+        [
+            42847
+        ],
+        [
+            42849
+        ],
+        [
+            42851
+        ],
+        [
+            42853
+        ],
+        [
+            42855
+        ],
+        [
+            42857
+        ],
+        [
+            42859
+        ],
+        [
+            42861
+        ],
+        [
+            42863
+        ],
+        [
+            42865,
+            42872
+        ],
+        [
+            42874
+        ],
+        [
+            42876
+        ],
+        [
+            42879
+        ],
+        [
+            42881
+        ],
+        [
+            42883
+        ],
+        [
+            42885
+        ],
+        [
+            42887
+        ],
+        [
+            42892
+        ],
+        [
+            42894
+        ],
+        [
+            42897
+        ],
+        [
+            42899
+        ],
+        [
+            42913
+        ],
+        [
+            42915
+        ],
+        [
+            42917
+        ],
+        [
+            42919
+        ],
+        [
+            42921
+        ],
+        [
+            43002
+        ],
+        [
+            64256,
+            64262
+        ],
+        [
+            64275,
+            64279
+        ],
+        [
+            65345,
+            65370
+        ],
+        [
+            66600,
+            66639
+        ],
+        [
+            119834,
+            119859
+        ],
+        [
+            119886,
+            119892
+        ],
+        [
+            119894,
+            119911
+        ],
+        [
+            119938,
+            119963
+        ],
+        [
+            119990,
+            119993
+        ],
+        [
+            119995
+        ],
+        [
+            119997,
+            120003
+        ],
+        [
+            120005,
+            120015
+        ],
+        [
+            120042,
+            120067
+        ],
+        [
+            120094,
+            120119
+        ],
+        [
+            120146,
+            120171
+        ],
+        [
+            120198,
+            120223
+        ],
+        [
+            120250,
+            120275
+        ],
+        [
+            120302,
+            120327
+        ],
+        [
+            120354,
+            120379
+        ],
+        [
+            120406,
+            120431
+        ],
+        [
+            120458,
+            120485
+        ],
+        [
+            120514,
+            120538
+        ],
+        [
+            120540,
+            120545
+        ],
+        [
+            120572,
+            120596
+        ],
+        [
+            120598,
+            120603
+        ],
+        [
+            120630,
+            120654
+        ],
+        [
+            120656,
+            120661
+        ],
+        [
+            120688,
+            120712
+        ],
+        [
+            120714,
+            120719
+        ],
+        [
+            120746,
+            120770
+        ],
+        [
+            120772,
+            120777
+        ],
+        [
+            120779
+        ]
+    ],
+    "Lt": [
+        [
+            453
+        ],
+        [
+            456
+        ],
+        [
+            459
+        ],
+        [
+            498
+        ],
+        [
+            8072,
+            8079
+        ],
+        [
+            8088,
+            8095
+        ],
+        [
+            8104,
+            8111
+        ],
+        [
+            8124
+        ],
+        [
+            8140
+        ],
+        [
+            8188
+        ]
+    ],
+    "Lm": [
+        [
+            688,
+            705
+        ],
+        [
+            710,
+            721
+        ],
+        [
+            736,
+            740
+        ],
+        [
+            748
+        ],
+        [
+            750
+        ],
+        [
+            884
+        ],
+        [
+            890
+        ],
+        [
+            1369
+        ],
+        [
+            1600
+        ],
+        [
+            1765,
+            1766
+        ],
+        [
+            2036,
+            2037
+        ],
+        [
+            2042
+        ],
+        [
+            2074
+        ],
+        [
+            2084
+        ],
+        [
+            2088
+        ],
+        [
+            2417
+        ],
+        [
+            3654
+        ],
+        [
+            3782
+        ],
+        [
+            4348
+        ],
+        [
+            6103
+        ],
+        [
+            6211
+        ],
+        [
+            6823
+        ],
+        [
+            7288,
+            7293
+        ],
+        [
+            7468,
+            7530
+        ],
+        [
+            7544
+        ],
+        [
+            7579,
+            7615
+        ],
+        [
+            8305
+        ],
+        [
+            8319
+        ],
+        [
+            8336,
+            8348
+        ],
+        [
+            11388,
+            11389
+        ],
+        [
+            11631
+        ],
+        [
+            11823
+        ],
+        [
+            12293
+        ],
+        [
+            12337,
+            12341
+        ],
+        [
+            12347
+        ],
+        [
+            12445,
+            12446
+        ],
+        [
+            12540,
+            12542
+        ],
+        [
+            40981
+        ],
+        [
+            42232,
+            42237
+        ],
+        [
+            42508
+        ],
+        [
+            42623
+        ],
+        [
+            42775,
+            42783
+        ],
+        [
+            42864
+        ],
+        [
+            42888
+        ],
+        [
+            43000,
+            43001
+        ],
+        [
+            43471
+        ],
+        [
+            43632
+        ],
+        [
+            43741
+        ],
+        [
+            43763,
+            43764
+        ],
+        [
+            65392
+        ],
+        [
+            65438,
+            65439
+        ],
+        [
+            94099,
+            94111
+        ]
+    ],
+    "Lo": [
+        [
+            170
+        ],
+        [
+            186
+        ],
+        [
+            443
+        ],
+        [
+            448,
+            451
+        ],
+        [
+            660
+        ],
+        [
+            1488,
+            1514
+        ],
+        [
+            1520,
+            1522
+        ],
+        [
+            1568,
+            1599
+        ],
+        [
+            1601,
+            1610
+        ],
+        [
+            1646,
+            1647
+        ],
+        [
+            1649,
+            1747
+        ],
+        [
+            1749
+        ],
+        [
+            1774,
+            1775
+        ],
+        [
+            1786,
+            1788
+        ],
+        [
+            1791
+        ],
+        [
+            1808
+        ],
+        [
+            1810,
+            1839
+        ],
+        [
+            1869,
+            1957
+        ],
+        [
+            1969
+        ],
+        [
+            1994,
+            2026
+        ],
+        [
+            2048,
+            2069
+        ],
+        [
+            2112,
+            2136
+        ],
+        [
+            2208
+        ],
+        [
+            2210,
+            2220
+        ],
+        [
+            2308,
+            2361
+        ],
+        [
+            2365
+        ],
+        [
+            2384
+        ],
+        [
+            2392,
+            2401
+        ],
+        [
+            2418,
+            2423
+        ],
+        [
+            2425,
+            2431
+        ],
+        [
+            2437,
+            2444
+        ],
+        [
+            2447,
+            2448
+        ],
+        [
+            2451,
+            2472
+        ],
+        [
+            2474,
+            2480
+        ],
+        [
+            2482
+        ],
+        [
+            2486,
+            2489
+        ],
+        [
+            2493
+        ],
+        [
+            2510
+        ],
+        [
+            2524,
+            2525
+        ],
+        [
+            2527,
+            2529
+        ],
+        [
+            2544,
+            2545
+        ],
+        [
+            2565,
+            2570
+        ],
+        [
+            2575,
+            2576
+        ],
+        [
+            2579,
+            2600
+        ],
+        [
+            2602,
+            2608
+        ],
+        [
+            2610,
+            2611
+        ],
+        [
+            2613,
+            2614
+        ],
+        [
+            2616,
+            2617
+        ],
+        [
+            2649,
+            2652
+        ],
+        [
+            2654
+        ],
+        [
+            2674,
+            2676
+        ],
+        [
+            2693,
+            2701
+        ],
+        [
+            2703,
+            2705
+        ],
+        [
+            2707,
+            2728
+        ],
+        [
+            2730,
+            2736
+        ],
+        [
+            2738,
+            2739
+        ],
+        [
+            2741,
+            2745
+        ],
+        [
+            2749
+        ],
+        [
+            2768
+        ],
+        [
+            2784,
+            2785
+        ],
+        [
+            2821,
+            2828
+        ],
+        [
+            2831,
+            2832
+        ],
+        [
+            2835,
+            2856
+        ],
+        [
+            2858,
+            2864
+        ],
+        [
+            2866,
+            2867
+        ],
+        [
+            2869,
+            2873
+        ],
+        [
+            2877
+        ],
+        [
+            2908,
+            2909
+        ],
+        [
+            2911,
+            2913
+        ],
+        [
+            2929
+        ],
+        [
+            2947
+        ],
+        [
+            2949,
+            2954
+        ],
+        [
+            2958,
+            2960
+        ],
+        [
+            2962,
+            2965
+        ],
+        [
+            2969,
+            2970
+        ],
+        [
+            2972
+        ],
+        [
+            2974,
+            2975
+        ],
+        [
+            2979,
+            2980
+        ],
+        [
+            2984,
+            2986
+        ],
+        [
+            2990,
+            3001
+        ],
+        [
+            3024
+        ],
+        [
+            3077,
+            3084
+        ],
+        [
+            3086,
+            3088
+        ],
+        [
+            3090,
+            3112
+        ],
+        [
+            3114,
+            3123
+        ],
+        [
+            3125,
+            3129
+        ],
+        [
+            3133
+        ],
+        [
+            3160,
+            3161
+        ],
+        [
+            3168,
+            3169
+        ],
+        [
+            3205,
+            3212
+        ],
+        [
+            3214,
+            3216
+        ],
+        [
+            3218,
+            3240
+        ],
+        [
+            3242,
+            3251
+        ],
+        [
+            3253,
+            3257
+        ],
+        [
+            3261
+        ],
+        [
+            3294
+        ],
+        [
+            3296,
+            3297
+        ],
+        [
+            3313,
+            3314
+        ],
+        [
+            3333,
+            3340
+        ],
+        [
+            3342,
+            3344
+        ],
+        [
+            3346,
+            3386
+        ],
+        [
+            3389
+        ],
+        [
+            3406
+        ],
+        [
+            3424,
+            3425
+        ],
+        [
+            3450,
+            3455
+        ],
+        [
+            3461,
+            3478
+        ],
+        [
+            3482,
+            3505
+        ],
+        [
+            3507,
+            3515
+        ],
+        [
+            3517
+        ],
+        [
+            3520,
+            3526
+        ],
+        [
+            3585,
+            3632
+        ],
+        [
+            3634,
+            3635
+        ],
+        [
+            3648,
+            3653
+        ],
+        [
+            3713,
+            3714
+        ],
+        [
+            3716
+        ],
+        [
+            3719,
+            3720
+        ],
+        [
+            3722
+        ],
+        [
+            3725
+        ],
+        [
+            3732,
+            3735
+        ],
+        [
+            3737,
+            3743
+        ],
+        [
+            3745,
+            3747
+        ],
+        [
+            3749
+        ],
+        [
+            3751
+        ],
+        [
+            3754,
+            3755
+        ],
+        [
+            3757,
+            3760
+        ],
+        [
+            3762,
+            3763
+        ],
+        [
+            3773
+        ],
+        [
+            3776,
+            3780
+        ],
+        [
+            3804,
+            3807
+        ],
+        [
+            3840
+        ],
+        [
+            3904,
+            3911
+        ],
+        [
+            3913,
+            3948
+        ],
+        [
+            3976,
+            3980
+        ],
+        [
+            4096,
+            4138
+        ],
+        [
+            4159
+        ],
+        [
+            4176,
+            4181
+        ],
+        [
+            4186,
+            4189
+        ],
+        [
+            4193
+        ],
+        [
+            4197,
+            4198
+        ],
+        [
+            4206,
+            4208
+        ],
+        [
+            4213,
+            4225
+        ],
+        [
+            4238
+        ],
+        [
+            4304,
+            4346
+        ],
+        [
+            4349,
+            4680
+        ],
+        [
+            4682,
+            4685
+        ],
+        [
+            4688,
+            4694
+        ],
+        [
+            4696
+        ],
+        [
+            4698,
+            4701
+        ],
+        [
+            4704,
+            4744
+        ],
+        [
+            4746,
+            4749
+        ],
+        [
+            4752,
+            4784
+        ],
+        [
+            4786,
+            4789
+        ],
+        [
+            4792,
+            4798
+        ],
+        [
+            4800
+        ],
+        [
+            4802,
+            4805
+        ],
+        [
+            4808,
+            4822
+        ],
+        [
+            4824,
+            4880
+        ],
+        [
+            4882,
+            4885
+        ],
+        [
+            4888,
+            4954
+        ],
+        [
+            4992,
+            5007
+        ],
+        [
+            5024,
+            5108
+        ],
+        [
+            5121,
+            5740
+        ],
+        [
+            5743,
+            5759
+        ],
+        [
+            5761,
+            5786
+        ],
+        [
+            5792,
+            5866
+        ],
+        [
+            5888,
+            5900
+        ],
+        [
+            5902,
+            5905
+        ],
+        [
+            5920,
+            5937
+        ],
+        [
+            5952,
+            5969
+        ],
+        [
+            5984,
+            5996
+        ],
+        [
+            5998,
+            6000
+        ],
+        [
+            6016,
+            6067
+        ],
+        [
+            6108
+        ],
+        [
+            6176,
+            6210
+        ],
+        [
+            6212,
+            6263
+        ],
+        [
+            6272,
+            6312
+        ],
+        [
+            6314
+        ],
+        [
+            6320,
+            6389
+        ],
+        [
+            6400,
+            6428
+        ],
+        [
+            6480,
+            6509
+        ],
+        [
+            6512,
+            6516
+        ],
+        [
+            6528,
+            6571
+        ],
+        [
+            6593,
+            6599
+        ],
+        [
+            6656,
+            6678
+        ],
+        [
+            6688,
+            6740
+        ],
+        [
+            6917,
+            6963
+        ],
+        [
+            6981,
+            6987
+        ],
+        [
+            7043,
+            7072
+        ],
+        [
+            7086,
+            7087
+        ],
+        [
+            7098,
+            7141
+        ],
+        [
+            7168,
+            7203
+        ],
+        [
+            7245,
+            7247
+        ],
+        [
+            7258,
+            7287
+        ],
+        [
+            7401,
+            7404
+        ],
+        [
+            7406,
+            7409
+        ],
+        [
+            7413,
+            7414
+        ],
+        [
+            8501,
+            8504
+        ],
+        [
+            11568,
+            11623
+        ],
+        [
+            11648,
+            11670
+        ],
+        [
+            11680,
+            11686
+        ],
+        [
+            11688,
+            11694
+        ],
+        [
+            11696,
+            11702
+        ],
+        [
+            11704,
+            11710
+        ],
+        [
+            11712,
+            11718
+        ],
+        [
+            11720,
+            11726
+        ],
+        [
+            11728,
+            11734
+        ],
+        [
+            11736,
+            11742
+        ],
+        [
+            12294
+        ],
+        [
+            12348
+        ],
+        [
+            12353,
+            12438
+        ],
+        [
+            12447
+        ],
+        [
+            12449,
+            12538
+        ],
+        [
+            12543
+        ],
+        [
+            12549,
+            12589
+        ],
+        [
+            12593,
+            12686
+        ],
+        [
+            12704,
+            12730
+        ],
+        [
+            12784,
+            12799
+        ],
+        [
+            13312,
+            19893
+        ],
+        [
+            19968,
+            40908
+        ],
+        [
+            40960,
+            40980
+        ],
+        [
+            40982,
+            42124
+        ],
+        [
+            42192,
+            42231
+        ],
+        [
+            42240,
+            42507
+        ],
+        [
+            42512,
+            42527
+        ],
+        [
+            42538,
+            42539
+        ],
+        [
+            42606
+        ],
+        [
+            42656,
+            42725
+        ],
+        [
+            43003,
+            43009
+        ],
+        [
+            43011,
+            43013
+        ],
+        [
+            43015,
+            43018
+        ],
+        [
+            43020,
+            43042
+        ],
+        [
+            43072,
+            43123
+        ],
+        [
+            43138,
+            43187
+        ],
+        [
+            43250,
+            43255
+        ],
+        [
+            43259
+        ],
+        [
+            43274,
+            43301
+        ],
+        [
+            43312,
+            43334
+        ],
+        [
+            43360,
+            43388
+        ],
+        [
+            43396,
+            43442
+        ],
+        [
+            43520,
+            43560
+        ],
+        [
+            43584,
+            43586
+        ],
+        [
+            43588,
+            43595
+        ],
+        [
+            43616,
+            43631
+        ],
+        [
+            43633,
+            43638
+        ],
+        [
+            43642
+        ],
+        [
+            43648,
+            43695
+        ],
+        [
+            43697
+        ],
+        [
+            43701,
+            43702
+        ],
+        [
+            43705,
+            43709
+        ],
+        [
+            43712
+        ],
+        [
+            43714
+        ],
+        [
+            43739,
+            43740
+        ],
+        [
+            43744,
+            43754
+        ],
+        [
+            43762
+        ],
+        [
+            43777,
+            43782
+        ],
+        [
+            43785,
+            43790
+        ],
+        [
+            43793,
+            43798
+        ],
+        [
+            43808,
+            43814
+        ],
+        [
+            43816,
+            43822
+        ],
+        [
+            43968,
+            44002
+        ],
+        [
+            44032,
+            55203
+        ],
+        [
+            55216,
+            55238
+        ],
+        [
+            55243,
+            55291
+        ],
+        [
+            63744,
+            64109
+        ],
+        [
+            64112,
+            64217
+        ],
+        [
+            64285
+        ],
+        [
+            64287,
+            64296
+        ],
+        [
+            64298,
+            64310
+        ],
+        [
+            64312,
+            64316
+        ],
+        [
+            64318
+        ],
+        [
+            64320,
+            64321
+        ],
+        [
+            64323,
+            64324
+        ],
+        [
+            64326,
+            64433
+        ],
+        [
+            64467,
+            64829
+        ],
+        [
+            64848,
+            64911
+        ],
+        [
+            64914,
+            64967
+        ],
+        [
+            65008,
+            65019
+        ],
+        [
+            65136,
+            65140
+        ],
+        [
+            65142,
+            65276
+        ],
+        [
+            65382,
+            65391
+        ],
+        [
+            65393,
+            65437
+        ],
+        [
+            65440,
+            65470
+        ],
+        [
+            65474,
+            65479
+        ],
+        [
+            65482,
+            65487
+        ],
+        [
+            65490,
+            65495
+        ],
+        [
+            65498,
+            65500
+        ],
+        [
+            65536,
+            65547
+        ],
+        [
+            65549,
+            65574
+        ],
+        [
+            65576,
+            65594
+        ],
+        [
+            65596,
+            65597
+        ],
+        [
+            65599,
+            65613
+        ],
+        [
+            65616,
+            65629
+        ],
+        [
+            65664,
+            65786
+        ],
+        [
+            66176,
+            66204
+        ],
+        [
+            66208,
+            66256
+        ],
+        [
+            66304,
+            66334
+        ],
+        [
+            66352,
+            66368
+        ],
+        [
+            66370,
+            66377
+        ],
+        [
+            66432,
+            66461
+        ],
+        [
+            66464,
+            66499
+        ],
+        [
+            66504,
+            66511
+        ],
+        [
+            66640,
+            66717
+        ],
+        [
+            67584,
+            67589
+        ],
+        [
+            67592
+        ],
+        [
+            67594,
+            67637
+        ],
+        [
+            67639,
+            67640
+        ],
+        [
+            67644
+        ],
+        [
+            67647,
+            67669
+        ],
+        [
+            67840,
+            67861
+        ],
+        [
+            67872,
+            67897
+        ],
+        [
+            67968,
+            68023
+        ],
+        [
+            68030,
+            68031
+        ],
+        [
+            68096
+        ],
+        [
+            68112,
+            68115
+        ],
+        [
+            68117,
+            68119
+        ],
+        [
+            68121,
+            68147
+        ],
+        [
+            68192,
+            68220
+        ],
+        [
+            68352,
+            68405
+        ],
+        [
+            68416,
+            68437
+        ],
+        [
+            68448,
+            68466
+        ],
+        [
+            68608,
+            68680
+        ],
+        [
+            69635,
+            69687
+        ],
+        [
+            69763,
+            69807
+        ],
+        [
+            69840,
+            69864
+        ],
+        [
+            69891,
+            69926
+        ],
+        [
+            70019,
+            70066
+        ],
+        [
+            70081,
+            70084
+        ],
+        [
+            71296,
+            71338
+        ],
+        [
+            73728,
+            74606
+        ],
+        [
+            77824,
+            78894
+        ],
+        [
+            92160,
+            92728
+        ],
+        [
+            93952,
+            94020
+        ],
+        [
+            94032
+        ],
+        [
+            110592,
+            110593
+        ],
+        [
+            126464,
+            126467
+        ],
+        [
+            126469,
+            126495
+        ],
+        [
+            126497,
+            126498
+        ],
+        [
+            126500
+        ],
+        [
+            126503
+        ],
+        [
+            126505,
+            126514
+        ],
+        [
+            126516,
+            126519
+        ],
+        [
+            126521
+        ],
+        [
+            126523
+        ],
+        [
+            126530
+        ],
+        [
+            126535
+        ],
+        [
+            126537
+        ],
+        [
+            126539
+        ],
+        [
+            126541,
+            126543
+        ],
+        [
+            126545,
+            126546
+        ],
+        [
+            126548
+        ],
+        [
+            126551
+        ],
+        [
+            126553
+        ],
+        [
+            126555
+        ],
+        [
+            126557
+        ],
+        [
+            126559
+        ],
+        [
+            126561,
+            126562
+        ],
+        [
+            126564
+        ],
+        [
+            126567,
+            126570
+        ],
+        [
+            126572,
+            126578
+        ],
+        [
+            126580,
+            126583
+        ],
+        [
+            126585,
+            126588
+        ],
+        [
+            126590
+        ],
+        [
+            126592,
+            126601
+        ],
+        [
+            126603,
+            126619
+        ],
+        [
+            126625,
+            126627
+        ],
+        [
+            126629,
+            126633
+        ],
+        [
+            126635,
+            126651
+        ],
+        [
+            131072,
+            173782
+        ],
+        [
+            173824,
+            177972
+        ],
+        [
+            177984,
+            178205
+        ],
+        [
+            194560,
+            195101
+        ]
+    ]
+};
 /*
  * ctype.islpha.js - Character type is alphabetic
  * 
@@ -16664,7 +27997,2051 @@ ilib.CType.isBlank = function (ch) {
 	return ilib.CType._inRange(ch, 'blank', ilib.data.ctype);
 };
 
-ilib.data.ctype_c = {"Cn":[[888,889],[895,899],[907],[909],[930],[1320,1328],[1367,1368],[1376],[1416],[1419,1422],[1424],[1480,1487],[1515,1519],[1525,1535],[1541],[1564,1565],[1806],[1867,1868],[1970,1983],[2043,2047],[2094,2095],[2111],[2140,2141],[2143,2207],[2209],[2221,2275],[2303],[2424],[2432],[2436],[2445,2446],[2449,2450],[2473],[2481],[2483,2485],[2490,2491],[2501,2502],[2505,2506],[2511,2518],[2520,2523],[2526],[2532,2533],[2556,2560],[2564],[2571,2574],[2577,2578],[2601],[2609],[2612],[2615],[2618,2619],[2621],[2627,2630],[2633,2634],[2638,2640],[2642,2648],[2653],[2655,2661],[2678,2688],[2692],[2702],[2706],[2729],[2737],[2740],[2746,2747],[2758],[2762],[2766,2767],[2769,2783],[2788,2789],[2802,2816],[2820],[2829,2830],[2833,2834],[2857],[2865],[2868],[2874,2875],[2885,2886],[2889,2890],[2894,2901],[2904,2907],[2910],[2916,2917],[2936,2945],[2948],[2955,2957],[2961],[2966,2968],[2971],[2973],[2976,2978],[2981,2983],[2987,2989],[3002,3005],[3011,3013],[3017],[3022,3023],[3025,3030],[3032,3045],[3067,3072],[3076],[3085],[3089],[3113],[3124],[3130,3132],[3141],[3145],[3150,3156],[3159],[3162,3167],[3172,3173],[3184,3191],[3200,3201],[3204],[3213],[3217],[3241],[3252],[3258,3259],[3269],[3273],[3278,3284],[3287,3293],[3295],[3300,3301],[3312],[3315,3329],[3332],[3341],[3345],[3387,3388],[3397],[3401],[3407,3414],[3416,3423],[3428,3429],[3446,3448],[3456,3457],[3460],[3479,3481],[3506],[3516],[3518,3519],[3527,3529],[3531,3534],[3541],[3543],[3552,3569],[3573,3584],[3643,3646],[3676,3712],[3715],[3717,3718],[3721],[3723,3724],[3726,3731],[3736],[3744],[3748],[3750],[3752,3753],[3756],[3770],[3774,3775],[3781],[3783],[3790,3791],[3802,3803],[3808,3839],[3912],[3949,3952],[3992],[4029],[4045],[4059,4095],[4294],[4296,4300],[4302,4303],[4681],[4686,4687],[4695],[4697],[4702,4703],[4745],[4750,4751],[4785],[4790,4791],[4799],[4801],[4806,4807],[4823],[4881],[4886,4887],[4955,4956],[4989,4991],[5018,5023],[5109,5119],[5789,5791],[5873,5887],[5901],[5909,5919],[5943,5951],[5972,5983],[5997],[6001],[6004,6015],[6110,6111],[6122,6127],[6138,6143],[6159],[6170,6175],[6264,6271],[6315,6319],[6390,6399],[6429,6431],[6444,6447],[6460,6463],[6465,6467],[6510,6511],[6517,6527],[6572,6575],[6602,6607],[6619,6621],[6684,6685],[6751],[6781,6782],[6794,6799],[6810,6815],[6830,6911],[6988,6991],[7037,7039],[7156,7163],[7224,7226],[7242,7244],[7296,7359],[7368,7375],[7415,7423],[7655,7675],[7958,7959],[7966,7967],[8006,8007],[8014,8015],[8024],[8026],[8028],[8030],[8062,8063],[8117],[8133],[8148,8149],[8156],[8176,8177],[8181],[8191],[8293,8297],[8306,8307],[8335],[8349,8351],[8379,8399],[8433,8447],[8586,8591],[9204,9215],[9255,9279],[9291,9311],[9984],[11085,11087],[11098,11263],[11311],[11359],[11508,11512],[11558],[11560,11564],[11566,11567],[11624,11630],[11633,11646],[11671,11679],[11687],[11695],[11703],[11711],[11719],[11727],[11735],[11743],[11836,11903],[11930],[12020,12031],[12246,12271],[12284,12287],[12352],[12439,12440],[12544,12548],[12590,12592],[12687],[12731,12735],[12772,12783],[12831],[13055],[19894,19903],[40909,40959],[42125,42127],[42183,42191],[42540,42559],[42648,42654],[42744,42751],[42895],[42900,42911],[42923,42999],[43052,43055],[43066,43071],[43128,43135],[43205,43213],[43226,43231],[43260,43263],[43348,43358],[43389,43391],[43470],[43482,43485],[43488,43519],[43575,43583],[43598,43599],[43610,43611],[43644,43647],[43715,43738],[43767,43776],[43783,43784],[43791,43792],[43799,43807],[43815],[43823,43967],[44014,44015],[44026,44031],[55204,55215],[55239,55242],[55292,55295],[64110,64111],[64218,64255],[64263,64274],[64280,64284],[64311],[64317],[64319],[64322],[64325],[64450,64466],[64832,64847],[64912,64913],[64968,65007],[65022,65023],[65050,65055],[65063,65071],[65107],[65127],[65132,65135],[65141],[65277,65278],[65280],[65471,65473],[65480,65481],[65488,65489],[65496,65497],[65501,65503],[65511],[65519,65528],[65534,65535],[65548],[65575],[65595],[65598],[65614,65615],[65630,65663],[65787,65791],[65795,65798],[65844,65846],[65931,65935],[65948,65999],[66046,66175],[66205,66207],[66257,66303],[66335],[66340,66351],[66379,66431],[66462],[66500,66503],[66518,66559],[66718,66719],[66730,67583],[67590,67591],[67593],[67638],[67641,67643],[67645,67646],[67670],[67680,67839],[67868,67870],[67898,67902],[67904,67967],[68024,68029],[68032,68095],[68100],[68103,68107],[68116],[68120],[68148,68151],[68155,68158],[68168,68175],[68185,68191],[68224,68351],[68406,68408],[68438,68439],[68467,68471],[68480,68607],[68681,69215],[69247,69631],[69710,69713],[69744,69759],[69826,69839],[69865,69871],[69882,69887],[69941],[69956,70015],[70089,70095],[70106,71295],[71352,71359],[71370,73727],[74607,74751],[74851,74863],[74868,77823],[78895,92159],[92729,93951],[94021,94031],[94079,94094],[94112,110591],[110594,118783],[119030,119039],[119079,119080],[119262,119295],[119366,119551],[119639,119647],[119666,119807],[119893],[119965],[119968,119969],[119971,119972],[119975,119976],[119981],[119994],[119996],[120004],[120070],[120075,120076],[120085],[120093],[120122],[120127],[120133],[120135,120137],[120145],[120486,120487],[120780,120781],[120832,126463],[126468],[126496],[126499],[126501,126502],[126504],[126515],[126520],[126522],[126524,126529],[126531,126534],[126536],[126538],[126540],[126544],[126547],[126549,126550],[126552],[126554],[126556],[126558],[126560],[126563],[126565,126566],[126571],[126579],[126584],[126589],[126591],[126602],[126620,126624],[126628],[126634],[126652,126703],[126706,126975],[127020,127023],[127124,127135],[127151,127152],[127167,127168],[127184],[127200,127231],[127243,127247],[127279],[127340,127343],[127387,127461],[127491,127503],[127547,127551],[127561,127567],[127570,127743],[127777,127791],[127798],[127869,127871],[127892,127903],[127941],[127947,127967],[127985,127999],[128063],[128065],[128248],[128253,128255],[128318,128319],[128324,128335],[128360,128506],[128577,128580],[128592,128639],[128710,128767],[128884,131071],[173783,173823],[177973,177983],[178206,194559],[195102,917504],[917506,917535],[917632,917759],[918000,983039],[1048574,1048575],[1114110,1114111]],"Cc":[[0,31],[127,159]],"Cf":[[173],[1536,1540],[1757],[1807],[8203,8207],[8234,8238],[8288,8292],[8298,8303],[65279],[65529,65531],[69821],[119155,119162],[917505],[917536,917631]],"Co":[[57344,63743],[983040,1048573],[1048576,1114109]],"Cs":[[55296,57343]]};
+ilib.data.ctype_c = {
+    "Cn": [
+        [
+            888,
+            889
+        ],
+        [
+            895,
+            899
+        ],
+        [
+            907
+        ],
+        [
+            909
+        ],
+        [
+            930
+        ],
+        [
+            1320,
+            1328
+        ],
+        [
+            1367,
+            1368
+        ],
+        [
+            1376
+        ],
+        [
+            1416
+        ],
+        [
+            1419,
+            1422
+        ],
+        [
+            1424
+        ],
+        [
+            1480,
+            1487
+        ],
+        [
+            1515,
+            1519
+        ],
+        [
+            1525,
+            1535
+        ],
+        [
+            1541
+        ],
+        [
+            1564,
+            1565
+        ],
+        [
+            1806
+        ],
+        [
+            1867,
+            1868
+        ],
+        [
+            1970,
+            1983
+        ],
+        [
+            2043,
+            2047
+        ],
+        [
+            2094,
+            2095
+        ],
+        [
+            2111
+        ],
+        [
+            2140,
+            2141
+        ],
+        [
+            2143,
+            2207
+        ],
+        [
+            2209
+        ],
+        [
+            2221,
+            2275
+        ],
+        [
+            2303
+        ],
+        [
+            2424
+        ],
+        [
+            2432
+        ],
+        [
+            2436
+        ],
+        [
+            2445,
+            2446
+        ],
+        [
+            2449,
+            2450
+        ],
+        [
+            2473
+        ],
+        [
+            2481
+        ],
+        [
+            2483,
+            2485
+        ],
+        [
+            2490,
+            2491
+        ],
+        [
+            2501,
+            2502
+        ],
+        [
+            2505,
+            2506
+        ],
+        [
+            2511,
+            2518
+        ],
+        [
+            2520,
+            2523
+        ],
+        [
+            2526
+        ],
+        [
+            2532,
+            2533
+        ],
+        [
+            2556,
+            2560
+        ],
+        [
+            2564
+        ],
+        [
+            2571,
+            2574
+        ],
+        [
+            2577,
+            2578
+        ],
+        [
+            2601
+        ],
+        [
+            2609
+        ],
+        [
+            2612
+        ],
+        [
+            2615
+        ],
+        [
+            2618,
+            2619
+        ],
+        [
+            2621
+        ],
+        [
+            2627,
+            2630
+        ],
+        [
+            2633,
+            2634
+        ],
+        [
+            2638,
+            2640
+        ],
+        [
+            2642,
+            2648
+        ],
+        [
+            2653
+        ],
+        [
+            2655,
+            2661
+        ],
+        [
+            2678,
+            2688
+        ],
+        [
+            2692
+        ],
+        [
+            2702
+        ],
+        [
+            2706
+        ],
+        [
+            2729
+        ],
+        [
+            2737
+        ],
+        [
+            2740
+        ],
+        [
+            2746,
+            2747
+        ],
+        [
+            2758
+        ],
+        [
+            2762
+        ],
+        [
+            2766,
+            2767
+        ],
+        [
+            2769,
+            2783
+        ],
+        [
+            2788,
+            2789
+        ],
+        [
+            2802,
+            2816
+        ],
+        [
+            2820
+        ],
+        [
+            2829,
+            2830
+        ],
+        [
+            2833,
+            2834
+        ],
+        [
+            2857
+        ],
+        [
+            2865
+        ],
+        [
+            2868
+        ],
+        [
+            2874,
+            2875
+        ],
+        [
+            2885,
+            2886
+        ],
+        [
+            2889,
+            2890
+        ],
+        [
+            2894,
+            2901
+        ],
+        [
+            2904,
+            2907
+        ],
+        [
+            2910
+        ],
+        [
+            2916,
+            2917
+        ],
+        [
+            2936,
+            2945
+        ],
+        [
+            2948
+        ],
+        [
+            2955,
+            2957
+        ],
+        [
+            2961
+        ],
+        [
+            2966,
+            2968
+        ],
+        [
+            2971
+        ],
+        [
+            2973
+        ],
+        [
+            2976,
+            2978
+        ],
+        [
+            2981,
+            2983
+        ],
+        [
+            2987,
+            2989
+        ],
+        [
+            3002,
+            3005
+        ],
+        [
+            3011,
+            3013
+        ],
+        [
+            3017
+        ],
+        [
+            3022,
+            3023
+        ],
+        [
+            3025,
+            3030
+        ],
+        [
+            3032,
+            3045
+        ],
+        [
+            3067,
+            3072
+        ],
+        [
+            3076
+        ],
+        [
+            3085
+        ],
+        [
+            3089
+        ],
+        [
+            3113
+        ],
+        [
+            3124
+        ],
+        [
+            3130,
+            3132
+        ],
+        [
+            3141
+        ],
+        [
+            3145
+        ],
+        [
+            3150,
+            3156
+        ],
+        [
+            3159
+        ],
+        [
+            3162,
+            3167
+        ],
+        [
+            3172,
+            3173
+        ],
+        [
+            3184,
+            3191
+        ],
+        [
+            3200,
+            3201
+        ],
+        [
+            3204
+        ],
+        [
+            3213
+        ],
+        [
+            3217
+        ],
+        [
+            3241
+        ],
+        [
+            3252
+        ],
+        [
+            3258,
+            3259
+        ],
+        [
+            3269
+        ],
+        [
+            3273
+        ],
+        [
+            3278,
+            3284
+        ],
+        [
+            3287,
+            3293
+        ],
+        [
+            3295
+        ],
+        [
+            3300,
+            3301
+        ],
+        [
+            3312
+        ],
+        [
+            3315,
+            3329
+        ],
+        [
+            3332
+        ],
+        [
+            3341
+        ],
+        [
+            3345
+        ],
+        [
+            3387,
+            3388
+        ],
+        [
+            3397
+        ],
+        [
+            3401
+        ],
+        [
+            3407,
+            3414
+        ],
+        [
+            3416,
+            3423
+        ],
+        [
+            3428,
+            3429
+        ],
+        [
+            3446,
+            3448
+        ],
+        [
+            3456,
+            3457
+        ],
+        [
+            3460
+        ],
+        [
+            3479,
+            3481
+        ],
+        [
+            3506
+        ],
+        [
+            3516
+        ],
+        [
+            3518,
+            3519
+        ],
+        [
+            3527,
+            3529
+        ],
+        [
+            3531,
+            3534
+        ],
+        [
+            3541
+        ],
+        [
+            3543
+        ],
+        [
+            3552,
+            3569
+        ],
+        [
+            3573,
+            3584
+        ],
+        [
+            3643,
+            3646
+        ],
+        [
+            3676,
+            3712
+        ],
+        [
+            3715
+        ],
+        [
+            3717,
+            3718
+        ],
+        [
+            3721
+        ],
+        [
+            3723,
+            3724
+        ],
+        [
+            3726,
+            3731
+        ],
+        [
+            3736
+        ],
+        [
+            3744
+        ],
+        [
+            3748
+        ],
+        [
+            3750
+        ],
+        [
+            3752,
+            3753
+        ],
+        [
+            3756
+        ],
+        [
+            3770
+        ],
+        [
+            3774,
+            3775
+        ],
+        [
+            3781
+        ],
+        [
+            3783
+        ],
+        [
+            3790,
+            3791
+        ],
+        [
+            3802,
+            3803
+        ],
+        [
+            3808,
+            3839
+        ],
+        [
+            3912
+        ],
+        [
+            3949,
+            3952
+        ],
+        [
+            3992
+        ],
+        [
+            4029
+        ],
+        [
+            4045
+        ],
+        [
+            4059,
+            4095
+        ],
+        [
+            4294
+        ],
+        [
+            4296,
+            4300
+        ],
+        [
+            4302,
+            4303
+        ],
+        [
+            4681
+        ],
+        [
+            4686,
+            4687
+        ],
+        [
+            4695
+        ],
+        [
+            4697
+        ],
+        [
+            4702,
+            4703
+        ],
+        [
+            4745
+        ],
+        [
+            4750,
+            4751
+        ],
+        [
+            4785
+        ],
+        [
+            4790,
+            4791
+        ],
+        [
+            4799
+        ],
+        [
+            4801
+        ],
+        [
+            4806,
+            4807
+        ],
+        [
+            4823
+        ],
+        [
+            4881
+        ],
+        [
+            4886,
+            4887
+        ],
+        [
+            4955,
+            4956
+        ],
+        [
+            4989,
+            4991
+        ],
+        [
+            5018,
+            5023
+        ],
+        [
+            5109,
+            5119
+        ],
+        [
+            5789,
+            5791
+        ],
+        [
+            5873,
+            5887
+        ],
+        [
+            5901
+        ],
+        [
+            5909,
+            5919
+        ],
+        [
+            5943,
+            5951
+        ],
+        [
+            5972,
+            5983
+        ],
+        [
+            5997
+        ],
+        [
+            6001
+        ],
+        [
+            6004,
+            6015
+        ],
+        [
+            6110,
+            6111
+        ],
+        [
+            6122,
+            6127
+        ],
+        [
+            6138,
+            6143
+        ],
+        [
+            6159
+        ],
+        [
+            6170,
+            6175
+        ],
+        [
+            6264,
+            6271
+        ],
+        [
+            6315,
+            6319
+        ],
+        [
+            6390,
+            6399
+        ],
+        [
+            6429,
+            6431
+        ],
+        [
+            6444,
+            6447
+        ],
+        [
+            6460,
+            6463
+        ],
+        [
+            6465,
+            6467
+        ],
+        [
+            6510,
+            6511
+        ],
+        [
+            6517,
+            6527
+        ],
+        [
+            6572,
+            6575
+        ],
+        [
+            6602,
+            6607
+        ],
+        [
+            6619,
+            6621
+        ],
+        [
+            6684,
+            6685
+        ],
+        [
+            6751
+        ],
+        [
+            6781,
+            6782
+        ],
+        [
+            6794,
+            6799
+        ],
+        [
+            6810,
+            6815
+        ],
+        [
+            6830,
+            6911
+        ],
+        [
+            6988,
+            6991
+        ],
+        [
+            7037,
+            7039
+        ],
+        [
+            7156,
+            7163
+        ],
+        [
+            7224,
+            7226
+        ],
+        [
+            7242,
+            7244
+        ],
+        [
+            7296,
+            7359
+        ],
+        [
+            7368,
+            7375
+        ],
+        [
+            7415,
+            7423
+        ],
+        [
+            7655,
+            7675
+        ],
+        [
+            7958,
+            7959
+        ],
+        [
+            7966,
+            7967
+        ],
+        [
+            8006,
+            8007
+        ],
+        [
+            8014,
+            8015
+        ],
+        [
+            8024
+        ],
+        [
+            8026
+        ],
+        [
+            8028
+        ],
+        [
+            8030
+        ],
+        [
+            8062,
+            8063
+        ],
+        [
+            8117
+        ],
+        [
+            8133
+        ],
+        [
+            8148,
+            8149
+        ],
+        [
+            8156
+        ],
+        [
+            8176,
+            8177
+        ],
+        [
+            8181
+        ],
+        [
+            8191
+        ],
+        [
+            8293,
+            8297
+        ],
+        [
+            8306,
+            8307
+        ],
+        [
+            8335
+        ],
+        [
+            8349,
+            8351
+        ],
+        [
+            8379,
+            8399
+        ],
+        [
+            8433,
+            8447
+        ],
+        [
+            8586,
+            8591
+        ],
+        [
+            9204,
+            9215
+        ],
+        [
+            9255,
+            9279
+        ],
+        [
+            9291,
+            9311
+        ],
+        [
+            9984
+        ],
+        [
+            11085,
+            11087
+        ],
+        [
+            11098,
+            11263
+        ],
+        [
+            11311
+        ],
+        [
+            11359
+        ],
+        [
+            11508,
+            11512
+        ],
+        [
+            11558
+        ],
+        [
+            11560,
+            11564
+        ],
+        [
+            11566,
+            11567
+        ],
+        [
+            11624,
+            11630
+        ],
+        [
+            11633,
+            11646
+        ],
+        [
+            11671,
+            11679
+        ],
+        [
+            11687
+        ],
+        [
+            11695
+        ],
+        [
+            11703
+        ],
+        [
+            11711
+        ],
+        [
+            11719
+        ],
+        [
+            11727
+        ],
+        [
+            11735
+        ],
+        [
+            11743
+        ],
+        [
+            11836,
+            11903
+        ],
+        [
+            11930
+        ],
+        [
+            12020,
+            12031
+        ],
+        [
+            12246,
+            12271
+        ],
+        [
+            12284,
+            12287
+        ],
+        [
+            12352
+        ],
+        [
+            12439,
+            12440
+        ],
+        [
+            12544,
+            12548
+        ],
+        [
+            12590,
+            12592
+        ],
+        [
+            12687
+        ],
+        [
+            12731,
+            12735
+        ],
+        [
+            12772,
+            12783
+        ],
+        [
+            12831
+        ],
+        [
+            13055
+        ],
+        [
+            19894,
+            19903
+        ],
+        [
+            40909,
+            40959
+        ],
+        [
+            42125,
+            42127
+        ],
+        [
+            42183,
+            42191
+        ],
+        [
+            42540,
+            42559
+        ],
+        [
+            42648,
+            42654
+        ],
+        [
+            42744,
+            42751
+        ],
+        [
+            42895
+        ],
+        [
+            42900,
+            42911
+        ],
+        [
+            42923,
+            42999
+        ],
+        [
+            43052,
+            43055
+        ],
+        [
+            43066,
+            43071
+        ],
+        [
+            43128,
+            43135
+        ],
+        [
+            43205,
+            43213
+        ],
+        [
+            43226,
+            43231
+        ],
+        [
+            43260,
+            43263
+        ],
+        [
+            43348,
+            43358
+        ],
+        [
+            43389,
+            43391
+        ],
+        [
+            43470
+        ],
+        [
+            43482,
+            43485
+        ],
+        [
+            43488,
+            43519
+        ],
+        [
+            43575,
+            43583
+        ],
+        [
+            43598,
+            43599
+        ],
+        [
+            43610,
+            43611
+        ],
+        [
+            43644,
+            43647
+        ],
+        [
+            43715,
+            43738
+        ],
+        [
+            43767,
+            43776
+        ],
+        [
+            43783,
+            43784
+        ],
+        [
+            43791,
+            43792
+        ],
+        [
+            43799,
+            43807
+        ],
+        [
+            43815
+        ],
+        [
+            43823,
+            43967
+        ],
+        [
+            44014,
+            44015
+        ],
+        [
+            44026,
+            44031
+        ],
+        [
+            55204,
+            55215
+        ],
+        [
+            55239,
+            55242
+        ],
+        [
+            55292,
+            55295
+        ],
+        [
+            64110,
+            64111
+        ],
+        [
+            64218,
+            64255
+        ],
+        [
+            64263,
+            64274
+        ],
+        [
+            64280,
+            64284
+        ],
+        [
+            64311
+        ],
+        [
+            64317
+        ],
+        [
+            64319
+        ],
+        [
+            64322
+        ],
+        [
+            64325
+        ],
+        [
+            64450,
+            64466
+        ],
+        [
+            64832,
+            64847
+        ],
+        [
+            64912,
+            64913
+        ],
+        [
+            64968,
+            65007
+        ],
+        [
+            65022,
+            65023
+        ],
+        [
+            65050,
+            65055
+        ],
+        [
+            65063,
+            65071
+        ],
+        [
+            65107
+        ],
+        [
+            65127
+        ],
+        [
+            65132,
+            65135
+        ],
+        [
+            65141
+        ],
+        [
+            65277,
+            65278
+        ],
+        [
+            65280
+        ],
+        [
+            65471,
+            65473
+        ],
+        [
+            65480,
+            65481
+        ],
+        [
+            65488,
+            65489
+        ],
+        [
+            65496,
+            65497
+        ],
+        [
+            65501,
+            65503
+        ],
+        [
+            65511
+        ],
+        [
+            65519,
+            65528
+        ],
+        [
+            65534,
+            65535
+        ],
+        [
+            65548
+        ],
+        [
+            65575
+        ],
+        [
+            65595
+        ],
+        [
+            65598
+        ],
+        [
+            65614,
+            65615
+        ],
+        [
+            65630,
+            65663
+        ],
+        [
+            65787,
+            65791
+        ],
+        [
+            65795,
+            65798
+        ],
+        [
+            65844,
+            65846
+        ],
+        [
+            65931,
+            65935
+        ],
+        [
+            65948,
+            65999
+        ],
+        [
+            66046,
+            66175
+        ],
+        [
+            66205,
+            66207
+        ],
+        [
+            66257,
+            66303
+        ],
+        [
+            66335
+        ],
+        [
+            66340,
+            66351
+        ],
+        [
+            66379,
+            66431
+        ],
+        [
+            66462
+        ],
+        [
+            66500,
+            66503
+        ],
+        [
+            66518,
+            66559
+        ],
+        [
+            66718,
+            66719
+        ],
+        [
+            66730,
+            67583
+        ],
+        [
+            67590,
+            67591
+        ],
+        [
+            67593
+        ],
+        [
+            67638
+        ],
+        [
+            67641,
+            67643
+        ],
+        [
+            67645,
+            67646
+        ],
+        [
+            67670
+        ],
+        [
+            67680,
+            67839
+        ],
+        [
+            67868,
+            67870
+        ],
+        [
+            67898,
+            67902
+        ],
+        [
+            67904,
+            67967
+        ],
+        [
+            68024,
+            68029
+        ],
+        [
+            68032,
+            68095
+        ],
+        [
+            68100
+        ],
+        [
+            68103,
+            68107
+        ],
+        [
+            68116
+        ],
+        [
+            68120
+        ],
+        [
+            68148,
+            68151
+        ],
+        [
+            68155,
+            68158
+        ],
+        [
+            68168,
+            68175
+        ],
+        [
+            68185,
+            68191
+        ],
+        [
+            68224,
+            68351
+        ],
+        [
+            68406,
+            68408
+        ],
+        [
+            68438,
+            68439
+        ],
+        [
+            68467,
+            68471
+        ],
+        [
+            68480,
+            68607
+        ],
+        [
+            68681,
+            69215
+        ],
+        [
+            69247,
+            69631
+        ],
+        [
+            69710,
+            69713
+        ],
+        [
+            69744,
+            69759
+        ],
+        [
+            69826,
+            69839
+        ],
+        [
+            69865,
+            69871
+        ],
+        [
+            69882,
+            69887
+        ],
+        [
+            69941
+        ],
+        [
+            69956,
+            70015
+        ],
+        [
+            70089,
+            70095
+        ],
+        [
+            70106,
+            71295
+        ],
+        [
+            71352,
+            71359
+        ],
+        [
+            71370,
+            73727
+        ],
+        [
+            74607,
+            74751
+        ],
+        [
+            74851,
+            74863
+        ],
+        [
+            74868,
+            77823
+        ],
+        [
+            78895,
+            92159
+        ],
+        [
+            92729,
+            93951
+        ],
+        [
+            94021,
+            94031
+        ],
+        [
+            94079,
+            94094
+        ],
+        [
+            94112,
+            110591
+        ],
+        [
+            110594,
+            118783
+        ],
+        [
+            119030,
+            119039
+        ],
+        [
+            119079,
+            119080
+        ],
+        [
+            119262,
+            119295
+        ],
+        [
+            119366,
+            119551
+        ],
+        [
+            119639,
+            119647
+        ],
+        [
+            119666,
+            119807
+        ],
+        [
+            119893
+        ],
+        [
+            119965
+        ],
+        [
+            119968,
+            119969
+        ],
+        [
+            119971,
+            119972
+        ],
+        [
+            119975,
+            119976
+        ],
+        [
+            119981
+        ],
+        [
+            119994
+        ],
+        [
+            119996
+        ],
+        [
+            120004
+        ],
+        [
+            120070
+        ],
+        [
+            120075,
+            120076
+        ],
+        [
+            120085
+        ],
+        [
+            120093
+        ],
+        [
+            120122
+        ],
+        [
+            120127
+        ],
+        [
+            120133
+        ],
+        [
+            120135,
+            120137
+        ],
+        [
+            120145
+        ],
+        [
+            120486,
+            120487
+        ],
+        [
+            120780,
+            120781
+        ],
+        [
+            120832,
+            126463
+        ],
+        [
+            126468
+        ],
+        [
+            126496
+        ],
+        [
+            126499
+        ],
+        [
+            126501,
+            126502
+        ],
+        [
+            126504
+        ],
+        [
+            126515
+        ],
+        [
+            126520
+        ],
+        [
+            126522
+        ],
+        [
+            126524,
+            126529
+        ],
+        [
+            126531,
+            126534
+        ],
+        [
+            126536
+        ],
+        [
+            126538
+        ],
+        [
+            126540
+        ],
+        [
+            126544
+        ],
+        [
+            126547
+        ],
+        [
+            126549,
+            126550
+        ],
+        [
+            126552
+        ],
+        [
+            126554
+        ],
+        [
+            126556
+        ],
+        [
+            126558
+        ],
+        [
+            126560
+        ],
+        [
+            126563
+        ],
+        [
+            126565,
+            126566
+        ],
+        [
+            126571
+        ],
+        [
+            126579
+        ],
+        [
+            126584
+        ],
+        [
+            126589
+        ],
+        [
+            126591
+        ],
+        [
+            126602
+        ],
+        [
+            126620,
+            126624
+        ],
+        [
+            126628
+        ],
+        [
+            126634
+        ],
+        [
+            126652,
+            126703
+        ],
+        [
+            126706,
+            126975
+        ],
+        [
+            127020,
+            127023
+        ],
+        [
+            127124,
+            127135
+        ],
+        [
+            127151,
+            127152
+        ],
+        [
+            127167,
+            127168
+        ],
+        [
+            127184
+        ],
+        [
+            127200,
+            127231
+        ],
+        [
+            127243,
+            127247
+        ],
+        [
+            127279
+        ],
+        [
+            127340,
+            127343
+        ],
+        [
+            127387,
+            127461
+        ],
+        [
+            127491,
+            127503
+        ],
+        [
+            127547,
+            127551
+        ],
+        [
+            127561,
+            127567
+        ],
+        [
+            127570,
+            127743
+        ],
+        [
+            127777,
+            127791
+        ],
+        [
+            127798
+        ],
+        [
+            127869,
+            127871
+        ],
+        [
+            127892,
+            127903
+        ],
+        [
+            127941
+        ],
+        [
+            127947,
+            127967
+        ],
+        [
+            127985,
+            127999
+        ],
+        [
+            128063
+        ],
+        [
+            128065
+        ],
+        [
+            128248
+        ],
+        [
+            128253,
+            128255
+        ],
+        [
+            128318,
+            128319
+        ],
+        [
+            128324,
+            128335
+        ],
+        [
+            128360,
+            128506
+        ],
+        [
+            128577,
+            128580
+        ],
+        [
+            128592,
+            128639
+        ],
+        [
+            128710,
+            128767
+        ],
+        [
+            128884,
+            131071
+        ],
+        [
+            173783,
+            173823
+        ],
+        [
+            177973,
+            177983
+        ],
+        [
+            178206,
+            194559
+        ],
+        [
+            195102,
+            917504
+        ],
+        [
+            917506,
+            917535
+        ],
+        [
+            917632,
+            917759
+        ],
+        [
+            918000,
+            983039
+        ],
+        [
+            1048574,
+            1048575
+        ],
+        [
+            1114110,
+            1114111
+        ]
+    ],
+    "Cc": [
+        [
+            0,
+            31
+        ],
+        [
+            127,
+            159
+        ]
+    ],
+    "Cf": [
+        [
+            173
+        ],
+        [
+            1536,
+            1540
+        ],
+        [
+            1757
+        ],
+        [
+            1807
+        ],
+        [
+            8203,
+            8207
+        ],
+        [
+            8234,
+            8238
+        ],
+        [
+            8288,
+            8292
+        ],
+        [
+            8298,
+            8303
+        ],
+        [
+            65279
+        ],
+        [
+            65529,
+            65531
+        ],
+        [
+            69821
+        ],
+        [
+            119155,
+            119162
+        ],
+        [
+            917505
+        ],
+        [
+            917536,
+            917631
+        ]
+    ],
+    "Co": [
+        [
+            57344,
+            63743
+        ],
+        [
+            983040,
+            1048573
+        ],
+        [
+            1048576,
+            1114109
+        ]
+    ],
+    "Cs": [
+        [
+            55296,
+            57343
+        ]
+    ]
+};
 /*
  * ctype.iscntrl.js - Character type is control character
  * 
@@ -16846,7 +30223,1079 @@ ilib.CType.isPrint = function (ch) {
 	return typeof(ch) !== 'undefined' && ch.length > 0 && !ilib.CType.isCntrl(ch);
 };
 
-ilib.data.ctype_p = {"Pd":[[45],[1418],[1470],[5120],[6150],[8208,8213],[11799],[11802],[11834,11835],[12316],[12336],[12448],[65073,65074],[65112],[65123],[65293]],"Ps":[[40],[91],[123],[3898],[3900],[5787],[8218],[8222],[8261],[8317],[8333],[9001],[10088],[10090],[10092],[10094],[10096],[10098],[10100],[10181],[10214],[10216],[10218],[10220],[10222],[10627],[10629],[10631],[10633],[10635],[10637],[10639],[10641],[10643],[10645],[10647],[10712],[10714],[10748],[11810],[11812],[11814],[11816],[12296],[12298],[12300],[12302],[12304],[12308],[12310],[12312],[12314],[12317],[64830],[65047],[65077],[65079],[65081],[65083],[65085],[65087],[65089],[65091],[65095],[65113],[65115],[65117],[65288],[65339],[65371],[65375],[65378]],"Pe":[[41],[93],[125],[3899],[3901],[5788],[8262],[8318],[8334],[9002],[10089],[10091],[10093],[10095],[10097],[10099],[10101],[10182],[10215],[10217],[10219],[10221],[10223],[10628],[10630],[10632],[10634],[10636],[10638],[10640],[10642],[10644],[10646],[10648],[10713],[10715],[10749],[11811],[11813],[11815],[11817],[12297],[12299],[12301],[12303],[12305],[12309],[12311],[12313],[12315],[12318,12319],[64831],[65048],[65078],[65080],[65082],[65084],[65086],[65088],[65090],[65092],[65096],[65114],[65116],[65118],[65289],[65341],[65373],[65376],[65379]],"Pc":[[95],[8255,8256],[8276],[65075,65076],[65101,65103],[65343]],"Po":[[33,35],[37,39],[42],[44],[46,47],[58,59],[63,64],[92],[161],[167],[182,183],[191],[894],[903],[1370,1375],[1417],[1472],[1475],[1478],[1523,1524],[1545,1546],[1548,1549],[1563],[1566,1567],[1642,1645],[1748],[1792,1805],[2039,2041],[2096,2110],[2142],[2404,2405],[2416],[2800],[3572],[3663],[3674,3675],[3844,3858],[3860],[3973],[4048,4052],[4057,4058],[4170,4175],[4347],[4960,4968],[5741,5742],[5867,5869],[5941,5942],[6100,6102],[6104,6106],[6144,6149],[6151,6154],[6468,6469],[6686,6687],[6816,6822],[6824,6829],[7002,7008],[7164,7167],[7227,7231],[7294,7295],[7360,7367],[7379],[8214,8215],[8224,8231],[8240,8248],[8251,8254],[8257,8259],[8263,8273],[8275],[8277,8286],[11513,11516],[11518,11519],[11632],[11776,11777],[11782,11784],[11787],[11790,11798],[11800,11801],[11803],[11806,11807],[11818,11822],[11824,11833],[12289,12291],[12349],[12539],[42238,42239],[42509,42511],[42611],[42622],[42738,42743],[43124,43127],[43214,43215],[43256,43258],[43310,43311],[43359],[43457,43469],[43486,43487],[43612,43615],[43742,43743],[43760,43761],[44011],[65040,65046],[65049],[65072],[65093,65094],[65097,65100],[65104,65106],[65108,65111],[65119,65121],[65128],[65130,65131],[65281,65283],[65285,65287],[65290],[65292],[65294,65295],[65306,65307],[65311,65312],[65340],[65377],[65380,65381],[65792,65794],[66463],[66512],[67671],[67871],[67903],[68176,68184],[68223],[68409,68415],[69703,69709],[69819,69820],[69822,69825],[69952,69955],[70085,70088],[74864,74867]],"Pi":[[171],[8216],[8219,8220],[8223],[8249],[11778],[11780],[11785],[11788],[11804],[11808]],"Pf":[[187],[8217],[8221],[8250],[11779],[11781],[11786],[11789],[11805],[11809]]};
+ilib.data.ctype_p = {
+    "Pd": [
+        [
+            45
+        ],
+        [
+            1418
+        ],
+        [
+            1470
+        ],
+        [
+            5120
+        ],
+        [
+            6150
+        ],
+        [
+            8208,
+            8213
+        ],
+        [
+            11799
+        ],
+        [
+            11802
+        ],
+        [
+            11834,
+            11835
+        ],
+        [
+            12316
+        ],
+        [
+            12336
+        ],
+        [
+            12448
+        ],
+        [
+            65073,
+            65074
+        ],
+        [
+            65112
+        ],
+        [
+            65123
+        ],
+        [
+            65293
+        ]
+    ],
+    "Ps": [
+        [
+            40
+        ],
+        [
+            91
+        ],
+        [
+            123
+        ],
+        [
+            3898
+        ],
+        [
+            3900
+        ],
+        [
+            5787
+        ],
+        [
+            8218
+        ],
+        [
+            8222
+        ],
+        [
+            8261
+        ],
+        [
+            8317
+        ],
+        [
+            8333
+        ],
+        [
+            9001
+        ],
+        [
+            10088
+        ],
+        [
+            10090
+        ],
+        [
+            10092
+        ],
+        [
+            10094
+        ],
+        [
+            10096
+        ],
+        [
+            10098
+        ],
+        [
+            10100
+        ],
+        [
+            10181
+        ],
+        [
+            10214
+        ],
+        [
+            10216
+        ],
+        [
+            10218
+        ],
+        [
+            10220
+        ],
+        [
+            10222
+        ],
+        [
+            10627
+        ],
+        [
+            10629
+        ],
+        [
+            10631
+        ],
+        [
+            10633
+        ],
+        [
+            10635
+        ],
+        [
+            10637
+        ],
+        [
+            10639
+        ],
+        [
+            10641
+        ],
+        [
+            10643
+        ],
+        [
+            10645
+        ],
+        [
+            10647
+        ],
+        [
+            10712
+        ],
+        [
+            10714
+        ],
+        [
+            10748
+        ],
+        [
+            11810
+        ],
+        [
+            11812
+        ],
+        [
+            11814
+        ],
+        [
+            11816
+        ],
+        [
+            12296
+        ],
+        [
+            12298
+        ],
+        [
+            12300
+        ],
+        [
+            12302
+        ],
+        [
+            12304
+        ],
+        [
+            12308
+        ],
+        [
+            12310
+        ],
+        [
+            12312
+        ],
+        [
+            12314
+        ],
+        [
+            12317
+        ],
+        [
+            64830
+        ],
+        [
+            65047
+        ],
+        [
+            65077
+        ],
+        [
+            65079
+        ],
+        [
+            65081
+        ],
+        [
+            65083
+        ],
+        [
+            65085
+        ],
+        [
+            65087
+        ],
+        [
+            65089
+        ],
+        [
+            65091
+        ],
+        [
+            65095
+        ],
+        [
+            65113
+        ],
+        [
+            65115
+        ],
+        [
+            65117
+        ],
+        [
+            65288
+        ],
+        [
+            65339
+        ],
+        [
+            65371
+        ],
+        [
+            65375
+        ],
+        [
+            65378
+        ]
+    ],
+    "Pe": [
+        [
+            41
+        ],
+        [
+            93
+        ],
+        [
+            125
+        ],
+        [
+            3899
+        ],
+        [
+            3901
+        ],
+        [
+            5788
+        ],
+        [
+            8262
+        ],
+        [
+            8318
+        ],
+        [
+            8334
+        ],
+        [
+            9002
+        ],
+        [
+            10089
+        ],
+        [
+            10091
+        ],
+        [
+            10093
+        ],
+        [
+            10095
+        ],
+        [
+            10097
+        ],
+        [
+            10099
+        ],
+        [
+            10101
+        ],
+        [
+            10182
+        ],
+        [
+            10215
+        ],
+        [
+            10217
+        ],
+        [
+            10219
+        ],
+        [
+            10221
+        ],
+        [
+            10223
+        ],
+        [
+            10628
+        ],
+        [
+            10630
+        ],
+        [
+            10632
+        ],
+        [
+            10634
+        ],
+        [
+            10636
+        ],
+        [
+            10638
+        ],
+        [
+            10640
+        ],
+        [
+            10642
+        ],
+        [
+            10644
+        ],
+        [
+            10646
+        ],
+        [
+            10648
+        ],
+        [
+            10713
+        ],
+        [
+            10715
+        ],
+        [
+            10749
+        ],
+        [
+            11811
+        ],
+        [
+            11813
+        ],
+        [
+            11815
+        ],
+        [
+            11817
+        ],
+        [
+            12297
+        ],
+        [
+            12299
+        ],
+        [
+            12301
+        ],
+        [
+            12303
+        ],
+        [
+            12305
+        ],
+        [
+            12309
+        ],
+        [
+            12311
+        ],
+        [
+            12313
+        ],
+        [
+            12315
+        ],
+        [
+            12318,
+            12319
+        ],
+        [
+            64831
+        ],
+        [
+            65048
+        ],
+        [
+            65078
+        ],
+        [
+            65080
+        ],
+        [
+            65082
+        ],
+        [
+            65084
+        ],
+        [
+            65086
+        ],
+        [
+            65088
+        ],
+        [
+            65090
+        ],
+        [
+            65092
+        ],
+        [
+            65096
+        ],
+        [
+            65114
+        ],
+        [
+            65116
+        ],
+        [
+            65118
+        ],
+        [
+            65289
+        ],
+        [
+            65341
+        ],
+        [
+            65373
+        ],
+        [
+            65376
+        ],
+        [
+            65379
+        ]
+    ],
+    "Pc": [
+        [
+            95
+        ],
+        [
+            8255,
+            8256
+        ],
+        [
+            8276
+        ],
+        [
+            65075,
+            65076
+        ],
+        [
+            65101,
+            65103
+        ],
+        [
+            65343
+        ]
+    ],
+    "Po": [
+        [
+            33,
+            35
+        ],
+        [
+            37,
+            39
+        ],
+        [
+            42
+        ],
+        [
+            44
+        ],
+        [
+            46,
+            47
+        ],
+        [
+            58,
+            59
+        ],
+        [
+            63,
+            64
+        ],
+        [
+            92
+        ],
+        [
+            161
+        ],
+        [
+            167
+        ],
+        [
+            182,
+            183
+        ],
+        [
+            191
+        ],
+        [
+            894
+        ],
+        [
+            903
+        ],
+        [
+            1370,
+            1375
+        ],
+        [
+            1417
+        ],
+        [
+            1472
+        ],
+        [
+            1475
+        ],
+        [
+            1478
+        ],
+        [
+            1523,
+            1524
+        ],
+        [
+            1545,
+            1546
+        ],
+        [
+            1548,
+            1549
+        ],
+        [
+            1563
+        ],
+        [
+            1566,
+            1567
+        ],
+        [
+            1642,
+            1645
+        ],
+        [
+            1748
+        ],
+        [
+            1792,
+            1805
+        ],
+        [
+            2039,
+            2041
+        ],
+        [
+            2096,
+            2110
+        ],
+        [
+            2142
+        ],
+        [
+            2404,
+            2405
+        ],
+        [
+            2416
+        ],
+        [
+            2800
+        ],
+        [
+            3572
+        ],
+        [
+            3663
+        ],
+        [
+            3674,
+            3675
+        ],
+        [
+            3844,
+            3858
+        ],
+        [
+            3860
+        ],
+        [
+            3973
+        ],
+        [
+            4048,
+            4052
+        ],
+        [
+            4057,
+            4058
+        ],
+        [
+            4170,
+            4175
+        ],
+        [
+            4347
+        ],
+        [
+            4960,
+            4968
+        ],
+        [
+            5741,
+            5742
+        ],
+        [
+            5867,
+            5869
+        ],
+        [
+            5941,
+            5942
+        ],
+        [
+            6100,
+            6102
+        ],
+        [
+            6104,
+            6106
+        ],
+        [
+            6144,
+            6149
+        ],
+        [
+            6151,
+            6154
+        ],
+        [
+            6468,
+            6469
+        ],
+        [
+            6686,
+            6687
+        ],
+        [
+            6816,
+            6822
+        ],
+        [
+            6824,
+            6829
+        ],
+        [
+            7002,
+            7008
+        ],
+        [
+            7164,
+            7167
+        ],
+        [
+            7227,
+            7231
+        ],
+        [
+            7294,
+            7295
+        ],
+        [
+            7360,
+            7367
+        ],
+        [
+            7379
+        ],
+        [
+            8214,
+            8215
+        ],
+        [
+            8224,
+            8231
+        ],
+        [
+            8240,
+            8248
+        ],
+        [
+            8251,
+            8254
+        ],
+        [
+            8257,
+            8259
+        ],
+        [
+            8263,
+            8273
+        ],
+        [
+            8275
+        ],
+        [
+            8277,
+            8286
+        ],
+        [
+            11513,
+            11516
+        ],
+        [
+            11518,
+            11519
+        ],
+        [
+            11632
+        ],
+        [
+            11776,
+            11777
+        ],
+        [
+            11782,
+            11784
+        ],
+        [
+            11787
+        ],
+        [
+            11790,
+            11798
+        ],
+        [
+            11800,
+            11801
+        ],
+        [
+            11803
+        ],
+        [
+            11806,
+            11807
+        ],
+        [
+            11818,
+            11822
+        ],
+        [
+            11824,
+            11833
+        ],
+        [
+            12289,
+            12291
+        ],
+        [
+            12349
+        ],
+        [
+            12539
+        ],
+        [
+            42238,
+            42239
+        ],
+        [
+            42509,
+            42511
+        ],
+        [
+            42611
+        ],
+        [
+            42622
+        ],
+        [
+            42738,
+            42743
+        ],
+        [
+            43124,
+            43127
+        ],
+        [
+            43214,
+            43215
+        ],
+        [
+            43256,
+            43258
+        ],
+        [
+            43310,
+            43311
+        ],
+        [
+            43359
+        ],
+        [
+            43457,
+            43469
+        ],
+        [
+            43486,
+            43487
+        ],
+        [
+            43612,
+            43615
+        ],
+        [
+            43742,
+            43743
+        ],
+        [
+            43760,
+            43761
+        ],
+        [
+            44011
+        ],
+        [
+            65040,
+            65046
+        ],
+        [
+            65049
+        ],
+        [
+            65072
+        ],
+        [
+            65093,
+            65094
+        ],
+        [
+            65097,
+            65100
+        ],
+        [
+            65104,
+            65106
+        ],
+        [
+            65108,
+            65111
+        ],
+        [
+            65119,
+            65121
+        ],
+        [
+            65128
+        ],
+        [
+            65130,
+            65131
+        ],
+        [
+            65281,
+            65283
+        ],
+        [
+            65285,
+            65287
+        ],
+        [
+            65290
+        ],
+        [
+            65292
+        ],
+        [
+            65294,
+            65295
+        ],
+        [
+            65306,
+            65307
+        ],
+        [
+            65311,
+            65312
+        ],
+        [
+            65340
+        ],
+        [
+            65377
+        ],
+        [
+            65380,
+            65381
+        ],
+        [
+            65792,
+            65794
+        ],
+        [
+            66463
+        ],
+        [
+            66512
+        ],
+        [
+            67671
+        ],
+        [
+            67871
+        ],
+        [
+            67903
+        ],
+        [
+            68176,
+            68184
+        ],
+        [
+            68223
+        ],
+        [
+            68409,
+            68415
+        ],
+        [
+            69703,
+            69709
+        ],
+        [
+            69819,
+            69820
+        ],
+        [
+            69822,
+            69825
+        ],
+        [
+            69952,
+            69955
+        ],
+        [
+            70085,
+            70088
+        ],
+        [
+            74864,
+            74867
+        ]
+    ],
+    "Pi": [
+        [
+            171
+        ],
+        [
+            8216
+        ],
+        [
+            8219,
+            8220
+        ],
+        [
+            8223
+        ],
+        [
+            8249
+        ],
+        [
+            11778
+        ],
+        [
+            11780
+        ],
+        [
+            11785
+        ],
+        [
+            11788
+        ],
+        [
+            11804
+        ],
+        [
+            11808
+        ]
+    ],
+    "Pf": [
+        [
+            187
+        ],
+        [
+            8217
+        ],
+        [
+            8221
+        ],
+        [
+            8250
+        ],
+        [
+            11779
+        ],
+        [
+            11781
+        ],
+        [
+            11786
+        ],
+        [
+            11789
+        ],
+        [
+            11805
+        ],
+        [
+            11809
+        ]
+    ]
+};
 /*
  * ctype.ispunct.js - Character type is punctuation
  * 
@@ -16962,7 +31411,1144 @@ ilib.CType.isXdigit = function (ch) {
 	return ilib.CType._inRange(ch, 'xdigit', ilib.data.ctype);
 };
 
-ilib.data.scripts = {"Afak":{"nb":439,"nm":"Afaka","lid":"Afaka"},"Aghb":{"nb":239,"nm":"Caucasian Albanian","lid":"Caucasian_Albanian"},"Arab":{"nb":160,"nm":"Arabic","lid":"Arabic","rtl":true,"ime":false,"casing":false},"Armi":{"nb":124,"nm":"Imperial Aramaic","lid":"Imperial_Aramaic","rtl":true,"ime":false,"casing":false},"Armn":{"nb":230,"nm":"Armenian","lid":"Armenian","rtl":false,"ime":false,"casing":true},"Avst":{"nb":134,"nm":"Avestan","lid":"Avestan","rtl":true,"ime":false,"casing":false},"Bali":{"nb":360,"nm":"Balinese","lid":"Balinese","rtl":false,"ime":false,"casing":false},"Bamu":{"nb":435,"nm":"Bamum","lid":"Bamum","rtl":false,"ime":true,"casing":false},"Bass":{"nb":259,"nm":"Bassa Vah","lid":"Bassa_Vah"},"Batk":{"nb":365,"nm":"Batak","lid":"Batak","rtl":false,"ime":false,"casing":false},"Beng":{"nb":325,"nm":"Bengali","lid":"Bengali","rtl":false,"ime":false,"casing":false},"Blis":{"nb":550,"nm":"Blissymbols","lid":"Blissymbols"},"Bopo":{"nb":285,"nm":"Bopomofo","lid":"Bopomofo","rtl":false,"ime":false,"casing":false},"Brah":{"nb":300,"nm":"Brahmi","lid":"Brahmi","rtl":false,"ime":false,"casing":false},"Brai":{"nb":570,"nm":"Braille","lid":"Braille","rtl":false,"ime":false,"casing":false},"Bugi":{"nb":367,"nm":"Buginese","lid":"Buginese","rtl":false,"ime":false,"casing":false},"Buhd":{"nb":372,"nm":"Buhid","lid":"Buhid","rtl":false,"ime":false,"casing":false},"Cakm":{"nb":349,"nm":"Chakma","lid":"Chakma","rtl":false,"ime":false,"casing":false},"Cans":{"nb":440,"nm":"Unified Canadian Aboriginal Syllabics","lid":"Canadian_Aboriginal","rtl":false,"ime":true,"casing":false},"Cari":{"nb":201,"nm":"Carian","lid":"Carian","rtl":false,"ime":false,"casing":false},"Cham":{"nb":358,"nm":"Cham","lid":"Cham","rtl":false,"ime":false,"casing":false},"Cher":{"nb":445,"nm":"Cherokee","lid":"Cherokee","rtl":false,"ime":false,"casing":false},"Cirt":{"nb":291,"nm":"Cirth","lid":"Cirth"},"Copt":{"nb":204,"nm":"Coptic","lid":"Coptic","rtl":false,"ime":false,"casing":true},"Cprt":{"nb":403,"nm":"Cypriot","lid":"Cypriot","rtl":true,"ime":false,"casing":false},"Cyrl":{"nb":220,"nm":"Cyrillic","lid":"Cyrillic","rtl":false,"ime":false,"casing":true},"Cyrs":{"nb":221,"nm":"Cyrillic (Old Church Slavonic variant)","lid":"Cyrillic_(Old_Church_Slavonic_variant)"},"Deva":{"nb":315,"nm":"Devanagari (Nagari)","lid":"Devanagari","rtl":false,"ime":false,"casing":false},"Dsrt":{"nb":250,"nm":"Deseret (Mormon)","lid":"Deseret","rtl":false,"ime":false,"casing":true},"Dupl":{"nb":755,"nm":"Duployan shorthand, Duployan stenography","lid":"Duployan_shorthand,_Duployan_stenography"},"Egyd":{"nb":70,"nm":"Egyptian demotic","lid":"Egyptian_demotic"},"Egyh":{"nb":60,"nm":"Egyptian hieratic","lid":"Egyptian_hieratic"},"Egyp":{"nb":50,"nm":"Egyptian hieroglyphs","lid":"Egyptian_Hieroglyphs","rtl":false,"ime":true,"casing":false},"Elba":{"nb":226,"nm":"Elbasan","lid":"Elbasan"},"Ethi":{"nb":430,"nm":"Ethiopic (Geʻez)","lid":"Ethiopic","rtl":false,"ime":true,"casing":false},"Geor":{"nb":240,"nm":"Georgian (Mkhedruli)","lid":"Georgian","rtl":false,"ime":false,"casing":false},"Geok":{"nb":241,"nm":"Khutsuri (Asomtavruli and Nuskhuri)","lid":"Georgian"},"Glag":{"nb":225,"nm":"Glagolitic","lid":"Glagolitic","rtl":false,"ime":false,"casing":true},"Goth":{"nb":206,"nm":"Gothic","lid":"Gothic","rtl":false,"ime":false,"casing":false},"Gran":{"nb":343,"nm":"Grantha","lid":"Grantha"},"Grek":{"nb":200,"nm":"Greek","lid":"Greek","rtl":false,"ime":false,"casing":true},"Gujr":{"nb":320,"nm":"Gujarati","lid":"Gujarati","rtl":false,"ime":false,"casing":false},"Guru":{"nb":310,"nm":"Gurmukhi","lid":"Gurmukhi","rtl":false,"ime":false,"casing":false},"Hang":{"nb":286,"nm":"Hangul (Hangŭl, Hangeul)","lid":"Hangul","rtl":false,"ime":true,"casing":false},"Hani":{"nb":500,"nm":"Han (Hanzi, Kanji, Hanja)","lid":"Han","rtl":false,"ime":true,"casing":false},"Hano":{"nb":371,"nm":"Hanunoo (Hanunóo)","lid":"Hanunoo","rtl":false,"ime":false,"casing":false},"Hans":{"nb":501,"nm":"Han (Simplified variant)","lid":"Han_(Simplified_variant)","rtl":false,"ime":true,"casing":false},"Hant":{"nb":502,"nm":"Han (Traditional variant)","lid":"Han_(Traditional_variant)","rtl":false,"ime":true,"casing":false},"Hebr":{"nb":125,"nm":"Hebrew","lid":"Hebrew","rtl":true,"ime":false,"casing":false},"Hira":{"nb":410,"nm":"Hiragana","lid":"Hiragana","rtl":false,"ime":false,"casing":false},"Hluw":{"nb":80,"nm":"Anatolian Hieroglyphs (Luwian Hieroglyphs, Hittite Hieroglyphs)","lid":"Anatolian_Hieroglyphs_(Luwian_Hieroglyphs,_Hittite_Hieroglyphs)"},"Hmng":{"nb":450,"nm":"Pahawh Hmong","lid":"Pahawh_Hmong"},"Hrkt":{"nb":412,"nm":"Japanese syllabaries (alias for Hiragana + Katakana)","lid":"Katakana_Or_Hiragana"},"Hung":{"nb":176,"nm":"Old Hungarian (Hungarian Runic)","lid":"Old_Hungarian_(Hungarian_Runic)"},"Inds":{"nb":610,"nm":"Indus (Harappan)","lid":"Indus_(Harappan)"},"Ital":{"nb":210,"nm":"Old Italic (Etruscan, Oscan, etc.)","lid":"Old_Italic","rtl":false,"ime":false,"casing":false},"Java":{"nb":361,"nm":"Javanese","lid":"Javanese","rtl":false,"ime":false,"casing":false},"Jpan":{"nb":413,"nm":"Japanese (alias for Han + Hiragana + Katakana)","lid":"Japanese_(alias_for_Han_+_Hiragana_+_Katakana)","rtl":false,"ime":false,"casing":false},"Jurc":{"nb":510,"nm":"Jurchen","lid":"Jurchen"},"Kali":{"nb":357,"nm":"Kayah Li","lid":"Kayah_Li","rtl":false,"ime":false,"casing":false},"Kana":{"nb":411,"nm":"Katakana","lid":"Katakana","rtl":false,"ime":false,"casing":false},"Khar":{"nb":305,"nm":"Kharoshthi","lid":"Kharoshthi","rtl":true,"ime":false,"casing":false},"Khmr":{"nb":355,"nm":"Khmer","lid":"Khmer","rtl":false,"ime":false,"casing":false},"Khoj":{"nb":322,"nm":"Khojki","lid":"Khojki"},"Knda":{"nb":345,"nm":"Kannada","lid":"Kannada","rtl":false,"ime":false,"casing":false},"Kore":{"nb":287,"nm":"Korean (alias for Hangul + Han)","lid":"Korean_(alias_for_Hangul_+_Han)","rtl":false,"ime":true,"casing":false},"Kpel":{"nb":436,"nm":"Kpelle","lid":"Kpelle"},"Kthi":{"nb":317,"nm":"Kaithi","lid":"Kaithi","rtl":false,"ime":false,"casing":false},"Lana":{"nb":351,"nm":"Tai Tham (Lanna)","lid":"Tai_Tham","rtl":false,"ime":false,"casing":false},"Laoo":{"nb":356,"nm":"Lao","lid":"Lao","rtl":false,"ime":false,"casing":false},"Latf":{"nb":217,"nm":"Latin (Fraktur variant)","lid":"Latin_(Fraktur_variant)"},"Latg":{"nb":216,"nm":"Latin (Gaelic variant)","lid":"Latin_(Gaelic_variant)"},"Latn":{"nb":215,"nm":"Latin","lid":"Latin","rtl":false,"ime":false,"casing":true},"Lepc":{"nb":335,"nm":"Lepcha (Róng)","lid":"Lepcha","rtl":false,"ime":false,"casing":false},"Limb":{"nb":336,"nm":"Limbu","lid":"Limbu","rtl":false,"ime":false,"casing":false},"Lina":{"nb":400,"nm":"Linear A","lid":"Linear_A"},"Linb":{"nb":401,"nm":"Linear B","lid":"Linear_B","rtl":false,"ime":true,"casing":false},"Lisu":{"nb":399,"nm":"Lisu (Fraser)","lid":"Lisu","rtl":false,"ime":true,"casing":false},"Loma":{"nb":437,"nm":"Loma","lid":"Loma"},"Lyci":{"nb":202,"nm":"Lycian","lid":"Lycian","rtl":false,"ime":false,"casing":false},"Lydi":{"nb":116,"nm":"Lydian","lid":"Lydian","rtl":true,"ime":false,"casing":false},"Mahj":{"nb":314,"nm":"Mahajani","lid":"Mahajani"},"Mand":{"nb":140,"nm":"Mandaic, Mandaean","lid":"Mandaic","rtl":true,"ime":false,"casing":false},"Mani":{"nb":139,"nm":"Manichaean","lid":"Manichaean"},"Maya":{"nb":90,"nm":"Mayan hieroglyphs","lid":"Mayan_hieroglyphs"},"Mend":{"nb":438,"nm":"Mende","lid":"Mende"},"Merc":{"nb":101,"nm":"Meroitic Cursive","lid":"Meroitic_Cursive","rtl":true,"ime":false,"casing":false},"Mero":{"nb":100,"nm":"Meroitic Hieroglyphs","lid":"Meroitic_Hieroglyphs","rtl":true,"ime":false,"casing":false},"Mlym":{"nb":347,"nm":"Malayalam","lid":"Malayalam","rtl":false,"ime":false,"casing":false},"Moon":{"nb":218,"nm":"Moon (Moon code, Moon script, Moon type)","lid":"Moon_(Moon_code,_Moon_script,_Moon_type)"},"Mong":{"nb":145,"nm":"Mongolian","lid":"Mongolian","rtl":false,"ime":false,"casing":false},"Mroo":{"nb":199,"nm":"Mro, Mru","lid":"Mro,_Mru"},"Mtei":{"nb":337,"nm":"Meitei Mayek (Meithei, Meetei)","lid":"Meetei_Mayek","rtl":false,"ime":false,"casing":false},"Mymr":{"nb":350,"nm":"Myanmar (Burmese)","lid":"Myanmar","rtl":false,"ime":false,"casing":false},"Narb":{"nb":106,"nm":"Old North Arabian (Ancient North Arabian)","lid":"Old_North_Arabian_(Ancient_North_Arabian)"},"Nbat":{"nb":159,"nm":"Nabataean","lid":"Nabataean"},"Nkgb":{"nb":420,"nm":"Nakhi Geba ('Na-'Khi ²Ggŏ-¹baw, Naxi Geba)","lid":"Nakhi_Geba_('Na-'Khi_²Ggŏ-¹baw,_Naxi_Geba)"},"Nkoo":{"nb":165,"nm":"N’Ko","lid":"Nko","rtl":true,"ime":false,"casing":false},"Nshu":{"nb":499,"nm":"Nüshu","lid":"Nüshu"},"Ogam":{"nb":212,"nm":"Ogham","lid":"Ogham","rtl":false,"ime":false,"casing":false},"Olck":{"nb":261,"nm":"Ol Chiki (Ol Cemet’, Ol, Santali)","lid":"Ol_Chiki","rtl":false,"ime":false,"casing":false},"Orkh":{"nb":175,"nm":"Old Turkic, Orkhon Runic","lid":"Old_Turkic","rtl":true,"ime":false,"casing":false},"Orya":{"nb":327,"nm":"Oriya","lid":"Oriya","rtl":false,"ime":false,"casing":false},"Osma":{"nb":260,"nm":"Osmanya","lid":"Osmanya","rtl":false,"ime":false,"casing":false},"Palm":{"nb":126,"nm":"Palmyrene","lid":"Palmyrene"},"Perm":{"nb":227,"nm":"Old Permic","lid":"Old_Permic"},"Phag":{"nb":331,"nm":"Phags-pa","lid":"Phags_Pa","rtl":false,"ime":false,"casing":false},"Phli":{"nb":131,"nm":"Inscriptional Pahlavi","lid":"Inscriptional_Pahlavi","rtl":true,"ime":false,"casing":false},"Phlp":{"nb":132,"nm":"Psalter Pahlavi","lid":"Psalter_Pahlavi"},"Phlv":{"nb":133,"nm":"Book Pahlavi","lid":"Book_Pahlavi"},"Phnx":{"nb":115,"nm":"Phoenician","lid":"Phoenician","rtl":true,"ime":false,"casing":false},"Plrd":{"nb":282,"nm":"Miao (Pollard)","lid":"Miao","rtl":false,"ime":false,"casing":false},"Prti":{"nb":130,"nm":"Inscriptional Parthian","lid":"Inscriptional_Parthian","rtl":true,"ime":false,"casing":false},"Qaaa":{"nb":900,"nm":"Reserved for private use (start)","lid":"Reserved_for_private_use_(start)"},"Qabx":{"nb":949,"nm":"Reserved for private use (end)","lid":"Reserved_for_private_use_(end)"},"Rjng":{"nb":363,"nm":"Rejang (Redjang, Kaganga)","lid":"Rejang","rtl":false,"ime":false,"casing":false},"Roro":{"nb":620,"nm":"Rongorongo","lid":"Rongorongo"},"Runr":{"nb":211,"nm":"Runic","lid":"Runic","rtl":false,"ime":false,"casing":false},"Samr":{"nb":123,"nm":"Samaritan","lid":"Samaritan","rtl":true,"ime":false,"casing":false},"Sara":{"nb":292,"nm":"Sarati","lid":"Sarati"},"Sarb":{"nb":105,"nm":"Old South Arabian","lid":"Old_South_Arabian","rtl":true,"ime":false,"casing":false},"Saur":{"nb":344,"nm":"Saurashtra","lid":"Saurashtra","rtl":false,"ime":false,"casing":false},"Sgnw":{"nb":95,"nm":"SignWriting","lid":"SignWriting"},"Shaw":{"nb":281,"nm":"Shavian (Shaw)","lid":"Shavian","rtl":false,"ime":false,"casing":false},"Shrd":{"nb":319,"nm":"Sharada, Śāradā","lid":"Sharada","rtl":false,"ime":false,"casing":false},"Sind":{"nb":318,"nm":"Khudawadi, Sindhi","lid":"Khudawadi,_Sindhi"},"Sinh":{"nb":348,"nm":"Sinhala","lid":"Sinhala","rtl":false,"ime":false,"casing":false},"Sora":{"nb":398,"nm":"Sora Sompeng","lid":"Sora_Sompeng","rtl":false,"ime":false,"casing":false},"Sund":{"nb":362,"nm":"Sundanese","lid":"Sundanese","rtl":false,"ime":false,"casing":false},"Sylo":{"nb":316,"nm":"Syloti Nagri","lid":"Syloti_Nagri","rtl":false,"ime":false,"casing":false},"Syrc":{"nb":135,"nm":"Syriac","lid":"Syriac","rtl":true,"ime":false,"casing":false},"Syre":{"nb":138,"nm":"Syriac (Estrangelo variant)","lid":"Syriac_(Estrangelo_variant)"},"Syrj":{"nb":137,"nm":"Syriac (Western variant)","lid":"Syriac_(Western_variant)"},"Syrn":{"nb":136,"nm":"Syriac (Eastern variant)","lid":"Syriac_(Eastern_variant)"},"Tagb":{"nb":373,"nm":"Tagbanwa","lid":"Tagbanwa","rtl":false,"ime":false,"casing":false},"Takr":{"nb":321,"nm":"Takri, Ṭākrī, Ṭāṅkrī","lid":"Takri","rtl":false,"ime":false,"casing":false},"Tale":{"nb":353,"nm":"Tai Le","lid":"Tai_Le","rtl":false,"ime":false,"casing":false},"Talu":{"nb":354,"nm":"New Tai Lue","lid":"New_Tai_Lue","rtl":false,"ime":false,"casing":false},"Taml":{"nb":346,"nm":"Tamil","lid":"Tamil","rtl":false,"ime":false,"casing":false},"Tang":{"nb":520,"nm":"Tangut","lid":"Tangut"},"Tavt":{"nb":359,"nm":"Tai Viet","lid":"Tai_Viet","rtl":false,"ime":false,"casing":false},"Telu":{"nb":340,"nm":"Telugu","lid":"Telugu","rtl":false,"ime":false,"casing":false},"Teng":{"nb":290,"nm":"Tengwar","lid":"Tengwar"},"Tfng":{"nb":120,"nm":"Tifinagh (Berber)","lid":"Tifinagh","rtl":false,"ime":false,"casing":false},"Tglg":{"nb":370,"nm":"Tagalog (Baybayin, Alibata)","lid":"Tagalog","rtl":false,"ime":false,"casing":false},"Thaa":{"nb":170,"nm":"Thaana","lid":"Thaana","rtl":true,"ime":false,"casing":false},"Thai":{"nb":352,"nm":"Thai","lid":"Thai","rtl":false,"ime":false,"casing":false},"Tibt":{"nb":330,"nm":"Tibetan","lid":"Tibetan","rtl":false,"ime":false,"casing":false},"Tirh":{"nb":326,"nm":"Tirhuta","lid":"Tirhuta"},"Ugar":{"nb":40,"nm":"Ugaritic","lid":"Ugaritic","rtl":false,"ime":false,"casing":false},"Vaii":{"nb":470,"nm":"Vai","lid":"Vai","rtl":false,"ime":true,"casing":false},"Visp":{"nb":280,"nm":"Visible Speech","lid":"Visible_Speech"},"Wara":{"nb":262,"nm":"Warang Citi (Varang Kshiti)","lid":"Warang_Citi_(Varang_Kshiti)"},"Wole":{"nb":480,"nm":"Woleai","lid":"Woleai"},"Xpeo":{"nb":30,"nm":"Old Persian","lid":"Old_Persian","rtl":false,"ime":false,"casing":false},"Xsux":{"nb":20,"nm":"Cuneiform, Sumero-Akkadian","lid":"Cuneiform","rtl":false,"ime":true,"casing":false},"Yiii":{"nb":460,"nm":"Yi","lid":"Yi","rtl":false,"ime":true,"casing":false},"Zinh":{"nb":994,"nm":"Code for inherited script","lid":"Inherited","rtl":false,"ime":false,"casing":false},"Zmth":{"nb":995,"nm":"Mathematical notation","lid":"Mathematical_notation"},"Zsym":{"nb":996,"nm":"Symbols","lid":"Symbols"},"Zxxx":{"nb":997,"nm":"Code for unwritten documents","lid":"Code_for_unwritten_documents"},"Zyyy":{"nb":998,"nm":"Code for undetermined script","lid":"Common","rtl":false,"ime":false,"casing":false},"Zzzz":{"nb":999,"nm":"Code for uncoded script","lid":"Unknown","rtl":false,"ime":false,"casing":false}};
+ilib.data.scripts = {
+    "Afak": {
+        "nb": 439,
+        "nm": "Afaka",
+        "lid": "Afaka"
+    },
+    "Aghb": {
+        "nb": 239,
+        "nm": "Caucasian Albanian",
+        "lid": "Caucasian_Albanian"
+    },
+    "Arab": {
+        "nb": 160,
+        "nm": "Arabic",
+        "lid": "Arabic",
+        "rtl": true,
+        "ime": false,
+        "casing": false
+    },
+    "Armi": {
+        "nb": 124,
+        "nm": "Imperial Aramaic",
+        "lid": "Imperial_Aramaic",
+        "rtl": true,
+        "ime": false,
+        "casing": false
+    },
+    "Armn": {
+        "nb": 230,
+        "nm": "Armenian",
+        "lid": "Armenian",
+        "rtl": false,
+        "ime": false,
+        "casing": true
+    },
+    "Avst": {
+        "nb": 134,
+        "nm": "Avestan",
+        "lid": "Avestan",
+        "rtl": true,
+        "ime": false,
+        "casing": false
+    },
+    "Bali": {
+        "nb": 360,
+        "nm": "Balinese",
+        "lid": "Balinese",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Bamu": {
+        "nb": 435,
+        "nm": "Bamum",
+        "lid": "Bamum",
+        "rtl": false,
+        "ime": true,
+        "casing": false
+    },
+    "Bass": {
+        "nb": 259,
+        "nm": "Bassa Vah",
+        "lid": "Bassa_Vah"
+    },
+    "Batk": {
+        "nb": 365,
+        "nm": "Batak",
+        "lid": "Batak",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Beng": {
+        "nb": 325,
+        "nm": "Bengali",
+        "lid": "Bengali",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Blis": {
+        "nb": 550,
+        "nm": "Blissymbols",
+        "lid": "Blissymbols"
+    },
+    "Bopo": {
+        "nb": 285,
+        "nm": "Bopomofo",
+        "lid": "Bopomofo",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Brah": {
+        "nb": 300,
+        "nm": "Brahmi",
+        "lid": "Brahmi",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Brai": {
+        "nb": 570,
+        "nm": "Braille",
+        "lid": "Braille",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Bugi": {
+        "nb": 367,
+        "nm": "Buginese",
+        "lid": "Buginese",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Buhd": {
+        "nb": 372,
+        "nm": "Buhid",
+        "lid": "Buhid",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Cakm": {
+        "nb": 349,
+        "nm": "Chakma",
+        "lid": "Chakma",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Cans": {
+        "nb": 440,
+        "nm": "Unified Canadian Aboriginal Syllabics",
+        "lid": "Canadian_Aboriginal",
+        "rtl": false,
+        "ime": true,
+        "casing": false
+    },
+    "Cari": {
+        "nb": 201,
+        "nm": "Carian",
+        "lid": "Carian",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Cham": {
+        "nb": 358,
+        "nm": "Cham",
+        "lid": "Cham",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Cher": {
+        "nb": 445,
+        "nm": "Cherokee",
+        "lid": "Cherokee",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Cirt": {
+        "nb": 291,
+        "nm": "Cirth",
+        "lid": "Cirth"
+    },
+    "Copt": {
+        "nb": 204,
+        "nm": "Coptic",
+        "lid": "Coptic",
+        "rtl": false,
+        "ime": false,
+        "casing": true
+    },
+    "Cprt": {
+        "nb": 403,
+        "nm": "Cypriot",
+        "lid": "Cypriot",
+        "rtl": true,
+        "ime": false,
+        "casing": false
+    },
+    "Cyrl": {
+        "nb": 220,
+        "nm": "Cyrillic",
+        "lid": "Cyrillic",
+        "rtl": false,
+        "ime": false,
+        "casing": true
+    },
+    "Cyrs": {
+        "nb": 221,
+        "nm": "Cyrillic (Old Church Slavonic variant)",
+        "lid": "Cyrillic_(Old_Church_Slavonic_variant)"
+    },
+    "Deva": {
+        "nb": 315,
+        "nm": "Devanagari (Nagari)",
+        "lid": "Devanagari",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Dsrt": {
+        "nb": 250,
+        "nm": "Deseret (Mormon)",
+        "lid": "Deseret",
+        "rtl": false,
+        "ime": false,
+        "casing": true
+    },
+    "Dupl": {
+        "nb": 755,
+        "nm": "Duployan shorthand, Duployan stenography",
+        "lid": "Duployan_shorthand,_Duployan_stenography"
+    },
+    "Egyd": {
+        "nb": 70,
+        "nm": "Egyptian demotic",
+        "lid": "Egyptian_demotic"
+    },
+    "Egyh": {
+        "nb": 60,
+        "nm": "Egyptian hieratic",
+        "lid": "Egyptian_hieratic"
+    },
+    "Egyp": {
+        "nb": 50,
+        "nm": "Egyptian hieroglyphs",
+        "lid": "Egyptian_Hieroglyphs",
+        "rtl": false,
+        "ime": true,
+        "casing": false
+    },
+    "Elba": {
+        "nb": 226,
+        "nm": "Elbasan",
+        "lid": "Elbasan"
+    },
+    "Ethi": {
+        "nb": 430,
+        "nm": "Ethiopic (Geʻez)",
+        "lid": "Ethiopic",
+        "rtl": false,
+        "ime": true,
+        "casing": false
+    },
+    "Geor": {
+        "nb": 240,
+        "nm": "Georgian (Mkhedruli)",
+        "lid": "Georgian",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Geok": {
+        "nb": 241,
+        "nm": "Khutsuri (Asomtavruli and Nuskhuri)",
+        "lid": "Georgian"
+    },
+    "Glag": {
+        "nb": 225,
+        "nm": "Glagolitic",
+        "lid": "Glagolitic",
+        "rtl": false,
+        "ime": false,
+        "casing": true
+    },
+    "Goth": {
+        "nb": 206,
+        "nm": "Gothic",
+        "lid": "Gothic",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Gran": {
+        "nb": 343,
+        "nm": "Grantha",
+        "lid": "Grantha"
+    },
+    "Grek": {
+        "nb": 200,
+        "nm": "Greek",
+        "lid": "Greek",
+        "rtl": false,
+        "ime": false,
+        "casing": true
+    },
+    "Gujr": {
+        "nb": 320,
+        "nm": "Gujarati",
+        "lid": "Gujarati",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Guru": {
+        "nb": 310,
+        "nm": "Gurmukhi",
+        "lid": "Gurmukhi",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Hang": {
+        "nb": 286,
+        "nm": "Hangul (Hangŭl, Hangeul)",
+        "lid": "Hangul",
+        "rtl": false,
+        "ime": true,
+        "casing": false
+    },
+    "Hani": {
+        "nb": 500,
+        "nm": "Han (Hanzi, Kanji, Hanja)",
+        "lid": "Han",
+        "rtl": false,
+        "ime": true,
+        "casing": false
+    },
+    "Hano": {
+        "nb": 371,
+        "nm": "Hanunoo (Hanunóo)",
+        "lid": "Hanunoo",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Hans": {
+        "nb": 501,
+        "nm": "Han (Simplified variant)",
+        "lid": "Han_(Simplified_variant)",
+        "rtl": false,
+        "ime": true,
+        "casing": false
+    },
+    "Hant": {
+        "nb": 502,
+        "nm": "Han (Traditional variant)",
+        "lid": "Han_(Traditional_variant)",
+        "rtl": false,
+        "ime": true,
+        "casing": false
+    },
+    "Hebr": {
+        "nb": 125,
+        "nm": "Hebrew",
+        "lid": "Hebrew",
+        "rtl": true,
+        "ime": false,
+        "casing": false
+    },
+    "Hira": {
+        "nb": 410,
+        "nm": "Hiragana",
+        "lid": "Hiragana",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Hluw": {
+        "nb": 80,
+        "nm": "Anatolian Hieroglyphs (Luwian Hieroglyphs, Hittite Hieroglyphs)",
+        "lid": "Anatolian_Hieroglyphs_(Luwian_Hieroglyphs,_Hittite_Hieroglyphs)"
+    },
+    "Hmng": {
+        "nb": 450,
+        "nm": "Pahawh Hmong",
+        "lid": "Pahawh_Hmong"
+    },
+    "Hrkt": {
+        "nb": 412,
+        "nm": "Japanese syllabaries (alias for Hiragana + Katakana)",
+        "lid": "Katakana_Or_Hiragana"
+    },
+    "Hung": {
+        "nb": 176,
+        "nm": "Old Hungarian (Hungarian Runic)",
+        "lid": "Old_Hungarian_(Hungarian_Runic)"
+    },
+    "Inds": {
+        "nb": 610,
+        "nm": "Indus (Harappan)",
+        "lid": "Indus_(Harappan)"
+    },
+    "Ital": {
+        "nb": 210,
+        "nm": "Old Italic (Etruscan, Oscan, etc.)",
+        "lid": "Old_Italic",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Java": {
+        "nb": 361,
+        "nm": "Javanese",
+        "lid": "Javanese",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Jpan": {
+        "nb": 413,
+        "nm": "Japanese (alias for Han + Hiragana + Katakana)",
+        "lid": "Japanese_(alias_for_Han_+_Hiragana_+_Katakana)",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Jurc": {
+        "nb": 510,
+        "nm": "Jurchen",
+        "lid": "Jurchen"
+    },
+    "Kali": {
+        "nb": 357,
+        "nm": "Kayah Li",
+        "lid": "Kayah_Li",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Kana": {
+        "nb": 411,
+        "nm": "Katakana",
+        "lid": "Katakana",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Khar": {
+        "nb": 305,
+        "nm": "Kharoshthi",
+        "lid": "Kharoshthi",
+        "rtl": true,
+        "ime": false,
+        "casing": false
+    },
+    "Khmr": {
+        "nb": 355,
+        "nm": "Khmer",
+        "lid": "Khmer",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Khoj": {
+        "nb": 322,
+        "nm": "Khojki",
+        "lid": "Khojki"
+    },
+    "Knda": {
+        "nb": 345,
+        "nm": "Kannada",
+        "lid": "Kannada",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Kore": {
+        "nb": 287,
+        "nm": "Korean (alias for Hangul + Han)",
+        "lid": "Korean_(alias_for_Hangul_+_Han)",
+        "rtl": false,
+        "ime": true,
+        "casing": false
+    },
+    "Kpel": {
+        "nb": 436,
+        "nm": "Kpelle",
+        "lid": "Kpelle"
+    },
+    "Kthi": {
+        "nb": 317,
+        "nm": "Kaithi",
+        "lid": "Kaithi",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Lana": {
+        "nb": 351,
+        "nm": "Tai Tham (Lanna)",
+        "lid": "Tai_Tham",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Laoo": {
+        "nb": 356,
+        "nm": "Lao",
+        "lid": "Lao",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Latf": {
+        "nb": 217,
+        "nm": "Latin (Fraktur variant)",
+        "lid": "Latin_(Fraktur_variant)"
+    },
+    "Latg": {
+        "nb": 216,
+        "nm": "Latin (Gaelic variant)",
+        "lid": "Latin_(Gaelic_variant)"
+    },
+    "Latn": {
+        "nb": 215,
+        "nm": "Latin",
+        "lid": "Latin",
+        "rtl": false,
+        "ime": false,
+        "casing": true
+    },
+    "Lepc": {
+        "nb": 335,
+        "nm": "Lepcha (Róng)",
+        "lid": "Lepcha",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Limb": {
+        "nb": 336,
+        "nm": "Limbu",
+        "lid": "Limbu",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Lina": {
+        "nb": 400,
+        "nm": "Linear A",
+        "lid": "Linear_A"
+    },
+    "Linb": {
+        "nb": 401,
+        "nm": "Linear B",
+        "lid": "Linear_B",
+        "rtl": false,
+        "ime": true,
+        "casing": false
+    },
+    "Lisu": {
+        "nb": 399,
+        "nm": "Lisu (Fraser)",
+        "lid": "Lisu",
+        "rtl": false,
+        "ime": true,
+        "casing": false
+    },
+    "Loma": {
+        "nb": 437,
+        "nm": "Loma",
+        "lid": "Loma"
+    },
+    "Lyci": {
+        "nb": 202,
+        "nm": "Lycian",
+        "lid": "Lycian",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Lydi": {
+        "nb": 116,
+        "nm": "Lydian",
+        "lid": "Lydian",
+        "rtl": true,
+        "ime": false,
+        "casing": false
+    },
+    "Mahj": {
+        "nb": 314,
+        "nm": "Mahajani",
+        "lid": "Mahajani"
+    },
+    "Mand": {
+        "nb": 140,
+        "nm": "Mandaic, Mandaean",
+        "lid": "Mandaic",
+        "rtl": true,
+        "ime": false,
+        "casing": false
+    },
+    "Mani": {
+        "nb": 139,
+        "nm": "Manichaean",
+        "lid": "Manichaean"
+    },
+    "Maya": {
+        "nb": 90,
+        "nm": "Mayan hieroglyphs",
+        "lid": "Mayan_hieroglyphs"
+    },
+    "Mend": {
+        "nb": 438,
+        "nm": "Mende",
+        "lid": "Mende"
+    },
+    "Merc": {
+        "nb": 101,
+        "nm": "Meroitic Cursive",
+        "lid": "Meroitic_Cursive",
+        "rtl": true,
+        "ime": false,
+        "casing": false
+    },
+    "Mero": {
+        "nb": 100,
+        "nm": "Meroitic Hieroglyphs",
+        "lid": "Meroitic_Hieroglyphs",
+        "rtl": true,
+        "ime": false,
+        "casing": false
+    },
+    "Mlym": {
+        "nb": 347,
+        "nm": "Malayalam",
+        "lid": "Malayalam",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Moon": {
+        "nb": 218,
+        "nm": "Moon (Moon code, Moon script, Moon type)",
+        "lid": "Moon_(Moon_code,_Moon_script,_Moon_type)"
+    },
+    "Mong": {
+        "nb": 145,
+        "nm": "Mongolian",
+        "lid": "Mongolian",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Mroo": {
+        "nb": 199,
+        "nm": "Mro, Mru",
+        "lid": "Mro,_Mru"
+    },
+    "Mtei": {
+        "nb": 337,
+        "nm": "Meitei Mayek (Meithei, Meetei)",
+        "lid": "Meetei_Mayek",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Mymr": {
+        "nb": 350,
+        "nm": "Myanmar (Burmese)",
+        "lid": "Myanmar",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Narb": {
+        "nb": 106,
+        "nm": "Old North Arabian (Ancient North Arabian)",
+        "lid": "Old_North_Arabian_(Ancient_North_Arabian)"
+    },
+    "Nbat": {
+        "nb": 159,
+        "nm": "Nabataean",
+        "lid": "Nabataean"
+    },
+    "Nkgb": {
+        "nb": 420,
+        "nm": "Nakhi Geba ('Na-'Khi ²Ggŏ-¹baw, Naxi Geba)",
+        "lid": "Nakhi_Geba_('Na-'Khi_²Ggŏ-¹baw,_Naxi_Geba)"
+    },
+    "Nkoo": {
+        "nb": 165,
+        "nm": "N’Ko",
+        "lid": "Nko",
+        "rtl": true,
+        "ime": false,
+        "casing": false
+    },
+    "Nshu": {
+        "nb": 499,
+        "nm": "Nüshu",
+        "lid": "Nüshu"
+    },
+    "Ogam": {
+        "nb": 212,
+        "nm": "Ogham",
+        "lid": "Ogham",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Olck": {
+        "nb": 261,
+        "nm": "Ol Chiki (Ol Cemet’, Ol, Santali)",
+        "lid": "Ol_Chiki",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Orkh": {
+        "nb": 175,
+        "nm": "Old Turkic, Orkhon Runic",
+        "lid": "Old_Turkic",
+        "rtl": true,
+        "ime": false,
+        "casing": false
+    },
+    "Orya": {
+        "nb": 327,
+        "nm": "Oriya",
+        "lid": "Oriya",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Osma": {
+        "nb": 260,
+        "nm": "Osmanya",
+        "lid": "Osmanya",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Palm": {
+        "nb": 126,
+        "nm": "Palmyrene",
+        "lid": "Palmyrene"
+    },
+    "Perm": {
+        "nb": 227,
+        "nm": "Old Permic",
+        "lid": "Old_Permic"
+    },
+    "Phag": {
+        "nb": 331,
+        "nm": "Phags-pa",
+        "lid": "Phags_Pa",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Phli": {
+        "nb": 131,
+        "nm": "Inscriptional Pahlavi",
+        "lid": "Inscriptional_Pahlavi",
+        "rtl": true,
+        "ime": false,
+        "casing": false
+    },
+    "Phlp": {
+        "nb": 132,
+        "nm": "Psalter Pahlavi",
+        "lid": "Psalter_Pahlavi"
+    },
+    "Phlv": {
+        "nb": 133,
+        "nm": "Book Pahlavi",
+        "lid": "Book_Pahlavi"
+    },
+    "Phnx": {
+        "nb": 115,
+        "nm": "Phoenician",
+        "lid": "Phoenician",
+        "rtl": true,
+        "ime": false,
+        "casing": false
+    },
+    "Plrd": {
+        "nb": 282,
+        "nm": "Miao (Pollard)",
+        "lid": "Miao",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Prti": {
+        "nb": 130,
+        "nm": "Inscriptional Parthian",
+        "lid": "Inscriptional_Parthian",
+        "rtl": true,
+        "ime": false,
+        "casing": false
+    },
+    "Qaaa": {
+        "nb": 900,
+        "nm": "Reserved for private use (start)",
+        "lid": "Reserved_for_private_use_(start)"
+    },
+    "Qabx": {
+        "nb": 949,
+        "nm": "Reserved for private use (end)",
+        "lid": "Reserved_for_private_use_(end)"
+    },
+    "Rjng": {
+        "nb": 363,
+        "nm": "Rejang (Redjang, Kaganga)",
+        "lid": "Rejang",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Roro": {
+        "nb": 620,
+        "nm": "Rongorongo",
+        "lid": "Rongorongo"
+    },
+    "Runr": {
+        "nb": 211,
+        "nm": "Runic",
+        "lid": "Runic",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Samr": {
+        "nb": 123,
+        "nm": "Samaritan",
+        "lid": "Samaritan",
+        "rtl": true,
+        "ime": false,
+        "casing": false
+    },
+    "Sara": {
+        "nb": 292,
+        "nm": "Sarati",
+        "lid": "Sarati"
+    },
+    "Sarb": {
+        "nb": 105,
+        "nm": "Old South Arabian",
+        "lid": "Old_South_Arabian",
+        "rtl": true,
+        "ime": false,
+        "casing": false
+    },
+    "Saur": {
+        "nb": 344,
+        "nm": "Saurashtra",
+        "lid": "Saurashtra",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Sgnw": {
+        "nb": 95,
+        "nm": "SignWriting",
+        "lid": "SignWriting"
+    },
+    "Shaw": {
+        "nb": 281,
+        "nm": "Shavian (Shaw)",
+        "lid": "Shavian",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Shrd": {
+        "nb": 319,
+        "nm": "Sharada, Śāradā",
+        "lid": "Sharada",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Sind": {
+        "nb": 318,
+        "nm": "Khudawadi, Sindhi",
+        "lid": "Khudawadi,_Sindhi"
+    },
+    "Sinh": {
+        "nb": 348,
+        "nm": "Sinhala",
+        "lid": "Sinhala",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Sora": {
+        "nb": 398,
+        "nm": "Sora Sompeng",
+        "lid": "Sora_Sompeng",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Sund": {
+        "nb": 362,
+        "nm": "Sundanese",
+        "lid": "Sundanese",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Sylo": {
+        "nb": 316,
+        "nm": "Syloti Nagri",
+        "lid": "Syloti_Nagri",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Syrc": {
+        "nb": 135,
+        "nm": "Syriac",
+        "lid": "Syriac",
+        "rtl": true,
+        "ime": false,
+        "casing": false
+    },
+    "Syre": {
+        "nb": 138,
+        "nm": "Syriac (Estrangelo variant)",
+        "lid": "Syriac_(Estrangelo_variant)"
+    },
+    "Syrj": {
+        "nb": 137,
+        "nm": "Syriac (Western variant)",
+        "lid": "Syriac_(Western_variant)"
+    },
+    "Syrn": {
+        "nb": 136,
+        "nm": "Syriac (Eastern variant)",
+        "lid": "Syriac_(Eastern_variant)"
+    },
+    "Tagb": {
+        "nb": 373,
+        "nm": "Tagbanwa",
+        "lid": "Tagbanwa",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Takr": {
+        "nb": 321,
+        "nm": "Takri, Ṭākrī, Ṭāṅkrī",
+        "lid": "Takri",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Tale": {
+        "nb": 353,
+        "nm": "Tai Le",
+        "lid": "Tai_Le",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Talu": {
+        "nb": 354,
+        "nm": "New Tai Lue",
+        "lid": "New_Tai_Lue",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Taml": {
+        "nb": 346,
+        "nm": "Tamil",
+        "lid": "Tamil",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Tang": {
+        "nb": 520,
+        "nm": "Tangut",
+        "lid": "Tangut"
+    },
+    "Tavt": {
+        "nb": 359,
+        "nm": "Tai Viet",
+        "lid": "Tai_Viet",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Telu": {
+        "nb": 340,
+        "nm": "Telugu",
+        "lid": "Telugu",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Teng": {
+        "nb": 290,
+        "nm": "Tengwar",
+        "lid": "Tengwar"
+    },
+    "Tfng": {
+        "nb": 120,
+        "nm": "Tifinagh (Berber)",
+        "lid": "Tifinagh",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Tglg": {
+        "nb": 370,
+        "nm": "Tagalog (Baybayin, Alibata)",
+        "lid": "Tagalog",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Thaa": {
+        "nb": 170,
+        "nm": "Thaana",
+        "lid": "Thaana",
+        "rtl": true,
+        "ime": false,
+        "casing": false
+    },
+    "Thai": {
+        "nb": 352,
+        "nm": "Thai",
+        "lid": "Thai",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Tibt": {
+        "nb": 330,
+        "nm": "Tibetan",
+        "lid": "Tibetan",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Tirh": {
+        "nb": 326,
+        "nm": "Tirhuta",
+        "lid": "Tirhuta"
+    },
+    "Ugar": {
+        "nb": 40,
+        "nm": "Ugaritic",
+        "lid": "Ugaritic",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Vaii": {
+        "nb": 470,
+        "nm": "Vai",
+        "lid": "Vai",
+        "rtl": false,
+        "ime": true,
+        "casing": false
+    },
+    "Visp": {
+        "nb": 280,
+        "nm": "Visible Speech",
+        "lid": "Visible_Speech"
+    },
+    "Wara": {
+        "nb": 262,
+        "nm": "Warang Citi (Varang Kshiti)",
+        "lid": "Warang_Citi_(Varang_Kshiti)"
+    },
+    "Wole": {
+        "nb": 480,
+        "nm": "Woleai",
+        "lid": "Woleai"
+    },
+    "Xpeo": {
+        "nb": 30,
+        "nm": "Old Persian",
+        "lid": "Old_Persian",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Xsux": {
+        "nb": 20,
+        "nm": "Cuneiform, Sumero-Akkadian",
+        "lid": "Cuneiform",
+        "rtl": false,
+        "ime": true,
+        "casing": false
+    },
+    "Yiii": {
+        "nb": 460,
+        "nm": "Yi",
+        "lid": "Yi",
+        "rtl": false,
+        "ime": true,
+        "casing": false
+    },
+    "Zinh": {
+        "nb": 994,
+        "nm": "Code for inherited script",
+        "lid": "Inherited",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Zmth": {
+        "nb": 995,
+        "nm": "Mathematical notation",
+        "lid": "Mathematical_notation"
+    },
+    "Zsym": {
+        "nb": 996,
+        "nm": "Symbols",
+        "lid": "Symbols"
+    },
+    "Zxxx": {
+        "nb": 997,
+        "nm": "Code for unwritten documents",
+        "lid": "Code_for_unwritten_documents"
+    },
+    "Zyyy": {
+        "nb": 998,
+        "nm": "Code for undetermined script",
+        "lid": "Common",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    },
+    "Zzzz": {
+        "nb": 999,
+        "nm": "Code for uncoded script",
+        "lid": "Unknown",
+        "rtl": false,
+        "ime": false,
+        "casing": false
+    }
+};
 /*
  * scriptinfo.js - information about scripts
  * 
@@ -18368,8 +33954,742 @@ ilib.NameFmt.prototype = {
 };
 
 ilib.data.address = {};
-ilib.data.countries = {"afghanistan":"AF","aland islands":"AX","åland islands":"AX","albania":"AL","algeria":"DZ","american samoa":"AS","andorra":"AD","angola":"AO","anguilla":"AI","antigua and barbuda":"AG","antigua & barbuda":"AG","antigua":"AG","barbuda":"AG","argentina":"AR","armenia":"AM","aruba":"AW","australia":"AU","austria":"AT","azerbaijan":"AZ","bahamas":"BS","the bahamas":"BS","bahrain":"BH","bangladesh":"BD","barbados":"BB","belarus":"BY","belgium":"BE","belize":"BZ","benin":"BJ","bermuda":"BM","bhutan":"BT","bolivia, plurinational state of":"BO","plurinational state of bolivia":"BO","bolivia":"BO","bosnia and herzegovina":"BA","bosnia & herzegovina":"BA","bosnia":"BA","herzegovina":"BA","botswana":"BW","bouvet island":"BV","brazil":"BR","british indian ocean territory":"IO","brunei darussalam":"BN","brunei":"BN","bulgaria":"BG","burkina faso":"BF","burundi":"BI","cambodia":"KH","cameroon":"CM","canada":"CA","cape verde":"CV","cape verde islands":"CV","cayman islands":"KY","caymans":"KY","central african republic":"CF","c.a.r.":"CF","car":"CF","chad":"TD","chile":"CL","people's republic of china":"CN","republic of china":"TW","p. r. of china":"CN","p. r. china":"CN","p.r. of china":"CN","pr china":"CN","R.O.C.":"TW","ROC":"TW","prc":"CN","china":"CN","christmas island":"CX","cocos (keeling) islands":"CC","cocos islands":"CC","cocos and keeling islands":"CC","cocos & keeling islands":"CC","colombia":"CO","comoros":"KM","congo":"CD","congo, the democratic republic of the":"CD","congo, democratic republic of the":"CD","the democratic republic of the congo":"CD","democratic republic of the congo":"CD","drc":"CD","cook islands":"CK","costa rica":"CR","cote d'ivoire":"CI","côte d'ivoire":"CI","ivory coast":"CI","croatia":"HR","cuba":"CU","cyprus":"CY","the czech republic":"CZ","czech republic":"CZ","denmark":"DK","djibouti":"DJ","dominica":"DM","dominican republic":"DO","d.r.":"DO","dr":"DO","ecuador":"EC","egypt":"EG","el salvador":"SV","equatorial guinea":"GQ","eritrea":"ER","estonia":"EE","ethiopia":"ET","falkland islands":"FK","falklands":"FK","malvinas":"FK","faroe islands":"FO","faroes":"FO","fiji":"FJ","finland":"FI","france":"FR","french guiana":"GF","french polynesia":"PF","polynesia":"PF","french southern territories":"TF","gabon":"GA","gabonese republic":"GA","gambia":"GM","republic of the gambia":"GM","georgia":"GE","germany":"DE","ghana":"GH","gibraltar":"GI","greece":"GR","greenland":"GL","grenada":"GD","guadeloupe":"GP","guam":"GU","guatemala":"GT","guernsey":"GG","guinea":"GN","guinea-bissau":"GW","republic of guinea-bissau":"GW","guyana":"GY","cooperative republic of guyana":"GY","haiti":"HT","heard island and mcdonald islands":"HM","heard island & mcdonald islands":"HM","heard and mcdonald islands":"HM","heard island":"HM","mcdonald islands":"HM","holy see":"VA","vatican city state":"VA","vatican city":"VA","vatican":"VA","honduras":"HN","hong kong":"HK","hungary":"HU","iceland":"IS","india":"IN","indonesia":"ID","iran, islamic republic of":"IR","islamic republic of iran":"IR","iran":"IR","iraq":"IQ","republic of ireland":"IE","ireland":"IE","éire":"IE","isle of man":"IM","israel":"IL","italy":"IT","jamaica":"JM","japan":"JP","jersey":"JE","jordan":"JO","kazakhstan":"KZ","kenya":"KE","republic of kenya":"KE","kiribati":"KI","korea, democratic people's republic of":"KP","democratic people's republic of korea":"KP","dprk":"KP","north korea":"KP","korea, republic of":"KR","republic of korea":"KR","south korea":"KR","korea":"KR","kuwait":"KW","kyrgyzstan":"KG","lao people's democratic republic":"LA","laos":"LA","latvia":"LV","lebanon":"LB","lesotho":"LS","liberia":"LR","libyan arab jamahiriya":"LY","libya":"LY","liechtenstein":"LI","lithuania":"LT","luxembourg":"LU","macao":"MO","macedonia, the former yugoslav republic of":"MK","macedonia, former yugoslav republic of":"MK","the former yugoslav republic of macedonia":"MK","former yugoslav republic of macedonia":"MK","f.y.r.o.m.":"MK","fyrom":"MK","macedonia":"MK","madagascar":"MG","malawi":"MW","malaysia":"MY","maldives":"MV","mali":"ML","republic of mali":"ML","malta":"MT","marshall islands":"MH","marshalls":"MH","martinique":"MQ","mauritania":"MR","mauritius":"MU","mayotte":"YT","mexico":"MX","micronesia, federated states of":"FM","federated states of micronesia":"FM","micronesia":"FM","moldova, republic of":"MD","republic of moldova":"MD","moldova":"MD","monaco":"MC","mongolia":"MN","montenegro":"ME","montserrat":"MS","morocco":"MA","mozambique":"MZ","myanmar":"MM","namibia":"NA","nauru":"NR","nepal":"NP","holland":"NL","netherlands antilles":"AN","the netherlands":"NL","netherlands":"NL","new caledonia":"NC","new zealand":"NZ","nicaragua":"NI","niger":"NE","nigeria":"NG","norfolk island":"NF","northern mariana islands":"MP","marianas":"MP","norway":"NO","oman":"OM","pakistan":"PK","palau":"PW","palestinian territory, occupied":"PS","occupied palestinian territory":"PS","palestinian territory":"PS","palestinian authority":"PS","palestine":"PS","panama":"PA","papua new guinea":"PG","png":"PG","paraguay":"PY","peru":"PE","the philippines":"PH","philippines":"PH","pitcairn":"PN","poland":"PL","portugal":"PT","puerto rico":"PR","qatar":"QA","reunion":"RE","réunion":"RE","romania":"RO","russian federation":"RU","russia":"RU","rwanda":"RW","saint barthélemy":"BL","saint barthelemy":"BL","saint barts":"BL","st. barthélemy":"BL","st. barthelemy":"BL","st. barts":"BL","st barthélemy":"BL","st barthelemy":"BL","st barts":"BL","saint helena, ascension and tristan da cunha":"SH","saint helena, ascension & tristan da cunha":"SH","saint helena":"SH","st. helena, ascension and tristan da cunha":"SH","st. helena, ascension & tristan da cunha":"SH","st. helena":"SH","st helena, ascension and tristan da cunha":"SH","st helena, ascension & tristan da cunha":"SH","st helena":"SH","ascension":"SH","tristan da cunha":"SH","saint kitts and nevis":"KN","saint kitts & nevis":"KN","saint kitts":"KN","st. kitts and nevis":"KN","st. kitts & nevis":"KN","st. kitts":"KN","st kitts and nevis":"KN","st kitts & nevis":"KN","st kitts":"KN","nevis":"KN","saint lucia":"LC","st. lucia":"LC","st lucia":"LC","saint martin":"MF","st. martin":"MF","st martin":"MF","saint pierre and miquelon":"PM","saint pierre & miquelon":"PM","saint pierre":"PM","st. pierre and miquelon":"PM","st. pierre & miquelon":"PM","st. pierre":"PM","st pierre and miquelon":"PM","st pierre & miquelon":"PM","st pierre":"PM","miquelon":"PM","saint vincent and the grenadines":"VC","saint vincent & the grenadines":"VC","saint vincent":"VC","st. vincent and the grenadines":"VC","st. vincent & the grenadines":"VC","st. vincent":"VC","st vincent and the grenadines":"VC","st vincent & the grenadines":"VC","st vincent":"VC","the grenadines":"VC","grenadines":"VC","samoa":"WS","san marino":"SM","sao tome and principe":"ST","sao tome & principe":"ST","sao tome":"ST","principe":"ST","saudi arabia":"SA","arabia":"SA","senegal":"SN","sénégal":"SN","serbia":"RS","seychelles":"SC","sierra leone":"SL","the republic of singapore":"SG","republic of singapore":"SG","singapore":"SG","slovakia":"SK","slovenia":"SI","solomon islands":"SB","solomons":"SB","somalia":"SO","south africa":"ZA","south georgia and the south sandwich islands":"GS","south georgia & the south sandwich islands":"GS","south georgia":"GS","the south sandwich islands":"GS","south sandwich islands":"GS","spain":"ES","sri lanka":"LK","the sudan":"SD","sudan":"SD","suriname":"SR","svalbard and jan mayen":"SJ","svalbard & jan mayen":"SJ","svalbard":"SJ","jan mayen":"SJ","swaziland":"SZ","sweden":"SE","switzerland":"CH","syrian arab republic":"SY","syria":"SY","taiwan":"TW","tajikistan":"TJ","tanzania, united republic of":"TZ","united republic of tanzania":"TZ","tanzania":"TZ","thailand":"TH","timor-leste":"TL","east timor":"TL","togo":"TG","tokelau":"TK","tonga":"TO","trinidad and tobago":"TT","trinidad & tobago":"TT","trinidad":"TT","tobago":"TT","tunisia":"TN","turkey":"TR","turkmenistan":"TM","turks and caicos islands":"TC","turks & caicos islands":"TC","turks islands":"TC","turk islands":"TC","caicos islands":"TC","caico islands":"TC","tuvalu":"TV","uganda":"UG","ukraine":"UA","united arab emirates":"AE","u.a.e.":"AE","uae":"AE","dubai":"AE","united kingdom":"GB","u.k.":"GB","uk":"GB","great britain":"GB","g.b.":"GB","gb":"GB","england":"GB","scotland":"GB","wales":"GB","united states":"US","united states of america":"US","u.s.a.":"US","usa":"US","united states minor outlying islands":"UM","uruguay":"UY","uzbekistan":"UZ","vanuatu":"VU","venezuela, bolivarian republic of":"VE","bolivarian republic of venezuela":"VE","venezuela":"VE","viet nam":"VN","vietnam":"VN","british virgin islands":"VG","virgin islands, british":"VG","bvis":"VG","b.v.i.":"VG","bvi":"VG","virgin islands, us":"VI","the us virgin islands":"VI","us virgin islands":"VI","virgin islands":"VI","usvi":"VI","wallis and futuna":"WF","wallis & futuna":"WF","wallis":"WF","futuna":"WF","western sahara":"EH","yemen":"YE","zambia":"ZM","zimbabwe":"ZW"};
-ilib.data.nativecountries = {"افغانستان":"AF","ålandsøerne":"AX","shqipëri":"AL","algérie":"DZ","الجزائر":"DZ","principat d'andorra":"AD","república de angola":"AO","repubilika ya ngola":"AO","Հայաստան":"AM","österreich":"AT","azərbaycan":"AZ","البحرين":"BH","বাংলাদেশ":"BD","গণপ্রজাতন্ত্রী বাংলাদেশ":"BD","gônoprojatontri bangladesh":"BD","беларусь":"BY","belgië":"BE","la belgique":"BE","belgique":"BE","république du bénin":"BJ","bénin":"BJ","འབྲུག་ཡུལ་":"BT","bulivya mamallaqta":"BO","estado plurinacional de bolivia":"BO","wuliwya suyu":"BO","bosna i hercegovina":"BA","босна и херцеговина":"BA","lefatshe la botswana":"BW","bouvetøya":"BV","brasil":"BR","negara brunei darussalam":"BN","българия":"BG","republika y'u burundi":"BI","république du burundi":"BI","ព្រះរាជាណាចក្រកម្ពុជា":"KH","preăh réachéanachâk kâmpŭchéa":"KH","kâmpŭchéa":"KH","cameroun":"CM","cabo verde":"CV","islas de cabo verde":"CV","république centrafricaine":"CF","ködörösêse tî bêafrîka":"CF","république du tchad":"TD","tchad":"TD","جمهورية تشاد":"TD","ǧumhūriyyat tšād":"TD","tšād":"TD","中华人民共和国中国":"CN","共和國的中國":"TW","台灣的":"TW","中国":"CN","union des comores":"KM","udzima wa komori":"KM","الاتحاد القمري":"KM","al-ittiḥād al-qumurī/qamarī":"KM","république du congo":"CG","repubilika ya kongo":"CG","republiki ya kongó":"CG","kongo":"CG","kongó":"CG","république démocratique du congo":"CD","kūki 'āirani":"CK","cote-d'ivoire":"CI","côte-d'ivoire":"CI","hrvatska":"HR","κυπριακή δημοκρατία":"CY","kypriakí dimokratía":"CY","kıbrıs cumhuriyeti":"CY","česká republika":"CZ","danmark":"DK","جمهورية جيبوتي":"DJ","jumhūriyyat jībūtī":"DJ","république de djibouti":"DJ","jamhuuriyadda jabuuti":"DJ","gabuutih ummuuno":"DJ","jībūtī":"DJ","djibouti":"DJ","jabuuti":"DJ","gabuutih":"DJ","Commonwealth de la Dominique":"DM","Dominique":"DM","república dominicana":"DO","مصر":"EG","república de guinea ecuatorial":"GQ","république de guinée équatoriale":"GQ","guinea ecuatorial":"GQ","guinée équatoriale":"GQ","ሃገረ ኤርትራ":"ER","hagere ertra":"ER","دولة إرتريا":"ER","dawlat iritrīya":"ER","eesti":"EE","የኢትዮጵያ ፌዴራላዊ ዲሞክራሲያዊ ሪፐብሊክ":"ET","ye-ītyōṗṗyā fēdēralāwī dīmōkrāsīyāwī rīpeblīk":"ET","የኢትዮጵያ":"ET","ye-ītyōṗṗyā":"ET","malvinas":"FK","færøerne":"FO","matanitu ko viti":"FJ","fijī ripablik":"FJ","फ़िजी गणराज्य":"FJ","suomi":"FI","guyane française":"GF","polynésie française":"PF","terres australes françaises":"TF","république gabonaise":"GA","საქართველოს":"GE","deutschland":"DE","ελλάδα":"GR","grønland":"GL","république de guinée":"GN","república da guiné-bissau":"GW","haïti":"HT","ayiti":"HT","santa sede":"VA","città del vaticano":"VA","vaticano":"VA","香港的":"HK","magyarország":"HU","ísland":"IS","भारत":"IN","جمهوری اسلامی ایران":"IR","ایران":"IR","العراق":"IQ","éire":"IE","ישראל":"IL","italia":"IT","日本":"JP","الأردن":"JO","Казахстан":"KZ","jamhuri ya kenya":"KE","ribaberiki kiribati":"KI","조선 민주주의 인민 공화국":"KP","북한":"KP","대한민국":"KR","한국":"KR","الكويت":"KW","кыргыз республикасы":"KG","kırgız respublikası":"KG","кыргызская республика":"KG","kyrgyzskaya respublika":"KG","ສາທາລະນະລັດ ປະຊາທິປະໄຕ ປະຊາຊົນລາວ":"LA","sathalanalat paxathipatai paxaxon lao":"LA","latvija":"LV","لبنان":"LB","muso oa lesotho":"LS","ليبيا":"LY","lietuva":"LT","luxemburg":"LU","macau":"MO","澳门":"MO","澳門":"MO","поранешна југословенска република македонија":"MK","македонија":"MK","repoblikan'i madagasikara":"MG","république de madagascar":"MG","chalo cha malawi":"MW","dziko la malaŵi":"MW","malaŵi":"MW","ދިވެހިރާއްޖޭގެ ޖުމްހޫރިއްޔާ":"MV","dhivehi raa'jeyge jumhooriyya":"MV","république du mali":"ML","mali ka fasojamana":"ML","الجمهورية الإسلامية الموريتانية":"MR","al-ǧumhūriyyah al-ʾislāmiyyah al-mūrītāniyyah":"MR","république islamique de mauritanie":"MR","republik bu lislaamu bu gànnaar":"MR","republik moris":"MU","république de maurice":"MU","méxico":"MX","republica moldova":"MD","mongγol ulus":"MN","монгол улс":"MN","mongol uls":"MN","crna gora":"ME","црна гора":"ME","مغربي":"MA","república de moçambique":"MZ","moçambique":"MZ","pyidaunzu thanmăda myăma nainngandaw":"MM","burma":"MM","republiek van namibië":"NA","republik namibia":"NA","namibië":"NA","ripublik naoero":"NR","सङ्घीय लोकतान्त्रिक गणतन्त्र नेपाल":"NP","sanghiya loktāntrik ganatantra nepāl":"NP","nepāl":"NP","nederland":"NL","nouvelle-calédonie":"NC","la calédonie":"NC","calédonie":"NC","aotearoa":"NZ","jamhuriyar nijar":"NE","nijar":"NE","jamhuriyar tarayyar najeriya":"NG","njíkọtá ọchíchìiwú nàịjíríà":"NG","àpapọ̀ olómìnira ilẹ̀ nàìjíríà":"NG","nàịjíríà":"NG","nàìjíríà":"NG","norge":"NO","سلطنة عمان":"OM","پاکستان":"PK","beluu ęr a belau":"PW","belau":"PW","panamá":"PA","independen stet bilong papua niugini":"PG","papua niugini":"PG","perú":"PE","las filipinas":"PH","filipinas":"PH","polska":"PL","قطر":"QA","românia":"RO","русский Федерации":"RU","россия":"RU","repubulika y'u rwanda":"RW","république du rwanda":"RW","saint-barthélemy":"BL","saint barth":"BL","saint-martin":"MF","sint maarten":"MF","saint-pierre-et-miquelon":"PM","malo sa'oloto tuto'atasi o samoa":"WS","san marino":"SM","sao tome and principe":"ST","sao tome & principe":"ST","sao tome":"ST","principe":"ST","السعودية جزيره العرب":"SA","arabia":"SA","senegal":"SN","sénégal":"SN","serbia":"RS","seychelles":"SC","sierra leone":"SL","新加坡共和国":"SG","新加坡的":"SG","slovensko":"SK","slovenija":"SI","solomon islands":"SB","solomons":"SB","somalia":"SO","suid-afrika":"ZA","españa":"ES","sri lanka":"LK","the sudan":"SD","sudan":"SD","suriname":"SR","svalbard and jan mayen":"SJ","svalbard & jan mayen":"SJ","svalbard":"SJ","jan mayen":"SJ","swaziland":"SZ","sverige":"SE","die schweiz":"CH","schweiz":"CH","la suisse":"CH","suisse":"CH","svizzera":"CH","سوريا":"SY","taiwan, province of china":"TW","taiwan":"TW","tajikistan":"TJ","tanzania, united republic of":"TZ","united republic of tanzania":"TZ","tanzania":"TZ","ประเทศไทย":"TH","timor-leste":"TL","east timor":"TL","togo":"TG","tokelau":"TK","tonga":"TO","trinidad and tobago":"TT","trinidad & tobago":"TT","trinidad":"TT","tobago":"TT","تونس":"TN","türkiye":"TR","turkmenistan":"TM","tuvalu":"TV","uganda":"UG","україна":"UA","الامارات العربية المتحدة":"AE","دبي":"AE","albain":"GB","cymru":"GB","uruguay":"UY","uzbekistan":"UZ","vanuatu":"VU","việt nam":"VN","western sahara":"EH","يمني":"YE","zambia":"ZM","zimbabwe":"ZW"};
+ilib.data.countries = {
+    "afghanistan": "AF",
+    "aland islands": "AX",
+    "åland islands": "AX",
+    "albania": "AL",
+    "algeria": "DZ",
+    "american samoa": "AS",
+    "andorra": "AD",
+    "angola": "AO",
+    "anguilla": "AI",
+    "antigua and barbuda": "AG",
+    "antigua & barbuda": "AG",
+    "antigua": "AG",
+    "barbuda": "AG",
+    "argentina": "AR",
+    "armenia": "AM",
+    "aruba": "AW",
+    "australia": "AU",
+    "austria": "AT",
+    "azerbaijan": "AZ",
+    "bahamas": "BS",
+    "the bahamas": "BS",
+    "bahrain": "BH",
+    "bangladesh": "BD",
+    "barbados": "BB",
+    "belarus": "BY",
+    "belgium": "BE",
+    "belize": "BZ",
+    "benin": "BJ",
+    "bermuda": "BM",
+    "bhutan": "BT",
+    "bolivia, plurinational state of": "BO",
+    "plurinational state of bolivia": "BO",
+    "bolivia": "BO",
+    "bosnia and herzegovina": "BA",
+    "bosnia & herzegovina": "BA",
+    "bosnia": "BA",
+    "herzegovina": "BA",
+    "botswana": "BW",
+    "bouvet island": "BV",
+    "brazil": "BR",
+    "british indian ocean territory": "IO",
+    "brunei darussalam": "BN",
+    "brunei": "BN",
+    "bulgaria": "BG",
+    "burkina faso": "BF",
+    "burundi": "BI",
+    "cambodia": "KH",
+    "cameroon": "CM",
+    "canada": "CA",
+    "cape verde": "CV",
+    "cape verde islands": "CV",
+    "cayman islands": "KY",
+    "caymans": "KY",
+    "central african republic": "CF",
+    "c.a.r.": "CF",
+    "car": "CF",
+    "chad": "TD",
+    "chile": "CL",
+    "people's republic of china": "CN",
+    "republic of china": "TW",
+    "p. r. of china": "CN",
+    "p. r. china": "CN",
+    "p.r. of china": "CN",
+    "pr china": "CN",
+    "R.O.C.": "TW",
+    "ROC": "TW",
+    "prc": "CN",
+    "china": "CN",
+    "christmas island": "CX",
+    "cocos (keeling) islands": "CC",
+    "cocos islands": "CC",
+    "cocos and keeling islands": "CC",
+    "cocos & keeling islands": "CC",
+    "colombia": "CO",
+    "comoros": "KM",
+    "congo": "CD",
+    "congo, the democratic republic of the": "CD",
+    "congo, democratic republic of the": "CD",
+    "the democratic republic of the congo": "CD",
+    "democratic republic of the congo": "CD",
+    "drc": "CD",
+    "cook islands": "CK",
+    "costa rica": "CR",
+    "cote d'ivoire": "CI",
+    "côte d'ivoire": "CI",
+    "ivory coast": "CI",
+    "croatia": "HR",
+    "cuba": "CU",
+    "cyprus": "CY",
+    "the czech republic": "CZ",
+    "czech republic": "CZ",
+    "denmark": "DK",
+    "djibouti": "DJ",
+    "dominica": "DM",
+    "dominican republic": "DO",
+    "d.r.": "DO",
+    "dr": "DO",
+    "ecuador": "EC",
+    "egypt": "EG",
+    "el salvador": "SV",
+    "equatorial guinea": "GQ",
+    "eritrea": "ER",
+    "estonia": "EE",
+    "ethiopia": "ET",
+    "falkland islands": "FK",
+    "falklands": "FK",
+    "malvinas": "FK",
+    "faroe islands": "FO",
+    "faroes": "FO",
+    "fiji": "FJ",
+    "finland": "FI",
+    "france": "FR",
+    "french guiana": "GF",
+    "french polynesia": "PF",
+    "polynesia": "PF",
+    "french southern territories": "TF",
+    "gabon": "GA",
+    "gabonese republic": "GA",
+    "gambia": "GM",
+    "republic of the gambia": "GM",
+    "georgia": "GE",
+    "germany": "DE",
+    "ghana": "GH",
+    "gibraltar": "GI",
+    "greece": "GR",
+    "greenland": "GL",
+    "grenada": "GD",
+    "guadeloupe": "GP",
+    "guam": "GU",
+    "guatemala": "GT",
+    "guernsey": "GG",
+    "guinea": "GN",
+    "guinea-bissau": "GW",
+    "republic of guinea-bissau": "GW",
+    "guyana": "GY",
+    "cooperative republic of guyana": "GY",
+    "haiti": "HT",
+    "heard island and mcdonald islands": "HM",
+    "heard island & mcdonald islands": "HM",
+    "heard and mcdonald islands": "HM",
+    "heard island": "HM",
+    "mcdonald islands": "HM",
+    "holy see": "VA",
+    "vatican city state": "VA",
+    "vatican city": "VA",
+    "vatican": "VA",
+    "honduras": "HN",
+    "hong kong": "HK",
+    "hungary": "HU",
+    "iceland": "IS",
+    "india": "IN",
+    "indonesia": "ID",
+    "iran, islamic republic of": "IR",
+    "islamic republic of iran": "IR",
+    "iran": "IR",
+    "iraq": "IQ",
+    "republic of ireland": "IE",
+    "ireland": "IE",
+    "éire": "IE",
+    "isle of man": "IM",
+    "israel": "IL",
+    "italy": "IT",
+    "jamaica": "JM",
+    "japan": "JP",
+    "jersey": "JE",
+    "jordan": "JO",
+    "kazakhstan": "KZ",
+    "kenya": "KE",
+    "republic of kenya": "KE",
+    "kiribati": "KI",
+    "korea, democratic people's republic of": "KP",
+    "democratic people's republic of korea": "KP",
+    "dprk": "KP",
+    "north korea": "KP",
+    "korea, republic of": "KR",
+    "republic of korea": "KR",
+    "south korea": "KR",
+    "korea": "KR",
+    "kuwait": "KW",
+    "kyrgyzstan": "KG",
+    "lao people's democratic republic": "LA",
+    "laos": "LA",
+    "latvia": "LV",
+    "lebanon": "LB",
+    "lesotho": "LS",
+    "liberia": "LR",
+    "libyan arab jamahiriya": "LY",
+    "libya": "LY",
+    "liechtenstein": "LI",
+    "lithuania": "LT",
+    "luxembourg": "LU",
+    "macao": "MO",
+    "macedonia, the former yugoslav republic of": "MK",
+    "macedonia, former yugoslav republic of": "MK",
+    "the former yugoslav republic of macedonia": "MK",
+    "former yugoslav republic of macedonia": "MK",
+    "f.y.r.o.m.": "MK",
+    "fyrom": "MK",
+    "macedonia": "MK",
+    "madagascar": "MG",
+    "malawi": "MW",
+    "malaysia": "MY",
+    "maldives": "MV",
+    "mali": "ML",
+    "republic of mali": "ML",
+    "malta": "MT",
+    "marshall islands": "MH",
+    "marshalls": "MH",
+    "martinique": "MQ",
+    "mauritania": "MR",
+    "mauritius": "MU",
+    "mayotte": "YT",
+    "mexico": "MX",
+    "micronesia, federated states of": "FM",
+    "federated states of micronesia": "FM",
+    "micronesia": "FM",
+    "moldova, republic of": "MD",
+    "republic of moldova": "MD",
+    "moldova": "MD",
+    "monaco": "MC",
+    "mongolia": "MN",
+    "montenegro": "ME",
+    "montserrat": "MS",
+    "morocco": "MA",
+    "mozambique": "MZ",
+    "myanmar": "MM",
+    "namibia": "NA",
+    "nauru": "NR",
+    "nepal": "NP",
+    "holland": "NL",
+    "netherlands antilles": "AN",
+    "the netherlands": "NL",
+    "netherlands": "NL",
+    "new caledonia": "NC",
+    "new zealand": "NZ",
+    "nicaragua": "NI",
+    "niger": "NE",
+    "nigeria": "NG",
+    "norfolk island": "NF",
+    "northern mariana islands": "MP",
+    "marianas": "MP",
+    "norway": "NO",
+    "oman": "OM",
+    "pakistan": "PK",
+    "palau": "PW",
+    "palestinian territory, occupied": "PS",
+    "occupied palestinian territory": "PS",
+    "palestinian territory": "PS",
+    "palestinian authority": "PS",
+    "palestine": "PS",
+    "panama": "PA",
+    "papua new guinea": "PG",
+    "png": "PG",
+    "paraguay": "PY",
+    "peru": "PE",
+    "the philippines": "PH",
+    "philippines": "PH",
+    "pitcairn": "PN",
+    "poland": "PL",
+    "portugal": "PT",
+    "puerto rico": "PR",
+    "qatar": "QA",
+    "reunion": "RE",
+    "réunion": "RE",
+    "romania": "RO",
+    "russian federation": "RU",
+    "russia": "RU",
+    "rwanda": "RW",
+    "saint barthélemy": "BL",
+    "saint barthelemy": "BL",
+    "saint barts": "BL",
+    "st. barthélemy": "BL",
+    "st. barthelemy": "BL",
+    "st. barts": "BL",
+    "st barthélemy": "BL",
+    "st barthelemy": "BL",
+    "st barts": "BL",
+    "saint helena, ascension and tristan da cunha": "SH",
+    "saint helena, ascension & tristan da cunha": "SH",
+    "saint helena": "SH",
+    "st. helena, ascension and tristan da cunha": "SH",
+    "st. helena, ascension & tristan da cunha": "SH",
+    "st. helena": "SH",
+    "st helena, ascension and tristan da cunha": "SH",
+    "st helena, ascension & tristan da cunha": "SH",
+    "st helena": "SH",
+    "ascension": "SH",
+    "tristan da cunha": "SH",
+    "saint kitts and nevis": "KN",
+    "saint kitts & nevis": "KN",
+    "saint kitts": "KN",
+    "st. kitts and nevis": "KN",
+    "st. kitts & nevis": "KN",
+    "st. kitts": "KN",
+    "st kitts and nevis": "KN",
+    "st kitts & nevis": "KN",
+    "st kitts": "KN",
+    "nevis": "KN",
+    "saint lucia": "LC",
+    "st. lucia": "LC",
+    "st lucia": "LC",
+    "saint martin": "MF",
+    "st. martin": "MF",
+    "st martin": "MF",
+    "saint pierre and miquelon": "PM",
+    "saint pierre & miquelon": "PM",
+    "saint pierre": "PM",
+    "st. pierre and miquelon": "PM",
+    "st. pierre & miquelon": "PM",
+    "st. pierre": "PM",
+    "st pierre and miquelon": "PM",
+    "st pierre & miquelon": "PM",
+    "st pierre": "PM",
+    "miquelon": "PM",
+    "saint vincent and the grenadines": "VC",
+    "saint vincent & the grenadines": "VC",
+    "saint vincent": "VC",
+    "st. vincent and the grenadines": "VC",
+    "st. vincent & the grenadines": "VC",
+    "st. vincent": "VC",
+    "st vincent and the grenadines": "VC",
+    "st vincent & the grenadines": "VC",
+    "st vincent": "VC",
+    "the grenadines": "VC",
+    "grenadines": "VC",
+    "samoa": "WS",
+    "san marino": "SM",
+    "sao tome and principe": "ST",
+    "sao tome & principe": "ST",
+    "sao tome": "ST",
+    "principe": "ST",
+    "saudi arabia": "SA",
+    "arabia": "SA",
+    "senegal": "SN",
+    "sénégal": "SN",
+    "serbia": "RS",
+    "seychelles": "SC",
+    "sierra leone": "SL",
+    "the republic of singapore": "SG",
+    "republic of singapore": "SG",
+    "singapore": "SG",
+    "slovakia": "SK",
+    "slovenia": "SI",
+    "solomon islands": "SB",
+    "solomons": "SB",
+    "somalia": "SO",
+    "south africa": "ZA",
+    "south georgia and the south sandwich islands": "GS",
+    "south georgia & the south sandwich islands": "GS",
+    "south georgia": "GS",
+    "the south sandwich islands": "GS",
+    "south sandwich islands": "GS",
+    "spain": "ES",
+    "sri lanka": "LK",
+    "the sudan": "SD",
+    "sudan": "SD",
+    "suriname": "SR",
+    "svalbard and jan mayen": "SJ",
+    "svalbard & jan mayen": "SJ",
+    "svalbard": "SJ",
+    "jan mayen": "SJ",
+    "swaziland": "SZ",
+    "sweden": "SE",
+    "switzerland": "CH",
+    "syrian arab republic": "SY",
+    "syria": "SY",
+    "taiwan": "TW",
+    "tajikistan": "TJ",
+    "tanzania, united republic of": "TZ",
+    "united republic of tanzania": "TZ",
+    "tanzania": "TZ",
+    "thailand": "TH",
+    "timor-leste": "TL",
+    "east timor": "TL",
+    "togo": "TG",
+    "tokelau": "TK",
+    "tonga": "TO",
+    "trinidad and tobago": "TT",
+    "trinidad & tobago": "TT",
+    "trinidad": "TT",
+    "tobago": "TT",
+    "tunisia": "TN",
+    "turkey": "TR",
+    "turkmenistan": "TM",
+    "turks and caicos islands": "TC",
+    "turks & caicos islands": "TC",
+    "turks islands": "TC",
+    "turk islands": "TC",
+    "caicos islands": "TC",
+    "caico islands": "TC",
+    "tuvalu": "TV",
+    "uganda": "UG",
+    "ukraine": "UA",
+    "united arab emirates": "AE",
+    "u.a.e.": "AE",
+    "uae": "AE",
+    "dubai": "AE",
+    "united kingdom": "GB",
+    "u.k.": "GB",
+    "uk": "GB",
+    "great britain": "GB",
+    "g.b.": "GB",
+    "gb": "GB",
+    "england": "GB",
+    "scotland": "GB",
+    "wales": "GB",
+    "united states": "US",
+    "united states of america": "US",
+    "u.s.a.": "US",
+    "usa": "US",
+    "united states minor outlying islands": "UM",
+    "uruguay": "UY",
+    "uzbekistan": "UZ",
+    "vanuatu": "VU",
+    "venezuela, bolivarian republic of": "VE",
+    "bolivarian republic of venezuela": "VE",
+    "venezuela": "VE",
+    "viet nam": "VN",
+    "vietnam": "VN",
+    "british virgin islands": "VG",
+    "virgin islands, british": "VG",
+    "bvis": "VG",
+    "b.v.i.": "VG",
+    "bvi": "VG",
+    "virgin islands, us": "VI",
+    "the us virgin islands": "VI",
+    "us virgin islands": "VI",
+    "virgin islands": "VI",
+    "usvi": "VI",
+    "wallis and futuna": "WF",
+    "wallis & futuna": "WF",
+    "wallis": "WF",
+    "futuna": "WF",
+    "western sahara": "EH",
+    "yemen": "YE",
+    "zambia": "ZM",
+    "zimbabwe": "ZW"
+};
+ilib.data.nativecountries = {
+    "افغانستان": "AF",
+    "ålandsøerne": "AX",
+    "shqipëri": "AL",
+    "algérie": "DZ",
+    "الجزائر": "DZ",
+    "principat d'andorra": "AD",
+    "república de angola": "AO",
+    "repubilika ya ngola": "AO",
+    "Հայաստան": "AM",
+    "österreich": "AT",
+    "azərbaycan": "AZ",
+    "البحرين": "BH",
+    "বাংলাদেশ": "BD",
+    "গণপ্রজাতন্ত্রী বাংলাদেশ": "BD",
+    "gônoprojatontri bangladesh": "BD",
+    "беларусь": "BY",
+    "belgië": "BE",
+    "la belgique": "BE",
+    "belgique": "BE",
+    "république du bénin": "BJ",
+    "bénin": "BJ",
+    "འབྲུག་ཡུལ་": "BT",
+    "bulivya mamallaqta": "BO",
+    "estado plurinacional de bolivia": "BO",
+    "wuliwya suyu": "BO",
+    "bosna i hercegovina": "BA",
+    "босна и херцеговина": "BA",
+    "lefatshe la botswana": "BW",
+    "bouvetøya": "BV",
+    "brasil": "BR",
+    "negara brunei darussalam": "BN",
+    "българия": "BG",
+    "republika y'u burundi": "BI",
+    "république du burundi": "BI",
+    "ព្រះរាជាណាចក្រកម្ពុជា": "KH",
+    "preăh réachéanachâk kâmpŭchéa": "KH",
+    "kâmpŭchéa": "KH",
+    "cameroun": "CM",
+    "cabo verde": "CV",
+    "islas de cabo verde": "CV",
+    "république centrafricaine": "CF",
+    "ködörösêse tî bêafrîka": "CF",
+    "république du tchad": "TD",
+    "tchad": "TD",
+    "جمهورية تشاد": "TD",
+    "ǧumhūriyyat tšād": "TD",
+    "tšād": "TD",
+    "中华人民共和国中国": "CN",
+    "共和國的中國": "TW",
+    "台灣的": "TW",
+    "中国": "CN",
+    "union des comores": "KM",
+    "udzima wa komori": "KM",
+    "الاتحاد القمري": "KM",
+    "al-ittiḥād al-qumurī/qamarī": "KM",
+    "république du congo": "CG",
+    "repubilika ya kongo": "CG",
+    "republiki ya kongó": "CG",
+    "kongo": "CG",
+    "kongó": "CG",
+    "république démocratique du congo": "CD",
+    "kūki 'āirani": "CK",
+    "cote-d'ivoire": "CI",
+    "côte-d'ivoire": "CI",
+    "hrvatska": "HR",
+    "κυπριακή δημοκρατία": "CY",
+    "kypriakí dimokratía": "CY",
+    "kıbrıs cumhuriyeti": "CY",
+    "česká republika": "CZ",
+    "danmark": "DK",
+    "جمهورية جيبوتي": "DJ",
+    "jumhūriyyat jībūtī": "DJ",
+    "république de djibouti": "DJ",
+    "jamhuuriyadda jabuuti": "DJ",
+    "gabuutih ummuuno": "DJ",
+    "jībūtī": "DJ",
+    "djibouti": "DJ",
+    "jabuuti": "DJ",
+    "gabuutih": "DJ",
+    "Commonwealth de la Dominique": "DM",
+    "Dominique": "DM",
+    "república dominicana": "DO",
+    "مصر": "EG",
+    "república de guinea ecuatorial": "GQ",
+    "république de guinée équatoriale": "GQ",
+    "guinea ecuatorial": "GQ",
+    "guinée équatoriale": "GQ",
+    "ሃገረ ኤርትራ": "ER",
+    "hagere ertra": "ER",
+    "دولة إرتريا": "ER",
+    "dawlat iritrīya": "ER",
+    "eesti": "EE",
+    "የኢትዮጵያ ፌዴራላዊ ዲሞክራሲያዊ ሪፐብሊክ": "ET",
+    "ye-ītyōṗṗyā fēdēralāwī dīmōkrāsīyāwī rīpeblīk": "ET",
+    "የኢትዮጵያ": "ET",
+    "ye-ītyōṗṗyā": "ET",
+    "malvinas": "FK",
+    "færøerne": "FO",
+    "matanitu ko viti": "FJ",
+    "fijī ripablik": "FJ",
+    "फ़िजी गणराज्य": "FJ",
+    "suomi": "FI",
+    "guyane française": "GF",
+    "polynésie française": "PF",
+    "terres australes françaises": "TF",
+    "république gabonaise": "GA",
+    "საქართველოს": "GE",
+    "deutschland": "DE",
+    "ελλάδα": "GR",
+    "grønland": "GL",
+    "république de guinée": "GN",
+    "república da guiné-bissau": "GW",
+    "haïti": "HT",
+    "ayiti": "HT",
+    "santa sede": "VA",
+    "città del vaticano": "VA",
+    "vaticano": "VA",
+    "香港的": "HK",
+    "magyarország": "HU",
+    "ísland": "IS",
+    "भारत": "IN",
+    "جمهوری اسلامی ایران": "IR",
+    "ایران": "IR",
+    "العراق": "IQ",
+    "éire": "IE",
+    "ישראל": "IL",
+    "italia": "IT",
+    "日本": "JP",
+    "الأردن": "JO",
+    "Казахстан": "KZ",
+    "jamhuri ya kenya": "KE",
+    "ribaberiki kiribati": "KI",
+    "조선 민주주의 인민 공화국": "KP",
+    "북한": "KP",
+    "대한민국": "KR",
+    "한국": "KR",
+    "الكويت": "KW",
+    "кыргыз республикасы": "KG",
+    "kırgız respublikası": "KG",
+    "кыргызская республика": "KG",
+    "kyrgyzskaya respublika": "KG",
+    "ສາທາລະນະລັດ ປະຊາທິປະໄຕ ປະຊາຊົນລາວ": "LA",
+    "sathalanalat paxathipatai paxaxon lao": "LA",
+    "latvija": "LV",
+    "لبنان": "LB",
+    "muso oa lesotho": "LS",
+    "ليبيا": "LY",
+    "lietuva": "LT",
+    "luxemburg": "LU",
+    "macau": "MO",
+    "澳门": "MO",
+    "澳門": "MO",
+    "поранешна југословенска република македонија": "MK",
+    "македонија": "MK",
+    "repoblikan'i madagasikara": "MG",
+    "république de madagascar": "MG",
+    "chalo cha malawi": "MW",
+    "dziko la malaŵi": "MW",
+    "malaŵi": "MW",
+    "ދިވެހިރާއްޖޭގެ ޖުމްހޫރިއްޔާ": "MV",
+    "dhivehi raa'jeyge jumhooriyya": "MV",
+    "république du mali": "ML",
+    "mali ka fasojamana": "ML",
+    "الجمهورية الإسلامية الموريتانية": "MR",
+    "al-ǧumhūriyyah al-ʾislāmiyyah al-mūrītāniyyah": "MR",
+    "république islamique de mauritanie": "MR",
+    "republik bu lislaamu bu gànnaar": "MR",
+    "republik moris": "MU",
+    "république de maurice": "MU",
+    "méxico": "MX",
+    "republica moldova": "MD",
+    "mongγol ulus": "MN",
+    "монгол улс": "MN",
+    "mongol uls": "MN",
+    "crna gora": "ME",
+    "црна гора": "ME",
+    "مغربي": "MA",
+    "república de moçambique": "MZ",
+    "moçambique": "MZ",
+    "pyidaunzu thanmăda myăma nainngandaw": "MM",
+    "burma": "MM",
+    "republiek van namibië": "NA",
+    "republik namibia": "NA",
+    "namibië": "NA",
+    "ripublik naoero": "NR",
+    "सङ्घीय लोकतान्त्रिक गणतन्त्र नेपाल": "NP",
+    "sanghiya loktāntrik ganatantra nepāl": "NP",
+    "nepāl": "NP",
+    "nederland": "NL",
+    "nouvelle-calédonie": "NC",
+    "la calédonie": "NC",
+    "calédonie": "NC",
+    "aotearoa": "NZ",
+    "jamhuriyar nijar": "NE",
+    "nijar": "NE",
+    "jamhuriyar tarayyar najeriya": "NG",
+    "njíkọtá ọchíchìiwú nàịjíríà": "NG",
+    "àpapọ̀ olómìnira ilẹ̀ nàìjíríà": "NG",
+    "nàịjíríà": "NG",
+    "nàìjíríà": "NG",
+    "norge": "NO",
+    "سلطنة عمان": "OM",
+    "پاکستان": "PK",
+    "beluu ęr a belau": "PW",
+    "belau": "PW",
+    "panamá": "PA",
+    "independen stet bilong papua niugini": "PG",
+    "papua niugini": "PG",
+    "perú": "PE",
+    "las filipinas": "PH",
+    "filipinas": "PH",
+    "polska": "PL",
+    "قطر": "QA",
+    "românia": "RO",
+    "русский Федерации": "RU",
+    "россия": "RU",
+    "repubulika y'u rwanda": "RW",
+    "république du rwanda": "RW",
+    "saint-barthélemy": "BL",
+    "saint barth": "BL",
+    "saint-martin": "MF",
+    "sint maarten": "MF",
+    "saint-pierre-et-miquelon": "PM",
+    "malo sa'oloto tuto'atasi o samoa": "WS",
+    "san marino": "SM",
+    "sao tome and principe": "ST",
+    "sao tome & principe": "ST",
+    "sao tome": "ST",
+    "principe": "ST",
+    "السعودية جزيره العرب": "SA",
+    "arabia": "SA",
+    "senegal": "SN",
+    "sénégal": "SN",
+    "serbia": "RS",
+    "seychelles": "SC",
+    "sierra leone": "SL",
+    "新加坡共和国": "SG",
+    "新加坡的": "SG",
+    "slovensko": "SK",
+    "slovenija": "SI",
+    "solomon islands": "SB",
+    "solomons": "SB",
+    "somalia": "SO",
+    "suid-afrika": "ZA",
+    "españa": "ES",
+    "sri lanka": "LK",
+    "the sudan": "SD",
+    "sudan": "SD",
+    "suriname": "SR",
+    "svalbard and jan mayen": "SJ",
+    "svalbard & jan mayen": "SJ",
+    "svalbard": "SJ",
+    "jan mayen": "SJ",
+    "swaziland": "SZ",
+    "sverige": "SE",
+    "die schweiz": "CH",
+    "schweiz": "CH",
+    "la suisse": "CH",
+    "suisse": "CH",
+    "svizzera": "CH",
+    "سوريا": "SY",
+    "taiwan, province of china": "TW",
+    "taiwan": "TW",
+    "tajikistan": "TJ",
+    "tanzania, united republic of": "TZ",
+    "united republic of tanzania": "TZ",
+    "tanzania": "TZ",
+    "ประเทศไทย": "TH",
+    "timor-leste": "TL",
+    "east timor": "TL",
+    "togo": "TG",
+    "tokelau": "TK",
+    "tonga": "TO",
+    "trinidad and tobago": "TT",
+    "trinidad & tobago": "TT",
+    "trinidad": "TT",
+    "tobago": "TT",
+    "تونس": "TN",
+    "türkiye": "TR",
+    "turkmenistan": "TM",
+    "tuvalu": "TV",
+    "uganda": "UG",
+    "україна": "UA",
+    "الامارات العربية المتحدة": "AE",
+    "دبي": "AE",
+    "albain": "GB",
+    "cymru": "GB",
+    "uruguay": "UY",
+    "uzbekistan": "UZ",
+    "vanuatu": "VU",
+    "việt nam": "VN",
+    "western sahara": "EH",
+    "يمني": "YE",
+    "zambia": "ZM",
+    "zimbabwe": "ZW"
+};
 /**
  * addressprs.js - Represent a mailing address
  * 

@@ -1,1 +1,11 @@
-{"language.name":"Southern Sotho","numfmt":{"groupChar":" "},"scripts":["Latn"],"locale":"st"}
+{
+    "language.name": "Southern Sotho",
+    "numfmt": {
+        "groupChar": " ",
+        "exponential": "E"
+    },
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "st"
+}

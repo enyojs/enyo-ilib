@@ -1,1 +1,7 @@
-{"language.name":"Mende","scripts":["Latn"],"locale":"men"}
+{
+    "language.name": "Mende",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "men"
+}

@@ -1,1 +1,7 @@
-{"language.name":"Tlingit","scripts":["Latn"],"locale":"tli"}
+{
+    "language.name": "Tlingit",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "tli"
+}

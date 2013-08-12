@@ -1,1 +1,7 @@
-{"language.name":"Efik","scripts":["Latn"],"locale":"efi"}
+{
+    "language.name": "Efik",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "efi"
+}

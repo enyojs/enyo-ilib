@@ -1,1 +1,8 @@
-{"language.name":"Makasar","scripts":["Latn","Bugi"],"locale":"mak"}
+{
+    "language.name": "Makasar",
+    "scripts": [
+        "Latn",
+        "Bugi"
+    ],
+    "locale": "mak"
+}

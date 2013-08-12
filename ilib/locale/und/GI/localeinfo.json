@@ -1,1 +1,6 @@
-{"currency":"GIP","region.name":"Gibraltar","timezone":"Europe/Gibraltar","locale":"GI"}
+{
+    "currency": "GIP",
+    "region.name": "Gibraltar",
+    "timezone": "Europe/Gibraltar",
+    "locale": "GI"
+}

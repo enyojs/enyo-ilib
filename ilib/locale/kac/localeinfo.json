@@ -1,1 +1,7 @@
-{"language.name":"Kachin","scripts":["Mymr"],"locale":"kac"}
+{
+    "language.name": "Kachin",
+    "scripts": [
+        "Mymr"
+    ],
+    "locale": "kac"
+}

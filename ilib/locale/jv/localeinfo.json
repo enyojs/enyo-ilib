@@ -1,1 +1,8 @@
-{"language.name":"Javanese","scripts":["Latn","Java"],"locale":"jv"}
+{
+    "language.name": "Javanese",
+    "scripts": [
+        "Latn",
+        "Java"
+    ],
+    "locale": "jv"
+}

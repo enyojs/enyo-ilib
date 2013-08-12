@@ -1,1 +1,7 @@
-{"language.name":"Walloon","scripts":["Latn"],"locale":"wa"}
+{
+    "language.name": "Walloon",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "wa"
+}

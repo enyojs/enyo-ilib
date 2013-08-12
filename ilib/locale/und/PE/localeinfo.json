@@ -1,1 +1,7 @@
-{"currency":"PEN","firstDayOfWeek":0,"region.name":"Peru","timezone":"America/Lima","locale":"PE"}
+{
+    "currency": "PEN",
+    "firstDayOfWeek": 0,
+    "region.name": "Peru",
+    "timezone": "America/Lima",
+    "locale": "PE"
+}

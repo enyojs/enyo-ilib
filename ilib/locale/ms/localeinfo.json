@@ -1,1 +1,17 @@
-{"clock":"12","language.name":"Malay","numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"commonNegative":"({s}{n})"}},"scripts":["Latn","Arab"],"locale":"ms"}
+{
+    "clock": "12",
+    "language.name": "Malay",
+    "numfmt": {
+        "decimalChar": ".",
+        "groupChar": ",",
+        "exponential": "E",
+        "currencyFormats": {
+            "commonNegative": "({s}{n})"
+        }
+    },
+    "scripts": [
+        "Latn",
+        "Arab"
+    ],
+    "locale": "ms"
+}

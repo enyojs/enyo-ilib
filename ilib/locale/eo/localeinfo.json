@@ -1,1 +1,14 @@
-{"language.name":"Esperanto","numfmt":{"groupChar":" ","currencyFormats":{"common":"{s} {n}"}},"scripts":["Latn"],"locale":"eo"}
+{
+    "language.name": "Esperanto",
+    "numfmt": {
+        "groupChar": " ",
+        "exponential": "E",
+        "currencyFormats": {
+            "common": "{s} {n}"
+        }
+    },
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "eo"
+}

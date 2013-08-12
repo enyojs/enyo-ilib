@@ -1,1 +1,7 @@
-{"language.name":"Dyula","scripts":["Latn"],"locale":"dyu"}
+{
+    "language.name": "Dyula",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "dyu"
+}

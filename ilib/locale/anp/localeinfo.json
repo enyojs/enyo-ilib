@@ -1,1 +1,7 @@
-{"language.name":"Angika","scripts":["Deva"],"locale":"anp"}
+{
+    "language.name": "Angika",
+    "scripts": [
+        "Deva"
+    ],
+    "locale": "anp"
+}

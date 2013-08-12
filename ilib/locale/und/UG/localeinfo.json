@@ -1,1 +1,6 @@
-{"currency":"UGX","region.name":"Uganda","timezone":"Africa/Kampala","locale":"UG"}
+{
+    "currency": "UGX",
+    "region.name": "Uganda",
+    "timezone": "Africa/Kampala",
+    "locale": "UG"
+}

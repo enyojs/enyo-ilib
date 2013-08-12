@@ -1,1 +1,7 @@
-{"language.name":"Osage","scripts":["Latn"],"locale":"osa"}
+{
+    "language.name": "Osage",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "osa"
+}

@@ -1,1 +1,16 @@
-{"clock":"12","language.name":"Yoruba","numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"commonNegative":"({s}{n})"}},"scripts":["Latn"],"locale":"yo"}
+{
+    "clock": "12",
+    "language.name": "Yoruba",
+    "numfmt": {
+        "decimalChar": ".",
+        "groupChar": ",",
+        "exponential": "E",
+        "currencyFormats": {
+            "commonNegative": "({s}{n})"
+        }
+    },
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "yo"
+}

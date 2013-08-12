@@ -1,1 +1,21 @@
-{"language.name":"Basaa","numfmt":{"groupChar":" ","currencyFormats":{"common":"{n} {s}"},"pctFmt":"{n} %"},"scripts":["Latn"],"locale":"bas"}
+{
+    "delimiter": {
+        "quotationStart": "«",
+        "quotationEnd": "»",
+        "alternateQuotationStart": "„",
+        "alternateQuotationEnd": "“"
+    },
+    "language.name": "Basaa",
+    "numfmt": {
+        "groupChar": " ",
+        "exponential": "E",
+        "currencyFormats": {
+            "common": "{n} {s}"
+        },
+        "pctFmt": "{n} %"
+    },
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "bas"
+}

@@ -1,1 +1,7 @@
-{"language.name":"Dinka","scripts":["Latn"],"locale":"din"}
+{
+    "language.name": "Dinka",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "din"
+}

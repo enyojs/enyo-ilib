@@ -1,1 +1,7 @@
-{"language.name":"Kimbundu","scripts":["Latn"],"locale":"kmb"}
+{
+    "language.name": "Kimbundu",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "kmb"
+}

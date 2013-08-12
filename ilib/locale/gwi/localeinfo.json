@@ -1,1 +1,7 @@
-{"language.name":"Gwichʼin","scripts":["Latn"],"locale":"gwi"}
+{
+    "language.name": "Gwichʼin",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "gwi"
+}

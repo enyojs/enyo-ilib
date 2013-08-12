@@ -1,1 +1,7 @@
-{"currency":"SYP","firstDayOfWeek":6,"region.name":"Syria","timezone":"Asia/Damascus","locale":"SY"}
+{
+    "currency": "SYP",
+    "firstDayOfWeek": 6,
+    "region.name": "Syria",
+    "timezone": "Asia/Damascus",
+    "locale": "SY"
+}

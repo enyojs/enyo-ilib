@@ -1,1 +1,7 @@
-{"language.name":"Lunda","scripts":["Latn"],"locale":"lun"}
+{
+    "language.name": "Lunda",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "lun"
+}

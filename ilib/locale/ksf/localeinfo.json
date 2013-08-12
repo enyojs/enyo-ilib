@@ -1,1 +1,18 @@
-{"language.name":"Bafia","numfmt":{"groupChar":" ","currencyFormats":{"common":"{n} {s}"}},"scripts":["Latn"],"locale":"ksf"}
+{
+    "delimiter": {
+        "quotationStart": "«",
+        "quotationEnd": "»"
+    },
+    "language.name": "Bafia",
+    "numfmt": {
+        "groupChar": " ",
+        "exponential": "E",
+        "currencyFormats": {
+            "common": "{n} {s}"
+        }
+    },
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "ksf"
+}

@@ -1,1 +1,6 @@
-{"currency":"RWF","region.name":"Rwanda","timezone":"Africa/Kigali","locale":"RW"}
+{
+    "currency": "RWF",
+    "region.name": "Rwanda",
+    "timezone": "Africa/Kigali",
+    "locale": "RW"
+}

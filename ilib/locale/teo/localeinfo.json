@@ -1,1 +1,16 @@
-{"clock":"12","language.name":"Teso","numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"commonNegative":"({s}{n})"}},"scripts":["Latn"],"locale":"teo"}
+{
+    "clock": "12",
+    "language.name": "Teso",
+    "numfmt": {
+        "decimalChar": ".",
+        "groupChar": ",",
+        "exponential": "E",
+        "currencyFormats": {
+            "commonNegative": "({s}{n})"
+        }
+    },
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "teo"
+}

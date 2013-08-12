@@ -1,1 +1,7 @@
-{"language.name":"Hiligaynon","scripts":["Latn"],"locale":"hil"}
+{
+    "language.name": "Hiligaynon",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "hil"
+}

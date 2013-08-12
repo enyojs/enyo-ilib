@@ -1,1 +1,7 @@
-{"currency":"EUR","firstDayOfWeek":1,"region.name":"Netherlands","timezone":"Europe/Amsterdam","locale":"NL"}
+{
+    "currency": "EUR",
+    "firstDayOfWeek": 1,
+    "region.name": "Netherlands",
+    "timezone": "Europe/Amsterdam",
+    "locale": "NL"
+}

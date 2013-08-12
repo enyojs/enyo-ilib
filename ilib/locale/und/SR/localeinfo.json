@@ -1,1 +1,6 @@
-{"currency":"SRD","region.name":"Suriname","timezone":"America/Paramaribo","locale":"SR"}
+{
+    "currency": "SRD",
+    "region.name": "Suriname",
+    "timezone": "America/Paramaribo",
+    "locale": "SR"
+}

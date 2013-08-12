@@ -1,1 +1,15 @@
-{"language.name":"Walser","numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"common":"{s} {n}"}},"scripts":["Latn"],"locale":"wae"}
+{
+    "language.name": "Walser",
+    "numfmt": {
+        "decimalChar": ".",
+        "groupChar": ",",
+        "exponential": "E",
+        "currencyFormats": {
+            "common": "{s} {n}"
+        }
+    },
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "wae"
+}

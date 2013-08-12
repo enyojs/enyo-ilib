@@ -1,1 +1,7 @@
-{"language.name":"Sami Language","scripts":["Latn"],"locale":"smi"}
+{
+    "language.name": "Sami Language",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "smi"
+}

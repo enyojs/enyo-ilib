@@ -1,3 +1,9 @@
 {
-	"locale": "ti-ER"
+    "delimiter": {
+        "quotationStart": "‘",
+        "quotationEnd": "’",
+        "alternateQuotationStart": "“",
+        "alternateQuotationEnd": "”"
+    },
+    "locale": "ti-ER"
 }

@@ -1,1 +1,14 @@
-{"clock":"12","language.name":"Makhuwa-Meetto","numfmt":{"currencyFormats":{"common":"{s} {n}"}},"scripts":["Latn"],"locale":"mgh"}
+{
+    "clock": "12",
+    "language.name": "Makhuwa-Meetto",
+    "numfmt": {
+        "exponential": "E",
+        "currencyFormats": {
+            "common": "{s} {n}"
+        }
+    },
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "mgh"
+}

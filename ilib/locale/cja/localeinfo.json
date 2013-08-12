@@ -1,1 +1,7 @@
-{"scripts":["Arab","Cham"],"locale":"cja"}
+{
+    "scripts": [
+        "Arab",
+        "Cham"
+    ],
+    "locale": "cja"
+}

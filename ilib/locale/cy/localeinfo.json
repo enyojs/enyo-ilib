@@ -1,1 +1,15 @@
-{"language.name":"Welsh","numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"common":"{s} {n}"}},"scripts":["Latn"],"locale":"cy"}
+{
+    "language.name": "Welsh",
+    "numfmt": {
+        "decimalChar": ".",
+        "groupChar": ",",
+        "exponential": "E",
+        "currencyFormats": {
+            "common": "{s} {n}"
+        }
+    },
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "cy"
+}

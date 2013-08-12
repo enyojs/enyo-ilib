@@ -1,1 +1,7 @@
-{"language.name":"Eastern Frisian","scripts":["Latn"],"locale":"frs"}
+{
+    "language.name": "Eastern Frisian",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "frs"
+}

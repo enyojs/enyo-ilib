@@ -1,1 +1,18 @@
-{"language.name":"Slovenian","numfmt":{"exponential":"e","currencyFormats":{"commonNegative":"({s}{n})"}},"scripts":["Latn"],"locale":"sl"}
+{
+    "delimiter": {
+        "quotationStart": "„",
+        "quotationEnd": "“",
+        "alternateQuotationStart": "‚",
+        "alternateQuotationEnd": "‘"
+    },
+    "language.name": "Slovenian",
+    "numfmt": {
+        "currencyFormats": {
+            "commonNegative": "({s}{n})"
+        }
+    },
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "sl"
+}

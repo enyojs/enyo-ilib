@@ -1,1 +1,7 @@
-{"scripts":["Latn","Batk"],"locale":"bbc"}
+{
+    "scripts": [
+        "Latn",
+        "Batk"
+    ],
+    "locale": "bbc"
+}

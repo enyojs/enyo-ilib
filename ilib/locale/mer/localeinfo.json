@@ -1,1 +1,16 @@
-{"clock":"12","language.name":"Meru","numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"commonNegative":"({s}{n})"}},"scripts":["Latn"],"locale":"mer"}
+{
+    "clock": "12",
+    "language.name": "Meru",
+    "numfmt": {
+        "decimalChar": ".",
+        "groupChar": ",",
+        "exponential": "E",
+        "currencyFormats": {
+            "commonNegative": "({s}{n})"
+        }
+    },
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "mer"
+}

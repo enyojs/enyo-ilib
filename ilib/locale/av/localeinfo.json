@@ -1,1 +1,7 @@
-{"language.name":"Avaric","scripts":["Cyrl"],"locale":"av"}
+{
+    "language.name": "Avaric",
+    "scripts": [
+        "Cyrl"
+    ],
+    "locale": "av"
+}

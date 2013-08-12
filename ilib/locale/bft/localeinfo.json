@@ -1,1 +1,7 @@
-{"scripts":["Arab","Tibt"],"locale":"bft"}
+{
+    "scripts": [
+        "Arab",
+        "Tibt"
+    ],
+    "locale": "bft"
+}

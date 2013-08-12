@@ -1,1 +1,7 @@
-{"language.name":"Tokelau","scripts":["Latn"],"locale":"tkl"}
+{
+    "language.name": "Tokelau",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "tkl"
+}

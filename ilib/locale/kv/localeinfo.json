@@ -1,1 +1,8 @@
-{"language.name":"Komi","scripts":["Cyrl","Latn"],"locale":"kv"}
+{
+    "language.name": "Komi",
+    "scripts": [
+        "Cyrl",
+        "Latn"
+    ],
+    "locale": "kv"
+}

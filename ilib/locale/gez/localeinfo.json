@@ -1,1 +1,7 @@
-{"language.name":"Geez","scripts":["Ethi"],"locale":"gez"}
+{
+    "language.name": "Geez",
+    "scripts": [
+        "Ethi"
+    ],
+    "locale": "gez"
+}

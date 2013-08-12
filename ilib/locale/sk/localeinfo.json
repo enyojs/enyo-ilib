@@ -1,1 +1,21 @@
-{"language.name":"Slovak","numfmt":{"groupChar":" ","currencyFormats":{"common":"{n} {s}"},"pctFmt":"{n} %"},"scripts":["Latn"],"locale":"sk"}
+{
+    "delimiter": {
+        "quotationStart": "„",
+        "quotationEnd": "“",
+        "alternateQuotationStart": "‚",
+        "alternateQuotationEnd": "‘"
+    },
+    "language.name": "Slovak",
+    "numfmt": {
+        "groupChar": " ",
+        "exponential": "E",
+        "currencyFormats": {
+            "common": "{n} {s}"
+        },
+        "pctFmt": "{n} %"
+    },
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "sk"
+}

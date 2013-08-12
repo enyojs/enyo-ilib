@@ -1,1 +1,7 @@
-{"language.name":"Ancient Egyptian","scripts":["Egyp"],"locale":"egy"}
+{
+    "language.name": "Ancient Egyptian",
+    "scripts": [
+        "Egyp"
+    ],
+    "locale": "egy"
+}

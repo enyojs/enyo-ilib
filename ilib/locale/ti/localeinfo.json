@@ -1,1 +1,13 @@
-{"clock":"12","language.name":"Tigrinya","numfmt":{"decimalChar":".","groupChar":","},"scripts":["Ethi"],"locale":"ti"}
+{
+    "clock": "12",
+    "language.name": "Tigrinya",
+    "numfmt": {
+        "decimalChar": ".",
+        "groupChar": ",",
+        "exponential": "E"
+    },
+    "scripts": [
+        "Ethi"
+    ],
+    "locale": "ti"
+}

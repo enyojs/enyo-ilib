@@ -1,1 +1,6 @@
-{"currency":"AUD","region.name":"Christmas Island","timezone":"Indian/Christmas","locale":"CX"}
+{
+    "currency": "AUD",
+    "region.name": "Christmas Island",
+    "timezone": "Indian/Christmas",
+    "locale": "CX"
+}

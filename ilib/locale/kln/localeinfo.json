@@ -1,1 +1,16 @@
-{"clock":"12","language.name":"Kalenjin","numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"commonNegative":"({s}{n})"}},"scripts":["Latn"],"locale":"kln"}
+{
+    "clock": "12",
+    "language.name": "Kalenjin",
+    "numfmt": {
+        "decimalChar": ".",
+        "groupChar": ",",
+        "exponential": "E",
+        "currencyFormats": {
+            "commonNegative": "({s}{n})"
+        }
+    },
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "kln"
+}

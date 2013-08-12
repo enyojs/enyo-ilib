@@ -1,1 +1,7 @@
-{"scripts":["Ital","Latn"],"locale":"ett"}
+{
+    "scripts": [
+        "Ital",
+        "Latn"
+    ],
+    "locale": "ett"
+}
