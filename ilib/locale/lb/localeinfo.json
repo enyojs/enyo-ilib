@@ -1,1 +1,7 @@
-{"language.name":"Luxembourgish","scripts":["Latn"],"locale":"lb"}
+{
+    "language.name": "Luxembourgish",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "lb"
+}

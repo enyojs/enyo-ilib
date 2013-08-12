@@ -1,1 +1,22 @@
-{"language.name":"Tachelhit","numfmt":{"groupChar":" ","currencyFormats":{"common":"{n}{s}"}},"scripts":["Tfng","Arab","Latn"],"locale":"shi"}
+{
+    "delimiter": {
+        "quotationStart": "«",
+        "quotationEnd": "»",
+        "alternateQuotationStart": "„",
+        "alternateQuotationEnd": "”"
+    },
+    "language.name": "Tachelhit",
+    "numfmt": {
+        "groupChar": " ",
+        "exponential": "E",
+        "currencyFormats": {
+            "common": "{n}{s}"
+        }
+    },
+    "scripts": [
+        "Tfng",
+        "Arab",
+        "Latn"
+    ],
+    "locale": "shi"
+}

@@ -1,1 +1,13 @@
-{"language.name":"Sena","numfmt":{"currencyFormats":{"common":"{n}{s}"}},"scripts":["Latn"],"locale":"seh"}
+{
+    "language.name": "Sena",
+    "numfmt": {
+        "exponential": "E",
+        "currencyFormats": {
+            "common": "{n}{s}"
+        }
+    },
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "seh"
+}

@@ -1,1 +1,6 @@
-{"currency":"NGN","region.name":"Nigeria","timezone":"Africa/Lagos","locale":"NG"}
+{
+    "currency": "NGN",
+    "region.name": "Nigeria",
+    "timezone": "Africa/Lagos",
+    "locale": "NG"
+}

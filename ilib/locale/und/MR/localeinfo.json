@@ -1,1 +1,6 @@
-{"currency":"MRO","region.name":"Mauritania","timezone":"Africa/Nouakchott","locale":"MR"}
+{
+    "currency": "MRO",
+    "region.name": "Mauritania",
+    "timezone": "Africa/Nouakchott",
+    "locale": "MR"
+}

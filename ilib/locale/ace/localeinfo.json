@@ -1,1 +1,7 @@
-{"language.name":"Achinese","scripts":["Latn"],"locale":"ace"}
+{
+    "language.name": "Achinese",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "ace"
+}

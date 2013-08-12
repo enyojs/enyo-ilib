@@ -1,1 +1,19 @@
-{"language.name":"Kwasio","numfmt":{"groupChar":" ","currencyFormats":{"common":"{n} {s}"}},"scripts":["Latn"],"locale":"nmg"}
+{
+    "delimiter": {
+        "quotationStart": "„",
+        "alternateQuotationStart": "«",
+        "alternateQuotationEnd": "»"
+    },
+    "language.name": "Kwasio",
+    "numfmt": {
+        "groupChar": " ",
+        "exponential": "E",
+        "currencyFormats": {
+            "common": "{n} {s}"
+        }
+    },
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "nmg"
+}

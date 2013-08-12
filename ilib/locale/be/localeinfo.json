@@ -1,1 +1,17 @@
-{"language.name":"Belarusian","numfmt":{"groupChar":" "},"scripts":["Cyrl"],"locale":"be"}
+{
+    "delimiter": {
+        "quotationStart": "«",
+        "quotationEnd": "»",
+        "alternateQuotationStart": "‹",
+        "alternateQuotationEnd": "›"
+    },
+    "language.name": "Belarusian",
+    "numfmt": {
+        "groupChar": " ",
+        "exponential": "E"
+    },
+    "scripts": [
+        "Cyrl"
+    ],
+    "locale": "be"
+}

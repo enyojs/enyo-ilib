@@ -1,1 +1,16 @@
-{"clock":"12","language.name":"Kikuyu","numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"commonNegative":"({s}{n})"}},"scripts":["Latn"],"locale":"ki"}
+{
+    "clock": "12",
+    "language.name": "Kikuyu",
+    "numfmt": {
+        "decimalChar": ".",
+        "groupChar": ",",
+        "exponential": "E",
+        "currencyFormats": {
+            "commonNegative": "({s}{n})"
+        }
+    },
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "ki"
+}

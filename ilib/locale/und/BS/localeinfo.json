@@ -1,1 +1,7 @@
-{"currency":"BSD","firstDayOfWeek":0,"region.name":"Bahamas","timezone":"America/Nassau","locale":"BS"}
+{
+    "currency": "BSD",
+    "firstDayOfWeek": 0,
+    "region.name": "Bahamas",
+    "timezone": "America/Nassau",
+    "locale": "BS"
+}

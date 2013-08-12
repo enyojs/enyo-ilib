@@ -1,1 +1,8 @@
-{"language.name":"Old Irish","scripts":["Latn","Ogam"],"locale":"sga"}
+{
+    "language.name": "Old Irish",
+    "scripts": [
+        "Latn",
+        "Ogam"
+    ],
+    "locale": "sga"
+}

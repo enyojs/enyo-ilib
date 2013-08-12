@@ -1,1 +1,7 @@
-{"language.name":"Sandawe","scripts":["Latn"],"locale":"sad"}
+{
+    "language.name": "Sandawe",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "sad"
+}

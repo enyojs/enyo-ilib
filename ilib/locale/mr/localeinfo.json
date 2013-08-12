@@ -1,1 +1,31 @@
-{"clock":"12","language.name":"Marathi","native_numfmt":{"script":"Deva","decimalChar":".","groupChar":",","pctChar":"%","exponential":"E","prigroupSize":3,"currencyFormats":{"common":"{s}{n}","commonNegative":"({s}{n})"},"pctFmt":"{n}%","roundingMode":"halfdown","digits":"०१२३४५६७८९"},"numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"commonNegative":"({s}{n})"}},"scripts":["Deva"],"locale":"mr"}
+{
+    "clock": "12",
+    "language.name": "Marathi",
+    "native_numfmt": {
+        "script": "Deva",
+        "decimalChar": ".",
+        "groupChar": ",",
+        "pctChar": "%",
+        "exponential": "E",
+        "prigroupSize": 3,
+        "currencyFormats": {
+            "common": "{s}{n}",
+            "commonNegative": "({s}{n})"
+        },
+        "pctFmt": "{n}%",
+        "roundingMode": "halfdown",
+        "digits": "०१२३४५६७८९"
+    },
+    "numfmt": {
+        "decimalChar": ".",
+        "groupChar": ",",
+        "exponential": "E",
+        "currencyFormats": {
+            "commonNegative": "({s}{n})"
+        }
+    },
+    "scripts": [
+        "Deva"
+    ],
+    "locale": "mr"
+}

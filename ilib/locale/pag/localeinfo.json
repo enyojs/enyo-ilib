@@ -1,1 +1,7 @@
-{"language.name":"Pangasinan","scripts":["Latn"],"locale":"pag"}
+{
+    "language.name": "Pangasinan",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "pag"
+}

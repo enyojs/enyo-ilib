@@ -1,1 +1,6 @@
-{"scripts":["Latn"],"locale":"hop"}
+{
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "hop"
+}

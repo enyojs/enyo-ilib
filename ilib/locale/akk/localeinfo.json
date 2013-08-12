@@ -1,1 +1,7 @@
-{"language.name":"Akkadian","scripts":["Xsux"],"locale":"akk"}
+{
+    "language.name": "Akkadian",
+    "scripts": [
+        "Xsux"
+    ],
+    "locale": "akk"
+}

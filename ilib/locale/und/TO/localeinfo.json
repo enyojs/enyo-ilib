@@ -1,1 +1,6 @@
-{"currency":"TOP","region.name":"Tonga","timezone":"Pacific/Tongatapu","locale":"TO"}
+{
+    "currency": "TOP",
+    "region.name": "Tonga",
+    "timezone": "Pacific/Tongatapu",
+    "locale": "TO"
+}

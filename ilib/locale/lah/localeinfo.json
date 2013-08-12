@@ -1,1 +1,7 @@
-{"language.name":"Lahnda","scripts":["Arab"],"locale":"lah"}
+{
+    "language.name": "Lahnda",
+    "scripts": [
+        "Arab"
+    ],
+    "locale": "lah"
+}

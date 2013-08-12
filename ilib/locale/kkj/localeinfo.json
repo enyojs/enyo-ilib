@@ -1,1 +1,19 @@
-{"language.name":"Kako","numfmt":{"currencyFormats":{"common":"{s} {n}"}},"scripts":["Latn"],"locale":"kkj"}
+{
+    "delimiter": {
+        "quotationStart": "«",
+        "quotationEnd": "»",
+        "alternateQuotationStart": "‹",
+        "alternateQuotationEnd": "›"
+    },
+    "language.name": "Kako",
+    "numfmt": {
+        "exponential": "E",
+        "currencyFormats": {
+            "common": "{s} {n}"
+        }
+    },
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "kkj"
+}

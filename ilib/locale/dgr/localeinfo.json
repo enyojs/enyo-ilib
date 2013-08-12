@@ -1,1 +1,7 @@
-{"language.name":"Dogrib","scripts":["Latn"],"locale":"dgr"}
+{
+    "language.name": "Dogrib",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "dgr"
+}

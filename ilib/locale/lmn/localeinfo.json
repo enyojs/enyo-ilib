@@ -1,1 +1,6 @@
-{"scripts":["Telu"],"locale":"lmn"}
+{
+    "scripts": [
+        "Telu"
+    ],
+    "locale": "lmn"
+}

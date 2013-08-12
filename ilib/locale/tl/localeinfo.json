@@ -1,1 +1,7 @@
-{"language.name":"Tagalog","scripts":["Latn"],"locale":"tl"}
+{
+    "language.name": "Tagalog",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "tl"
+}

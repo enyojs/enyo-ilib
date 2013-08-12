@@ -1,1 +1,7 @@
-{"language.name":"Pampanga","scripts":["Latn"],"locale":"pam"}
+{
+    "language.name": "Pampanga",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "pam"
+}

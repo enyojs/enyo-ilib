@@ -1,1 +1,7 @@
-{"language.name":"Zuni","scripts":["Latn"],"locale":"zun"}
+{
+    "language.name": "Zuni",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "zun"
+}

@@ -1,1 +1,6 @@
-{"currency":"USD","region.name":"British Indian Ocean Territory","timezone":"Indian/Chagos","locale":"IO"}
+{
+    "currency": "USD",
+    "region.name": "British Indian Ocean Territory",
+    "timezone": "Indian/Chagos",
+    "locale": "IO"
+}

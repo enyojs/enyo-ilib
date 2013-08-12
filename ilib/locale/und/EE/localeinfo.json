@@ -1,1 +1,7 @@
-{"currency":"EUR","firstDayOfWeek":1,"region.name":"Estonia","timezone":"Europe/Tallinn","locale":"EE"}
+{
+    "currency": "EUR",
+    "firstDayOfWeek": 1,
+    "region.name": "Estonia",
+    "timezone": "Europe/Tallinn",
+    "locale": "EE"
+}

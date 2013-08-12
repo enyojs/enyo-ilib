@@ -1,1 +1,7 @@
-{"language.name":"Rajasthani","scripts":["Latn"],"locale":"raj"}
+{
+    "language.name": "Rajasthani",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "raj"
+}

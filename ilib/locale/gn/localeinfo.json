@@ -1,1 +1,7 @@
-{"language.name":"Guarani","scripts":["Latn"],"locale":"gn"}
+{
+    "language.name": "Guarani",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "gn"
+}

@@ -1,1 +1,11 @@
-{"currency":"USD","firstDayOfWeek":0,"paperSizes":{"regular":"8x11"},"region.name":"United States","timezone":"America/New_York","units":"uscustomary","locale":"US"}
+{
+    "currency": "USD",
+    "firstDayOfWeek": 0,
+    "paperSizes": {
+        "regular": "8x11"
+    },
+    "region.name": "United States",
+    "timezone": "America/New_York",
+    "units": "uscustomary",
+    "locale": "US"
+}

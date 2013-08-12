@@ -1,1 +1,7 @@
-{"language.name":"Tuvinian","scripts":["Cyrl"],"locale":"tyv"}
+{
+    "language.name": "Tuvinian",
+    "scripts": [
+        "Cyrl"
+    ],
+    "locale": "tyv"
+}

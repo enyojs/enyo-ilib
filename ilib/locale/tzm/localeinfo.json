@@ -1,1 +1,16 @@
-{"clock":"12","language.name":"Central Atlas Tamazight","numfmt":{"groupChar":" ","currencyFormats":{"common":"{n} {s}"}},"scripts":["Latn","Tfng"],"locale":"tzm"}
+{
+    "clock": "12",
+    "language.name": "Central Atlas Tamazight",
+    "numfmt": {
+        "groupChar": " ",
+        "exponential": "E",
+        "currencyFormats": {
+            "common": "{n} {s}"
+        }
+    },
+    "scripts": [
+        "Latn",
+        "Tfng"
+    ],
+    "locale": "tzm"
+}

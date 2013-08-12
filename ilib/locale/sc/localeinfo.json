@@ -1,1 +1,7 @@
-{"language.name":"Sardinian","scripts":["Latn"],"locale":"sc"}
+{
+    "language.name": "Sardinian",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "sc"
+}

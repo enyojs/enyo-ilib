@@ -1,1 +1,15 @@
-{"language.name":"Friulian","numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"common":"{s} {n}"}},"scripts":["Latn"],"locale":"fur"}
+{
+    "language.name": "Friulian",
+    "numfmt": {
+        "decimalChar": ".",
+        "groupChar": ",",
+        "exponential": "E",
+        "currencyFormats": {
+            "common": "{s} {n}"
+        }
+    },
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "fur"
+}

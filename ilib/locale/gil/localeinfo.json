@@ -1,1 +1,7 @@
-{"language.name":"Gilbertese","scripts":["Latn"],"locale":"gil"}
+{
+    "language.name": "Gilbertese",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "gil"
+}

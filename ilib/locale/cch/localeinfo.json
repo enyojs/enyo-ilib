@@ -1,1 +1,7 @@
-{"language.name":"Atsam","scripts":["Latn"],"locale":"cch"}
+{
+    "language.name": "Atsam",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "cch"
+}

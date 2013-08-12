@@ -1,1 +1,8 @@
-{"numfmt":{"currencyFormats":{"common":"{s}{n}"}},"locale":"es-AR"}
+{
+    "numfmt": {
+        "currencyFormats": {
+            "common": "{s}{n}"
+        }
+    },
+    "locale": "es-AR"
+}

@@ -1,1 +1,8 @@
-{"language.name":"Balinese","scripts":["Latn","Bali"],"locale":"ban"}
+{
+    "language.name": "Balinese",
+    "scripts": [
+        "Latn",
+        "Bali"
+    ],
+    "locale": "ban"
+}

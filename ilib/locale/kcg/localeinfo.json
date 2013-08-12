@@ -1,1 +1,7 @@
-{"language.name":"Tyap","scripts":["Latn"],"locale":"kcg"}
+{
+    "language.name": "Tyap",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "kcg"
+}

@@ -1,1 +1,11 @@
-{"language.name":"Swati","numfmt":{"groupChar":" "},"scripts":["Latn"],"locale":"ss"}
+{
+    "language.name": "Swati",
+    "numfmt": {
+        "groupChar": " ",
+        "exponential": "E"
+    },
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "ss"
+}

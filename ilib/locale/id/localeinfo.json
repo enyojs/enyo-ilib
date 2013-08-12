@@ -1,1 +1,11 @@
-{"language.name":"Indonesian","scripts":["Latn","Arab"],"locale":"id"}
+{
+    "language.name": "Indonesian",
+    "numfmt": {
+        "exponential": "E"
+    },
+    "scripts": [
+        "Latn",
+        "Arab"
+    ],
+    "locale": "id"
+}

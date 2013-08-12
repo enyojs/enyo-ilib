@@ -1,1 +1,11 @@
-{"language.name":"Venda","numfmt":{"groupChar":" "},"scripts":["Latn"],"locale":"ve"}
+{
+    "language.name": "Venda",
+    "numfmt": {
+        "groupChar": " ",
+        "exponential": "E"
+    },
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "ve"
+}

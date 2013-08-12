@@ -1,1 +1,7 @@
-{"currency":"BYR","firstDayOfWeek":0,"region.name":"Belarus","timezone":"Europe/Minsk","locale":"BY"}
+{
+    "currency": "BYR",
+    "firstDayOfWeek": 0,
+    "region.name": "Belarus",
+    "timezone": "Europe/Minsk",
+    "locale": "BY"
+}

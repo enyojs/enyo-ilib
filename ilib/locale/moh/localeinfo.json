@@ -1,1 +1,7 @@
-{"language.name":"Mohawk","scripts":["Latn"],"locale":"moh"}
+{
+    "language.name": "Mohawk",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "moh"
+}

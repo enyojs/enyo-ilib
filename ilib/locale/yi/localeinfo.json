@@ -1,1 +1,7 @@
-{"language.name":"Yiddish","scripts":["Hebr"],"locale":"yi"}
+{
+    "language.name": "Yiddish",
+    "scripts": [
+        "Hebr"
+    ],
+    "locale": "yi"
+}

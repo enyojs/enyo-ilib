@@ -1,1 +1,7 @@
-{"language.name":"Pohnpeian","scripts":["Latn"],"locale":"pon"}
+{
+    "language.name": "Pohnpeian",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "pon"
+}

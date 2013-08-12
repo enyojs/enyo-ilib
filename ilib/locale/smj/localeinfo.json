@@ -1,1 +1,7 @@
-{"language.name":"Lule Sami","scripts":["Latn"],"locale":"smj"}
+{
+    "language.name": "Lule Sami",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "smj"
+}

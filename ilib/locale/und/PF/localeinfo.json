@@ -1,1 +1,6 @@
-{"currency":"XPF","region.name":"French Polynesia","timezone":"Pacific/Tahiti","locale":"PF"}
+{
+    "currency": "XPF",
+    "region.name": "French Polynesia",
+    "timezone": "Pacific/Tahiti",
+    "locale": "PF"
+}

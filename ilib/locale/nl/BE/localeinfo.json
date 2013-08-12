@@ -1,1 +1,8 @@
-{"numfmt":{"currencyFormats":{"common":"{n} {s}"}},"locale":"nl-BE"}
+{
+    "numfmt": {
+        "currencyFormats": {
+            "common": "{n} {s}"
+        }
+    },
+    "locale": "nl-BE"
+}

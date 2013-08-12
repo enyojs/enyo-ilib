@@ -1,1 +1,7 @@
-{"scripts":["Latn","Cyrl"],"locale":"gag"}
+{
+    "scripts": [
+        "Latn",
+        "Cyrl"
+    ],
+    "locale": "gag"
+}

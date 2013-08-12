@@ -1,1 +1,7 @@
-{"language.name":"Sicilian","scripts":["Latn"],"locale":"scn"}
+{
+    "language.name": "Sicilian",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "scn"
+}

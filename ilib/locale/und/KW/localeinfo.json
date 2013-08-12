@@ -1,1 +1,7 @@
-{"currency":"KWD","firstDayOfWeek":6,"region.name":"Kuwait","timezone":"Asia/Kuwait","locale":"KW"}
+{
+    "currency": "KWD",
+    "firstDayOfWeek": 6,
+    "region.name": "Kuwait",
+    "timezone": "Asia/Kuwait",
+    "locale": "KW"
+}

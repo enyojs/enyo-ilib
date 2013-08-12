@@ -1,1 +1,6 @@
-{"currency":"EUR","region.name":"Saint Pierre and Miquelon","timezone":"America/Miquelon","locale":"PM"}
+{
+    "currency": "EUR",
+    "region.name": "Saint Pierre and Miquelon",
+    "timezone": "America/Miquelon",
+    "locale": "PM"
+}

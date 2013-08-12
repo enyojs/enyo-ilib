@@ -1,1 +1,20 @@
-{"language.name":"Lithuanian","numfmt":{"groupChar":" ","currencyFormats":{"common":"{n} {s}"}},"scripts":["Latn"],"locale":"lt"}
+{
+    "delimiter": {
+        "quotationStart": "„",
+        "quotationEnd": "“",
+        "alternateQuotationStart": "„",
+        "alternateQuotationEnd": "“"
+    },
+    "language.name": "Lithuanian",
+    "numfmt": {
+        "groupChar": " ",
+        "exponential": "E",
+        "currencyFormats": {
+            "common": "{n} {s}"
+        }
+    },
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "lt"
+}

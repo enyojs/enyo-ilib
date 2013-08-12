@@ -1,1 +1,25 @@
-{"language.name":"German","numfmt":{"currencyFormats":{"common":"{n} {s}"},"pctFmt":"{n} %"},"paperSizes":{"regular":"A4","photo":"4x6"},"scripts":["Latn","Runr"],"locale":"de"}
+{
+    "delimiter": {
+        "quotationStart": "„",
+        "quotationEnd": "“",
+        "alternateQuotationStart": "‚",
+        "alternateQuotationEnd": "‘"
+    },
+    "language.name": "German",
+    "numfmt": {
+        "exponential": "E",
+        "currencyFormats": {
+            "common": "{n} {s}"
+        },
+        "pctFmt": "{n} %"
+    },
+    "paperSizes": {
+        "regular": "A4",
+        "photo": "4x6"
+    },
+    "scripts": [
+        "Latn",
+        "Runr"
+    ],
+    "locale": "de"
+}

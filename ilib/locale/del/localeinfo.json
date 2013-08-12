@@ -1,1 +1,7 @@
-{"language.name":"Delaware","scripts":["Latn"],"locale":"del"}
+{
+    "language.name": "Delaware",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "del"
+}

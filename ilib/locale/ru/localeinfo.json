@@ -1,1 +1,21 @@
-{"language.name":"Russian","numfmt":{"groupChar":" ","currencyFormats":{"common":"{n} {s}"},"pctFmt":"{n} %"},"scripts":["Cyrl"],"locale":"ru"}
+{
+    "delimiter": {
+        "quotationStart": "«",
+        "quotationEnd": "»",
+        "alternateQuotationStart": "„",
+        "alternateQuotationEnd": "“"
+    },
+    "language.name": "Russian",
+    "numfmt": {
+        "groupChar": " ",
+        "exponential": "E",
+        "currencyFormats": {
+            "common": "{n} {s}"
+        },
+        "pctFmt": "{n} %"
+    },
+    "scripts": [
+        "Cyrl"
+    ],
+    "locale": "ru"
+}

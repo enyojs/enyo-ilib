@@ -1,1 +1,6 @@
-{"currency":"GNF","region.name":"Guinea","timezone":"Africa/Conakry","locale":"GN"}
+{
+    "currency": "GNF",
+    "region.name": "Guinea",
+    "timezone": "Africa/Conakry",
+    "locale": "GN"
+}

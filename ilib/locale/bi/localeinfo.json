@@ -1,1 +1,7 @@
-{"language.name":"Bislama","scripts":["Latn"],"locale":"bi"}
+{
+    "language.name": "Bislama",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "bi"
+}

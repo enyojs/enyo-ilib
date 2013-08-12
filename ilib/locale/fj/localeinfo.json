@@ -1,1 +1,7 @@
-{"language.name":"Fijian","scripts":["Latn"],"locale":"fj"}
+{
+    "language.name": "Fijian",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "fj"
+}
