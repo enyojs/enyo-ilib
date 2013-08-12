@@ -1,1 +1,6 @@
-{"currency":"ZMK","region.name":"Zambia","timezone":"Africa/Lusaka","locale":"ZM"}
+{
+    "currency": "ZMK",
+    "region.name": "Zambia",
+    "timezone": "Africa/Lusaka",
+    "locale": "ZM"
+}

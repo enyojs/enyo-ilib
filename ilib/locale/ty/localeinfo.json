@@ -1,1 +1,7 @@
-{"language.name":"Tahitian","scripts":["Latn"],"locale":"ty"}
+{
+    "language.name": "Tahitian",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "ty"
+}

@@ -1,1 +1,6 @@
-{"currency":"GYD","region.name":"Guyana","timezone":"America/Guyana","locale":"GY"}
+{
+    "currency": "GYD",
+    "region.name": "Guyana",
+    "timezone": "America/Guyana",
+    "locale": "GY"
+}

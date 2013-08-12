@@ -1,1 +1,7 @@
-{"language.name":"Kutenai","scripts":["Latn"],"locale":"kut"}
+{
+    "language.name": "Kutenai",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "kut"
+}

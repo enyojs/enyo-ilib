@@ -1,1 +1,7 @@
-{"language.name":"Mongo","scripts":["Latn"],"locale":"lol"}
+{
+    "language.name": "Mongo",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "lol"
+}

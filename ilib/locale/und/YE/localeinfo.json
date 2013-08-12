@@ -1,1 +1,7 @@
-{"currency":"YER","firstDayOfWeek":6,"region.name":"Yemen","timezone":"Asia/Aden","locale":"YE"}
+{
+    "currency": "YER",
+    "firstDayOfWeek": 6,
+    "region.name": "Yemen",
+    "timezone": "Asia/Aden",
+    "locale": "YE"
+}

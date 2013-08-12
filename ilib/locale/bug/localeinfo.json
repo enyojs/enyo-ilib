@@ -1,1 +1,8 @@
-{"language.name":"Buginese","scripts":["Latn","Bugi"],"locale":"bug"}
+{
+    "language.name": "Buginese",
+    "scripts": [
+        "Latn",
+        "Bugi"
+    ],
+    "locale": "bug"
+}

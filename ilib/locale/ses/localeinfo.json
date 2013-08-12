@@ -1,1 +1,15 @@
-{"language.name":"Koyraboro Senni","numfmt":{"decimalChar":".","groupChar":" ","currencyFormats":{"common":"{n}{s}"}},"scripts":["Latn"],"locale":"ses"}
+{
+    "language.name": "Koyraboro Senni",
+    "numfmt": {
+        "decimalChar": ".",
+        "groupChar": " ",
+        "exponential": "E",
+        "currencyFormats": {
+            "common": "{n}{s}"
+        }
+    },
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "ses"
+}

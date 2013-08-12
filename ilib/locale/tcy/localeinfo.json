@@ -1,1 +1,6 @@
-{"scripts":["Knda"],"locale":"tcy"}
+{
+    "scripts": [
+        "Knda"
+    ],
+    "locale": "tcy"
+}

@@ -1,1 +1,7 @@
-{"currency":"BAM","firstDayOfWeek":1,"region.name":"Bosnia and Herzegovina","timezone":"Europe/Sarajevo","locale":"BA"}
+{
+    "currency": "BAM",
+    "firstDayOfWeek": 1,
+    "region.name": "Bosnia and Herzegovina",
+    "timezone": "Europe/Sarajevo",
+    "locale": "BA"
+}

@@ -1,3 +1,9 @@
 {
-	"locale": "zh-MO-Hant"
+    "delimiter": {
+        "quotationStart": "「",
+        "quotationEnd": "」",
+        "alternateQuotationStart": "『",
+        "alternateQuotationEnd": "』"
+    },
+    "locale": "zh-Hant-MO"
 }

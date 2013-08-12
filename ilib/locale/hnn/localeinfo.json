@@ -1,1 +1,7 @@
-{"scripts":["Latn","Hano"],"locale":"hnn"}
+{
+    "scripts": [
+        "Latn",
+        "Hano"
+    ],
+    "locale": "hnn"
+}

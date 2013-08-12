@@ -1,1 +1,7 @@
-{"scripts":["Beng","Cakm"],"locale":"ccp"}
+{
+    "scripts": [
+        "Beng",
+        "Cakm"
+    ],
+    "locale": "ccp"
+}

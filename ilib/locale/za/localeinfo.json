@@ -1,1 +1,8 @@
-{"language.name":"Zhuang","scripts":["Latn","Hans"],"locale":"za"}
+{
+    "language.name": "Zhuang",
+    "scripts": [
+        "Latn",
+        "Hans"
+    ],
+    "locale": "za"
+}

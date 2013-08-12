@@ -1,1 +1,8 @@
-{"language.name":"Ainu","scripts":["Kana","Latn"],"locale":"ain"}
+{
+    "language.name": "Ainu",
+    "scripts": [
+        "Kana",
+        "Latn"
+    ],
+    "locale": "ain"
+}

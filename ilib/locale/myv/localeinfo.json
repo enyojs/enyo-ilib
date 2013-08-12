@@ -1,1 +1,7 @@
-{"language.name":"Erzya","scripts":["Cyrl"],"locale":"myv"}
+{
+    "language.name": "Erzya",
+    "scripts": [
+        "Cyrl"
+    ],
+    "locale": "myv"
+}

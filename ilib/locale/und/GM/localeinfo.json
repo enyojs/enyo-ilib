@@ -1,1 +1,6 @@
-{"currency":"GMD","region.name":"Gambia","timezone":"Africa/Banjul","locale":"GM"}
+{
+    "currency": "GMD",
+    "region.name": "Gambia",
+    "timezone": "Africa/Banjul",
+    "locale": "GM"
+}

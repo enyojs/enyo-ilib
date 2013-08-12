@@ -1,1 +1,7 @@
-{"language.name":"Kanuri","scripts":["Latn"],"locale":"kr"}
+{
+    "language.name": "Kanuri",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "kr"
+}

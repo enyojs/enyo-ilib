@@ -1,1 +1,16 @@
-{"language.name":"Kirghiz","numfmt":{"groupChar":" ","currencyFormats":{"common":"{s} {n}"}},"scripts":["Arab","Cyrl","Latn"],"locale":"ky"}
+{
+    "language.name": "Kirghiz",
+    "numfmt": {
+        "groupChar": " ",
+        "exponential": "E",
+        "currencyFormats": {
+            "common": "{s} {n}"
+        }
+    },
+    "scripts": [
+        "Arab",
+        "Cyrl",
+        "Latn"
+    ],
+    "locale": "ky"
+}

@@ -1,1 +1,6 @@
-{"currency":"XOF","region.name":"Niger","timezone":"Africa/Niamey","locale":"NE"}
+{
+    "currency": "XOF",
+    "region.name": "Niger",
+    "timezone": "Africa/Niamey",
+    "locale": "NE"
+}

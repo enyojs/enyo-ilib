@@ -1,1 +1,15 @@
-{"clock":"12","language.name":"Afrikaans","numfmt":{"groupChar":" ","currencyFormats":{"commonNegative":"({s}{n})"}},"scripts":["Latn"],"locale":"af"}
+{
+    "clock": "12",
+    "language.name": "Afrikaans",
+    "numfmt": {
+        "groupChar": " ",
+        "exponential": "E",
+        "currencyFormats": {
+            "commonNegative": "({s}{n})"
+        }
+    },
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "af"
+}

@@ -1,1 +1,7 @@
-{"language.name":"Pahlavi","scripts":["Phli"],"locale":"pal"}
+{
+    "language.name": "Pahlavi",
+    "scripts": [
+        "Phli"
+    ],
+    "locale": "pal"
+}

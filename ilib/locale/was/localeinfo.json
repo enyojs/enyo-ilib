@@ -1,1 +1,7 @@
-{"language.name":"Washo","scripts":["Latn"],"locale":"was"}
+{
+    "language.name": "Washo",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "was"
+}

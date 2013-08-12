@@ -1,1 +1,16 @@
-{"language.name":"Sango","scripts":["Latn"],"locale":"sg"}
+{
+    "delimiter": {
+        "quotationStart": "«",
+        "quotationEnd": "»",
+        "alternateQuotationStart": "“",
+        "alternateQuotationEnd": "”"
+    },
+    "language.name": "Sango",
+    "numfmt": {
+        "exponential": "E"
+    },
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "sg"
+}

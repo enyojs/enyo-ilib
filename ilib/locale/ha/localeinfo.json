@@ -1,1 +1,16 @@
-{"language.name":"Hausa","numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"common":"{s} {n}"}},"scripts":["Arab","Latn"],"locale":"ha"}
+{
+    "language.name": "Hausa",
+    "numfmt": {
+        "decimalChar": ".",
+        "groupChar": ",",
+        "exponential": "E",
+        "currencyFormats": {
+            "common": "{s} {n}"
+        }
+    },
+    "scripts": [
+        "Arab",
+        "Latn"
+    ],
+    "locale": "ha"
+}

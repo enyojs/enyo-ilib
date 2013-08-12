@@ -1,1 +1,7 @@
-{"language.name":"Quechua","scripts":["Latn"],"locale":"qu"}
+{
+    "language.name": "Quechua",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "qu"
+}

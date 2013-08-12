@@ -1,1 +1,7 @@
-{"currency":"EUR","firstDayOfWeek":1,"region.name":"Andorra","timezone":"Europe/Andorra","locale":"AD"}
+{
+    "currency": "EUR",
+    "firstDayOfWeek": 1,
+    "region.name": "Andorra",
+    "timezone": "Europe/Andorra",
+    "locale": "AD"
+}

@@ -1,1 +1,6 @@
-{"currency":"NZD","region.name":"Pitcairn Islands","timezone":"Pacific/Pitcairn","locale":"PN"}
+{
+    "currency": "NZD",
+    "region.name": "Pitcairn Islands",
+    "timezone": "Pacific/Pitcairn",
+    "locale": "PN"
+}

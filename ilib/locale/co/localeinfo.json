@@ -1,1 +1,7 @@
-{"language.name":"Corsican","scripts":["Latn"],"locale":"co"}
+{
+    "language.name": "Corsican",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "co"
+}

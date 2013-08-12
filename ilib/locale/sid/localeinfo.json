@@ -1,1 +1,7 @@
-{"language.name":"Sidamo","scripts":["Latn"],"locale":"sid"}
+{
+    "language.name": "Sidamo",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "sid"
+}

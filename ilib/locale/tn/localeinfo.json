@@ -1,1 +1,11 @@
-{"language.name":"Tswana","numfmt":{"groupChar":" "},"scripts":["Latn"],"locale":"tn"}
+{
+    "language.name": "Tswana",
+    "numfmt": {
+        "groupChar": " ",
+        "exponential": "E"
+    },
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "tn"
+}

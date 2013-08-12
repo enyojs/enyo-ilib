@@ -1,1 +1,7 @@
-{"language.name":"Bikol","scripts":["Latn"],"locale":"bik"}
+{
+    "language.name": "Bikol",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "bik"
+}

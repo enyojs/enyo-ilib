@@ -1,1 +1,6 @@
-{"currency":"XAF","region.name":"Equatorial Guinea","timezone":"Africa/Malabo","locale":"GQ"}
+{
+    "currency": "XAF",
+    "region.name": "Equatorial Guinea",
+    "timezone": "Africa/Malabo",
+    "locale": "GQ"
+}

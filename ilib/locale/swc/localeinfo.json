@@ -1,1 +1,10 @@
-{"language.name":"Congo Swahili","scripts":["Latn"],"locale":"swc"}
+{
+    "language.name": "Congo Swahili",
+    "numfmt": {
+        "exponential": "E"
+    },
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "swc"
+}

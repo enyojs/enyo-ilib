@@ -1,1 +1,7 @@
-{"numfmt":{"decimalChar":".","groupChar":"'"},"locale":"it-CH"}
+{
+    "numfmt": {
+        "decimalChar": ".",
+        "groupChar": "'"
+    },
+    "locale": "it-CH"
+}

@@ -1,1 +1,7 @@
-{"language.name":"Mossi","scripts":["Latn"],"locale":"mos"}
+{
+    "language.name": "Mossi",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "mos"
+}

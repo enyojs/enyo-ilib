@@ -1,1 +1,7 @@
-{"currency":"JOD","firstDayOfWeek":6,"region.name":"Jordan","timezone":"Asia/Amman","locale":"JO"}
+{
+    "currency": "JOD",
+    "firstDayOfWeek": 6,
+    "region.name": "Jordan",
+    "timezone": "Asia/Amman",
+    "locale": "JO"
+}

@@ -1,1 +1,6 @@
-{"scripts":["Cari"],"locale":"xcr"}
+{
+    "scripts": [
+        "Cari"
+    ],
+    "locale": "xcr"
+}

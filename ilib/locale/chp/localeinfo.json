@@ -1,1 +1,8 @@
-{"language.name":"Chipewyan","scripts":["Latn","Cans"],"locale":"chp"}
+{
+    "language.name": "Chipewyan",
+    "scripts": [
+        "Latn",
+        "Cans"
+    ],
+    "locale": "chp"
+}

@@ -1,1 +1,6 @@
-{"scripts":["Lisu"],"locale":"lis"}
+{
+    "scripts": [
+        "Lisu"
+    ],
+    "locale": "lis"
+}

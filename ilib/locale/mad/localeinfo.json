@@ -1,1 +1,7 @@
-{"language.name":"Madurese","scripts":["Latn"],"locale":"mad"}
+{
+    "language.name": "Madurese",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "mad"
+}

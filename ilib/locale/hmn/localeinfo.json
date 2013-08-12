@@ -1,1 +1,8 @@
-{"language.name":"Hmong","scripts":["Latn","Hmng"],"locale":"hmn"}
+{
+    "language.name": "Hmong",
+    "scripts": [
+        "Latn",
+        "Hmng"
+    ],
+    "locale": "hmn"
+}

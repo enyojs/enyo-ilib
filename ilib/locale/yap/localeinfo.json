@@ -1,1 +1,7 @@
-{"language.name":"Yapese","scripts":["Latn"],"locale":"yap"}
+{
+    "language.name": "Yapese",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "yap"
+}

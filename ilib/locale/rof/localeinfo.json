@@ -1,1 +1,13 @@
-{"clock":"12","language.name":"Rombo","numfmt":{"decimalChar":".","groupChar":","},"scripts":["Latn"],"locale":"rof"}
+{
+    "clock": "12",
+    "language.name": "Rombo",
+    "numfmt": {
+        "decimalChar": ".",
+        "groupChar": ",",
+        "exponential": "E"
+    },
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "rof"
+}

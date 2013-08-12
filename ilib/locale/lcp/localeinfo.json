@@ -1,1 +1,6 @@
-{"scripts":["Thai"],"locale":"lcp"}
+{
+    "scripts": [
+        "Thai"
+    ],
+    "locale": "lcp"
+}

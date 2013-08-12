@@ -1,1 +1,6 @@
-{"scripts":["Latn"],"locale":"rcf"}
+{
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "rcf"
+}

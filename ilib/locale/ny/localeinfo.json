@@ -1,1 +1,7 @@
-{"language.name":"Nyanja","scripts":["Latn"],"locale":"ny"}
+{
+    "language.name": "Nyanja",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "ny"
+}

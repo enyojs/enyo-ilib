@@ -1,1 +1,7 @@
-{"language.name":"Koro","scripts":["Latn"],"locale":"kfo"}
+{
+    "language.name": "Koro",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "kfo"
+}

@@ -1,1 +1,14 @@
-{"language.name":"Armenian","numfmt":{"prigroupSize":2,"currencyFormats":{"common":"{n} {s}"}},"scripts":["Armn"],"locale":"hy"}
+{
+    "language.name": "Armenian",
+    "numfmt": {
+        "exponential": "E",
+        "prigroupSize": 2,
+        "currencyFormats": {
+            "common": "{n} {s}"
+        }
+    },
+    "scripts": [
+        "Armn"
+    ],
+    "locale": "hy"
+}

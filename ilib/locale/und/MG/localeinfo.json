@@ -1,1 +1,6 @@
-{"currency":"MGA","region.name":"Madagascar","timezone":"Indian/Antananarivo","locale":"MG"}
+{
+    "currency": "MGA",
+    "region.name": "Madagascar",
+    "timezone": "Indian/Antananarivo",
+    "locale": "MG"
+}

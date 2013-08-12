@@ -1,1 +1,7 @@
-{"language.name":"Chuukese","scripts":["Latn"],"locale":"chk"}
+{
+    "language.name": "Chuukese",
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "chk"
+}

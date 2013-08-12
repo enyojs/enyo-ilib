@@ -1,1 +1,7 @@
-{"language.name":"Selkup","scripts":["Cyrl"],"locale":"sel"}
+{
+    "language.name": "Selkup",
+    "scripts": [
+        "Cyrl"
+    ],
+    "locale": "sel"
+}

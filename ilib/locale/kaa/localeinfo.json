@@ -1,1 +1,7 @@
-{"language.name":"Kara-Kalpak","scripts":["Cyrl"],"locale":"kaa"}
+{
+    "language.name": "Kara-Kalpak",
+    "scripts": [
+        "Cyrl"
+    ],
+    "locale": "kaa"
+}

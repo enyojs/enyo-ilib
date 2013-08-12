@@ -1,1 +1,10 @@
-{"numfmt":{"decimalChar":".","groupChar":",","currencyFormats":{"common":"{s}{n}"}},"locale":"es-PA"}
+{
+    "numfmt": {
+        "decimalChar": ".",
+        "groupChar": ",",
+        "currencyFormats": {
+            "common": "{s}{n}"
+        }
+    },
+    "locale": "es-PA"
+}

@@ -1,1 +1,7 @@
-{"language.name":"Syriac","scripts":["Syrc"],"locale":"syr"}
+{
+    "language.name": "Syriac",
+    "scripts": [
+        "Syrc"
+    ],
+    "locale": "syr"
+}

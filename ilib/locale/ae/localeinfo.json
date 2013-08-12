@@ -1,1 +1,7 @@
-{"language.name":"Avestan","scripts":["Avst"],"locale":"ae"}
+{
+    "language.name": "Avestan",
+    "scripts": [
+        "Avst"
+    ],
+    "locale": "ae"
+}

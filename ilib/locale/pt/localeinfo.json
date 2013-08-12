@@ -1,1 +1,13 @@
-{"language.name":"Portuguese","numfmt":{"currencyFormats":{"commonNegative":"({s}{n})"}},"scripts":["Latn"],"locale":"pt"}
+{
+    "language.name": "Portuguese",
+    "numfmt": {
+        "exponential": "E",
+        "currencyFormats": {
+            "commonNegative": "({s}{n})"
+        }
+    },
+    "scripts": [
+        "Latn"
+    ],
+    "locale": "pt"
+}
