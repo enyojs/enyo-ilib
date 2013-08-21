@@ -109,6 +109,9 @@
 		var script = new ilib.ScriptInfo(li.getDefaultScript());
 		if (script.getScriptDirection() === "rtl") {
 			enyo.dom.getFirstElementByTagName("body").className += base + "right-to-left";
+			if (enyo.Control) {
+				enyo.Control.prototype.rtl = true;
+			}
 		}
 
 		// allow enyo or the apps to give CSS classes that are specific to the language, country, or script
