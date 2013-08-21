@@ -141,6 +141,9 @@
  */
 $L = (function() {
 	var lfunc = function (string) {
+		if (!$L.rb) {
+			return string;
+		}
 		var str = $L.rb.getString(string);
 		return str.toString();
 	};
@@ -149,6 +152,7 @@ $L = (function() {
 		type: "html",
 		name: "strings",
 		missing: locale.getLanguage() === "en" ? "source" : "pseudo",
+		sync: true,
 		lengthen: true		// if pseudo-localizing, this tells it to lengthen strings
 	});
 	return lfunc;
@@ -164,6 +168,7 @@ $L.setLocale = function (spec) {
 			locale: spec,
 			type: "html",
 			name: "strings",
+			sync: true,
 			missing: locale.getLanguage() === "en" ? "source" : "pseudo",
 			lengthen: true		// if pseudo-localizing, this tells it to lengthen strings
 		});
