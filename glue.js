@@ -132,11 +132,6 @@
 		if (locale.getRegion()) {
 			enyo.dom.getFirstElementByTagName("body").className += base + locale.getRegion();
 		}
-
-		document.addEventListener("localechange", function() {
-			ilib.setLocale(navigator.language);
-			enyo.Signals.send("onlocalechange");
-		}, false);
 	});
 })();
 
@@ -179,3 +174,13 @@ $L.setLocale = function (spec) {
 		});
 	}
 };
+
+/**
+ * This Enyo hook lets us know that the system locale has changed and gives
+ * us a chance to update the iLib locale before Enyo broadcasts its
+ * `onlocalechange` signal.
+ */
+enyo.updateLocale = function() {
+	ilib.setLocale(navigator.$language);
+}
+
