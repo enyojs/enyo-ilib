@@ -132,6 +132,11 @@
 		if (locale.getRegion()) {
 			enyo.dom.getFirstElementByTagName("body").className += base + locale.getRegion();
 		}
+
+		document.addEventListener("localechange", function() {
+			ilib.setLocale(navigator.language);
+			enyo.Signals.send("onlocalechange");
+		}, false);
 	});
 })();
 
