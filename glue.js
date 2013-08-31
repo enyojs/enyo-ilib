@@ -181,6 +181,6 @@ $L.setLocale = function (spec) {
  * `onlocalechange` signal.
  */
 enyo.updateLocale = function() {
-	ilib.setLocale(navigator.$language);
+	ilib.setLocale(navigator.language);
 }
 
