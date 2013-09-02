@@ -1,3 +1,4 @@
+/* global ilib */
 (function() {
 	/**
 	 * Load the list of files asynchronously. This uses recursion in
@@ -95,20 +96,20 @@
 	var li = new ilib.LocaleInfo(); // for the current locale
 	var locale = li.getLocale();
 	enyo.ready(function () {
-		var base = " enyo-locale-";
+		var base = "enyo-locale-";
 		if (li.getScript() !== "Latn" || locale.getLanguage() === "vi") {
 			// allow enyo to define other fonts for non-Latin languages, or Vietnamese which
 			// is Latin-based, but the characters with multiple accents don't appear in the
 			// regular fonts, creating a strange "ransom note" look with a mix of fonts in the
 			// same word. So, treat it like a non-Latin language in order to get all the characters
 			// to display with the same font.
-			enyo.dom.getFirstElementByTagName("body").className += base + "non-latin";
+			enyo.dom.addBodyClass(base + "non-latin");
 		}
 
 		// allow enyo to apply right-to-left styles to the app and widgets if necessary
 		var script = new ilib.ScriptInfo(li.getDefaultScript());
 		if (script.getScriptDirection() === "rtl") {
-			enyo.dom.getFirstElementByTagName("body").className += base + "right-to-left";
+			enyo.dom.addBodyClass(base + "right-to-left");
 			if (enyo.Control) {
 				enyo.Control.prototype.rtl = true;
 			}
@@ -116,21 +117,21 @@
 
 		// allow enyo or the apps to give CSS classes that are specific to the language, country, or script
 		if (locale.getLanguage()) {
-			enyo.dom.getFirstElementByTagName("body").className += base + locale.getLanguage();
+			enyo.dom.addBodyClass(base + locale.getLanguage());
 			if (locale.getScript()) {
-				enyo.dom.getFirstElementByTagName("body").className += base + locale.getLanguage() + "-" + locale.getScript();
+				enyo.dom.addBodyClass(base + locale.getLanguage() + "-" + locale.getScript());
 				if (locale.getRegion()) {
-					enyo.dom.getFirstElementByTagName("body").className += base + locale.getLanguage() + "-" + locale.getScript() + "-" + locale.getRegion();
+					enyo.dom.addBodyClass(base + locale.getLanguage() + "-" + locale.getScript() + "-" + locale.getRegion());
 				}
 			} else if (locale.getRegion()) {
-				enyo.dom.getFirstElementByTagName("body").className += base + locale.getLanguage() + "-" + locale.getRegion();
+				enyo.dom.addBodyClass(base + locale.getLanguage() + "-" + locale.getRegion());
 			}
 		}
 		if (locale.getScript()) {
-			enyo.dom.getFirstElementByTagName("body").className += base + locale.getScript();
+			enyo.dom.addBodyClass(base + locale.getScript());
 		}
 		if (locale.getRegion()) {
-			enyo.dom.getFirstElementByTagName("body").className += base + locale.getRegion();
+			enyo.dom.addBodyClass(base + locale.getRegion());
 		}
 	});
 })();
