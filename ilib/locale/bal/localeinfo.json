@@ -1,8 +1,1 @@
-{
-    "language.name": "Baluchi",
-    "scripts": [
-        "Arab",
-        "Latn"
-    ],
-    "locale": "bal"
-}
+{"language.name":"Baluchi","scripts":["Arab","Latn"],"locale":"bal"}

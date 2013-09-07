@@ -1,8 +1,1 @@
-{
-    "language.name": "Manipuri",
-    "scripts": [
-        "Beng",
-        "Mtei"
-    ],
-    "locale": "mni"
-}
+{"language.name":"Manipuri","scripts":["Beng","Mtei"],"locale":"mni"}

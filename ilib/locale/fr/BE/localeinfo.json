@@ -1,6 +1,1 @@
-{
-    "numfmt": {
-        "groupChar": "."
-    },
-    "locale": "fr-BE"
-}
+{"numfmt":{"groupChar":"."},"locale":"fr-BE"}

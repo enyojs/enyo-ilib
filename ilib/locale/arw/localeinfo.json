@@ -1,7 +1,1 @@
-{
-    "language.name": "Arawak",
-    "scripts": [
-        "Latn"
-    ],
-    "locale": "arw"
-}
+{"language.name":"Arawak","scripts":["Latn"],"locale":"arw"}

@@ -1,15 +1,1 @@
-{
-    "language.name": "Blin",
-    "numfmt": {
-        "decimalChar": ".",
-        "groupChar": ",",
-        "exponential": "E",
-        "currencyFormats": {
-            "common": "{s} {n}"
-        }
-    },
-    "scripts": [
-        "Ethi"
-    ],
-    "locale": "byn"
-}
+{"language.name":"Blin","numfmt":{"decimalChar":".","groupChar":",","exponential":"E","currencyFormats":{"common":"{s} {n}"}},"scripts":["Ethi"],"locale":"byn"}

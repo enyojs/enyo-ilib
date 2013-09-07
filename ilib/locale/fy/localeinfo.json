@@ -1,7 +1,1 @@
-{
-    "language.name": "Western Frisian",
-    "scripts": [
-        "Latn"
-    ],
-    "locale": "fy"
-}
+{"language.name":"Western Frisian","scripts":["Latn"],"locale":"fy"}

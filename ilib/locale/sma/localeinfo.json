@@ -1,7 +1,1 @@
-{
-    "language.name": "Southern Sami",
-    "scripts": [
-        "Latn"
-    ],
-    "locale": "sma"
-}
+{"language.name":"Southern Sami","scripts":["Latn"],"locale":"sma"}

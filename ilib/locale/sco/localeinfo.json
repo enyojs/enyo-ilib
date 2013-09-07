@@ -1,7 +1,1 @@
-{
-    "language.name": "Scots",
-    "scripts": [
-        "Latn"
-    ],
-    "locale": "sco"
-}
+{"language.name":"Scots","scripts":["Latn"],"locale":"sco"}

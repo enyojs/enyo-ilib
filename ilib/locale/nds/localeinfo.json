@@ -1,7 +1,1 @@
-{
-    "language.name": "Low German",
-    "scripts": [
-        "Latn"
-    ],
-    "locale": "nds"
-}
+{"language.name":"Low German","scripts":["Latn"],"locale":"nds"}

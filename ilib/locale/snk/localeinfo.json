@@ -1,7 +1,1 @@
-{
-    "language.name": "Soninke",
-    "scripts": [
-        "Latn"
-    ],
-    "locale": "snk"
-}
+{"language.name":"Soninke","scripts":["Latn"],"locale":"snk"}

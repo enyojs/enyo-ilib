@@ -1,7 +1,1 @@
-{
-    "language.name": "Occitan",
-    "scripts": [
-        "Latn"
-    ],
-    "locale": "oc"
-}
+{"language.name":"Occitan","scripts":["Latn"],"locale":"oc"}

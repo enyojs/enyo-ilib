@@ -1,7 +1,1 @@
-{
-    "scripts": [
-        "Deva",
-        "Limb"
-    ],
-    "locale": "lif"
-}
+{"scripts":["Deva","Limb"],"locale":"lif"}

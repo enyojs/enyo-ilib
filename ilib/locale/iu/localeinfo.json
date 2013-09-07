@@ -1,8 +1,1 @@
-{
-    "language.name": "Inuktitut",
-    "scripts": [
-        "Cans",
-        "Latn"
-    ],
-    "locale": "iu"
-}
+{"language.name":"Inuktitut","scripts":["Cans","Latn"],"locale":"iu"}

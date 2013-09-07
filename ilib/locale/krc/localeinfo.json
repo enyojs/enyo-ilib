@@ -1,7 +1,1 @@
-{
-    "language.name": "Karachay-Balkar",
-    "scripts": [
-        "Cyrl"
-    ],
-    "locale": "krc"
-}
+{"language.name":"Karachay-Balkar","scripts":["Cyrl"],"locale":"krc"}

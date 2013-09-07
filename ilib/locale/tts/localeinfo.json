@@ -1,6 +1,1 @@
-{
-    "scripts": [
-        "Thai"
-    ],
-    "locale": "tts"
-}
+{"scripts":["Thai"],"locale":"tts"}

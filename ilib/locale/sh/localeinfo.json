@@ -1,7 +1,1 @@
-{
-    "language.name": "Serbo-Croatian",
-    "scripts": [
-        "Latn"
-    ],
-    "locale": "sh"
-}
+{"language.name":"Serbo-Croatian","scripts":["Latn"],"locale":"sh"}

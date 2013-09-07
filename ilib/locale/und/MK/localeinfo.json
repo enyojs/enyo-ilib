@@ -1,7 +1,1 @@
-{
-    "currency": "MKD",
-    "firstDayOfWeek": 1,
-    "region.name": "Macedonia",
-    "timezone": "Europe/Skopje",
-    "locale": "MK"
-}
+{"currency":"MKD","firstDayOfWeek":1,"region.name":"Macedonia","timezone":"Europe/Skopje","locale":"MK"}

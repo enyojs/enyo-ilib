@@ -1,7 +1,1 @@
-{
-    "language.name": "Fang",
-    "scripts": [
-        "Latn"
-    ],
-    "locale": "fan"
-}
+{"language.name":"Fang","scripts":["Latn"],"locale":"fan"}

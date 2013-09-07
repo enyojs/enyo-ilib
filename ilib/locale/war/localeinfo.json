@@ -1,7 +1,1 @@
-{
-    "language.name": "Waray",
-    "scripts": [
-        "Latn"
-    ],
-    "locale": "war"
-}
+{"language.name":"Waray","scripts":["Latn"],"locale":"war"}

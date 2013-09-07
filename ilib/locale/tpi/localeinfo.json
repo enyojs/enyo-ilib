@@ -1,7 +1,1 @@
-{
-    "language.name": "Tok Pisin",
-    "scripts": [
-        "Latn"
-    ],
-    "locale": "tpi"
-}
+{"language.name":"Tok Pisin","scripts":["Latn"],"locale":"tpi"}

@@ -1,16 +1,1 @@
-{
-    "clock": "12",
-    "language.name": "Taita",
-    "numfmt": {
-        "decimalChar": ".",
-        "groupChar": ",",
-        "exponential": "E",
-        "currencyFormats": {
-            "commonNegative": "({s}{n})"
-        }
-    },
-    "scripts": [
-        "Latn"
-    ],
-    "locale": "dav"
-}
+{"clock":"12","language.name":"Taita","numfmt":{"decimalChar":".","groupChar":",","exponential":"E","currencyFormats":{"commonNegative":"({s}{n})"}},"scripts":["Latn"],"locale":"dav"}

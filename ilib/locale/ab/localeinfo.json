@@ -1,7 +1,1 @@
-{
-    "language.name": "Abkhazian",
-    "scripts": [
-        "Cyrl"
-    ],
-    "locale": "ab"
-}
+{"language.name":"Abkhazian","scripts":["Cyrl"],"locale":"ab"}
