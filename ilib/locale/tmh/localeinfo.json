@@ -1,7 +1,1 @@
-{
-    "language.name": "Tamashek",
-    "scripts": [
-        "Latn"
-    ],
-    "locale": "tmh"
-}
+{"language.name":"Tamashek","scripts":["Latn"],"locale":"tmh"}

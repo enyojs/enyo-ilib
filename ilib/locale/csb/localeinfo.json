@@ -1,7 +1,1 @@
-{
-    "language.name": "Kashubian",
-    "scripts": [
-        "Latn"
-    ],
-    "locale": "csb"
-}
+{"language.name":"Kashubian","scripts":["Latn"],"locale":"csb"}

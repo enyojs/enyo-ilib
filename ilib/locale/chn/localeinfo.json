@@ -1,7 +1,1 @@
-{
-    "language.name": "Chinook Jargon",
-    "scripts": [
-        "Latn"
-    ],
-    "locale": "chn"
-}
+{"language.name":"Chinook Jargon","scripts":["Latn"],"locale":"chn"}

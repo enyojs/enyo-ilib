@@ -1,7 +1,1 @@
-{
-    "currency": "EUR",
-    "firstDayOfWeek": 1,
-    "region.name": "Austria",
-    "timezone": "Europe/Vienna",
-    "locale": "AT"
-}
+{"currency":"EUR","firstDayOfWeek":1,"region.name":"Austria","timezone":"Europe/Vienna","locale":"AT"}

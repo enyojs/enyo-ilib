@@ -1,7 +1,1 @@
-{
-    "language.name": "Taroko",
-    "scripts": [
-        "Latn"
-    ],
-    "locale": "trv"
-}
+{"language.name":"Taroko","scripts":["Latn"],"locale":"trv"}

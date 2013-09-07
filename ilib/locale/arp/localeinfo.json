@@ -1,7 +1,1 @@
-{
-    "language.name": "Arapaho",
-    "scripts": [
-        "Latn"
-    ],
-    "locale": "arp"
-}
+{"language.name":"Arapaho","scripts":["Latn"],"locale":"arp"}

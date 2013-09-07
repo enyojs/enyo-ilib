@@ -1,16 +1,1 @@
-{
-    "delimiter": {
-        "quotationStart": "«",
-        "quotationEnd": "»",
-        "alternateQuotationStart": "‹",
-        "alternateQuotationEnd": "›"
-    },
-    "numfmt": {
-        "decimalChar": ".",
-        "groupChar": "'",
-        "currencyFormats": {
-            "common": "{s} {n}"
-        }
-    },
-    "locale": "de-CH"
-}
+{"delimiter":{"quotationStart":"«","quotationEnd":"»","alternateQuotationStart":"‹","alternateQuotationEnd":"›"},"numfmt":{"decimalChar":".","groupChar":"'","currencyFormats":{"common":"{s} {n}"}},"locale":"de-CH"}

@@ -1,7 +1,1 @@
-{
-    "language.name": "Tuvalu",
-    "scripts": [
-        "Latn"
-    ],
-    "locale": "tvl"
-}
+{"language.name":"Tuvalu","scripts":["Latn"],"locale":"tvl"}

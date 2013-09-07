@@ -1,7 +1,1 @@
-{
-    "language.name": "Tatar",
-    "scripts": [
-        "Cyrl"
-    ],
-    "locale": "tt"
-}
+{"language.name":"Tatar","scripts":["Cyrl"],"locale":"tt"}

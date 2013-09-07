@@ -1,16 +1,1 @@
-{
-    "language.name": "Ossetic",
-    "numfmt": {
-        "decimalChar": ".",
-        "groupChar": ",",
-        "exponential": "E",
-        "currencyFormats": {
-            "common": "{s} {n}"
-        }
-    },
-    "scripts": [
-        "Cyrl",
-        "Latn"
-    ],
-    "locale": "os"
-}
+{"language.name":"Ossetic","numfmt":{"decimalChar":".","groupChar":",","exponential":"E","currencyFormats":{"common":"{s} {n}"}},"scripts":["Cyrl","Latn"],"locale":"os"}

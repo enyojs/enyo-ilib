@@ -1,5 +1,5 @@
 enyo.depends(
 	"version.js",
-	"ilib/js/ilib-dyn.js",
+	"ilib/js/ilib-dyn-standard.js",
 	"glue.js"
 );

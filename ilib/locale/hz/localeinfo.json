@@ -1,7 +1,1 @@
-{
-    "language.name": "Herero",
-    "scripts": [
-        "Latn"
-    ],
-    "locale": "hz"
-}
+{"language.name":"Herero","scripts":["Latn"],"locale":"hz"}

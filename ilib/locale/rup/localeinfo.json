@@ -1,7 +1,1 @@
-{
-    "language.name": "Aromanian",
-    "scripts": [
-        "Latn"
-    ],
-    "locale": "rup"
-}
+{"language.name":"Aromanian","scripts":["Latn"],"locale":"rup"}

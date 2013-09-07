@@ -1,9 +1,1 @@
-{
-    "delimiter": {
-        "quotationStart": "「",
-        "quotationEnd": "」",
-        "alternateQuotationStart": "『",
-        "alternateQuotationEnd": "』"
-    },
-    "locale": "zh-Hant-HK"
-}
+{"delimiter":{"quotationStart":"「","quotationEnd":"」","alternateQuotationStart":"『","alternateQuotationEnd":"』"},"locale":"zh-Hant-HK"}

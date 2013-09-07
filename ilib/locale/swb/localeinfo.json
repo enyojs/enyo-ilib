@@ -1,8 +1,1 @@
-{
-    "language.name": "Comorian",
-    "scripts": [
-        "Arab",
-        "Latn"
-    ],
-    "locale": "swb"
-}
+{"language.name":"Comorian","scripts":["Arab","Latn"],"locale":"swb"}

@@ -1,7 +1,1 @@
-{
-    "language.name": "Palauan",
-    "scripts": [
-        "Latn"
-    ],
-    "locale": "pau"
-}
+{"language.name":"Palauan","scripts":["Latn"],"locale":"pau"}

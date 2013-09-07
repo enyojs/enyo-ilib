@@ -1,6 +1,1 @@
-{
-    "scripts": [
-        "Cyrl"
-    ],
-    "locale": "bxr"
-}
+{"scripts":["Cyrl"],"locale":"bxr"}

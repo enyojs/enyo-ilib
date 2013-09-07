@@ -1,7 +1,1 @@
-{
-    "language.name": "Ladino",
-    "scripts": [
-        "Hebr"
-    ],
-    "locale": "lad"
-}
+{"language.name":"Ladino","scripts":["Hebr"],"locale":"lad"}

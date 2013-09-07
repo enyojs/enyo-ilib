@@ -1,7 +1,1 @@
-{
-    "language.name": "Judeo-Persian",
-    "scripts": [
-        "Hebr"
-    ],
-    "locale": "jpr"
-}
+{"language.name":"Judeo-Persian","scripts":["Hebr"],"locale":"jpr"}

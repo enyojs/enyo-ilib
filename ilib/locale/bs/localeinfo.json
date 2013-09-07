@@ -1,13 +1,1 @@
-{
-    "language.name": "Bosnian",
-    "numfmt": {
-        "exponential": "E",
-        "currencyFormats": {
-            "common": "{s} {n}"
-        }
-    },
-    "scripts": [
-        "Latn"
-    ],
-    "locale": "bs"
-}
+{"language.name":"Bosnian","numfmt":{"exponential":"E","currencyFormats":{"common":"{s} {n}"}},"scripts":["Latn"],"locale":"bs"}
