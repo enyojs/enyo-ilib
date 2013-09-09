@@ -1,5 +1,5 @@
 {
-	"source": ".",
+	"packagejs": "./package.js",
 	"assets": ["ilib/locale", "LICENSE-2.0.txt"],
 	"libs": []
 }
