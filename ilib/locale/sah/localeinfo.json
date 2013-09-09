@@ -1,15 +1,1 @@
-{
-    "language.name": "Sakha",
-    "numfmt": {
-        "decimalChar": ".",
-        "groupChar": ",",
-        "exponential": "E",
-        "currencyFormats": {
-            "common": "{s} {n}"
-        }
-    },
-    "scripts": [
-        "Cyrl"
-    ],
-    "locale": "sah"
-}
+{"language.name":"Sakha","numfmt":{"decimalChar":".","groupChar":",","exponential":"E","currencyFormats":{"common":"{s} {n}"}},"scripts":["Cyrl"],"locale":"sah"}

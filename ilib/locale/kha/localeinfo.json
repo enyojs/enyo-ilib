@@ -1,8 +1,1 @@
-{
-    "language.name": "Khasi",
-    "scripts": [
-        "Latn",
-        "Beng"
-    ],
-    "locale": "kha"
-}
+{"language.name":"Khasi","scripts":["Latn","Beng"],"locale":"kha"}

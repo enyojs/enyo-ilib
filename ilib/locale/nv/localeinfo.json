@@ -1,7 +1,1 @@
-{
-    "language.name": "Navajo",
-    "scripts": [
-        "Latn"
-    ],
-    "locale": "nv"
-}
+{"language.name":"Navajo","scripts":["Latn"],"locale":"nv"}

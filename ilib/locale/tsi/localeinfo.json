@@ -1,7 +1,1 @@
-{
-    "language.name": "Tsimshian",
-    "scripts": [
-        "Latn"
-    ],
-    "locale": "tsi"
-}
+{"language.name":"Tsimshian","scripts":["Latn"],"locale":"tsi"}

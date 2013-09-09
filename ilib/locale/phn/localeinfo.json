@@ -1,7 +1,1 @@
-{
-    "language.name": "Phoenician",
-    "scripts": [
-        "Phnx"
-    ],
-    "locale": "phn"
-}
+{"language.name":"Phoenician","scripts":["Phnx"],"locale":"phn"}

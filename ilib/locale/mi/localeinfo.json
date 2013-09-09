@@ -1,7 +1,1 @@
-{
-    "language.name": "Maori",
-    "scripts": [
-        "Latn"
-    ],
-    "locale": "mi"
-}
+{"language.name":"Maori","scripts":["Latn"],"locale":"mi"}

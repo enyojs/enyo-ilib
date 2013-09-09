@@ -1,7 +1,1 @@
-{
-    "language.name": "Manchu",
-    "scripts": [
-        "Mong"
-    ],
-    "locale": "mnc"
-}
+{"language.name":"Manchu","scripts":["Mong"],"locale":"mnc"}

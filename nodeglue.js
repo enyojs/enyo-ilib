@@ -1,5 +1,5 @@
 // pass the ilib definition to our callers
-exports.ilib = require("./ilib/js/ilib-dyn.js").ilib;
+exports.ilib = require("./ilib/js/ilib-dyn-standard.js").ilib;
 
 var path = require("path"),
 	fs = require("fs");

@@ -1,7 +1,1 @@
-{
-    "language.name": "Fon",
-    "scripts": [
-        "Latn"
-    ],
-    "locale": "fon"
-}
+{"language.name":"Fon","scripts":["Latn"],"locale":"fon"}

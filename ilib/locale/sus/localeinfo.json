@@ -1,8 +1,1 @@
-{
-    "language.name": "Susu",
-    "scripts": [
-        "Latn",
-        "Arab"
-    ],
-    "locale": "sus"
-}
+{"language.name":"Susu","scripts":["Latn","Arab"],"locale":"sus"}

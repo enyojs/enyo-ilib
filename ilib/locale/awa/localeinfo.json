@@ -1,7 +1,1 @@
-{
-    "language.name": "Awadhi",
-    "scripts": [
-        "Deva"
-    ],
-    "locale": "awa"
-}
+{"language.name":"Awadhi","scripts":["Deva"],"locale":"awa"}

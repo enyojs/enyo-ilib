@@ -1,15 +1,1 @@
-{
-    "language.name": "Tigre",
-    "numfmt": {
-        "decimalChar": ".",
-        "groupChar": ",",
-        "exponential": "E",
-        "currencyFormats": {
-            "common": "{s} {n}"
-        }
-    },
-    "scripts": [
-        "Ethi"
-    ],
-    "locale": "tig"
-}
+{"language.name":"Tigre","numfmt":{"decimalChar":".","groupChar":",","exponential":"E","currencyFormats":{"common":"{s} {n}"}},"scripts":["Ethi"],"locale":"tig"}

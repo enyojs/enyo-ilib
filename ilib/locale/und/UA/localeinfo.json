@@ -1,7 +1,1 @@
-{
-    "currency": "UAH",
-    "firstDayOfWeek": 1,
-    "region.name": "Ukraine",
-    "timezone": "Europe/Kiev",
-    "locale": "UA"
-}
+{"currency":"UAH","firstDayOfWeek":1,"region.name":"Ukraine","timezone":"Europe/Kiev","locale":"UA"}

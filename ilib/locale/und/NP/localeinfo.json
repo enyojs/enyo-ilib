@@ -1,7 +1,1 @@
-{
-    "currency": "NPR",
-    "firstDayOfWeek": 0,
-    "region.name": "Nepal",
-    "timezone": "Asia/Kathmandu",
-    "locale": "NP"
-}
+{"currency":"NPR","firstDayOfWeek":0,"region.name":"Nepal","timezone":"Asia/Kathmandu","locale":"NP"}

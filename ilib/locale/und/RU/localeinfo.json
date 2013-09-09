@@ -1,7 +1,1 @@
-{
-    "currency": "RUB",
-    "firstDayOfWeek": 1,
-    "region.name": "Russia",
-    "timezone": "Europe/Moscow",
-    "locale": "RU"
-}
+{"currency":"RUB","firstDayOfWeek":1,"region.name":"Russia","timezone":"Europe/Moscow","locale":"RU"}
