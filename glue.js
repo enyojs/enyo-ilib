@@ -107,7 +107,7 @@
 		}
 
 		// allow enyo to apply right-to-left styles to the app and widgets if necessary
-		var script = new ilib.ScriptInfo(li.getDefaultScript());
+		var script = new ilib.ScriptInfo(li.getScript());
 		if (script.getScriptDirection() === "rtl") {
 			enyo.dom.addBodyClass(base + "right-to-left");
 			if (enyo.Control) {
