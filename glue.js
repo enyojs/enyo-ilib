@@ -142,10 +142,24 @@
  */
 $L = (function() {
 	var lfunc = function (string) {
-		if (!$L.rb) {
-			return string;
+		var str;
+		if (typeof(string) === 'string') {
+			if (!$L.rb) {
+				return string;
+			}
+			str = $L.rb.getString(string);
+		} else if (typeof(string) === 'object') {
+			if (typeof(string.key) !== 'undefined' && typeof(string.value) !== 'undefined') {
+				if (!$L.rb) {
+					return string.value;
+				}
+				str = $L.rb.getString(string.value, string.key);
+			} else {
+				str = "";
+			}
+		} else {
+			str = string;
 		}
-		var str = $L.rb.getString(string);
 		return str.toString();
 	};
 	var locale = new ilib.Locale();
