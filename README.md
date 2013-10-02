@@ -20,10 +20,25 @@ directory, then edit your package.js:
 
     enyo.depends(
         "$lib/enyo-ilib",
-	    <rest of your dependencies>
+	<rest of your dependencies>
     );
 
 Now the "ilib" namespace is available to use in your app.
+
+If you want the core (resources and string translation) or full versions, you should instead use
+
+    enyo.depends(
+        "$lib/enyo-ilib/package-core.js",
+	<rest of your dependencies>
+    );
+
+or
+
+    enyo.depends(
+        "$lib/enyo-ilib/package-full.js",
+	<rest of your dependencies>
+    );
+
 
 nodejs
 ------
