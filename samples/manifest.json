@@ -1,0 +1,10 @@
+{
+    "sourcePath":"../../..",
+    "name": "iLib",
+	"ns": "ilib.sample",
+    "loadPackages": "$lib/spotlight $lib/enyo-ilib $lib/enyo-ilib/samples",
+	"samples": [
+        {"name": "Locale Info", "path": "$lib/enyo-ilib/samples/LocaleInfo"},
+        {"name": "RTL/LTR selector", "path": "$lib/enyo-ilib/samples/RTL"}
+	]
+}

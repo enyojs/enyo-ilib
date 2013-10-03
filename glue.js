@@ -21,8 +21,8 @@
 			var ajax = new enyo.Ajax({url: enyo.path.rewrite("$lib/enyo-ilib/ilib/locale/" + path)});
 			//console.log("moondemo2: browser/async: attempting to load lib/enyo-ilib/ilib/locale/" + path);
 			var resultFunc = function(inSender, json) {
-				//console.log("moondemo2: " + (json ? "success" : "failed"));
-				results.push((typeof(json) === 'object') ? json : undefined);
+                // console.log("moondemo2: " + (!inSender.failed && json ? "success" : "failed"));
+				results.push(!inSender.failed && (typeof(json) === 'object') ? json : undefined);
 				if (paths.length > 0) {
 					loadFiles(context, paths, results, params, callback);
 				} else {
@@ -58,8 +58,8 @@
 				});
 
 				var handler = function(inSender, json) {
-					// console.log((json ? "success" : "failed"));
-					ret.push((typeof(json) === 'object') ? json : undefined);
+                    // console.log((!inSender.failed && json ? "success" : "failed"));
+					ret.push(!inSender.failed && (typeof(json) === 'object') ? json : undefined);
 				};
 				ajax.response(this, handler);
 				ajax.error(this, function(inSender, json) {
@@ -91,12 +91,17 @@
 		ilib.setLocale(window.UILocale);
 	}
 
-	// This is temporary special code for webOS to be able to test apps with a font that works
-	// in other locales.
-	var li = new ilib.LocaleInfo(); // for the current locale
-	var locale = li.getLocale();
-	enyo.ready(function () {
+	// enyo.updateI18NClasses should be called after every setLocale, but there isn't such a callback in current version
+    enyo.updateI18NClasses = function updateBodyClasses() {
+        var li = new ilib.LocaleInfo(); // for the current locale
+        var locale = li.getLocale();
 		var base = "enyo-locale-";
+        
+        // Remove old style definitions (hack style becouse enyo.dom doesn't have methods like enyo.dom.getBodyClasses, enyo.dom.removeBodyClass)
+        if (document && document.body && document.body.className && document.body.className) {
+            document.body.className = document.body.className.replace(new RegExp('(^|\\s)'+ base +'[^\\s]*', 'g'), '');
+        }
+        
 		if (li.getScript() !== "Latn" || locale.getLanguage() === "vi") {
 			// allow enyo to define other fonts for non-Latin languages, or Vietnamese which
 			// is Latin-based, but the characters with multiple accents don't appear in the
@@ -133,7 +138,9 @@
 		if (locale.getRegion()) {
 			enyo.dom.addBodyClass(base + locale.getRegion());
 		}
-	});
+    };
+    
+	enyo.ready(function () { enyo.updateI18NClasses(); });
 })();
 
 /*
@@ -197,5 +204,6 @@ $L.setLocale = function (spec) {
  */
 enyo.updateLocale = function() {
 	ilib.setLocale(navigator.language);
-}
+	enyo.updateI18NClasses();
+};
 
