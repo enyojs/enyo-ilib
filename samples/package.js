@@ -1,0 +1,9 @@
+enyo.depends(
+	"LoadiLibResources.js",
+	"ChooseLocale.js",
+	"sample.css",
+	"LocaleInfo.js",
+	"MoonSamples.js",
+    "RTL.js",
+    "DateFormating.js"
+);
