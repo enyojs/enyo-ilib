@@ -9,7 +9,7 @@ enyo.kind({
             {kind: "ilib.sample.ChooseLocale", onSelectedLocale: "setLocale"},
             {tag: "br"},
             
-            {kind: "moon.Divider", content: "Current Locale"},
+            {kind: "moon.Divider", content: rb.getString("Current Locale")},
             {name: "currentLocateData"}
         ]}
     ],

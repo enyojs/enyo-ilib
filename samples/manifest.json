@@ -2,9 +2,10 @@
     "sourcePath":"../../..",
     "name": "iLib",
 	"ns": "ilib.sample",
-    "loadPackages": "$lib/spotlight $lib/enyo-ilib $lib/enyo-ilib/samples",
+    "loadPackages": "$lib/spotlight $lib/enyo-ilib-full $lib/enyo-ilib-full/samples",
 	"samples": [
-        {"name": "Locale Info", "path": "$lib/enyo-ilib/samples/LocaleInfo"},
-        {"name": "RTL/LTR selector", "path": "$lib/enyo-ilib/samples/RTL"}
+        {"name": "Locale Info", "path": "$lib/enyo-ilib-full/samples/LocaleInfo"},
+        {"name": "RTL/LTR selector", "path": "$lib/enyo-ilib-full/samples/RTL"},
+        {"name": "Date Formating", "path": "$lib/enyo-ilib-full/samples/DateFormating"}
 	]
 }
