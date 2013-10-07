@@ -149,6 +149,9 @@
  */
 $L = function (string) {
 	var str;
+	if (!$L.rb) {
+		$L.setLocale();
+	}
 	if (typeof(string) === 'string') {
 		if (!$L.rb) {
 			return string;
