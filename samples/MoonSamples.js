@@ -2,9 +2,9 @@ enyo.kind({
     name: "ilib.moon.sample.RTL",
     components: [
         {kind: "moon.Header", content: rb.getString("Header"), titleAbove: "01", titleBelow: rb.getString("Sub Header"), subTitleBelow: rb.getString("Sub-sub Header"), components: [
-            {kind: "moon.IconButton", src: "lib/enyo-ilib-full/samples/assets/icon-refresh.png", classes:"moon-header-left", ontap: "refreshPanels"},
-            {kind: "moon.IconButton", src: "lib/enyo-ilib-full/samples/assets/icon-left.png", ontap: "prevPanel"},
-            {kind: "moon.IconButton", src: "lib/enyo-ilib-full/samples/assets/icon-right.png", ontap: "nextPanel"}
+            {kind: "moon.IconButton", src: "lib/enyo-ilib/samples/assets/icon-refresh.png", classes:"moon-header-left", ontap: "refreshPanels"},
+            {kind: "moon.IconButton", src: "lib/enyo-ilib/samples/assets/icon-left.png", ontap: "prevPanel"},
+            {kind: "moon.IconButton", src: "lib/enyo-ilib/samples/assets/icon-right.png", ontap: "nextPanel"}
         ]}, 
 
         {name: "panels", kind: "moon.Panels", pattern: "activity", fit: true, classes: "enyo-fill", components: [
@@ -110,7 +110,7 @@ enyo.kind({
     },
 
     setupItem: function(inSender, inEvent) {
-		var i = inEvent.index;
-		this.$.sampleMoonItem.setContent("Item "+ (i + 1));
-	}
+        var i = inEvent.index;
+        this.$.sampleMoonItem.setContent("Item "+ (i + 1));
+    }
 });

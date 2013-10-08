@@ -1,7 +1,7 @@
 enyo.kind({
     name: "ilib.sample.RTL",
     kind: "FittableRows",
-	classes: "moon enyo-unselectable enyo-fit",
+    classes: "moon enyo-unselectable enyo-fit",
     
     components: [
         {kind: "moon.Scroller", fit: true, components: [
