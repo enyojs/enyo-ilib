@@ -15,6 +15,10 @@
 	 * to load all the files that exist and can be loaded
 	 */
 	function loadFiles(context, paths, results, params, callback) {
+		var root = "resources/";
+		if (params && typeof(params.root) !== "undefined") {
+			root = params.root + '/';
+		}
 		if (paths.length > 0) {
 			var path = paths.shift();
 			var ajax = new enyo.Ajax({url: enyo.path.rewrite("$lib/enyo-ilib/ilib/locale/" + path)});
@@ -34,7 +38,7 @@
 			ajax.error(this, function(inSender, json) {
 				//console.log("moondemo2: browser/async: attempting to load resources/" + path);
 				// not there? Try the standard place instead
-				var file = "resources/" + path;
+				var file = root + path;
 				var ajax2 = new enyo.Ajax({url: file});
 
 				ajax2.response(this, resultFunc);
@@ -48,6 +52,10 @@
 	ilib.setLoaderCallback(enyo.bind(this, function(paths, sync, params, callback) {
 		if (sync) {
 			var ret = [];
+			var root = "resources/";
+			if (params && typeof(params.root) !== "undefined") {
+				root = params.root + '/';
+			}
 			// synchronous
 			paths.forEach(function (path) {
 				// console.log("browser/sync: attempting to load lib/enyo-ilib/ilib/locale/" + path);
@@ -64,7 +72,7 @@
 				ajax.error(this, function(inSender, json) {
 					// console.log("browser/sync: Now attempting to load resources/" + path);
 					var ajax2 = new enyo.Ajax({
-						url: "resources/" + path,
+						url: root + path,
 						sync: true
 					});
 					ajax2.response(this, handler);
