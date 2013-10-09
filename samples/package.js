@@ -2,6 +2,7 @@ enyo.depends(
     "LoadiLibResources.js",
     "ChooseLocale.js",
     "ChooseTimeZone.js",
+    "ChooseCurrency.js",
     "sample.css",
     "LocaleInfo.js",
     "MoonSamples.js",

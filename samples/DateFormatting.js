@@ -28,20 +28,20 @@ enyo.kind({
                     {tag: "br"},
                     
                     {kind: "moon.Divider", content: rb.getString("Length")},
-                    {kind: "moon.RadioItemGroup", name: "length", onActivate: "buttonActivated", components: [
+                    {kind: "moon.RadioItemGroup", name: "length", components: [
                         {content: "short"},
                         {content: "medium"},
                         {content: "long", selected: true},
                         {content: "full"},
                     ]},
                    {kind: "moon.Divider", content: rb.getString("Type")},
-                   {kind: "moon.RadioItemGroup", name: "type", onActivate: "buttonActivated", components: [
+                   {kind: "moon.RadioItemGroup", name: "type", components: [
                         {content: "date"},
                         {content: "time"},
                         {content: "datetime", selected: true}
                     ]},
                     {kind: "moon.Divider", content: rb.getString("Date")},
-                    {kind: "moon.RadioItemGroup", name: "date", onActivate: "buttonActivated", components: [
+                    {kind: "moon.RadioItemGroup", name: "date", components: [
                         {content: "dmwy"},
                         {content: "dmy", selected: true},
                         {content: "dmw"},
@@ -54,7 +54,7 @@ enyo.kind({
                         {content: "y"}
                     ]},
                     {kind: "moon.Divider", content: rb.getString("Time")},
-                    {kind: "moon.RadioItemGroup", name: "time", onActivate: "buttonActivated", components: [
+                    {kind: "moon.RadioItemGroup", name: "time", components: [
                         {content: "ahmsz"},
                         {content: "ahms"},
                         {content: "hmsz"},
@@ -70,13 +70,13 @@ enyo.kind({
                         {content: "s"}
                     ]},
                     {kind: "moon.Divider", content: rb.getString("Clock")},
-                    {kind: "moon.RadioItemGroup", name: "clock", onActivate: "buttonActivated", components: [
+                    {kind: "moon.RadioItemGroup", name: "clock", components: [
                         {content: "12"},
                         {content: "24"},
                         {content: "locale", selected: true}
                     ]},
                     {kind: "moon.Divider", content: rb.getString("Native Digits")},
-                    {kind: "moon.RadioItemGroup", name: "useNative", onActivate: "buttonActivated", components: [
+                    {kind: "moon.RadioItemGroup", name: "useNative", components: [
                         {content: "false", selected: true},
                         {content: "true"}
                     ]}
@@ -106,7 +106,7 @@ enyo.kind({
         options['type'] = this.$.type.getActive().content;
         options['date'] = this.$.date.getActive().content;
         options['time'] = this.$.time.getActive().content;
-        if (this.$.clock.getActive().content !== 'default')
+        if (this.$.clock.getActive().content !== 'locale')
             options['clock'] = this.$.clock.getActive().content;
         options['useNative'] = this.$.useNative.getActive().content === 'true';
         if (this.$.timeZonesSelector.getValue() !== 'default')

@@ -26,6 +26,6 @@ enyo.kind({
     setLocale: function(inSender, inEvent) {
         ilib.setLocale(inEvent.content);
         this.$.rtlStatus.setChecked(new ilib.ScriptInfo(new ilib.LocaleInfo().getScript()).getScriptDirection() === "rtl");
-        ilib.updateBodyClasses();
+        enyo.updateI18NClasses();
     }    
 });

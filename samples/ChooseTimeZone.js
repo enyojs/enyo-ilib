@@ -27,6 +27,6 @@ enyo.kind({
 
     setTimeZone: function(inSender, inEvent) {
         this.setValue(inEvent.selected.content);
-        this.bubble("onSelectedTimeZones", {content: inEvent.selected.content});
+        this.bubble("onSelectedTimeZone", {content: inEvent.selected.content});
     }
 });
