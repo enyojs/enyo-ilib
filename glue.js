@@ -1,4 +1,3 @@
-/* global ilib */
 (function() {
 	/**
 	 * Load the list of files asynchronously. This uses recursion in
@@ -96,12 +95,12 @@
         var li = new ilib.LocaleInfo(); // for the current locale
         var locale = li.getLocale();
 		var base = "enyo-locale-";
-        
+
         // Remove old style definitions (hack style becouse enyo.dom doesn't have methods like enyo.dom.getBodyClasses, enyo.dom.removeBodyClass)
         if (document && document.body && document.body.className && document.body.className) {
             document.body.className = document.body.className.replace(new RegExp('(^|\\s)'+ base +'[^\\s]*', 'g'), '');
         }
-        
+
 		if (li.getScript() !== "Latn" || locale.getLanguage() === "vi") {
 			// allow enyo to define other fonts for non-Latin languages, or Vietnamese which
 			// is Latin-based, but the characters with multiple accents don't appear in the
@@ -139,55 +138,47 @@
 			enyo.dom.addBodyClass(base + locale.getRegion());
 		}
     };
-    
-	enyo.ready(function () { enyo.updateI18NClasses(); });
 })();
 
 /*
  * Reset the $L function to use ilib instead of the dummy function that enyo
  * comes with by default.
  */
-$L = (function() {
-	var lfunc = function (string) {
-		var str;
-		if (typeof(string) === 'string') {
-			if (!$L.rb) {
-				return string;
-			}
-			str = $L.rb.getString(string);
-		} else if (typeof(string) === 'object') {
-			if (typeof(string.key) !== 'undefined' && typeof(string.value) !== 'undefined') {
-				if (!$L.rb) {
-					return string.value;
-				}
-				str = $L.rb.getString(string.value, string.key);
-			} else {
-				str = "";
-			}
-		} else {
-			str = string;
+$L = function (string) {
+	var str;
+	if (!$L.rb) {
+		$L.setLocale();
+	}
+	if (typeof(string) === 'string') {
+		if (!$L.rb) {
+			return string;
 		}
-		return str.toString();
-	};
-	var locale = new ilib.Locale();
-	lfunc.rb = new ilib.ResBundle({
-		type: "html",
-		name: "strings",
-		missing: locale.getLanguage() === "en" ? "source" : "pseudo",
-		sync: true,
-		lengthen: true		// if pseudo-localizing, this tells it to lengthen strings
-	});
-	return lfunc;
-})();
+		str = $L.rb.getString(string);
+	} else if (typeof(string) === 'object') {
+		if (typeof(string.key) !== 'undefined' && typeof(string.value) !== 'undefined') {
+			if (!$L.rb) {
+				return string.value;
+			}
+			str = $L.rb.getString(string.value, string.key);
+		} else {
+			str = "";
+		}
+	} else {
+		str = string;
+	}
+	return str.toString();
+};
 
 /**
  * Set the locale for the strings that $L loads. This may reload the
  * string resources if necessary.
+ * @param {string} spec the locale specifier
  */
 $L.setLocale = function (spec) {
-	if (spec !== $L.rb.getLocale().getSpec()) {
+	var locale = new ilib.Locale(spec);
+	if (!$L.rb || spec !== $L.rb.getLocale().getSpec()) {
 		$L.rb = new ilib.ResBundle({
-			locale: spec,
+			locale: locale,
 			type: "html",
 			name: "strings",
 			sync: true,
@@ -204,6 +195,7 @@ $L.setLocale = function (spec) {
  */
 enyo.updateLocale = function() {
 	ilib.setLocale(navigator.language);
+	$L.setLocale(navigator.language);
 	enyo.updateI18NClasses();
 };
 
