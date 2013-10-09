@@ -1,7 +1,7 @@
 enyo.kind({
     name: "ilib.sample.RTL",
     kind: "FittableRows",
-	classes: "moon enyo-unselectable enyo-fit",
+    classes: "moon enyo-unselectable enyo-fit",
     
     components: [
         {kind: "moon.Scroller", fit: true, components: [
@@ -20,12 +20,12 @@ enyo.kind({
     
     create: function() {
         this.inherited(arguments);
-        this.$.rtlStatus.setChecked(new ilib.ScriptInfo(new ilib.LocaleInfo().getScript()).getScriptDirection() === "rtl")
+        this.$.rtlStatus.setChecked(new ilib.ScriptInfo(new ilib.LocaleInfo().getScript()).getScriptDirection() === "rtl");
     },
            
     setLocale: function(inSender, inEvent) {
         ilib.setLocale(inEvent.content);
-        this.$.rtlStatus.setChecked(new ilib.ScriptInfo(new ilib.LocaleInfo().getScript()).getScriptDirection() === "rtl")
+        this.$.rtlStatus.setChecked(new ilib.ScriptInfo(new ilib.LocaleInfo().getScript()).getScriptDirection() === "rtl");
         ilib.updateBodyClasses();
     }    
 });
