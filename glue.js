@@ -1,4 +1,3 @@
-/* global ilib */
 (function() {
 	/**
 	 * Load the list of files asynchronously. This uses recursion in
