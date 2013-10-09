@@ -17,7 +17,7 @@ enyo.kind({
                     {kind: "moon.ExpandablePicker", name: "calendarType", content: rb.getString("Input Calendar"), onChange: "changedParameters"},
                     {style: "width: 30px"},
                     {kind: "FittableColumns", name: "regularDate", components: [
-                        {kind: "moon.ExpandableInput", name: "year", content: rb.getString("Year"), fieldType: "password", type: "number", noneText: rb.getString("Not defined"), onChange: "changedParameters", classes: "moon-3h"},
+                        {kind: "moon.ExpandableInput", name: "year", content: rb.getString("Year"), noneText: rb.getString("Not defined"), onChange: "changedParameters", classes: "moon-3h"},
                         {kind: "moon.ExpandablePicker", name: "month", content: rb.getString("Month"), onChange: "changedParameters"},
                         {kind: "moon.ExpandablePicker", name: "day", content: rb.getString("Day")},
                     ]},
@@ -31,20 +31,20 @@ enyo.kind({
                 {tag: "br"},
                 
                 {kind: "moon.Divider", content: rb.getString("Length")},
-                {kind: "moon.RadioItemGroup", name: "length", onActivate: "buttonActivated", components: [
+                {kind: "moon.RadioItemGroup", name: "length", components: [
                     {content: "short"},
                     {content: "medium"},
                     {content: "long", selected: true},
                     {content: "full"},
                 ]},
                {kind: "moon.Divider", content: rb.getString("Type")},
-               {kind: "moon.RadioItemGroup", name: "type", onActivate: "buttonActivated", components: [
+               {kind: "moon.RadioItemGroup", name: "type", components: [
                     {content: "date"},
                     {content: "time"},
                     {content: "datetime", selected: true}
                 ]},
                 {kind: "moon.Divider", content: rb.getString("Date")},
-                {kind: "moon.RadioItemGroup", name: "date", onActivate: "buttonActivated", components: [
+                {kind: "moon.RadioItemGroup", name: "date", components: [
                     {content: "dmwy"},
                     {content: "dmy", selected: true},
                     {content: "dmw"},
@@ -57,7 +57,7 @@ enyo.kind({
                     {content: "y"}
                 ]},
                 {kind: "moon.Divider", content: rb.getString("Time")},
-                {kind: "moon.RadioItemGroup", name: "time", onActivate: "buttonActivated", components: [
+                {kind: "moon.RadioItemGroup", name: "time", components: [
                     {content: "ahmsz"},
                     {content: "ahms"},
                     {content: "hmsz"},
@@ -73,25 +73,21 @@ enyo.kind({
                     {content: "s"}
                 ]},
                 {kind: "moon.Divider", content: rb.getString("Clock")},
-                {kind: "moon.RadioItemGroup", name: "clock", onActivate: "buttonActivated", components: [
+                {kind: "moon.RadioItemGroup", name: "clock", components: [
                     {content: "12"},
                     {content: "24"},
                     {content: "locale", selected: true}
                 ]},
                 {kind: "moon.Divider", content: rb.getString("Native Digits")},
-                {kind: "moon.RadioItemGroup", name: "useNative", onActivate: "buttonActivated", components: [
+                {kind: "moon.RadioItemGroup", name: "useNative", components: [
                     {content: "false", selected: true},
                     {content: "true"}
                 ]}
             ]}
         ]},
         
-        {kind: "moon.Divider"},
-        {kind: "FittableColumns", components: [
-            {content: rb.getString("Format result:")},
-            {content: " ", style: "width: 20px"},
-            {name: "rtlResult", fit: true, content: "-"}
-        ]}
+        {kind: "moon.Divider", content: rb.getString("Format result:")},
+        {name: "rtlResult", fit: true, content: "-"}
     ],
     
     changedDate: function(inSender, inEvent) {
@@ -118,10 +114,10 @@ enyo.kind({
     },
     
     changedParameters: function(inSender, inEvent) {
-        this.updateParameters(true);
+        this.updateParameters();
     },
     
-    updateParameters: function(init) {
+    updateParameters: function() {
         if (this.updateParametersProcessing)
             return;
         this.updateParametersProcessing = true;
@@ -175,7 +171,7 @@ enyo.kind({
         options['type'] = this.$.type.getActive().content;
         options['date'] = this.$.date.getActive().content;
         options['time'] = this.$.time.getActive().content;
-        if (this.$.clock.getActive().content !== 'default')
+        if (this.$.clock.getActive().content !== 'locale')
             options['clock'] = this.$.clock.getActive().content;
         options['useNative'] = this.$.useNative.getActive().content === 'true';
         if (this.$.timeZonesSelector.getValue() !== 'default')

@@ -198,7 +198,7 @@ enyo.kind({
         for(var i = 0; i < this.locales.length; i++)
             this.$.switcherLocale.createComponent({locale: this.locales[i].locale, content: this.locales[i].locale +" ("+ this.locales[i].label +" / "+ this.locales[i].label_ol +")", active: this.locales[i].locale === curLocale});
         this.$.switcherLocale.initializeActiveItem();
-        this.setValue(this.$.switcherLocale.selected.content);
+        this.setValue(this.$.switcherLocale.selected.locale);
     },
 
     setLocale: function(inSender, inEvent) {

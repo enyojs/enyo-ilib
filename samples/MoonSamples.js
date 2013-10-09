@@ -38,7 +38,7 @@ enyo.kind({
                         {tag: "br"},
                         
                         {kind: "moon.TooltipDecorator", components: [
-                            {name: "Small Button", kind: "moon.Button", small: true, content: rb.getString("Button + Tooltip")},
+                            {kind: "moon.Button", small: true, content: rb.getString("Button + Tooltip")},
                             {kind: "moon.Tooltip", content: rb.getString("I'm a tooltip for a button.")}
                         ]}                            
                     ]},
@@ -46,7 +46,7 @@ enyo.kind({
                         {kind: "moon.Divider", content: rb.getString("Column {num}").format({num: 2})},
                         
                         {kind: "moon.Divider", content: rb.getString("Radio Items Group")},
-                        {kind: "moon.RadioItemGroup", onActivate: "buttonActivated", components: [
+                        {kind: "moon.RadioItemGroup", components: [
                             {content: rb.getString("Cat")},
                             {content: rb.getString("Dog")},
                             {content: rb.getString("Whale"), disabled: true},
