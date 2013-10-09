@@ -139,8 +139,6 @@
 			enyo.dom.addBodyClass(base + locale.getRegion());
 		}
     };
-
-	enyo.ready(function () { enyo.updateI18NClasses(); });
 })();
 
 /*
