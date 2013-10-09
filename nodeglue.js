@@ -1,3 +1,4 @@
+/* jshint node: true */
 // pass the ilib definition to our callers
 exports.ilib = require("./ilib/js/ilib-dyn-standard.js").ilib;
 
@@ -7,11 +8,11 @@ var path = require("path"),
 
 exports.ilib._load = (function () {
 	var base = path.normalize(path.join(__dirname, "ilib/locale"));
-	
+
 	if (!fs.existsSync(path.join(base, "localeinfo.json"))) {
 		base = "/usr/palm/ilib/locale";
 	}
-	
+
 	function nextFile(context, root, paths, results, callback, json) {
 		//util.print("node loader:  " + (json ? "succeeded" : "failed") + "\n");
 		results.push(json ? JSON.parse(json) : undefined);
@@ -24,7 +25,7 @@ exports.ilib._load = (function () {
 			}
 		}
 	}
-	
+
 	function loadFiles(context, root, paths, results, callback) {
 		if (paths.length > 0) {
 			var filename = paths.shift();
@@ -49,7 +50,7 @@ exports.ilib._load = (function () {
 		//util.print("node loader: attempting to load paths " + JSON.stringify(paths) + "\n");
 		if (sync) {
 			var ret = [];
-			
+
 			// synchronous
 			paths.forEach(function (p) {
 				var filepath = path.join(root, p);
@@ -80,7 +81,6 @@ exports.ilib._load = (function () {
 		var results = [];
 		loadFiles(this, root, paths, results, callback);
 	};
-	return undefined;
 })();
 
 exports.$L = (function() {
