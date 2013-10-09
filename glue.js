@@ -36,9 +36,9 @@
 			};
 			ajax.response(this, resultFunc);
 			ajax.error(this, function(inSender, json) {
-				//console.log("moondemo2: browser/async: attempting to load resources/" + path);
 				// not there? Try the standard place instead
 				var file = root + path;
+				// console.log("moondemo2: browser/async: attempting to load " + file);
 				var ajax2 = new enyo.Ajax({url: file});
 
 				ajax2.response(this, resultFunc);
@@ -70,7 +70,7 @@
 				};
 				ajax.response(this, handler);
 				ajax.error(this, function(inSender, json) {
-					// console.log("browser/sync: Now attempting to load resources/" + path);
+					// console.log("browser/sync: Now attempting to load " + root + path);
 					var ajax2 = new enyo.Ajax({
 						url: root + path,
 						sync: true
