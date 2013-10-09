@@ -28,14 +28,14 @@ Now the "ilib" namespace is available to use in your app.
 If you want the core (resources and string translation) or full versions, you should instead use
 
     enyo.depends(
-        "$lib/enyo-ilib/package-core.js",
+        "$lib/enyo-ilib/core-package.js",
 	<rest of your dependencies>
     );
 
 or
 
     enyo.depends(
-        "$lib/enyo-ilib/package-full.js",
+        "$lib/enyo-ilib/full-package.js",
 	<rest of your dependencies>
     );
 
