@@ -73,7 +73,7 @@ enyo.kind({
                     {kind: "moon.RadioItemGroup", name: "clock", onActivate: "buttonActivated", components: [
                         {content: "12"},
                         {content: "24"},
-                        {content: "default", selected: true}
+                        {content: "locale", selected: true}
                     ]},
                     {kind: "moon.Divider", content: rb.getString("Native Digits")},
                     {kind: "moon.RadioItemGroup", name: "useNative", onActivate: "buttonActivated", components: [
@@ -86,7 +86,7 @@ enyo.kind({
         
         {kind: "moon.Divider"},
         {kind: "FittableColumns", components: [
-            {content: rb.getString("Format result") +":"},
+            {content: rb.getString("Format result:")},
             {content: " ", style: "width: 20px"},
             {name: "rtlResult", fit: true, content: "-"}
         ]}
@@ -130,6 +130,6 @@ enyo.kind({
         var fmt = new ilib.DateFmt(options);
         var postFmtData = fmt.format(date);
         // Output results
-        this.$.rtlResult.setContent(postFmtData + ', '+ rb.getString('julian day') +': '+ date.getJulianDay() +', '+ rb.getString('unix time') +': '+ date.getTime());
+        this.$.rtlResult.setContent(postFmtData + ', '+ rb.getString('julian day: ') + date.getJulianDay() +', '+ rb.getString('unix time: ') + date.getTime());
     }
 });

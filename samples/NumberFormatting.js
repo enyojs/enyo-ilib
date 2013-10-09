@@ -15,7 +15,7 @@ enyo.kind({
         
         {kind: "moon.Divider"},
         {kind: "FittableColumns", components: [
-            {content: rb.getString("Format result") +":"},
+            {content: rb.getString("Format result:")},
             {content: " ", style: "width: 20px"},
             {name: "rtlResult", fit: true, content: "-"}
         ]}
