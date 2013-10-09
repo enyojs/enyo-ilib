@@ -1,16 +1,14 @@
 enyo.kind({
-    name: "ilib.sample.DateFormating",
+    name: "ilib.sample.DateFormatting",
     kind: "FittableRows",
-	classes: "moon enyo-unselectable enyo-fit",
+    classes: "moon enyo-unselectable enyo-fit",
     
     components: [
         {kind: "moon.Scroller", fit: true, components: [
             {kind: "FittableColumns", components: [
                 /* Header with selecting locale */
-                {kind: "ilib.sample.ChooseLocale", name: "localeSelector", onSelectedLocale: "setLocale", style: "width: 55%"},
-                {kind: "moon.ExpandablePicker", name: "timeZones", content: rb.getString("Time Zone"), style: "width: 35%", components: [
-                    {content: rb.getString("default"), active: true}
-                ]},
+                {kind: "ilib.sample.ChooseLocale", name: "localeSelector", style: "width: 55%"},
+                {kind: "ilib.sample.ChooseTimeZone", name: "timeZonesSelector", style: "width: 35%"},
                 {kind: "moon.Button", small: true, content: rb.getString("Apply"), ontap: "calcFormat", fit: true}
             ]},
             
@@ -29,13 +27,6 @@ enyo.kind({
                     {kind: "moon.Divider", content: rb.getString("Optional parameters")},
                     {tag: "br"},
                     
-                    {kind: "moon.ExpandablePicker", name: "calendarType", content: rb.getString("Input Calendar"), components: [
-                        {content: "gregorian", active: true}/*,
-                        {content: "hebrew"},
-                        {content: "islamic"},
-                        {content: "julian"},
-                        {content: "julianday"}*/
-                    ]},
                     {kind: "moon.Divider", content: rb.getString("Length")},
                     {kind: "moon.RadioItemGroup", name: "length", onActivate: "buttonActivated", components: [
                         {content: "short"},
@@ -82,7 +73,7 @@ enyo.kind({
                     {kind: "moon.RadioItemGroup", name: "clock", onActivate: "buttonActivated", components: [
                         {content: "12"},
                         {content: "24"},
-                        {content: "default", selected: true}
+                        {content: "locale", selected: true}
                     ]},
                     {kind: "moon.Divider", content: rb.getString("Native Digits")},
                     {kind: "moon.RadioItemGroup", name: "useNative", onActivate: "buttonActivated", components: [
@@ -95,7 +86,7 @@ enyo.kind({
         
         {kind: "moon.Divider"},
         {kind: "FittableColumns", components: [
-            {content: rb.getString("Format result") +":"},
+            {content: rb.getString("Format result:")},
             {content: " ", style: "width: 20px"},
             {name: "rtlResult", fit: true, content: "-"}
         ]}
@@ -106,21 +97,10 @@ enyo.kind({
             this.$.calendar.setValue(inEvent.value);
     },
     
-    create: function() {
-        this.inherited(arguments);
-        this.initTimeZones();
-    },
-    
-    initTimeZones: function() {
-        var timeZones = ilib.TimeZone.getAvailableIds();
-        for (var i = 0; i < timeZones.length; ++i)
-            this.$.timeZones.createComponent({content: timeZones[i]});
-    },
-           
     calcFormat: function(inSender, inEvent) {
         var options = {};
         options['locale'] = this.$.localeSelector.getValue();
-        options['calendar'] = this.$.calendarType.getSelected().content;
+        options['calendar'] = 'gregorian';
         options['length'] = this.$.length.getActive().content;
         options['length'] = this.$.length.getActive().content;
         options['type'] = this.$.type.getActive().content;
@@ -129,8 +109,8 @@ enyo.kind({
         if (this.$.clock.getActive().content !== 'default')
             options['clock'] = this.$.clock.getActive().content;
         options['useNative'] = this.$.useNative.getActive().content === 'true';
-        if (this.$.timeZones.getSelected().content !== 'default')
-            options['timezone'] = this.$.timeZones.getSelected().content;
+        if (this.$.timeZonesSelector.getValue() !== 'default')
+            options['timezone'] = this.$.timeZonesSelector.getValue();
         // processing    
         var cal = ilib.Cal.newInstance({
             locale: options['locale'],
@@ -150,6 +130,6 @@ enyo.kind({
         var fmt = new ilib.DateFmt(options);
         var postFmtData = fmt.format(date);
         // Output results
-        this.$.rtlResult.setContent(postFmtData + ', '+ rb.getString('julian day') +': '+ date.getJulianDay() +', '+ rb.getString('unix time') +': '+ date.getTime());
+        this.$.rtlResult.setContent(postFmtData + ', '+ rb.getString('julian day: ') + date.getJulianDay() +', '+ rb.getString('unix time: ') + date.getTime());
     }
 });
