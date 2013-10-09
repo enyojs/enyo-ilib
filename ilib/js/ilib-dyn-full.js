@@ -58,22 +58,43 @@ if (typeof(exports) !== 'undefined') {
  * @private
  * @static
  * Return the name of the platform
+ * @return {string} string naming the platform
  */
 ilib._getPlatform = function () {
 	if (!ilib._platform) {
-		if (typeof(window) !== 'undefined' && typeof(PalmSystem) === 'undefined') {
-			ilib._platform = "browser";
-		} else if (typeof(PalmSystem) !== 'undefined') {
-			ilib._platform = "webos";
-		} else if (typeof(environment) !== 'undefined') {
+		if (typeof(environment) !== 'undefined') {
 			ilib._platform = "rhino";
-		} else if (typeof(process) !== 'undefined') {
+		} else if (typeof(process) !== 'undefined' || typeof(require) !== 'undefined') {
 			ilib._platform = "nodejs";
+		} else if (typeof(window) !== 'undefined') {
+			ilib._platform = (typeof(PalmSystem) !== 'undefined') ? "webos" : "browser";
 		} else {
 			ilib._platform = "unknown";
 		}
 	}	
 	return ilib._platform;
+};
+
+/**
+ * @private
+ * @static
+ * Return true if the global variable is defined on this platform.
+ * @return {boolean} true if the global variable is defined on this platform, false otherwise
+ */
+ilib._isGlobal = function(name) {
+	switch (ilib._getPlatform()) {
+		case "rhino":
+			var top = (function() {
+			  return (typeof global === 'object') ? global : this;
+			})();
+			return typeof(top[name]) !== undefined;
+		case "nodejs":
+			var root = typeof(global) !== 'undefined' ? global : this;
+			return root && typeof(root[name]) !== undefined;
+			
+		default:
+			return typeof(window[name]) !== undefined;
+	}
 };
 
 /**
@@ -665,6 +686,508 @@ ilib.Locale.getAvailableLocales = function () {
 	return ilib.Locale.locales;
 };
 /*
+ * localeinfo.js - Encode locale-specific defaults
+ * 
+ * Copyright © 2012-2013, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// !depends ilibglobal.js locale.js
+
+// !data localeinfo
+
+/**
+ * @class
+ * Create a new locale info instance. Locale info instances give information about
+ * the default settings for a particular locale. These settings may be overridden
+ * by various parts of the code, and should be used as a fall-back setting of last
+ * resort. <p>
+ * 
+ * The optional options object holds extra parameters if they are necessary. The
+ * current list of supported options are:
+ * 
+ * <ul>
+ * <li><i>onLoad</i> - a callback function to call when the locale info object is fully 
+ * loaded. When the onLoad option is given, the localeinfo object will attempt to
+ * load any missing locale data using the ilib loader callback.
+ * When the constructor is done (even if the data is already preassembled), the 
+ * onLoad function is called with the current instance as a parameter, so this
+ * callback can be used with preassembled or dynamic loading or a mix of the two.
+ * 
+ * <li><i>sync</i> - tell whether to load any missing locale data synchronously or 
+ * asynchronously. If this option is given as "false", then the "onLoad"
+ * callback must be given, as the instance returned from this constructor will
+ * not be usable for a while. 
+ *
+ * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ * loader callback function when locale data is missing. The parameters are not
+ * interpretted or modified in any way. They are simply passed along. The object 
+ * may contain any property/value pairs as long as the calling code is in
+ * agreement with the loader callback function as to what those parameters mean.
+ * </ul>
+ * 
+ * If this copy of ilib is pre-assembled and all the data is already available, 
+ * or if the data was already previously loaded, then this constructor will call
+ * the onLoad callback immediately when the initialization is done. 
+ * If the onLoad option is not given, this class will only attempt to load any
+ * missing locale data synchronously.
+ * 
+ * Depends directive: !depends localeinfo.js
+ * 
+ * @constructor
+ * @see {ilib.setLoaderCallback} for information about registering a loader callback
+ * function
+ * @param {ilib.Locale|string=} locale the locale for which the info is sought, or undefined for
+ * @param {Object=} options the locale for which the info is sought, or undefined for
+ * the current locale
+ */
+ilib.LocaleInfo = function(locale, options) {
+	var sync = true,
+	    loadParams = undefined;
+	
+	/* these are all the defaults. Essentially, en-US */
+	/** @type {{
+		scripts:Array.<string>,
+		timezone:string,
+		units:string,
+		calendar:string,
+		clock:string,
+		currency:string,
+		firstDayOfWeek:number,
+		numfmt:Object.<{
+			currencyFormats:Object.<{common:string,commonNegative:string,iso:string,isoNegative:string}>,
+			script:string,
+			decimalChar:string,
+			groupChar:string,
+			prigroupSize:number,
+			secgroupSize:number,
+			negativenumFmt:string,
+			pctFmt:string,
+			negativepctFmt:string,
+			pctChar:string,
+			roundingMode:string,
+			exponential:string,
+			digits:string
+		}>
+	}}*/
+	this.info = ilib.LocaleInfo.defaultInfo;
+	
+	switch (typeof(locale)) {
+		case "string":
+			this.locale = new ilib.Locale(locale);
+			break;
+		default:
+		case "undefined":
+			this.locale = new ilib.Locale();
+			break;
+		case "object":
+			this.locale = locale;
+			break;
+	}
+	
+	if (options) {
+		if (typeof(options.sync) !== 'undefined') {
+			sync = (options.sync == true);
+		}
+		
+		if (typeof(options.loadParams) !== 'undefined') {
+			loadParams = options.loadParams;
+		}
+	}
+
+	if (!ilib.LocaleInfo.cache) {
+		ilib.LocaleInfo.cache = {};
+	}
+
+	ilib.loadData({
+		object: ilib.LocaleInfo, 
+		locale: this.locale, 
+		name: "localeinfo.json", 
+		sync: sync, 
+		loadParams: loadParams, 
+		callback: ilib.bind(this, function (info) {
+			if (!info) {
+				info = ilib.LocaleInfo.defaultInfo;
+				var spec = this.locale.getSpec().replace(/-/g, "_");
+				ilib.LocaleInfo.cache[spec] = info;
+			}
+			this.info = info;
+			if (options && typeof(options.onLoad) === 'function') {
+				options.onLoad(this);
+			}
+		})
+	});
+};
+
+ilib.LocaleInfo.defaultInfo = /** @type {{
+	scripts:Array.<string>,
+	timezone:string,
+	units:string,
+	calendar:string,
+	clock:string,
+	currency:string,
+	firstDayOfWeek:number,
+	numfmt:Object.<{
+		currencyFormats:Object.<{
+			common:string,
+			commonNegative:string,
+			iso:string,
+			isoNegative:string
+		}>,
+		script:string,
+		decimalChar:string,
+		groupChar:string,
+		prigroupSize:number,
+		secgroupSize:number,
+		negativenumFmt:string,
+		pctFmt:string,
+		negativepctFmt:string,
+		pctChar:string,
+		roundingMode:string,
+		exponential:string,
+		digits:string
+	}>
+}}*/ ilib.data.localeinfo;
+ilib.LocaleInfo.defaultInfo = ilib.LocaleInfo.defaultInfo || {
+	"scripts": ["Latn"],
+    "timezone": "Etc/UTC",
+    "units": "metric",
+    "calendar": "gregorian",
+    "clock": "24",
+    "currency": "USD",
+    "firstDayOfWeek": 1,
+    "numfmt": {
+        "currencyFormats": {
+            "common": "{s}{n}",
+            "commonNegative": "{s}-{n}",
+            "iso": "{s}{n}",
+            "isoNegative": "{s}-{n}"
+        },
+        "script": "Latn",
+        "decimalChar": ",",
+        "groupChar": ".",
+        "prigroupSize": 3,
+        "secgroupSize": 0,
+        "pctFmt": "{n}%",
+        "negativepctFmt": "-{n}%",
+        "pctChar": "%",
+        "roundingMode": "halfdown",
+        "exponential": "e",
+        "digits": ""
+    }
+};
+
+ilib.LocaleInfo.prototype = {
+    /**
+     * Return the name of the locale's language in English.
+     * @returns {string} the name of the locale's language in English
+     */
+    getLanguageName: function () {
+    	return this.info["language.name"];	
+    },
+    
+    /**
+     * Return the name of the locale's region in English. If the locale
+     * has no region, this returns undefined.
+     * 
+     * @returns {string|undefined} the name of the locale's region in English
+     */
+    getRegionName: function () {
+    	return this.info["region.name"];	
+    },
+
+    /**
+	 * Return whether this locale commonly uses the 12- or the 24-hour clock.
+	 *  
+	 * @returns {string} "12" if the locale commonly uses a 12-hour clock, or "24"
+	 * if the locale commonly uses a 24-hour clock. 
+	 */
+	getClock: function() {
+		return this.info.clock;
+	},
+
+	/**
+	 * Return the locale that this info object was created with.
+	 * @returns {ilib.Locale} The locale spec of the locale used to construct this info instance
+	 */
+	getLocale: function () {
+		return this.locale;
+	},
+	
+	/**
+	 * Return the name of the measuring system that is commonly used in the given locale.
+	 * Valid values are "uscustomary", "imperial", and "metric".
+	 * 
+	 * @returns {string} The name of the measuring system commonly used in the locale
+	 */
+	getUnits: function () {
+		return this.info.units;
+	},
+	
+	/**
+	 * Return the name of the calendar that is commonly used in the given locale.
+	 * 
+	 * @returns {string} The name of the calendar commonly used in the locale
+	 */
+	getCalendar: function () {
+		return this.info.calendar;
+	},
+	
+	/**
+	 * Return the day of week that starts weeks in the current locale. Days are still
+	 * numbered the standard way with 0 for Sunday through 6 for Saturday, but calendars 
+	 * should be displayed and weeks calculated with the day of week returned from this 
+	 * function as the first day of the week.
+	 * 
+	 * @returns {number} the day of the week that starts weeks in the current locale.
+	 */
+	getFirstDayOfWeek: function () {
+		return this.info.firstDayOfWeek;
+	},
+	
+	/**
+	 * Return the default time zone for this locale. Many locales span across multiple
+	 * time zones. In this case, the time zone with the largest population is chosen
+	 * to represent the locale. This is obviously not that accurate, but then again,
+	 * this method's return value should only be used as a default anyways.
+	 * @returns {string} the default time zone for this locale.
+	 */
+	getTimeZone: function () {
+		return this.info.timezone;
+	},
+	
+	/**
+	 * Return the decimal separator for formatted numbers in this locale.
+	 * @returns {string} the decimal separator char
+	 */
+	getDecimalSeparator: function () {
+		return this.info.numfmt.decimalChar;
+	},
+	
+	/**
+	 * Return the decimal separator for formatted numbers in this locale for native script.
+	 * @returns {string} the decimal separator char
+	 */
+	getNativeDecimalSeparator: function () {
+		return (this.info.native_numfmt && this.info.native_numfmt.decimalChar) || this.info.numfmt.decimalChar;
+	},
+	
+	/**
+	 * Return the separator character used to separate groups of digits on the 
+	 * integer side of the decimal character.
+	 * @returns {string} the grouping separator char
+	 */
+	getGroupingSeparator: function () {
+		return this.info.numfmt.groupChar;
+	},
+
+	/**
+	 * Return the separator character used to separate groups of digits on the 
+	 * integer side of the decimal character for the native script if present other than the default script.
+	 * @returns {string} the grouping separator char
+	 */
+	getNativeGroupingSeparator: function () {
+		return (this.info.native_numfmt && this.info.native_numfmt.groupChar) || this.info.numfmt.groupChar;
+	},
+	
+	/**
+	 * Return the minimum number of digits grouped together on the integer side 
+	 * for the first (primary) group. 
+	 * In western European cultures, groupings are in 1000s, so the number of digits
+	 * is 3. 
+	 * @returns {number} the number of digits in a primary grouping, or 0 for no grouping
+	 */
+	getPrimaryGroupingDigits: function () {
+		return (typeof(this.info.numfmt.prigroupSize) !== 'undefined' && this.info.numfmt.prigroupSize) || 0;
+	},
+
+	/**
+	 * Return the minimum number of digits grouped together on the integer side
+	 * for the second or more (secondary) group.<p>
+	 *   
+	 * In western European cultures, all groupings are by 1000s, so the secondary
+	 * size should be 0 because there is no secondary size. In general, if this 
+	 * method returns 0, then all groupings are of the primary size.<p> 
+	 * 
+	 * For some other cultures, the first grouping (primary)
+	 * is 3 and any subsequent groupings (secondary) are two. So, 100000 would be
+	 * written as: "1,00,000".
+	 * 
+	 * @returns {number} the number of digits in a secondary grouping, or 0 for no 
+	 * secondary grouping. 
+	 */
+	getSecondaryGroupingDigits: function () {
+		return this.info.numfmt.secgroupSize || 0;
+	},
+
+	/**
+	 * Return the format template used to format percentages in this locale.
+	 * @returns {string} the format template for formatting percentages
+	 */
+	getPercentageFormat: function () {
+		return this.info.numfmt.pctFmt;
+	},
+
+	/**
+	 * Return the format template used to format percentages in this locale
+	 * with negative amounts.
+	 * @returns {string} the format template for formatting percentages
+	 */
+	getNegativePercentageFormat: function () {
+		return this.info.numfmt.negativepctFmt;
+	},
+
+	/**
+	 * Return the symbol used for percentages in this locale.
+	 * @returns {string} the symbol used for percentages in this locale
+	 */
+	getPercentageSymbol: function () {
+		return this.info.numfmt.pctChar || "%";
+	},
+
+	/**
+	 * Return the symbol used for exponential in this locale.
+	 * @returns {string} the symbol used for exponential in this locale
+	 */
+	getExponential: function () {
+		return this.info.numfmt.exponential;
+	},
+
+	/**
+	 * Return the symbol used for exponential in this locale for native script.
+	 * @returns {string} the symbol used for exponential in this locale for native script
+	 */
+	getNativeExponential: function () {
+		return (this.info.native_numfmt && this.info.native_numfmt.exponential) || this.info.numfmt.exponential;
+	},
+
+	/**
+	 * Return the symbol used for percentages in this locale for native script.
+	 * @returns {string} the symbol used for percentages in this locale for native script
+	 */
+	getNativePercentageSymbol: function () {
+		return (this.info.native_numfmt && this.info.native_numfmt.pctChar) || this.info.numfmt.pctChar || "%";
+	
+	},
+	/**
+	 * Return the format template used to format negative numbers in this locale.
+	 * @returns {string} the format template for formatting negative numbers
+	 */
+	getNegativeNumberFormat: function () { 
+		return this.info.numfmt.negativenumFmt;
+	},
+	
+	/**
+	 * Return an object containing the format templates for formatting currencies
+	 * in this locale. The object has a number of properties in it that each are
+	 * a particular style of format. Normally, this contains a "common" and an "iso"
+	 * style, but may contain others in the future.
+	 * @returns {Object} an object containing the format templates for currencies
+	 */
+	getCurrencyFormats: function () {
+		return this.info.numfmt.currencyFormats;
+	},
+	
+	/**
+	 * Return the currency that is legal in the locale, or which is most commonly 
+	 * used in regular commerce.
+	 * @returns {string} the ISO 4217 code for the currency of this locale
+	 */
+	getCurrency: function () {
+		return this.info.currency;
+	},
+	
+	/**
+	 * Return the digits of the default script if they are defined.
+	 * If not defined, the default should be the regular "Arabic numerals"
+	 * used in the Latin script. (0-9)
+	 * @returns {string|undefined} the digits used in the default script 
+	 */
+	getDigits: function () {
+		return this.info.numfmt.digits;
+	},
+	
+	/**
+	 * Return the digits of the native script if they are defined. 
+	 * @returns {string|undefined} the digits used in the default script 
+	 */
+	getNativeDigits: function () {
+		return this.info.native_numfmt && this.info.native_numfmt.digits;
+	},
+	
+	/**
+	 * If this locale typically uses a different type of rounding for numeric
+	 * formatting other than halfdown, especially for currency, then it can be 
+	 * specified in the localeinfo. If the locale uses the default, then this 
+	 * method returns undefined. The locale's rounding method overrides the 
+	 * rounding method for the currency itself, which can sometimes shared 
+	 * between various locales so it is less specific.
+	 * @returns {string} the name of the rounding mode typically used in this
+	 * locale, or "halfdown" if the locale does not override the default
+	 */
+	getRoundingMode: function () {
+		return this.info.numfmt.roundingMode;
+	},
+	
+	/**
+	 * Return the default script used to write text in the language of this 
+	 * locale. Text for most languages is written in only one script, but there
+	 * are some languages where the text can be written in a number of scripts,
+	 * depending on a variety of things such as the region, ethnicity, religion, 
+	 * etc. of the author. This method returns the default script for the
+	 * locale, in which the language is most commonly written.<p> 
+	 * 
+	 * The script is returned as an ISO 15924 4-letter code.
+	 * 
+	 * @returns {string} the ISO 15924 code for the default script used to write
+	 * text in this locale 
+	 */
+	getDefaultScript: function() {
+		return (this.info.scripts) ? this.info.scripts[0] : "Latn";
+	},
+	
+	/**
+	 * Return the script used for the current locale. If the current locale
+	 * explicitly defines a script, then this script is returned. If not, then 
+	 * the default script for the locale is returned.
+	 * 
+	 * @see ilib.LocaleInfo.getDefaultScript
+	 * @returns {string} the ISO 15924 code for the script used to write
+	 * text in this locale
+	 */
+	getScript: function() {
+		return this.locale.getScript() || this.getDefaultScript(); 
+	},
+	
+	/**
+	 * Return an array of script codes which are used to write text in the current
+	 * language. Text for most languages is written in only one script, but there
+	 * are some languages where the text can be written in a number of scripts,
+	 * depending on a variety of things such as the region, ethnicity, religion, 
+	 * etc. of the author. This method returns an array of script codes in which 
+	 * the language is commonly written.
+	 * 
+	 * @returns {Array.<string>} an array of ISO 15924 codes for the scripts used 
+	 * to write text in this language
+	 */
+	getAllScripts: function() {
+		return this.info.scripts || ["Latn"];
+	}
+};
+
+/*
  * date.js - Represent a date in any calendar. This class is subclassed for each calendar.
  * 
  * Copyright © 2012, JEDLSoft
@@ -683,7 +1206,7 @@ ilib.Locale.getAvailableLocales = function () {
  * limitations under the License.
  */
 
-/* !depends ilibglobal.js */
+/* !depends ilibglobal.js localeinfo.js */
 
 /**
  * @class
@@ -836,8 +1359,8 @@ ilib.Date.prototype = {
  * bind() doesn't exist in many older browsers.
  * 
  * @param {Object} scope object that the method should operate on
- * @param {function(?)} method method to call
- * @return {function(?)|undefined} function that calls the given method 
+ * @param {function(...)} method method to call
+ * @return {function(...)|undefined} function that calls the given method 
  * in the given scope with all of its arguments properly attached, or
  * undefined if there was a problem with the arguments
  */
@@ -1218,9 +1741,9 @@ ilib.isEmpty = function (obj) {
  * The parameters can specify any of the following properties:<p>
  * 
  * <ul>
- * <li><i>name</i> - String. The name of the file being loaded.
+ * <li><i>name</i> - String. The name of the file being loaded. Default: resources.json
  * <li><i>object</i> - Object. The class attempting to load data. The cache is stored inside of here.
- * <li><i>locale</i> - ilib.Locale. The name of the locale data to load. Default is the current locale.
+ * <li><i>locale</i> - ilib.Locale. The locale for which data is loaded. Default is the current locale.
  * <li><i>type</i> - String. Type of file to load. This can be "json" or "other" type. Default: "json" 
  * <li><i>loadParams</i> - Object. An object with parameters to pass to the loader function
  * <li><i>sync</i> - boolean. Whether or not to load the data synchronously
@@ -1235,7 +1758,7 @@ ilib.loadData = function(params) {
 		object = undefined, 
 		locale = new ilib.Locale(ilib.getLocale()), 
 		sync = false, 
-		type = "json",
+		type,
 		loadParams = {},
 		callback = undefined;
 	
@@ -1267,22 +1790,33 @@ ilib.loadData = function(params) {
 	if (object && !object.cache) {
 		object.cache = {};
 	}
+	
+	if (!type) {
+		var dot = name.lastIndexOf(".");
+		type = (dot !== -1) ? name.substring(dot+1) : "text";
+	}
 
 	var spec = locale.getSpec().replace(/-/g, '_') || "root";
 	if (!object || typeof(object.cache[spec]) === 'undefined') {
-		var basename = name.substring(0,name.lastIndexOf("."));
-		var data = ilib.mergeLocData(basename, locale);
-		if (data) {
-			if (object) {
-				object.cache[spec] = data;
+		var data;
+		
+		if (type === "json") {
+			var basename = name.substring(0, name.lastIndexOf("."));
+			data = ilib.mergeLocData(basename, locale);
+			if (data) {
+				if (object) {
+					object.cache[spec] = data;
+				}
+				callback(data);
+				return;
 			}
-			callback(data);
-		} else if (typeof(ilib._load) === 'function') {
+		}
+		
+		if (typeof(ilib._load) === 'function') {
 			// the data is not preassembled, so attempt to load it dynamically
 			var files = ilib.getLocFiles(locale, name);
 			if (type !== "json") {
 				loadParams.returnOne = true;
-				loadParams.nonLocale = true;
 			}
 			
 			ilib._load(files, sync, loadParams, ilib.bind(this, function(arr) {
@@ -1299,16 +1833,23 @@ ilib.loadData = function(params) {
 					}
 					callback(data);
 				} else {
-					// only returns the most locale-specific file in 0th element
-					if (object) {
-						object.cache[spec] = arr[arr.length-1];
+					var i = arr.length-1; 
+					while (i > -1 && !arr[i]) {
+						i--;
 					}
-					callback(arr[arr.length-1]);
+					if (i > -1) {
+						if (object) {
+							object.cache[spec] = arr[i];
+						}
+						callback(arr[i]);
+					} else {
+						callback(undefined);
+					}
 				}
 			}));
 		} else {
 			// no data other than the generic shared data
-			if (object) {
+			if (object && data) {
 				object.cache[spec] = data;
 			}
 			callback(data);
@@ -2269,16 +2810,35 @@ ilib.String.prototype = {
 	 * 3 or 4".
 	 * @param {ilib.Locale|string} locale locale to use when processing choice
 	 * formats with this string
+	 * @param {boolean} sync [optional] whether to load the locale data synchronously 
+	 * or not
+	 * @param {Object} loadParams [optional] parameters to pass to the loader function
+	 * @param {function(*)=} onLoad [optional] function to call when the loading is done
 	 */
-	setLocale: function (locale) {
+	setLocale: function (locale, sync, loadParams, onLoad) {
 		if (typeof(locale) === 'object') {
 			this.locale = locale;
 		} else {
 			this.localeSpec = locale;
 			this.locale = new ilib.Locale(locale);
 		}
+		
+		ilib.String.loadPlurals(typeof(sync) !== 'undefined' ? sync : true, this.locale, loadParams, onLoad);
 	},
-	
+
+	/**
+	 * Return the locale to use when processing choice formats. The locale
+	 * affects how number classes are interpretted. In some cultures,
+	 * the limit "few" maps to "any integer that ends in the digits 2 to 9" and
+	 * in yet others, "few" maps to "any integer that ends in the digits
+	 * 3 or 4".
+	 * @return {string} localespec to use when processing choice
+	 * formats with this string
+	 */
+	getLocale: function () {
+		return (this.locale ? this.locale.getSpec() : this.localeSpec) || ilib.getLocale();
+	},
+
 	/**
 	 * Return the number of code points in this string. This may be different
 	 * than the number of characters, as the UTF-16 encoding that Javascript
@@ -2301,508 +2861,6 @@ ilib.String.prototype = {
 		return this.cpLength;	
 	}
 };
-/*
- * localeinfo.js - Encode locale-specific defaults
- * 
- * Copyright © 2012-2013, JEDLSoft
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-// !depends ilibglobal.js locale.js
-
-// !data localeinfo
-
-/**
- * @class
- * Create a new locale info instance. Locale info instances give information about
- * the default settings for a particular locale. These settings may be overridden
- * by various parts of the code, and should be used as a fall-back setting of last
- * resort. <p>
- * 
- * The optional options object holds extra parameters if they are necessary. The
- * current list of supported options are:
- * 
- * <ul>
- * <li><i>onLoad</i> - a callback function to call when the locale info object is fully 
- * loaded. When the onLoad option is given, the localeinfo object will attempt to
- * load any missing locale data using the ilib loader callback.
- * When the constructor is done (even if the data is already preassembled), the 
- * onLoad function is called with the current instance as a parameter, so this
- * callback can be used with preassembled or dynamic loading or a mix of the two.
- * 
- * <li><i>sync</i> - tell whether to load any missing locale data synchronously or 
- * asynchronously. If this option is given as "false", then the "onLoad"
- * callback must be given, as the instance returned from this constructor will
- * not be usable for a while. 
- *
- * <li><i>loadParams</i> - an object containing parameters to pass to the 
- * loader callback function when locale data is missing. The parameters are not
- * interpretted or modified in any way. They are simply passed along. The object 
- * may contain any property/value pairs as long as the calling code is in
- * agreement with the loader callback function as to what those parameters mean.
- * </ul>
- * 
- * If this copy of ilib is pre-assembled and all the data is already available, 
- * or if the data was already previously loaded, then this constructor will call
- * the onLoad callback immediately when the initialization is done. 
- * If the onLoad option is not given, this class will only attempt to load any
- * missing locale data synchronously.
- * 
- * Depends directive: !depends localeinfo.js
- * 
- * @constructor
- * @see {ilib.setLoaderCallback} for information about registering a loader callback
- * function
- * @param {ilib.Locale|string=} locale the locale for which the info is sought, or undefined for
- * @param {Object=} options the locale for which the info is sought, or undefined for
- * the current locale
- */
-ilib.LocaleInfo = function(locale, options) {
-	var sync = true,
-	    loadParams = undefined;
-	
-	/* these are all the defaults. Essentially, en-US */
-	/** @type {{
-		scripts:Array.<string>,
-		timezone:string,
-		units:string,
-		calendar:string,
-		clock:string,
-		currency:string,
-		firstDayOfWeek:number,
-		numfmt:Object.<{
-			currencyFormats:Object.<{common:string,commonNegative:string,iso:string,isoNegative:string}>,
-			script:string,
-			decimalChar:string,
-			groupChar:string,
-			prigroupSize:number,
-			secgroupSize:number,
-			negativenumFmt:string,
-			pctFmt:string,
-			negativepctFmt:string,
-			pctChar:string,
-			roundingMode:string,
-			exponential:string,
-			digits:string
-		}>
-	}}*/
-	this.info = ilib.LocaleInfo.defaultInfo;
-	
-	switch (typeof(locale)) {
-		case "string":
-			this.locale = new ilib.Locale(locale);
-			break;
-		default:
-		case "undefined":
-			this.locale = new ilib.Locale();
-			break;
-		case "object":
-			this.locale = locale;
-			break;
-	}
-	
-	if (options) {
-		if (typeof(options.sync) !== 'undefined') {
-			sync = (options.sync == true);
-		}
-		
-		if (typeof(options.loadParams) !== 'undefined') {
-			loadParams = options.loadParams;
-		}
-	}
-
-	if (!ilib.LocaleInfo.cache) {
-		ilib.LocaleInfo.cache = {};
-	}
-
-	ilib.loadData({
-		object: ilib.LocaleInfo, 
-		locale: this.locale, 
-		name: "localeinfo.json", 
-		sync: sync, 
-		loadParams: loadParams, 
-		callback: ilib.bind(this, function (info) {
-			if (!info) {
-				info = ilib.LocaleInfo.defaultInfo;
-				var spec = this.locale.getSpec().replace(/-/g, "_");
-				ilib.LocaleInfo.cache[spec] = info;
-			}
-			this.info = info;
-			if (options && typeof(options.onLoad) === 'function') {
-				options.onLoad(this);
-			}
-		})
-	});
-};
-
-ilib.LocaleInfo.defaultInfo = /** @type {{
-	scripts:Array.<string>,
-	timezone:string,
-	units:string,
-	calendar:string,
-	clock:string,
-	currency:string,
-	firstDayOfWeek:number,
-	numfmt:Object.<{
-		currencyFormats:Object.<{
-			common:string,
-			commonNegative:string,
-			iso:string,
-			isoNegative:string
-		}>,
-		script:string,
-		decimalChar:string,
-		groupChar:string,
-		prigroupSize:number,
-		secgroupSize:number,
-		negativenumFmt:string,
-		pctFmt:string,
-		negativepctFmt:string,
-		pctChar:string,
-		roundingMode:string,
-		exponential:string,
-		digits:string
-	}>
-}}*/ ilib.data.localeinfo;
-ilib.LocaleInfo.defaultInfo = ilib.LocaleInfo.defaultInfo || {
-	"scripts": ["Latn"],
-    "timezone": "Etc/UTC",
-    "units": "metric",
-    "calendar": "gregorian",
-    "clock": "24",
-    "currency": "USD",
-    "firstDayOfWeek": 1,
-    "numfmt": {
-        "currencyFormats": {
-            "common": "{s}{n}",
-            "commonNegative": "{s}-{n}",
-            "iso": "{s}{n}",
-            "isoNegative": "{s}-{n}"
-        },
-        "script": "Latn",
-        "decimalChar": ",",
-        "groupChar": ".",
-        "prigroupSize": 3,
-        "secgroupSize": 0,
-        "pctFmt": "{n}%",
-        "negativepctFmt": "-{n}%",
-        "pctChar": "%",
-        "roundingMode": "halfdown",
-        "exponential": "e",
-        "digits": ""
-    }
-};
-
-ilib.LocaleInfo.prototype = {
-    /**
-     * Return the name of the locale's language in English.
-     * @returns {string} the name of the locale's language in English
-     */
-    getLanguageName: function () {
-    	return this.info["language.name"];	
-    },
-    
-    /**
-     * Return the name of the locale's region in English. If the locale
-     * has no region, this returns undefined.
-     * 
-     * @returns {string|undefined} the name of the locale's region in English
-     */
-    getRegionName: function () {
-    	return this.info["region.name"];	
-    },
-
-    /**
-	 * Return whether this locale commonly uses the 12- or the 24-hour clock.
-	 *  
-	 * @returns {string} "12" if the locale commonly uses a 12-hour clock, or "24"
-	 * if the locale commonly uses a 24-hour clock. 
-	 */
-	getClock: function() {
-		return this.info.clock;
-	},
-
-	/**
-	 * Return the locale that this info object was created with.
-	 * @returns {ilib.Locale} The locale spec of the locale used to construct this info instance
-	 */
-	getLocale: function () {
-		return this.locale;
-	},
-	
-	/**
-	 * Return the name of the measuring system that is commonly used in the given locale.
-	 * Valid values are "uscustomary", "imperial", and "metric".
-	 * 
-	 * @returns {string} The name of the measuring system commonly used in the locale
-	 */
-	getUnits: function () {
-		return this.info.units;
-	},
-	
-	/**
-	 * Return the name of the calendar that is commonly used in the given locale.
-	 * 
-	 * @returns {string} The name of the calendar commonly used in the locale
-	 */
-	getCalendar: function () {
-		return this.info.calendar;
-	},
-	
-	/**
-	 * Return the day of week that starts weeks in the current locale. Days are still
-	 * numbered the standard way with 0 for Sunday through 6 for Saturday, but calendars 
-	 * should be displayed and weeks calculated with the day of week returned from this 
-	 * function as the first day of the week.
-	 * 
-	 * @returns {number} the day of the week that starts weeks in the current locale.
-	 */
-	getFirstDayOfWeek: function () {
-		return this.info.firstDayOfWeek;
-	},
-	
-	/**
-	 * Return the default time zone for this locale. Many locales span across multiple
-	 * time zones. In this case, the time zone with the largest population is chosen
-	 * to represent the locale. This is obviously not that accurate, but then again,
-	 * this method's return value should only be used as a default anyways.
-	 * @returns {string} the default time zone for this locale.
-	 */
-	getTimeZone: function () {
-		return this.info.timezone;
-	},
-	
-	/**
-	 * Return the decimal separator for formatted numbers in this locale.
-	 * @returns {string} the decimal separator char
-	 */
-	getDecimalSeparator: function () {
-		return this.info.numfmt.decimalChar;
-	},
-	
-	/**
-	 * Return the decimal separator for formatted numbers in this locale for native script.
-	 * @returns {string} the decimal separator char
-	 */
-	getNativeDecimalSeparator: function () {
-		return (this.info.native_numfmt && this.info.native_numfmt.decimalChar) || this.info.numfmt.decimalChar;
-	},
-	
-	/**
-	 * Return the separator character used to separate groups of digits on the 
-	 * integer side of the decimal character.
-	 * @returns {string} the grouping separator char
-	 */
-	getGroupingSeparator: function () {
-		return this.info.numfmt.groupChar;
-	},
-
-	/**
-	 * Return the separator character used to separate groups of digits on the 
-	 * integer side of the decimal character for the native script if present other than the default script.
-	 * @returns {string} the grouping separator char
-	 */
-	getNativeGroupingSeparator: function () {
-		return (this.info.native_numfmt && this.info.native_numfmt.groupChar) || this.info.numfmt.groupChar;
-	},
-	
-	/**
-	 * Return the minimum number of digits grouped together on the integer side 
-	 * for the first (primary) group. 
-	 * In western European cultures, groupings are in 1000s, so the number of digits
-	 * is 3. 
-	 * @returns {number} the number of digits in a primary grouping, or 0 for no grouping
-	 */
-	getPrimaryGroupingDigits: function () {
-		return (typeof(this.info.numfmt.prigroupSize) !== 'undefined' && this.info.numfmt.prigroupSize) || 0;
-	},
-
-	/**
-	 * Return the minimum number of digits grouped together on the integer side
-	 * for the second or more (secondary) group.<p>
-	 *   
-	 * In western European cultures, all groupings are by 1000s, so the secondary
-	 * size should be 0 because there is no secondary size. In general, if this 
-	 * method returns 0, then all groupings are of the primary size.<p> 
-	 * 
-	 * For some other cultures, the first grouping (primary)
-	 * is 3 and any subsequent groupings (secondary) are two. So, 100000 would be
-	 * written as: "1,00,000".
-	 * 
-	 * @returns {number} the number of digits in a secondary grouping, or 0 for no 
-	 * secondary grouping. 
-	 */
-	getSecondaryGroupingDigits: function () {
-		return this.info.numfmt.secgroupSize || 0;
-	},
-
-	/**
-	 * Return the format template used to format percentages in this locale.
-	 * @returns {string} the format template for formatting percentages
-	 */
-	getPercentageFormat: function () {
-		return this.info.numfmt.pctFmt;
-	},
-
-	/**
-	 * Return the format template used to format percentages in this locale
-	 * with negative amounts.
-	 * @returns {string} the format template for formatting percentages
-	 */
-	getNegativePercentageFormat: function () {
-		return this.info.numfmt.negativepctFmt;
-	},
-
-	/**
-	 * Return the symbol used for percentages in this locale.
-	 * @returns {string} the symbol used for percentages in this locale
-	 */
-	getPercentageSymbol: function () {
-		return this.info.numfmt.pctChar || "%";
-	},
-
-	/**
-	 * Return the symbol used for exponential in this locale.
-	 * @returns {string} the symbol used for exponential in this locale
-	 */
-	getExponential: function () {
-		return this.info.numfmt.exponential;
-	},
-
-	/**
-	 * Return the symbol used for exponential in this locale for native script.
-	 * @returns {string} the symbol used for exponential in this locale for native script
-	 */
-	getNativeExponential: function () {
-		return (this.info.native_numfmt && this.info.native_numfmt.exponential) || this.info.numfmt.exponential;
-	},
-
-	/**
-	 * Return the symbol used for percentages in this locale for native script.
-	 * @returns {string} the symbol used for percentages in this locale for native script
-	 */
-	getNativePercentageSymbol: function () {
-		return (this.info.native_numfmt && this.info.native_numfmt.pctChar) || this.info.numfmt.pctChar || "%";
-	
-	},
-	/**
-	 * Return the format template used to format negative numbers in this locale.
-	 * @returns {string} the format template for formatting negative numbers
-	 */
-	getNegativeNumberFormat: function () { 
-		return this.info.numfmt.negativenumFmt;
-	},
-	
-	/**
-	 * Return an object containing the format templates for formatting currencies
-	 * in this locale. The object has a number of properties in it that each are
-	 * a particular style of format. Normally, this contains a "common" and an "iso"
-	 * style, but may contain others in the future.
-	 * @returns {Object} an object containing the format templates for currencies
-	 */
-	getCurrencyFormats: function () {
-		return this.info.numfmt.currencyFormats;
-	},
-	
-	/**
-	 * Return the currency that is legal in the locale, or which is most commonly 
-	 * used in regular commerce.
-	 * @returns {string} the ISO 4217 code for the currency of this locale
-	 */
-	getCurrency: function () {
-		return this.info.currency;
-	},
-	
-	/**
-	 * Return the digits of the default script if they are defined.
-	 * If not defined, the default should be the regular "Arabic numerals"
-	 * used in the Latin script. (0-9)
-	 * @returns {string|undefined} the digits used in the default script 
-	 */
-	getDigits: function () {
-		return this.info.numfmt.digits;
-	},
-	
-	/**
-	 * Return the digits of the native script if they are defined. 
-	 * @returns {string|undefined} the digits used in the default script 
-	 */
-	getNativeDigits: function () {
-		return this.info.native_numfmt && this.info.native_numfmt.digits;
-	},
-	
-	/**
-	 * If this locale typically uses a different type of rounding for numeric
-	 * formatting other than halfdown, especially for currency, then it can be 
-	 * specified in the localeinfo. If the locale uses the default, then this 
-	 * method returns undefined. The locale's rounding method overrides the 
-	 * rounding method for the currency itself, which can sometimes shared 
-	 * between various locales so it is less specific.
-	 * @returns {string} the name of the rounding mode typically used in this
-	 * locale, or "halfdown" if the locale does not override the default
-	 */
-	getRoundingMode: function () {
-		return this.info.numfmt.roundingMode;
-	},
-	
-	/**
-	 * Return the default script used to write text in the language of this 
-	 * locale. Text for most languages is written in only one script, but there
-	 * are some languages where the text can be written in a number of scripts,
-	 * depending on a variety of things such as the region, ethnicity, religion, 
-	 * etc. of the author. This method returns the default script for the
-	 * locale, in which the language is most commonly written.<p> 
-	 * 
-	 * The script is returned as an ISO 15924 4-letter code.
-	 * 
-	 * @returns {string} the ISO 15924 code for the default script used to write
-	 * text in this locale 
-	 */
-	getDefaultScript: function() {
-		return (this.info.scripts) ? this.info.scripts[0] : "Latn";
-	},
-	
-	/**
-	 * Return the script used for the current locale. If the current locale
-	 * explicitly defines a script, then this script is returned. If not, then 
-	 * the default script for the locale is returned.
-	 * 
-	 * @see ilib.LocaleInfo.getDefaultScript
-	 * @returns {string} the ISO 15924 code for the script used to write
-	 * text in this locale
-	 */
-	getScript: function() {
-		return this.locale.getScript() || this.getDefaultScript(); 
-	},
-	
-	/**
-	 * Return an array of script codes which are used to write text in the current
-	 * language. Text for most languages is written in only one script, but there
-	 * are some languages where the text can be written in a number of scripts,
-	 * depending on a variety of things such as the region, ethnicity, religion, 
-	 * etc. of the author. This method returns an array of script codes in which 
-	 * the language is commonly written.
-	 * 
-	 * @returns {Array.<string>} an array of ISO 15924 codes for the scripts used 
-	 * to write text in this language
-	 */
-	getAllScripts: function() {
-		return this.info.scripts || ["Latn"];
-	}
-};
-
 /*
  * calendar.js - Represent a calendar object.
  * 
@@ -5377,7 +5435,13 @@ ilib.ResBundle.prototype = {
 				trans = trans.replace(/'/g, "\\\'").replace(/"/g, "\\\"");
 			}
 		}
-		return trans === undefined ? undefined : new ilib.String(trans);
+		if (trans === undefined) {
+			return undefined;
+		} else {
+			var ret = new ilib.String(trans);
+			ret.setLocale(this.locale.getSpec(), true, this.loadParams); // no callback
+			return ret;
+		}
 	},
 	
 	/**
@@ -10654,6 +10718,7 @@ util/jsutils.js
 ilib.NumFmt = function (options) {
 	var sync = true;
 	this.locale = new ilib.Locale();
+	/** @type {string} */
 	this.type = "number";
 	this.useNative = false;
 
@@ -10671,31 +10736,41 @@ ilib.NumFmt = function (options) {
 		}
 
 		if (options.currency) {
+			/** @type {string} */
 			this.currency = options.currency;
 		}
 
 		if (typeof (options.maxFractionDigits) === 'number') {
+			/** @type {number|undefined} */
 			this.maxFractionDigits = this._toPrimitive(options.maxFractionDigits);
 		}
 		if (typeof (options.minFractionDigits) === 'number') {
+			/** @type {number|undefined} */
 			this.minFractionDigits = this._toPrimitive(options.minFractionDigits);
 		}
 		if (options.style) {
+			/** @type {string} */
 			this.style = options.style;
 		}
 		if (options.useNative) {
 			this.useNative = options.useNative;
 		}
+		/** @type {string} */
 		this.roundingMode = options.roundingMode;
 
 		if (typeof (options.sync) !== 'undefined') {
+			/** @type {boolean} */
 			sync = (options.sync == true);
 		}
 	}
 
+	/** @type {ilib.LocaleInfo|undefined} */
+	this.localeInfo = undefined;
+	
 	new ilib.LocaleInfo(this.locale, {
 		sync: sync,
 		onLoad: ilib.bind(this, function (li) {
+			/** @type {ilib.LocaleInfo|undefined} */
 			this.localeInfo = li;
 
 			if (this.type === "number") {
@@ -10716,8 +10791,8 @@ ilib.NumFmt = function (options) {
 						if (this.style !== "common" && this.style !== "iso") {
 							this.style = "common";
 						}
-
-						if (typeof (this.maxFractionDigits) !== 'number' && typeof (this.minFractionDigits) !== 'number') {
+						
+						if (typeof(this.maxFractionDigits) !== 'number' && typeof(this.minFractionDigits) !== 'number') {
 							this.minFractionDigits = this.maxFractionDigits = this.currencyInfo.getFractionDigits();
 						}
 
@@ -10891,8 +10966,8 @@ ilib.NumFmt.prototype = {
 	_formatStandard: function (num) {
 		var i;
 		var k;
-
-		if (typeof (this.maxFractionDigits) !== 'undefined' && this.maxFractionDigits > -1) {
+		
+		if (typeof(this.maxFractionDigits) !== 'undefined' && this.maxFractionDigits > -1) {
 			var factor = Math.pow(10, this.maxFractionDigits);
 			num = this.round(num * factor) / factor;
 		}
@@ -14218,6 +14293,8 @@ ilib.AddressFmt.prototype.format = function (address) {
 
 /**
  * @class
+ * @constructor
+ * 
  * A class that implements a locale-sensitive comparator function 
  * for use with sorting function. The comparator function
  * assumes that the strings it is comparing contain Unicode characters
@@ -14239,19 +14316,20 @@ ilib.AddressFmt.prototype.format = function (address) {
  * <li><i>locale</i> - String|Locale. The locale which the comparator function 
  * will collate with. Default: the current iLib locale.
  * 
- * <li><i>level</i> - String. Strength of collator. This is one of "primary", "secondary", 
- * "tertiary", or "quaternary". Default: "primary"
+ * <li><i>sensitivity</i> - String. Sensitivity or strength of collator. This is one of 
+ * "primary", "base", "secondary", "accent", "tertiary", "case", "quaternary", or 
+ * "variant". Default: "primary"
  *   <ol>
- *   <li>primary - Only the primary distinctions between characters are significant.
+ *   <li>base or primary - Only the primary distinctions between characters are significant.
  *   Another way of saying that is that the collator will be case-, accent-, and 
  *   variation-insensitive, and only distinguish between the base characters
- *   <li>secondary - Both the primary and secondary distinctions between characters
+ *   <li>accent or secondary - Both the primary and secondary distinctions between characters
  *   are significant. That is, the collator will be accent- and variation-insensitive
  *   and will distinguish between base characters and character case.
- *   <li>tertiary - The primary, secondary, and tertiary distinctions between
+ *   <li>case or tertiary - The primary, secondary, and tertiary distinctions between
  *   characters are all significant. That is, the collator will be 
  *   variation-insensitive, but accent-, case-, and base-character-sensitive. 
- *   <li>quaternary - All distinctions between characters are significant. That is,
+ *   <li>variant or quaternary - All distinctions between characters are significant. That is,
  *   the algorithm is base character-, case-, accent-, and variation-sensitive.
  *   </ol>
  *   
@@ -14281,6 +14359,12 @@ ilib.AddressFmt.prototype.format = function (address) {
  * currently knows about for any given locale. If the value of the style option is 
  * not recognized for a locale, it will be ignored. Default style is "standard".<p>
  * 
+ * <li><i>numeric</i> - Treat the left and right strings as if they started with
+ * numbers and sort them numerically rather than lexically.
+ * 
+ * <li><i>ignorePunctuation</i> - Skip punctuation characters when comparing the
+ * strings.
+ *  
  * <li>onLoad - a callback function to call when the collator object is fully 
  * loaded. When the onLoad option is given, the collator object will attempt to
  * load any missing locale data using the ilib loader callback.
@@ -14435,31 +14519,104 @@ ilib.AddressFmt.prototype.format = function (address) {
  * function will operate
  */
 ilib.Collator = function(options) {
-	// TODO: fill in the collator constructor function
+	var sync = true,
+		loadParams = undefined;
+
+	// defaults
+	/** @type ilib.Locale */
+	this.locale = new ilib.Locale(ilib.getLocale());
+	this.caseFirst = "upper";
+	this.sensitivity = "case";
+	
+	if (options) {
+		if (options.locale) {
+			this.locale = (typeof(options.locale) === 'string') ? new ilib.Locale(options.locale) : options.locale;
+		}
+		if (options.sensitivity) {
+			switch (options.sensitivity) {
+				case 'primary':
+				case 'base':
+					this.sensitivity = "base";
+					break;
+				case 'secondary':
+				case 'accent':
+					this.sensitivity = "accent";
+					break;
+				case 'tertiary':
+				case 'case':
+					this.sensitivity = "case";
+					break;
+				case 'quaternary':
+				case 'variant':
+					this.sensitivity = "variant";
+					break;
+			}
+		}
+		if (typeof(options.upperFirst) !== 'undefined') {
+			/** @type string */
+			this.caseFirst = options.upperFirst ? "upper" : "lower"; 
+		}
+		
+		if (typeof(options.ignorePunctuation) !== 'undefined') {
+			/** @type boolean */
+			this.ignorePunctuation = options.ignorePunctuation;
+		}
+		if (typeof(options.sync) !== 'undefined') {
+			sync = (options.sync == true);
+		}
+		
+		loadParams = options.loadParams;
+	}
+
+	if (typeof(Intl) !== 'undefined' && Intl) {
+		// this engine is modern and supports the new Intl object!
+		//console.log("implemented natively");
+		/** @type {{compare:function(string,string)}} */
+		this.collator = new Intl.Collator(this.locale.getSpec(), this);
+		
+		if (options && typeof(options.onLoad) === 'function') {
+			options.onLoad(this);
+		}
+	} else {
+		//console.log("implemented in pure JS");
+		if (!ilib.Collator.cache) {
+			ilib.Collator.cache = {};
+		}
+
+		// else implement in pure Javascript
+		ilib.loadData({
+			object: ilib.Collator, 
+			locale: this.locale, 
+			name: "collrules.json", 
+			sync: sync, 
+			loadParams: loadParams, 
+			callback: ilib.bind(this, function (collation) {
+				/*
+				// TODO: fill in the collator constructor function
+				if (!collation) {
+					collation = ilib.data.ducet;
+					var spec = this.locale.getSpec().replace(/-/g, '_');
+					ilib.Collator.cache[spec] = collation;
+				}
+				console.log("this is " + JSON.stringify(this));
+				this._init(collation);
+				if (options && typeof(options.onLoad) === 'function') {
+					options.onLoad(this);
+				}
+				*/
+			})
+		});
+	}
 };
 
 ilib.Collator.prototype = {
-	/**
-	 * Return a comparator function that can compare two strings together
-	 * according to the rules of this collator instance. The function 
-	 * returns a negative number if the left 
-	 * string comes before right, a positive number if the right string comes 
-	 * before the left, and zero if left and right are equivalent. If the
-	 * reverse property was given as true to the collator constructor, this 
-	 * function will
-	 * switch the sign of those values to cause sorting to happen in the
-	 * reverse order.
-	 * 
-	 * @return {function(string,string):number} a comparator function that 
-	 * can compare two strings together according to the rules of this 
-	 * collator instance
-	 */
-	getComparator: function() {
-		// bind the function to this instance so that we have the collation
-		// rules available to do the work
-		return /** @type function(string,string):number */ ilib.bind(this, this.compare);
-	},
-	
+    /**
+     * @private
+     */
+    init: function(rules) {
+    	
+    },
+    
 	/**
 	 * Compare two strings together according to the rules of this 
 	 * collator instance. Do not use this function directly with 
@@ -14475,7 +14632,39 @@ ilib.Collator.prototype = {
 	 */
 	compare: function (left, right) {
 		// TODO: fill in the full comparison algorithm here
+		// last resort: use the "C" locale
+		if (this.collator) {
+			// implemented by the core engine
+			return this.collator.compare(left, right);
+		}
+		
 		return (left < right) ? -1 : ((left > right) ? 1 : 0);
+	},
+	
+	/**
+	 * Return a comparator function that can compare two strings together
+	 * according to the rules of this collator instance. The function 
+	 * returns a negative number if the left 
+	 * string comes before right, a positive number if the right string comes 
+	 * before the left, and zero if left and right are equivalent. If the
+	 * reverse property was given as true to the collator constructor, this 
+	 * function will
+	 * switch the sign of those values to cause sorting to happen in the
+	 * reverse order.
+	 * 
+	 * @return {function(...)|undefined} a comparator function that 
+	 * can compare two strings together according to the rules of this 
+	 * collator instance
+	 */
+	getComparator: function() {
+		// bind the function to this instance so that we have the collation
+		// rules available to do the work
+		if (this.collator) {
+			// implemented by the core engine
+			return this.collator.compare;
+		}
+		
+		return /** @type function(string,string):number */ ilib.bind(this, this.compare);
 	},
 	
 	/**
