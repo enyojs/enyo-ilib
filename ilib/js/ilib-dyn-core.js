@@ -58,22 +58,43 @@ if (typeof(exports) !== 'undefined') {
  * @private
  * @static
  * Return the name of the platform
+ * @return {string} string naming the platform
  */
 ilib._getPlatform = function () {
 	if (!ilib._platform) {
-		if (typeof(window) !== 'undefined' && typeof(PalmSystem) === 'undefined') {
-			ilib._platform = "browser";
-		} else if (typeof(PalmSystem) !== 'undefined') {
-			ilib._platform = "webos";
-		} else if (typeof(environment) !== 'undefined') {
+		if (typeof(environment) !== 'undefined') {
 			ilib._platform = "rhino";
-		} else if (typeof(process) !== 'undefined') {
+		} else if (typeof(process) !== 'undefined' || typeof(require) !== 'undefined') {
 			ilib._platform = "nodejs";
+		} else if (typeof(window) !== 'undefined') {
+			ilib._platform = (typeof(PalmSystem) !== 'undefined') ? "webos" : "browser";
 		} else {
 			ilib._platform = "unknown";
 		}
 	}	
 	return ilib._platform;
+};
+
+/**
+ * @private
+ * @static
+ * Return true if the global variable is defined on this platform.
+ * @return {boolean} true if the global variable is defined on this platform, false otherwise
+ */
+ilib._isGlobal = function(name) {
+	switch (ilib._getPlatform()) {
+		case "rhino":
+			var top = (function() {
+			  return (typeof global === 'object') ? global : this;
+			})();
+			return typeof(top[name]) !== undefined;
+		case "nodejs":
+			var root = typeof(global) !== 'undefined' ? global : this;
+			return root && typeof(root[name]) !== undefined;
+			
+		default:
+			return typeof(window[name]) !== undefined;
+	}
 };
 
 /**
@@ -336,8 +357,8 @@ ilib.setLoaderCallback = function(loader) {
  * bind() doesn't exist in many older browsers.
  * 
  * @param {Object} scope object that the method should operate on
- * @param {function(?)} method method to call
- * @return {function(?)|undefined} function that calls the given method 
+ * @param {function(...)} method method to call
+ * @return {function(...)|undefined} function that calls the given method 
  * in the given scope with all of its arguments properly attached, or
  * undefined if there was a problem with the arguments
  */
@@ -718,9 +739,9 @@ ilib.isEmpty = function (obj) {
  * The parameters can specify any of the following properties:<p>
  * 
  * <ul>
- * <li><i>name</i> - String. The name of the file being loaded.
+ * <li><i>name</i> - String. The name of the file being loaded. Default: resources.json
  * <li><i>object</i> - Object. The class attempting to load data. The cache is stored inside of here.
- * <li><i>locale</i> - ilib.Locale. The name of the locale data to load. Default is the current locale.
+ * <li><i>locale</i> - ilib.Locale. The locale for which data is loaded. Default is the current locale.
  * <li><i>type</i> - String. Type of file to load. This can be "json" or "other" type. Default: "json" 
  * <li><i>loadParams</i> - Object. An object with parameters to pass to the loader function
  * <li><i>sync</i> - boolean. Whether or not to load the data synchronously
@@ -735,7 +756,7 @@ ilib.loadData = function(params) {
 		object = undefined, 
 		locale = new ilib.Locale(ilib.getLocale()), 
 		sync = false, 
-		type = "json",
+		type,
 		loadParams = {},
 		callback = undefined;
 	
@@ -767,22 +788,33 @@ ilib.loadData = function(params) {
 	if (object && !object.cache) {
 		object.cache = {};
 	}
+	
+	if (!type) {
+		var dot = name.lastIndexOf(".");
+		type = (dot !== -1) ? name.substring(dot+1) : "text";
+	}
 
 	var spec = locale.getSpec().replace(/-/g, '_') || "root";
 	if (!object || typeof(object.cache[spec]) === 'undefined') {
-		var basename = name.substring(0,name.lastIndexOf("."));
-		var data = ilib.mergeLocData(basename, locale);
-		if (data) {
-			if (object) {
-				object.cache[spec] = data;
+		var data;
+		
+		if (type === "json") {
+			var basename = name.substring(0, name.lastIndexOf("."));
+			data = ilib.mergeLocData(basename, locale);
+			if (data) {
+				if (object) {
+					object.cache[spec] = data;
+				}
+				callback(data);
+				return;
 			}
-			callback(data);
-		} else if (typeof(ilib._load) === 'function') {
+		}
+		
+		if (typeof(ilib._load) === 'function') {
 			// the data is not preassembled, so attempt to load it dynamically
 			var files = ilib.getLocFiles(locale, name);
 			if (type !== "json") {
 				loadParams.returnOne = true;
-				loadParams.nonLocale = true;
 			}
 			
 			ilib._load(files, sync, loadParams, ilib.bind(this, function(arr) {
@@ -799,16 +831,23 @@ ilib.loadData = function(params) {
 					}
 					callback(data);
 				} else {
-					// only returns the most locale-specific file in 0th element
-					if (object) {
-						object.cache[spec] = arr[arr.length-1];
+					var i = arr.length-1; 
+					while (i > -1 && !arr[i]) {
+						i--;
 					}
-					callback(arr[arr.length-1]);
+					if (i > -1) {
+						if (object) {
+							object.cache[spec] = arr[i];
+						}
+						callback(arr[i]);
+					} else {
+						callback(undefined);
+					}
 				}
 			}));
 		} else {
 			// no data other than the generic shared data
-			if (object) {
+			if (object && data) {
 				object.cache[spec] = data;
 			}
 			callback(data);
@@ -2124,16 +2163,35 @@ ilib.String.prototype = {
 	 * 3 or 4".
 	 * @param {ilib.Locale|string} locale locale to use when processing choice
 	 * formats with this string
+	 * @param {boolean} sync [optional] whether to load the locale data synchronously 
+	 * or not
+	 * @param {Object} loadParams [optional] parameters to pass to the loader function
+	 * @param {function(*)=} onLoad [optional] function to call when the loading is done
 	 */
-	setLocale: function (locale) {
+	setLocale: function (locale, sync, loadParams, onLoad) {
 		if (typeof(locale) === 'object') {
 			this.locale = locale;
 		} else {
 			this.localeSpec = locale;
 			this.locale = new ilib.Locale(locale);
 		}
+		
+		ilib.String.loadPlurals(typeof(sync) !== 'undefined' ? sync : true, this.locale, loadParams, onLoad);
 	},
-	
+
+	/**
+	 * Return the locale to use when processing choice formats. The locale
+	 * affects how number classes are interpretted. In some cultures,
+	 * the limit "few" maps to "any integer that ends in the digits 2 to 9" and
+	 * in yet others, "few" maps to "any integer that ends in the digits
+	 * 3 or 4".
+	 * @return {string} localespec to use when processing choice
+	 * formats with this string
+	 */
+	getLocale: function () {
+		return (this.locale ? this.locale.getSpec() : this.localeSpec) || ilib.getLocale();
+	},
+
 	/**
 	 * Return the number of code points in this string. This may be different
 	 * than the number of characters, as the UTF-16 encoding that Javascript
@@ -3200,7 +3258,13 @@ ilib.ResBundle.prototype = {
 				trans = trans.replace(/'/g, "\\\'").replace(/"/g, "\\\"");
 			}
 		}
-		return trans === undefined ? undefined : new ilib.String(trans);
+		if (trans === undefined) {
+			return undefined;
+		} else {
+			var ret = new ilib.String(trans);
+			ret.setLocale(this.locale.getSpec(), true, this.loadParams); // no callback
+			return ret;
+		}
 	},
 	
 	/**
