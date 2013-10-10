@@ -45,7 +45,7 @@ exports.ilib._load = (function () {
 		}
 	}
 	return function(paths, sync, params, callback) {
-		var root = (params && params.base) ? path.normalize(params.base) : base;
+		var root = (params && params.root) ? path.normalize(params.root) : base;
 
 		//util.print("node loader: attempting to load paths " + JSON.stringify(paths) + "\n");
 		if (sync) {
