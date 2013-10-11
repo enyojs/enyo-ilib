@@ -189,7 +189,11 @@ enyo.kind({
     ],
     
     components: [
-        {name: "switcherLocale", kind: "moon.ExpandablePicker", noneText: rb.getString("None Selected"), content: rb.getString("Choose Locale"), onChange: "setLocale"}
+        {content: rb.getString("Choose Locale"), classes: "ilib-onyx-sample-divider"},
+        {kind: "onyx.PickerDecorator", components: [
+            {},
+            {name: "switcherLocale", kind: "onyx.Picker", onChange: "setLocale"}
+        ]}
     ],
 
     create: function() {
@@ -197,8 +201,6 @@ enyo.kind({
         var curLocale = ilib.getLocale();
         for(var i = 0; i < this.locales.length; i++)
             this.$.switcherLocale.createComponent({locale: this.locales[i].locale, content: this.locales[i].locale +" ("+ this.locales[i].label +" / "+ this.locales[i].label_ol +")", active: this.locales[i].locale === curLocale});
-        this.$.switcherLocale.initializeActiveItem();
-        this.setValue(this.$.switcherLocale.selected.locale);
     },
 
     setLocale: function(inSender, inEvent) {

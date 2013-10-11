@@ -7,10 +7,13 @@ enyo.kind({
     },
 
     components: [
-        {kind: "moon.ExpandablePicker", name: "timeZones", content: rb.getString("Time Zone"), onChange: "setTimeZone", components: [
-            {content: rb.getString("default"), active: true}
+        {content: rb.getString("Time Zone"), classes: "ilib-onyx-sample-divider"},
+        {kind: "onyx.PickerDecorator", components: [
+            {},
+            {name: "timeZones", kind: "onyx.Picker", onChange: "setTimeZone", components: [
+                {content: rb.getString("default"), active: true}
+            ]}
         ]},
-        // It's a fake component but without it the ilib.TimeZone.getAvailableIds() was returning an empty array, TODO - investigate it
         {kind: "moon.TimePicker", name: "timePickerFake", content: rb.getString("Time"), showing: false}
     ],
 

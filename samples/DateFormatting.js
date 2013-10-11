@@ -1,101 +1,97 @@
+// It's a hack that deletes enyo.g11n because the current version of enyo.g11n has some bugs in the enyo.g11n.Fmts
+delete(enyo.g11n);
+
 enyo.kind({
     name: "ilib.sample.DateFormatting",
     kind: "FittableRows",
-    classes: "moon enyo-unselectable enyo-fit",
+    classes: "onyx ilib-onyx-sample enyo-fit",
     
     components: [
-        {kind: "moon.Scroller", fit: true, components: [
+        {kind: "Scroller", fit: true, components: [
             {kind: "FittableColumns", components: [
                 /* Header with selecting locale */
-                {kind: "ilib.sample.ChooseLocale", name: "localeSelector", style: "width: 55%"},
-                {kind: "ilib.sample.ChooseTimeZone", name: "timeZonesSelector", style: "width: 35%"},
-                {kind: "moon.Button", small: true, content: rb.getString("Apply"), ontap: "calcFormat", fit: true}
+                {kind: "ilib.sample.ChooseLocale", name: "localeSelector"},
+                {style: "width: 20px"},
+                {kind: "onyx.Button", content: rb.getString("Apply"), ontap: "calcFormat", style: "vertical-align: bottom;", classes: "onyx-affirmative"},
+                {fit: true}
             ]},
             
+            {kind: "ilib.sample.ChooseTimeZone", name: "timeZonesSelector"},
+            
             {kind: "FittableColumns", components: [
-                {kind: "FittableRows", components: [
-                    {kind: "FittableColumns", components: [
-                        {kind: "moon.DatePicker", name: "datePicker", content: rb.getString("Date"), onChange: "changedDate", style: "width: 50%"},
-                        {kind: "moon.TimePicker", fit: true, name: "timePicker", content: rb.getString("Time")}
-                    ]},
-                    {kind: "moon.CalendarPicker", fit: true, name: "calendar"}
+                {components: [
+                    {content: rb.getString("Date"), classes: "ilib-onyx-sample-divider"},
+                    {kind: "onyx.DatePicker", name: "datePicker"}
                 ]},
-                
-                {kind: "FittableRows", fit: true, components: [
-                    {tag: "br"},
-                    {tag: "br"},
-                    {kind: "moon.Divider", content: rb.getString("Optional parameters")},
-                    {tag: "br"},
-                    
-                    {kind: "moon.Divider", content: rb.getString("Length")},
-                    {kind: "moon.RadioItemGroup", name: "length", components: [
-                        {content: "short"},
-                        {content: "medium"},
-                        {content: "long", selected: true},
-                        {content: "full"},
-                    ]},
-                   {kind: "moon.Divider", content: rb.getString("Type")},
-                   {kind: "moon.RadioItemGroup", name: "type", components: [
-                        {content: "date"},
-                        {content: "time"},
-                        {content: "datetime", selected: true}
-                    ]},
-                    {kind: "moon.Divider", content: rb.getString("Date")},
-                    {kind: "moon.RadioItemGroup", name: "date", components: [
-                        {content: "dmwy"},
-                        {content: "dmy", selected: true},
-                        {content: "dmw"},
-                        {content: "dm"},
-                        {content: "my"},
-                        {content: "dw"},
-                        {content: "d"},
-                        {content: "m"},
-                        {content: "n"},
-                        {content: "y"}
-                    ]},
-                    {kind: "moon.Divider", content: rb.getString("Time")},
-                    {kind: "moon.RadioItemGroup", name: "time", components: [
-                        {content: "ahmsz"},
-                        {content: "ahms"},
-                        {content: "hmsz"},
-                        {content: "hms"},
-                        {content: "ahmz"},
-                        {content: "ahm"},
-                        {content: "hmz", selected: true},
-                        {content: "ah"},
-                        {content: "hm"},
-                        {content: "ms"},
-                        {content: "h"},
-                        {content: "m"},
-                        {content: "s"}
-                    ]},
-                    {kind: "moon.Divider", content: rb.getString("Clock")},
-                    {kind: "moon.RadioItemGroup", name: "clock", components: [
-                        {content: "12"},
-                        {content: "24"},
-                        {content: "locale", selected: true}
-                    ]},
-                    {kind: "moon.Divider", content: rb.getString("Native Digits")},
-                    {kind: "moon.RadioItemGroup", name: "useNative", components: [
-                        {content: "false", selected: true},
-                        {content: "true"}
-                    ]}
-                ]}
-            ]}               
+                {style: "width: 20px"},
+                {components: [
+                    {content: rb.getString("Time"), classes: "ilib-onyx-sample-divider"},
+                    {kind: "onyx.TimePicker", name: "timePicker"}
+                ]},
+                {fit: true}
+            ]},
+            
+            {content: rb.getString("Length"), classes: "ilib-onyx-sample-divider"},
+            {kind: "onyx.RadioGroup", name: "length", components: [
+                {content: "short"},
+                {content: "medium"},
+                {content: "long", active: true},
+                {content: "full"},
+            ]},
+           {content: rb.getString("Type"), classes: "ilib-onyx-sample-divider"},
+           {kind: "onyx.RadioGroup", name: "type", components: [
+                {content: "date"},
+                {content: "time"},
+                {content: "datetime", active: true}
+            ]},
+            {content: rb.getString("Date"), classes: "ilib-onyx-sample-divider"},
+            {kind: "onyx.RadioGroup", name: "date", components: [
+                {content: "dmwy"},
+                {content: "dmy", active: true},
+                {content: "dmw"},
+                {content: "dm"},
+                {content: "my"},
+                {content: "dw"},
+                {content: "d"},
+                {content: "m"},
+                {content: "n"},
+                {content: "y"}
+            ]},
+            {content: rb.getString("Time"), classes: "ilib-onyx-sample-divider"},
+            {kind: "onyx.RadioGroup", name: "time", components: [
+                {content: "ahmsz"},
+                {content: "ahms"},
+                {content: "hmsz"},
+                {content: "hms"},
+                {content: "ahmz"},
+                {content: "ahm"},
+                {content: "hmz", active: true},
+                {content: "ah"},
+                {content: "hm"},
+                {content: "ms"},
+                {content: "h"},
+                {content: "m"},
+                {content: "s"}
+            ]},
+            {content: rb.getString("Clock"), classes: "ilib-onyx-sample-divider"},
+            {kind: "onyx.RadioGroup", name: "clock", components: [
+                {content: "12"},
+                {content: "24"},
+                {content: "locale", active: true}
+            ]},
+            {content: rb.getString("Native Digits"), classes: "ilib-onyx-sample-divider"},
+            {kind: "onyx.RadioGroup", name: "useNative", components: [
+                {content: "false", active: true},
+                {content: "true"}
+            ]},
+            {tag: "br"}
         ]},
         
-        {kind: "moon.Divider"},
-        {kind: "FittableColumns", components: [
-            {content: rb.getString("Format result:")},
-            {content: " ", style: "width: 20px"},
-            {name: "rtlResult", fit: true, content: "-"}
+        {kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
+            {kind: "onyx.GroupboxHeader", content: rb.getString("Format result:")},
+            {name: "rtlResult", fit: true, content: "-", style: "padding: 10px"}
         ]}
     ],
-    
-    changedDate: function(inSender, inEvent) {
-        if (inEvent.value)
-            this.$.calendar.setValue(inEvent.value);
-    },
     
     calcFormat: function(inSender, inEvent) {
         var options = {};
@@ -116,7 +112,7 @@ enyo.kind({
             locale: options['locale'],
             type: options['calendar']
         });
-        var dateCalendar = this.$.calendar.getValue();
+        var dateCalendar = this.$.datePicker.getValue();
         var time = this.$.timePicker.getValue();
         var date = cal.newDateInstance({
             year: dateCalendar.getFullYear(),

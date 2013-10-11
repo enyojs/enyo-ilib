@@ -7,7 +7,11 @@ enyo.kind({
     },
 
     components: [
-        {kind: "moon.ExpandablePicker", name: "currencies", content: rb.getString("Currency"), onChange: "setCurrency"},
+        {content: rb.getString("Currency"), classes: "ilib-onyx-sample-divider"},
+        {kind: "onyx.PickerDecorator", components: [
+            {},
+            {name: "currencies", kind: "onyx.Picker", onChange: "setCurrency"}
+        ]}
     ],
 
     create: function() {
@@ -30,13 +34,15 @@ enyo.kind({
         var li = new ilib.LocaleInfo(locale);
         var currency = li['info'].currency;
         var components = this.$.currencies.getClientControls();
-        var indexCC = -1;
+        var selected;
+        if (components[0])
+            selected = components[0];
         for (var i = 0; i < components.length; ++i)
             if (components[i].content === currency) {
-                indexCC = i;
+                selected = components[i];
                 break;
             }
-        this.$.currencies.setSelectedIndex(indexCC >= 0 ? indexCC : 0);
+        this.$.currencies.setSelected(selected);
     },
 
     setCurrency: function(inSender, inEvent) {

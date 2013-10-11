@@ -1,54 +1,76 @@
 enyo.kind({
     name: "ilib.sample.NumberFormatting",
     kind: "FittableRows",
-    classes: "moon enyo-unselectable enyo-fit",
+    classes: "onyx ilib-onyx-sample enyo-fit",
     
     components: [
-        {kind: "moon.Scroller", fit: true, components: [
+        {kind: "Scroller", fit: true, components: [
             {kind: "FittableColumns", components: [
                 /* Header with selecting locale */
-                {kind: "ilib.sample.ChooseLocale", name: "localeSelector", onSelectedLocale: "setLocale", fit: true},
-                {kind: "moon.Button", small: true, content: rb.getString("Apply"), ontap: "calcFormat"}
+                {kind: "ilib.sample.ChooseLocale", name: "localeSelector", onSelectedLocale: "setLocale"},
+                {style: "width: 20px"},
+                {kind: "onyx.Button", content: rb.getString("Apply"), ontap: "calcFormat", style: "vertical-align: bottom;", classes: "onyx-affirmative"},
+                {fit: true}
             ]},
             {tag: "br"},
             
-            {kind: "moon.Divider", content: rb.getString("Type")},
-            {kind: "moon.RadioItemGroup", name: "type", onActivate: "buttonActivated", components: [
-                {content: "number", selected: true},
+            {content: rb.getString("Type"), classes: "ilib-onyx-sample-divider"},
+            {kind: "onyx.RadioGroup", name: "type", onActivate: "buttonActivated", components: [
+                {content: "number", active: true},
                 {content: "percentage"},
                 {content: "currency"}
             ]},
 
 
             {kind: "FittableColumns", components: [
-                {kind: "moon.ExpandableInput", name: "maxFractionDigits", content: rb.getString("Max Frac Digits"), noneText: rb.getString("Not defined"), style: "width: 50%"},
-                {kind: "moon.ExpandableInput", name: "minFractionDigits", content: rb.getString("Min Frac Digits"), noneText: rb.getString("Not defined"), fit: true},
+                {components: [
+                    {content: rb.getString("Max Frac Digits"), classes: "ilib-onyx-sample-divider"},
+                    {kind: "onyx.InputDecorator", alwaysLooksFocused: true, components: [
+                        {kind: "onyx.Input", name: "maxFractionDigits", placeholder: rb.getString("Enter number")}
+                    ]}
+                ]},
+                {style: "width: 20px"},
+                {components: [
+                    {content: rb.getString("Min Frac Digits"), classes: "ilib-onyx-sample-divider"},
+                    {kind: "onyx.InputDecorator", alwaysLooksFocused: true, components: [
+                        {kind: "onyx.Input", name: "minFractionDigits", placeholder: rb.getString("Enter number")}
+                    ]}
+                ]},
+                {fit: true}
             ]},
             
             
-            {kind: "moon.Divider", content: rb.getString("Rounding Mode")},
-            {kind: "moon.RadioItemGroup", name: "roundingMode", components: [
+            {content: rb.getString("Rounding Mode"), classes: "ilib-onyx-sample-divider"},
+            {kind: "onyx.RadioGroup", name: "roundingMode", components: [
                 {content: "up"},
                 {content: "down"},
                 {content: "ceiling"},
                 {content: "floor"},
-                {content: "half up", selected: true},
+                {content: "half up", active: true},
                 {content: "half down"},
                 {content: "half even"},
                 {content: "half odd"} 
             ]},
             
             {name: "numberParams", components: [
-                {kind: "moon.ExpandablePicker", name: "styleOfNumber", content: rb.getString("Style"), components: [
-                    {content: "standard", active: true},
-                    {content: "scientific"}
-                ]}
+                {content: rb.getString("Style"), classes: "ilib-onyx-sample-divider"},
+                {kind: "onyx.PickerDecorator", components: [
+                    {},
+                    {name: "styleOfNumber", kind: "onyx.Picker", components: [
+                        {content: "standard", active: true},
+                        {content: "scientific"}
+                    ]}
+                ]}            
             ]},
             
             {name: "currencyParams", components: [
-                {kind: "moon.ExpandablePicker", name: "styleOfCurrency", content: rb.getString("Style"), components: [
-                    {content: "common", active: true},
-                    {content: "iso"}
+                {content: rb.getString("Style"), classes: "ilib-onyx-sample-divider"},
+                {kind: "onyx.PickerDecorator", components: [
+                    {},
+                    {name: "styleOfCurrency", kind: "onyx.Picker", components: [
+                        {content: "common", active: true},
+                        {content: "iso"}
+                    ]}
                 ]},
                 
                 {kind: "ilib.sample.ChooseCurrency", name: "currency"}
@@ -57,16 +79,22 @@ enyo.kind({
             {tag: "br"}
         ]},
 
-        {kind: "moon.Divider", content: rb.getString("Number")},
-        {kind: "moon.InputDecorator", spotlight: true, components: [
-            {kind: "moon.Input", name: "number"},
+        {kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
+            {kind: "onyx.GroupboxHeader", content: rb.getString("Number")},
+            {kind: "onyx.InputDecorator", alwaysLooksFocused: true, components: [
+                {kind: "onyx.Input", name: "number", placeholder: rb.getString("Enter number")}
+            ]}
         ]},
-        {kind: "moon.Divider", content: rb.getString("Format result:")},
-        {name: "rtlResult", fit: true, content: "-"}
+        {tag: "br"},
+        {kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
+            {kind: "onyx.GroupboxHeader", content: rb.getString("Format result:")},
+            {name: "rtlResult", fit: true, content: "-", style: "padding: 10px"}
+        ]}
     ],
     
     setLocale: function(inSender, inEvent) {
-        this.$.currency.selectCurrency(this.$.localeSelector.getValue());
+        if (this.$['currency'])
+            this.$.currency.selectCurrency(this.$.localeSelector.getValue());
     },
     
     buttonActivated: function(inSender, inEvent) {
@@ -85,10 +113,10 @@ enyo.kind({
             type: this.$.type.getActive().content,
             roundingMode: this.$.roundingMode.getActive().content
         };
-        if ((parseInt(this.$.maxFractionDigits, 10) || 0) !== 0)
-            options.maxFractionDigits = parseInt(this.$.maxFractionDigits, 10);
-        if ((parseInt(this.$.minFractionDigits, 10) || 0) !== 0)
-            options.minFractionDigits = parseInt(this.$.minFractionDigits, 10);
+        if ((parseInt(this.$.maxFractionDigits.getValue(), 10) || 0) !== 0)
+            options.maxFractionDigits = parseInt(this.$.maxFractionDigits.getValue(), 10);
+        if ((parseInt(this.$.minFractionDigits.getValue(), 10) || 0) !== 0)
+            options.minFractionDigits = parseInt(this.$.minFractionDigits.getValue(), 10);
         if (options.type === 'number')
             options.style = this.$.styleOfNumber.getSelected().content;
         if (options.type === 'currency') {
