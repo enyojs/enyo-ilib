@@ -3654,7 +3654,7 @@ ilib.Date.GregDate.cumMonthLengthsLeap = [
  * @private
  * @const
  * @type number
- * the difference between a zero Julian day and the first Gregorian date. 
+ * the difference between a zero Julian day and the zero Gregorian date. 
  */
 ilib.Date.GregDate.epoch = 1721424.5;
 
@@ -3670,9 +3670,11 @@ ilib.Date.GregDate.prototype.calcRataDie = function(date) {
 		Math.floor((date.year-1)/4) -
 		Math.floor((date.year-1)/100) +
 		Math.floor((date.year-1)/400);
+	// explicitly call the gregorian leap year calculator so that it doesn't conflict
+	// with the calculator of possible subclasses 
 	var dayInYear = (date.month > 1 ? ilib.Date.GregDate.cumMonthLengths[date.month-1] : 0) +
 		date.day +
-		(this.cal.isLeapYear(date.year) && date.month > 2 ? 1 : 0);
+		(ilib.Cal.Gregorian.prototype.isLeapYear.call(this.cal, date.year) && date.month > 2 ? 1 : 0);
 	var rdtime = (date.hour * 3600000 +
 		date.minute * 60000 +
 		date.second * 1000 +
@@ -3709,15 +3711,11 @@ ilib.Date.GregDate.prototype.calcComponents = function (rd) {
 		days100,
 		days4,
 		days1,
-		day,
 		years400,
 		years100,
 		years4,
 		years1,
-		year,
-		month,
 		remainder,
-		jdstart,
 		cumulative,
 		ret = {};
 	
@@ -3753,9 +3751,11 @@ ilib.Date.GregDate.prototype.calcComponents = function (rd) {
 	ret.second = 0;
 	ret.millisecond = 0;
 	
-	remainder = rd - this.calcRataDie(ret) + 1;
+	// explicitly call the gregorian rd calculator instead of any 
+	// possible overloaded ones from subclasses
+	remainder = rd - ilib.Date.GregDate.prototype.calcRataDie.call(this, ret) + 1;
 	
-	cumulative = this.cal.isLeapYear(ret.year) ? 
+	cumulative = ilib.Cal.Gregorian.prototype.isLeapYear.call(this.cal, ret.year) ? 
 		ilib.Date.GregDate.cumMonthLengthsLeap : 
 		ilib.Date.GregDate.cumMonthLengths; 
 	
@@ -3934,10 +3934,10 @@ ilib.Date.GregDate.prototype.firstSunday = function (year) {
  * as a number where 0 = Sunday, 1 = Monday, etc.
  * 
  * @param {number} dow the day of the week before the current date that is being sought
- * @return {ilib.Date.GregDate} the date being sought
+ * @return {ilib.Date} the date being sought
  */
 ilib.Date.GregDate.prototype.before = function (dow) {
-	return new ilib.Date.GregDate({rd: this.beforeRd(this.getRataDie(), dow)});
+	return this.cal.newDateInstance({rd: this.beforeRd(this.getRataDie(), dow)});
 };
 
 /**
@@ -3946,10 +3946,10 @@ ilib.Date.GregDate.prototype.before = function (dow) {
  * as a number where 0 = Sunday, 1 = Monday, etc.
  * 
  * @param {number} dow the day of the week after the current date that is being sought
- * @return {ilib.Date.GregDate} the date being sought
+ * @return {ilib.Date} the date being sought
  */
 ilib.Date.GregDate.prototype.after = function (dow) {
-	return new ilib.Date.GregDate({rd: this.afterRd(this.getRataDie(), dow)});
+	return this.cal.newDateInstance({rd: this.afterRd(this.getRataDie(), dow)});
 };
 
 /**
@@ -3958,10 +3958,10 @@ ilib.Date.GregDate.prototype.after = function (dow) {
  * as a number where 0 = Sunday, 1 = Monday, etc.
  * 
  * @param {number} dow the day of the week on or before the current date that is being sought
- * @return {ilib.Date.GregDate} the date being sought
+ * @return {ilib.Date} the date being sought
  */
 ilib.Date.GregDate.prototype.onOrBefore = function (dow) {
-	return new ilib.Date.GregDate({rd: this.onOrBeforeRd(this.getRataDie(), dow)});
+	return this.cal.newDateInstance({rd: this.onOrBeforeRd(this.getRataDie(), dow)});
 };
 
 /**
@@ -3970,10 +3970,10 @@ ilib.Date.GregDate.prototype.onOrBefore = function (dow) {
  * as a number where 0 = Sunday, 1 = Monday, etc.
  * 
  * @param {number} dow the day of the week on or after the current date that is being sought
- * @return {ilib.Date.GregDate} the date being sought
+ * @return {ilib.Date} the date being sought
  */
 ilib.Date.GregDate.prototype.onOrAfter = function (dow) {
-	return new ilib.Date.GregDate({rd: this.onOrAfterRd(this.getRataDie(), dow)});
+	return this.cal.newDateInstance({rd: this.onOrAfterRd(this.getRataDie(), dow)});
 };
 
 /**
@@ -5654,7 +5654,15 @@ util/jsutils.js
  * be called with a GregDate instance.)
  *  
  * <li><i>timezone</i> - time zone to use when formatting times. This may be a time zone
- * instance or a time zone specifier string in RFC 822 format. If not specified, the
+ * instance or a time zone specifier from the IANA list of time zone database names 
+ * (eg. "America/Los_Angeles"), 
+ * the string "local", or a string specifying the offset in RFC 822 format. The IANA
+ * list of time zone names can be viewed at 
+ * <a href="http://en.wikipedia.org/wiki/List_of_tz_database_time_zones">this page</a>.
+ * If the time zone is given as "local", the offset from UTC as given by
+ * the Javascript system is used. If the offset is given as an RFC 822 style offset
+ * specifier, it will parse that string and use the resulting offset. If the time zone
+ * is not specified, the
  * default time zone for the locale is used. If both the date object and this formatter
  * instance contain time zones and those time zones are different from each other, the 
  * formatter will calculate the offset between the time zones and subtract it from the 
@@ -6378,7 +6386,11 @@ ilib.DateFmt.prototype = {
 		if (typeof(str) !== 'string') {
 			str = "" + str;
 		}
-		return (str.length >= length) ? str : ilib.DateFmt.zeros.substring(0,length-str.length) + str;
+		var start = 0;
+		if (str.charAt(0) === '-') {
+			start++;
+		}
+		return (str.length >= length+start) ? str : str.substring(0, start) + ilib.DateFmt.zeros.substring(0,length-str.length+start) + str.substring(start);
 	},
 	
 	/*
@@ -6396,20 +6408,20 @@ ilib.DateFmt.prototype = {
 					str += (date.day || 1);
 					break;
 				case 'dd':
-					str += this._pad(date.day || 1, 2);
+					str += this._pad(date.day || "1", 2);
 					break;
 				case 'yy':
-					temp = "" + (date.year || 1);
-					str += this._pad(temp.substring(2,4), 2);
+					temp = "" + ((date.year || 0) % 100);
+					str += this._pad(temp, 2);
 					break;
 				case 'yyyy':
-					str += this._pad(date.year || 1, 4);
+					str += this._pad(date.year || "0", 4);
 					break;
 				case 'M':
 					str += (date.month || 1);
 					break;
 				case 'MM':
-					str += this._pad(date.month || 1, 2);
+					str += this._pad(date.month || "1", 2);
 					break;
 
 				case 'h':
@@ -6436,10 +6448,10 @@ ilib.DateFmt.prototype = {
 					break;
 
 				case 'H':
-					str += (date.hour || 0);
+					str += (date.hour || "0");
 					break;
 				case 'HH':
-					str += this._pad(date.hour || 0, 2);
+					str += this._pad(date.hour || "0", 2);
 					break;
 				case 'k':
 					str += (date.hour == 0 ? "24" : date.hour);
@@ -6450,22 +6462,22 @@ ilib.DateFmt.prototype = {
 					break;
 
 				case 'm':
-					str += (date.minute || 0);
+					str += (date.minute || "0");
 					break;
 				case 'mm':
-					str += this._pad(date.minute || 0, 2);
+					str += this._pad(date.minute || "0", 2);
 					break;
 				case 's':
-					str += (date.minute || 0);
+					str += (date.minute || "0");
 					break;
 				case 'ss':
-					str += this._pad(date.second || 0, 2);
+					str += this._pad(date.second || "0", 2);
 					break;
 				case 'S':
-					str += (date.millisecond || 0);
+					str += (date.millisecond || "0");
 					break;
 				case 'SSS':
-					str += this._pad(date.millisecond || 0, 3);
+					str += this._pad(date.millisecond || "0", 3);
 					break;
 
 				case 'N':
