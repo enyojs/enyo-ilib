@@ -3654,7 +3654,7 @@ ilib.Date.GregDate.cumMonthLengthsLeap = [
  * @private
  * @const
  * @type number
- * the difference between a zero Julian day and the first Gregorian date. 
+ * the difference between a zero Julian day and the zero Gregorian date. 
  */
 ilib.Date.GregDate.epoch = 1721424.5;
 
@@ -3670,9 +3670,11 @@ ilib.Date.GregDate.prototype.calcRataDie = function(date) {
 		Math.floor((date.year-1)/4) -
 		Math.floor((date.year-1)/100) +
 		Math.floor((date.year-1)/400);
+	// explicitly call the gregorian leap year calculator so that it doesn't conflict
+	// with the calculator of possible subclasses 
 	var dayInYear = (date.month > 1 ? ilib.Date.GregDate.cumMonthLengths[date.month-1] : 0) +
 		date.day +
-		(this.cal.isLeapYear(date.year) && date.month > 2 ? 1 : 0);
+		(ilib.Cal.Gregorian.prototype.isLeapYear.call(this.cal, date.year) && date.month > 2 ? 1 : 0);
 	var rdtime = (date.hour * 3600000 +
 		date.minute * 60000 +
 		date.second * 1000 +
@@ -3709,15 +3711,11 @@ ilib.Date.GregDate.prototype.calcComponents = function (rd) {
 		days100,
 		days4,
 		days1,
-		day,
 		years400,
 		years100,
 		years4,
 		years1,
-		year,
-		month,
 		remainder,
-		jdstart,
 		cumulative,
 		ret = {};
 	
@@ -3753,9 +3751,11 @@ ilib.Date.GregDate.prototype.calcComponents = function (rd) {
 	ret.second = 0;
 	ret.millisecond = 0;
 	
-	remainder = rd - this.calcRataDie(ret) + 1;
+	// explicitly call the gregorian rd calculator instead of any 
+	// possible overloaded ones from subclasses
+	remainder = rd - ilib.Date.GregDate.prototype.calcRataDie.call(this, ret) + 1;
 	
-	cumulative = this.cal.isLeapYear(ret.year) ? 
+	cumulative = ilib.Cal.Gregorian.prototype.isLeapYear.call(this.cal, ret.year) ? 
 		ilib.Date.GregDate.cumMonthLengthsLeap : 
 		ilib.Date.GregDate.cumMonthLengths; 
 	
@@ -3934,10 +3934,10 @@ ilib.Date.GregDate.prototype.firstSunday = function (year) {
  * as a number where 0 = Sunday, 1 = Monday, etc.
  * 
  * @param {number} dow the day of the week before the current date that is being sought
- * @return {ilib.Date.GregDate} the date being sought
+ * @return {ilib.Date} the date being sought
  */
 ilib.Date.GregDate.prototype.before = function (dow) {
-	return new ilib.Date.GregDate({rd: this.beforeRd(this.getRataDie(), dow)});
+	return this.cal.newDateInstance({rd: this.beforeRd(this.getRataDie(), dow)});
 };
 
 /**
@@ -3946,10 +3946,10 @@ ilib.Date.GregDate.prototype.before = function (dow) {
  * as a number where 0 = Sunday, 1 = Monday, etc.
  * 
  * @param {number} dow the day of the week after the current date that is being sought
- * @return {ilib.Date.GregDate} the date being sought
+ * @return {ilib.Date} the date being sought
  */
 ilib.Date.GregDate.prototype.after = function (dow) {
-	return new ilib.Date.GregDate({rd: this.afterRd(this.getRataDie(), dow)});
+	return this.cal.newDateInstance({rd: this.afterRd(this.getRataDie(), dow)});
 };
 
 /**
@@ -3958,10 +3958,10 @@ ilib.Date.GregDate.prototype.after = function (dow) {
  * as a number where 0 = Sunday, 1 = Monday, etc.
  * 
  * @param {number} dow the day of the week on or before the current date that is being sought
- * @return {ilib.Date.GregDate} the date being sought
+ * @return {ilib.Date} the date being sought
  */
 ilib.Date.GregDate.prototype.onOrBefore = function (dow) {
-	return new ilib.Date.GregDate({rd: this.onOrBeforeRd(this.getRataDie(), dow)});
+	return this.cal.newDateInstance({rd: this.onOrBeforeRd(this.getRataDie(), dow)});
 };
 
 /**
@@ -3970,10 +3970,10 @@ ilib.Date.GregDate.prototype.onOrBefore = function (dow) {
  * as a number where 0 = Sunday, 1 = Monday, etc.
  * 
  * @param {number} dow the day of the week on or after the current date that is being sought
- * @return {ilib.Date.GregDate} the date being sought
+ * @return {ilib.Date} the date being sought
  */
 ilib.Date.GregDate.prototype.onOrAfter = function (dow) {
-	return new ilib.Date.GregDate({rd: this.onOrAfterRd(this.getRataDie(), dow)});
+	return this.cal.newDateInstance({rd: this.onOrAfterRd(this.getRataDie(), dow)});
 };
 
 /**
@@ -5654,7 +5654,15 @@ util/jsutils.js
  * be called with a GregDate instance.)
  *  
  * <li><i>timezone</i> - time zone to use when formatting times. This may be a time zone
- * instance or a time zone specifier string in RFC 822 format. If not specified, the
+ * instance or a time zone specifier from the IANA list of time zone database names 
+ * (eg. "America/Los_Angeles"), 
+ * the string "local", or a string specifying the offset in RFC 822 format. The IANA
+ * list of time zone names can be viewed at 
+ * <a href="http://en.wikipedia.org/wiki/List_of_tz_database_time_zones">this page</a>.
+ * If the time zone is given as "local", the offset from UTC as given by
+ * the Javascript system is used. If the offset is given as an RFC 822 style offset
+ * specifier, it will parse that string and use the resulting offset. If the time zone
+ * is not specified, the
  * default time zone for the locale is used. If both the date object and this formatter
  * instance contain time zones and those time zones are different from each other, the 
  * formatter will calculate the offset between the time zones and subtract it from the 
@@ -6378,7 +6386,11 @@ ilib.DateFmt.prototype = {
 		if (typeof(str) !== 'string') {
 			str = "" + str;
 		}
-		return (str.length >= length) ? str : ilib.DateFmt.zeros.substring(0,length-str.length) + str;
+		var start = 0;
+		if (str.charAt(0) === '-') {
+			start++;
+		}
+		return (str.length >= length+start) ? str : str.substring(0, start) + ilib.DateFmt.zeros.substring(0,length-str.length+start) + str.substring(start);
 	},
 	
 	/*
@@ -6396,20 +6408,20 @@ ilib.DateFmt.prototype = {
 					str += (date.day || 1);
 					break;
 				case 'dd':
-					str += this._pad(date.day || 1, 2);
+					str += this._pad(date.day || "1", 2);
 					break;
 				case 'yy':
-					temp = "" + (date.year || 1);
-					str += this._pad(temp.substring(2,4), 2);
+					temp = "" + ((date.year || 0) % 100);
+					str += this._pad(temp, 2);
 					break;
 				case 'yyyy':
-					str += this._pad(date.year || 1, 4);
+					str += this._pad(date.year || "0", 4);
 					break;
 				case 'M':
 					str += (date.month || 1);
 					break;
 				case 'MM':
-					str += this._pad(date.month || 1, 2);
+					str += this._pad(date.month || "1", 2);
 					break;
 
 				case 'h':
@@ -6436,10 +6448,10 @@ ilib.DateFmt.prototype = {
 					break;
 
 				case 'H':
-					str += (date.hour || 0);
+					str += (date.hour || "0");
 					break;
 				case 'HH':
-					str += this._pad(date.hour || 0, 2);
+					str += this._pad(date.hour || "0", 2);
 					break;
 				case 'k':
 					str += (date.hour == 0 ? "24" : date.hour);
@@ -6450,22 +6462,22 @@ ilib.DateFmt.prototype = {
 					break;
 
 				case 'm':
-					str += (date.minute || 0);
+					str += (date.minute || "0");
 					break;
 				case 'mm':
-					str += this._pad(date.minute || 0, 2);
+					str += this._pad(date.minute || "0", 2);
 					break;
 				case 's':
-					str += (date.minute || 0);
+					str += (date.minute || "0");
 					break;
 				case 'ss':
-					str += this._pad(date.second || 0, 2);
+					str += this._pad(date.second || "0", 2);
 					break;
 				case 'S':
-					str += (date.millisecond || 0);
+					str += (date.millisecond || "0");
 					break;
 				case 'SSS':
-					str += this._pad(date.millisecond || 0, 3);
+					str += this._pad(date.millisecond || "0", 3);
 					break;
 
 				case 'N':
@@ -9675,6 +9687,326 @@ ilib.Date.JulDate.prototype.setTimeZone = function (tzName) {
 
 //register with the factory method
 ilib.Date._constructors["julian"] = ilib.Date.JulDate;
+/*
+ * thaisolar.js - Represent a Thai solar calendar object.
+ * 
+ * Copyright © 2013, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+/* !depends calendar.js locale.js date.js julianday.js calendar/gregorian.js util/utils.js */
+
+/**
+ * @class
+ * Construct a new Thai solar calendar object. This class encodes information about
+ * a Thai solar calendar.<p>
+ * 
+ * Depends directive: !depends thaisolar.js
+ * 
+ * @constructor
+ * @implements ilib.Cal
+ */
+ilib.Cal.ThaiSolar = function() {
+	this.type = "thaisolar";
+};
+
+ilib.Cal.ThaiSolar.prototype = new ilib.Cal.Gregorian();
+ilib.Cal.ThaiSolar.prototype.parent = ilib.Cal.Gregorian;
+ilib.Cal.ThaiSolar.prototype.constructor = ilib.Cal.ThaiSolar;
+
+/**
+ * Return true if the given year is a leap year in the Thai solar calendar.
+ * The year parameter may be given as a number, or as a ThaiSolarDate object.
+ * @param {number|ilib.Date.ThaiSolarDate} year the year for which the leap year information is being sought
+ * @return {boolean} true if the given year is a leap year
+ */
+ilib.Cal.ThaiSolar.prototype.isLeapYear = function(year) {
+	var y = (typeof(year) === 'number' ? year : year.getYears());
+	y -= 543;
+	var centuries = ilib.mod(y, 400);
+	return (ilib.mod(y, 4) === 0 && centuries !== 100 && centuries !== 200 && centuries !== 300);
+};
+
+/**
+ * Return a date instance for this calendar type using the given
+ * options.
+ * @param {Object} options options controlling the construction of 
+ * the date instance
+ * @return {ilib.Date} a date appropriate for this calendar type
+ */
+ilib.Cal.ThaiSolar.prototype.newDateInstance = function (options) {
+	return new ilib.Date.ThaiSolarDate(options);
+};
+
+/* register this calendar for the factory method */
+ilib.Cal._constructors["thaisolar"] = ilib.Cal.ThaiSolar;
+/*
+ * thaisolardate.js - Represent a date in the ThaiSolar calendar
+ * 
+ * Copyright © 2013, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* !depends 
+date.js
+calendar/gregoriandate.js
+calendar/thaisolar.js
+util/utils.js
+util/search.js 
+localeinfo.js 
+julianday.js 
+*/
+
+/**
+ * @class
+ * 
+ * Construct a new Thai solar date object. The constructor parameters can 
+ * contain any of the following properties:
+ * 
+ * <ul>
+ * <li><i>unixtime<i> - sets the time of this instance according to the given 
+ * unix time. Unix time is the number of milliseconds since midnight on Jan 1, 1970.
+ * 
+ * <li><i>julianday</i> - sets the time of this instance according to the given
+ * Julian Day instance or the Julian Day given as a float
+ * 
+ * <li><i>year</i> - any integer, including 0
+ * 
+ * <li><i>month</i> - 1 to 12, where 1 means January, 2 means February, etc.
+ * 
+ * <li><i>day</i> - 1 to 31
+ * 
+ * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation 
+ * is always done with an unambiguous 24 hour representation
+ * 
+ * <li><i>minute</i> - 0 to 59
+ * 
+ * <li><i>second</i> - 0 to 59
+ * 
+ * <li><i>millisecond</i> - 0 to 999
+ * 
+ * <li><i>timezone</i> - the ilib.TimeZone instance or time zone name as a string 
+ * of this Thai solar date. The date/time is kept in the local time. The time zone
+ * is used later if this date is formatted according to a different time zone and
+ * the difference has to be calculated, or when the date format has a time zone
+ * component in it.
+ * 
+ * <li><i>locale</i> - locale for this Thai solar date. If the time zone is not 
+ * given, it can be inferred from this locale. For locales that span multiple
+ * time zones, the one with the largest population is chosen as the one that 
+ * represents the locale. 
+ * </ul>
+ *
+ * If the constructor is called with another Thai solar date instance instead of
+ * a parameter block, the other instance acts as a parameter block and its
+ * settings are copied into the current instance.<p>
+ * 
+ * If the constructor is called with no arguments at all or if none of the 
+ * properties listed above 
+ * from <i>unixtime</i> through <i>millisecond</i> are present, then the date 
+ * components are 
+ * filled in with the current date at the time of instantiation. Note that if
+ * you do not give the time zone when defaulting to the current time and the 
+ * time zone for all of ilib was not set with <i>ilib.setTimeZone()</i>, then the
+ * time zone will default to UTC ("Universal Time, Coordinated" or "Greenwich 
+ * Mean Time").<p>
+ * 
+ * If any of the properties from <i>year</i> through <i>millisecond</i> are not
+ * specified in the params, it is assumed that they have the smallest possible
+ * value in the range for the property (zero or one).<p>
+ * 
+ * Depends directive: !depends thaisolardate.js
+ * 
+ * @constructor
+ * @extends ilib.Date.GregDate
+ * @param {Object=} params parameters that govern the settings and behaviour of this Thai solar date
+ */
+ilib.Date.ThaiSolarDate = function(params) {
+	ilib.Date.GregDate.call(this, params);
+	this.cal = new ilib.Cal.ThaiSolar();
+};
+
+ilib.Date.ThaiSolarDate.prototype = new ilib.Date.GregDate();
+ilib.Date.ThaiSolarDate.prototype.parent = ilib.Date.GregDate.prototype;
+ilib.Date.ThaiSolarDate.prototype.constructor = ilib.Date.ThaiSolarDate;
+
+/**
+ * @private
+ * @const
+ * @type number
+ * the difference between a zero Julian day and the zero Thai Solar date.
+ * This is some 543 years before the start of the Gregorian epoch. 
+ */
+ilib.Date.ThaiSolarDate.epoch = 1523097.5;
+
+/**
+ * @private
+ * Return the Rata Die (fixed day) number for the given date.
+ * @param {Object} parts the parts to calculate with
+ * @return {number} the rd date as a number
+ */
+ilib.Date.ThaiSolarDate.prototype.calcRataDie = function(parts) {
+	var gregorianRd = this.parent.calcRataDie.call(this, {
+		year: parts.year - 543,
+		month: parts.month,
+		day: parts.day,
+		hour: parts.hour,
+		minute: parts.minute,
+		second: parts.second,
+		millisecond: parts.millisecond
+	});
+	// there is 198327 days difference between the Thai solar and 
+	// Gregorian epochs which is equivalent to 543 years
+	return gregorianRd + 198327;
+};
+
+/**
+ * @private
+ * Calculate date components for the given RD date.
+ * @param {number} rd the RD date to calculate components for
+ * @return {Object} object containing the component fields
+ */
+ilib.Date.ThaiSolarDate.prototype.calcComponents = function (rd) {
+	// there is 198327 days difference between the Thai solar and 
+	// Gregorian epochs which is equivalent to 543 years
+	var gregorianComponents = this.parent.calcComponents.call(this, rd - 198327);
+	
+	gregorianComponents.year += 543;
+	return gregorianComponents;
+};
+
+/**
+ * Set the date of this instance using a Julian Day.
+ * @param {number} date the Julian Day to use to set this date
+ */
+ilib.Date.ThaiSolarDate.prototype.setJulianDay = function (date) {
+	var jd = (typeof(date) === 'number') ? new ilib.JulianDay(date) : date,
+		rd;	// rata die -- # of days since the beginning of the calendar
+	
+	rd = jd.getDate() - ilib.Date.ThaiSolarDate.epoch; 	// Julian Days start at noon
+	this.setRd(rd);
+};
+
+/**
+ * Return the day of the week of this date. The day of the week is encoded
+ * as number from 0 to 6, with 0=Sunday, 1=Monday, etc., until 6=Saturday.
+ * 
+ * @return {number} the day of the week
+ */
+ilib.Date.ThaiSolarDate.prototype.getDayOfWeek = function() {
+	var rd = Math.floor(this.getRataDie() - 198327);
+	return ilib.mod(rd, 7);
+};
+
+/**
+ * @private
+ * Return the rd of the particular day of the week on or before the given rd.
+ * eg. The Sunday on or before the given rd.
+ * @param {number} rd the rata die date of the reference date
+ * @param {number} dayOfWeek the day of the week that is being sought relative 
+ * to the reference date
+ * @return {number} the day of the week
+ */
+ilib.Date.ThaiSolarDate.prototype.onOrBeforeRd = function(rd, dayOfWeek) {
+	return rd - ilib.mod(Math.floor(rd - 198327) - dayOfWeek, 7);
+};
+
+/**
+ * Return the unix time equivalent to this ThaiSolar date instance. Unix time is
+ * the number of milliseconds since midnight on Jan 1, 1970. This method only
+ * returns a valid number for dates between midnight, Jan 1, 1970 and  
+ * Jan 19, 2038 at 3:14:07am when the unix time runs out. If this instance 
+ * encodes a date outside of that range, this method will return -1.
+ * 
+ * @return {number} a number giving the unix time, or -1 if the date is outside the
+ * valid unix time range
+ */
+ilib.Date.ThaiSolarDate.prototype.getTime = function() {
+	var rd = this.calcRataDie({
+		year: this.year,
+		month: this.month,
+		day: this.day,
+		hour: this.hour,
+		minute: this.minute,
+		second: this.second,
+		millisecond: 0
+	});
+	
+	// earlier than Jan 1, 1970
+	// or later than Jan 19, 2038 at 3:14:07am
+	if (rd < 917490 || rd > 942345.134803241) { 
+		return -1;
+	}
+
+	// avoid the rounding errors in the floating point math by only using
+	// the whole days from the rd, and then calculating the milliseconds directly
+	var seconds = Math.floor(rd - 917490) * 86400 + 
+		this.hour * 3600 +
+		this.minute * 60 +
+		this.second;
+	var millis = seconds * 1000 + this.millisecond;
+	
+	return millis;
+};
+
+/**
+ * Set the time of this instance according to the given unix time. Unix time is
+ * the number of milliseconds since midnight on Jan 1, 1970.
+ * 
+ * @param {number} millis the unix time to set this date to in milliseconds 
+ */
+ilib.Date.ThaiSolarDate.prototype.setTime = function(millis) {
+	var rd = 917490 + millis / 86400000;
+	this.setRd(rd);
+};
+
+/**
+ * Return the Julian Day equivalent to this calendar date as a number.
+ * 
+ * @return {number} the julian date equivalent of this date
+ */
+ilib.Date.ThaiSolarDate.prototype.getJulianDay = function() {
+	return this.getRataDie() + ilib.Date.ThaiSolarDate.epoch;
+};
+
+/**
+ * Return the name of the calendar that governs this date.
+ * 
+ * @return {string} a string giving the name of the calendar
+ */
+ilib.Date.ThaiSolarDate.prototype.getCalendar = function() {
+	return "thaisolar";
+};
+
+//register with the factory method
+ilib.Date._constructors["thaisolar"] = ilib.Date.ThaiSolarDate;
+
+
 /*
  * ctype.js - Character type definitions
  * 
@@ -15559,6 +15891,8 @@ calendar/julian.js
 calendar/juliandate.js
 calendar/gregorian.js
 calendar/gregoriandate.js
+calendar/thaisolar.js
+calendar/thaisolardate.js
 numprs.js
 numfmt.js
 julianday.js
