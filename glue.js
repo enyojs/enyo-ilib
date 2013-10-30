@@ -207,3 +207,6 @@ enyo.updateLocale = function() {
 	enyo.updateI18NClasses();
 };
 
+// we go ahead and run this once during loading of iLib settings are valid
+// during the loads of later libraries.
+enyo.updateLocale();
