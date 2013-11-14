@@ -29,7 +29,8 @@ var ilib = ilib || {};
  */
 ilib.getVersion = function () {
     // increment this for each release
-    return "3.0";
+    return "4.0"
+    ;
 };
 
 /**
@@ -197,7 +198,7 @@ ilib.setTimeZone = function (tz) {
  * class. If the default time zone
  * is not set, ilib will attempt to use the locale of the
  * environment it is running in, if it can find that. If not, it will
- * default to the the UTC zone "Etc/UTC".<p>
+ * default to the the zone "local".<p>
  * 
  * Depends directive: !depends ilibglobal.js
  * 
@@ -227,7 +228,7 @@ ilib.getTimeZone = function() {
 			}
 		}
 		
-		ilib.tz = ilib.tz || "Etc/UTC"; 
+		ilib.tz = ilib.tz || "local"; 
 	}
 
     return ilib.tz;
@@ -483,6 +484,448 @@ ilib.Locale = function(language, region, variant, script) {
 	}
 };
 
+// from http://en.wikipedia.org/wiki/ISO_3166-1
+ilib.Locale.a2toa3regmap = {
+	"AF": "AFG",
+	"AX": "ALA",
+	"AL": "ALB",
+	"DZ": "DZA",
+	"AS": "ASM",
+	"AD": "AND",
+	"AO": "AGO",
+	"AI": "AIA",
+	"AQ": "ATA",
+	"AG": "ATG",
+	"AR": "ARG",
+	"AM": "ARM",
+	"AW": "ABW",
+	"AU": "AUS",
+	"AT": "AUT",
+	"AZ": "AZE",
+	"BS": "BHS",
+	"BH": "BHR",
+	"BD": "BGD",
+	"BB": "BRB",
+	"BY": "BLR",
+	"BE": "BEL",
+	"BZ": "BLZ",
+	"BJ": "BEN",
+	"BM": "BMU",
+	"BT": "BTN",
+	"BO": "BOL",
+	"BQ": "BES",
+	"BA": "BIH",
+	"BW": "BWA",
+	"BV": "BVT",
+	"BR": "BRA",
+	"IO": "IOT",
+	"BN": "BRN",
+	"BG": "BGR",
+	"BF": "BFA",
+	"BI": "BDI",
+	"KH": "KHM",
+	"CM": "CMR",
+	"CA": "CAN",
+	"CV": "CPV",
+	"KY": "CYM",
+	"CF": "CAF",
+	"TD": "TCD",
+	"CL": "CHL",
+	"CN": "CHN",
+	"CX": "CXR",
+	"CC": "CCK",
+	"CO": "COL",
+	"KM": "COM",
+	"CG": "COG",
+	"CD": "COD",
+	"CK": "COK",
+	"CR": "CRI",
+	"CI": "CIV",
+	"HR": "HRV",
+	"CU": "CUB",
+	"CW": "CUW",
+	"CY": "CYP",
+	"CZ": "CZE",
+	"DK": "DNK",
+	"DJ": "DJI",
+	"DM": "DMA",
+	"DO": "DOM",
+	"EC": "ECU",
+	"EG": "EGY",
+	"SV": "SLV",
+	"GQ": "GNQ",
+	"ER": "ERI",
+	"EE": "EST",
+	"ET": "ETH",
+	"FK": "FLK",
+	"FO": "FRO",
+	"FJ": "FJI",
+	"FI": "FIN",
+	"FR": "FRA",
+	"GF": "GUF",
+	"PF": "PYF",
+	"TF": "ATF",
+	"GA": "GAB",
+	"GM": "GMB",
+	"GE": "GEO",
+	"DE": "DEU",
+	"GH": "GHA",
+	"GI": "GIB",
+	"GR": "GRC",
+	"GL": "GRL",
+	"GD": "GRD",
+	"GP": "GLP",
+	"GU": "GUM",
+	"GT": "GTM",
+	"GG": "GGY",
+	"GN": "GIN",
+	"GW": "GNB",
+	"GY": "GUY",
+	"HT": "HTI",
+	"HM": "HMD",
+	"VA": "VAT",
+	"HN": "HND",
+	"HK": "HKG",
+	"HU": "HUN",
+	"IS": "ISL",
+	"IN": "IND",
+	"ID": "IDN",
+	"IR": "IRN",
+	"IQ": "IRQ",
+	"IE": "IRL",
+	"IM": "IMN",
+	"IL": "ISR",
+	"IT": "ITA",
+	"JM": "JAM",
+	"JP": "JPN",
+	"JE": "JEY",
+	"JO": "JOR",
+	"KZ": "KAZ",
+	"KE": "KEN",
+	"KI": "KIR",
+	"KP": "PRK",
+	"KR": "KOR",
+	"KW": "KWT",
+	"KG": "KGZ",
+	"LA": "LAO",
+	"LV": "LVA",
+	"LB": "LBN",
+	"LS": "LSO",
+	"LR": "LBR",
+	"LY": "LBY",
+	"LI": "LIE",
+	"LT": "LTU",
+	"LU": "LUX",
+	"MO": "MAC",
+	"MK": "MKD",
+	"MG": "MDG",
+	"MW": "MWI",
+	"MY": "MYS",
+	"MV": "MDV",
+	"ML": "MLI",
+	"MT": "MLT",
+	"MH": "MHL",
+	"MQ": "MTQ",
+	"MR": "MRT",
+	"MU": "MUS",
+	"YT": "MYT",
+	"MX": "MEX",
+	"FM": "FSM",
+	"MD": "MDA",
+	"MC": "MCO",
+	"MN": "MNG",
+	"ME": "MNE",
+	"MS": "MSR",
+	"MA": "MAR",
+	"MZ": "MOZ",
+	"MM": "MMR",
+	"NA": "NAM",
+	"NR": "NRU",
+	"NP": "NPL",
+	"NL": "NLD",
+	"NC": "NCL",
+	"NZ": "NZL",
+	"NI": "NIC",
+	"NE": "NER",
+	"NG": "NGA",
+	"NU": "NIU",
+	"NF": "NFK",
+	"MP": "MNP",
+	"NO": "NOR",
+	"OM": "OMN",
+	"PK": "PAK",
+	"PW": "PLW",
+	"PS": "PSE",
+	"PA": "PAN",
+	"PG": "PNG",
+	"PY": "PRY",
+	"PE": "PER",
+	"PH": "PHL",
+	"PN": "PCN",
+	"PL": "POL",
+	"PT": "PRT",
+	"PR": "PRI",
+	"QA": "QAT",
+	"RE": "REU",
+	"RO": "ROU",
+	"RU": "RUS",
+	"RW": "RWA",
+	"BL": "BLM",
+	"SH": "SHN",
+	"KN": "KNA",
+	"LC": "LCA",
+	"MF": "MAF",
+	"PM": "SPM",
+	"VC": "VCT",
+	"WS": "WSM",
+	"SM": "SMR",
+	"ST": "STP",
+	"SA": "SAU",
+	"SN": "SEN",
+	"RS": "SRB",
+	"SC": "SYC",
+	"SL": "SLE",
+	"SG": "SGP",
+	"SX": "SXM",
+	"SK": "SVK",
+	"SI": "SVN",
+	"SB": "SLB",
+	"SO": "SOM",
+	"ZA": "ZAF",
+	"GS": "SGS",
+	"SS": "SSD",
+	"ES": "ESP",
+	"LK": "LKA",
+	"SD": "SDN",
+	"SR": "SUR",
+	"SJ": "SJM",
+	"SZ": "SWZ",
+	"SE": "SWE",
+	"CH": "CHE",
+	"SY": "SYR",
+	"TW": "TWN",
+	"TJ": "TJK",
+	"TZ": "TZA",
+	"TH": "THA",
+	"TL": "TLS",
+	"TG": "TGO",
+	"TK": "TKL",
+	"TO": "TON",
+	"TT": "TTO",
+	"TN": "TUN",
+	"TR": "TUR",
+	"TM": "TKM",
+	"TC": "TCA",
+	"TV": "TUV",
+	"UG": "UGA",
+	"UA": "UKR",
+	"AE": "ARE",
+	"GB": "GBR",
+	"US": "USA",
+	"UM": "UMI",
+	"UY": "URY",
+	"UZ": "UZB",
+	"VU": "VUT",
+	"VE": "VEN",
+	"VN": "VNM",
+	"VG": "VGB",
+	"VI": "VIR",
+	"WF": "WLF",
+	"EH": "ESH",
+	"YE": "YEM",
+	"ZM": "ZMB",
+	"ZW": "ZWE"
+};
+
+
+ilib.Locale.a1toa3langmap = {
+	"ab": "abk",
+	"aa": "aar",
+	"af": "afr",
+	"ak": "aka",
+	"sq": "sqi",
+	"am": "amh",
+	"ar": "ara",
+	"an": "arg",
+	"hy": "hye",
+	"as": "asm",
+	"av": "ava",
+	"ae": "ave",
+	"ay": "aym",
+	"az": "aze",
+	"bm": "bam",
+	"ba": "bak",
+	"eu": "eus",
+	"be": "bel",
+	"bn": "ben",
+	"bh": "bih",
+	"bi": "bis",
+	"bs": "bos",
+	"br": "bre",
+	"bg": "bul",
+	"my": "mya",
+	"ca": "cat",
+	"ch": "cha",
+	"ce": "che",
+	"ny": "nya",
+	"zh": "zho",
+	"cv": "chv",
+	"kw": "cor",
+	"co": "cos",
+	"cr": "cre",
+	"hr": "hrv",
+	"cs": "ces",
+	"da": "dan",
+	"dv": "div",
+	"nl": "nld",
+	"dz": "dzo",
+	"en": "eng",
+	"eo": "epo",
+	"et": "est",
+	"ee": "ewe",
+	"fo": "fao",
+	"fj": "fij",
+	"fi": "fin",
+	"fr": "fra",
+	"ff": "ful",
+	"gl": "glg",
+	"ka": "kat",
+	"de": "deu",
+	"el": "ell",
+	"gn": "grn",
+	"gu": "guj",
+	"ht": "hat",
+	"ha": "hau",
+	"he": "heb",
+	"hz": "her",
+	"hi": "hin",
+	"ho": "hmo",
+	"hu": "hun",
+	"ia": "ina",
+	"id": "ind",
+	"ie": "ile",
+	"ga": "gle",
+	"ig": "ibo",
+	"ik": "ipk",
+	"io": "ido",
+	"is": "isl",
+	"it": "ita",
+	"iu": "iku",
+	"ja": "jpn",
+	"jv": "jav",
+	"kl": "kal",
+	"kn": "kan",
+	"kr": "kau",
+	"ks": "kas",
+	"kk": "kaz",
+	"km": "khm",
+	"ki": "kik",
+	"rw": "kin",
+	"ky": "kir",
+	"kv": "kom",
+	"kg": "kon",
+	"ko": "kor",
+	"ku": "kur",
+	"kj": "kua",
+	"la": "lat",
+	"lb": "ltz",
+	"lg": "lug",
+	"li": "lim",
+	"ln": "lin",
+	"lo": "lao",
+	"lt": "lit",
+	"lu": "lub",
+	"lv": "lav",
+	"gv": "glv",
+	"mk": "mkd",
+	"mg": "mlg",
+	"ms": "msa",
+	"ml": "mal",
+	"mt": "mlt",
+	"mi": "mri",
+	"mr": "mar",
+	"mh": "mah",
+	"mn": "mon",
+	"na": "nau",
+	"nv": "nav",
+	"nb": "nob",
+	"nd": "nde",
+	"ne": "nep",
+	"ng": "ndo",
+	"nn": "nno",
+	"no": "nor",
+	"ii": "iii",
+	"nr": "nbl",
+	"oc": "oci",
+	"oj": "oji",
+	"cu": "chu",
+	"om": "orm",
+	"or": "ori",
+	"os": "oss",
+	"pa": "pan",
+	"pi": "pli",
+	"fa": "fas",
+	"pl": "pol",
+	"ps": "pus",
+	"pt": "por",
+	"qu": "que",
+	"rm": "roh",
+	"rn": "run",
+	"ro": "ron",
+	"ru": "rus",
+	"sa": "san",
+	"sc": "srd",
+	"sd": "snd",
+	"se": "sme",
+	"sm": "smo",
+	"sg": "sag",
+	"sr": "srp",
+	"gd": "gla",
+	"sn": "sna",
+	"si": "sin",
+	"sk": "slk",
+	"sl": "slv",
+	"so": "som",
+	"st": "sot",
+	"az": "azb",
+	"es": "spa",
+	"su": "sun",
+	"sw": "swa",
+	"ss": "ssw",
+	"sv": "swe",
+	"ta": "tam",
+	"te": "tel",
+	"tg": "tgk",
+	"th": "tha",
+	"ti": "tir",
+	"bo": "bod",
+	"tk": "tuk",
+	"tl": "tgl",
+	"tn": "tsn",
+	"to": "ton",
+	"tr": "tur",
+	"ts": "tso",
+	"tt": "tat",
+	"tw": "twi",
+	"ty": "tah",
+	"ug": "uig",
+	"uk": "ukr",
+	"ur": "urd",
+	"uz": "uzb",
+	"ve": "ven",
+	"vi": "vie",
+	"vo": "vol",
+	"wa": "wln",
+	"cy": "cym",
+	"wo": "wol",
+	"fy": "fry",
+	"xh": "xho",
+	"yi": "yid",
+	"yo": "yor",
+	"za": "zha",
+	"zu": "zul"
+};
+
 /**
  * @private
  * Tell whether or not the str does not start with a lower case ASCII char.
@@ -594,6 +1037,32 @@ ilib.Locale._isScriptCode = function(str)
 	return true;
 };
 
+/**
+ * @static
+ * Return the ISO-3166 alpha3 equivalent region code for the given ISO 3166 alpha2
+ * region code. If the given alpha2 code is not found, this function returns its
+ * argument unchanged.
+ * @param {string|undefined} alpha2 the alpha2 code to map
+ * @return {string|undefined} the alpha3 equivalent of the given alpha2 code, or the alpha2
+ * parameter if the alpha2 value is not found
+ */
+ilib.Locale.regionAlpha2ToAlpha3 = function(alpha2) {
+	return ilib.Locale.a2toa3regmap[alpha2] || alpha2;
+};
+
+/**
+ * @static
+ * Return the ISO-639 alpha3 equivalent language code for the given ISO 639 alpha1
+ * language code. If the given alpha1 code is not found, this function returns its
+ * argument unchanged.
+ * @param {string|undefined} alpha1 the alpha1 code to map
+ * @return {string|undefined} the alpha3 equivalent of the given alpha1 code, or the alpha1
+ * parameter if the alpha1 value is not found
+ */
+ilib.Locale.languageAlpha1ToAlpha3 = function(alpha1) {
+	return ilib.Locale.a1toa3langmap[alpha1] || alpha1;
+};
+
 ilib.Locale.prototype = {
 	/**
 	 * Return the ISO 639 language code for this locale. 
@@ -604,11 +1073,27 @@ ilib.Locale.prototype = {
 	},
 	
 	/**
+	 * Return the language of this locale as an ISO-639-alpha3 language code
+	 * @return {string|undefined} the alpha3 language code of this locale
+	 */
+	getLanguageAlpha3: function() {
+		return ilib.Locale.languageAlpha1ToAlpha3(this.language);
+	},
+	
+	/**
 	 * Return the ISO 3166 region code for this locale.
 	 * @return {string|undefined} the region code of this locale
 	 */
 	getRegion: function() {
 		return this.region;
+	},
+	
+	/**
+	 * Return the region of this locale as an ISO-3166-alpha3 region code
+	 * @return {string|undefined} the alpha3 region code of this locale
+	 */
+	getRegionAlpha3: function() {
+		return ilib.Locale.regionAlpha2ToAlpha3(this.region);
 	},
 	
 	/**
@@ -3569,8 +4054,6 @@ ilib.Date.GregDate = function(params) {
 		}
 		
 		if (typeof(params.unixtime) != 'undefined') {
-			// unix time is defined to be UTC
-			this.timezone = "Etc/UTC";
 			this.setTime(parseInt(params.unixtime, 10));
 		} else if (typeof(params.julianday) != 'undefined') {
 			// JD time is defined to be UTC
@@ -3588,17 +4071,14 @@ ilib.Date.GregDate = function(params) {
 		} else if (typeof(params.rd) != 'undefined') {
 			// private parameter. Do not document this!
 			// RD time is defined to be UTC
-			this.timezone = "Etc/UTC";
 			this.setRd(params.rd);
 		} else {
-			// Date.getTime() gets unix time in UTC
 			var now = new Date();
-			this.setTime(now.getTime() - now.getTimezoneOffset()*60000);
+			this.setTime(now.getTime());
 		}
 	} else {
-		// Date.getTime() gets unix time in UTC
 		var now = new Date();
-		this.setTime(now.getTime() - now.getTimezoneOffset()*60000);
+		this.setTime(now.getTime());
 	}
 };
 
@@ -4153,7 +4633,7 @@ ilib.Date.GregDate.prototype.getCalendar = function() {
  * @return {string|undefined} the name of the time zone for this date instance
  */
 ilib.Date.GregDate.prototype.getTimeZone = function() {
-	return this.timezone;
+	return this.timezone || "local";
 };
 
 /**
@@ -4321,10 +4801,8 @@ ilib.TimeZone = function(options) {
 				// the offset of the standard time for the time zone is always the one that is largest of 
 				// the two, no matter whether you are in the northern or southern hemisphere
 				this.offset = Math.max(this.offsetJan1, this.offsetJun1);
-				this.id = this.getDisplayName(undefined, undefined);
-			} else {
-				this.id = options.id;
 			}
+			this.id = options.id;
 		} else if (options.offset) {
 			this.offset = (typeof(options.offset) === 'string') ? parseInt(options.offset, 10) : options.offset;
 			this.id = this.getDisplayName(undefined, undefined);
@@ -4384,7 +4862,7 @@ ilib.TimeZone.prototype._initZone = function() {
 	 * @type {{o:string,f:string,e:Object.<{m:number,r:string,t:string,z:string}>,s:Object.<{m:number,r:string,t:string,z:string,v:string,c:string}>,c:string,n:string}} 
 	 */
 	this.zone = ilib.data.timezones[this.id];
-	if (!this.zone && !this.offset) {
+	if (!this.zone && typeof(this.offset) === 'undefined') {
 		this.id = "Etc/UTC";
 		this.zone = ilib.data.timezones[this.id];
 	}
@@ -5953,7 +6431,13 @@ ilib.DateFmt = function(options) {
 				locale: this.locale, 
 				id: options.timezone
 			});
-		}
+		} else if (options.locale) {
+			// if an explicit locale was given, then get the time zone for that locale
+			this.tz = new ilib.TimeZone({
+				locale: this.locale
+			});
+		} // else just assume time zone "local"
+		
 		if (typeof(options.useNative) !== 'undefined') {
 			this.useNative = options.useNative;
 		}
@@ -6351,7 +6835,7 @@ ilib.DateFmt.prototype = {
 		// time zone in their format, we never have to load up a TimeZone
 		// instance into this formatter.
 		if (!this.tz) {
-			this.tz = new ilib.TimeZone({locale: this.locale});
+			this.tz = new ilib.TimeZone({id: ilib.getTimeZone()});
 		}
 		return this.tz;
 	},
@@ -6587,17 +7071,24 @@ ilib.DateFmt.prototype = {
 			throw "Wrong date type passed to ilib.DateFmt.format()";
 		}
 		
+		var thisZoneName = this.tz && this.tz.getId() || "local";
+		var dateZoneName = date.timezone || "local";
+		
 		// convert to the time zone of this formatter before formatting
-		if (date.timezone && this.tz) {
-			// console.log("Differing time zones " + date.timezone + " and " + this.tz.getId() + ". Converting...");
+		if (dateZoneName !== thisZoneName) {
+			// console.log("Differing time zones date: " + dateZoneName + " and fmt: " + thisZoneName + ". Converting...");
 			
 			var datetz = new ilib.TimeZone({
 				locale: date.locale,
-				id: date.timezone
+				id: dateZoneName
+			});
+			var thistz = this.tz || new ilib.TimeZone({
+				locale: date.locale,
+				id: thisZoneName
 			});
 			
 			var dateOffset = datetz.getOffset(date),
-				fmtOffset = this.tz.getOffset(date),
+				fmtOffset = thistz.getOffset(date),
 				// relative offset in seconds
 				offset = (dateOffset.h || 0)*60*60 + (dateOffset.m || 0)*60 + (dateOffset.s || 0) -
 					((fmtOffset.h || 0)*60*60 + (fmtOffset.m || 0)*60 + (fmtOffset.s || 0));
