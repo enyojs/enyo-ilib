@@ -109,7 +109,8 @@
             document.body.className = document.body.className.replace(new RegExp('(^|\\s)'+ base +'[^\\s]*', 'g'), '');
         }
 
-		if (li.getScript() !== "Latn" || locale.getLanguage() === "vi") {
+		var scriptName = li.getScript(); 
+		if (scriptName !== "Latn" || locale.getLanguage() === "vi") {
 			// allow enyo to define other fonts for non-Latin languages, or Vietnamese which
 			// is Latin-based, but the characters with multiple accents don't appear in the
 			// regular fonts, creating a strange "ransom note" look with a mix of fonts in the
@@ -117,9 +118,14 @@
 			// to display with the same font.
 			enyo.dom.addBodyClass(base + "non-latin");
 		}
+		if (scriptName !== 'Latn' && scriptName !== 'Cyrl' && scriptName !== 'Grek') {
+			// GF-45884: allow enyo to avoid setting italic fonts for those scripts that do not 
+			// commonly use italics
+			enyo.dom.addBodyClass(base + "non-italic");
+		}
 
 		// allow enyo to apply right-to-left styles to the app and widgets if necessary
-		var script = new ilib.ScriptInfo(li.getScript());
+		var script = new ilib.ScriptInfo(scriptName);
 		if (script.getScriptDirection() === "rtl") {
 			enyo.dom.addBodyClass(base + "right-to-left");
 			if (enyo.Control) {
