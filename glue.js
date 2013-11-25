@@ -196,7 +196,6 @@ $L.setLocale = function (spec) {
 			type: "html",
 			name: "strings",
 			sync: true,
-			missing: locale.getLanguage() === "en" ? "source" : "pseudo",
 			lengthen: true		// if pseudo-localizing, this tells it to lengthen strings
 		});
 	}
