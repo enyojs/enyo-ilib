@@ -109,10 +109,11 @@
             document.body.className = document.body.className.replace(new RegExp('(^|\\s)'+ base +'[^\\s]*', 'g'), '');
         }
 
-		var scriptName = li.getScript(); 
-		if (scriptName !== "Latn" || locale.getLanguage() === "vi") {
-			// allow enyo to define other fonts for non-Latin languages, or Vietnamese which
-			// is Latin-based, but the characters with multiple accents don't appear in the
+        var nonLatinLanguages = ["cs", "hu", "lv", "lt", "po", "ro", "sr", "sl", "tr", "vi"];
+		var scriptName = li.getScript();
+		if (scriptName !== "Latn" || nonLatinLanguages.indexOf(locale.getLanguage()) !== -1) {
+			// allow enyo to define other fonts for non-Latin languages, or for certain
+			// Latin-based languages where the characters with some accents don't appear in the
 			// regular fonts, creating a strange "ransom note" look with a mix of fonts in the
 			// same word. So, treat it like a non-Latin language in order to get all the characters
 			// to display with the same font.
