@@ -148,26 +148,33 @@
     };
 })();
 
+var defaultTextDomain = "strings";
+
 /*
  * Reset the $L function to use ilib instead of the dummy function that enyo
  * comes with by default.
  */
-$L = function (string) {
+$L = function (string, domain) {
 	var str;
 	if (!$L.rb) {
 		$L.setLocale();
 	}
+	
+	if (!domain) {
+		domain = $L.getDefaultTextDomain();
+	}
+
 	if (typeof(string) === 'string') {
-		if (!$L.rb) {
+		if (!$L.rb || !$L.rb[domain]) {
 			return string;
 		}
-		str = $L.rb.getString(string);
+		str = $L.rb[domain].getString(string);
 	} else if (typeof(string) === 'object') {
 		if (typeof(string.key) !== 'undefined' && typeof(string.value) !== 'undefined') {
-			if (!$L.rb) {
+			if (!$L.rb || !$L.rb[domain]) {
 				return string.value;
 			}
-			str = $L.rb.getString(string.value, string.key);
+			str = $L.rb[domain].getString(string.value, string.key);
 		} else {
 			str = "";
 		}
@@ -184,11 +191,13 @@ $L = function (string) {
  */
 $L.setLocale = function (spec) {
 	var locale = new ilib.Locale(spec);
-	if (!$L.rb || spec !== $L.rb.getLocale().getSpec()) {
-		$L.rb = new ilib.ResBundle({
+	if (!$L.rb || spec !== $L.rb[$L.getDefaultTextDomain()].getLocale().getSpec()) {
+		$L.rb = [];
+		$L.rb[$L.getDefaultTextDomain()] = {};
+		$L.rb[$L.getDefaultTextDomain()] = new ilib.ResBundle({
 			locale: locale,
 			type: "html",
-			name: "strings",
+			name: $L.getDefaultTextDomain(),
 			sync: true,
 			missing: locale.getLanguage() === "en" ? "source" : "pseudo",
 			lengthen: true		// if pseudo-localizing, this tells it to lengthen strings
@@ -205,6 +214,34 @@ enyo.updateLocale = function() {
 	ilib.setLocale(navigator.language);
 	$L.setLocale(navigator.language);
 	enyo.updateI18NClasses();
+};
+
+$L.bindTextDomain = function (domain, path) {
+	var locale = $L.rb && $L.rb[$L.getDefaultTextDomain()].getLocale().getSpec();
+	if (locale) {
+		if (!$L.rb[domain]) {
+			$L.rb[domain] = {};
+		}
+		$L.rb[domain] = new ilib.ResBundle({
+			locale: locale,
+			type: "html",
+			name: domain,
+			loadParams: {root: path},
+			sync: true,
+			lengthen: true		// if pseudo-localizing, this tells it to lengthen strings			
+		});
+	}
+};
+
+$L.setDefaultTextDomain = function (domain) {
+	if (!domain || domain === "") {
+		domain = "strings";
+	}
+	defaultTextDomain = domain;
+};
+
+$L.getDefaultTextDomain = function () {
+	return defaultTextDomain || "strings";
 };
 
 // we go ahead and run this once during loading of iLib settings are valid
