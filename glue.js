@@ -217,11 +217,16 @@
 /* default translation domain name*/
 var defaultTextDomain = "strings";
 
-/*
+/**
+ * @public
  * Reset the $L function to use ilib instead of the dummy function that enyo
  * comes with by default.
+ *
+ * @param {string} string indicates the string entry to translate
+ * @param {string} domain indicates the translation domain where the translated results could be found - if null, defaultDomain will be used
+ * @param {json} params gives the values to parameterize the translation returned 
  */
-$L = function (string, domain) {
+$L = function (string, domain, params) {
 	var str;
 	if (!$L.rb) {
 		$L.setLocale();
@@ -233,12 +238,18 @@ $L = function (string, domain) {
 
 	if (typeof(string) === 'string') {
 		if (!$L.rb || !$L.rb[domain]) {
+			if (params) {
+				return string.format(params);
+			}
 			return string;
 		}
 		str = $L.rb[domain].getString(string);
 	} else if (typeof(string) === 'object') {
 		if (typeof(string.key) !== 'undefined' && typeof(string.value) !== 'undefined') {
 			if (!$L.rb || !$L.rb[domain]) {
+				if (params) {
+					return string.value.format(params);
+				}
 				return string.value;
 			}
 			str = $L.rb[domain].getString(string.value, string.key);
@@ -247,6 +258,10 @@ $L = function (string, domain) {
 		}
 	} else {
 		str = string;
+	}
+
+	if (params) {
+		return str.toString().format(params);
 	}
 	return str.toString();
 };
