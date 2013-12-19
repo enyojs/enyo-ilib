@@ -158,7 +158,10 @@
 		}
     };
 
-    /* enyo.collectResources collects resources descriptor files:
+    /** enyo.collectResources collects resources descriptor files:
+     * it should be called after every setLocale, but there isn't such a callback in current version
+     * 
+     * @param {string} resourcesPath indicates where resources.json file is available - 
      * 
      * resources.json:
      *  {
@@ -170,9 +173,9 @@
 	 *  }
      *
      * "domain" describes a translation domain to load:
-     * "domain.name" is the name of the translation domain
-     * "domain.path" is the path where the related of the translation domain
-     * "domain.defaultDomain" indicates if this translation domain becomes the default one.
+     * - "domain.name" is the name of the translation domain
+     * - "domain.path" is the path where the related of the translation domain
+     * - "domain.defaultDomain" indicates if this translation domain becomes the default one.
      * 
      * It implies there's only one default translation domain that could be defined for the current application
      * If it is defined, "domain.name" replaces "strings" as translation domain default name
@@ -211,6 +214,7 @@
     };
 })();
 
+/* default translation domain name*/
 var defaultTextDomain = "strings";
 
 /*
@@ -248,8 +252,10 @@ $L = function (string, domain) {
 };
 
 /**
+ * @public
  * Set the locale for the strings that $L loads. This may reload the
  * string resources if necessary.
+ * 
  * @param {string} spec the locale specifier
  */
 $L.setLocale = function (spec) {
@@ -279,6 +285,13 @@ enyo.updateLocale = function() {
 	enyo.collectResources();
 };
 
+/**
+ * @public
+ * Add a new translation domain.
+ * 
+ * @param {string} domain: the translation domain name
+ * @param {string} path: the path to the related resources
+ */
 $L.bindTextDomain = function (domain, path) {
 	var locale = $L.rb && $L.rb[$L.getDefaultTextDomain()].getLocale().getSpec();
 	if (locale) {
@@ -296,6 +309,12 @@ $L.bindTextDomain = function (domain, path) {
 	}
 };
 
+/**
+ * @public
+ * define the default translation domain.
+ * 
+ * @param {string} domain: the translation domain name
+ */
 $L.setDefaultTextDomain = function (domain) {
 	if (!domain || domain === "") {
 		domain = "strings";
@@ -303,6 +322,10 @@ $L.setDefaultTextDomain = function (domain) {
 	defaultTextDomain = domain;
 };
 
+/**
+ * @public
+ * @returns {string} the default translation domain name
+ */
 $L.getDefaultTextDomain = function () {
 	return defaultTextDomain || "strings";
 };
