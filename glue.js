@@ -148,15 +148,15 @@
     };
 
     // collect resources descriptor files
-    enyo.collectResources = function(path) {
-		if (!path) {
-			path = "";
+    enyo.collectResources = function(resourcesPath) {
+		if (!resourcesPath) {
+			resourcesPath = "";
 		}
 
 		var handler = function(inSender, json) {
 			if (!inSender.failed && (typeof(json) === 'object')) {
 				if (json.domain) {
-					$L.bindTextDomain(json.domain.name, path + json.domain.path);
+					$L.bindTextDomain(json.domain.name, resourcesPath + json.domain.path);
 
 					if (json.domain.defaultDomain && json.domain.defaultDomain === "true") {
 						$L.setDefaultTextDomain(json.domain.name);
@@ -165,14 +165,14 @@
 
 				if (json.resources) {
 					json.resources.forEach(function (resource) {
-						enyo.collectResources(path + resource);
+						enyo.collectResources(resourcesPath + resource);
 					});
 				}
 			}
 		};
 
 		var ajax = new enyo.Ajax({
-			url: enyo.path.rewrite(path + "resources.json")
+			url: enyo.path.rewrite(resourcesPath + "resources.json")
 		});
 		ajax.response(this, handler);
 		ajax.error(this, handler);
