@@ -158,7 +158,28 @@
 		}
     };
 
-    // collect resources descriptor files
+    /* enyo.collectResources collects resources descriptor files:
+     * it should be called after every setLocale, but there isn't such a callback in current version
+     * 
+     * resources.json:
+     *  {
+	 *    "domain": {"name": "domain_name_A", "path": "resources_path/", "defaultDomain": "true"},
+	 *    "resources": [
+	 *      "../other_domain_path_1/",
+	 *      "../other_domain_path_2/"
+	 *    ]
+	 *  }
+     *
+     * "domain" describes a translation domain to load:
+     * "domain.name" is the name of the translation domain
+     * "domain.path" is the path where the related of the translation domain
+     * "domain.defaultDomain" indicates if this translation domain becomes the default one.
+     * 
+     * It implies there's only one default translation domain that could be defined for the current application
+     * If it is defined, "domain.name" replaces "strings" as translation domain default name
+     *
+     * "resources" indicates the list where other resources.json files are defined in the application
+     */
     enyo.collectResources = function(resourcesPath) {
 		if (!resourcesPath) {
 			resourcesPath = "";
