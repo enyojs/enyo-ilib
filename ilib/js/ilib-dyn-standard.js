@@ -29,7 +29,8 @@ var ilib = ilib || {};
  */
 ilib.getVersion = function () {
     // increment this for each release
-    return "3.0";
+    return "4.0"
+    ;
 };
 
 /**
@@ -110,7 +111,11 @@ ilib._isGlobal = function(name) {
  * @param {string} spec the locale specifier for the default locale
  */
 ilib.setLocale = function (spec) {
-    ilib.locale = spec || ilib.locale;
+	if (typeof(spec) === 'string') {
+		ilib.locale = spec;
+	}
+    // else ignore other data types, as we don't have the dependencies
+	// to look into them to find a locale
 };
 
 /**
@@ -127,7 +132,7 @@ ilib.setLocale = function (spec) {
  * @return {string} the locale specifier for the default locale
  */
 ilib.getLocale = function () {
-	if (typeof(ilib.locale) === 'undefined') {
+	if (typeof(ilib.locale) !== 'string') {
 		if (typeof(navigator) !== 'undefined' && typeof(navigator.language) !== 'undefined') {
 			// running in a browser
 			ilib.locale = navigator.language;  // FF/Opera/Chrome/Webkit
@@ -169,7 +174,7 @@ ilib.getLocale = function () {
 			}
 		}
 			 
-		ilib.locale = ilib.locale || 'en-US';
+		ilib.locale = typeof(ilib.locale) === 'string' ? ilib.locale : 'en-US';
 	}
     return ilib.locale;
 };
@@ -197,7 +202,7 @@ ilib.setTimeZone = function (tz) {
  * class. If the default time zone
  * is not set, ilib will attempt to use the locale of the
  * environment it is running in, if it can find that. If not, it will
- * default to the the UTC zone "Etc/UTC".<p>
+ * default to the the zone "local".<p>
  * 
  * Depends directive: !depends ilibglobal.js
  * 
@@ -227,7 +232,7 @@ ilib.getTimeZone = function() {
 			}
 		}
 		
-		ilib.tz = ilib.tz || "Etc/UTC"; 
+		ilib.tz = ilib.tz || "local"; 
 	}
 
     return ilib.tz;
@@ -392,8 +397,8 @@ ilib.setLoaderCallback = function(loader) {
  * Depends directive: !depends locale.js
  * 
  * @constructor
- * @param {?string=} language the ISO 639 2-letter code for the language, or a full 
- * locale spec in BCP-47 format
+ * @param {?string|ilib.Locale=} language the ISO 639 2-letter code for the language, or a full 
+ * locale spec in BCP-47 format, or another ilib.Locale instance to copy from
  * @param {string=} region the ISO 3166 2-letter code for the region
  * @param {string=} variant the name of the variant of this locale, if any
  * @param {string=} script the ISO 15924 code of the script for this locale, if any
@@ -401,38 +406,45 @@ ilib.setLoaderCallback = function(loader) {
 ilib.Locale = function(language, region, variant, script) {
 	if (typeof(region) === 'undefined') {
 		var spec = language || ilib.getLocale();
-		var parts = spec.split('-');
-        for ( var i = 0; i < parts.length; i++ ) {
-        	if (ilib.Locale._isLanguageCode(parts[i])) {
-    			/** 
-    			 * @private
-    			 * @type {string|undefined}
-    			 */
-        		this.language = parts[i];
-        	} else if (ilib.Locale._isRegionCode(parts[i])) {
-    			/** 
-    			 * @private
-    			 * @type {string|undefined}
-    			 */
-        		this.region = parts[i];
-        	} else if (ilib.Locale._isScriptCode(parts[i])) {
-    			/** 
-    			 * @private
-    			 * @type {string|undefined}
-    			 */
-        		this.script = parts[i];
-        	} else {
-    			/** 
-    			 * @private
-    			 * @type {string|undefined}
-    			 */
-        		this.variant = parts[i];
-        	}
-        }
-        this.language = this.language || undefined;
-        this.region = this.region || undefined;
-        this.script = this.script || undefined;
-        this.variant = this.variant || undefined;
+		if (typeof(spec) === 'string') {
+			var parts = spec.split('-');
+	        for ( var i = 0; i < parts.length; i++ ) {
+	        	if (ilib.Locale._isLanguageCode(parts[i])) {
+	    			/** 
+	    			 * @private
+	    			 * @type {string|undefined}
+	    			 */
+	        		this.language = parts[i];
+	        	} else if (ilib.Locale._isRegionCode(parts[i])) {
+	    			/** 
+	    			 * @private
+	    			 * @type {string|undefined}
+	    			 */
+	        		this.region = parts[i];
+	        	} else if (ilib.Locale._isScriptCode(parts[i])) {
+	    			/** 
+	    			 * @private
+	    			 * @type {string|undefined}
+	    			 */
+	        		this.script = parts[i];
+	        	} else {
+	    			/** 
+	    			 * @private
+	    			 * @type {string|undefined}
+	    			 */
+	        		this.variant = parts[i];
+	        	}
+	        }
+	        this.language = this.language || undefined;
+	        this.region = this.region || undefined;
+	        this.script = this.script || undefined;
+	        this.variant = this.variant || undefined;
+		} else if (typeof(spec) === 'object') {
+	        this.language = spec.language || undefined;
+	        this.region = spec.region || undefined;
+	        this.script = spec.script || undefined;
+	        this.variant = spec.variant || undefined;
+		}
 	} else {
 		if (language) {
 			language = language.trim();
@@ -481,6 +493,448 @@ ilib.Locale = function(language, region, variant, script) {
 		}
 		this.spec += this.variant;
 	}
+};
+
+// from http://en.wikipedia.org/wiki/ISO_3166-1
+ilib.Locale.a2toa3regmap = {
+	"AF": "AFG",
+	"AX": "ALA",
+	"AL": "ALB",
+	"DZ": "DZA",
+	"AS": "ASM",
+	"AD": "AND",
+	"AO": "AGO",
+	"AI": "AIA",
+	"AQ": "ATA",
+	"AG": "ATG",
+	"AR": "ARG",
+	"AM": "ARM",
+	"AW": "ABW",
+	"AU": "AUS",
+	"AT": "AUT",
+	"AZ": "AZE",
+	"BS": "BHS",
+	"BH": "BHR",
+	"BD": "BGD",
+	"BB": "BRB",
+	"BY": "BLR",
+	"BE": "BEL",
+	"BZ": "BLZ",
+	"BJ": "BEN",
+	"BM": "BMU",
+	"BT": "BTN",
+	"BO": "BOL",
+	"BQ": "BES",
+	"BA": "BIH",
+	"BW": "BWA",
+	"BV": "BVT",
+	"BR": "BRA",
+	"IO": "IOT",
+	"BN": "BRN",
+	"BG": "BGR",
+	"BF": "BFA",
+	"BI": "BDI",
+	"KH": "KHM",
+	"CM": "CMR",
+	"CA": "CAN",
+	"CV": "CPV",
+	"KY": "CYM",
+	"CF": "CAF",
+	"TD": "TCD",
+	"CL": "CHL",
+	"CN": "CHN",
+	"CX": "CXR",
+	"CC": "CCK",
+	"CO": "COL",
+	"KM": "COM",
+	"CG": "COG",
+	"CD": "COD",
+	"CK": "COK",
+	"CR": "CRI",
+	"CI": "CIV",
+	"HR": "HRV",
+	"CU": "CUB",
+	"CW": "CUW",
+	"CY": "CYP",
+	"CZ": "CZE",
+	"DK": "DNK",
+	"DJ": "DJI",
+	"DM": "DMA",
+	"DO": "DOM",
+	"EC": "ECU",
+	"EG": "EGY",
+	"SV": "SLV",
+	"GQ": "GNQ",
+	"ER": "ERI",
+	"EE": "EST",
+	"ET": "ETH",
+	"FK": "FLK",
+	"FO": "FRO",
+	"FJ": "FJI",
+	"FI": "FIN",
+	"FR": "FRA",
+	"GF": "GUF",
+	"PF": "PYF",
+	"TF": "ATF",
+	"GA": "GAB",
+	"GM": "GMB",
+	"GE": "GEO",
+	"DE": "DEU",
+	"GH": "GHA",
+	"GI": "GIB",
+	"GR": "GRC",
+	"GL": "GRL",
+	"GD": "GRD",
+	"GP": "GLP",
+	"GU": "GUM",
+	"GT": "GTM",
+	"GG": "GGY",
+	"GN": "GIN",
+	"GW": "GNB",
+	"GY": "GUY",
+	"HT": "HTI",
+	"HM": "HMD",
+	"VA": "VAT",
+	"HN": "HND",
+	"HK": "HKG",
+	"HU": "HUN",
+	"IS": "ISL",
+	"IN": "IND",
+	"ID": "IDN",
+	"IR": "IRN",
+	"IQ": "IRQ",
+	"IE": "IRL",
+	"IM": "IMN",
+	"IL": "ISR",
+	"IT": "ITA",
+	"JM": "JAM",
+	"JP": "JPN",
+	"JE": "JEY",
+	"JO": "JOR",
+	"KZ": "KAZ",
+	"KE": "KEN",
+	"KI": "KIR",
+	"KP": "PRK",
+	"KR": "KOR",
+	"KW": "KWT",
+	"KG": "KGZ",
+	"LA": "LAO",
+	"LV": "LVA",
+	"LB": "LBN",
+	"LS": "LSO",
+	"LR": "LBR",
+	"LY": "LBY",
+	"LI": "LIE",
+	"LT": "LTU",
+	"LU": "LUX",
+	"MO": "MAC",
+	"MK": "MKD",
+	"MG": "MDG",
+	"MW": "MWI",
+	"MY": "MYS",
+	"MV": "MDV",
+	"ML": "MLI",
+	"MT": "MLT",
+	"MH": "MHL",
+	"MQ": "MTQ",
+	"MR": "MRT",
+	"MU": "MUS",
+	"YT": "MYT",
+	"MX": "MEX",
+	"FM": "FSM",
+	"MD": "MDA",
+	"MC": "MCO",
+	"MN": "MNG",
+	"ME": "MNE",
+	"MS": "MSR",
+	"MA": "MAR",
+	"MZ": "MOZ",
+	"MM": "MMR",
+	"NA": "NAM",
+	"NR": "NRU",
+	"NP": "NPL",
+	"NL": "NLD",
+	"NC": "NCL",
+	"NZ": "NZL",
+	"NI": "NIC",
+	"NE": "NER",
+	"NG": "NGA",
+	"NU": "NIU",
+	"NF": "NFK",
+	"MP": "MNP",
+	"NO": "NOR",
+	"OM": "OMN",
+	"PK": "PAK",
+	"PW": "PLW",
+	"PS": "PSE",
+	"PA": "PAN",
+	"PG": "PNG",
+	"PY": "PRY",
+	"PE": "PER",
+	"PH": "PHL",
+	"PN": "PCN",
+	"PL": "POL",
+	"PT": "PRT",
+	"PR": "PRI",
+	"QA": "QAT",
+	"RE": "REU",
+	"RO": "ROU",
+	"RU": "RUS",
+	"RW": "RWA",
+	"BL": "BLM",
+	"SH": "SHN",
+	"KN": "KNA",
+	"LC": "LCA",
+	"MF": "MAF",
+	"PM": "SPM",
+	"VC": "VCT",
+	"WS": "WSM",
+	"SM": "SMR",
+	"ST": "STP",
+	"SA": "SAU",
+	"SN": "SEN",
+	"RS": "SRB",
+	"SC": "SYC",
+	"SL": "SLE",
+	"SG": "SGP",
+	"SX": "SXM",
+	"SK": "SVK",
+	"SI": "SVN",
+	"SB": "SLB",
+	"SO": "SOM",
+	"ZA": "ZAF",
+	"GS": "SGS",
+	"SS": "SSD",
+	"ES": "ESP",
+	"LK": "LKA",
+	"SD": "SDN",
+	"SR": "SUR",
+	"SJ": "SJM",
+	"SZ": "SWZ",
+	"SE": "SWE",
+	"CH": "CHE",
+	"SY": "SYR",
+	"TW": "TWN",
+	"TJ": "TJK",
+	"TZ": "TZA",
+	"TH": "THA",
+	"TL": "TLS",
+	"TG": "TGO",
+	"TK": "TKL",
+	"TO": "TON",
+	"TT": "TTO",
+	"TN": "TUN",
+	"TR": "TUR",
+	"TM": "TKM",
+	"TC": "TCA",
+	"TV": "TUV",
+	"UG": "UGA",
+	"UA": "UKR",
+	"AE": "ARE",
+	"GB": "GBR",
+	"US": "USA",
+	"UM": "UMI",
+	"UY": "URY",
+	"UZ": "UZB",
+	"VU": "VUT",
+	"VE": "VEN",
+	"VN": "VNM",
+	"VG": "VGB",
+	"VI": "VIR",
+	"WF": "WLF",
+	"EH": "ESH",
+	"YE": "YEM",
+	"ZM": "ZMB",
+	"ZW": "ZWE"
+};
+
+
+ilib.Locale.a1toa3langmap = {
+	"ab": "abk",
+	"aa": "aar",
+	"af": "afr",
+	"ak": "aka",
+	"sq": "sqi",
+	"am": "amh",
+	"ar": "ara",
+	"an": "arg",
+	"hy": "hye",
+	"as": "asm",
+	"av": "ava",
+	"ae": "ave",
+	"ay": "aym",
+	"az": "aze",
+	"bm": "bam",
+	"ba": "bak",
+	"eu": "eus",
+	"be": "bel",
+	"bn": "ben",
+	"bh": "bih",
+	"bi": "bis",
+	"bs": "bos",
+	"br": "bre",
+	"bg": "bul",
+	"my": "mya",
+	"ca": "cat",
+	"ch": "cha",
+	"ce": "che",
+	"ny": "nya",
+	"zh": "zho",
+	"cv": "chv",
+	"kw": "cor",
+	"co": "cos",
+	"cr": "cre",
+	"hr": "hrv",
+	"cs": "ces",
+	"da": "dan",
+	"dv": "div",
+	"nl": "nld",
+	"dz": "dzo",
+	"en": "eng",
+	"eo": "epo",
+	"et": "est",
+	"ee": "ewe",
+	"fo": "fao",
+	"fj": "fij",
+	"fi": "fin",
+	"fr": "fra",
+	"ff": "ful",
+	"gl": "glg",
+	"ka": "kat",
+	"de": "deu",
+	"el": "ell",
+	"gn": "grn",
+	"gu": "guj",
+	"ht": "hat",
+	"ha": "hau",
+	"he": "heb",
+	"hz": "her",
+	"hi": "hin",
+	"ho": "hmo",
+	"hu": "hun",
+	"ia": "ina",
+	"id": "ind",
+	"ie": "ile",
+	"ga": "gle",
+	"ig": "ibo",
+	"ik": "ipk",
+	"io": "ido",
+	"is": "isl",
+	"it": "ita",
+	"iu": "iku",
+	"ja": "jpn",
+	"jv": "jav",
+	"kl": "kal",
+	"kn": "kan",
+	"kr": "kau",
+	"ks": "kas",
+	"kk": "kaz",
+	"km": "khm",
+	"ki": "kik",
+	"rw": "kin",
+	"ky": "kir",
+	"kv": "kom",
+	"kg": "kon",
+	"ko": "kor",
+	"ku": "kur",
+	"kj": "kua",
+	"la": "lat",
+	"lb": "ltz",
+	"lg": "lug",
+	"li": "lim",
+	"ln": "lin",
+	"lo": "lao",
+	"lt": "lit",
+	"lu": "lub",
+	"lv": "lav",
+	"gv": "glv",
+	"mk": "mkd",
+	"mg": "mlg",
+	"ms": "msa",
+	"ml": "mal",
+	"mt": "mlt",
+	"mi": "mri",
+	"mr": "mar",
+	"mh": "mah",
+	"mn": "mon",
+	"na": "nau",
+	"nv": "nav",
+	"nb": "nob",
+	"nd": "nde",
+	"ne": "nep",
+	"ng": "ndo",
+	"nn": "nno",
+	"no": "nor",
+	"ii": "iii",
+	"nr": "nbl",
+	"oc": "oci",
+	"oj": "oji",
+	"cu": "chu",
+	"om": "orm",
+	"or": "ori",
+	"os": "oss",
+	"pa": "pan",
+	"pi": "pli",
+	"fa": "fas",
+	"pl": "pol",
+	"ps": "pus",
+	"pt": "por",
+	"qu": "que",
+	"rm": "roh",
+	"rn": "run",
+	"ro": "ron",
+	"ru": "rus",
+	"sa": "san",
+	"sc": "srd",
+	"sd": "snd",
+	"se": "sme",
+	"sm": "smo",
+	"sg": "sag",
+	"sr": "srp",
+	"gd": "gla",
+	"sn": "sna",
+	"si": "sin",
+	"sk": "slk",
+	"sl": "slv",
+	"so": "som",
+	"st": "sot",
+	"az": "azb",
+	"es": "spa",
+	"su": "sun",
+	"sw": "swa",
+	"ss": "ssw",
+	"sv": "swe",
+	"ta": "tam",
+	"te": "tel",
+	"tg": "tgk",
+	"th": "tha",
+	"ti": "tir",
+	"bo": "bod",
+	"tk": "tuk",
+	"tl": "tgl",
+	"tn": "tsn",
+	"to": "ton",
+	"tr": "tur",
+	"ts": "tso",
+	"tt": "tat",
+	"tw": "twi",
+	"ty": "tah",
+	"ug": "uig",
+	"uk": "ukr",
+	"ur": "urd",
+	"uz": "uzb",
+	"ve": "ven",
+	"vi": "vie",
+	"vo": "vol",
+	"wa": "wln",
+	"cy": "cym",
+	"wo": "wol",
+	"fy": "fry",
+	"xh": "xho",
+	"yi": "yid",
+	"yo": "yor",
+	"za": "zha",
+	"zu": "zul"
 };
 
 /**
@@ -594,6 +1048,32 @@ ilib.Locale._isScriptCode = function(str)
 	return true;
 };
 
+/**
+ * @static
+ * Return the ISO-3166 alpha3 equivalent region code for the given ISO 3166 alpha2
+ * region code. If the given alpha2 code is not found, this function returns its
+ * argument unchanged.
+ * @param {string|undefined} alpha2 the alpha2 code to map
+ * @return {string|undefined} the alpha3 equivalent of the given alpha2 code, or the alpha2
+ * parameter if the alpha2 value is not found
+ */
+ilib.Locale.regionAlpha2ToAlpha3 = function(alpha2) {
+	return ilib.Locale.a2toa3regmap[alpha2] || alpha2;
+};
+
+/**
+ * @static
+ * Return the ISO-639 alpha3 equivalent language code for the given ISO 639 alpha1
+ * language code. If the given alpha1 code is not found, this function returns its
+ * argument unchanged.
+ * @param {string|undefined} alpha1 the alpha1 code to map
+ * @return {string|undefined} the alpha3 equivalent of the given alpha1 code, or the alpha1
+ * parameter if the alpha1 value is not found
+ */
+ilib.Locale.languageAlpha1ToAlpha3 = function(alpha1) {
+	return ilib.Locale.a1toa3langmap[alpha1] || alpha1;
+};
+
 ilib.Locale.prototype = {
 	/**
 	 * Return the ISO 639 language code for this locale. 
@@ -604,11 +1084,27 @@ ilib.Locale.prototype = {
 	},
 	
 	/**
+	 * Return the language of this locale as an ISO-639-alpha3 language code
+	 * @return {string|undefined} the alpha3 language code of this locale
+	 */
+	getLanguageAlpha3: function() {
+		return ilib.Locale.languageAlpha1ToAlpha3(this.language);
+	},
+	
+	/**
 	 * Return the ISO 3166 region code for this locale.
 	 * @return {string|undefined} the region code of this locale
 	 */
 	getRegion: function() {
 		return this.region;
+	},
+	
+	/**
+	 * Return the region of this locale as an ISO-3166-alpha3 region code
+	 * @return {string|undefined} the alpha3 region code of this locale
+	 */
+	getRegionAlpha3: function() {
+		return ilib.Locale.regionAlpha2ToAlpha3(this.region);
 	},
 	
 	/**
@@ -1730,6 +2226,60 @@ ilib.isEmpty = function (obj) {
 	return true;
 };
 
+
+ilib.hashCode = function(obj) {
+	var hash = 0;
+	
+	function addHash(hash, newValue) {
+		// co-prime numbers creates a nicely distributed hash
+		hash *= 65543;
+		hash += newValue;
+		hash %= 2147483647; 
+		return hash;
+	}
+	
+	function stringHash(str) {
+		var hash = 0;
+		for (var i = 0; i < str.length; i++) {
+			hash = addHash(hash, str.charCodeAt(i));
+		}
+		return hash;
+	}
+	
+	switch (typeof(obj)) {
+		case 'undefined':
+			hash = 0;
+			break;
+		case 'string':
+			hash = stringHash(obj);
+			break;
+		case 'function':
+		case 'number':
+		case 'xml':
+			hash = stringHash(String(obj));
+			break;
+		case 'boolean':
+			hash = obj ? 1 : 0;
+			break;
+		case 'object':
+			var props = [];
+			for (var p in obj) {
+				if (obj.hasOwnProperty(p)) {
+					props.push(p);
+				}
+			}
+			// make sure the order of the properties doesn't matter
+			props.sort();
+			for (var i = 0; i < props.length; i++) {
+				hash = addHash(hash, stringHash(props[i]));
+				hash = addHash(hash, ilib.hashCode(obj[props[i]]));
+			}
+			break;
+	}
+	
+	return hash;
+};
+
 /**
  * Find locale data or load it in. If the data with the given name is preassembled, it will
  * find the data in ilib.data. If the data is not preassembled but there is a loader function,
@@ -1796,7 +2346,7 @@ ilib.loadData = function(params) {
 		type = (dot !== -1) ? name.substring(dot+1) : "text";
 	}
 
-	var spec = locale.getSpec().replace(/-/g, '_') || "root";
+	var spec = (locale.getSpec().replace(/-/g, '_') || "root") + "," + name + "," + String(ilib.hashCode(loadParams));
 	if (!object || typeof(object.cache[spec]) === 'undefined') {
 		var data;
 		
@@ -3569,8 +4119,6 @@ ilib.Date.GregDate = function(params) {
 		}
 		
 		if (typeof(params.unixtime) != 'undefined') {
-			// unix time is defined to be UTC
-			this.timezone = "Etc/UTC";
 			this.setTime(parseInt(params.unixtime, 10));
 		} else if (typeof(params.julianday) != 'undefined') {
 			// JD time is defined to be UTC
@@ -3588,17 +4136,14 @@ ilib.Date.GregDate = function(params) {
 		} else if (typeof(params.rd) != 'undefined') {
 			// private parameter. Do not document this!
 			// RD time is defined to be UTC
-			this.timezone = "Etc/UTC";
 			this.setRd(params.rd);
 		} else {
-			// Date.getTime() gets unix time in UTC
 			var now = new Date();
-			this.setTime(now.getTime() - now.getTimezoneOffset()*60000);
+			this.setTime(now.getTime());
 		}
 	} else {
-		// Date.getTime() gets unix time in UTC
 		var now = new Date();
-		this.setTime(now.getTime() - now.getTimezoneOffset()*60000);
+		this.setTime(now.getTime());
 	}
 };
 
@@ -4153,7 +4698,7 @@ ilib.Date.GregDate.prototype.getCalendar = function() {
  * @return {string|undefined} the name of the time zone for this date instance
  */
 ilib.Date.GregDate.prototype.getTimeZone = function() {
-	return this.timezone;
+	return this.timezone || "local";
 };
 
 /**
@@ -4321,10 +4866,8 @@ ilib.TimeZone = function(options) {
 				// the offset of the standard time for the time zone is always the one that is largest of 
 				// the two, no matter whether you are in the northern or southern hemisphere
 				this.offset = Math.max(this.offsetJan1, this.offsetJun1);
-				this.id = this.getDisplayName(undefined, undefined);
-			} else {
-				this.id = options.id;
 			}
+			this.id = options.id;
 		} else if (options.offset) {
 			this.offset = (typeof(options.offset) === 'string') ? parseInt(options.offset, 10) : options.offset;
 			this.id = this.getDisplayName(undefined, undefined);
@@ -4384,7 +4927,7 @@ ilib.TimeZone.prototype._initZone = function() {
 	 * @type {{o:string,f:string,e:Object.<{m:number,r:string,t:string,z:string}>,s:Object.<{m:number,r:string,t:string,z:string,v:string,c:string}>,c:string,n:string}} 
 	 */
 	this.zone = ilib.data.timezones[this.id];
-	if (!this.zone && !this.offset) {
+	if (!this.zone && typeof(this.offset) === 'undefined') {
 		this.id = "Etc/UTC";
 		this.zone = ilib.data.timezones[this.id];
 	}
@@ -5953,7 +6496,13 @@ ilib.DateFmt = function(options) {
 				locale: this.locale, 
 				id: options.timezone
 			});
-		}
+		} else if (options.locale) {
+			// if an explicit locale was given, then get the time zone for that locale
+			this.tz = new ilib.TimeZone({
+				locale: this.locale
+			});
+		} // else just assume time zone "local"
+		
 		if (typeof(options.useNative) !== 'undefined') {
 			this.useNative = options.useNative;
 		}
@@ -6351,7 +6900,7 @@ ilib.DateFmt.prototype = {
 		// time zone in their format, we never have to load up a TimeZone
 		// instance into this formatter.
 		if (!this.tz) {
-			this.tz = new ilib.TimeZone({locale: this.locale});
+			this.tz = new ilib.TimeZone({id: ilib.getTimeZone()});
 		}
 		return this.tz;
 	},
@@ -6587,17 +7136,24 @@ ilib.DateFmt.prototype = {
 			throw "Wrong date type passed to ilib.DateFmt.format()";
 		}
 		
+		var thisZoneName = this.tz && this.tz.getId() || "local";
+		var dateZoneName = date.timezone || "local";
+		
 		// convert to the time zone of this formatter before formatting
-		if (date.timezone && this.tz) {
-			// console.log("Differing time zones " + date.timezone + " and " + this.tz.getId() + ". Converting...");
+		if (dateZoneName !== thisZoneName) {
+			// console.log("Differing time zones date: " + dateZoneName + " and fmt: " + thisZoneName + ". Converting...");
 			
 			var datetz = new ilib.TimeZone({
 				locale: date.locale,
-				id: date.timezone
+				id: dateZoneName
+			});
+			var thistz = this.tz || new ilib.TimeZone({
+				locale: date.locale,
+				id: thisZoneName
 			});
 			
 			var dateOffset = datetz.getOffset(date),
-				fmtOffset = this.tz.getOffset(date),
+				fmtOffset = thistz.getOffset(date),
 				// relative offset in seconds
 				offset = (dateOffset.h || 0)*60*60 + (dateOffset.m || 0)*60 + (dateOffset.s || 0) -
 					((fmtOffset.h || 0)*60*60 + (fmtOffset.m || 0)*60 + (fmtOffset.s || 0));
@@ -7073,7 +7629,7 @@ ilib.DateRngFmt.prototype = {
 		// c01 - difference is less than 3 days. Year and month are same but date and time are different
 		// c02 - difference is less than 3 days. Year is same but month, date, and time are different. (ie. it straddles a month boundary)
 		// c03 - difference is less than 3 days. Year, month, date, and time are all different. (ie. it straddles a year boundary)
-		// c10 - difference is less than 2 years. Year and month are the same, but date and time are different.
+		// c10 - difference is less than 2 years. Year and month are the same, but date is different.
 		// c11 - difference is less than 2 years. Year is the same, but month, date, and time are different.
 		// c12 - difference is less than 2 years. All fields are different. (ie. straddles a year boundary)
 		// c20 - difference is less than 10 years. All fields are different.
@@ -7133,6 +7689,326 @@ ilib.DateRngFmt.prototype = {
 		});
 	}
 };
+
+/*
+ * thaisolar.js - Represent a Thai solar calendar object.
+ * 
+ * Copyright © 2013, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+/* !depends calendar.js locale.js date.js julianday.js calendar/gregorian.js util/utils.js */
+
+/**
+ * @class
+ * Construct a new Thai solar calendar object. This class encodes information about
+ * a Thai solar calendar.<p>
+ * 
+ * Depends directive: !depends thaisolar.js
+ * 
+ * @constructor
+ * @implements ilib.Cal
+ */
+ilib.Cal.ThaiSolar = function() {
+	this.type = "thaisolar";
+};
+
+ilib.Cal.ThaiSolar.prototype = new ilib.Cal.Gregorian();
+ilib.Cal.ThaiSolar.prototype.parent = ilib.Cal.Gregorian;
+ilib.Cal.ThaiSolar.prototype.constructor = ilib.Cal.ThaiSolar;
+
+/**
+ * Return true if the given year is a leap year in the Thai solar calendar.
+ * The year parameter may be given as a number, or as a ThaiSolarDate object.
+ * @param {number|ilib.Date.ThaiSolarDate} year the year for which the leap year information is being sought
+ * @return {boolean} true if the given year is a leap year
+ */
+ilib.Cal.ThaiSolar.prototype.isLeapYear = function(year) {
+	var y = (typeof(year) === 'number' ? year : year.getYears());
+	y -= 543;
+	var centuries = ilib.mod(y, 400);
+	return (ilib.mod(y, 4) === 0 && centuries !== 100 && centuries !== 200 && centuries !== 300);
+};
+
+/**
+ * Return a date instance for this calendar type using the given
+ * options.
+ * @param {Object} options options controlling the construction of 
+ * the date instance
+ * @return {ilib.Date} a date appropriate for this calendar type
+ */
+ilib.Cal.ThaiSolar.prototype.newDateInstance = function (options) {
+	return new ilib.Date.ThaiSolarDate(options);
+};
+
+/* register this calendar for the factory method */
+ilib.Cal._constructors["thaisolar"] = ilib.Cal.ThaiSolar;
+/*
+ * thaisolardate.js - Represent a date in the ThaiSolar calendar
+ * 
+ * Copyright © 2013, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* !depends 
+date.js
+calendar/gregoriandate.js
+calendar/thaisolar.js
+util/utils.js
+util/search.js 
+localeinfo.js 
+julianday.js 
+*/
+
+/**
+ * @class
+ * 
+ * Construct a new Thai solar date object. The constructor parameters can 
+ * contain any of the following properties:
+ * 
+ * <ul>
+ * <li><i>unixtime<i> - sets the time of this instance according to the given 
+ * unix time. Unix time is the number of milliseconds since midnight on Jan 1, 1970.
+ * 
+ * <li><i>julianday</i> - sets the time of this instance according to the given
+ * Julian Day instance or the Julian Day given as a float
+ * 
+ * <li><i>year</i> - any integer, including 0
+ * 
+ * <li><i>month</i> - 1 to 12, where 1 means January, 2 means February, etc.
+ * 
+ * <li><i>day</i> - 1 to 31
+ * 
+ * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation 
+ * is always done with an unambiguous 24 hour representation
+ * 
+ * <li><i>minute</i> - 0 to 59
+ * 
+ * <li><i>second</i> - 0 to 59
+ * 
+ * <li><i>millisecond</i> - 0 to 999
+ * 
+ * <li><i>timezone</i> - the ilib.TimeZone instance or time zone name as a string 
+ * of this Thai solar date. The date/time is kept in the local time. The time zone
+ * is used later if this date is formatted according to a different time zone and
+ * the difference has to be calculated, or when the date format has a time zone
+ * component in it.
+ * 
+ * <li><i>locale</i> - locale for this Thai solar date. If the time zone is not 
+ * given, it can be inferred from this locale. For locales that span multiple
+ * time zones, the one with the largest population is chosen as the one that 
+ * represents the locale. 
+ * </ul>
+ *
+ * If the constructor is called with another Thai solar date instance instead of
+ * a parameter block, the other instance acts as a parameter block and its
+ * settings are copied into the current instance.<p>
+ * 
+ * If the constructor is called with no arguments at all or if none of the 
+ * properties listed above 
+ * from <i>unixtime</i> through <i>millisecond</i> are present, then the date 
+ * components are 
+ * filled in with the current date at the time of instantiation. Note that if
+ * you do not give the time zone when defaulting to the current time and the 
+ * time zone for all of ilib was not set with <i>ilib.setTimeZone()</i>, then the
+ * time zone will default to UTC ("Universal Time, Coordinated" or "Greenwich 
+ * Mean Time").<p>
+ * 
+ * If any of the properties from <i>year</i> through <i>millisecond</i> are not
+ * specified in the params, it is assumed that they have the smallest possible
+ * value in the range for the property (zero or one).<p>
+ * 
+ * Depends directive: !depends thaisolardate.js
+ * 
+ * @constructor
+ * @extends ilib.Date.GregDate
+ * @param {Object=} params parameters that govern the settings and behaviour of this Thai solar date
+ */
+ilib.Date.ThaiSolarDate = function(params) {
+	ilib.Date.GregDate.call(this, params);
+	this.cal = new ilib.Cal.ThaiSolar();
+};
+
+ilib.Date.ThaiSolarDate.prototype = new ilib.Date.GregDate();
+ilib.Date.ThaiSolarDate.prototype.parent = ilib.Date.GregDate.prototype;
+ilib.Date.ThaiSolarDate.prototype.constructor = ilib.Date.ThaiSolarDate;
+
+/**
+ * @private
+ * @const
+ * @type number
+ * the difference between a zero Julian day and the zero Thai Solar date.
+ * This is some 543 years before the start of the Gregorian epoch. 
+ */
+ilib.Date.ThaiSolarDate.epoch = 1523097.5;
+
+/**
+ * @private
+ * Return the Rata Die (fixed day) number for the given date.
+ * @param {Object} parts the parts to calculate with
+ * @return {number} the rd date as a number
+ */
+ilib.Date.ThaiSolarDate.prototype.calcRataDie = function(parts) {
+	var gregorianRd = this.parent.calcRataDie.call(this, {
+		year: parts.year - 543,
+		month: parts.month,
+		day: parts.day,
+		hour: parts.hour,
+		minute: parts.minute,
+		second: parts.second,
+		millisecond: parts.millisecond
+	});
+	// there is 198327 days difference between the Thai solar and 
+	// Gregorian epochs which is equivalent to 543 years
+	return gregorianRd + 198327;
+};
+
+/**
+ * @private
+ * Calculate date components for the given RD date.
+ * @param {number} rd the RD date to calculate components for
+ * @return {Object} object containing the component fields
+ */
+ilib.Date.ThaiSolarDate.prototype.calcComponents = function (rd) {
+	// there is 198327 days difference between the Thai solar and 
+	// Gregorian epochs which is equivalent to 543 years
+	var gregorianComponents = this.parent.calcComponents.call(this, rd - 198327);
+	
+	gregorianComponents.year += 543;
+	return gregorianComponents;
+};
+
+/**
+ * Set the date of this instance using a Julian Day.
+ * @param {number} date the Julian Day to use to set this date
+ */
+ilib.Date.ThaiSolarDate.prototype.setJulianDay = function (date) {
+	var jd = (typeof(date) === 'number') ? new ilib.JulianDay(date) : date,
+		rd;	// rata die -- # of days since the beginning of the calendar
+	
+	rd = jd.getDate() - ilib.Date.ThaiSolarDate.epoch; 	// Julian Days start at noon
+	this.setRd(rd);
+};
+
+/**
+ * Return the day of the week of this date. The day of the week is encoded
+ * as number from 0 to 6, with 0=Sunday, 1=Monday, etc., until 6=Saturday.
+ * 
+ * @return {number} the day of the week
+ */
+ilib.Date.ThaiSolarDate.prototype.getDayOfWeek = function() {
+	var rd = Math.floor(this.getRataDie() - 198327);
+	return ilib.mod(rd, 7);
+};
+
+/**
+ * @private
+ * Return the rd of the particular day of the week on or before the given rd.
+ * eg. The Sunday on or before the given rd.
+ * @param {number} rd the rata die date of the reference date
+ * @param {number} dayOfWeek the day of the week that is being sought relative 
+ * to the reference date
+ * @return {number} the day of the week
+ */
+ilib.Date.ThaiSolarDate.prototype.onOrBeforeRd = function(rd, dayOfWeek) {
+	return rd - ilib.mod(Math.floor(rd - 198327) - dayOfWeek, 7);
+};
+
+/**
+ * Return the unix time equivalent to this ThaiSolar date instance. Unix time is
+ * the number of milliseconds since midnight on Jan 1, 1970. This method only
+ * returns a valid number for dates between midnight, Jan 1, 1970 and  
+ * Jan 19, 2038 at 3:14:07am when the unix time runs out. If this instance 
+ * encodes a date outside of that range, this method will return -1.
+ * 
+ * @return {number} a number giving the unix time, or -1 if the date is outside the
+ * valid unix time range
+ */
+ilib.Date.ThaiSolarDate.prototype.getTime = function() {
+	var rd = this.calcRataDie({
+		year: this.year,
+		month: this.month,
+		day: this.day,
+		hour: this.hour,
+		minute: this.minute,
+		second: this.second,
+		millisecond: 0
+	});
+	
+	// earlier than Jan 1, 1970
+	// or later than Jan 19, 2038 at 3:14:07am
+	if (rd < 917490 || rd > 942345.134803241) { 
+		return -1;
+	}
+
+	// avoid the rounding errors in the floating point math by only using
+	// the whole days from the rd, and then calculating the milliseconds directly
+	var seconds = Math.floor(rd - 917490) * 86400 + 
+		this.hour * 3600 +
+		this.minute * 60 +
+		this.second;
+	var millis = seconds * 1000 + this.millisecond;
+	
+	return millis;
+};
+
+/**
+ * Set the time of this instance according to the given unix time. Unix time is
+ * the number of milliseconds since midnight on Jan 1, 1970.
+ * 
+ * @param {number} millis the unix time to set this date to in milliseconds 
+ */
+ilib.Date.ThaiSolarDate.prototype.setTime = function(millis) {
+	var rd = 917490 + millis / 86400000;
+	this.setRd(rd);
+};
+
+/**
+ * Return the Julian Day equivalent to this calendar date as a number.
+ * 
+ * @return {number} the julian date equivalent of this date
+ */
+ilib.Date.ThaiSolarDate.prototype.getJulianDay = function() {
+	return this.getRataDie() + ilib.Date.ThaiSolarDate.epoch;
+};
+
+/**
+ * Return the name of the calendar that governs this date.
+ * 
+ * @return {string} a string giving the name of the calendar
+ */
+ilib.Date.ThaiSolarDate.prototype.getCalendar = function() {
+	return "thaisolar";
+};
+
+//register with the factory method
+ilib.Date._constructors["thaisolar"] = ilib.Date.ThaiSolarDate;
+
 
 /*
  * ctype.js - Character type definitions
@@ -9177,6 +10053,8 @@ daterangefmt.js
 date.js
 calendar/gregorian.js
 calendar/gregoriandate.js
+calendar/thaisolar.js
+calendar/thaisolardate.js
 numprs.js
 numfmt.js
 julianday.js

@@ -109,17 +109,28 @@
             document.body.className = document.body.className.replace(new RegExp('(^|\\s)'+ base +'[^\\s]*', 'g'), '');
         }
 
-		if (li.getScript() !== "Latn" || locale.getLanguage() === "vi") {
-			// allow enyo to define other fonts for non-Latin languages, or Vietnamese which
-			// is Latin-based, but the characters with multiple accents don't appear in the
+        // We use the non-latin fonts for these languages (even though their scripts are technically considered latin)
+        var nonLatinLanguageOverrides = ["cs", "hu", "lv", "lt", "po", "ro", "sr", "sl", "tr", "vi"];
+        // We use the latin fonts (with non-Latin fallback) for these languages (even though their scripts are non-latin)
+        var latinLanguageOverrides = ["ko"];
+		var scriptName = li.getScript();
+		if ((scriptName !== "Latn" || enyo.indexOf(locale.getLanguage(), nonLatinLanguageOverrides) !== -1) &&
+			(enyo.indexOf(locale.getLanguage(), latinLanguageOverrides) < 0)) {
+			// allow enyo to define other fonts for non-Latin languages, or for certain
+			// Latin-based languages where the characters with some accents don't appear in the
 			// regular fonts, creating a strange "ransom note" look with a mix of fonts in the
 			// same word. So, treat it like a non-Latin language in order to get all the characters
 			// to display with the same font.
 			enyo.dom.addBodyClass(base + "non-latin");
 		}
+		if (scriptName !== 'Latn' && scriptName !== 'Cyrl' && scriptName !== 'Grek') {
+			// GF-45884: allow enyo to avoid setting italic fonts for those scripts that do not 
+			// commonly use italics
+			enyo.dom.addBodyClass(base + "non-italic");
+		}
 
 		// allow enyo to apply right-to-left styles to the app and widgets if necessary
-		var script = new ilib.ScriptInfo(li.getScript());
+		var script = new ilib.ScriptInfo(scriptName);
 		if (script.getScriptDirection() === "rtl") {
 			enyo.dom.addBodyClass(base + "right-to-left");
 			if (enyo.Control) {
@@ -231,7 +242,6 @@ $L.setLocale = function (spec) {
 			type: "html",
 			name: $L.getDefaultTextDomain(),
 			sync: true,
-			missing: locale.getLanguage() === "en" ? "source" : "pseudo",
 			lengthen: true		// if pseudo-localizing, this tells it to lengthen strings
 		});
 	}
