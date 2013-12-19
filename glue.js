@@ -157,49 +157,131 @@
 			enyo.dom.addBodyClass(base + locale.getRegion());
 		}
     };
+
+    /** enyo.collectResources collects resources descriptor files:
+     * it should be called after every setLocale, but there isn't such a callback in current version
+     * 
+     * @param {string} resourcesPath indicates where resources.json file is available - 
+     * 
+     * resources.json:
+     *  {
+	 *    "domain": {"name": "domain_name_A", "path": "resources_path/", "defaultDomain": "true"},
+	 *    "resources": [
+	 *      "../other_domain_path_1/",
+	 *      "../other_domain_path_2/"
+	 *    ]
+	 *  }
+     *
+     * "domain" describes a translation domain to load:
+     * - "domain.name" is the name of the translation domain
+     * - "domain.path" is the path where the related of the translation domain
+     * - "domain.defaultDomain" indicates if this translation domain becomes the default one.
+     * 
+     * It implies there's only one default translation domain that could be defined for the current application
+     * If it is defined, "domain.name" replaces "strings" as translation domain default name
+     *
+     * "resources" indicates the list where other resources.json files are defined in the application
+     */
+    enyo.collectResources = function(resourcesPath) {
+		if (!resourcesPath) {
+			resourcesPath = "";
+		}
+
+		var handler = function(inSender, json) {
+			if (!inSender.failed && (typeof(json) === 'object')) {
+				if (json.domain) {
+					$L.bindTextDomain(json.domain.name, resourcesPath + json.domain.path);
+
+					if (json.domain.defaultDomain && json.domain.defaultDomain === "true") {
+						$L.setDefaultTextDomain(json.domain.name);
+					}
+				}
+
+				if (json.resources) {
+					json.resources.forEach(function (resource) {
+						enyo.collectResources(resourcesPath + resource);
+					});
+				}
+			}
+		};
+
+		var ajax = new enyo.Ajax({
+			url: enyo.path.rewrite(resourcesPath + "resources.json")
+		});
+		ajax.response(this, handler);
+		ajax.error(this, handler);
+		ajax.go();
+    };
 })();
 
-/*
+/* default translation domain name*/
+var defaultTextDomain = "strings";
+
+/**
+ * @public
  * Reset the $L function to use ilib instead of the dummy function that enyo
  * comes with by default.
+ *
+ * @param {string} string indicates the string entry to translate
+ * @param {string} domain indicates the translation domain where the translated results could be found - if null, defaultDomain will be used
+ * @param {json} params gives the values to parameterize the translation returned 
  */
-$L = function (string) {
+$L = function (string, domain, params) {
 	var str;
 	if (!$L.rb) {
 		$L.setLocale();
 	}
+	
+	if (!domain) {
+		domain = $L.getDefaultTextDomain();
+	}
+
 	if (typeof(string) === 'string') {
-		if (!$L.rb) {
+		if (!$L.rb || !$L.rb[domain]) {
+			if (params) {
+				return string.format(params);
+			}
 			return string;
 		}
-		str = $L.rb.getString(string);
+		str = $L.rb[domain].getString(string);
 	} else if (typeof(string) === 'object') {
 		if (typeof(string.key) !== 'undefined' && typeof(string.value) !== 'undefined') {
-			if (!$L.rb) {
+			if (!$L.rb || !$L.rb[domain]) {
+				if (params) {
+					return string.value.format(params);
+				}
 				return string.value;
 			}
-			str = $L.rb.getString(string.value, string.key);
+			str = $L.rb[domain].getString(string.value, string.key);
 		} else {
 			str = "";
 		}
 	} else {
 		str = string;
 	}
+
+	if (params) {
+		return str.toString().format(params);
+	}
 	return str.toString();
 };
 
 /**
+ * @public
  * Set the locale for the strings that $L loads. This may reload the
  * string resources if necessary.
+ * 
  * @param {string} spec the locale specifier
  */
 $L.setLocale = function (spec) {
 	var locale = new ilib.Locale(spec);
-	if (!$L.rb || spec !== $L.rb.getLocale().getSpec()) {
-		$L.rb = new ilib.ResBundle({
+	if (!$L.rb || spec !== $L.rb[$L.getDefaultTextDomain()].getLocale().getSpec()) {
+		$L.rb = [];
+		$L.rb[$L.getDefaultTextDomain()] = {};
+		$L.rb[$L.getDefaultTextDomain()] = new ilib.ResBundle({
 			locale: locale,
 			type: "html",
-			name: "strings",
+			name: $L.getDefaultTextDomain(),
 			sync: true,
 			lengthen: true		// if pseudo-localizing, this tells it to lengthen strings
 		});
@@ -215,6 +297,52 @@ enyo.updateLocale = function() {
 	ilib.setLocale(navigator.language);
 	$L.setLocale(navigator.language);
 	enyo.updateI18NClasses();
+	enyo.collectResources();
+};
+
+/**
+ * @public
+ * Add a new translation domain.
+ * 
+ * @param {string} domain: the translation domain name
+ * @param {string} path: the path to the related resources
+ */
+$L.bindTextDomain = function (domain, path) {
+	var locale = $L.rb && $L.rb[$L.getDefaultTextDomain()].getLocale().getSpec();
+	if (locale) {
+		if (!$L.rb[domain]) {
+			$L.rb[domain] = {};
+		}
+		$L.rb[domain] = new ilib.ResBundle({
+			locale: locale,
+			type: "html",
+			name: domain,
+			loadParams: {root: path},
+			sync: true,
+			lengthen: true		// if pseudo-localizing, this tells it to lengthen strings			
+		});
+	}
+};
+
+/**
+ * @public
+ * define the default translation domain.
+ * 
+ * @param {string} domain: the translation domain name
+ */
+$L.setDefaultTextDomain = function (domain) {
+	if (!domain || domain === "") {
+		domain = "strings";
+	}
+	defaultTextDomain = domain;
+};
+
+/**
+ * @public
+ * @returns {string} the default translation domain name
+ */
+$L.getDefaultTextDomain = function () {
+	return defaultTextDomain || "strings";
 };
 
 // we go ahead and run this once during loading of iLib settings are valid
