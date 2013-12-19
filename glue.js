@@ -159,7 +159,6 @@
     };
 
     /* enyo.collectResources collects resources descriptor files:
-     * it should be called after every setLocale, but there isn't such a callback in current version
      * 
      * resources.json:
      *  {
