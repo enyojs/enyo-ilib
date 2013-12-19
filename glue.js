@@ -114,8 +114,8 @@
         // We use the latin fonts (with non-Latin fallback) for these languages (even though their scripts are non-latin)
         var latinLanguageOverrides = ["ko"];
 		var scriptName = li.getScript();
-		if ((scriptName !== "Latn" || nonLatinLanguageOverrides.indexOf(locale.getLanguage()) !== -1) &&
-			(latinLanguageOverrides.indexOf(locale.getLanguage()) < 0)) {
+		if ((scriptName !== "Latn" || enyo.indexOf(locale.getLanguage(), nonLatinLanguageOverrides) !== -1) &&
+			(enyo.indexOf(locale.getLanguage(), latinLanguageOverrides) < 0)) {
 			// allow enyo to define other fonts for non-Latin languages, or for certain
 			// Latin-based languages where the characters with some accents don't appear in the
 			// regular fonts, creating a strange "ransom note" look with a mix of fonts in the
