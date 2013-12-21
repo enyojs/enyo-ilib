@@ -110,7 +110,7 @@
         }
 
         // We use the non-latin fonts for these languages (even though their scripts are technically considered latin)
-        var nonLatinLanguageOverrides = ["cs", "hu", "lv", "lt", "po", "ro", "sr", "sl", "tr", "vi"];
+        var nonLatinLanguageOverrides = ["cs", "hu", "lv", "lt", "pl", "ro", "sr", "sl", "tr", "vi"];
         // We use the latin fonts (with non-Latin fallback) for these languages (even though their scripts are non-latin)
         var latinLanguageOverrides = ["ko"];
 		var scriptName = li.getScript();
