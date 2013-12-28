@@ -21,7 +21,7 @@
 		}
 		if (paths.length > 0) {
 			var path = paths.shift();
-			var ajax = new enyo.Ajax({url: enyo.path.rewrite("$lib/enyo-ilib/ilib/locale/" + path)});
+			var ajax = new enyo.Ajax({url: enyo.path.rewrite("$lib/enyo-ilib/ilib/locale/" + path), cacheBust: false});
 			//console.log("moondemo2: browser/async: attempting to load lib/enyo-ilib/ilib/locale/" + path);
 			var resultFunc = function(inSender, json) {
                 // console.log("moondemo2: " + (!inSender.failed && json ? "success" : "failed"));
@@ -39,7 +39,7 @@
 				// not there? Try the standard place instead
 				var file = root + path;
 				// console.log("moondemo2: browser/async: attempting to load " + file);
-				var ajax2 = new enyo.Ajax({url: file});
+				var ajax2 = new enyo.Ajax({url: file, cacheBust: false});
 
 				ajax2.response(this, resultFunc);
 				ajax2.error(this, resultFunc);
@@ -61,7 +61,7 @@
 				// console.log("browser/sync: attempting to load lib/enyo-ilib/ilib/locale/" + path);
 				var ajax = new enyo.Ajax({
 					url: enyo.path.rewrite("$lib/enyo-ilib/ilib/locale/" + path),
-					sync: true
+					sync: true, cacheBust: false
 				});
 
 				var handler = function(inSender, json) {
@@ -73,7 +73,7 @@
 					// console.log("browser/sync: Now attempting to load " + root + path);
 					var ajax2 = new enyo.Ajax({
 						url: root + path,
-						sync: true
+						sync: true, cacheBust: false
 					});
 					ajax2.response(this, handler);
 					ajax2.error(this, handler);
