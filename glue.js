@@ -207,6 +207,25 @@ $L.setLocale = function (spec) {
 };
 
 /**
+ * Override Enyo's toLowerCase and toUpperCase methods with these fancy ones
+ * that call iLib's locale-safe case mapper.
+ */
+enyo.toLowerCase = function(inString) {
+	if (typeof(inString) === "undefined" || typeof(inString) === "null") {
+		return inString;
+	}
+	var cm = new ilib.CaseMapper({direction: "tolower"});
+	return cm.map(inString);
+};
+enyo.toUpperCase = function(inString) {
+	if (typeof(inString) === "undefined" || typeof(inString) === "null") {
+		return inString;
+	}
+	var cm = new ilib.CaseMapper({direction: "toupper"});
+	return cm.map(inString);
+};
+
+/**
  * This Enyo hook lets us know that the system locale has changed and gives
  * us a chance to update the iLib locale before Enyo broadcasts its
  * `onlocalechange` signal.
