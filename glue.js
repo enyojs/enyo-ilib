@@ -156,7 +156,9 @@
 		if (locale.getRegion()) {
 			enyo.dom.addBodyClass(base + locale.getRegion());
 		}
-    };
+		// Recreate the case mappers to use the just-recently-set locale
+	 	enyo.setCaseMappers();
+   };
 })();
 
 /*
@@ -207,6 +209,14 @@ $L.setLocale = function (spec) {
 };
 
 /**
+ * Set CaseMapper object references to ilib's current locale (its most recently set, by default)
+ */
+enyo.setCaseMappers = function() {
+	enyo._caseMapperLower = new ilib.CaseMapper({direction: "tolower"});
+	enyo._caseMapperUpper = new ilib.CaseMapper({direction: "toupper"});
+};
+
+/**
  * Override Enyo's toLowerCase and toUpperCase methods with these fancy ones
  * that call iLib's locale-safe case mapper.
  */
@@ -214,15 +224,13 @@ enyo.toLowerCase = function(inString) {
 	if (typeof(inString) === "undefined" || typeof(inString) === "null") {
 		return inString;
 	}
-	var cm = new ilib.CaseMapper({direction: "tolower"});
-	return cm.map(inString);
+	return enyo._caseMapperLower.map(inString);
 };
 enyo.toUpperCase = function(inString) {
 	if (typeof(inString) === "undefined" || typeof(inString) === "null") {
 		return inString;
 	}
-	var cm = new ilib.CaseMapper({direction: "toupper"});
-	return cm.map(inString);
+	return enyo._caseMapperUpper.map(inString);
 };
 
 /**
