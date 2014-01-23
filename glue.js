@@ -212,8 +212,8 @@ $L.setLocale = function (spec) {
  * Set CaseMapper object references to ilib's current locale (its most recently set, by default)
  */
 enyo.setCaseMappers = function() {
-	enyo._caseMapperLower = new ilib.CaseMapper({direction: "tolower"});
-	enyo._caseMapperUpper = new ilib.CaseMapper({direction: "toupper"});
+	enyo.toLowerCase.mapper = new ilib.CaseMapper({direction: "tolower"});
+	enyo.toUpperCase.mapper = new ilib.CaseMapper({direction: "toupper"});
 };
 
 /**
@@ -224,13 +224,13 @@ enyo.toLowerCase = function(inString) {
 	if (typeof(inString) === "undefined" || typeof(inString) === "null") {
 		return inString;
 	}
-	return enyo._caseMapperLower.map(inString);
+	return enyo.toLowerCase.mapper.map(inString);
 };
 enyo.toUpperCase = function(inString) {
 	if (typeof(inString) === "undefined" || typeof(inString) === "null") {
 		return inString;
 	}
-	return enyo._caseMapperUpper.map(inString);
+	return enyo.toUpperCase.mapper.map(inString);
 };
 
 /**
