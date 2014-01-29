@@ -237,10 +237,13 @@ enyo.toUpperCase = function(inString) {
  * This Enyo hook lets us know that the system locale has changed and gives
  * us a chance to update the iLib locale before Enyo broadcasts its
  * `onlocalechange` signal.
+ * Provide an inLocale string, like "en-US" or "ja-JP", to conveniently set
+ * that locale immediately. Provide nothing, and reset the locale back to the
+ * browser's default language.
  */
-enyo.updateLocale = function() {
-	ilib.setLocale(navigator.language);
-	$L.setLocale(navigator.language);
+enyo.updateLocale = function(inLocale) {
+	ilib.setLocale(inLocale || navigator.language);
+	$L.setLocale(inLocale || navigator.language);
 	enyo.updateI18NClasses();
 };
 
