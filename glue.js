@@ -110,7 +110,7 @@
         }
 
         // We use the non-latin fonts for these languages (even though their scripts are technically considered latin)
-        var nonLatinLanguageOverrides = ["cs", "hu", "lv", "lt", "pl", "ro", "sr", "sl", "tr", "vi"];
+        var nonLatinLanguageOverrides = ["bs", "cs", "hr", "hu", "lv", "lt", "pl", "ro", "sr", "sl", "tr", "vi"];
         // We use the latin fonts (with non-Latin fallback) for these languages (even though their scripts are non-latin)
         var latinLanguageOverrides = ["ko"];
 		var scriptName = li.getScript();
@@ -156,7 +156,9 @@
 		if (locale.getRegion()) {
 			enyo.dom.addBodyClass(base + locale.getRegion());
 		}
-    };
+		// Recreate the case mappers to use the just-recently-set locale
+	 	enyo.setCaseMappers();
+   };
 })();
 
 /*
@@ -207,13 +209,41 @@ $L.setLocale = function (spec) {
 };
 
 /**
+ * Set CaseMapper object references to ilib's current locale (its most recently set, by default)
+ */
+enyo.setCaseMappers = function() {
+	enyo.toLowerCase.mapper = new ilib.CaseMapper({direction: "tolower"});
+	enyo.toUpperCase.mapper = new ilib.CaseMapper({direction: "toupper"});
+};
+
+/**
+ * Override Enyo's toLowerCase and toUpperCase methods with these fancy ones
+ * that call iLib's locale-safe case mapper.
+ */
+enyo.toLowerCase = function(inString) {
+	if (typeof(inString) === "undefined" || typeof(inString) === "null") {
+		return inString;
+	}
+	return enyo.toLowerCase.mapper.map(inString);
+};
+enyo.toUpperCase = function(inString) {
+	if (typeof(inString) === "undefined" || typeof(inString) === "null") {
+		return inString;
+	}
+	return enyo.toUpperCase.mapper.map(inString);
+};
+
+/**
  * This Enyo hook lets us know that the system locale has changed and gives
  * us a chance to update the iLib locale before Enyo broadcasts its
  * `onlocalechange` signal.
+ * Provide an inLocale string, like "en-US" or "ja-JP", to conveniently set
+ * that locale immediately. Provide nothing, and reset the locale back to the
+ * browser's default language.
  */
-enyo.updateLocale = function() {
-	ilib.setLocale(navigator.language);
-	$L.setLocale(navigator.language);
+enyo.updateLocale = function(inLocale) {
+	ilib.setLocale(inLocale || navigator.language);
+	$L.setLocale(inLocale || navigator.language);
 	enyo.updateI18NClasses();
 };
 
