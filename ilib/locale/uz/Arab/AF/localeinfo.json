@@ -1,1 +1,1 @@
-{"numfmt":{"script":"arabext","decimalChar":"٫","groupChar":"٬","pctChar":"٪","exponential":"×۱۰^","digits":"۰۱۲۳۴۵۶۷۸۹"},"locale":"uz-Arab-AF"}
+{"numfmt":{"script":"Arab","decimalChar":"٫","groupChar":"٬","pctChar":"٪","exponential":"×۱۰^","useNative":true,"digits":"۰۱۲۳۴۵۶۷۸۹"},"locale":"uz-Arab-AF"}
