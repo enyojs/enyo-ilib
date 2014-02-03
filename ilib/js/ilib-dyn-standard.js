@@ -1606,6 +1606,29 @@ ilib.LocaleInfo.prototype = {
 	},
 	
 	/**
+	 * Return a string that describes the style of digits used by this locale.
+	 * Possible return values are:
+	 * <ul>
+	 * <li><i>western</i> - uses the regular western 10-based digits 0 through 9
+	 * <li><i>optional</i> - native 10-based digits exist, but in modern usage,
+	 * this locale most often uses western digits
+	 * <li><i>native</i> - native 10-based native digits exist and are used
+	 * regularly by this locale
+	 * <li><i>custom</i> - uses native digits by default that are not 10-based
+	 * </ul>
+	 * @returns {string} string that describes the style of digits used in this locale
+	 */
+	getDigitsStyle: function () {
+		if (this.info.numfmt.useNative) {
+			return "native";
+		}
+		if (typeof(this.info.native_numfmt) !== 'undefined') {
+			return "optional";
+		}
+		return "western";
+	},
+	
+	/**
 	 * Return the digits of the default script if they are defined.
 	 * If not defined, the default should be the regular "Arabic numerals"
 	 * used in the Latin script. (0-9)
@@ -1620,7 +1643,7 @@ ilib.LocaleInfo.prototype = {
 	 * @returns {string|undefined} the digits used in the default script 
 	 */
 	getNativeDigits: function () {
-		return this.info.native_numfmt && this.info.native_numfmt.digits;
+		return (this.info.numfmt.useNative && this.info.numfmt.digits) || (this.info.native_numfmt && this.info.native_numfmt.digits);
 	},
 	
 	/**
@@ -6166,7 +6189,6 @@ resources.js
 calendar.js
 localeinfo.js
 timezone.js
-localeinfo.js
 calendar/gregorian.js
 util/jsutils.js
 */
@@ -6371,7 +6393,13 @@ util/jsutils.js
  * <li>sync - tell whether to load any missing locale data synchronously or 
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
- * not be usable for a while. 
+ * not be usable for a while.
+ *  
+ * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ * loader callback function when locale data is missing. The parameters are not
+ * interpretted or modified in any way. They are simply passed along. The object 
+ * may contain any property/value pairs as long as the calling code is in
+ * agreement with the loader callback function as to what those parameters mean.
  * </ul>
  * 
  * Any substring containing letters within single or double quotes will be used 
@@ -6416,7 +6444,6 @@ ilib.DateFmt = function(options) {
 	this.length = "s";
 	this.dateComponents = "dmy";
 	this.timeComponents = "ahm";
-	this.useNative= false;
 	if (options) {
 		if (options.locale) {
 			this.locale = (typeof(options.locale) === 'string') ? new ilib.Locale(options.locale) : options.locale;
@@ -6503,7 +6530,7 @@ ilib.DateFmt = function(options) {
 			});
 		} // else just assume time zone "local"
 		
-		if (typeof(options.useNative) !== 'undefined') {
+		if (typeof(options.useNative) === 'boolean') {
 			this.useNative = options.useNative;
 		}
 		if (typeof(options.sync) !== 'undefined') {
@@ -6726,14 +6753,19 @@ ilib.DateFmt.prototype = {
 		// tokenize it now for easy formatting
 		this.templateArr = this._tokenize(this.template);
 
+		var digits;
 		// set up the mapping to native or alternate digits if necessary
-		var digits = this.locinfo.getDigits();
-		if (digits && digits != "0123456789") {
-			this.digits = digits;
-		}
-		if (this.useNative) {
+		if (typeof(this.useNative) === "boolean") {
+			if (this.useNative) {
+				digits = this.locinfo.getNativeDigits();
+				if (digits) {
+					this.digits = digits;
+				}
+			}
+		} else if (this.locinfo.getDigitsStyle() === "native") {
 			digits = this.locinfo.getNativeDigits();
 			if (digits) {
+				this.useNative = true;
 				this.digits = digits;
 			}
 		}
@@ -7446,7 +7478,13 @@ util/jsutils.js
  * <li>sync - tell whether to load any missing locale data synchronously or 
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
- * not be usable for a while. 
+ * not be usable for a while.
+ *  
+ * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ * loader callback function when locale data is missing. The parameters are not
+ * interpretted or modified in any way. They are simply passed along. The object 
+ * may contain any property/value pairs as long as the calling code is in
+ * agreement with the loader callback function as to what those parameters mean.
  * </ul>
  * <p>
  * 
@@ -7457,6 +7495,7 @@ util/jsutils.js
  */
 ilib.DateRngFmt = function(options) {
 	var sync = true;
+	var loadParams = undefined;
 	this.locale = new ilib.Locale();
 	this.length = "s";
 	
@@ -7477,11 +7516,15 @@ ilib.DateRngFmt = function(options) {
 		if (typeof(options.sync) !== 'undefined') {
 			sync = (options.sync == true);
 		}
+		
+		loadParams = options.loadParams;
 	}
 	
 	var opts = {};
 	ilib.shallowCopy(options, opts);
 	opts.sync = sync;
+	opts.loadParams = loadParams;
+	
 	/**
 	 * @private
 	 */
@@ -9521,6 +9564,7 @@ date.js
 strings.js 
 resources.js 
 localeinfo.js
+util/jsutils.js
 */
 
 // !data dateformats sysres
@@ -9564,6 +9608,9 @@ localeinfo.js
  * values for this property are "text" or "clock". Default if this property is not specified
  * is "text".
  * 
+ *<li><i>useNative</i> - the flag used to determaine whether to use the native script settings 
+ * for formatting the numbers .
+ * 
  * <li><i>onLoad</i> - a callback function to call when the format data is fully 
  * loaded. When the onLoad option is given, this class will attempt to
  * load any missing locale data using the ilib loader callback.
@@ -9574,7 +9621,13 @@ localeinfo.js
  * <li>sync - tell whether to load any missing locale data synchronously or 
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
- * not be usable for a while. 
+ * not be usable for a while.
+ *  
+ * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ * loader callback function when locale data is missing. The parameters are not
+ * interpretted or modified in any way. They are simply passed along. The object 
+ * may contain any property/value pairs as long as the calling code is in
+ * agreement with the loader callback function as to what those parameters mean.
  * </ul>
  * <p>
  * 
@@ -9585,6 +9638,7 @@ localeinfo.js
  */
 ilib.DurFmt = function(options) {
 	var sync = true;
+	var loadParams = undefined;
 	
 	this.locale = new ilib.Locale();
 	this.length = "short";
@@ -9613,12 +9667,19 @@ ilib.DurFmt = function(options) {
 		if (typeof(options.sync) !== 'undefined') {
 			sync = (options.sync == true);
 		}
+		
+		if (typeof(options.useNative) === 'boolean') {
+			this.useNative = options.useNative;
+		}
+		
+		loadParams = options.loadParams;
 	}
 	
 	new ilib.ResBundle({
 		locale: this.locale,
 		name: "sysres",
 		sync: sync,
+		loadParams: loadParams,
 		onLoad: ilib.bind(this, function (sysres) {
 			switch (this.length) {
 				case 'short':
@@ -9688,6 +9749,8 @@ ilib.DurFmt = function(options) {
 					type: "time",
 					time: "ms",
 					sync: sync,
+					loadParams: loadParams,
+					useNative: this.useNative,
 					onLoad: ilib.bind(this, function (fmtMS) {
 						this.timeFmtMS = fmtMS;
 						new ilib.DateFmt({
@@ -9695,6 +9758,8 @@ ilib.DurFmt = function(options) {
 							type: "time",
 							time: "hm",
 							sync: sync,
+							loadParams: loadParams,
+							useNative: this.useNative,
 							onLoad: ilib.bind(this, function (fmtHM) {
 								this.timeFmtHM = fmtHM;		
 								new ilib.DateFmt({
@@ -9702,6 +9767,8 @@ ilib.DurFmt = function(options) {
 									type: "time",
 									time: "hms",
 									sync: sync,
+									loadParams: loadParams,
+									useNative: this.useNative,
 									onLoad: ilib.bind(this, function (fmtHMS) {
 										this.timeFmtHMS = fmtHMS;		
 
@@ -9711,9 +9778,7 @@ ilib.DurFmt = function(options) {
 										this.timeFmtHMS.template = this.timeFmtHMS.template.replace(/hh?/, 'H');
 										this.timeFmtHMS.templateArr = this.timeFmtHMS._tokenize(this.timeFmtHMS.template);
 										
-										if (options && typeof(options.onLoad) === 'function') {
-											options.onLoad(this);
-										}
+										this._init(this.timeFmtHM.locinfo, options && options.onLoad);
 									})
 								});
 							})
@@ -9722,10 +9787,14 @@ ilib.DurFmt = function(options) {
 				});
 				return;
 			}
-			
-			if (options && typeof(options.onLoad) === 'function') {
-				options.onLoad(this);
-			}
+
+			new ilib.LocaleInfo(this.locale, {
+				sync: sync,
+				loadParams: loadParams,
+				onLoad: ilib.bind(this, function (li) {
+					this._init(li, options && options.onLoad);
+				})
+			});
 		})
 	});
 };
@@ -9737,6 +9806,45 @@ ilib.DurFmt = function(options) {
 ilib.DurFmt.complist = {
 	"text": ["year", "month", "week", "day", "hour", "minute", "second", "millisecond"],
 	"clock": ["year", "month", "week", "day"]
+};
+
+/**
+ * @private
+ */
+ilib.DurFmt.prototype._mapDigits = function(str) {
+	if (this.useNative && this.digits) {
+		return ilib.mapString(str.toString(), this.digits);
+	}
+	return str;
+};
+
+/**
+ * @private
+ * @param {ilib.LocaleInfo} locinfo
+ * @param {Function|undefined} onLoad
+ */
+ilib.DurFmt.prototype._init = function(locinfo, onLoad) {
+	var digits;
+	if (typeof(this.useNative) === 'boolean') {
+		// if the caller explicitly said to use native or not, honour that despite what the locale data says...
+		if (this.useNative) {
+			digits = locinfo.getNativeDigits();
+			if (digits) {
+				this.digits = digits;
+			}
+		}
+	} else if (locinfo.getDigitsStyle() === "native") {
+		// else if the locale usually uses native digits, then use them 
+		digits = locinfo.getNativeDigits();
+		if (digits) {
+			this.useNative = true;
+			this.digits = digits;
+		}
+	} // else use western digits always
+
+	if (typeof(onLoad) === 'function') {
+		onLoad(this);
+	}
 };
 
 /**
@@ -9781,7 +9889,7 @@ ilib.DurFmt.prototype.format = function (components) {
 				str = ((this.length === 'full' && secondlast) ? this.components.finalSeparator : this.components.separator) + str;
 				secondlast = false;
 			}
-			str = this.components[list[i]].formatChoice(components[list[i]], {num: components[list[i]]}) + str;
+			str = this.components[list[i]].formatChoice(components[list[i]], {num: this._mapDigits(components[list[i]])}) + str;
 		}
 	}
 
