@@ -221,16 +221,16 @@ enyo.setCaseMappers = function() {
  * that call iLib's locale-safe case mapper.
  */
 enyo.toLowerCase = function(inString) {
-	if (typeof(inString) === "undefined" || typeof(inString) === "null") {
-		return inString;
+	if (inString != null) {
+		return enyo.toLowerCase.mapper.map(inString);
 	}
-	return enyo.toLowerCase.mapper.map(inString);
+	return inString;
 };
 enyo.toUpperCase = function(inString) {
-	if (typeof(inString) === "undefined" || typeof(inString) === "null") {
-		return inString;
+	if (inString != null) {
+		return enyo.toUpperCase.mapper.map(inString);
 	}
-	return enyo.toUpperCase.mapper.map(inString);
+	return inString;
 };
 
 /**
