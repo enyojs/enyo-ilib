@@ -245,6 +245,7 @@ enyo.updateLocale = function(inLocale) {
 	ilib.setLocale(inLocale || navigator.language);
 	$L.setLocale(inLocale || navigator.language);
 	enyo.updateI18NClasses();
+	enyo.Signals.send("onlocalechange");
 };
 
 // we go ahead and run this once during loading of iLib settings are valid
