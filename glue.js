@@ -241,12 +241,15 @@ enyo.toUpperCase = function(inString) {
  * that locale immediately. Provide nothing, and reset the locale back to the
  * browser's default language.
  */
-enyo.updateLocale = function(inLocale) {
-	ilib.setLocale(inLocale || navigator.language);
-	$L.setLocale(inLocale || navigator.language);
-	enyo.updateI18NClasses();
-};
+(function(originalUpdateLocale) {
+	enyo.updateLocale = function(inLocale) {
+		ilib.setLocale(inLocale || navigator.language);
+		$L.setLocale(inLocale || navigator.language);
+		enyo.updateI18NClasses();
+		originalUpdateLocale();
+	};
+})(enyo.updateLocale);
 
 // we go ahead and run this once during loading of iLib settings are valid
 // during the loads of later libraries.
-enyo.updateLocale();
+enyo.updateLocale(null, true);
