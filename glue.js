@@ -98,6 +98,26 @@
 		ilib.setLocale(window.UILocale);
 	}
 
+	/*
+	 * Tell whether or not the given locale is considered a non-Latin locale for webOS purposes. This controls
+	 * which fonts are used in various places to show the various languages. An undefined spec parameter means
+	 * to test the current locale. 
+	 * 
+	 * @param {ilib.Locale|string|undefined} spec locale specifier or locale object of the locale to test, or undefined
+	 * to test the current locale
+	 */
+	enyo.isNonLatinLocale = function(spec) {
+		var li = new ilib.LocaleInfo(spec),
+			locale = li.getLocale();
+
+        // We use the non-latin fonts for these languages (even though their scripts are technically considered latin)
+        var nonLatinLanguageOverrides = ["bs", "cs", "hr", "hu", "lv", "lt", "pl", "ro", "sr", "sl", "tr", "vi"];
+        // We use the latin fonts (with non-Latin fallback) for these languages (even though their scripts are non-latin)
+        var latinLanguageOverrides = ["ko"];
+		return ((li.getScript() !== "Latn" || enyo.indexOf(locale.getLanguage(), nonLatinLanguageOverrides) !== -1) &&
+			(enyo.indexOf(locale.getLanguage(), latinLanguageOverrides) < 0));
+	};
+	
 	// enyo.updateI18NClasses should be called after every setLocale, but there isn't such a callback in current version
     enyo.updateI18NClasses = function updateBodyClasses() {
         var li = new ilib.LocaleInfo(); // for the current locale
@@ -109,13 +129,7 @@
             document.body.className = document.body.className.replace(new RegExp('(^|\\s)'+ base +'[^\\s]*', 'g'), '');
         }
 
-        // We use the non-latin fonts for these languages (even though their scripts are technically considered latin)
-        var nonLatinLanguageOverrides = ["bs", "cs", "hr", "hu", "lv", "lt", "pl", "ro", "sr", "sl", "tr", "vi"];
-        // We use the latin fonts (with non-Latin fallback) for these languages (even though their scripts are non-latin)
-        var latinLanguageOverrides = ["ko"];
-		var scriptName = li.getScript();
-		if ((scriptName !== "Latn" || enyo.indexOf(locale.getLanguage(), nonLatinLanguageOverrides) !== -1) &&
-			(enyo.indexOf(locale.getLanguage(), latinLanguageOverrides) < 0)) {
+		if (enyo.isNonLatinLocale(locale)) {
 			// allow enyo to define other fonts for non-Latin languages, or for certain
 			// Latin-based languages where the characters with some accents don't appear in the
 			// regular fonts, creating a strange "ransom note" look with a mix of fonts in the
@@ -123,6 +137,8 @@
 			// to display with the same font.
 			enyo.dom.addBodyClass(base + "non-latin");
 		}
+		
+		var scriptName = li.getScript();
 		if (scriptName !== 'Latn' && scriptName !== 'Cyrl' && scriptName !== 'Grek') {
 			// GF-45884: allow enyo to avoid setting italic fonts for those scripts that do not 
 			// commonly use italics
