@@ -224,13 +224,21 @@ enyo.toLowerCase = function(inString) {
 	if (inString != null) {
 		return enyo.toLowerCase.mapper.map(inString);
 	}
+<<<<<<< HEAD
 	return inString;
+=======
+	return enyo.toLowerCase.mapper.map(inString.toString());
+>>>>>>> 3232342... BHV-698: Guard against non-string objects.
 };
 enyo.toUpperCase = function(inString) {
 	if (inString != null) {
 		return enyo.toUpperCase.mapper.map(inString);
 	}
+<<<<<<< HEAD
 	return inString;
+=======
+	return enyo.toUpperCase.mapper.map(inString.toString());
+>>>>>>> 3232342... BHV-698: Guard against non-string objects.
 };
 
 /**
