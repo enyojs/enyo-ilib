@@ -222,13 +222,13 @@ enyo.setCaseMappers = function() {
  */
 enyo.toLowerCase = function(inString) {
 	if (inString != null) {
-		return enyo.toLowerCase.mapper.map(inString);
+		return enyo.toLowerCase.mapper.map(inString.toString());
 	}
 	return inString;
 };
 enyo.toUpperCase = function(inString) {
 	if (inString != null) {
-		return enyo.toUpperCase.mapper.map(inString);
+		return enyo.toUpperCase.mapper.map(inString.toString());
 	}
 	return inString;
 };
