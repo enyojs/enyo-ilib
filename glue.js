@@ -224,13 +224,13 @@ enyo.toLowerCase = function(inString) {
 	if (typeof(inString) === "undefined" || typeof(inString) === "null") {
 		return inString;
 	}
-	return enyo.toLowerCase.mapper.map(inString);
+	return enyo.toLowerCase.mapper.map(inString.toString());
 };
 enyo.toUpperCase = function(inString) {
 	if (typeof(inString) === "undefined" || typeof(inString) === "null") {
 		return inString;
 	}
-	return enyo.toUpperCase.mapper.map(inString);
+	return enyo.toUpperCase.mapper.map(inString.toString());
 };
 
 /**
