@@ -243,8 +243,12 @@ enyo.toUpperCase = function(inString) {
  */
 (function(originalUpdateLocale) {
 	enyo.updateLocale = function(inLocale) {
-		ilib.setLocale(inLocale || navigator.language);
-		$L.setLocale(inLocale || navigator.language);
+		// When using the browser language, ensure that the format is correct (Safari returns lowercase region identifier)
+		inLocale = inLocale || navigator.language.replace(/-[a-z]{2}$/, function (inMatch) {
+			return inMatch.toUpperCase();
+		});
+		ilib.setLocale(inLocale);
+		$L.setLocale(inLocale);
 		enyo.updateI18NClasses();
 		originalUpdateLocale();
 	};
