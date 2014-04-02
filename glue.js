@@ -57,7 +57,7 @@
 				root = params.root + '/';
 			}
 			// synchronous
-			paths.forEach(function (path) {
+			enyo.forEach(paths, function (path) {
 				// console.log("browser/sync: attempting to load lib/enyo-ilib/ilib/locale/" + path);
 				var ajax = new enyo.Ajax({
 					url: enyo.path.rewrite("$lib/enyo-ilib/ilib/locale/" + path),
@@ -80,7 +80,7 @@
 					ajax2.go();
 				});
 				ajax.go();
-			});
+			}, this);
 
 			if (typeof(callback) === 'function') {
 				callback.call(this, ret);
