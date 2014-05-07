@@ -1,4 +1,11 @@
 (function() {
+	var enyoLoader = function() {
+		this.base = enyo.path.rewrite("$lib/enyo-ilib/ilib/");
+	};
+
+	enyoLoader.prototype = new ilib.Loader();
+	enyoLoader.prototype.constructor = enyoLoader;
+
 	/**
 	 * Load the list of files asynchronously. This uses recursion in
 	 * order to create a queue of files that will be loaded serially.
@@ -14,20 +21,20 @@
 	 * @param {function(Array.<Object>)} callback callback to call when this function is finished attempting
 	 * to load all the files that exist and can be loaded
 	 */
-	function loadFiles(context, paths, results, params, callback) {
+	enyoLoader.prototype._loadFilesAsync = function (context, paths, results, params, callback) {
 		var root = "resources/";
 		if (params && typeof(params.root) !== "undefined") {
 			root = params.root + '/';
 		}
 		if (paths.length > 0) {
 			var path = paths.shift();
-			var ajax = new enyo.Ajax({url: enyo.path.rewrite("$lib/enyo-ilib/ilib/locale/" + path), cacheBust: false});
+			var ajax = new enyo.Ajax({url: this.base + "/locale/" + path, cacheBust: false});
 			//console.log("moondemo2: browser/async: attempting to load lib/enyo-ilib/ilib/locale/" + path);
 			var resultFunc = function(inSender, json) {
                 // console.log("moondemo2: " + (!inSender.failed && json ? "success" : "failed"));
 				results.push(!inSender.failed && (typeof(json) === 'object') ? json : undefined);
 				if (paths.length > 0) {
-					loadFiles(context, paths, results, params, callback);
+					this._loadFilesAsync(context, paths, results, params, callback);
 				} else {
 					// only the bottom item on the stack will call
 					// the callback
@@ -47,9 +54,9 @@
 			});
 			ajax.go();
 		}
-	}
+	};
 
-	ilib.setLoaderCallback(enyo.bind(this, function(paths, sync, params, callback) {
+	enyoLoader.prototype.loadFiles = function(paths, sync, params, callback) {
 		if (sync) {
 			var ret = [];
 			var root = "resources/";
@@ -60,8 +67,9 @@
 			enyo.forEach(paths, function (path) {
 				// console.log("browser/sync: attempting to load lib/enyo-ilib/ilib/locale/" + path);
 				var ajax = new enyo.Ajax({
-					url: enyo.path.rewrite("$lib/enyo-ilib/ilib/locale/" + path),
-					sync: true, cacheBust: false
+					url: this.base + "/locale/" + path,
+					sync: true, 
+					cacheBust: false
 				});
 
 				var handler = function(inSender, json) {
@@ -90,9 +98,63 @@
 
 		// asynchronous
 		var results = [];
-		loadFiles(this, paths, results, params, callback);
-	}));
+		this._loadFilesAsync(this, paths, results, params, callback);
+	};
 
+	enyoLoader.prototype._loadManifests = function() {
+		// util.print("enyo loader: load manifests\n");
+		if (!this.manifest) {
+			var root = this.base;
+			var manifest = {};
+
+			function loadManifest(subpath) {
+				var dirpath = root + "/" + subpath;
+				var filepath = dirpath + "/ilibmanifest.json";
+
+				// util.print("enyo loader: loading manifest " + filepath + "\n");
+				var ajax = new enyo.Ajax({
+					url: filepath,
+					sync: true, 
+					cacheBust: false
+				});
+
+				ajax.response(this, function(inSender, json) {
+                    // console.log((!inSender.failed && json ? "success" : "failed"));
+					if (!inSender.failed && typeof(json) === 'object') {
+						manifest[dirpath] = JSON.parse(json).files;
+					}
+				});
+			}
+
+			loadManifest("locale");
+			root = ".";
+			loadManifest("resources");
+			
+			this.manifest = manifest;
+		}
+	};
+	enyoLoader.prototype.listAvailableFiles = function() {
+		// util.print("enyo loader: list available files called\n");
+		this._loadManifests();
+		return this.manifest;
+	};
+	enyoLoader.prototype.isAvailable = function(path) {
+		this._loadManifests();
+		
+		// util.print("enyo loader: isAvailable " + path + "? ");
+		for (var dir in this.manifest) {
+			if (ilib.indexOf(this.manifest[dir], path) !== -1) {
+				// util.print("true\n");
+				return true;
+			}
+		}
+		
+		// util.print("false\n");
+		return false;
+	};
+
+	ilib.setLoaderCallback(new enyoLoader());
+	
 	if (typeof(window.UILocale) !== 'undefined') {
 		// this is a hack until GF-1581 is fixed
 		ilib.setLocale(window.UILocale);
