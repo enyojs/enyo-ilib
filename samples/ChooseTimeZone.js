@@ -11,7 +11,7 @@ enyo.kind({
         {kind: "onyx.PickerDecorator", components: [
             {},
             {name: "timeZones", kind: "onyx.Picker", onChange: "setTimeZone", components: [
-                {content: rb.getString("default"), active: true}
+                {content: rb.getString("local"), active: true}
             ]}
         ]},
         {kind: "onyx.TimePicker", name: "timePickerFake", content: rb.getString("Time"), showing: false}

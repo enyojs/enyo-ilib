@@ -28,31 +28,33 @@
 		}
 		if (paths.length > 0) {
 			var path = paths.shift();
-			var ajax = new enyo.Ajax({url: this.base + "/locale/" + path, cacheBust: false});
-			//console.log("moondemo2: browser/async: attempting to load lib/enyo-ilib/ilib/locale/" + path);
-			var resultFunc = function(inSender, json) {
-                // console.log("moondemo2: " + (!inSender.failed && json ? "success" : "failed"));
-				results.push(!inSender.failed && (typeof(json) === 'object') ? json : undefined);
-				if (paths.length > 0) {
-					this._loadFilesAsync(context, paths, results, params, callback);
-				} else {
-					// only the bottom item on the stack will call
-					// the callback
-					callback.call(context, results);
-				}
-			};
-			ajax.response(this, resultFunc);
-			ajax.error(this, function(inSender, json) {
-				// not there? Try the standard place instead
-				var file = root + path;
-				// console.log("moondemo2: browser/async: attempting to load " + file);
-				var ajax2 = new enyo.Ajax({url: file, cacheBust: false});
-
-				ajax2.response(this, resultFunc);
-				ajax2.error(this, resultFunc);
-				ajax2.go();
-			});
-			ajax.go();
+			if (this.isAvailable(path)) {
+				var ajax = new enyo.Ajax({url: this.base + "locale/" + path, cacheBust: false});
+				//console.log("moondemo2: browser/async: attempting to load lib/enyo-ilib/ilib/locale/" + path);
+				var resultFunc = function(inSender, json) {
+	                // console.log("moondemo2: " + (!inSender.failed && json ? "success" : "failed"));
+					results.push(!inSender.failed && (typeof(json) === 'object') ? json : undefined);
+					if (paths.length > 0) {
+						this._loadFilesAsync(context, paths, results, params, callback);
+					} else {
+						// only the bottom item on the stack will call
+						// the callback
+						callback.call(context, results);
+					}
+				};
+				ajax.response(this, resultFunc);
+				ajax.error(this, function(inSender, json) {
+					// not there? Try the standard place instead
+					var file = root + path;
+					// console.log("moondemo2: browser/async: attempting to load " + file);
+					var ajax2 = new enyo.Ajax({url: file, cacheBust: false});
+	
+					ajax2.response(this, resultFunc);
+					ajax2.error(this, resultFunc);
+					ajax2.go();
+				});
+				ajax.go();
+			}
 		}
 	};
 
@@ -66,28 +68,30 @@
 			// synchronous
 			enyo.forEach(paths, function (path) {
 				// console.log("browser/sync: attempting to load lib/enyo-ilib/ilib/locale/" + path);
-				var ajax = new enyo.Ajax({
-					url: this.base + "/locale/" + path,
-					sync: true, 
-					cacheBust: false
-				});
-
-				var handler = function(inSender, json) {
-                    // console.log((!inSender.failed && json ? "success" : "failed"));
-					ret.push(!inSender.failed && (typeof(json) === 'object') ? json : undefined);
-				};
-				ajax.response(this, handler);
-				ajax.error(this, function(inSender, json) {
-					// console.log("browser/sync: Now attempting to load " + root + path);
-					var ajax2 = new enyo.Ajax({
-						url: root + path,
-						sync: true, cacheBust: false
+				if (this.isAvailable(path)) {
+					var ajax = new enyo.Ajax({
+						url: this.base + "locale/" + path,
+						sync: true, 
+						cacheBust: false
 					});
-					ajax2.response(this, handler);
-					ajax2.error(this, handler);
-					ajax2.go();
-				});
-				ajax.go();
+	
+					var handler = function(inSender, json) {
+	                    // console.log((!inSender.failed && json ? "success" : "failed"));
+						ret.push(!inSender.failed && (typeof(json) === 'object') ? json : undefined);
+					};
+					ajax.response(this, handler);
+					ajax.error(this, function(inSender, json) {
+						// console.log("browser/sync: Now attempting to load " + root + path);
+						var ajax2 = new enyo.Ajax({
+							url: root + path,
+							sync: true, cacheBust: false
+						});
+						ajax2.response(this, handler);
+						ajax2.error(this, handler);
+						ajax2.go();
+					});
+					ajax.go();
+				}
 			}, this);
 
 			if (typeof(callback) === 'function') {
@@ -121,9 +125,10 @@
 				ajax.response(this, function(inSender, json) {
                     // console.log((!inSender.failed && json ? "success" : "failed"));
 					if (!inSender.failed && typeof(json) === 'object') {
-						manifest[dirpath] = JSON.parse(json).files;
+						manifest[dirpath] = json.files;
 					}
 				});
+				ajax.go();
 			}
 
 			loadManifest("locale");
