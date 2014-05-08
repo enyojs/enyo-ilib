@@ -6,6 +6,18 @@ var path = require("path"),
 	fs = require("fs");
 // var util = require("util");
 
+exports.ilib.isNonLatinLocale = function(spec) {
+	var li = new exports.ilib.LocaleInfo(spec),
+		locale = li.getLocale();
+	
+    // We use the non-latin fonts for these languages (even though their scripts are technically considered latin)
+    var nonLatinLanguageOverrides = ["bs", "cs", "hr", "hu", "lv", "lt", "pl", "ro", "sr", "sl", "tr", "vi"];
+    // We use the latin fonts (with non-Latin fallback) for these languages (even though their scripts are non-latin)
+    var latinLanguageOverrides = ["ko"];
+	return ((li.getScript() !== "Latn" || exports.ilib.indexOf(nonLatinLanguageOverrides, locale.getLanguage()) !== -1) &&
+		(exports.ilib.indexOf(latinLanguageOverrides, locale.getLanguage()) < 0));
+};
+
 exports.ilib._load = (function () {
 	var base = path.normalize(path.join(__dirname, "ilib/locale"));
 
