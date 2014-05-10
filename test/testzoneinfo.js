@@ -23,3 +23,54 @@ function testZoneInfoFileConstructor() {
     assertNotNull(zif);
 }
 
+function testZoneInfoFileConstructor2() {
+    var zif = new ZoneInfoFile("/usr/share/zoneinfo/America/Los_Angeles");
+    
+    assertNotNull(zif);
+}
+
+function testZoneInfoFileGetOffsetNone() {
+    var zif = new ZoneInfoFile("/usr/share/zoneinfo/Etc/UTC");
+    
+    assertNotNull(zif);
+    
+    assertEquals(0, zif.getRawOffset(2014));
+}
+
+function testZoneInfoFileGetOffsetWest() {
+    var zif = new ZoneInfoFile("/usr/share/zoneinfo/America/Los_Angeles");
+    
+    assertNotNull(zif);
+    
+    assertEquals(-8, zif.getRawOffset(2014));
+}
+
+function testZoneInfoFileGetOffsetEast() {
+    var zif = new ZoneInfoFile("/usr/share/zoneinfo/Australia/Perth");
+    
+    assertNotNull(zif);
+    
+    assertEquals(8, zif.getRawOffset(2014));
+}
+
+function testZoneInfoFileUsesDSTFalse() {
+    var zif = new ZoneInfoFile("/usr/share/zoneinfo/America/Los_Angeles");
+    
+    assertNotNull(zif);
+}
+
+function testZoneInfoFileUsesDSTTrue() {
+    var zif = new ZoneInfoFile("/usr/share/zoneinfo/Europe/Berlin");
+    
+    assertNotNull(zif);
+    
+    assertTrue(zif.usesDST(2014));
+}
+
+function testZoneInfoFileUsesDSTFalse() {
+    var zif = new ZoneInfoFile("/usr/share/zoneinfo/Asia/Shanghai");
+    
+    assertNotNull(zif);
+    
+    assertFalse(zif.usesDST(2014));
+}
