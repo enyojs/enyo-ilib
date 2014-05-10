@@ -20,7 +20,7 @@
 
 /**
  * @constructor
- * Represents a binary buffer of bytes that will be parsed in various ways. The buffer 
+ * Represents a binary buffer of unsigned bytes that will be parsed in various ways. The buffer 
  * can be decoded by reading various lengths of bytes and interpretting them as longs
  * or unsigned bytes, etc. The bytes are interpretted in big-endian (network) format.
  * @param {string} buffer the binary buffer represented as a string
@@ -40,14 +40,17 @@ var PackedBuffer = function (buffer) {
  * @returns {Array.<number>} the array of signed long integers
  */
 PackedBuffer.prototype.getLongs = function(num) {
-	var result = [];
-	for (var i = 0; i < num && this.index+3 < this.buffer.length; i++) {
-		var long = this.buffer[this.index] << 24 | 
-			this.buffer[this.index+1] << 16 | 
-			this.buffer[this.index+2] << 8 | 
-			this.buffer[this.index+3];
-		result.push(long);
-		this.index += 3;
+	var result = undefined;
+	if (this.buffer && this.index < this.buffer.length) {
+		result = [];
+		for (var i = 0; i < num && this.index+3 < this.buffer.length; i++) {
+			var long = this.buffer[this.index] << 24 | 
+				this.buffer[this.index+1] << 16 | 
+				this.buffer[this.index+2] << 8 | 
+				this.buffer[this.index+3];
+			result.push(long);
+			this.index += 4;
+		}
 	}
 	return result;
 };
@@ -62,9 +65,16 @@ PackedBuffer.prototype.getLongs = function(num) {
  * @returns {Array.<number>} the array of signed byte integers
  */
 PackedBuffer.prototype.getBytes = function(num) {
-	var result = [];
-	for (var i = 0; i < num && this.index < this.buffer.length; i++) {
-		result.push(this.buffer[this.index++]);
+	var result = undefined;
+	if (this.buffer && this.index < this.buffer.length) {
+		result = [];
+		for (var i = 0; i < num && this.index < this.buffer.length; i++) {
+			var byte = this.buffer[this.index++];
+			if (byte & 0x80) {
+				byte -= 0x100;
+			}
+			result.push(byte);
+		}
 	}
 	return result;
 };
@@ -79,13 +89,12 @@ PackedBuffer.prototype.getBytes = function(num) {
  * @returns {Array.<number>} the array of unsigned byte integers
  */
 PackedBuffer.prototype.getUnsignedBytes = function(num) {
-	var result = [];
-	for (var i = 0; i < num && this.index < this.buffer.length; i++) {
-		var byte = this.buffer[this.index++];
-		if (byte < 0) {
-			byte += 256;
+	var result = undefined;
+	if (this.buffer && this.index < this.buffer.length) {
+		result = [];
+		for (var i = 0; i < num && this.index < this.buffer.length; i++) {
+			result.push(this.buffer[this.index++]);
 		}
-		result.push(byte);
 	}
 	return result;
 	
