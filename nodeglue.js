@@ -11,7 +11,7 @@ var nodeLoader = function () {
 	// util.print("new nodeLoader instance\n");
 
 	// for use from within a check-out of ilib
-	this.base = path.normalize(process.cwd() + "/../data");  
+	this.base = path.normalize(path.join(__dirname, "ilib"));
 	
 	// for use on-device
 	if (!fs.existsSync(path.join(this.base, "locale/localeinfo.json"))) {
