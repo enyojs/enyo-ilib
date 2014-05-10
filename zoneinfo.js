@@ -17,6 +17,21 @@
  * limitations under the License.
  */
 
+var _platform;
+(function () {
+	if (typeof(enyo) !== 'undefined') {
+		_platform = "enyo";
+	} else if (typeof(environment) !== 'undefined') {
+		_platform = "rhino";
+	} else if (typeof(process) !== 'undefined' || typeof(require) !== 'undefined') {
+		_platform = "nodejs";
+	} else if (typeof(window) !== 'undefined') {
+		_platform = (typeof(PalmSystem) !== 'undefined') ? "webos" : "browser";
+	} else {
+		_platform = "unknown";
+	}
+})();
+
 /**
  * @constructor
  * Represents a binary zone info file of the sort that the Unix Zone Info Compiler
@@ -25,19 +40,25 @@
  * @param {number} year year of the zone info rules needed
  */
 var ZoneInfoFile = function (path) {
-	var ajax = new enyo.Ajax({
-		xhrFields: {
-			responseType:"arraybuffer"
-		}, 
-		url: path
-	});
-	ajax.response(function(s, r) {
-		var byteArray = new Uint8Array(r);
-		console.log("ZoneInfoFile bytes received: " + byteArray.length);
-		this._parseInfo(byteArray);
-	});
-	
-	ajax.go();
+	switch (_platform) {
+		case "enyo":
+			var ajax = new enyo.Ajax({
+				xhrFields: {
+					responseType:"arraybuffer"
+				}, 
+				url: path
+			});
+			ajax.response(function(s, r) {
+				var byteArray = new Uint8Array(r);
+				console.log("ZoneInfoFile bytes received: " + byteArray.length);
+				this._parseInfo(byteArray);
+			});
+			
+			ajax.go();
+			break;
+		case "nodejs":
+			break;
+	} 
 };
 
 /**
@@ -266,7 +287,7 @@ ZoneInfoFile.prototype.usesDST = function(year) {
  * @returns {number} offset from from UTC in number of minutes. Negative
  * numbers are west of Greenwich, positive are east of Greenwich 
  */
-ZoneInfoFile.prototype.rawOffset = function(year) {
+ZoneInfoFile.prototype.getRawOffset = function(year) {
 	
 };
 
@@ -279,7 +300,7 @@ ZoneInfoFile.prototype.rawOffset = function(year) {
  * @returns {number} number of minutes in DST savings if the zone 
  * uses DST in the given year, or zero otherwise
  */
-ZoneInfoFile.prototype.dstSavings = function(year) {
+ZoneInfoFile.prototype.getDSTSavings = function(year) {
 	
 };
 
@@ -292,7 +313,7 @@ ZoneInfoFile.prototype.dstSavings = function(year) {
  * of DST in the given year, or -1 if the zone does not
  * use DST in the given year
  */
-ZoneInfoFile.prototype.dstStartDate = function(year) {
+ZoneInfoFile.prototype.getDSTStartDate = function(year) {
 	
 };
 
@@ -305,7 +326,7 @@ ZoneInfoFile.prototype.dstStartDate = function(year) {
  * of DST in the given year, or -1 if the zone does not
  * use DST in the given year
  */
-ZoneInfoFile.prototype.dstEndDate = function(year) {
+ZoneInfoFile.prototype.getDSTEndDate = function(year) {
 	
 };
 
