@@ -74,3 +74,27 @@ function testZoneInfoFileUsesDSTFalse() {
     
     assertFalse(zif.usesDST(2014));
 }
+
+function testZoneInfoFileGetDSTSavings() {
+    var zif = new ZoneInfoFile("/usr/share/zoneinfo/America/New_York");
+    
+    assertNotNull(zif);
+    
+    assertEquals(60, zif.getDSTSavings(2014));
+}
+
+function testZoneInfoFileGetDSTSavingsOdd() {
+    var zif = new ZoneInfoFile("/usr/share/zoneinfo/Australia/Lord_Howe");
+    
+    assertNotNull(zif);
+    
+    assertEquals(30, zif.getDSTSavings(2014));
+}
+
+function testZoneInfoFileGetDSTSavingsNone() {
+    var zif = new ZoneInfoFile("/usr/share/zoneinfo/America/Phoenix");
+    
+    assertNotNull(zif);
+    
+    assertEquals(0, zif.getDSTSavings(2014));
+}
