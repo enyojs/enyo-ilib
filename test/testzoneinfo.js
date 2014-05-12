@@ -98,3 +98,39 @@ function testZoneInfoFileGetDSTSavingsNone() {
     
     assertEquals(0, zif.getDSTSavings(2014));
 }
+
+function testZoneInfoFileGetDSTStartDate() {
+    var zif = new ZoneInfoFile("/usr/share/zoneinfo/America/Los_Angeles");
+    
+    assertNotNull(zif);
+    
+    // unix time of March 9, 2014 2:00am PST -> 3:00 am PDT
+    assertEquals(1394359200000, zif.getDSTStartDate(2014));
+}
+
+function testZoneInfoFileGetDSTEndDate() {
+    var zif = new ZoneInfoFile("/usr/share/zoneinfo/America/Los_Angeles");
+    
+    assertNotNull(zif);
+    
+    // unix time of Nov 2, 2014 2:00am PDT -> 1:00 am PST
+    assertEquals(1414922400000, zif.getDSTEndDate(2014));
+}
+
+function testZoneInfoFileGetDSTStartDateNone() {
+    var zif = new ZoneInfoFile("/usr/share/zoneinfo/America/Phoenix");
+    
+    assertNotNull(zif);
+    
+    // no DST in Arizona
+    assertEquals(-1, zif.getDSTStartDate(2014));
+}
+
+function testZoneInfoFileGetDSTEndDateNone() {
+    var zif = new ZoneInfoFile("/usr/share/zoneinfo/America/Phoenix");
+    
+    assertNotNull(zif);
+    
+    // no DST in Arizona
+    assertEquals(-1, zif.getDSTEndDate(2014));
+}
