@@ -40,6 +40,7 @@ var _platform;
  * @param {number} year year of the zone info rules needed
  */
 var ZoneInfoFile = function (path) {
+	var that = this;
 	switch (_platform) {
 		case "enyo":
 			var ajax = new enyo.Ajax({
@@ -51,14 +52,26 @@ var ZoneInfoFile = function (path) {
 			ajax.response(function(s, r) {
 				var byteArray = new Uint8Array(r);
 				console.log("ZoneInfoFile bytes received: " + byteArray.length);
-				this._parseInfo(byteArray);
+				that._parseInfo(byteArray);
 			});
 			
 			ajax.go();
 			break;
 		case "nodejs":
 			break;
-	} 
+		default:
+			// use normal web techniques
+			var req = new XMLHttpRequest();
+			req.open("GET", "file:" + path, false);
+			req.responseType = "arraybuffer";
+			req.onload = function(e) {
+				var byteArray = new Uint8Array(req.response);
+				console.log("ZoneInfoFile bytes received: " + byteArray.length);
+				that._parseInfo(byteArray);
+			};
+			req.send();
+			break;
+	}
 };
 
 /**
@@ -77,7 +90,7 @@ ZoneInfoFile.prototype._parseInfo = function(buffer) {
 	// six four-byte values of type long, written in a
 	// ''standard'' byte order (the high-order byte
 	// of the value is written first).
-	if (packed.getUnsignedChars(4).toString('ascii') != "TZif") {
+	if (packed.getString(4) != "TZif") {
 		throw "file format not recognized";
 	} else {
 		// ignore 16 bytes

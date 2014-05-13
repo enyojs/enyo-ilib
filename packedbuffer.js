@@ -101,6 +101,23 @@ PackedBuffer.prototype.getUnsignedBytes = function(num) {
 };
 
 /**
+ * Return a string made out of the given number of bytes and convert
+ * from UTF-8 to UTF-16.
+ * 
+ * @param {number} num The number of bytes to make a string out of
+ * @returns {string} a string made out of the given bytes
+ */
+PackedBuffer.prototype.getString = function(num) {
+	var arr = this.getUnsignedBytes(num);
+	var str = "";
+	for (var i = 0; i < arr.length; i++) {
+		str += String.fromCharCode(arr[i]);
+	}
+	return str;
+	
+};
+
+/**
  * Advance the current pointer in the buffer by the specified number of
  * bytes in the string.
  * 
