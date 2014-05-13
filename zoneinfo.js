@@ -97,21 +97,21 @@ ZoneInfoFile.prototype._parseInfo = function(buffer) {
 		packed.skip(16);
 		
 		// The number of UTC/local indicators stored in the file.
-		var _ttisgmtct = packed.getLongs(1);
+		var _ttisgmtct = packed.getLong();
 		// The number of standard/wall indicators stored in the file.
-		var _ttisstdct = packed.getLongs(1);
+		var _ttisstdct = packed.getLong();
 		// The number of leap seconds for which data is
 		// stored in the file.
-		var _leapct = packed.getLongs(1);
+		var _leapct = packed.getLong();
 		// The number of "transition times" for which data
 		// is stored in the file.
-		var _timect = packed.getLongs(1);
+		var _timect = packed.getLong();
 		// The number of "local time types" for which data
 		// is stored in the file (must not be zero).
-		var _typect = packed.getLongs(1);
+		var _typect = packed.getLong();
 		// The number of characters of "time zone
 		// abbreviation strings" stored in the file.
-		var _charct = packed.getLongs(1);
+		var _charct = packed.getLong();
 
 		this.tzinfo = {
 			trans_list: null,
@@ -159,11 +159,10 @@ ZoneInfoFile.prototype._parseInfo = function(buffer) {
 
 		var _ttinfo = [];
 		for (var i = 0; i < _typect; i++) {
-			_ttinfo.push(packed.getLongs(1));
-			_ttinfo.push(packed.getBytes(2));
+			_ttinfo.push([packed.getLong()].concat(packed.getBytes(2)));
 		}
 
-		var _abbr = packed.getUnsignedBytes(_charct).toString('ascii');
+		var _abbr = packed.getString(_charct);
 		
 		// Then there are tzh_leapcnt pairs of four-byte
 		// values, written in standard byte order; the
@@ -205,21 +204,23 @@ ZoneInfoFile.prototype._parseInfo = function(buffer) {
 		// finished reading
 
 		this.tzinfo.ttinfo_list = [];
-		enyo.forEach(_ttinfo, function (item, index) {
+		for (var i = 0; i < _ttinfo.length; i++) {
+			var item = _ttinfo[i];
 			item[0] = Math.floor(item[0] / 60);
 
 			this.tzinfo.ttinfo_list.push({
 				offset: item[0],
 				isdst: item[1],
 				abbr: _abbr.slice(item[2], _abbr.indexOf('\x00',item[2])),
-				isstd: _ttisstdct > index && _isstd[index] != 0,
-				isgmt: _ttisgmtct > index && _isgmt[index] != 0
+				isstd: _ttisstdct > i && _isstd[i] != 0,
+				isgmt: _ttisgmtct > i && _isgmt[i] != 0
 			});
-		}, this);
+		};
 
 		// Replace ttinfo indexes for ttinfo objects.
+		var that = this;
 		this.tzinfo.trans_idx = this.tzinfo.trans_idx.map(function (item) {
-			return this.tzinfo.ttinfo_list[item];
+			return that.tzinfo.ttinfo_list[item];
 		});
 		
 		// Set standard, dst, and before ttinfos. before will be
@@ -258,29 +259,47 @@ ZoneInfoFile.prototype._parseInfo = function(buffer) {
 				}
 			}
 		}
+	}
+};
 
-		/*
-		 * Now fix transition times to become relative to wall time. I'm
-		 * not sure about this. In my tests, the tz source file is setup to
-		 * wall time, and in the binary file isstd and isgmt are off, so it
-		 * should be in wall time. OTOH, it's always in gmt time. Let me know
-		 * if you have comments about this.
-		 */
-		var laststdoffset = 0;
-		this.tzinfo._trans_list = list(this.tzinfo._trans_list);
-		for (var i = 0; i < this.tzinfo._trans_list.length; i++ ) {
-			var tti = this.tzinfo._trans_idx[i];
-			if (!tti.isdst) {
-				// This is std time.
-				this.tzinfo._trans_list[i] += tti.offset;
-				laststdoffset = tti.offset; 
-			} else {
-				// This is dst time. Convert to std. 
-				this.tzinfo._trans_list[i] += laststdoffset;
-				this.tzinfo._trans_list = tuple(this.tzinfo._trans_list);
-			}
+/**
+ * Binary search a sorted array of numbers for a particular target value.
+ * If the exact value is not found, it returns the index of the smallest 
+ * entry that is greater than the given target value.<p> 
+ * 
+ * @param {number} target element being sought 
+ * @param {Array} arr the array being searched
+ * @return the index of the array into which the value would fit if 
+ * inserted, or -1 if given array is not an array or the target is not 
+ * a number
+ */
+ZoneInfoFile.prototype.bsearch = function(target, arr) {
+	if (typeof(arr) === 'undefined' || !arr || typeof(target) === 'undefined') {
+		return -1;
+	}
+	
+	var high = arr.length - 1,
+		low = 0,
+		mid = 0,
+		value;
+	
+	function compareNumbers(element, target) {
+		return element - target;
+	}
+	
+	while (low <= high) {
+		mid = Math.floor((high+low)/2);
+		value = compareNumbers(arr[mid], target);
+		if (value > 0) {
+			high = mid - 1;
+		} else if (value < 0) {
+			low = mid + 1;
+		} else {
+			return mid;
 		}
 	}
+	
+	return low;
 };
 
 /**
@@ -290,7 +309,23 @@ ZoneInfoFile.prototype._parseInfo = function(buffer) {
  * @returns {boolean} true if the zone uses DST in the given year
  */
 ZoneInfoFile.prototype.usesDST = function(year) {
+	var target = new Date(year, 0, 1).getTime()/1000;
+	var nextyear = new Date(year+1, 0, 1).getTime()/1000;
 	
+	// search between Jan 1 of this year to Jan 1 of next year, and
+	// if any of the infos is DST, then this zone supports DST in 
+	// the given year.
+	
+	var index = this.bsearch(target, this.tzinfo.trans_list);
+	if (index !== -1) {
+		while (this.tzinfo.trans_list[index] < nextyear) {
+			if (this.tzinfo.trans_idx[index++].isdst) {
+				return true;
+			}
+		}
+	}
+	
+	return false;
 };
 
 /**
