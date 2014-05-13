@@ -56,6 +56,23 @@ PackedBuffer.prototype.getLongs = function(num) {
 };
 
 /**
+ * Return a signed long integer from the current location in
+ * the buffer as an array of numbers and advance the current pointer in the buffer.
+ * This method will only return a long if it is available in the buffer, otherwise
+ * it will return undefined.
+ * 
+ * @returns {number} the long at the current point in the buffer, or undefined if
+ * there is not enough bytes left in the buffer to form a long
+ */
+PackedBuffer.prototype.getLong = function() {
+	var longs = this.getLongs(1);
+	if (longs && longs.length > 0) {
+		return longs[0];
+	}
+	return undefined;
+};
+
+/**
  * Return the specified number of signed byte integers from the current location in
  * the buffer as an array of numbers and advance the current pointer in the buffer.
  * This method will only return as many bytes as are available in the rest of the

@@ -62,10 +62,12 @@ function testZoneInfoFileGetOffsetEast() {
     assertEquals(8, zif.getRawOffset(2014));
 }
 
-function testZoneInfoFileUsesDSTFalse() {
-    var zif = new ZoneInfoFile("/usr/share/zoneinfo/America/Los_Angeles");
+function testZoneInfoFileUsesDSTWest() {
+    var zif = new ZoneInfoFile("/usr/share/zoneinfo/America/Phoenix");
 
     assertNotNull(zif);
+    
+    assertFalse(zif.usesDST(2014));
 }
 
 function testZoneInfoFileUsesDSTTrue() {
@@ -76,7 +78,7 @@ function testZoneInfoFileUsesDSTTrue() {
     assertTrue(zif.usesDST(2014));
 }
 
-function testZoneInfoFileUsesDSTFalse() {
+function testZoneInfoFileUsesDSTFalseEast() {
     var zif = new ZoneInfoFile("/usr/share/zoneinfo/Asia/Shanghai");
 
     assertNotNull(zif);
