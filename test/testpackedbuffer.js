@@ -238,3 +238,64 @@ function testPackedBufferGetLongsUndefined() {
     
     assertUndefined(pb.getLongs(2));
 }
+
+
+function testPackedBufferGetLong1() {
+    var pb = new PackedBuffer([1, 2, 3, 4]);
+    
+    assertNotNull(pb);
+    
+    assertEquals(16909060, pb.getLong());
+}
+
+function testPackedBufferGetLongUpdatePointer() {
+    var pb = new PackedBuffer([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+    
+    assertNotNull(pb);
+    
+    assertEquals(16909060, pb.getLong());
+    assertEquals(84281096, pb.getLong());
+    assertEquals(151653132, pb.getLong());
+}
+
+function testPackedBufferGetLongAtEnd() {
+    var pb = new PackedBuffer([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+    
+    assertNotNull(pb);
+    
+    assertArrayEquals([16909060, 84281096, 151653132], pb.getLongs(3));
+    assertUndefined(pb.getLong());
+}
+
+function testPackedBufferGetLongPastEnd() {
+    var pb = new PackedBuffer([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+    
+    assertNotNull(pb);
+    
+    assertArrayEquals([16909060, 84281096], pb.getLongs(2));
+    assertEquals(151653132, pb.getLong());
+}
+
+function testPackedBufferGetLongNegative() {
+    var pb = new PackedBuffer([255, 255, 255, 255, 255, 255, 255, 254]);
+    
+    assertNotNull(pb);
+    
+    assertEquals(-1, pb.getLong());
+}
+
+function testPackedBufferGetLongEmpty() {
+    var pb = new PackedBuffer([]);
+    
+    assertNotNull(pb);
+    
+    assertUndefined(pb.getLong());
+}
+
+function testPackedBufferGetLongUndefined() {
+    var pb = new PackedBuffer();
+    
+    assertNotNull(pb);
+    
+    assertUndefined(pb.getLong());
+}
