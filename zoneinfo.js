@@ -303,6 +303,14 @@ ZoneInfoFile.prototype.bsearch = function(target, arr) {
 };
 
 /**
+ * @private
+ * @param year
+ */
+ZoneInfoFile.prototype._findYear = function (year) {
+	
+};
+
+/**
  * Return whether or not this zone uses DST in the given year.
  * 
  * @param {number} year the Gregorian year to test
@@ -336,7 +344,16 @@ ZoneInfoFile.prototype.usesDST = function(year) {
  * numbers are west of Greenwich, positive are east of Greenwich 
  */
 ZoneInfoFile.prototype.getRawOffset = function(year) {
+	var target = new Date(year, 0, 1).getTime()/1000;
 	
+	// search between Jan 1 of this year to Jan 1 of next year
+	
+	var index = this.bsearch(target, this.tzinfo.trans_list);
+	if (index !== -1 && index > 1) {
+		return this.tzinfo.trans_idx[index-1].offset;
+	}
+	
+	return this.tzinfo.ttinfo_before.offset;
 };
 
 /**
