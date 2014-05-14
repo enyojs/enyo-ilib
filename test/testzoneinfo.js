@@ -51,7 +51,7 @@ function testZoneInfoFileGetOffsetWest() {
 
     assertNotNull(zif);
 
-    assertEquals(-8, zif.getRawOffset(2014));
+    assertEquals(-480, zif.getRawOffset(2014));
 }
 
 function testZoneInfoFileGetOffsetEast() {
@@ -59,7 +59,7 @@ function testZoneInfoFileGetOffsetEast() {
 
     assertNotNull(zif);
 
-    assertEquals(8, zif.getRawOffset(2014));
+    assertEquals(480, zif.getRawOffset(2014));
 }
 
 function testZoneInfoFileUsesDSTWest() {
