@@ -28,6 +28,45 @@
 	enyoLoader.prototype = new ilib.Loader();
 	enyoLoader.prototype.constructor = enyoLoader;
 
+	enyoLoader.prototype._createZoneFile = function (zone) {
+		var zif = new ZoneInfoFile("/usr/share/zoneinfo/" + zone);
+		var year = new Date().getFullYear();
+		
+		function minutesToStr(min) {
+			var hours = Math.floor(min / 60);
+			var minutes = min - hours * 60;
+			
+			return hours + ":" + minutes;
+		}
+		
+		var res = {
+			"o": minutesToStr(zif.getRawOffset(year))
+		};
+		if (zif.usesDST(year)) {
+			var starttime = new Date(zif.getDSTStartDate(year));
+			var endtime = new Date(zif.getDSTEndDate(year));
+
+			res.f = "{c}";
+			res.e = {
+				"c": zif.getAbbreviation(year),
+				"m": endtime.getMonth()+1,
+				"r": endtime.getDate(),
+				"t": endtime.getHours() + ":" + endtime.getMinutes()
+			};
+			res.s = {
+				"c": zif.getDSTAbbreviation(year),
+				"m": starttime.getMonth()+1,
+				"r": starttime.getDate(),
+				"t": starttime.getHours() + ":" + starttime.getMinutes(),
+				"v": minutesToStr(zif.getDSTSavings(year))
+			};
+		} else {
+			res.f = zif.getAbbreviation(year);
+		}
+		
+		return res;
+	};
+	
 	/**
 	 * Load the list of files asynchronously. This uses recursion in
 	 * order to create a queue of files that will be loaded serially.
