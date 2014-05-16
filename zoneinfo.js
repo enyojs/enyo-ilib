@@ -15,6 +15,31 @@
  *
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * 
+ * The portion of this code that parses the zone info file format is derived 
+ * from the code in the node-zoneinfo project by Gregory McWhirter licensed
+ * under the MIT license:
+ * 
+ * Copyright (c) 2013 Gregory McWhirter
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining 
+ * a copy of this software and associated documentation files (the 
+ * "Software"), to deal in the Software without restriction, including 
+ * without limitation the rights to use, copy, modify, merge, publish, 
+ * distribute, sublicense, and/or sell copies of the Software, and to 
+ * permit persons to whom the Software is furnished to do so, subject 
+ * to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included 
+ * in all copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR 
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR 
+ * OTHER DEALINGS IN THE SOFTWARE.
  */
 
 var _platform;
@@ -66,7 +91,7 @@ var ZoneInfoFile = function (path) {
 			req.responseType = "arraybuffer";
 			req.onload = function(e) {
 				var byteArray = new Uint8Array(req.response);
-				console.log("ZoneInfoFile bytes received: " + byteArray.length);
+				// console.log("ZoneInfoFile bytes received: " + byteArray.length);
 				that._parseInfo(byteArray);
 			};
 			req.send();
@@ -81,7 +106,6 @@ var ZoneInfoFile = function (path) {
  */
 ZoneInfoFile.prototype._parseInfo = function(buffer) {
 	var packed = new PackedBuffer(buffer);
-    this.tzinfo = {};
     
 	// The time zone information files used by tzset(3)
 	// begin with the magic characters "TZif" to identify
@@ -97,175 +121,117 @@ ZoneInfoFile.prototype._parseInfo = function(buffer) {
 		packed.skip(16);
 		
 		// The number of UTC/local indicators stored in the file.
-		var _ttisgmtct = packed.getLong();
+		var tzh_ttisgmtcnt = packed.getLong();
 		// The number of standard/wall indicators stored in the file.
-		var _ttisstdct = packed.getLong();
-		// The number of leap seconds for which data is
-		// stored in the file.
-		var _leapct = packed.getLong();
-		// The number of "transition times" for which data
-		// is stored in the file.
-		var _timect = packed.getLong();
-		// The number of "local time types" for which data
-		// is stored in the file (must not be zero).
-		var _typect = packed.getLong();
-		// The number of characters of "time zone
-		// abbreviation strings" stored in the file.
-		var _charct = packed.getLong();
+		var tzh_ttisstdcnt = packed.getLong();
+		// The number of leap seconds for which data is stored in the file.
+		var tzh_leapcnt = packed.getLong();
+		// The number of "transition times" for which data is stored in the file.
+		var tzh_timecnt = packed.getLong();
+		// The number of "local time types" for which data is stored in the file (must not be zero).
+		var tzh_typecnt = packed.getLong();
+		// The number of characters of "time zone abbreviation strings" stored in the file.
+		var tzh_charcnt = packed.getLong();
 
-		this.tzinfo = {
-			trans_list: null,
-			trans_idx: null,
-			ttinfo_list: null,
-			ttinfo_std: null,
-			ttinfo_dst: null,
-			ttinfo_before: null
-		};
+		this.transitionTimes = tzh_timecnt ? packed.getLongs(tzh_timecnt) : [];
 
-		// The above header is followed by tzh_timecnt four-byte
-		// values of type long, sorted in ascending order.
-		// These values are written in ``standard'' byte order.
-		// Each is used as a transition time (as returned by
-		// time(2)) at which the rules for computing local time
-		// change.
-		if (_timect) {
-			this.tzinfo.trans_list = packed.getLongs(_timect);
-		} else {
-			this.tzinfo.trans_list = [];
+		this.transitionTimes = this.transitionTimes.map(function (item) {
+			return item * 1000;
+		});
+
+		// these are indexes into the zonesInfo that correspond to each transition time
+		this.ruleIndex = tzh_timecnt ? packed.getUnsignedBytes(tzh_timecnt) : [];
+
+		this.zoneInfo = [];
+		for (var i = 0; i < tzh_typecnt; i++) {
+			this.zoneInfo.push({
+				offset: Math.floor(packed.getLong()/60),  // offset in seconds, so convert to minutes
+				isdst: !!packed.getByte(),
+				abbreviationIndex: packed.getByte()
+			});
 		}
 
-		// Next come tzh_timecnt one-byte values of type unsigned
-		// char; each one tells which of the different types of
-		// ``local time'' types described in the file is associated
-		// with the same-indexed transition time. These values
-		// serve as indices into an array of ttinfo structures that
-		// appears next in the file.
-		if (_timect) {
-			this.tzinfo.trans_idx = packed.getUnsignedBytes(_timect);
-		} else {
-			this.tzinfo.trans_idx = [];
+		var allAbbreviations = packed.getString(tzh_charcnt);
+
+		for (var i = 0; i < tzh_typecnt; i++) {
+			var abbreviation = allAbbreviations.substring(this.zoneInfo[i].abbreviationIndex);
+			this.zoneInfo[i].abbreviation = abbreviation.substring(0, abbreviation.indexOf('\x00'));
 		}
 
-		// Each ttinfo structure is written as a four-byte value
-		// for tt_gmtoff of type long, in a standard byte
-		// order, followed by a one-byte value for tt_isdst
-		// and a one-byte value for tt_abbrind. In each
-		// structure, tt_gmtoff gives the number of
-		// seconds to be added to UTC, tt_isdst tells whether
-		// tm_isdst should be set by localtime(3), and
-		// tt_abbrind serves as an index into the array of
-		// time zone abbreviation characters that follow the
-		// ttinfo structure(s) in the file.
-
-		var _ttinfo = [];
-		for (var i = 0; i < _typect; i++) {
-			_ttinfo.push([packed.getLong()].concat(packed.getBytes(2)));
+		// ignore the leap seconds
+		if (tzh_leapcnt) {
+			packed.skip(tzh_leapcnt * 2);
 		}
 
-		var _abbr = packed.getString(_charct);
+		// skip the standard/wall time indicators
+		if (tzh_ttisstdcnt) {
+			packed.skip(tzh_ttisstdcnt);
+		}
 		
-		// Then there are tzh_leapcnt pairs of four-byte
-		// values, written in standard byte order; the
-		// first value of each pair gives the time (as
-		// returned by time(2)) at which a leap second
-		// occurs; the second gives the total number of
-		// leap seconds to be applied after the given time.
-		// The pairs of values are sorted in ascending order
-		// by time.
-
-		if (_leapct) {
-			_leap = packed.getLongs(_leapct * 2);
-		}
-
-		// Then there are tzh_ttisstdcnt standard/wall
-		// indicators, each stored as a one-byte value;
-		// they tell whether the transition times associated
-		// with local time types were specified as standard
-		// time or wall clock time, and are used when
-		// a time zone file is used in handling POSIX-style
-		// time zone environment variables.
-		var _isstd = null;
-		if (_ttisstdct) {
-			_isstd = packed.getBytes(_ttisstdct);
-		}
-
-		// Finally, there are tzh_ttisgmtcnt UTC/local
-		// indicators, each stored as a one-byte value;
-		// they tell whether the transition times associated
-		// with local time types were specified as UTC or
-		// local time, and are used when a time zone file
-		// is used in handling POSIX-style time zone envi-
-		// ronment variables.
-		var _isgmt = null;
-		if (_ttisgmtct) {
-			_isgmt = packed.getBytes(_ttisgmtct);
+		// ignore the UTC/local time indicators -- everything should be UTC
+		if (tzh_ttisgmtcnt) {
+			packed.skip(tzh_ttisgmtcnt);
 		}
 
 		// finished reading
 
-		this.tzinfo.ttinfo_list = [];
-		for (var i = 0; i < _ttinfo.length; i++) {
-			var item = _ttinfo[i];
-			item[0] = Math.floor(item[0] / 60);
-
-			this.tzinfo.ttinfo_list.push({
-				offset: item[0],
-				isdst: item[1],
-				abbr: _abbr.slice(item[2], _abbr.indexOf('\x00',item[2])),
-				isstd: _ttisstdct > i && _isstd[i] != 0,
-				isgmt: _ttisgmtct > i && _isgmt[i] != 0
-			});
-		};
-
 		// Replace ttinfo indexes for ttinfo objects.
 		var that = this;
-		this.tzinfo.trans_idx = this.tzinfo.trans_idx.map(function (item) {
-			return that.tzinfo.ttinfo_list[item];
+		this.ruleIndex = this.ruleIndex.map(function (item) {
+			return {
+				offset: that.zoneInfo[item].offset,
+				isdst: that.zoneInfo[item].isdst,
+				abbreviation: that.zoneInfo[item].abbreviation,
+			};
 		});
 		
+		// calculate the dst savings for each daylight time
+		for (var i = 0; i < tzh_timecnt; i++) {
+			if (i > 0 && this.ruleIndex[i].isdst) {
+				this.ruleIndex[i].savings = this.ruleIndex[i].offset - this.ruleIndex[i-1].offset; 
+			}
+		}
+
 		// Set standard, dst, and before ttinfos. before will be
 		// used when a given time is before any transitions,
 		// and will be set to the first non-dst ttinfo, or to
 		// the first dst, if all of them are dst.
-		if (this.tzinfo.ttinfo_list.length) {
-			if (!this.tzinfo.trans_list.length) {
-				this.tzinfo.ttinfo_std = this.tzinfo.ttinfo_first = this.tzinfo.ttinfo_list[0];
-			} else {
-				for (var j = _timect - 1; j > -1; j--) {
-					var tti = this.tzinfo.trans_idx[j];
-					if (!this.tzinfo.ttinfo_std && !tti.isdst) {
-						this.tzinfo.ttinfo_std = tti;
-					} else if (!this.tzinfo.ttinfo_dst && tti.isdst) {
-						this.tzinfo.ttinfo_dst = tti;
-					}
-
-					if (this.tzinfo.ttinfo_dst && this.tzinfo.ttinfo_std)
-						break;
+		if (!this.transitionTimes.length) {
+			this.standardTime = this.zoneInfo[0];
+		} else {
+			for (var j = tzh_timecnt - 1; j > -1; j--) {
+				var tti = this.ruleIndex[j];
+				if (!this.standardTime && !tti.isdst) {
+					this.standardTime = tti;
+				} else if (!this.daylightTime && tti.isdst) {
+					this.daylightTime = tti;
 				}
 
-				if (this.tzinfo.ttinfo_dst && !this.tzinfo.ttinfo_std) {
-					this.tzinfo.ttinfo_std = this.tzinfo.ttinfo_dst;
-				}
+				if (this.daylightTime && this.standardTime)
+					break;
+			}
 
-				for (var k in this.tzinfo.ttinfo_list) {
-					if (!this.tzinfo.ttinfo_list[k].isdst) {
-						this.tzinfo.ttinfo_before = this.tzinfo.ttinfo_list[k];
-						break;
-					}
-				}
+			if (this.daylightTime && !this.standardTime) {
+				this.standardTime = this.daylightTime;
+			}
 
-				if (!this.tzinfo.ttinfo_before) {
-					this.tzinfo.ttinfo_before = this.tzinfo.ttinfo_list[0];
+			for (var k in this.zoneInfo) {
+				if (!this.zoneInfo[k].isdst) {
+					this.defaultTime = this.zoneInfo[k];
+					break;
 				}
 			}
+		}
+		if (!this.defaultTime) {
+			this.defaultTime = this.zoneInfo[0];
 		}
 	}
 };
 
 /**
  * Binary search a sorted array of numbers for a particular target value.
- * If the exact value is not found, it returns the index of the smallest 
- * entry that is greater than the given target value.<p> 
+ * If the exact value is not found, it returns the index of the largest 
+ * entry that is smaller than the given target value.<p> 
  * 
  * @param {number} target element being sought 
  * @param {Array} arr the array being searched
@@ -274,8 +240,13 @@ ZoneInfoFile.prototype._parseInfo = function(buffer) {
  * a number
  */
 ZoneInfoFile.prototype.bsearch = function(target, arr) {
-	if (typeof(arr) === 'undefined' || !arr || typeof(target) === 'undefined') {
+	if (typeof(arr) === 'undefined' || !arr || typeof(target) === 'undefined' || target < arr[0]) {
 		return -1;
+	}
+	
+	// greater than the end of the array
+	if (target > arr[arr.length-1]) {
+		return arr.length - 1;
 	}
 	
 	var high = arr.length - 1,
@@ -283,13 +254,9 @@ ZoneInfoFile.prototype.bsearch = function(target, arr) {
 		mid = 0,
 		value;
 	
-	function compareNumbers(element, target) {
-		return element - target;
-	}
-	
 	while (low <= high) {
 		mid = Math.floor((high+low)/2);
-		value = compareNumbers(arr[mid], target);
+		value = arr[mid] - target;
 		if (value > 0) {
 			high = mid - 1;
 		} else if (value < 0) {
@@ -299,7 +266,7 @@ ZoneInfoFile.prototype.bsearch = function(target, arr) {
 		}
 	}
 	
-	return low;
+	return high;
 };
 
 /**
@@ -317,17 +284,17 @@ ZoneInfoFile.prototype._findYear = function (year) {
  * @returns {boolean} true if the zone uses DST in the given year
  */
 ZoneInfoFile.prototype.usesDST = function(year) {
-	var target = new Date(year, 0, 1).getTime()/1000;
-	var nextyear = new Date(year+1, 0, 1).getTime()/1000;
+	var thisYear = new Date(year, 0, 1).getTime();
+	var nextyear = new Date(year+1, 0, 1).getTime();
 	
-	// search between Jan 1 of this year to Jan 1 of next year, and
-	// if any of the infos is DST, then this zone supports DST in 
-	// the given year.
+	// search for the zone that was effective Jan 1 of this year 
+	// to Jan 1 of next year, and if any of the infos is DST, then 
+	// this zone supports DST in the given year.
 	
-	var index = this.bsearch(target, this.tzinfo.trans_list);
+	var index = this.bsearch(thisYear, this.transitionTimes);
 	if (index !== -1) {
-		while (this.tzinfo.trans_list[index] < nextyear) {
-			if (this.tzinfo.trans_idx[index++].isdst) {
+		while (index < this.transitionTimes.length && this.transitionTimes[index] < nextyear) {
+			if (this.ruleIndex[index++].isdst) {
 				return true;
 			}
 		}
@@ -344,16 +311,14 @@ ZoneInfoFile.prototype.usesDST = function(year) {
  * numbers are west of Greenwich, positive are east of Greenwich 
  */
 ZoneInfoFile.prototype.getRawOffset = function(year) {
-	var target = new Date(year, 0, 1).getTime()/1000;
+	var target = new Date(year, 0, 1).getTime();
+	var index = this.bsearch(target, this.transitionTimes);
 	
-	// search between Jan 1 of this year to Jan 1 of next year
-	
-	var index = this.bsearch(target, this.tzinfo.trans_list);
-	if (index !== -1 && index > 1) {
-		return this.tzinfo.trans_idx[index-1].offset;
+	if (index > -1) {
+		return this.ruleIndex[index].offset;
 	}
 	
-	return this.tzinfo.ttinfo_before.offset;
+	return this.defaultTime.offset;
 };
 
 /**
@@ -366,7 +331,26 @@ ZoneInfoFile.prototype.getRawOffset = function(year) {
  * uses DST in the given year, or zero otherwise
  */
 ZoneInfoFile.prototype.getDSTSavings = function(year) {
+	var thisYear = new Date(year, 0, 1).getTime();
+	var nextYear = new Date(year+1, 0, 1).getTime();
 	
+	// search for all transitions between Jan 1 of this year 
+	// to Jan 1 of next year, and calculate the difference
+	// in DST (if any)
+	
+	var index = this.bsearch(thisYear, this.transitionTimes);
+	var savings = 0;
+	if (index > -1) {	
+		while (index < this.transitionTimes.length && !this.ruleIndex[index].isdst && this.transitionTimes[index+1] < nextYear) {
+			index++;
+		}
+		
+		if (index < this.transitionTimes.length && this.ruleIndex[index].isdst) {
+			savings = this.ruleIndex[index].savings;
+		}
+	}
+
+	return savings;
 };
 
 /**
@@ -379,7 +363,29 @@ ZoneInfoFile.prototype.getDSTSavings = function(year) {
  * use DST in the given year
  */
 ZoneInfoFile.prototype.getDSTStartDate = function(year) {
+	var thisYear = new Date(year, 0, 1).getTime();
+	var nextYear = new Date(year+1, 0, 1).getTime();
 	
+	// search for all transitions between Jan 1 of this year 
+	// to Jan 1 of next year, and calculate the difference
+	// in DST (if any)
+	
+	var index = this.bsearch(thisYear, this.transitionTimes);
+	var startDate = -1;
+	if (index > -1) {	
+		if (this.transitionTimes[index] < thisYear) {
+			index++; // start in this year instead of the previous year
+		}
+		while (index < this.transitionTimes.length && !this.ruleIndex[index].isdst && this.transitionTimes[index+1] < nextYear) {
+			index++;
+		}
+		
+		if (index < this.transitionTimes.length && this.ruleIndex[index].isdst) {
+			startDate = this.transitionTimes[index];
+		}
+	}
+
+	return startDate;
 };
 
 /**
@@ -392,7 +398,29 @@ ZoneInfoFile.prototype.getDSTStartDate = function(year) {
  * use DST in the given year
  */
 ZoneInfoFile.prototype.getDSTEndDate = function(year) {
+	var thisYear = new Date(year, 0, 1).getTime();
+	var nextYear = new Date(year+1, 0, 1).getTime();
 	
+	// search for all transitions between Jan 1 of this year 
+	// to Jan 1 of next year, and calculate the difference
+	// in DST (if any)
+	
+	var index = this.bsearch(thisYear, this.transitionTimes);
+	var endDate = -1;
+	if (index > -1) {	
+		if (this.transitionTimes[index] < thisYear) {
+			index++; // start in this year instead of the previous year
+		}
+		while (index < this.transitionTimes.length && this.ruleIndex[index].isdst && this.transitionTimes[index+1] < nextYear) {
+			index++;
+		}
+		
+		if (index < this.transitionTimes.length && !this.ruleIndex[index].isdst) {
+			endDate = this.transitionTimes[index];
+		}
+	}
+
+	return endDate;
 };
 
 /**
@@ -404,7 +432,26 @@ ZoneInfoFile.prototype.getDSTEndDate = function(year) {
  * used in this time zone during standard time
  */
 ZoneInfoFile.prototype.getAbbreviation = function(year) {
+	var thisYear = new Date(year, 0, 1).getTime();
+	var nextYear = new Date(year+1, 0, 1).getTime();
 	
+	// search for all transitions between Jan 1 of this year 
+	// to Jan 1 of next year, and calculate the difference
+	// in DST (if any)
+	
+	var index = this.bsearch(thisYear, this.transitionTimes);
+	var abbr = this.ruleIndex[index].abbreviation;
+	if (index > -1) {	
+		while (index < this.transitionTimes.length && this.ruleIndex[index].isdst && this.transitionTimes[index+1] < nextYear) {
+			index++;
+		}
+		
+		if (index < this.transitionTimes.length && !this.ruleIndex[index].isdst) {
+			abbr = this.ruleIndex[index].abbreviation;
+		}
+	}
+
+	return abbr;
 };
 
 /**
@@ -417,5 +464,24 @@ ZoneInfoFile.prototype.getAbbreviation = function(year) {
  * used in this time zone during daylight time
  */
 ZoneInfoFile.prototype.getDSTAbbreviation = function(year) {
+	var thisYear = new Date(year, 0, 1).getTime();
+	var nextYear = new Date(year+1, 0, 1).getTime();
 	
+	// search for all transitions between Jan 1 of this year 
+	// to Jan 1 of next year, and calculate the difference
+	// in DST (if any)
+	
+	var index = this.bsearch(thisYear, this.transitionTimes);
+	var abbr = this.ruleIndex[index].abbreviation;
+	if (index > -1) {	
+		while (index < this.transitionTimes.length && !this.ruleIndex[index].isdst && this.transitionTimes[index+1] < nextYear) {
+			index++;
+		}
+		
+		if (index < this.transitionTimes.length && this.ruleIndex[index].isdst) {
+			abbr = this.ruleIndex[index].abbreviation;
+		}
+	}
+
+	return abbr;
 };

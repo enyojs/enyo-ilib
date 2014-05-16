@@ -299,3 +299,64 @@ function testPackedBufferGetLongUndefined() {
     
     assertUndefined(pb.getLong());
 }
+
+function testPackedBufferGetByte1() {
+    var pb = new PackedBuffer([1, 2, 3]);
+    
+    assertNotNull(pb);
+    
+    assertEquals(1, pb.getByte());
+}
+
+function testPackedBufferGetByteUpdatePointer() {
+    var pb = new PackedBuffer([1, 2, 3]);
+    
+    assertNotNull(pb);
+    
+    assertEquals(1, pb.getByte());
+    assertEquals(2, pb.getByte());
+    assertEquals(3, pb.getByte());
+}
+
+function testPackedBufferGetByteAtEnd() {
+    var pb = new PackedBuffer([1, 2, 3]);
+    
+    assertNotNull(pb);
+    
+    assertArrayEquals([1, 2, 3], pb.getBytes(3));
+    assertUndefined(pb.getByte());
+}
+
+function testPackedBufferGetBytePastEnd() {
+    var pb = new PackedBuffer([1, 2, 3]);
+    
+    assertNotNull(pb);
+    
+    assertArrayEquals([1, 2], pb.getBytes(2));
+    assertEquals(3, pb.getByte());
+}
+
+function testPackedBufferGetByteNegative() {
+    var pb = new PackedBuffer([255, 254, 253]);
+    
+    assertNotNull(pb);
+    
+    assertEquals(-1, pb.getByte());
+}
+
+function testPackedBufferGetByteEmpty() {
+    var pb = new PackedBuffer([]);
+    
+    assertNotNull(pb);
+    
+    assertUndefined(pb.getByte());
+}
+
+function testPackedBufferGetByteUndefined() {
+    var pb = new PackedBuffer();
+    
+    assertNotNull(pb);
+    
+    assertUndefined(pb.getByte());
+}
+
