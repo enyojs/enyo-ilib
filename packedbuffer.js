@@ -97,6 +97,23 @@ PackedBuffer.prototype.getBytes = function(num) {
 };
 
 /**
+ * Return a signed byte integer from the current location in
+ * the buffer as an array of numbers and advance the current pointer in the buffer.
+ * This method will only return a byte if it is available in the buffer, otherwise
+ * it will return undefined.
+ * 
+ * @returns {number} the byte at the current point in the buffer, or undefined if
+ * there is not enough bytes left in the buffer to form a byte
+ */
+PackedBuffer.prototype.getByte = function() {
+	var bytes = this.getBytes(1);
+	if (bytes && bytes.length > 0) {
+		return bytes[0];
+	}
+	return undefined;
+};
+
+/**
  * Return the specified number of unsigned byte integers from the current location in
  * the buffer as an array of numbers and advance the current pointer in the buffer.
  * This method will only return as many bytes as are available in the rest of the

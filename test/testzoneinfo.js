@@ -38,6 +38,69 @@ function testZoneInfoFileConstructor2() {
     assertNotNull(zif);
 }
 
+function testZoneInfoBsearch() {
+	var zif = new ZoneInfoFile("/usr/share/zoneinfo/Etc/UTC");
+    var array = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
+    
+    assertEquals(4, zif.bsearch(10, array));
+}
+
+function testZoneInfoBsearchEmptyArray() {
+	var zif = new ZoneInfoFile("/usr/share/zoneinfo/Etc/UTC");
+    var array = [];
+    
+    assertEquals(-1, zif.bsearch(10, array));
+}
+
+function testZoneInfoBsearchUndefinedArray() {
+	var zif = new ZoneInfoFile("/usr/share/zoneinfo/Etc/UTC");
+    assertEquals(-1, zif.bsearch(10, undefined));
+}
+
+function testZoneInfoBsearchUndefinedTarget() {
+	var zif = new ZoneInfoFile("/usr/share/zoneinfo/Etc/UTC");
+    var array = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
+    
+    assertEquals(-1, zif.bsearch(undefined, array));
+}
+
+function testZoneInfoBsearchBefore() {
+	var zif = new ZoneInfoFile("/usr/share/zoneinfo/Etc/UTC");
+    var array = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
+    
+    assertEquals(-1, zif.bsearch(0, array));
+}
+
+function testZoneInfoBsearchAfter() {
+	var zif = new ZoneInfoFile("/usr/share/zoneinfo/Etc/UTC");
+    var array = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
+    
+    assertEquals(9, zif.bsearch(20, array));
+}
+
+function testZoneInfoBsearchExact() {
+	var zif = new ZoneInfoFile("/usr/share/zoneinfo/Etc/UTC");
+    var array = [0, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
+    
+    // place it right after the exact match
+    assertEquals(0, zif.bsearch(0, array));
+}
+
+function testZoneInfoBsearchExactEnd() {
+	var zif = new ZoneInfoFile("/usr/share/zoneinfo/Etc/UTC");
+    var array = [0, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
+    
+    // place it right after the exact match
+    assertEquals(10, zif.bsearch(19, array));
+}
+
+function testZoneInfoBsearchMonthEdge() {
+	var zif = new ZoneInfoFile("/usr/share/zoneinfo/Etc/UTC");
+    var array = [0,31,60,91,121,152,182,213,244,274,305,335,366];
+    
+    assertEquals(6, zif.bsearch(182, array));
+}
+
 function testZoneInfoFileGetOffsetNone() {
     var zif = new ZoneInfoFile("/usr/share/zoneinfo/Etc/UTC");
 
@@ -110,22 +173,40 @@ function testZoneInfoFileGetDSTSavingsNone() {
     assertEquals(0, zif.getDSTSavings(2014));
 }
 
-function testZoneInfoFileGetDSTStartDate() {
+function testZoneInfoFileGetDSTStartDateNorthernHemisphere() {
     var zif = new ZoneInfoFile("/usr/share/zoneinfo/America/Los_Angeles");
 
     assertNotNull(zif);
 
-    // unix time of March 9, 2014 2:00am PST -> 3:00 am PDT
+    // unix time of March 9, 2014 2:00am PST -> 3:00am PDT
     assertEquals(1394359200000, zif.getDSTStartDate(2014));
 }
 
-function testZoneInfoFileGetDSTEndDate() {
+function testZoneInfoFileGetDSTEndDateNorthernHemisphere() {
     var zif = new ZoneInfoFile("/usr/share/zoneinfo/America/Los_Angeles");
 
     assertNotNull(zif);
 
-    // unix time of Nov 2, 2014 2:00am PDT -> 1:00 am PST
-    assertEquals(1414922400000, zif.getDSTEndDate(2014));
+    // unix time of Nov 2, 2014 2:00am PDT -> 1:00am PST
+    assertEquals(1414918800000, zif.getDSTEndDate(2014));
+}
+
+function testZoneInfoFileGetDSTStartDateSouthernHemisphere() {
+    var zif = new ZoneInfoFile("/usr/share/zoneinfo/Australia/Sydney");
+
+    assertNotNull(zif);
+
+    // unix time of Oct 5, 2014 2:00am EST -> 3:00am EDT
+    assertEquals(1412438400000, zif.getDSTStartDate(2014));
+}
+
+function testZoneInfoFileGetDSTEndDateSouthernHemisphere() {
+    var zif = new ZoneInfoFile("/usr/share/zoneinfo/Australia/Sydney");
+
+    assertNotNull(zif);
+
+    // unix time of Apr 6, 2014 3:00am EDT -> 2:00am EST
+    assertEquals(1396713600000, zif.getDSTEndDate(2014));
 }
 
 function testZoneInfoFileGetDSTStartDateNone() {
