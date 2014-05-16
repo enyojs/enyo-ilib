@@ -311,14 +311,23 @@ ZoneInfoFile.prototype.usesDST = function(year) {
  * numbers are west of Greenwich, positive are east of Greenwich 
  */
 ZoneInfoFile.prototype.getRawOffset = function(year) {
-	var target = new Date(year, 0, 1).getTime();
-	var index = this.bsearch(target, this.transitionTimes);
+	var thisYear = new Date(year, 0, 1).getTime();
+	var nextYear = new Date(year+1, 0, 1).getTime();
 	
-	if (index > -1) {
-		return this.ruleIndex[index].offset;
+	var index = this.bsearch(thisYear, this.transitionTimes);
+	
+	var offset = this.defaultTime.offset;
+	if (index > -1) {	
+		while (index < this.transitionTimes.length && this.ruleIndex[index].isdst && this.transitionTimes[index+1] < nextYear) {
+			index++;
+		}
+		
+		if (index < this.transitionTimes.length && !this.ruleIndex[index].isdst) {
+			offset = this.ruleIndex[index].offset;
+		}
 	}
-	
-	return this.defaultTime.offset;
+
+	return offset;
 };
 
 /**
@@ -438,17 +447,21 @@ ZoneInfoFile.prototype.getAbbreviation = function(year) {
 	// search for all transitions between Jan 1 of this year 
 	// to Jan 1 of next year, and calculate the difference
 	// in DST (if any)
-	
-	var index = this.bsearch(thisYear, this.transitionTimes);
-	var abbr = this.ruleIndex[index].abbreviation;
-	if (index > -1) {	
-		while (index < this.transitionTimes.length && this.ruleIndex[index].isdst && this.transitionTimes[index+1] < nextYear) {
-			index++;
+	var abbr;
+	if (this.transitionTimes.length > 0) {
+		var index = this.bsearch(thisYear, this.transitionTimes);
+		abbr = this.ruleIndex[index].abbreviation;
+		if (index > -1) {	
+			while (index < this.transitionTimes.length && this.ruleIndex[index].isdst && this.transitionTimes[index+1] < nextYear) {
+				index++;
+			}
+			
+			if (index < this.transitionTimes.length && !this.ruleIndex[index].isdst) {
+				abbr = this.ruleIndex[index].abbreviation;
+			}
 		}
-		
-		if (index < this.transitionTimes.length && !this.ruleIndex[index].isdst) {
-			abbr = this.ruleIndex[index].abbreviation;
-		}
+	} else {
+		abbr = this.standardTime.abbreviation;
 	}
 
 	return abbr;
@@ -471,17 +484,62 @@ ZoneInfoFile.prototype.getDSTAbbreviation = function(year) {
 	// to Jan 1 of next year, and calculate the difference
 	// in DST (if any)
 	
-	var index = this.bsearch(thisYear, this.transitionTimes);
-	var abbr = this.ruleIndex[index].abbreviation;
-	if (index > -1) {	
-		while (index < this.transitionTimes.length && !this.ruleIndex[index].isdst && this.transitionTimes[index+1] < nextYear) {
-			index++;
+	var abbr;
+	if (this.transitionTimes.length > 0) {
+		var index = this.bsearch(thisYear, this.transitionTimes);
+		abbr = this.ruleIndex[index].abbreviation;
+		if (index > -1) {	
+			while (index < this.transitionTimes.length && !this.ruleIndex[index].isdst && this.transitionTimes[index+1] < nextYear) {
+				index++;
+			}
+			
+			if (index < this.transitionTimes.length && this.ruleIndex[index].isdst) {
+				abbr = this.ruleIndex[index].abbreviation;
+			}
 		}
-		
-		if (index < this.transitionTimes.length && this.ruleIndex[index].isdst) {
-			abbr = this.ruleIndex[index].abbreviation;
-		}
+	} else {
+		abbr = this.standardTime.abbreviation;
 	}
 
 	return abbr;
+};
+
+/**
+ * Return the zone information for the given year in ilib 
+ * format.
+ * 
+ * @param {number} year the Gregorian year to test
+ * @returns {Object} an object containing the zone information 
+ * for the given year in the format that ilib can use directly
+ */
+ZoneInfoFile.prototype.getIlibZoneInfo = function(year) {
+	function minutesToStr(min) {
+		var hours = Math.floor(min / 60);
+		var minutes = min - hours * 60;
+		
+		return hours + ":" + minutes;
+	}
+	
+	function unixtimeToJD(millis) {
+		return 2440587.5 + millis / 86400000;
+	}
+	var res = {
+		"o": minutesToStr(this.getRawOffset(year))
+	};
+	if (this.usesDST(year)) {
+		res.f = "{c}";
+		res.e = {
+			"c": this.getAbbreviation(year),
+			"j": unixtimeToJD(this.getDSTEndDate(year))
+		};
+		res.s = {
+			"c": this.getDSTAbbreviation(year),
+			"j": unixtimeToJD(this.getDSTStartDate(year)),
+			"v": minutesToStr(this.getDSTSavings(year))
+		};
+	} else {
+		res.f = this.getAbbreviation(year);
+	}
+	
+	return res;
 };
