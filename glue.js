@@ -28,43 +28,17 @@
 	enyoLoader.prototype = new ilib.Loader();
 	enyoLoader.prototype.constructor = enyoLoader;
 
-	enyoLoader.prototype._createZoneFile = function (zone) {
-		var zif = new ZoneInfoFile("/usr/share/zoneinfo/" + zone);
-		var year = new Date().getFullYear();
+	enyoLoader.prototype._createZoneFile = function (path) {
+		var zone = path.substring(path.indexOf("zoneinfo"));
 		
-		function minutesToStr(min) {
-			var hours = Math.floor(min / 60);
-			var minutes = min - hours * 60;
-			
-			return hours + ":" + minutes;
-		}
+		// remove the .json suffix to get the name of the zone
+		zone = zone.substring(0, zone.length-5);
 		
-		var res = {
-			"o": minutesToStr(zif.getRawOffset(year))
-		};
-		if (zif.usesDST(year)) {
-			var starttime = new Date(zif.getDSTStartDate(year));
-			var endtime = new Date(zif.getDSTEndDate(year));
-
-			res.f = "{c}";
-			res.e = {
-				"c": zif.getAbbreviation(year),
-				"m": endtime.getMonth()+1,
-				"r": endtime.getDate(),
-				"t": endtime.getHours() + ":" + endtime.getMinutes()
-			};
-			res.s = {
-				"c": zif.getDSTAbbreviation(year),
-				"m": starttime.getMonth()+1,
-				"r": starttime.getDate(),
-				"t": starttime.getHours() + ":" + starttime.getMinutes(),
-				"v": minutesToStr(zif.getDSTSavings(year))
-			};
-		} else {
-			res.f = zif.getAbbreviation(year);
-		}
+		var zif = new ZoneInfoFile("/usr/share/" + zone);
 		
-		return res;
+		// only get the info for this year. Later we can get the info
+		// for any historical or future year too
+		return zif.getIlibZoneInfo(new Date().getFullYear());
 	};
 	
 	/**
@@ -90,31 +64,35 @@
 		if (paths.length > 0) {
 			var path = paths.shift();
 			if (this.isAvailable(path)) {
-				var ajax = new enyo.Ajax({url: this.base + "locale/" + path, cacheBust: false});
-				//console.log("moondemo2: browser/async: attempting to load lib/enyo-ilib/ilib/locale/" + path);
-				var resultFunc = function(inSender, json) {
-	                // console.log("moondemo2: " + (!inSender.failed && json ? "success" : "failed"));
-					results.push(!inSender.failed && (typeof(json) === 'object') ? json : undefined);
-					if (paths.length > 0) {
-						this._loadFilesAsync(context, paths, results, params, callback);
-					} else {
-						// only the bottom item on the stack will call
-						// the callback
-						callback.call(context, results);
-					}
-				};
-				ajax.response(this, resultFunc);
-				ajax.error(this, function(inSender, json) {
-					// not there? Try the standard place instead
-					var file = root + path;
-					// console.log("moondemo2: browser/async: attempting to load " + file);
-					var ajax2 = new enyo.Ajax({url: file, cacheBust: false});
-	
-					ajax2.response(this, resultFunc);
-					ajax2.error(this, resultFunc);
-					ajax2.go();
-				});
-				ajax.go();
+				if (this.webos && path.indexOf("zoneinfo") !== -1) {
+					results.push(this._createZoneFile(zone));
+				} else {
+					var ajax = new enyo.Ajax({url: this.base + "locale/" + path, cacheBust: false});
+					//console.log("moondemo2: browser/async: attempting to load lib/enyo-ilib/ilib/locale/" + path);
+					var resultFunc = function(inSender, json) {
+		                // console.log("moondemo2: " + (!inSender.failed && json ? "success" : "failed"));
+						results.push(!inSender.failed && (typeof(json) === 'object') ? json : undefined);
+						if (paths.length > 0) {
+							this._loadFilesAsync(context, paths, results, params, callback);
+						} else {
+							// only the bottom item on the stack will call
+							// the callback
+							callback.call(context, results);
+						}
+					};
+					ajax.response(this, resultFunc);
+					ajax.error(this, function(inSender, json) {
+						// not there? Try the standard place instead
+						var file = root + path;
+						// console.log("moondemo2: browser/async: attempting to load " + file);
+						var ajax2 = new enyo.Ajax({url: file, cacheBust: false});
+		
+						ajax2.response(this, resultFunc);
+						ajax2.error(this, resultFunc);
+						ajax2.go();
+					});
+					ajax.go();
+				}
 			}
 		}
 	};
@@ -127,31 +105,35 @@
 				root = params.root + '/';
 			}
 			// synchronous
-			paths.forEach(function (path) {
-				// console.log("browser/sync: attempting to load lib/enyo-ilib/ilib/locale/" + path);
-				if (this.isAvailable(path)) {
-					var ajax = new enyo.Ajax({
-						url: this.base + "locale/" + path,
-						sync: true, 
-						cacheBust: false
-					});
-	
-					var handler = function(inSender, json) {
-	                    // console.log((!inSender.failed && json ? "success" : "failed"));
-						ret.push(!inSender.failed && (typeof(json) === 'object') ? json : undefined);
-					};
-					ajax.response(this, handler);
-					ajax.error(this, function(inSender, json) {
-						// console.log("browser/sync: Now attempting to load " + root + path);
-						var ajax2 = new enyo.Ajax({
-							url: root + path,
-							sync: true, cacheBust: false
+			enyo.forEach(paths, function (path) {
+				if (this.webos && path.indexOf("zoneinfo") !== -1) {
+					ret.push(this._createZoneFile(zone));
+				} else {
+					// console.log("browser/sync: attempting to load lib/enyo-ilib/ilib/locale/" + path);
+					if (this.isAvailable(path)) {
+						var ajax = new enyo.Ajax({
+							url: this.base + "locale/" + path,
+							sync: true, 
+							cacheBust: false
 						});
-						ajax2.response(this, handler);
-						ajax2.error(this, handler);
-						ajax2.go();
-					});
-					ajax.go();
+		
+						var handler = function(inSender, json) {
+		                    // console.log((!inSender.failed && json ? "success" : "failed"));
+							ret.push(!inSender.failed && (typeof(json) === 'object') ? json : undefined);
+						};
+						ajax.response(this, handler);
+						ajax.error(this, function(inSender, json) {
+							// console.log("browser/sync: Now attempting to load " + root + path);
+							var ajax2 = new enyo.Ajax({
+								url: root + path,
+								sync: true, cacheBust: false
+							});
+							ajax2.response(this, handler);
+							ajax2.error(this, handler);
+							ajax2.go();
+						});
+						ajax.go();
+					}
 				}
 			}, this);
 

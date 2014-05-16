@@ -117,12 +117,20 @@ function testZoneInfoFileGetOffsetWest() {
     assertEquals(-480, zif.getRawOffset(2014));
 }
 
-function testZoneInfoFileGetOffsetEast() {
+function testZoneInfoFileGetOffsetEastNoDST() {
     var zif = new ZoneInfoFile("/usr/share/zoneinfo/Australia/Perth");
 
     assertNotNull(zif);
 
     assertEquals(480, zif.getRawOffset(2014));
+}
+
+function testZoneInfoFileGetOffsetEastWithDST() {
+    var zif = new ZoneInfoFile("/usr/share/zoneinfo/Australia/Sydney");
+
+    assertNotNull(zif);
+
+    assertEquals(600, zif.getRawOffset(2014));
 }
 
 function testZoneInfoFileUsesDSTWest() {
@@ -227,6 +235,15 @@ function testZoneInfoFileGetDSTEndDateNone() {
     assertEquals(-1, zif.getDSTEndDate(2014));
 }
 
+function testZoneInfoFileGetAbbreviationSimple() {
+    var zif = new ZoneInfoFile("/usr/share/zoneinfo/Etc/UTC");
+
+    assertNotNull(zif);
+
+    // no DST in UTC
+    assertEquals("UTC", zif.getAbbreviation(2014));
+}
+
 function testZoneInfoFileGetAbbreviationNoDST() {
     var zif = new ZoneInfoFile("/usr/share/zoneinfo/America/Phoenix");
 
@@ -261,4 +278,61 @@ function testZoneInfoFileGetDSTAbbreviationWithDST() {
 
     // standard time
     assertEquals("PDT", zif.getDSTAbbreviation(2014));
+}
+
+function testZoneInfoFileGetDSTAbbreviationSimple() {
+    var zif = new ZoneInfoFile("/usr/share/zoneinfo/Etc/UTC");
+
+    assertNotNull(zif);
+
+    // no DST in UTC
+    assertEquals("UTC", zif.getDSTAbbreviation(2014));
+}
+
+function testZoneInfoGetIlibFormatSimpleZone() {
+	var zif = new ZoneInfoFile("/usr/share/zoneinfo/Etc/UTC");
+    
+	var info = {
+		"o": "0:0",
+		"f": "UTC"
+	};
+    assertObjectEquals(info, zif.getIlibZoneInfo(2014));
+}
+
+function testZoneInfoGetIlibFormatComplexZone() {
+	var zif = new ZoneInfoFile("/usr/share/zoneinfo/America/Los_Angeles");
+    
+	var info = {
+		"o": "-8:0",
+		"f": "{c}",
+		"s": {
+			"c": "PDT",
+			"j": 2456725.9166666665,
+			"v": "1:0"
+		},
+		"e": {
+			"c": "PST",
+			"j": 2456963.875
+		}
+	};
+    assertObjectEquals(info, zif.getIlibZoneInfo(2014));
+}
+
+function testZoneInfoGetIlibFormatSouthernHemisphere() {
+	var zif = new ZoneInfoFile("/usr/share/zoneinfo/Australia/Sydney");
+    
+	var info = {
+		"o": "10:0",
+		"f": "{c}",
+		"s": {
+			"c": "EST",
+			"j": 2456935.1666666665, // Oct 5, 2014 2:00am
+			"v": "1:0"
+		},
+		"e": {
+			"c": "EST",
+			"j": 2456753.1666666665 // Apr 6, 2014 3:00am
+		}
+	};
+    assertObjectEquals(info, zif.getIlibZoneInfo(2014));
 }
