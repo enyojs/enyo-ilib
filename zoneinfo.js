@@ -82,8 +82,14 @@ var ZoneInfoFile = function (path) {
 			
 			ajax.go();
 			break;
+		
 		case "nodejs":
+			var fs = require("fs");
+			var bytes = new Buffer(fs.readFileSync(path));
+			var byteArray = new Uint8Array(bytes);
+			this._parseInfo(byteArray);
 			break;
+			
 		default:
 			// use normal web techniques
 			var req = new XMLHttpRequest();
