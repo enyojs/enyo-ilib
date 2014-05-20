@@ -20,7 +20,7 @@
 (function() {
 	var enyoLoader = function() {
 		this.base = enyo.path.rewrite("$lib/enyo-ilib/ilib/");
-		if (enyo._platform === "webOS") {
+		if (enyo.platform.platformName === "webos") {
 			this.webos = true;
 		}
 	};
@@ -65,7 +65,7 @@
 			var path = paths.shift();
 			if (this.isAvailable(path)) {
 				if (this.webos && path.indexOf("zoneinfo") !== -1) {
-					results.push(this._createZoneFile(zone));
+					results.push(this._createZoneFile(path));
 				} else {
 					var ajax = new enyo.Ajax({url: this.base + "locale/" + path, cacheBust: false});
 					//console.log("moondemo2: browser/async: attempting to load lib/enyo-ilib/ilib/locale/" + path);
@@ -107,7 +107,7 @@
 			// synchronous
 			enyo.forEach(paths, function (path) {
 				if (this.webos && path.indexOf("zoneinfo") !== -1) {
-					ret.push(this._createZoneFile(zone));
+					ret.push(this._createZoneFile(path));
 				} else {
 					// console.log("browser/sync: attempting to load lib/enyo-ilib/ilib/locale/" + path);
 					if (this.isAvailable(path)) {

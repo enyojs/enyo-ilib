@@ -72,14 +72,19 @@ var ZoneInfoFile = function (path) {
 				xhrFields: {
 					responseType:"arraybuffer"
 				},
-				url: path
+				cacheBust: false,
+				sync: true,
+				handleAs: "binary",
+				url: "file://" + path
 			});
-			ajax.response(function(s, r) {
+			ajax.response(this, function(s, r) {
 				var byteArray = new Uint8Array(r);
-				console.log("ZoneInfoFile bytes received: " + byteArray.length);
+				// console.log("ZoneInfoFile bytes received: " + byteArray.length);
 				that._parseInfo(byteArray);
 			});
-
+			ajax.error(this, function(s, r) {
+				// console.log("ZoneInfoFile: failed to load files " + s + " " + r);
+			});
 			ajax.go();
 			break;
 		
