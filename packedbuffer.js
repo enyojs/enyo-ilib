@@ -160,3 +160,7 @@ PackedBuffer.prototype.getString = function(num) {
 PackedBuffer.prototype.skip = function(num) {
 	this.index += num;
 };
+
+if (typeof(exports) !== "undefined") {
+	exports.PackedBuffer = PackedBuffer;
+}
