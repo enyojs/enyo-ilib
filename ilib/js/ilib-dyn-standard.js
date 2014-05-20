@@ -1,7 +1,7 @@
 /*
  * ilibglobal.js - define the ilib name space
  * 
- * Copyright © 2012-2013, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ var ilib = ilib || {};
  */
 ilib.getVersion = function () {
     // increment this for each release
-    return "5.0"
+    return "6.0"
     ;
 };
 
@@ -43,16 +43,20 @@ ilib.data = {
         nfd: {},
         nfkd: {},
         ccc: {}
+    },
+    zoneinfo: {
+        "Etc/UTC":{"o":"0:0","f":"UTC"},
+        "local":{"f":"local"}
     }
 };
 
 if (typeof(window) !== 'undefined') {
-	window["ilib"] = ilib;
+    window["ilib"] = ilib;
 }
 
 // export ilib for use as a module in nodejs
 if (typeof(exports) !== 'undefined') {
-	exports.ilib = ilib;
+    exports.ilib = ilib;
 }
 
 /**
@@ -62,18 +66,18 @@ if (typeof(exports) !== 'undefined') {
  * @return {string} string naming the platform
  */
 ilib._getPlatform = function () {
-	if (!ilib._platform) {
-		if (typeof(environment) !== 'undefined') {
-			ilib._platform = "rhino";
-		} else if (typeof(process) !== 'undefined' || typeof(require) !== 'undefined') {
-			ilib._platform = "nodejs";
-		} else if (typeof(window) !== 'undefined') {
-			ilib._platform = (typeof(PalmSystem) !== 'undefined') ? "webos" : "browser";
-		} else {
-			ilib._platform = "unknown";
-		}
-	}	
-	return ilib._platform;
+    if (!ilib._platform) {
+        if (typeof(environment) !== 'undefined') {
+            ilib._platform = "rhino";
+        } else if (typeof(process) !== 'undefined' || typeof(require) !== 'undefined') {
+            ilib._platform = "nodejs";
+        } else if (typeof(window) !== 'undefined') {
+            ilib._platform = (typeof(PalmSystem) !== 'undefined') ? "webos" : "browser";
+        } else {
+            ilib._platform = "unknown";
+        }
+    }    
+    return ilib._platform;
 };
 
 /**
@@ -83,19 +87,19 @@ ilib._getPlatform = function () {
  * @return {boolean} true if the global variable is defined on this platform, false otherwise
  */
 ilib._isGlobal = function(name) {
-	switch (ilib._getPlatform()) {
-		case "rhino":
-			var top = (function() {
-			  return (typeof global === 'object') ? global : this;
-			})();
-			return typeof(top[name]) !== undefined;
-		case "nodejs":
-			var root = typeof(global) !== 'undefined' ? global : this;
-			return root && typeof(root[name]) !== undefined;
-			
-		default:
-			return typeof(window[name]) !== undefined;
-	}
+    switch (ilib._getPlatform()) {
+        case "rhino":
+            var top = (function() {
+              return (typeof global === 'object') ? global : this;
+            })();
+            return typeof(top[name]) !== undefined;
+        case "nodejs":
+            var root = typeof(global) !== 'undefined' ? global : this;
+            return root && typeof(root[name]) !== undefined;
+            
+        default:
+            return typeof(window[name]) !== undefined;
+    }
 };
 
 /**
@@ -111,11 +115,11 @@ ilib._isGlobal = function(name) {
  * @param {string} spec the locale specifier for the default locale
  */
 ilib.setLocale = function (spec) {
-	if (typeof(spec) === 'string') {
-		ilib.locale = spec;
-	}
+    if (typeof(spec) === 'string') {
+        ilib.locale = spec;
+    }
     // else ignore other data types, as we don't have the dependencies
-	// to look into them to find a locale
+    // to look into them to find a locale
 };
 
 /**
@@ -132,50 +136,50 @@ ilib.setLocale = function (spec) {
  * @return {string} the locale specifier for the default locale
  */
 ilib.getLocale = function () {
-	if (typeof(ilib.locale) !== 'string') {
-		if (typeof(navigator) !== 'undefined' && typeof(navigator.language) !== 'undefined') {
-			// running in a browser
-			ilib.locale = navigator.language;  // FF/Opera/Chrome/Webkit
-			if (!ilib.locale) {
-				// IE on Windows
-				var lang = typeof(navigator.browserLanguage) !== 'undefined' ? 
-					navigator.browserLanguage : 
-					(typeof(navigator.userLanguage) !== 'undefined' ? 
-						navigator.userLanguage : 
-						(typeof(navigator.systemLanguage) !== 'undefined' ?
-							navigator.systemLanguage :
-							undefined));
-				if (typeof(lang) !== 'undefined' && lang) {
-					// for some reason, MS uses lower case region tags
-					ilib.locale = lang.substring(0,3) + lang.substring(3,5).toUpperCase();
-				}
-			}
-		} else if (typeof(PalmSystem) !== 'undefined' && typeof(PalmSystem.locales) !== 'undefined') {
-			// webOS
-			if (typeof(PalmSystem.locales.UI) != 'undefined' && PalmSystem.locales.UI.length > 0) {
-				ilib.locale = PalmSystem.locales.UI;
-			}
-		} else if (typeof(environment) !== 'undefined' && typeof(environment.user) !== 'undefined') {
-			// running under rhino
-			if (typeof(environment.user.language) === 'string' && environment.user.language.length > 0) {
-				ilib.locale = environment.user.language;
-				if (typeof(environment.user.country) === 'string' && environment.user.country.length > 0) {
-					ilib.locale += '-' + environment.user.country;
-				}
-			}
-		} else if (typeof(process) !== 'undefined' && typeof(process.env) !== 'undefined') {
-			// running under nodejs
-			var lang = process.env.LANG || process.env.LC_ALL;
-			// the LANG variable on unix is in the form "lang_REGION.CHARSET"
-			// where language and region are the correct ISO codes separated by
-			// an underscore. This translate it back to the BCP-47 form.
-			if (lang && lang !== 'undefined') {
-				ilib.locale = lang.substring(0,2).toLowerCase() + '-' + lang.substring(3,5).toUpperCase();
-			}
-		}
-			 
-		ilib.locale = typeof(ilib.locale) === 'string' ? ilib.locale : 'en-US';
-	}
+    if (typeof(ilib.locale) !== 'string') {
+        if (typeof(navigator) !== 'undefined' && typeof(navigator.language) !== 'undefined') {
+            // running in a browser
+            ilib.locale = navigator.language;  // FF/Opera/Chrome/Webkit
+            if (!ilib.locale) {
+                // IE on Windows
+                var lang = typeof(navigator.browserLanguage) !== 'undefined' ? 
+                    navigator.browserLanguage : 
+                    (typeof(navigator.userLanguage) !== 'undefined' ? 
+                        navigator.userLanguage : 
+                        (typeof(navigator.systemLanguage) !== 'undefined' ?
+                            navigator.systemLanguage :
+                            undefined));
+                if (typeof(lang) !== 'undefined' && lang) {
+                    // for some reason, MS uses lower case region tags
+                    ilib.locale = lang.substring(0,3) + lang.substring(3,5).toUpperCase();
+                }
+            }
+        } else if (typeof(PalmSystem) !== 'undefined' && typeof(PalmSystem.locales) !== 'undefined') {
+            // webOS
+            if (typeof(PalmSystem.locales.UI) != 'undefined' && PalmSystem.locales.UI.length > 0) {
+                ilib.locale = PalmSystem.locales.UI;
+            }
+        } else if (typeof(environment) !== 'undefined' && typeof(environment.user) !== 'undefined') {
+            // running under rhino
+            if (typeof(environment.user.language) === 'string' && environment.user.language.length > 0) {
+                ilib.locale = environment.user.language;
+                if (typeof(environment.user.country) === 'string' && environment.user.country.length > 0) {
+                    ilib.locale += '-' + environment.user.country;
+                }
+            }
+        } else if (typeof(process) !== 'undefined' && typeof(process.env) !== 'undefined') {
+            // running under nodejs
+            var lang = process.env.LANG || process.env.LC_ALL;
+            // the LANG variable on unix is in the form "lang_REGION.CHARSET"
+            // where language and region are the correct ISO codes separated by
+            // an underscore. This translate it back to the BCP-47 form.
+            if (lang && lang !== 'undefined') {
+                ilib.locale = lang.substring(0,2).toLowerCase() + '-' + lang.substring(3,5).toUpperCase();
+            }
+        }
+             
+        ilib.locale = typeof(ilib.locale) === 'string' ? ilib.locale : 'en-US';
+    }
     return ilib.locale;
 };
 
@@ -209,57 +213,61 @@ ilib.setTimeZone = function (tz) {
  * @return {string} the default time zone for ilib
  */
 ilib.getTimeZone = function() {
-	if (typeof(ilib.tz) === 'undefined') {
-		if (typeof(navigator) !== 'undefined' && typeof(navigator.timezone) !== 'undefined') {
-			// running in a browser
-			if (navigator.timezone.length > 0) {
-				ilib.tz = navigator.timezone;
-			}
-		} else if (typeof(PalmSystem) !== 'undefined' && typeof(PalmSystem.timezone) !== 'undefined') {
-			// running in webkit on webOS
-			if (PalmSystem.timezone.length > 0) {
-				ilib.tz = PalmSystem.timezone;
-			}
-		} else if (typeof(environment) !== 'undefined' && typeof(environment.user) !== 'undefined') {
-			// running under rhino
-			if (typeof(environment.user.timezone) !== 'undefined' && environment.user.timezone.length > 0) {
-				ilib.tz = environment.user.timezone;
-			}
-		} else if (typeof(process) !== 'undefined' && typeof(process.env) !== 'undefined') {
-			// running in nodejs
-			if (process.env.TZ && process.env.TZ !== "undefined") {
-				ilib.tz = process.env.TZ;
-			}
-		}
-		
-		ilib.tz = ilib.tz || "local"; 
-	}
+    if (typeof(ilib.tz) === 'undefined') {
+        if (typeof(navigator) !== 'undefined' && typeof(navigator.timezone) !== 'undefined') {
+            // running in a browser
+            if (navigator.timezone.length > 0) {
+                ilib.tz = navigator.timezone;
+            }
+        } else if (typeof(PalmSystem) !== 'undefined' && typeof(PalmSystem.timezone) !== 'undefined') {
+            // running in webkit on webOS
+            if (PalmSystem.timezone.length > 0) {
+                ilib.tz = PalmSystem.timezone;
+            }
+        } else if (typeof(environment) !== 'undefined' && typeof(environment.user) !== 'undefined') {
+            // running under rhino
+            if (typeof(environment.user.timezone) !== 'undefined' && environment.user.timezone.length > 0) {
+                ilib.tz = environment.user.timezone;
+            }
+        } else if (typeof(process) !== 'undefined' && typeof(process.env) !== 'undefined') {
+            // running in nodejs
+            if (process.env.TZ && process.env.TZ !== "undefined") {
+                ilib.tz = process.env.TZ;
+            }
+        }
+        
+        ilib.tz = ilib.tz || "local"; 
+    }
 
     return ilib.tz;
 };
 
 /**
- * @static
- * Define a callback function for loading missing locale data or resources.
+ * @interface
+ * Defines the interface for the loader class for ilib. The main method of the
+ * loader object is loadFiles(), which loads a set of requested locale data files
+ * from where-ever it is stored. 
+ */
+ilib.Loader = function() {};
+
+/**
+ * Load a set of files from where-ever it is stored.<p>
+ * 
+ * This is the main function define a callback function for loading missing locale 
+ * data or resources.
  * If this copy of ilib is assembled without including the required locale data
  * or resources, then that data can be lazy loaded dynamically when it is 
- * needed by calling this callback function. Each ilib class will first
+ * needed by calling this method. Each ilib class will first
  * check for the existence of data under ilib.data, and if it is not there, 
- * it will attempt to load it by calling this loader function, and then place
+ * it will attempt to load it by calling this method of the laoder, and then place
  * it there.<p>
  * 
- * Suggested implementations of the callback function might be to load files 
+ * Suggested implementations of this method might load files 
  * directly from disk under nodejs or rhino, or within web pages, to load 
  * files from the server with XHR calls.<p>
  * 
- * The expected API for the call back is:
- * 
- * <pre>
- * function(paths, sync, params, callback) {}
- * </pre>
- * 
- * The first parameter to the callback
- * function, paths, is an array of relative paths within the ilib dir structure for the 
+ * The first parameter to this method, paths, is an array of relative paths within 
+ * the ilib dir structure for the 
  * requested data. These paths will already have the locale spec integrated 
  * into them, so no further tweaking needs to happen to load the data. Simply
  * load the named files. The second
@@ -288,24 +296,15 @@ ilib.getTimeZone = function() {
  * An example implementation for nodejs might be:
  * 
  * <pre>
- * function loadFiles(context, paths, results, callback) {
- *    if (paths.length > 0) {
- *        var file = paths.shift();
- *        fs.readFile(file, "utf-8", function(err, json) {
- *            results.push(err ? undefined : JSON.parse(json));
- *            if (paths.length > 0) {
- *                loadFiles(context, paths, results, callback);
- *            } else {
- *                callback.call(context, results);
- *            }
- *        });
- *     }
- * }
- * // bind to "this" so that "this" is relative to your own instance
- * ilib.setLoaderCallback(ilib.bind(this, function(paths, sync, params, callback) {
+ * var fs = require("fs");
+ * 
+ * var myLoader = function() {};
+ * myLoader.prototype = new ilib.Loader();
+ * myLoader.prototype.constructor = myLoader;
+ * myLoader.prototype.loadFiles = function(paths, sync, params, callback) {
  *    if (sync) {
  *        var ret = [];
- *        // synchronous
+ *        // synchronous load -- just return the result
  *        paths.forEach(function (path) {
  *            var json = fs.readFileSync(path, "utf-8");
  *            ret.push(json ? JSON.parse(json) : undefined);
@@ -313,22 +312,95 @@ ilib.getTimeZone = function() {
  *        
  *        return ret;
  *    }
+ *    this.callback = callback;
  *
  *    // asynchronous
- *    var results = [];
- *    loadFiles(this, paths, results, callback);
- * }));
- * </pre>
+ *    this.results = [];
+ *    this._loadFilesAsync(paths);
+ * }
+ * myLoader.prototype._loadFilesAsync = function (paths) {
+ *    if (paths.length > 0) {
+ *        var file = paths.shift();
+ *        fs.readFile(file, "utf-8", function(err, json) {
+ *            this.results.push(err ? undefined : JSON.parse(json));
+ *            // call self recursively so that the callback is only called at the end
+ *            // when all the files are loaded sequentially
+ *            if (paths.length > 0) {
+ *                this._loadFilesAsync(paths);
+ *            } else {
+ *                this.callback(this.results);
+ *            }
+ *        });
+ *     }
+ * }
  * 
- * @param {function(Array.<string>,Boolean,Object,function(Object))} loader function to call to 
- * load the requested data.
+ * // bind to "this" so that "this" is relative to your own instance
+ * ilib.setLoaderCallback(new myLoader());
+ * </pre>
+
+ * @param {Array.<string>} paths An array of paths to load from wherever the files are stored 
+ * @param {Boolean} sync if true, load the files synchronously, and false means asynchronously
+ * @param {Object} params an object with any extra parameters for the loader. These can be 
+ * anything. The caller of the ilib class passes these parameters in. Presumably, the code that
+ * calls ilib and the code that provides the loader are together and can have a private 
+ * agreement between them about what the parameters should contain.
+ * @param {function(Object)} callback function to call when the files are all loaded. The 
+ * parameter of the callback function is the contents of the files.
+ */
+ilib.Loader.prototype.loadFiles = function (paths, sync, params, callback) {};
+
+/**
+ * Return all files available for loading using this loader instance.
+ * This method returns an object where the properties are the paths to
+ * directories where files are loaded from and the values are an array
+ * of strings containing the relative paths under the directory of each
+ * file that can be loaded.<p>
+ * 
+ * Example:
+ *  <pre>
+ *  {
+ *      "/usr/share/javascript/ilib/locale": [
+ *          "dateformats.json",
+ *          "aa/dateformats.json",
+ *            "af/dateformats.json",
+ *            "agq/dateformats.json",
+ *            "ak/dateformats.json",
+ *            ...
+ *          "zxx/dateformats.json"
+ *      ]
+ *  }
+ *  </pre>
+ * @returns {Object} a hash containing directory names and
+ * paths to file that can be loaded by this loader 
+ */
+ilib.Loader.prototype.listAvailableFiles = function() {};
+
+/**
+ * Return true if the file in the named path is available for loading using
+ * this loader. The path may be given as an absolute path, in which case
+ * only that file is checked, or as a relative path, in which case, the
+ * relative path may appear underneath any of the directories that the loader
+ * knows about.
+ * @returns {boolean} true if the file in the named path is available for loading, and
+ * false otherwise
+ */
+ilib.Loader.prototype.isAvailable = function(path) {};
+
+/**
+ * @static
+ * Set the custom loader used to load ilib's locale data in your environment. 
+ * The instance passed in must implement the ilib.Loader interface. See the
+ * ilib.Loader class documentation for more information about loaders. 
+ * 
+ * @param {ilib.Loader} loader class to call to access the requested data.
  * @return {boolean} true if the loader was installed correctly, or false
  * if not
  */
 ilib.setLoaderCallback = function(loader) {
     // only a basic check
-    if (typeof(loader) === 'function' || typeof(loader) === 'undefined') {
-    	// console.log("setting callback loader to " + (loader ? loader.name : "undefined"));
+    if ((typeof(loader) === 'object' && loader instanceof ilib.Loader) || 
+            typeof(loader) === 'function' || typeof(loader) === 'undefined') {
+        // console.log("setting callback loader to " + (loader ? loader.name : "undefined"));
         ilib._load = loader;
         return true;
     }
@@ -1740,13 +1812,7 @@ ilib.LocaleInfo.prototype = {
  * @param {Object=} options The date components to initialize this date with
  */
 ilib.Date = function(options) {
-	this.year = options && options.year || 0;
-	this.month = options && options.month || 1;
-	this.day = options && options.day || 1;
-	this.hour = options && options.hour || 0;
-	this.minute = options && options.minute || 0;
-	this.second = options && options.second || 0;
-	this.millisecond = options && options.millisecond || 0;
+	return ilib.Date.newInstance(options);
 };
 
 /**
@@ -1795,6 +1861,7 @@ ilib.Date.newInstance = function(options) {
 
 /**
  * @static
+ * @private
  * 
  * Convert JavaScript Date objects and other types into native ilib Dates. This accepts any
  * string or number that can be translated by the JavaScript Date class,
@@ -1804,10 +1871,11 @@ ilib.Date.newInstance = function(options) {
  * return null or undefined if input is null or undefined). Normal output is 
  * a standard native subclass of the ilib Date object as appropriate for the locale.
  * 
- * @param  {ilib.Date|ilib.JulianDay|Date|String|Number=} inDate The input date object, string or Number.
- * @return {ilib.Date|null|undefined}
+ * @param  {ilib.Date|Object|ilib.JulianDay|Date|string|number=} inDate The input date object, string or Number.
+ * @param  {ilib.String|string=} timezone timezone to use if a new date object is created
+ * @return {ilib.Date|null|undefined} an ilib.Date subclass equivalent to the given inDate
  */
-ilib.Date._dateToIlib = function(inDate) {
+ilib.Date._dateToIlib = function(inDate, timezone) {
 	if (typeof(inDate) === 'undefined' || inDate === null) {
 		return inDate;
 	}
@@ -1815,13 +1883,22 @@ ilib.Date._dateToIlib = function(inDate) {
 		return inDate;
 	}
 	if (inDate instanceof Date) {
-		return ilib.Date.newInstance({unixtime: inDate.getTime()});
+		return ilib.Date.newInstance({
+			unixtime: inDate.getTime(),
+			timezone: timezone
+		});
 	}
 	if (inDate instanceof ilib.JulianDay) {
-		return ilib.Date.newInstance({jd: inDate});
+		return ilib.Date.newInstance({
+			jd: inDate,
+			timezone: timezone
+		});
 	}
 	if (typeof(inDate) === 'number') {
-		return ilib.Date.newInstance({unixtime: inDate});
+		return ilib.Date.newInstance({
+			unixtime: inDate,
+			timezone: timezone
+		});
 	}
 	if (typeof(inDate) === 'object') {
 		return ilib.Date.newInstance(inDate);
@@ -1829,7 +1906,10 @@ ilib.Date._dateToIlib = function(inDate) {
 	if (typeof(inDate) === 'string') {
 		inDate = new Date(inDate);
 	}
-	return ilib.Date.newInstance({unixtime: inDate.getTime()});
+	return ilib.Date.newInstance({
+		unixtime: inDate.getTime(),
+		timezone: timezone
+	});
 };
 
 /* place for the subclasses to put their constructors so that the factory method
@@ -1843,6 +1923,37 @@ ilib.Date.prototype = {
 		return "ilib.Date";
 	},
 	
+	/**
+	 * Return the unix time equivalent to this date instance. Unix time is
+	 * the number of milliseconds since midnight on Jan 1, 1970 UTC (Gregorian). This 
+	 * method only returns a valid number for dates between midnight, 
+	 * Jan 1, 1970 UTC (Gregorian) and Jan 19, 2038 at 3:14:07am UTC (Gregorian) when 
+	 * the unix time runs out. If this instance encodes a date outside of that range, 
+	 * this method will return -1. For date types that are not Gregorian, the point 
+	 * in time represented by this date object will only give a return value if it
+	 * is in the correct range in the Gregorian calendar as given previously.
+	 * 
+	 * @return {number} a number giving the unix time, or -1 if the date is outside the
+	 * valid unix time range
+	 */
+	getTime: function() {
+		return this.rd.getTime(); 
+	},
+	
+	/**
+	 * Set the time of this instance according to the given unix time. Unix time is
+	 * the number of milliseconds since midnight on Jan 1, 1970.
+	 * 
+	 * @param {number} millis the unix time to set this date to in milliseconds 
+	 */
+	setTime: function(millis) {
+		this.rd = this.newRd({
+			unixtime: millis,
+			cal: this.cal
+		});
+		this._calcDateComponents();
+	},
+	
 	getDays: function() {
 		return this.day;
 	},
@@ -1852,7 +1963,6 @@ ilib.Date.prototype = {
 	getYears: function() {
 		return this.year;
 	},
-	
 	getHours: function() {
 		return this.hour;
 	},
@@ -1867,26 +1977,266 @@ ilib.Date.prototype = {
 	},
 
 	setDays: function(day) {
-		this.day = day;
+		this.day = parseInt(day, 10) || 1;
+		this.rd._setDateComponents(this);
 	},
 	setMonths: function(month) {
-		this.month = month;
+		this.month = parseInt(month, 10) || 1;
+		this.rd._setDateComponents(this);
 	},
 	setYears: function(year) {
-		this.year = year;
+		this.year = parseInt(year, 10) || 0;
+		this.rd._setDateComponents(this);
 	},
 	
 	setHours: function(hour) {
-		this.hour = hour;
+		this.hour = parseInt(hour, 10) || 0;
+		this.rd._setDateComponents(this);
 	},
 	setMinutes: function(minute) {
-		this.minute = minute;
+		this.minute = parseInt(minute, 10) || 0;
+		this.rd._setDateComponents(this);
 	},
 	setSeconds: function(second) {
-		this.second = second;
+		this.second = parseInt(second, 10) || 0;
+		this.rd._setDateComponents(this);
 	},
 	setMilliseconds: function(milli) {
-		this.millisecond = milli;
+		this.millisecond = parseInt(milli, 10) || 0;
+		this.rd._setDateComponents(this);
+	},
+	
+	/**
+	 * Return a new date instance in the current calendar that represents the first instance 
+	 * of the given day of the week before the current date. The day of the week is encoded
+	 * as a number where 0 = Sunday, 1 = Monday, etc.
+	 * 
+	 * @param {number} dow the day of the week before the current date that is being sought
+	 * @return {ilib.Date} the date being sought
+	 */
+	before: function (dow) {
+		return this.cal.newDateInstance({
+			rd: this.rd.before(dow, this.offset),
+			timezone: this.timezone
+		});
+	},
+	
+	/**
+	 * Return a new date instance in the current calendar that represents the first instance 
+	 * of the given day of the week after the current date. The day of the week is encoded
+	 * as a number where 0 = Sunday, 1 = Monday, etc.
+	 * 
+	 * @param {number} dow the day of the week after the current date that is being sought
+	 * @return {ilib.Date} the date being sought
+	 */
+	after: function (dow) {
+		return this.cal.newDateInstance({
+			rd: this.rd.after(dow, this.offset),
+			timezone: this.timezone
+		});
+	},
+
+	/**
+	 * Return a new Gregorian date instance that represents the first instance of the 
+	 * given day of the week on or before the current date. The day of the week is encoded
+	 * as a number where 0 = Sunday, 1 = Monday, etc.
+	 * 
+	 * @param {number} dow the day of the week on or before the current date that is being sought
+	 * @return {ilib.Date} the date being sought
+	 */
+	onOrBefore: function (dow) {
+		return this.cal.newDateInstance({
+			rd: this.rd.onOrBefore(dow, this.offset),
+			timezone: this.timezone
+		});
+	},
+
+	/**
+	 * Return a new Gregorian date instance that represents the first instance of the 
+	 * given day of the week on or after the current date. The day of the week is encoded
+	 * as a number where 0 = Sunday, 1 = Monday, etc.
+	 * 
+	 * @param {number} dow the day of the week on or after the current date that is being sought
+	 * @return {ilib.Date} the date being sought
+	 */
+	onOrAfter: function (dow) {
+		return this.cal.newDateInstance({
+			rd: this.rd.onOrAfter(dow, this.offset),
+			timezone: this.timezone
+		});
+	},
+	
+	/**
+	 * Return a Javascript Date object that is equivalent to this date
+	 * object.
+	 * 
+	 * @return {Date|undefined} a javascript Date object
+	 */
+	getJSDate: function() {
+		var unix = this.rd.getTime();
+		return (unix === -1) ? undefined : new Date(unix); 
+	},
+	
+	/**
+	 * @private
+	 * Return the Rata Die (fixed day) number of this date.
+	 * 
+	 * @return {number} the rd date as a number
+	 */
+	getRataDie: function() {
+		return this.rd.getRataDie();
+	},
+	
+	/**
+	 * @private
+	 * Set the date components of this instance based on the given rd.
+	 * @param {number} rd the rata die date to set
+	 */
+	setRd: function (rd) {
+		this.rd = this.newRd({
+			rd: rd,
+			cal: this.cal
+		});
+		this._calcDateComponents();
+	},
+	
+	/**
+	 * Return the Julian Day equivalent to this calendar date as a number.
+	 * 
+	 * @return {number} the julian date equivalent of this date
+	 */
+	getJulianDay: function() {
+		return this.rd.getJulianDay();
+	},
+	
+	/**
+	 * Set the date of this instance using a Julian Day.
+	 * @param {number|ilib.JulianDay} date the Julian Day to use to set this date
+	 */
+	setJulianDay: function (date) {
+		this.rd = this.newRd({
+			julianday: (typeof(date) === 'object') ? date.getDate() : date,
+			cal: this.cal
+		});
+		this._calcDateComponents();
+	},
+
+	/**
+	 * Return the time zone associated with this date, or 
+	 * undefined if none was specified in the constructor.
+	 * 
+	 * @return {string|undefined} the name of the time zone for this date instance
+	 */
+	getTimeZone: function() {
+		return this.timezone || "local";
+	},
+	
+	/**
+	 * Set the time zone associated with this date.
+	 * @param {string=} tzName the name of the time zone to set into this date instance,
+	 * or "undefined" to unset the time zone 
+	 */
+	setTimeZone: function (tzName) {
+		if (!tzName || tzName === "") {
+			// same as undefining it
+			this.timezone = undefined;
+			this.tz = undefined;
+		} else if (typeof(tzName) === 'string') {
+			this.timezone = tzName;
+			this.tz = undefined;
+			// assuming the same UTC time, but a new time zone, now we have to 
+			// recalculate what the date components are
+			this._calcDateComponents();
+		}
+	},
+	
+	/**
+	 * @private
+	 * Return the rd number of the first Sunday of the given ISO year.
+	 * @param {number} year the year for which the first Sunday is being sought
+	 * @return {number} the rd of the first Sunday of the ISO year
+	 */
+	firstSunday: function (year) {
+		var firstDay = this.newRd({
+			year: year,
+			month: 1,
+			day: 1,
+			hour: 0,
+			minute: 0,
+			second: 0,
+			millisecond: 0,
+			cal: this.cal
+		});
+		var firstThu = this.newRd({
+			rd: firstDay.onOrAfter(4),
+			cal: this.cal
+		});
+		return firstThu.before(0);
+	},
+	
+	/**
+	 * Return the ISO 8601 week number in the current year for the current date. The week
+	 * number ranges from 0 to 55, as some years have 55 weeks assigned to them in some
+	 * calendars.
+	 * 
+	 * @return {number} the week number for the current date
+	 */
+	getWeekOfYear: function() {
+		var rd = Math.floor(this.rd.getRataDie());
+		var year = this._calcYear(rd + this.offset);
+		var yearStart = this.firstSunday(year);
+		var nextYear;
+		
+		// if we have a January date, it may be in this ISO year or the previous year
+		if (rd < yearStart) {
+			yearStart = this.firstSunday(year-1);
+		} else {
+			// if we have a late December date, it may be in this ISO year, or the next year
+			nextYear = this.firstSunday(year+1);
+			if (rd >= nextYear) {
+				yearStart = nextYear;
+			}
+		}
+		
+		return Math.floor((rd-yearStart)/7) + 1;
+	},
+	
+	/**
+	 * Return the ordinal number of the week within the month. The first week of a month is
+	 * the first one that contains 4 or more days in that month. If any days precede this
+	 * first week, they are marked as being in week 0. This function returns values from 0
+	 * through 6.<p>
+	 * 
+	 * The locale is a required parameter because different locales that use the same 
+	 * Gregorian calendar consider different days of the week to be the beginning of
+	 * the week. This can affect the week of the month in which some days are located.
+	 * 
+	 * @param {ilib.Locale|string} locale the locale or locale spec to use when figuring out 
+	 * the first day of the week
+	 * @return {number} the ordinal number of the week within the current month
+	 */
+	getWeekOfMonth: function(locale) {
+		var li = new ilib.LocaleInfo(locale);
+		
+		var first = this.newRd({
+			year: this._calcYear(this.rd.getRataDie()+this.offset),
+			month: this.month,
+			day: 1,
+			hour: 0,
+			minute: 0,
+			second: 0,
+			millisecond: 0,
+			cal: this.cal
+		});
+		var weekStart = first.onOrAfter(li.getFirstDayOfWeek());
+		
+		if (weekStart - first.getRataDie() > 3) {
+			// if the first week has 4 or more days in it of the current month, then consider
+			// that week 1. Otherwise, it is week 0. To make it week 1, move the week start
+			// one week earlier.
+			weekStart -= 7;
+		}
+		return Math.floor((this.rd.getRataDie() - weekStart) / 7) + 1;
 	}
 };
 
@@ -2342,6 +2692,25 @@ ilib.hashCode = function(obj) {
 	return hash;
 };
 
+
+/**
+ * @private
+ * Load data using the new loader object or via the old function callback.
+ */
+ilib._callLoadData = function (files, sync, params, callback) {
+	// console.log("ilib._callLoadData called");
+	if (typeof(ilib._load) === 'function') {
+		// console.log("ilib._callLoadData: calling as a regular function");
+		return ilib._load(files, sync, params, callback);
+	} else if (typeof(ilib._load) === 'object' && ilib._load instanceof ilib.Loader) {
+		// console.log("ilib._callLoadData: calling as an object");
+		return ilib._load.loadFiles(files, sync, params, callback);
+	}
+	
+	// console.log("ilib._callLoadData: not calling. Type is " + typeof(ilib._load) + " and instanceof says " + (ilib._load instanceof ilib.Loader));
+	return undefined;
+};
+
 /**
  * Find locale data or load it in. If the data with the given name is preassembled, it will
  * find the data in ilib.data. If the data is not preassembled but there is a loader function,
@@ -2356,6 +2725,7 @@ ilib.hashCode = function(obj) {
  * <li><i>name</i> - String. The name of the file being loaded. Default: resources.json
  * <li><i>object</i> - Object. The class attempting to load data. The cache is stored inside of here.
  * <li><i>locale</i> - ilib.Locale. The locale for which data is loaded. Default is the current locale.
+ * <li><i>nonlocale</i> - boolean. If true, the data being loaded is not locale-specific.
  * <li><i>type</i> - String. Type of file to load. This can be "json" or "other" type. Default: "json" 
  * <li><i>loadParams</i> - Object. An object with parameters to pass to the loader function
  * <li><i>sync</i> - boolean. Whether or not to load the data synchronously
@@ -2370,9 +2740,10 @@ ilib.loadData = function(params) {
 		object = undefined, 
 		locale = new ilib.Locale(ilib.getLocale()), 
 		sync = false, 
-		type,
+		type = undefined,
 		loadParams = {},
-		callback = undefined;
+		callback = undefined,
+		nonlocale = false;
 	
 	if (!params || typeof(params.callback) !== 'function') {
 		return;
@@ -2396,6 +2767,9 @@ ilib.loadData = function(params) {
 	if (params.sync) {
 		sync = params.sync;
 	}
+	if (params.nonlocale) {
+		nonlocale = !!params.nonlocale;
+	}
 	
 	callback = params.callback;
 	
@@ -2408,14 +2782,21 @@ ilib.loadData = function(params) {
 		type = (dot !== -1) ? name.substring(dot+1) : "text";
 	}
 
-	var spec = (locale.getSpec().replace(/-/g, '_') || "root") + "," + name + "," + String(ilib.hashCode(loadParams));
+	var spec = ((!nonlocale && locale.getSpec().replace(/-/g, '_')) || "root") + "," + name + "," + String(ilib.hashCode(loadParams));
 	if (!object || typeof(object.cache[spec]) === 'undefined') {
 		var data;
 		
 		if (type === "json") {
+			// console.log("type is json");
 			var basename = name.substring(0, name.lastIndexOf("."));
-			data = ilib.mergeLocData(basename, locale);
+			if (nonlocale) {
+				basename = name.replace(/\//g, '.').replace(/[\\\+\-]/g, "_");
+				data = ilib.data[basename];
+			} else {
+				data = ilib.mergeLocData(basename, locale);
+			}
 			if (data) {
+				// console.log("found assembled data");
 				if (object) {
 					object.cache[spec] = data;
 				}
@@ -2424,14 +2805,15 @@ ilib.loadData = function(params) {
 			}
 		}
 		
-		if (typeof(ilib._load) === 'function') {
+		// console.log("ilib._load is " + typeof(ilib._load));
+		if (typeof(ilib._load) !== 'undefined') {
 			// the data is not preassembled, so attempt to load it dynamically
-			var files = ilib.getLocFiles(locale, name);
+			var files = nonlocale ? [ name || "resources.json" ] : ilib.getLocFiles(locale, name);
 			if (type !== "json") {
 				loadParams.returnOne = true;
 			}
 			
-			ilib._load(files, sync, loadParams, ilib.bind(this, function(arr) {
+			ilib._callLoadData(files, sync, loadParams, ilib.bind(this, function(arr) {
 				if (type === "json") {
 					data = ilib.data[basename] || {};
 					for (var i = 0; i < arr.length; i++) {
@@ -3986,9 +4368,9 @@ ilib.Cal.Gregorian.prototype.newDateInstance = function (options) {
 ilib.Cal._constructors["gregorian"] = ilib.Cal.Gregorian;
 
 /*
- * util/search.js - Misc search utility routines
+ * ratadie.js - Represent the RD date number in the calendar
  * 
- * Copyright © 2013, JEDLSoft
+ * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -4004,73 +4386,253 @@ ilib.Cal._constructors["gregorian"] = ilib.Cal.Gregorian;
  * limitations under the License.
  */
 
-// !depends ilibglobal.js
+/* !depends 
+util/utils.js
+julianday.js 
+*/
 
 /**
- * Binary search a sorted array for a particular target value.
- * If the exact value is not found, it returns the index of the smallest 
- * entry that is greater than the given target value.<p> 
+ * @class
  * 
- * The comparator
- * parameter is a function that knows how to compare elements of the 
- * array and the target. The function should return a value greater than 0
- * if the array element is greater than the target, a value less than 0 if
- * the array element is less than the target, and 0 if the array element 
- * and the target are equivalent.<p>
+ * Construct a new RD date number object. The constructor parameters can 
+ * contain any of the following properties:
  * 
- * If the comparator function is not specified, this function assumes
- * the array and the target are numeric values and should be compared 
- * as such.<p>
+ * <ul>
+ * <li><i>unixtime<i> - sets the time of this instance according to the given 
+ * unix time. Unix time is the number of milliseconds since midnight on Jan 1, 1970.
  * 
- * Depends directive: !depends utils.js
+ * <li><i>julianday</i> - sets the time of this instance according to the given
+ * Julian Day instance or the Julian Day given as a float
  * 
+ * <li><i>year</i> - any integer, including 0
  * 
- * @param {*} target element being sought 
- * @param {Array} arr the array being searched
- * @param {?function(*,*)=} comparator a comparator that is appropriate for comparing two entries
- * in the array  
- * @return the index of the array into which the value would fit if 
- * inserted, or -1 if given array is not an array or the target is not 
- * a number
+ * <li><i>month</i> - 1 to 12, where 1 means January, 2 means February, etc.
+ * 
+ * <li><i>day</i> - 1 to 31
+ * 
+ * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation 
+ * is always done with an unambiguous 24 hour representation
+ * 
+ * <li><i>minute</i> - 0 to 59
+ * 
+ * <li><i>second</i> - 0 to 59
+ * 
+ * <li><i>millisecond</i> - 0 to 999
+ * 
+ * <li><i>parts</i> - 0 to 1079. Specify the halaqim parts of an hour. Either specify 
+ * the parts or specify the minutes, seconds, and milliseconds, but not both. This is only used
+ * in the Hebrew calendar. 
+ * 
+ * <li><i>minute</i> - 0 to 59
+ * 
+ * <li><i>date</i> - use the given intrinsic Javascript date to initialize this one.
+ * </ul>
+ *
+ * If the constructor is called with another date instance instead of
+ * a parameter block, the other instance acts as a parameter block and its
+ * settings are copied into the current instance.<p>
+ * 
+ * If the constructor is called with no arguments at all or if none of the 
+ * properties listed above are present, then the RD is calculate based on 
+ * the current date at the time of instantiation. <p>
+ * 
+ * If any of the properties from <i>year</i> through <i>millisecond</i> are not
+ * specified in the params, it is assumed that they have the smallest possible
+ * value in the range for the property (zero or one).<p>
+ * 
+ * Depends directive: !depends ratadie.js
+ * 
+ * @constructor
+ * @param {Object=} params parameters that govern the settings and behaviour of this RD date
  */
-ilib.bsearch = function(target, arr, comparator) {
-	if (typeof(arr) === 'undefined' || !arr || typeof(target) === 'undefined') {
-		return -1;
-	}
-	
-	var high = arr.length - 1,
-		low = 0,
-		mid = 0,
-		value,
-		cmp = comparator || ilib.bsearch.numbers;
-	
-	while (low <= high) {
-		mid = Math.floor((high+low)/2);
-		value = cmp(arr[mid], target);
-		if (value > 0) {
-			high = mid - 1;
-		} else if (value < 0) {
-			low = mid + 1;
-		} else {
-			return mid;
+ilib.Date.RataDie = function(params) {
+	if (params) {
+		if (typeof(params.date) !== 'undefined') {
+			// accept JS Date classes or strings
+			var date = params.date;
+			if (!(date instanceof Date)) {
+				date = new Date(date); // maybe a string initializer?
+			}
+			this._setTime(date.getTime());
+		} else if (typeof(params.unixtime) !== 'undefined') {
+			this._setTime(parseInt(params.unixtime, 10));
+		} else if (typeof(params.julianday) !== 'undefined') {
+			// JD time is defined to be UTC
+			this._setJulianDay(parseFloat(params.julianday));
+		} else if (params.year || params.month || params.day || params.hour ||
+				params.minute || params.second || params.millisecond || params.parts) {
+			this._setDateComponents(params);
+		} else if (typeof(params.rd) !== 'undefined') {
+			this.rd = (typeof(params.rd) === 'object' && params.rd instanceof ilib.Date.RataDie) ? params.rd.rd : params.rd;
 		}
 	}
 	
-	return low;
+	/**
+	 * @type {number} the Rata Die number of this date for this calendar type
+	 */
+	if (typeof(this.rd) === 'undefined') {
+		var now = new Date();
+		this._setTime(now.getTime());
+	}
 };
 
-/**
- * @private
- * Returns whether or not the given element is greater than, less than,
- * or equal to the given target.<p>
- * 
- * Depends directive: !depends utils.js
- * 
- * @param {number} element the element being tested
- * @param {number} target the target being sought
- */
-ilib.bsearch.numbers = function(element, target) {
-	return element - target;
+ilib.Date.RataDie.prototype = {
+	/**
+	 * @private
+	 * @const
+	 * @type number
+	 * the difference between a zero Julian day and the zero Gregorian date. 
+	 */
+	epoch: 1721424.5,
+	
+	/**
+	 * @private
+	 * Set the RD of this instance according to the given unix time. Unix time is
+	 * the number of milliseconds since midnight on Jan 1, 1970.
+	 * 
+	 * @param {number} millis the unix time to set this date to in milliseconds 
+	 */
+	_setTime: function(millis) {
+		// 2440587.5 is the julian day of midnight Jan 1, 1970, UTC (Gregorian)
+		this._setJulianDay(2440587.5 + millis / 86400000);
+	},
+
+	/**
+	 * @private
+	 * Set the date of this instance using a Julian Day.
+	 * @param {number} date the Julian Day to use to set this date
+	 */
+	_setJulianDay: function (date) {
+		var jd = (typeof(date) === 'number') ? new ilib.JulianDay(date) : date;
+		this.rd = ilib._roundFnc.halfup((jd.getDate() - this.epoch) * 100000000) / 100000000;
+	},
+
+	/**
+	 * @private
+	 * Return the rd number of the particular day of the week on or before the 
+	 * given rd. eg. The Sunday on or before the given rd.
+	 * @param {number} rd the rata die date of the reference date
+	 * @param {number} dayOfWeek the day of the week that is being sought relative 
+	 * to the current date
+	 * @return {number} the rd of the day of the week
+	 */
+	_onOrBefore: function(rd, dayOfWeek) {
+		return rd - ilib.mod(Math.floor(rd) - dayOfWeek - 2, 7);
+	},
+	
+	/**
+	 * Return the rd number of the particular day of the week on or before the current rd.
+	 * eg. The Sunday on or before the current rd. If the offset is given, the calculation
+	 * happens in wall time instead of UTC. UTC time may be a day before or day behind 
+	 * wall time, so it it would give the wrong day of the week if this calculation was
+	 * done in UTC time when the caller really wanted wall time. Even though the calculation
+	 * may be done in wall time, the return value is nonetheless always given in UTC.
+	 * @param {number} dayOfWeek the day of the week that is being sought relative 
+	 * to the current date
+	 * @param {number=} offset RD offset for the time zone. Zero is assumed if this param is
+	 * not given
+	 * @return {number} the rd of the day of the week
+	 */
+	onOrBefore: function(dayOfWeek, offset) {
+		offset = offset || 0;
+		return this._onOrBefore(this.rd + offset, dayOfWeek) - offset;
+	},
+	
+	/**
+	 * Return the rd number of the particular day of the week on or before the current rd.
+	 * eg. The Sunday on or before the current rd. If the offset is given, the calculation
+	 * happens in wall time instead of UTC. UTC time may be a day before or day behind 
+	 * wall time, so it it would give the wrong day of the week if this calculation was
+	 * done in UTC time when the caller really wanted wall time. Even though the calculation
+	 * may be done in wall time, the return value is nonetheless always given in UTC.
+	 * @param {number} dayOfWeek the day of the week that is being sought relative 
+	 * to the reference date
+	 * @param {number=} offset RD offset for the time zone. Zero is assumed if this param is
+	 * not given
+	 * @return {number} the day of the week
+	 */
+	onOrAfter: function(dayOfWeek, offset) {
+		offset = offset || 0;
+		return this._onOrBefore(this.rd+6+offset, dayOfWeek) - offset;
+	},
+	
+	/**
+	 * Return the rd number of the particular day of the week before the current rd.
+	 * eg. The Sunday before the current rd. If the offset is given, the calculation
+	 * happens in wall time instead of UTC. UTC time may be a day before or day behind 
+	 * wall time, so it it would give the wrong day of the week if this calculation was
+	 * done in UTC time when the caller really wanted wall time. Even though the calculation
+	 * may be done in wall time, the return value is nonetheless always given in UTC.
+	 * @param {number} dayOfWeek the day of the week that is being sought relative 
+	 * to the reference date
+	 * @param {number=} offset RD offset for the time zone. Zero is assumed if this param is
+	 * not given
+	 * @return {number} the day of the week
+	 */
+	before: function(dayOfWeek, offset) {
+		offset = offset || 0;
+		return this._onOrBefore(this.rd-1+offset, dayOfWeek) - offset;
+	},
+	
+	/**
+	 * Return the rd number of the particular day of the week after the current rd.
+	 * eg. The Sunday after the current rd. If the offset is given, the calculation
+	 * happens in wall time instead of UTC. UTC time may be a day before or day behind 
+	 * wall time, so it it would give the wrong day of the week if this calculation was
+	 * done in UTC time when the caller really wanted wall time. Even though the calculation
+	 * may be done in wall time, the return value is nonetheless always given in UTC.
+	 * @param {number} dayOfWeek the day of the week that is being sought relative 
+	 * to the reference date
+	 * @param {number=} offset RD offset for the time zone. Zero is assumed if this param is
+	 * not given
+	 * @return {number} the day of the week
+	 */
+	after: function(dayOfWeek, offset) {
+		offset = offset || 0;
+		return this._onOrBefore(this.rd+7+offset, dayOfWeek) - offset;
+	},
+
+	/**
+	 * Return the unix time equivalent to this Gregorian date instance. Unix time is
+	 * the number of milliseconds since midnight on Jan 1, 1970 UTC. This method only
+	 * returns a valid number for dates between midnight, Jan 1, 1970 and  
+	 * Jan 19, 2038 at 3:14:07am when the unix time runs out. If this instance 
+	 * encodes a date outside of that range, this method will return -1.
+	 * 
+	 * @return {number} a number giving the unix time, or -1 if the date is outside the
+	 * valid unix time range
+	 */
+	getTime: function() {
+		// earlier than Jan 1, 1970
+		// or later than Jan 19, 2038 at 3:14:07am
+		var jd = this.getJulianDay();
+		if (jd < 2440587.5 || jd > 2465442.634803241) { 
+			return -1;
+		}
+	
+		// avoid the rounding errors in the floating point math by only using
+		// the whole days from the rd, and then calculating the milliseconds directly
+		return Math.round((jd - 2440587.5) * 86400000);
+	},
+
+	/**
+	 * Return the Julian Day equivalent to this calendar date as a number.
+	 * This returns the julian day in UTC.
+	 * 
+	 * @return {number} the julian date equivalent of this date
+	 */
+	getJulianDay: function() {
+		return this.rd + this.epoch;
+	},
+
+	/**
+	 * Return the Rata Die (fixed day) number of this RD date.
+	 * 
+	 * @return {number} the rd date as a number
+	 */
+	getRataDie: function() {
+		return this.rd;
+	}
 };
 
 /*
@@ -4093,10 +4655,10 @@ ilib.bsearch.numbers = function(element, target) {
  */
 
 /* !depends 
-date.js 
-calendar/gregorian.js 
+date.js
+calendar/gregorian.js
+calendar/ratadie.js
 util/utils.js
-util/search.js 
 julianday.js 
 */
 
@@ -4149,34 +4711,14 @@ julianday.js
  * @param {Object=} params parameters that govern the settings and behaviour of this Gregorian RD date
  */
 ilib.Date.GregRataDie = function(params) {
-	this.cal = new ilib.Cal.Gregorian();
-
-	if (params) {
-		if (typeof(params.date) !== 'undefined') {
-			// accept JS Date classes or strings
-			var date = params.date;
-			if (!(date instanceof Date)) {
-				date = new Date(date); // maybe a string initializer?
-			}
-			this._setTime(date.getTime());
-		} else if (typeof(params.unixtime) !== 'undefined') {
-			this._setTime(parseInt(params.unixtime, 10));
-		} else if (typeof(params.julianday) !== 'undefined') {
-			// JD time is defined to be UTC
-			this._setJulianDay(parseFloat(params.julianday));
-		} else if (params.year || params.month || params.day || params.hour ||
-				params.minute || params.second || params.millisecond ) {
-			this._setDateComponents(params);
-		} else if (typeof(params.rd) !== 'undefined') {
-			this.rd = (typeof(params.rd) === 'object' && params.rd instanceof ilib.DateFmt.GregRataDie) ? params.rd.rd : params.rd;
-		}
-	}
-	
-	if (typeof(this.rd) === 'undefined') {
-		var now = new Date();
-		this._setTime(now.getTime());
-	}
+	this.cal = params && params.cal || new ilib.Cal.Gregorian();
+	this.rd = undefined;
+	ilib.Date.RataDie.call(this, params);
 };
+
+ilib.Date.GregRataDie.prototype = new ilib.Date.RataDie();
+ilib.Date.GregRataDie.prototype.parent = ilib.Date.RataDie;
+ilib.Date.GregRataDie.prototype.constructor = ilib.Date.GregRataDie;
 
 /**
  * @private
@@ -4224,37 +4766,6 @@ ilib.Date.GregRataDie.cumMonthLengthsLeap = [
 
 /**
  * @private
- * @const
- * @type number
- * the difference between a zero Julian day and the zero Gregorian date. 
- */
-ilib.Date.GregRataDie.epoch = 1721424.5;
-
-/**
- * @private
- * Set the RD of this instance according to the given unix time. Unix time is
- * the number of milliseconds since midnight on Jan 1, 1970.
- * 
- * @param {number} millis the unix time to set this date to in milliseconds 
- */
-ilib.Date.GregRataDie.prototype._setTime = function(millis) {
-	this.rd = 719163 + millis / 86400000;
-};
-
-/**
- * @private
- * Set the date of this instance using a Julian Day.
- * @param {number} date the Julian Day to use to set this date
- */
-ilib.Date.GregRataDie.prototype._setJulianDay = function (date) {
-	var jd = (typeof(date) === 'number') ? new ilib.JulianDay(date) : date;
-	
-	this.rd = jd.getDate() - ilib.Date.GregRataDie.epoch; 	// Julian Days start at noon
-};
-
-
-/**
- * @private
  * Calculate the Rata Die (fixed day) number of the given date.
  * 
  * @param {Object} date the date components to calculate the RD from
@@ -4275,7 +4786,7 @@ ilib.Date.GregRataDie.prototype._setDateComponents = function(date) {
 	
 	var dayInYear = (month > 1 ? ilib.Date.GregRataDie.cumMonthLengths[month-1] : 0) +
 		day +
-		(this.cal.isLeapYear(year) && month > 2 ? 1 : 0);
+		(ilib.Cal.Gregorian.prototype.isLeapYear.call(this.cal, year) && month > 2 ? 1 : 0);
 	var rdtime = (hour * 3600000 +
 		minute * 60000 +
 		second * 1000 +
@@ -4288,18 +4799,11 @@ ilib.Date.GregRataDie.prototype._setDateComponents = function(date) {
 	debug("getRataDie: rdtime is " +  rdtime);
 	debug("getRataDie: rd is " +  (years + dayInYear + rdtime));
 	*/
+	
+	/**
+	 * @type {number} the RD number of this Gregorian date
+	 */
 	this.rd = years + dayInYear + rdtime;
-};
-
-/**
- * Return the day of the week of this date. The day of the week is encoded
- * as number from 0 to 6, with 0=Sunday, 1=Monday, etc., until 6=Saturday.
- * 
- * @return {number} the day of the week
- */
-ilib.Date.GregRataDie.prototype.getDayOfWeek = function() {
-	var rd = Math.floor(this.rd);
-	return ilib.mod(rd, 7);
 };
 
 /**
@@ -4311,100 +4815,14 @@ ilib.Date.GregRataDie.prototype.getDayOfWeek = function() {
  * to the current date
  * @return {number} the rd of the day of the week
  */
-ilib.Date.GregRataDie.prototype._onOrBeforeRd = function(rd, dayOfWeek) {
+ilib.Date.GregRataDie.prototype._onOrBefore = function(rd, dayOfWeek) {
 	return rd - ilib.mod(Math.floor(rd) - dayOfWeek, 7);
-};
-
-/**
- * Return the rd number of the particular day of the week on or before the current rd.
- * eg. The Sunday on or before the current rd.
- * @param {number} dayOfWeek the day of the week that is being sought relative 
- * to the current date
- * @return {number} the rd of the day of the week
- */
-ilib.Date.GregRataDie.prototype.onOrBeforeRd = function(dayOfWeek) {
-	return this._onOrBeforeRd(this.rd, dayOfWeek);
-};
-
-/**
- * Return the rd number of the particular day of the week on or before the current rd.
- * eg. The Sunday on or before the current rd.
- * @param {number} dayOfWeek the day of the week that is being sought relative 
- * to the reference date
- * @return {number} the day of the week
- */
-ilib.Date.GregRataDie.prototype.onOrAfterRd = function(dayOfWeek) {
-	return this._onOrBeforeRd(this.rd+6, dayOfWeek);
-};
-
-/**
- * Return the rd number of the particular day of the week before the current rd.
- * eg. The Sunday before the current rd.
- * @param {number} dayOfWeek the day of the week that is being sought relative 
- * to the reference date
- * @return {number} the day of the week
- */
-ilib.Date.GregRataDie.prototype.beforeRd = function(dayOfWeek) {
-	return this._onOrBeforeRd(this.rd-1, dayOfWeek);
-};
-
-/**
- * Return the rd number of the particular day of the week after the current rd.
- * eg. The Sunday after the current rd.
- * @param {number} dayOfWeek the day of the week that is being sought relative 
- * to the reference date
- * @return {number} the day of the week
- */
-ilib.Date.GregRataDie.prototype.afterRd = function(dayOfWeek) {
-	return this._onOrBeforeRd(this.rd+7, dayOfWeek);
-};
-
-/**
- * Return the unix time equivalent to this Gregorian date instance. Unix time is
- * the number of milliseconds since midnight on Jan 1, 1970. This method only
- * returns a valid number for dates between midnight, Jan 1, 1970 and  
- * Jan 19, 2038 at 3:14:07am when the unix time runs out. If this instance 
- * encodes a date outside of that range, this method will return -1. This method
- * returns the time in the local time zone, not in UTC.
- * 
- * @return {number} a number giving the unix time, or -1 if the date is outside the
- * valid unix time range
- */
-ilib.Date.GregRataDie.prototype.getTime = function() {
-	// earlier than Jan 1, 1970
-	// or later than Jan 19, 2038 at 3:14:07am
-	if (this.rd < 719163 || this.rd > 744018.134803241) { 
-		return -1;
-	}
-
-	// avoid the rounding errors in the floating point math by only using
-	// the whole days from the rd, and then calculating the milliseconds directly
-	return Math.round((this.rd - 719163) * 86400000);
-};
-
-/**
- * Return the Julian Day equivalent to this calendar date as a number.
- * This returns the julian day in the local time zone.
- * 
- * @return {number} the julian date equivalent of this date
- */
-ilib.Date.GregRataDie.prototype.getJulianDay = function() {
-	return this.rd + ilib.Date.GregRataDie.epoch;
-};
-
-/**
- * Return the Rata Die (fixed day) number of this RD date.
- * 
- * @return {number} the rd date as a number
- */
-ilib.Date.GregRataDie.prototype.getRataDie = function() {
-	return this.rd;
 };
 
 /*
  * timezone.js - Definition of a time zone class
  * 
- * Copyright © 2012-2013, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -4430,7 +4848,7 @@ util/math.js
 calendar/gregratadie.js
 */
 
-// !data localeinfo timezones
+// !data localeinfo zoneinfo
 
 /**
  * @class Create a time zone instance. 
@@ -4535,7 +4953,8 @@ ilib.TimeZone = function(options) {
 		}
 		
 		if (options.id) {
-			if (options.id === 'local') {
+			var id = options.id.toString();
+			if (id === 'local') {
 				this.isLocal = true;
 				
 				// use standard Javascript Date to figure out the time zone offsets
@@ -4551,14 +4970,14 @@ ilib.TimeZone = function(options) {
 				// the two, no matter whether you are in the northern or southern hemisphere
 				this.offset = Math.max(this.offsetJan1, this.offsetJun1);
 			}
-			this.id = options.id;
+			this.id = id;
 		} else if (options.offset) {
 			this.offset = (typeof(options.offset) === 'string') ? parseInt(options.offset, 10) : options.offset;
 			this.id = this.getDisplayName(undefined, undefined);
 		}
 		
 		if (typeof(options.sync) !== 'undefined') {
-			this.sync = options.sync;
+			this.sync = !!options.sync;
 		}
 		
 		this.loadParams = options.loadParams;
@@ -4586,14 +5005,14 @@ ilib.TimeZone = function(options) {
 /*
  * Explanation of the compressed time zone info properties.
  * {
- *     "o": "8:0",      // Offset from UTC
- *     "f": "W{c}T",      // 
+ *     "o": "8:0",      // offset from UTC
+ *     "f": "W{c}T",    // standard abbreviation. For time zones that observe DST, the {c} replacement is replaced with the 
+ *                      // letter in the e.c or s.c properties below 
  *     "e": {           // info about the end of DST
  *         "m": 3,      // month that it ends
  *         "r": "l0",   // rule for the day it ends "l" = "last", numbers are Sun=0 through Sat=6. Other syntax is "0>7". 
  *                      // This means the 0-day (Sun) after the 7th of the month. Other possible operators are <, >, <=, >=
  *         "t": "2:0",  // time of day that the DST turns off, hours:minutes
- *         "z": "s",    // ???
  *         "c": "S"     // character to replace into the abbreviation for standard time 
  *     },
  *     "s": {           // info about the start of DST
@@ -4601,7 +5020,6 @@ ilib.TimeZone = function(options) {
  *         "r": "l0",   // rule for the day it starts "l" = "last", numbers are Sun=0 through Sat=6. Other syntax is "0>7".
  *                      // This means the 0-day (Sun) after the 7th of the month. Other possible operators are <, >, <=, >=
  *         "t": "2:0",  // time of day that the DST turns on, hours:minutes
- *         "z": "s",    // ???
  *         "v": "1:0",  // amount of time saved in hours:minutes
  *         "c": "D"     // character to replace into the abbreviation for daylight time
  *     },
@@ -4610,20 +5028,20 @@ ilib.TimeZone = function(options) {
  *                      // long English name of the zone. The {c} replacement is for the word "Standard" or "Daylight" as appropriate
  * }
  */
-ilib.data.defaultZones = {
-	"Etc/UTC":{"o":"0:0","f":"UTC"}
-};
-
 ilib.TimeZone.prototype._loadtzdata = function () {
-	if (!ilib.data.timezones) {
+	// console.log("id is: " + JSON.stringify(this.id));
+	// console.log("zoneinfo is: " + JSON.stringify(ilib.data.zoneinfo[this.id]));
+	if (!ilib.data.zoneinfo[this.id] && typeof(this.offset) === 'undefined') {
 		ilib.loadData({
 			object: ilib.TimeZone, 
-			locale: "-",	// locale independent 
-			name: "timezones.json", 
+			nonlocale: true,	// locale independent 
+			name: "zoneinfo/" + this.id + ".json", 
 			sync: this.sync, 
 			loadParams: this.loadParams, 
 			callback: ilib.bind(this, function (tzdata) {
-				ilib.data.timezones = tzdata || ilib.data.defaultZones;
+				if (tzdata && !ilib.isEmpty(tzdata)) {
+					ilib.data.zoneinfo[this.id] = tzdata;
+				}
 				this._initZone();
 			})
 		});
@@ -4637,10 +5055,10 @@ ilib.TimeZone.prototype._initZone = function() {
 	 * @private
 	 * @type {{o:string,f:string,e:Object.<{m:number,r:string,t:string,z:string}>,s:Object.<{m:number,r:string,t:string,z:string,v:string,c:string}>,c:string,n:string}} 
 	 */
-	this.zone = ilib.data.timezones[this.id];
+	this.zone = ilib.data.zoneinfo[this.id];
 	if (!this.zone && typeof(this.offset) === 'undefined') {
 		this.id = "Etc/UTC";
-		this.zone = ilib.data.timezones[this.id];
+		this.zone = ilib.data.zoneinfo[this.id];
 	}
 	
 	this._calcDSTSavings();
@@ -4659,6 +5077,8 @@ ilib.TimeZone.prototype._initZone = function() {
 	}
 };
 
+ilib.data.timezone = {};
+
 /**
  * Return an array of available zone ids that the constructor knows about.
  * The country parameter is optional. If it is not given, all time zones will
@@ -4671,15 +5091,50 @@ ilib.TimeZone.prototype._initZone = function() {
 ilib.TimeZone.getAvailableIds = function (country) {
 	var tz, ids = [];
 	
+	if (!ilib.data.timezone.list) {
+		ilib.data.timezone.list = [];
+		if (ilib._load instanceof ilib.Loader) {
+			var hash = ilib._load.listAvailableFiles();
+			for (var dir in hash) {
+				var files = hash[dir];
+				files.forEach(function (filename) {
+					if (filename && filename.match(/^zoneinfo/)) {
+						ilib.data.timezone.list.push(filename.replace(/^zoneinfo\//, "").replace(/\.json$/, ""));
+					}
+				});
+			}
+		} else {
+			for (tz in ilib.data.zoneinfo) {
+				if (ilib.data.zoneinfo[tz]) {
+					ilib.data.timezone.list.push(tz);
+				}
+			}
+		}
+	}
+	
 	if (!country) {
 		// special zone meaning "the local time zone according to the JS engine we are running upon"
 		ids.push("local");
-	}
-	
-	for (tz in ilib.data.timezones) {
-		if (tz && (!country || ilib.data.timezones[tz].c === country)) {
-			ids.push(tz);
+		for (tz in ilib.data.timezone.list) {
+			if (ilib.data.timezone.list[tz]) {
+				ids.push(ilib.data.timezone.list[tz]);
+			}
 		}
+	} else {
+		if (!ilib.data.zoneinfo.zonetab) {
+			ilib.loadData({
+				object: ilib.TimeZone, 
+				nonlocale: true,	// locale independent 
+				name: "zoneinfo/zonetab.json", 
+				sync: true, 
+				callback: ilib.bind(this, function (tzdata) {
+					if (tzdata) {
+						ilib.data.zoneinfo.zonetab = tzdata;
+					}
+				})
+			});
+		}
+		ids = ilib.data.zoneinfo.zonetab[country];
 	}
 	
 	return ids;
@@ -4690,7 +5145,7 @@ ilib.TimeZone.getAvailableIds = function (country) {
  * @return {string} a unique id for this time zone
  */
 ilib.TimeZone.prototype.getId = function () {
-	return this.id;
+	return this.id.toString();
 };
 
 /**
@@ -4810,6 +5265,9 @@ ilib.TimeZone.prototype._offsetStringToObj = function (str) {
  * the given date/time, in hours, minutes, and seconds  
  */
 ilib.TimeZone.prototype.getOffset = function (date) {
+	if (!date) {
+		return this.getRawOffset();
+	}
 	var offset = this.getOffsetMillis(date)/60000;
 	
 	var hours = ilib._roundFnc.down(offset/60),
@@ -5047,13 +5505,13 @@ ilib.TimeZone.prototype._calcRuleStart = function (rule, year) {
 	switch (type) {
 		case 'l':
 		case '<':
-			//console.log("returning " + refDay.onOrBeforeRd(rd, weekday));
-			d = refDay.onOrBeforeRd(weekday); 
+			//console.log("returning " + refDay.onOrBefore(rd, weekday));
+			d = refDay.onOrBefore(weekday); 
 			break;
 		case 'f':
 		case '>':
 			//console.log("returning " + refDay.onOrAfterRd(rd, weekday));
-			d = refDay.onOrAfterRd(weekday); 
+			d = refDay.onOrAfter(weekday); 
 			break;
 	}
 	return d;
@@ -5132,8 +5590,8 @@ ilib.TimeZone.prototype.inDaylightTime = function (date, wallTime) {
 		});
 	}
 	
-	// if we aren't using daylight time in this zone, then where are never in daylight
-	// time, no matter what the date is
+	// if we aren't using daylight time in this zone for the given year, then we are 
+	// not in daylight time
 	if (!this.useDaylightTime(date.year)) {
 		return false;
 	}
@@ -7017,23 +7475,25 @@ ilib.DateFmt.prototype = {
 	 * @return {string} the formatted version of the given date instance
 	 */
 	format: function (dateLike) {
-		var date = ilib.Date._dateToIlib(dateLike);
+		var thisZoneName = this.tz && this.tz.getId() || "local";
+
+		var date = ilib.Date._dateToIlib(dateLike, thisZoneName);
 		
-		if (!date.getCalendar || date.getCalendar() !== this.calName) {
+		if (!date.getCalendar || !(date instanceof ilib.Date)) {
 			throw "Wrong date type passed to ilib.DateFmt.format()";
 		}
 		
-		var thisZoneName = this.tz && this.tz.getId() || "local";
 		var dateZoneName = date.timezone || "local";
 		
 		// convert to the time zone of this formatter before formatting
-		if (dateZoneName !== thisZoneName) {
+		if (dateZoneName !== thisZoneName || date.getCalendar() !== this.calName) {
 			// console.log("Differing time zones date: " + dateZoneName + " and fmt: " + thisZoneName + ". Converting...");
 			// this will recalculate the date components based on the new time zone
+			// and/or convert a date in another calendar to the current calendar before formatting it
 			var newDate = ilib.Date.newInstance({
 				type: this.calName,
 				timezone: thisZoneName,
-				rd: date.getRataDie()
+				julianday: date.getJulianDay()
 			});
 			
 			date = newDate;
@@ -7574,6 +8034,94 @@ ilib.DateRngFmt.prototype = {
 };
 
 /*
+ * util/search.js - Misc search utility routines
+ * 
+ * Copyright © 2013, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// !depends ilibglobal.js
+
+/**
+ * Binary search a sorted array for a particular target value.
+ * If the exact value is not found, it returns the index of the smallest 
+ * entry that is greater than the given target value.<p> 
+ * 
+ * The comparator
+ * parameter is a function that knows how to compare elements of the 
+ * array and the target. The function should return a value greater than 0
+ * if the array element is greater than the target, a value less than 0 if
+ * the array element is less than the target, and 0 if the array element 
+ * and the target are equivalent.<p>
+ * 
+ * If the comparator function is not specified, this function assumes
+ * the array and the target are numeric values and should be compared 
+ * as such.<p>
+ * 
+ * Depends directive: !depends utils.js
+ * 
+ * 
+ * @param {*} target element being sought 
+ * @param {Array} arr the array being searched
+ * @param {?function(*,*)=} comparator a comparator that is appropriate for comparing two entries
+ * in the array  
+ * @return the index of the array into which the value would fit if 
+ * inserted, or -1 if given array is not an array or the target is not 
+ * a number
+ */
+ilib.bsearch = function(target, arr, comparator) {
+	if (typeof(arr) === 'undefined' || !arr || typeof(target) === 'undefined') {
+		return -1;
+	}
+	
+	var high = arr.length - 1,
+		low = 0,
+		mid = 0,
+		value,
+		cmp = comparator || ilib.bsearch.numbers;
+	
+	while (low <= high) {
+		mid = Math.floor((high+low)/2);
+		value = cmp(arr[mid], target);
+		if (value > 0) {
+			high = mid - 1;
+		} else if (value < 0) {
+			low = mid + 1;
+		} else {
+			return mid;
+		}
+	}
+	
+	return low;
+};
+
+/**
+ * @private
+ * Returns whether or not the given element is greater than, less than,
+ * or equal to the given target.<p>
+ * 
+ * Depends directive: !depends utils.js
+ * 
+ * @param {number} element the element being tested
+ * @param {number} target the target being sought
+ */
+ilib.bsearch.numbers = function(element, target) {
+	return element - target;
+};
+
+/*
  * gregoriandate.js - Represent a date in the Gregorian calendar
  * 
  * Copyright © 2012-2013, JEDLSoft
@@ -7694,21 +8242,10 @@ ilib.Date.GregDate = function(params) {
 			this.timezone = li.getTimeZone(); 
 		}
 		if (params.timezone) {
-			this.timezone = params.timezone;
+			this.timezone = params.timezone.toString();
 		}
 		
-		if (typeof(params.date) !== 'undefined') {
-			// accept JS Date classes or strings
-			var date = params.date;
-			if (!(date instanceof Date)) {
-				date = new Date(date);
-			}
-			this.setTime(date.getTime());
-		} else if (typeof(params.unixtime) !== 'undefined') {
-			this.setTime(parseInt(params.unixtime, 10));
-		} else if (typeof(params.julianday) !== 'undefined') {
-			this.setJulianDay(parseFloat(params.julianday));
-		} else if (params.year || params.month || params.day || params.hour ||
+		if (params.year || params.month || params.day || params.hour ||
 				params.minute || params.second || params.millisecond ) {
 			this.year = parseInt(params.year, 10) || 0;
 			this.month = parseInt(params.month, 10) || 1;
@@ -7720,16 +8257,16 @@ ilib.Date.GregDate = function(params) {
 			if (typeof(params.dst) === 'boolean') {
 				this.dst = params.dst;
 			}
-			this.rd = new ilib.Date.GregRataDie(params);
+			this.rd = this.newRd(params);
 			
 			// add the time zone offset to the rd to convert to UTC
-			var offset = 0;
+			this.offset = 0;
 			if (this.timezone === "local" && typeof(params.dst) === 'undefined') {
 				// if dst is defined, the intrinsic Date object has no way of specifying which version of a time you mean
 				// in the overlap time at the end of DST. Do you mean the daylight 1:30am or the standard 1:30am? In this
 				// case, use the ilib calculations below, which can distinguish between the two properly
 				var d = new Date(this.year, this.month-1, this.day, this.hour, this.minute, this.second, this.millisecond);
-				offset = d.getTimezoneOffset() / 1440;
+				this.offset = -d.getTimezoneOffset() / 1440;
 			} else {
 				if (!this.tz) {
 					this.tz = new ilib.TimeZone({id: this.timezone});
@@ -7737,22 +8274,19 @@ ilib.Date.GregDate = function(params) {
 				// getOffsetMillis requires that this.year, this.rd, and this.dst 
 				// are set in order to figure out which time zone rules apply and 
 				// what the offset is at that point in the year
-				offset = -this.tz._getOffsetMillisWallTime(this) / 86400000;
+				this.offset = this.tz._getOffsetMillisWallTime(this) / 86400000;
 			}
-			if (offset !== 0) {
-				this.rd = new ilib.Date.GregRataDie({
-					rd: this.rd.getRataDie() + offset
+			if (this.offset !== 0) {
+				this.rd = this.newRd({
+					rd: this.rd.getRataDie() - this.offset
 				});
 			}
-		} else if (typeof(params.rd) !== 'undefined') {
-			// private parameter. Do not document this!
-			this.setRd(params.rd);
 		}
 	} 
 
 	if (!this.rd) {
-		var now = new Date();
-		this.setTime(now.getTime());
+		this.rd = this.newRd(params);
+		this._calcDateComponents();
 	}
 };
 
@@ -7762,22 +8296,12 @@ ilib.Date.GregDate.prototype.constructor = ilib.Date.GregDate;
 
 /**
  * @private
- * Return the Rata Die (fixed day) number of this date.
- * 
- * @return {number} the rd date as a number
+ * Return a new RD for this date type using the given params.
+ * @param {Object=} params the parameters used to create this rata die instance
+ * @returns {ilib.Date.RataDie} the new RD instance for the given params
  */
-ilib.Date.GregDate.prototype.getRataDie = function() {
-	return this.rd.getRataDie();
-};
-
-/**
- * @private
- * Set the date components of this instance based on the given rd.
- * @param {number} rd the rata die date to set
- */
-ilib.Date.GregDate.prototype.setRd = function (rd) {
-	this.rd = new ilib.Date.GregRataDie({rd: rd});
-	this.calcDateComponents();
+ilib.Date.GregDate.prototype.newRd = function (params) {
+	return new ilib.Date.GregRataDie(params);
 };
 
 /**
@@ -7813,7 +8337,7 @@ ilib.Date.GregDate.prototype._calcYear = function(rd) {
  * @private
  * Calculate the date components for the current time zone
  */
-ilib.Date.GregDate.prototype.calcDateComponents = function () {
+ilib.Date.GregDate.prototype._calcDateComponents = function () {
 	if (this.timezone === "local" && this.rd.getRataDie() >= 719163 && this.rd.getRataDie() <= 744018.134803241) {
 		// use the intrinsic JS Date object to do the tz conversion for us, which 
 		// guarantees that it follows the system tz database settings 
@@ -7861,25 +8385,30 @@ ilib.Date.GregDate.prototype.calcDateComponents = function () {
 		 * @type number
 		 */
 		this.millisecond = d.getMilliseconds();
+		
+		this.offset = -d.getTimezoneOffset() / 1440;
 	} else {
-		this.year = this._calcYear(this.rd.getRataDie());
-		
-		// now offset the RD by the time zone, then recalculate in case we were 
-		// near the year boundary
-		if (!this.tz) {
-			this.tz = new ilib.TimeZone({id: this.timezone});
+		if (typeof(this.offset) === "undefined") {
+			this.year = this._calcYear(this.rd.getRataDie());
+			
+			// now offset the RD by the time zone, then recalculate in case we were 
+			// near the year boundary
+			if (!this.tz) {
+				this.tz = new ilib.TimeZone({id: this.timezone});
+			}
+			this.offset = this.tz.getOffsetMillis(this) / 86400000;
 		}
-		var offset = this.tz.getOffsetMillis(this) / 86400000;
 		var rd = this.rd.getRataDie();
-		if (offset !== 0) {
-			rd += offset;
-			this.year = this._calcYear(rd);
+		if (this.offset !== 0) {
+			rd += this.offset;
 		}
+		this.year = this._calcYear(rd);
 		
-		var yearStartRd = new ilib.Date.GregRataDie({
+		var yearStartRd = this.newRd({
 			year: this.year,
 			month: 1,
-			day: 1
+			day: 1,
+			cal: this.cal
 		});
 		
 		// remainder is days into the year
@@ -7911,118 +8440,14 @@ ilib.Date.GregDate.prototype.calcDateComponents = function () {
 };
 
 /**
- * Set the date of this instance using a Julian Day.
- * @param {number|ilib.JulianDay} date the Julian Day to use to set this date
- */
-ilib.Date.GregDate.prototype.setJulianDay = function (date) {
-	this.rd = new ilib.Date.GregRataDie({julianday: (typeof(date) === 'object') ? date.getDate() : date});
-	this.calcDateComponents();
-};
-
-/**
  * Return the day of the week of this date. The day of the week is encoded
  * as number from 0 to 6, with 0=Sunday, 1=Monday, etc., until 6=Saturday.
  * 
  * @return {number} the day of the week
  */
 ilib.Date.GregDate.prototype.getDayOfWeek = function() {
-	var rd = Math.floor(this.rd.getRataDie());
+	var rd = Math.floor(this.rd.getRataDie() + (this.offset || 0));
 	return ilib.mod(rd, 7);
-};
-
-/**
- * @private
- * Return the rd number of the first Sunday of the given ISO year.
- * @param {number} year the year for which the first Sunday is being sought
- * @return {number} the rd of the first Sunday of the ISO year
- */
-ilib.Date.GregDate.prototype.firstSunday = function (year) {
-	var jan1 = new ilib.Date.GregRataDie({
-		year: year,
-		month: 1,
-		day: 1,
-		hour: 0,
-		minute: 0,
-		second: 0,
-		millisecond: 0
-	});
-	var firstThu = new ilib.Date.GregRataDie({rd: jan1.onOrAfterRd(4)});
-	return firstThu.beforeRd(0);
-};
-
-/**
- * Return a new Gregorian date instance that represents the first instance of the 
- * given day of the week before the current date. The day of the week is encoded
- * as a number where 0 = Sunday, 1 = Monday, etc.
- * 
- * @param {number} dow the day of the week before the current date that is being sought
- * @return {ilib.Date} the date being sought
- */
-ilib.Date.GregDate.prototype.before = function (dow) {
-	return this.cal.newDateInstance({rd: this.rd.beforeRd(dow)});
-};
-
-/**
- * Return a new Gregorian date instance that represents the first instance of the 
- * given day of the week after the current date. The day of the week is encoded
- * as a number where 0 = Sunday, 1 = Monday, etc.
- * 
- * @param {number} dow the day of the week after the current date that is being sought
- * @return {ilib.Date} the date being sought
- */
-ilib.Date.GregDate.prototype.after = function (dow) {
-	return this.cal.newDateInstance({rd: this.rd.afterRd(dow)});
-};
-
-/**
- * Return a new Gregorian date instance that represents the first instance of the 
- * given day of the week on or before the current date. The day of the week is encoded
- * as a number where 0 = Sunday, 1 = Monday, etc.
- * 
- * @param {number} dow the day of the week on or before the current date that is being sought
- * @return {ilib.Date} the date being sought
- */
-ilib.Date.GregDate.prototype.onOrBefore = function (dow) {
-	return this.cal.newDateInstance({rd: this.rd.onOrBeforeRd(dow)});
-};
-
-/**
- * Return a new Gregorian date instance that represents the first instance of the 
- * given day of the week on or after the current date. The day of the week is encoded
- * as a number where 0 = Sunday, 1 = Monday, etc.
- * 
- * @param {number} dow the day of the week on or after the current date that is being sought
- * @return {ilib.Date} the date being sought
- */
-ilib.Date.GregDate.prototype.onOrAfter = function (dow) {
-	return this.cal.newDateInstance({rd: this.rd.onOrAfterRd(dow)});
-};
-
-/**
- * Return the ISO 8601 week number in the current year for the current date. The week
- * number ranges from 1 to 53, as some years have 53 weeks assigned to them, and most
- * only 52.
- * 
- * @return {number} the week number for the current date
- */
-ilib.Date.GregDate.prototype.getWeekOfYear = function() {
-	var rd = Math.floor(this.rd.getRataDie()),
-		gregorianYear = this._calcYear(rd),
-		yearStart = this.firstSunday(gregorianYear),
-		nextYear;
-	
-	// if we have a January date, it may be in this ISO year or the previous year
-	if (rd < yearStart) {
-		yearStart = this.firstSunday(gregorianYear-1);
-	} else if (this.month == 12 && this.day > 25) {
-		// if we have a late December date, it may be in this ISO year, or the next year
-		nextYear = this.firstSunday(gregorianYear+1);
-		if (rd >= nextYear) {
-			yearStart = nextYear;
-		}
-	}
-	
-	return Math.floor((rd-yearStart)/7) + 1;
 };
 
 /**
@@ -8040,41 +8465,6 @@ ilib.Date.GregDate.prototype.getDayOfYear = function() {
 };
 
 /**
- * Return the ordinal number of the week within the month. The first week of a month is
- * the first one that contains 4 or more days in that month. If any days precede this
- * first week, they are marked as being in week 0. This function returns values from 0
- * through 6.<p>
- * 
- * The locale is a required parameter because different locales that use the same 
- * Gregorian calendar consider different days of the week to be the beginning of
- * the week. This can affect the week of the month in which some days are located.
- * 
- * @param {ilib.Locale|string} locale the locale or locale spec to use when figuring out 
- * the first day of the week
- * @return {number} the ordinal number of the week within the current month
- */
-ilib.Date.GregDate.prototype.getWeekOfMonth = function(locale) {
-	var li = new ilib.LocaleInfo(locale),
-		first = new ilib.Date.GregRataDie({
-			year: this._calcYear(this.rd.getRataDie()),
-			month: this.month,
-			day: 1,
-			hour: 0,
-			minute: 0,
-			second: 0,
-			millisecond: 0
-		}),
-		weekStart = first.onOrAfterRd(li.getFirstDayOfWeek());
-	if (weekStart - first.getRataDie() > 3) {
-		// if the first week has 4 or more days in it of the current month, then consider
-		// that week 1. Otherwise, it is week 0. To make it week 1, move the week start
-		// one week earlier.
-		weekStart -= 7;
-	}
-	return Math.floor((this.rd.getRataDie() - weekStart) / 7) + 1;
-};
-
-/**
  * Return the era for this date as a number. The value for the era for Gregorian 
  * calendars is -1 for "before the common era" (BCE) and 1 for "the common era" (CE). 
  * BCE dates are any date before Jan 1, 1 CE. In the proleptic Gregorian calendar, 
@@ -8089,88 +8479,12 @@ ilib.Date.GregDate.prototype.getEra = function() {
 };
 
 /**
- * Return the unix time equivalent to this Gregorian date instance. Unix time is
- * the number of milliseconds since midnight on Jan 1, 1970. This method only
- * returns a valid number for dates between midnight, Jan 1, 1970 and  
- * Jan 19, 2038 at 3:14:07am when the unix time runs out. If this instance 
- * encodes a date outside of that range, this method will return -1. This method
- * returns the time in the local time zone, not in UTC.
- * 
- * @return {number} a number giving the unix time, or -1 if the date is outside the
- * valid unix time range
- */
-ilib.Date.GregDate.prototype.getTime = function() {
-	return this.rd.getTime(); 
-};
-
-/**
- * Set the time of this instance according to the given unix time. Unix time is
- * the number of milliseconds since midnight on Jan 1, 1970.
- * 
- * @param {number} millis the unix time to set this date to in milliseconds 
- */
-ilib.Date.GregDate.prototype.setTime = function(millis) {
-	this.rd = new ilib.Date.GregRataDie({unixtime: millis});
-	this.calcDateComponents();
-};
-
-/**
- * Return a Javascript Date object that is equivalent to this Gregorian date
- * object.
- * 
- * @return {Date|undefined} a javascript Date object
- */
-ilib.Date.GregDate.prototype.getJSDate = function() {
-	var unix = this.rd.getTime();
-	return (unix === -1) ? undefined : new Date(unix); 
-};
-
-/**
- * Return the Julian Day equivalent to this calendar date as a number.
- * This returns the julian day in the local time zone.
- * 
- * @return {number} the julian date equivalent of this date
- */
-ilib.Date.GregDate.prototype.getJulianDay = function() {
-	return this.rd.getJulianDay();
-};
-
-/**
  * Return the name of the calendar that governs this date.
  * 
  * @return {string} a string giving the name of the calendar
  */
 ilib.Date.GregDate.prototype.getCalendar = function() {
 	return "gregorian";
-};
-
-/**
- * Return the time zone associated with this Gregorian date, or 
- * undefined if none was specified in the constructor.
- * 
- * @return {string|undefined} the name of the time zone for this date instance
- */
-ilib.Date.GregDate.prototype.getTimeZone = function() {
-	return this.timezone || "local";
-};
-
-/**
- * Set the time zone associated with this Gregorian date.
- * @param {string} tzName the name of the time zone to set into this date instance,
- * or "undefined" to unset the time zone 
- */
-ilib.Date.GregDate.prototype.setTimeZone = function (tzName) {
-	if (!tzName || tzName === "") {
-		// same as undefining it
-		this.timezone = undefined;
-		this.tz = undefined;
-	} else if (typeof(tzName) === 'string') {
-		this.timezone = tzName;
-		this.tz = undefined;
-		// assuming the same UTC time, but a new time zone, now we have to 
-		// recalculate what the date components are
-		this.calcDateComponents();
-	}
 };
 
 // register with the factory method
@@ -8348,7 +8662,7 @@ ilib.Date.ThaiSolarDate = function(params) {
 	ilib.Date.GregDate.call(this, p);
 	this.cal = new ilib.Cal.ThaiSolar();
 	// make sure the year is set correctly
-	this.calcDateComponents();
+	this._calcDateComponents();
 };
 
 ilib.Date.ThaiSolarDate.prototype = new ilib.Date.GregDate();
@@ -8368,10 +8682,10 @@ ilib.Date.ThaiSolarDate.epoch = 1523097.5;
  * @private
  * Calculate the date components for the current time zone
  */
-ilib.Date.ThaiSolarDate.prototype.calcDateComponents = function () {
+ilib.Date.ThaiSolarDate.prototype._calcDateComponents = function () {
 	// there is 198327 days difference between the Thai solar and 
 	// Gregorian epochs which is equivalent to 543 years
-	this.parent.calcDateComponents.call(this);
+	this.parent._calcDateComponents.call(this);
 	this.year += 543;
 };
 
@@ -8396,7 +8710,10 @@ ilib.Date.ThaiSolarDate.prototype.getRataDie = function() {
  * @return {ilib.Date} the date being sought
  */
 ilib.Date.ThaiSolarDate.prototype.before = function (dow) {
-	return this.cal.newDateInstance({rd: this.rd.beforeRd(dow) + 198327});
+	return this.cal.newDateInstance({
+		rd: this.rd.before(dow, this.offset) + 198327,
+		timezone: this.timezone
+	});
 };
 
 /**
@@ -8408,7 +8725,10 @@ ilib.Date.ThaiSolarDate.prototype.before = function (dow) {
  * @return {ilib.Date} the date being sought
  */
 ilib.Date.ThaiSolarDate.prototype.after = function (dow) {
-	return this.cal.newDateInstance({rd: this.rd.afterRd(dow) + 198327});
+	return this.cal.newDateInstance({
+		rd: this.rd.after(dow, this.offset) + 198327,
+		timezone: this.timezone
+	});
 };
 
 /**
@@ -8420,7 +8740,10 @@ ilib.Date.ThaiSolarDate.prototype.after = function (dow) {
  * @return {ilib.Date} the date being sought
  */
 ilib.Date.ThaiSolarDate.prototype.onOrBefore = function (dow) {
-	return this.cal.newDateInstance({rd: this.rd.onOrBeforeRd(dow) + 198327});
+	return this.cal.newDateInstance({
+		rd: this.rd.onOrBefore(dow, this.offset) + 198327,
+		timezone: this.timezone
+	});
 };
 
 /**
@@ -8432,7 +8755,10 @@ ilib.Date.ThaiSolarDate.prototype.onOrBefore = function (dow) {
  * @return {ilib.Date} the date being sought
  */
 ilib.Date.ThaiSolarDate.prototype.onOrAfter = function (dow) {
-	return this.cal.newDateInstance({rd: this.rd.onOrAfterRd(dow) + 198327});
+	return this.cal.newDateInstance({
+		rd: this.rd.onOrAfter(dow, this.offset) + 198327,
+		timezone: this.timezone
+	});
 };
 
 /**
