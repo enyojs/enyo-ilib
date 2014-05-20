@@ -162,7 +162,8 @@
 				var ajax = new enyo.Ajax({
 					url: filepath,
 					sync: true, 
-					cacheBust: false
+					cacheBust: false,
+					handleAs: "json"
 				});
 
 				ajax.response(this, function(inSender, json) {

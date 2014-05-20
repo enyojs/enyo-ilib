@@ -42,7 +42,8 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-var _platform;
+var _platform = "unknown";
+
 (function () {
 	if (typeof(enyo) !== 'undefined') {
 		_platform = "enyo";
@@ -52,12 +53,10 @@ var _platform;
 		_platform = "nodejs";
 	} else if (typeof(window) !== 'undefined') {
 		_platform = (typeof(PalmSystem) !== 'undefined') ? "webos" : "browser";
-	} else {
-		_platform = "unknown";
 	}
 })();
 
-var PackedBuffer = PackedBuffer || (_platform === "nodejs") ? require("./packedbuffer.js").PackedBuffer : undefined;
+var PackedBuffer = PackedBuffer || ((_platform === "nodejs") ? require("./packedbuffer.js").PackedBuffer : undefined);
 
 /**
  * @constructor
@@ -84,9 +83,9 @@ var ZoneInfoFile = function (path) {
 				// console.log("ZoneInfoFile bytes received: " + byteArray.length);
 				that._parseInfo(byteArray);
 			});
-			ajax.error(this, function(s, r) {
-				// console.log("ZoneInfoFile: failed to load files " + s + " " + r);
-			});
+			//ajax.error(this, function(s, r) {
+			//	console.log("ZoneInfoFile: failed to load files " + JSON.stringify(s) + " " + r);
+			//});
 			ajax.go();
 			break;
 		
@@ -550,7 +549,7 @@ ZoneInfoFile.prototype.getIlibZoneInfo = function(year) {
 	return res;
 };
 
-if (_platform === "nodejs") {
+if (_platform === "nodejs" && typeof(exports) !== "undefined") {
 	// console.log("exporting ZoneInfoFile");
 	exports.ZoneInfoFile = ZoneInfoFile;
 }
