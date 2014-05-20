@@ -1,6 +1,6 @@
 /*
  * zoneinfo.js - represent a binary zone info file
- * 
+ *
  * Copyright © 2014 LG Electronics, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,30 +15,30 @@
  *
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
- * The portion of this code that parses the zone info file format is derived 
+ *
+ * The portion of this code that parses the zone info file format is derived
  * from the code in the node-zoneinfo project by Gregory McWhirter licensed
  * under the MIT license:
- * 
+ *
  * Copyright (c) 2013 Gregory McWhirter
- * 
- * Permission is hereby granted, free of charge, to any person obtaining 
- * a copy of this software and associated documentation files (the 
- * "Software"), to deal in the Software without restriction, including 
- * without limitation the rights to use, copy, modify, merge, publish, 
- * distribute, sublicense, and/or sell copies of the Software, and to 
- * permit persons to whom the Software is furnished to do so, subject 
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject
  * to the following conditions:
 
- * The above copyright notice and this permission notice shall be included 
+ * The above copyright notice and this permission notice shall be included
  * in all copies or substantial portions of the Software.
 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
- * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
- * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR 
- * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
- * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
@@ -71,7 +71,7 @@ var ZoneInfoFile = function (path) {
 			var ajax = new enyo.Ajax({
 				xhrFields: {
 					responseType:"arraybuffer"
-				}, 
+				},
 				url: path
 			});
 			ajax.response(function(s, r) {
@@ -79,7 +79,7 @@ var ZoneInfoFile = function (path) {
 				console.log("ZoneInfoFile bytes received: " + byteArray.length);
 				that._parseInfo(byteArray);
 			});
-			
+
 			ajax.go();
 			break;
 		
@@ -112,7 +112,7 @@ var ZoneInfoFile = function (path) {
  */
 ZoneInfoFile.prototype._parseInfo = function(buffer) {
 	var packed = new PackedBuffer(buffer);
-    
+
 	// The time zone information files used by tzset(3)
 	// begin with the magic characters "TZif" to identify
 	// them as time zone information files, followed by
@@ -125,7 +125,7 @@ ZoneInfoFile.prototype._parseInfo = function(buffer) {
 	} else {
 		// ignore 16 bytes
 		packed.skip(16);
-		
+
 		// The number of UTC/local indicators stored in the file.
 		var tzh_ttisgmtcnt = packed.getLong();
 		// The number of standard/wall indicators stored in the file.
@@ -173,7 +173,7 @@ ZoneInfoFile.prototype._parseInfo = function(buffer) {
 		if (tzh_ttisstdcnt) {
 			packed.skip(tzh_ttisstdcnt);
 		}
-		
+
 		// ignore the UTC/local time indicators -- everything should be UTC
 		if (tzh_ttisgmtcnt) {
 			packed.skip(tzh_ttisgmtcnt);
@@ -190,11 +190,11 @@ ZoneInfoFile.prototype._parseInfo = function(buffer) {
 				abbreviation: that.zoneInfo[item].abbreviation,
 			};
 		});
-		
+
 		// calculate the dst savings for each daylight time
 		for (var i = 0; i < tzh_timecnt; i++) {
 			if (i > 0 && this.ruleIndex[i].isdst) {
-				this.ruleIndex[i].savings = this.ruleIndex[i].offset - this.ruleIndex[i-1].offset; 
+				this.ruleIndex[i].savings = this.ruleIndex[i].offset - this.ruleIndex[i-1].offset;
 			}
 		}
 
@@ -236,30 +236,30 @@ ZoneInfoFile.prototype._parseInfo = function(buffer) {
 
 /**
  * Binary search a sorted array of numbers for a particular target value.
- * If the exact value is not found, it returns the index of the largest 
- * entry that is smaller than the given target value.<p> 
- * 
- * @param {number} target element being sought 
+ * If the exact value is not found, it returns the index of the largest
+ * entry that is smaller than the given target value.<p>
+ *
+ * @param {number} target element being sought
  * @param {Array} arr the array being searched
- * @return the index of the array into which the value would fit if 
- * inserted, or -1 if given array is not an array or the target is not 
+ * @return the index of the array into which the value would fit if
+ * inserted, or -1 if given array is not an array or the target is not
  * a number
  */
 ZoneInfoFile.prototype.bsearch = function(target, arr) {
 	if (typeof(arr) === 'undefined' || !arr || typeof(target) === 'undefined' || target < arr[0]) {
 		return -1;
 	}
-	
+
 	// greater than the end of the array
 	if (target > arr[arr.length-1]) {
 		return arr.length - 1;
 	}
-	
+
 	var high = arr.length - 1,
 		low = 0,
 		mid = 0,
 		value;
-	
+
 	while (low <= high) {
 		mid = Math.floor((high+low)/2);
 		value = arr[mid] - target;
@@ -271,32 +271,24 @@ ZoneInfoFile.prototype.bsearch = function(target, arr) {
 			return mid;
 		}
 	}
-	
+
 	return high;
 };
 
 /**
- * @private
- * @param year
- */
-ZoneInfoFile.prototype._findYear = function (year) {
-	
-};
-
-/**
  * Return whether or not this zone uses DST in the given year.
- * 
+ *
  * @param {number} year the Gregorian year to test
  * @returns {boolean} true if the zone uses DST in the given year
  */
 ZoneInfoFile.prototype.usesDST = function(year) {
 	var thisYear = new Date(year, 0, 1).getTime();
 	var nextyear = new Date(year+1, 0, 1).getTime();
-	
-	// search for the zone that was effective Jan 1 of this year 
-	// to Jan 1 of next year, and if any of the infos is DST, then 
+
+	// search for the zone that was effective Jan 1 of this year
+	// to Jan 1 of next year, and if any of the infos is DST, then
 	// this zone supports DST in the given year.
-	
+
 	var index = this.bsearch(thisYear, this.transitionTimes);
 	if (index !== -1) {
 		while (index < this.transitionTimes.length && this.transitionTimes[index] < nextyear) {
@@ -305,29 +297,29 @@ ZoneInfoFile.prototype.usesDST = function(year) {
 			}
 		}
 	}
-	
+
 	return false;
 };
 
 /**
  * Return the raw offset from UTC that this zone uses in the given year.
- * 
+ *
  * @param {number} year the Gregorian year to test
  * @returns {number} offset from from UTC in number of minutes. Negative
- * numbers are west of Greenwich, positive are east of Greenwich 
+ * numbers are west of Greenwich, positive are east of Greenwich
  */
 ZoneInfoFile.prototype.getRawOffset = function(year) {
 	var thisYear = new Date(year, 0, 1).getTime();
 	var nextYear = new Date(year+1, 0, 1).getTime();
-	
+
 	var index = this.bsearch(thisYear, this.transitionTimes);
-	
+
 	var offset = this.defaultTime.offset;
-	if (index > -1) {	
+	if (index > -1) {
 		while (index < this.transitionTimes.length && this.ruleIndex[index].isdst && this.transitionTimes[index+1] < nextYear) {
 			index++;
 		}
-		
+
 		if (index < this.transitionTimes.length && !this.ruleIndex[index].isdst) {
 			offset = this.ruleIndex[index].offset;
 		}
@@ -337,29 +329,29 @@ ZoneInfoFile.prototype.getRawOffset = function(year) {
 };
 
 /**
- * If this zone uses DST in the given year, return the DST savings 
+ * If this zone uses DST in the given year, return the DST savings
  * in use. If the zone does not use DST in the given year, this
  * method will return 0.
- * 
+ *
  * @param {number} year the Gregorian year to test
- * @returns {number} number of minutes in DST savings if the zone 
+ * @returns {number} number of minutes in DST savings if the zone
  * uses DST in the given year, or zero otherwise
  */
 ZoneInfoFile.prototype.getDSTSavings = function(year) {
 	var thisYear = new Date(year, 0, 1).getTime();
 	var nextYear = new Date(year+1, 0, 1).getTime();
-	
-	// search for all transitions between Jan 1 of this year 
+
+	// search for all transitions between Jan 1 of this year
 	// to Jan 1 of next year, and calculate the difference
 	// in DST (if any)
-	
+
 	var index = this.bsearch(thisYear, this.transitionTimes);
 	var savings = 0;
-	if (index > -1) {	
+	if (index > -1) {
 		while (index < this.transitionTimes.length && !this.ruleIndex[index].isdst && this.transitionTimes[index+1] < nextYear) {
 			index++;
 		}
-		
+
 		if (index < this.transitionTimes.length && this.ruleIndex[index].isdst) {
 			savings = this.ruleIndex[index].savings;
 		}
@@ -369,9 +361,9 @@ ZoneInfoFile.prototype.getDSTSavings = function(year) {
 };
 
 /**
- * Return the start date/time of DST if this zone uses 
+ * Return the start date/time of DST if this zone uses
  * DST in the given year.
- * 
+ *
  * @param {number} year the Gregorian year to test
  * @returns {number} unixtime representation of the start
  * of DST in the given year, or -1 if the zone does not
@@ -380,21 +372,21 @@ ZoneInfoFile.prototype.getDSTSavings = function(year) {
 ZoneInfoFile.prototype.getDSTStartDate = function(year) {
 	var thisYear = new Date(year, 0, 1).getTime();
 	var nextYear = new Date(year+1, 0, 1).getTime();
-	
-	// search for all transitions between Jan 1 of this year 
+
+	// search for all transitions between Jan 1 of this year
 	// to Jan 1 of next year, and calculate the difference
 	// in DST (if any)
-	
+
 	var index = this.bsearch(thisYear, this.transitionTimes);
 	var startDate = -1;
-	if (index > -1) {	
+	if (index > -1) {
 		if (this.transitionTimes[index] < thisYear) {
 			index++; // start in this year instead of the previous year
 		}
 		while (index < this.transitionTimes.length && !this.ruleIndex[index].isdst && this.transitionTimes[index+1] < nextYear) {
 			index++;
 		}
-		
+
 		if (index < this.transitionTimes.length && this.ruleIndex[index].isdst) {
 			startDate = this.transitionTimes[index];
 		}
@@ -404,9 +396,9 @@ ZoneInfoFile.prototype.getDSTStartDate = function(year) {
 };
 
 /**
- * Return the end date/time of DST if this zone uses 
+ * Return the end date/time of DST if this zone uses
  * DST in the given year.
- * 
+ *
  * @param {number} year the Gregorian year to test
  * @returns {number} unixtime representation of the end
  * of DST in the given year, or -1 if the zone does not
@@ -415,21 +407,21 @@ ZoneInfoFile.prototype.getDSTStartDate = function(year) {
 ZoneInfoFile.prototype.getDSTEndDate = function(year) {
 	var thisYear = new Date(year, 0, 1).getTime();
 	var nextYear = new Date(year+1, 0, 1).getTime();
-	
-	// search for all transitions between Jan 1 of this year 
+
+	// search for all transitions between Jan 1 of this year
 	// to Jan 1 of next year, and calculate the difference
 	// in DST (if any)
-	
+
 	var index = this.bsearch(thisYear, this.transitionTimes);
 	var endDate = -1;
-	if (index > -1) {	
+	if (index > -1) {
 		if (this.transitionTimes[index] < thisYear) {
 			index++; // start in this year instead of the previous year
 		}
 		while (index < this.transitionTimes.length && this.ruleIndex[index].isdst && this.transitionTimes[index+1] < nextYear) {
 			index++;
 		}
-		
+
 		if (index < this.transitionTimes.length && !this.ruleIndex[index].isdst) {
 			endDate = this.transitionTimes[index];
 		}
@@ -441,7 +433,7 @@ ZoneInfoFile.prototype.getDSTEndDate = function(year) {
 /**
  * Return the abbreviation used by this zone in standard
  * time.
- * 
+ *
  * @param {number} year the Gregorian year to test
  * @returns {string} a string representing the abbreviation
  * used in this time zone during standard time
@@ -449,19 +441,19 @@ ZoneInfoFile.prototype.getDSTEndDate = function(year) {
 ZoneInfoFile.prototype.getAbbreviation = function(year) {
 	var thisYear = new Date(year, 0, 1).getTime();
 	var nextYear = new Date(year+1, 0, 1).getTime();
-	
-	// search for all transitions between Jan 1 of this year 
+
+	// search for all transitions between Jan 1 of this year
 	// to Jan 1 of next year, and calculate the difference
 	// in DST (if any)
 	var abbr;
 	if (this.transitionTimes.length > 0) {
 		var index = this.bsearch(thisYear, this.transitionTimes);
 		abbr = this.ruleIndex[index].abbreviation;
-		if (index > -1) {	
+		if (index > -1) {
 			while (index < this.transitionTimes.length && this.ruleIndex[index].isdst && this.transitionTimes[index+1] < nextYear) {
 				index++;
 			}
-			
+
 			if (index < this.transitionTimes.length && !this.ruleIndex[index].isdst) {
 				abbr = this.ruleIndex[index].abbreviation;
 			}
@@ -477,7 +469,7 @@ ZoneInfoFile.prototype.getAbbreviation = function(year) {
  * Return the abbreviation used by this zone in daylight
  * time. If the zone does not use DST in the given year,
  * this returns the same thing as getAbbreviation().
- * 
+ *
  * @param {number} year the Gregorian year to test
  * @returns {string} a string representing the abbreviation
  * used in this time zone during daylight time
@@ -485,20 +477,20 @@ ZoneInfoFile.prototype.getAbbreviation = function(year) {
 ZoneInfoFile.prototype.getDSTAbbreviation = function(year) {
 	var thisYear = new Date(year, 0, 1).getTime();
 	var nextYear = new Date(year+1, 0, 1).getTime();
-	
-	// search for all transitions between Jan 1 of this year 
+
+	// search for all transitions between Jan 1 of this year
 	// to Jan 1 of next year, and calculate the difference
 	// in DST (if any)
-	
+
 	var abbr;
 	if (this.transitionTimes.length > 0) {
 		var index = this.bsearch(thisYear, this.transitionTimes);
 		abbr = this.ruleIndex[index].abbreviation;
-		if (index > -1) {	
+		if (index > -1) {
 			while (index < this.transitionTimes.length && !this.ruleIndex[index].isdst && this.transitionTimes[index+1] < nextYear) {
 				index++;
 			}
-			
+
 			if (index < this.transitionTimes.length && this.ruleIndex[index].isdst) {
 				abbr = this.ruleIndex[index].abbreviation;
 			}
@@ -511,21 +503,21 @@ ZoneInfoFile.prototype.getDSTAbbreviation = function(year) {
 };
 
 /**
- * Return the zone information for the given year in ilib 
+ * Return the zone information for the given year in ilib
  * format.
- * 
+ *
  * @param {number} year the Gregorian year to test
- * @returns {Object} an object containing the zone information 
+ * @returns {Object} an object containing the zone information
  * for the given year in the format that ilib can use directly
  */
 ZoneInfoFile.prototype.getIlibZoneInfo = function(year) {
 	function minutesToStr(min) {
 		var hours = Math.floor(min / 60);
 		var minutes = min - hours * 60;
-		
+
 		return hours + ":" + minutes;
 	}
-	
+
 	function unixtimeToJD(millis) {
 		return 2440587.5 + millis / 86400000;
 	}
@@ -546,6 +538,6 @@ ZoneInfoFile.prototype.getIlibZoneInfo = function(year) {
 	} else {
 		res.f = this.getAbbreviation(year);
 	}
-	
+
 	return res;
 };
