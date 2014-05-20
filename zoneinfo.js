@@ -57,6 +57,8 @@ var _platform;
 	}
 })();
 
+var PackedBuffer = PackedBuffer || (_platform === "nodejs") ? require("./packedbuffer.js").PackedBuffer : undefined;
+
 /**
  * @constructor
  * Represents a binary zone info file of the sort that the Unix Zone Info Compiler
@@ -89,6 +91,7 @@ var ZoneInfoFile = function (path) {
 			break;
 		
 		case "nodejs":
+			// console.log("ZoneInfoFile: loading zoneinfo path " + path + "\n");
 			var fs = require("fs");
 			var bytes = new Buffer(fs.readFileSync(path));
 			var byteArray = new Uint8Array(bytes);
@@ -546,3 +549,8 @@ ZoneInfoFile.prototype.getIlibZoneInfo = function(year) {
 
 	return res;
 };
+
+if (_platform === "nodejs") {
+	// console.log("exporting ZoneInfoFile");
+	exports.ZoneInfoFile = ZoneInfoFile;
+}
