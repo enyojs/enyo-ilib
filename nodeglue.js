@@ -5,7 +5,8 @@ exports.ilib = ilib;
 
 var path = require("path"),
 	fs = require("fs"),
-	util = require("util");
+	util = require("util"),
+	ZoneInfoFile = require("./zoneinfo.js").ZoneInfoFile;
 
 exports.ilib.isNonLatinLocale = function(spec) {
 	var li = new exports.ilib.LocaleInfo(spec),
@@ -37,6 +38,19 @@ var nodeLoader = function () {
 nodeLoader.prototype = new ilib.Loader();
 nodeLoader.prototype.constructor = nodeLoader;
 
+nodeLoader.prototype._createZoneFile = function (path) {
+	var zone = path.substring(path.indexOf("zoneinfo"));
+	
+	// remove the .json suffix to get the name of the zone
+	zone = zone.substring(0, zone.length-5);
+	
+	var zif = new ZoneInfoFile("/usr/share/" + zone);
+	
+	// only get the info for this year. Later we can get the info
+	// for any historical or future year too
+	return zif.getIlibZoneInfo(new Date().getFullYear());
+};
+
 nodeLoader.prototype.loadFiles = function(paths, sync, params, callback) {
 	var root = (params && params.base) ? path.normalize(params.base) : this.base;
 
@@ -56,30 +70,36 @@ nodeLoader.prototype.loadFiles = function(paths, sync, params, callback) {
 	// util.print("node loader: attempting to load paths " + JSON.stringify(paths) + "\n");
 	if (sync) {
 		var ret = [];
+		var that = this;
 		
 		// synchronous
 		paths.forEach(function (p) {
-			var json;
-
-			var filepath = path.join(root, "locale", p);
-			// util.print("node loader: attempting sync load " + filepath + "\n");
-			if (fs.existsSync(filepath)) {
-				json = fs.readFileSync(filepath, "utf-8");
-				// util.print("node loader: load " + filepath + (json ? " succeeded\n" : " failed\n"));
-				ret.push(json ? JSON.parse(json) : undefined);
-				return;
-			} 
-			
-			if (resExists) {
-				filepath = path.join(resources, p);
-				// util.print("node loader: attempting sync load resources " + filepath + "\n");
+			if (p.indexOf("zoneinfo") !== -1) {
+				// util.print("node loader: loading zoneinfo path " + p + "\n");
+				ret.push(that._createZoneFile(p));
+			} else {
+				var json;
+	
+				var filepath = path.join(root, "locale", p);
+				// util.print("node loader: attempting sync load " + filepath + "\n");
 				if (fs.existsSync(filepath)) {
 					json = fs.readFileSync(filepath, "utf-8");
 					// util.print("node loader: load " + filepath + (json ? " succeeded\n" : " failed\n"));
 					ret.push(json ? JSON.parse(json) : undefined);
+					return;
 				} 
+				
+				if (resExists) {
+					filepath = path.join(resources, p);
+					// util.print("node loader: attempting sync load resources " + filepath + "\n");
+					if (fs.existsSync(filepath)) {
+						json = fs.readFileSync(filepath, "utf-8");
+						// util.print("node loader: load " + filepath + (json ? " succeeded\n" : " failed\n"));
+						ret.push(json ? JSON.parse(json) : undefined);
+					} 
+				}
+				// util.print("node loader:  sync load failed\n");
 			}
-			// util.print("node loader:  sync load failed\n");
 		});
 
 		// only call the callback at the end of the chain of files
@@ -99,24 +119,28 @@ nodeLoader.prototype.loadFiles = function(paths, sync, params, callback) {
 nodeLoader.prototype._loadFilesAsync = function (root, paths) {
 	if (paths.length > 0) {
 		var filename = paths.shift();
-		var filepath = path.join(root, "locale", filename);
-		// util.print("node loader: attempting async load " + filepath + "\n");
-		fs.readFile(filepath, "utf-8", function(err, json) {
-			if (err) {
-				filepath = path.join("resources", filename);
-				// util.print("node loader: attempting async load " + filepath + "\n");
-				fs.readFile(filepath, "utf-8", function(err, json) {
-					this._nextFile(root, paths, err ? undefined : json);
-				});
-			} else {
-				this._nextFile(root, paths, json);
-			}
-		});
+		if (filename.indexOf("zoneinfo") !== -1) {
+			this._nextFile(root, paths, this._createZoneFile(filename));
+		} else {
+			var filepath = path.join(root, "locale", filename);
+			// util.print("node loader: attempting async load " + filepath + "\n");
+			fs.readFile(filepath, "utf-8", function(err, json) {
+				if (err) {
+					filepath = path.join("resources", filename);
+					// util.print("node loader: attempting async load " + filepath + "\n");
+					fs.readFile(filepath, "utf-8", function(err, json) {
+						this._nextFile(root, paths, err ? undefined : json);
+					});
+				} else {
+					this._nextFile(root, paths, json);
+				}
+			});
+		}
 	}
 };
 nodeLoader.prototype._nextFile = function (root, paths, json) {
 	// util.print("node loader:  async load " + (json ? "succeeded" : "failed") + "\n");
-	this.results.push(json ? JSON.parse(json) : undefined);
+	this.results.push(json ? (typeof(json) === "string" ? JSON.parse(json) : json) : undefined);
 	if (paths.length > 0) {
 		this._loadFilesAsync(root, paths);
 	} else {
