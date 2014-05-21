@@ -9360,7 +9360,8 @@ ilib.Date.IslamicRataDie.prototype._setDateComponents = function(date) {
  * Depends directive: !depends islamicdate.js
  * 
  * @constructor
- * @param {Object=} params parameters that govern the settings and behaviour of this Islamic RD date
+ * @extends ilib.Date
+ * @param {Object=} params parameters that govern the settings and behaviour of this Islamic date
  */
 ilib.Date.IslamicDate = function(params) {
 	this.cal = new ilib.Cal.Islamic();
