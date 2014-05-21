@@ -32,6 +32,14 @@ var nodeLoader = function () {
 	}
 	
 	// util.print("base is defined as " + this.base + "\n");
+
+	// use this so that we only load from the system on webOS
+	if (fs.existsSync("/usr/palm")) {
+		//util.print("_createZoneFile: Loading zone info from the system\n");
+		this.useSystemZoneInfo = true;
+	//} else {
+	//	util.print("_createZoneFile: using ilib zone info\n");
+	}
 };
 
 // make this a subclass of loader
@@ -73,8 +81,8 @@ nodeLoader.prototype.loadFiles = function(paths, sync, params, callback) {
 		var that = this;
 		
 		// synchronous
-		paths.forEach(function (p) {
-			if (p.indexOf("zoneinfo") !== -1) {
+		paths.forEach(ilib.bind(this, function (p) {
+			if (this.useSystemZoneInfo && p.indexOf("zoneinfo") !== -1) {
 				// util.print("node loader: loading zoneinfo path " + p + "\n");
 				ret.push(that._createZoneFile(p));
 			} else {
@@ -100,7 +108,7 @@ nodeLoader.prototype.loadFiles = function(paths, sync, params, callback) {
 				}
 				// util.print("node loader:  sync load failed\n");
 			}
-		});
+		}));
 
 		// only call the callback at the end of the chain of files
 		if (typeof(callback) === 'function') {
@@ -119,7 +127,7 @@ nodeLoader.prototype.loadFiles = function(paths, sync, params, callback) {
 nodeLoader.prototype._loadFilesAsync = function (root, paths) {
 	if (paths.length > 0) {
 		var filename = paths.shift();
-		if (filename.indexOf("zoneinfo") !== -1) {
+		if (this.useSystemZoneInfo && filename.indexOf("zoneinfo") !== -1) {
 			this._nextFile(root, paths, this._createZoneFile(filename));
 		} else {
 			var filepath = path.join(root, "locale", filename);
