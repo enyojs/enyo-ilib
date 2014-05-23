@@ -68,6 +68,8 @@ var PackedBuffer = PackedBuffer || ((_platform === "nodejs") ? require("./packed
 var ZoneInfoFile = function (path) {
 	var that = this;
 	switch (_platform) {
+		/*
+		Uncomment and use this when enyo works for binary load.
 		case "enyo":
 			var ajax = new enyo.Ajax({
 				xhrFields: {
@@ -88,6 +90,7 @@ var ZoneInfoFile = function (path) {
 			//});
 			ajax.go();
 			break;
+		*/
 		
 		case "nodejs":
 			// console.log("ZoneInfoFile: loading zoneinfo path " + path + "\n");
@@ -106,6 +109,9 @@ var ZoneInfoFile = function (path) {
 				var byteArray = new Uint8Array(req.response);
 				// console.log("ZoneInfoFile bytes received: " + byteArray.length);
 				that._parseInfo(byteArray);
+			};
+			req.onerror = function(e) {
+				throw "Cannot load file " + path;
 			};
 			req.send();
 			break;
