@@ -52,11 +52,15 @@ nodeLoader.prototype._createZoneFile = function (path) {
 	// remove the .json suffix to get the name of the zone
 	zone = zone.substring(0, zone.length-5);
 	
-	var zif = new ZoneInfoFile("/usr/share/" + zone);
-	
-	// only get the info for this year. Later we can get the info
-	// for any historical or future year too
-	return zif.getIlibZoneInfo(new Date().getFullYear());
+	try {
+		var zif = new ZoneInfoFile("/usr/share/" + zone);
+		
+		// only get the info for this year. Later we can get the info
+		// for any historical or future year too
+		return zif.getIlibZoneInfo(new Date().getFullYear());
+	} catch (e) {
+		return undefined;
+	}
 };
 
 nodeLoader.prototype.loadFiles = function(paths, sync, params, callback) {

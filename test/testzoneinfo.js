@@ -26,7 +26,7 @@ function testZoneInfoFileConstructor() {
 function testZoneInfoFileConstructorBadFile() {
 	try {
 	    var zif = new ZoneInfoFile("/usr/share/zoneinfo/foobar");
-	    assertUndefined(zif);
+	    assertFalse(true);
 	} catch (e) {
 		assertTrue(true);
 	}
