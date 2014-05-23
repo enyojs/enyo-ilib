@@ -3,11 +3,12 @@ enyo.kind({
     name: "ilib.sample.ChooseTimeZone",
 
     published: {
-        "value": "default"
+        "value": "default",
+        label: rb.getString("Time Zone")
     },
 
     components: [
-        {content: rb.getString("Time Zone"), classes: "ilib-onyx-sample-divider"},
+        {name: "tzheader", content: "", classes: "ilib-onyx-sample-divider"},
         {kind: "onyx.PickerDecorator", components: [
             {},
             {name: "timeZones", kind: "onyx.Picker", onChange: "setTimeZone", components: [
@@ -20,6 +21,7 @@ enyo.kind({
     create: function() {
         this.inherited(arguments);
         this.initTimeZones();
+        this.$.tzheader.setContent(this.label.toString());
     },
     
     initTimeZones: function() {
