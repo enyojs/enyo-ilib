@@ -5,15 +5,7 @@ enyo.kind({
 
     components: [
         {kind: "Scroller", fit: true, components: [
-            {kind: "FittableColumns", components: [
-                /* Header with selecting locale */
-                {kind: "ilib.sample.ChooseLocale", name: "localeSelector"},
-                {style: "width: 20px"},
-                {kind: "onyx.Button", content: rb.getString("Apply"), ontap: "calcFormat", style: "vertical-align: bottom;", classes: "onyx-affirmative"},
-                {fit: true}
-            ]},
-
-            {kind: "ilib.sample.ChooseTimeZone", name: "timeZonesSelector"},
+            {kind: "ilib.sample.ChooseTimeZone", name: "timeZonesSelector", label: rb.getString("Input Time Zone")},
 
             {content: rb.getString("Input Calendar"), classes: "ilib-onyx-sample-divider"},
             {kind: "onyx.PickerDecorator", components: [
@@ -64,6 +56,9 @@ enyo.kind({
                 {fit: true}
             ]},
 
+            /* Header with selecting locale */
+            {kind: "ilib.sample.ChooseLocale", name: "localeSelector"},
+            {kind: "ilib.sample.ChooseTimeZone", name: "formatZonesSelector", label: rb.getString("Format Time Zone")},
             {content: rb.getString("Length"), classes: "ilib-onyx-sample-divider"},
             {kind: "onyx.RadioGroup", name: "length", components: [
                 {content: "short"},
@@ -116,7 +111,9 @@ enyo.kind({
             {kind: "onyx.RadioGroup", name: "useNative", components: [
                 {content: "false", active: true},
                 {content: "true"}
-            ]}
+            ]},
+            {content: " "},
+            {kind: "onyx.Button", content: rb.getString("Apply"), ontap: "calcFormat", style: "vertical-align: bottom;", classes: "onyx-affirmative"},
         ]},
 
         {kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
@@ -167,8 +164,10 @@ enyo.kind({
             locale: this.$.localeSelector.getValue()
         });
         // Init Year
-        if (this.$.year.getValue() == '')
-            this.$.year.setValue(new Date().getFullYear());
+        if (this.$.year.getValue() == '') {
+        	var d = ilib.Date.newInstance();
+            this.$.year.setValue(d.getYears());
+        }
         // Init/Refill Month
         var numMonths = cal.getNumMonths(parseInt(this.$.year.getValue(), 10) || 0);
         var prevSelectedValue = (this.$.month.getSelected() ? this.$.month.getSelected().value : 1);
@@ -204,6 +203,7 @@ enyo.kind({
     calcFormat: function(inSender, inEvent) {
         var options = {};
         var calendar = this.$.calendarType.selected.content || 'gregorian';
+        var inputTimeZone = "local";
         options['locale'] = this.$.localeSelector.getValue();
         options['length'] = this.$.length.getActive().content;
         options['length'] = this.$.length.getActive().content;
@@ -214,7 +214,10 @@ enyo.kind({
             options['clock'] = this.$.clock.getActive().content;
         options['useNative'] = this.$.useNative.getActive().content === 'true';
         if (this.$.timeZonesSelector.getValue() !== 'default')
-            options['timezone'] = this.$.timeZonesSelector.getValue();
+        	inputTimeZone = this.$.timeZonesSelector.getValue();
+        if (this.$.formatZonesSelector.getValue() !== 'default')
+            options['timezone'] = this.$.formatZonesSelector.getValue();
+        
         // processing
         var cal = ilib.Cal.newInstance({
             locale: options['locale'],
@@ -226,6 +229,7 @@ enyo.kind({
         else {
             var time = this.$.timePicker.getValue();
             date = cal.newDateInstance({
+            	timezone: inputTimeZone,
                 year: this.$.year.getValue(),
                 month: this.$.month.selected.value,
                 day: this.$.day.selected.value,
