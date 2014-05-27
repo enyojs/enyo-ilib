@@ -1,4 +1,51 @@
+/*
+ * glue.js - glue code to fit ilib into enyo
+ * 
+ * Copyright © 2013-2014 LG Electronics, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 (function() {
+	var enyoLoader = function() {
+		this.base = enyo.path.rewrite("$lib/enyo-ilib/ilib/");
+		if (enyo.platform.platformName === "webos") {
+			this.webos = true;
+		}
+	};
+
+	enyoLoader.prototype = new ilib.Loader();
+	enyoLoader.prototype.constructor = enyoLoader;
+
+	enyoLoader.prototype._createZoneFile = function (path) {
+		var zone = path.substring(path.indexOf("zoneinfo"));
+		
+		// remove the .json suffix to get the name of the zone
+		zone = zone.substring(0, zone.length-5);
+		
+		try {
+			var zif = new ZoneInfoFile("/usr/share/" + zone);
+			
+			// only get the info for this year. Later we can get the info
+			// for any historical or future year too
+			return zif.getIlibZoneInfo(new Date().getFullYear());
+		} catch (e) {
+			// no file, so just return nothing
+			return undefined;
+		}
+	};
+	
 	/**
 	 * Load the list of files asynchronously. This uses recursion in
 	 * order to create a queue of files that will be loaded serially.
@@ -14,42 +61,48 @@
 	 * @param {function(Array.<Object>)} callback callback to call when this function is finished attempting
 	 * to load all the files that exist and can be loaded
 	 */
-	function loadFiles(context, paths, results, params, callback) {
+	enyoLoader.prototype._loadFilesAsync = function (context, paths, results, params, callback) {
 		var root = "resources/";
 		if (params && typeof(params.root) !== "undefined") {
 			root = params.root + '/';
 		}
 		if (paths.length > 0) {
 			var path = paths.shift();
-			var ajax = new enyo.Ajax({url: enyo.path.rewrite("$lib/enyo-ilib/ilib/locale/" + path), cacheBust: false});
-			//console.log("moondemo2: browser/async: attempting to load lib/enyo-ilib/ilib/locale/" + path);
-			var resultFunc = function(inSender, json) {
-                // console.log("moondemo2: " + (!inSender.failed && json ? "success" : "failed"));
-				results.push(!inSender.failed && (typeof(json) === 'object') ? json : undefined);
-				if (paths.length > 0) {
-					loadFiles(context, paths, results, params, callback);
+			if (this.isAvailable(path)) {
+				if (this.webos && path.indexOf("zoneinfo") !== -1) {
+					results.push(this._createZoneFile(path));
 				} else {
-					// only the bottom item on the stack will call
-					// the callback
-					callback.call(context, results);
+					var ajax = new enyo.Ajax({url: this.base + "locale/" + path, cacheBust: false});
+					//console.log("moondemo2: browser/async: attempting to load lib/enyo-ilib/ilib/locale/" + path);
+					var resultFunc = function(inSender, json) {
+		                // console.log("moondemo2: " + (!inSender.failed && json ? "success" : "failed"));
+						results.push(!inSender.failed && (typeof(json) === 'object') ? json : undefined);
+						if (paths.length > 0) {
+							this._loadFilesAsync(context, paths, results, params, callback);
+						} else {
+							// only the bottom item on the stack will call
+							// the callback
+							callback.call(context, results);
+						}
+					};
+					ajax.response(this, resultFunc);
+					ajax.error(this, function(inSender, json) {
+						// not there? Try the standard place instead
+						var file = root + path;
+						// console.log("moondemo2: browser/async: attempting to load " + file);
+						var ajax2 = new enyo.Ajax({url: file, cacheBust: false});
+		
+						ajax2.response(this, resultFunc);
+						ajax2.error(this, resultFunc);
+						ajax2.go();
+					});
+					ajax.go();
 				}
-			};
-			ajax.response(this, resultFunc);
-			ajax.error(this, function(inSender, json) {
-				// not there? Try the standard place instead
-				var file = root + path;
-				// console.log("moondemo2: browser/async: attempting to load " + file);
-				var ajax2 = new enyo.Ajax({url: file, cacheBust: false});
-
-				ajax2.response(this, resultFunc);
-				ajax2.error(this, resultFunc);
-				ajax2.go();
-			});
-			ajax.go();
+			}
 		}
-	}
+	};
 
-	ilib.setLoaderCallback(enyo.bind(this, function(paths, sync, params, callback) {
+	enyoLoader.prototype.loadFiles = function(paths, sync, params, callback) {
 		if (sync) {
 			var ret = [];
 			var root = "resources/";
@@ -58,28 +111,35 @@
 			}
 			// synchronous
 			enyo.forEach(paths, function (path) {
-				// console.log("browser/sync: attempting to load lib/enyo-ilib/ilib/locale/" + path);
-				var ajax = new enyo.Ajax({
-					url: enyo.path.rewrite("$lib/enyo-ilib/ilib/locale/" + path),
-					sync: true, cacheBust: false
-				});
-
-				var handler = function(inSender, json) {
-                    // console.log((!inSender.failed && json ? "success" : "failed"));
-					ret.push(!inSender.failed && (typeof(json) === 'object') ? json : undefined);
-				};
-				ajax.response(this, handler);
-				ajax.error(this, function(inSender, json) {
-					// console.log("browser/sync: Now attempting to load " + root + path);
-					var ajax2 = new enyo.Ajax({
-						url: root + path,
-						sync: true, cacheBust: false
-					});
-					ajax2.response(this, handler);
-					ajax2.error(this, handler);
-					ajax2.go();
-				});
-				ajax.go();
+				if (this.webos && path.indexOf("zoneinfo") !== -1) {
+					ret.push(this._createZoneFile(path));
+				} else {
+					// console.log("browser/sync: attempting to load lib/enyo-ilib/ilib/locale/" + path);
+					if (this.isAvailable(path)) {
+						var ajax = new enyo.Ajax({
+							url: this.base + "locale/" + path,
+							sync: true, 
+							cacheBust: false
+						});
+		
+						var handler = function(inSender, json) {
+		                    // console.log((!inSender.failed && json ? "success" : "failed"));
+							ret.push(!inSender.failed && (typeof(json) === 'object') ? json : undefined);
+						};
+						ajax.response(this, handler);
+						ajax.error(this, function(inSender, json) {
+							// console.log("browser/sync: Now attempting to load " + root + path);
+							var ajax2 = new enyo.Ajax({
+								url: root + path,
+								sync: true, cacheBust: false
+							});
+							ajax2.response(this, handler);
+							ajax2.error(this, handler);
+							ajax2.go();
+						});
+						ajax.go();
+					}
+				}
 			}, this);
 
 			if (typeof(callback) === 'function') {
@@ -90,9 +150,65 @@
 
 		// asynchronous
 		var results = [];
-		loadFiles(this, paths, results, params, callback);
-	}));
+		this._loadFilesAsync(this, paths, results, params, callback);
+	};
 
+	enyoLoader.prototype._loadManifests = function() {
+		// util.print("enyo loader: load manifests\n");
+		if (!this.manifest) {
+			var root = this.base;
+			var manifest = {};
+
+			function loadManifest(subpath) {
+				var dirpath = root + "/" + subpath;
+				var filepath = dirpath + "/ilibmanifest.json";
+
+				// util.print("enyo loader: loading manifest " + filepath + "\n");
+				var ajax = new enyo.Ajax({
+					url: filepath,
+					sync: true, 
+					cacheBust: false,
+					handleAs: "json"
+				});
+
+				ajax.response(this, function(inSender, json) {
+                    // console.log((!inSender.failed && json ? "success" : "failed"));
+					if (!inSender.failed && typeof(json) === 'object') {
+						manifest[dirpath] = json.files;
+					}
+				});
+				ajax.go();
+			}
+
+			loadManifest("locale");
+			root = ".";
+			loadManifest("resources");
+			
+			this.manifest = manifest;
+		}
+	};
+	enyoLoader.prototype.listAvailableFiles = function() {
+		// util.print("enyo loader: list available files called\n");
+		this._loadManifests();
+		return this.manifest;
+	};
+	enyoLoader.prototype.isAvailable = function(path) {
+		this._loadManifests();
+		
+		// util.print("enyo loader: isAvailable " + path + "? ");
+		for (var dir in this.manifest) {
+			if (ilib.indexOf(this.manifest[dir], path) !== -1) {
+				// util.print("true\n");
+				return true;
+			}
+		}
+		
+		// util.print("false\n");
+		return false;
+	};
+
+	ilib.setLoaderCallback(new enyoLoader());
+	
 	if (typeof(window.UILocale) !== 'undefined') {
 		// this is a hack until GF-1581 is fixed
 		ilib.setLocale(window.UILocale);

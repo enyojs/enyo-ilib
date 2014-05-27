@@ -96,7 +96,6 @@ enyo.kind({
     calcFormat: function(inSender, inEvent) {
         var options = {};
         options['locale'] = this.$.localeSelector.getValue();
-        options['calendar'] = 'gregorian';
         options['length'] = this.$.length.getActive().content;
         options['length'] = this.$.length.getActive().content;
         options['type'] = this.$.type.getActive().content;
@@ -109,8 +108,7 @@ enyo.kind({
             options['timezone'] = this.$.timeZonesSelector.getValue();
         // processing    
         var cal = ilib.Cal.newInstance({
-            locale: options['locale'],
-            type: options['calendar']
+            locale: options['locale']
         });
         var dateCalendar = this.$.datePicker.getValue();
         var time = this.$.timePicker.getValue();
@@ -121,7 +119,8 @@ enyo.kind({
             hour: time.getHours(),
             minute: time.getMinutes(),
             second: time.getSeconds(),
-            millisecond: 0
+            millisecond: 0,
+            timezone: options['timezone']
         });
         var fmt = new ilib.DateFmt(options);
         var postFmtData = fmt.format(date);
