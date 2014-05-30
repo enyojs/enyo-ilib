@@ -25,6 +25,7 @@ var ilib = ilib || {};
 /**
  * Return the current version of ilib.
  * 
+ * @static
  * @return {string} a version string for this instance of ilib
  */
 ilib.getVersion = function () {
@@ -60,9 +61,9 @@ if (typeof(exports) !== 'undefined') {
 }
 
 /**
+ * Return the name of the platform
  * @private
  * @static
- * Return the name of the platform
  * @return {string} string naming the platform
  */
 ilib._getPlatform = function () {
@@ -81,9 +82,9 @@ ilib._getPlatform = function () {
 };
 
 /**
+ * Return true if the global variable is defined on this platform.
  * @private
  * @static
- * Return true if the global variable is defined on this platform.
  * @return {boolean} true if the global variable is defined on this platform, false otherwise
  */
 ilib._isGlobal = function(name) {
@@ -103,7 +104,6 @@ ilib._isGlobal = function(name) {
 };
 
 /**
- * @static
  * Sets the default locale for all of ilib. This locale will be used
  * when no explicit locale is passed to any ilib class. If the default
  * locale is not set, ilib will attempt to use the locale of the
@@ -112,6 +112,7 @@ ilib._isGlobal = function(name) {
  * 
  * Depends directive: !depends ilibglobal.js
  * 
+ * @static
  * @param {string} spec the locale specifier for the default locale
  */
 ilib.setLocale = function (spec) {
@@ -123,7 +124,6 @@ ilib.setLocale = function (spec) {
 };
 
 /**
- * @static
  * Return the default locale for all of ilib if one has been set. This 
  * locale will be used when no explicit locale is passed to any ilib 
  * class. If the default
@@ -133,6 +133,7 @@ ilib.setLocale = function (spec) {
  * 
  * Depends directive: !depends ilibglobal.js 
  * 
+ * @static
  * @return {string} the locale specifier for the default locale
  */
 ilib.getLocale = function () {
@@ -184,7 +185,6 @@ ilib.getLocale = function () {
 };
 
 /**
- * @static
  * Sets the default time zone for all of ilib. This time zone will be used when
  * no explicit time zone is passed to any ilib class. If the default time zone
  * is not set, ilib will attempt to use the time zone of the
@@ -193,6 +193,7 @@ ilib.getLocale = function () {
  * 
  * Depends directive: !depends ilibglobal.js
  * 
+ * @static
  * @param {string} tz the name of the time zone to set as the default time zone
  */
 ilib.setTimeZone = function (tz) {
@@ -200,7 +201,6 @@ ilib.setTimeZone = function (tz) {
 };
 
 /**
- * @static
  * Return the default time zone for all of ilib if one has been set. This 
  * time zone will be used when no explicit time zone is passed to any ilib 
  * class. If the default time zone
@@ -210,6 +210,7 @@ ilib.setTimeZone = function (tz) {
  * 
  * Depends directive: !depends ilibglobal.js
  * 
+ * @static
  * @return {string} the default time zone for ilib
  */
 ilib.getTimeZone = function() {
@@ -243,10 +244,10 @@ ilib.getTimeZone = function() {
 };
 
 /**
- * @interface
  * Defines the interface for the loader class for ilib. The main method of the
  * loader object is loadFiles(), which loads a set of requested locale data files
- * from where-ever it is stored. 
+ * from where-ever it is stored.
+ * @interface
  */
 ilib.Loader = function() {};
 
@@ -387,11 +388,11 @@ ilib.Loader.prototype.listAvailableFiles = function() {};
 ilib.Loader.prototype.isAvailable = function(path) {};
 
 /**
- * @static
  * Set the custom loader used to load ilib's locale data in your environment. 
  * The instance passed in must implement the ilib.Loader interface. See the
  * ilib.Loader class documentation for more information about loaders. 
  * 
+ * @static
  * @param {ilib.Loader} loader class to call to access the requested data.
  * @return {boolean} true if the loader was installed correctly, or false
  * if not
@@ -410,7 +411,7 @@ ilib.setLoaderCallback = function(loader) {
 /*
  * util/utils.js - Core utility routines
  * 
- * Copyright © 2012-2013, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -806,6 +807,9 @@ ilib.isEmpty = function (obj) {
 };
 
 
+/**
+ * @private
+ */
 ilib.hashCode = function(obj) {
 	var hash = 0;
 	
@@ -861,8 +865,8 @@ ilib.hashCode = function(obj) {
 
 
 /**
- * @private
  * Load data using the new loader object or via the old function callback.
+ * @private
  */
 ilib._callLoadData = function (files, sync, params, callback) {
 	// console.log("ilib._callLoadData called");
@@ -1023,7 +1027,7 @@ ilib.loadData = function(params) {
 /*
  * locale.js - Locale specifier definition
  * 
- * Copyright © 2012, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1042,7 +1046,6 @@ ilib.loadData = function(params) {
 // !depends ilibglobal.js
 
 /**
- * @class
  * Create a new locale instance. Locales are specified either with a specifier string 
  * that follows the BCP-47 convention (roughly: "language-region-script-variant") or 
  * with 4 parameters that specify the language, region, variant, and script individually.<p>
@@ -1081,6 +1084,7 @@ ilib.loadData = function(params) {
  * 
  * Depends directive: !depends locale.js
  * 
+ * @class
  * @constructor
  * @param {?string|ilib.Locale=} language the ISO 639 2-letter code for the language, or a full 
  * locale spec in BCP-47 format, or another ilib.Locale instance to copy from
@@ -1623,8 +1627,8 @@ ilib.Locale.a1toa3langmap = {
 };
 
 /**
- * @private
  * Tell whether or not the str does not start with a lower case ASCII char.
+ * @private
  * @param {string} str the char to check
  * @return {boolean} true if the char is not a lower case ASCII char
  */
@@ -1635,8 +1639,8 @@ ilib.Locale._notLower = function(str) {
 };
 
 /**
- * @private
  * Tell whether or not the str does not start with an upper case ASCII char.
+ * @private
  * @param {string} str the char to check
  * @return {boolean} true if the char is a not an upper case ASCII char
  */
@@ -1647,8 +1651,8 @@ ilib.Locale._notUpper = function(str) {
 };
 
 /**
- * @private
  * Tell whether or not the str does not start with a digit char.
+ * @private
  * @param {string} str the char to check
  * @return {boolean} true if the char is a not an upper case ASCII char
  */
@@ -1659,10 +1663,10 @@ ilib.Locale._notDigit = function(str) {
 };
 
 /**
- * @private
  * Tell whether or not the given string has the correct syntax to be 
  * an ISO 639 language code.
  * 
+ * @private
  * @param {string} str the string to parse
  * @return {boolean} true if the string could syntactically be a language code.
  */
@@ -1681,10 +1685,10 @@ ilib.Locale._isLanguageCode = function(str) {
 };
 
 /**
- * @private
  * Tell whether or not the given string has the correct syntax to be 
  * an ISO 3166 2-letter region code or M.49 3-digit region code.
  * 
+ * @private
  * @param {string} str the string to parse
  * @return {boolean} true if the string could syntactically be a language code.
  */
@@ -1711,10 +1715,10 @@ ilib.Locale._isRegionCode = function (str) {
 };
 
 /**
- * @private
  * Tell whether or not the given string has the correct syntax to be 
  * an ISO 639 language code.
  * 
+ * @private
  * @param {string} str the string to parse
  * @return {boolean} true if the string could syntactically be a language code.
  */
@@ -1734,10 +1738,10 @@ ilib.Locale._isScriptCode = function(str)
 };
 
 /**
- * @static
  * Return the ISO-3166 alpha3 equivalent region code for the given ISO 3166 alpha2
  * region code. If the given alpha2 code is not found, this function returns its
  * argument unchanged.
+ * @static
  * @param {string|undefined} alpha2 the alpha2 code to map
  * @return {string|undefined} the alpha3 equivalent of the given alpha2 code, or the alpha2
  * parameter if the alpha2 value is not found
@@ -1747,10 +1751,10 @@ ilib.Locale.regionAlpha2ToAlpha3 = function(alpha2) {
 };
 
 /**
- * @static
  * Return the ISO-639 alpha3 equivalent language code for the given ISO 639 alpha1
  * language code. If the given alpha1 code is not found, this function returns its
  * argument unchanged.
+ * @static
  * @param {string|undefined} alpha1 the alpha1 code to map
  * @return {string|undefined} the alpha3 equivalent of the given alpha1 code, or the alpha1
  * parameter if the alpha1 value is not found
@@ -1869,7 +1873,7 @@ ilib.Locale.getAvailableLocales = function () {
 /*
  * strings.js - ilib string subclass definition
  * 
- * Copyright © 2012-2013, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1890,7 +1894,6 @@ ilib.Locale.getAvailableLocales = function () {
 // !data plurals
 
 /**
- * @class
  * Create a new string instance. This string inherits from the Javascript
  * String class, and adds two more methods, fmt and fmtChoice. It can be
  * used anywhere that a normal Javascript string is used. The formatting
@@ -1899,6 +1902,7 @@ ilib.Locale.getAvailableLocales = function () {
  * 
  * Depends directive: !depends strings.js
  * 
+ * @class
  * @constructor
  * @param {string|ilib.String=} string initialize this instance with this string 
  */
@@ -1916,12 +1920,11 @@ ilib.String = function (string) {
 };
 
 /**
- * @private
- * @static
- * 
  * Return true if the given character is a Unicode surrogate character,
  * either high or low.
  * 
+ * @private
+ * @static
  * @param {string} ch character to check
  * @return {boolean} true if the character is a surrogate
  */
@@ -1931,7 +1934,6 @@ ilib.String._isSurrogate = function (ch) {
 };
 
 /**
- * @static
  * Convert a UCS-4 code point to a Javascript string. The codepoint can be any valid 
  * UCS-4 Unicode character, including supplementary characters. Standard Javascript
  * only supports supplementary characters using the UTF-16 encoding, which has 
@@ -1949,6 +1951,7 @@ ilib.String._isSurrogate = function (ch) {
  * ilib.String.codePointAt() to access code points in a string, or use 
  * an iterator to walk through the code points in a string. 
  * 
+ * @static
  * @param {number} codepoint UCS-4 code point to convert to a character
  * @return {string} a string containing the character represented by the codepoint
  */
@@ -2160,6 +2163,7 @@ ilib.String._fncs = {
 	},
 	
 	/**
+	 * @private
 	 * @param {Object} rule
 	 * @param {number} n
 	 * @return {boolean}
@@ -2171,7 +2175,6 @@ ilib.String._fncs = {
 
 ilib.String.prototype = {
 	/**
-	 * @private
 	 * Return the length of this string in characters. This function defers to the regular
 	 * Javascript string class in order to perform the length function. Please note that this
 	 * method is a real method, whereas the length property of Javascript strings is 
@@ -2183,6 +2186,7 @@ ilib.String.prototype = {
 	 * var str = new ilib.String("this is a string");
 	 * console.log("String is " + str._length() + " characters long.");
 	 * </pre>
+	 * @private
 	 */
 	_length: function () {
 		return this.str.length;
@@ -2669,9 +2673,9 @@ ilib.String.prototype = {
 	},
 	
 	/**
-	 * @private
 	 * Convert the character or the surrogate pair at the given
 	 * index into the string to a Unicode UCS-4 code point.
+	 * @protected
 	 * @param {number} index index into the string
 	 * @return {number} code point of the character at the
 	 * given index into the string
@@ -2871,7 +2875,7 @@ ilib.String.prototype = {
 /*
  * localeinfo.js - Encode locale-specific defaults
  * 
- * Copyright © 2012-2013, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -2892,7 +2896,6 @@ ilib.String.prototype = {
 // !data localeinfo
 
 /**
- * @class
  * Create a new locale info instance. Locale info instances give information about
  * the default settings for a particular locale. These settings may be overridden
  * by various parts of the code, and should be used as a fall-back setting of last
@@ -2929,6 +2932,7 @@ ilib.String.prototype = {
  * 
  * Depends directive: !depends localeinfo.js
  * 
+ * @class
  * @constructor
  * @see {ilib.setLoaderCallback} for information about registering a loader callback
  * function
@@ -3396,7 +3400,7 @@ ilib.LocaleInfo.prototype = {
 /*
  * resources.js - Resource bundle definition
  * 
- * Copyright © 2012-2013, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -3417,7 +3421,6 @@ ilib.LocaleInfo.prototype = {
 // !data pseudomap
 
 /**
- * @class
  * Create a new resource bundle instance. The resource bundle loads strings
  * appropriate for a particular locale and provides them via the getString 
  * method.<p>
@@ -3599,6 +3602,7 @@ ilib.LocaleInfo.prototype = {
  * 
  * Depends directive: !depends resources.js
  * 
+ * @class
  * @constructor
  * @param {?Object} options Options controlling how the bundle is created
  */
@@ -4006,7 +4010,7 @@ ilib.ResBundle.prototype = {
 /*
  * scriptinfo.js - information about scripts
  * 
- * Copyright © 2012-2013, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -4027,7 +4031,6 @@ ilib.ResBundle.prototype = {
 // !data scripts
 
 /**
- * @class
  * Create a new script info instance. This class encodes information about
  * scripts, which are sets of characters used in a writing system.<p>
  * 
@@ -4055,6 +4058,7 @@ ilib.ResBundle.prototype = {
  * 
  * Depends directive: !depends scriptinfo.js
  * 
+ * @class
  * @constructor
  * @param {string} script The ISO 15924 4-letter identifier for the script
  * @param {Object} options parameters to initialize this matcher 
@@ -4106,9 +4110,9 @@ ilib.ScriptInfo = function(script, options) {
 };
 
 /**
- * @static
  * Return an array of all ISO 15924 4-letter identifier script identifiers that
  * this copy of ilib knows about.
+ * @static
  * @return {Array.<string>} an array of all script identifiers that this copy of
  * ilib knows about
  */
@@ -4196,8 +4200,7 @@ ilib.ScriptInfo.prototype = {
 	}
 };
 /**
- * @license
- * Copyright © 2012, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -4211,6 +4214,7 @@ ilib.ScriptInfo.prototype = {
  *
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * @license
  */
 
 /*
