@@ -25,6 +25,7 @@ var ilib = ilib || {};
 /**
  * Return the current version of ilib.
  * 
+ * @static
  * @return {string} a version string for this instance of ilib
  */
 ilib.getVersion = function () {
@@ -60,9 +61,9 @@ if (typeof(exports) !== 'undefined') {
 }
 
 /**
+ * Return the name of the platform
  * @private
  * @static
- * Return the name of the platform
  * @return {string} string naming the platform
  */
 ilib._getPlatform = function () {
@@ -81,9 +82,9 @@ ilib._getPlatform = function () {
 };
 
 /**
+ * Return true if the global variable is defined on this platform.
  * @private
  * @static
- * Return true if the global variable is defined on this platform.
  * @return {boolean} true if the global variable is defined on this platform, false otherwise
  */
 ilib._isGlobal = function(name) {
@@ -103,7 +104,6 @@ ilib._isGlobal = function(name) {
 };
 
 /**
- * @static
  * Sets the default locale for all of ilib. This locale will be used
  * when no explicit locale is passed to any ilib class. If the default
  * locale is not set, ilib will attempt to use the locale of the
@@ -112,6 +112,7 @@ ilib._isGlobal = function(name) {
  * 
  * Depends directive: !depends ilibglobal.js
  * 
+ * @static
  * @param {string} spec the locale specifier for the default locale
  */
 ilib.setLocale = function (spec) {
@@ -123,7 +124,6 @@ ilib.setLocale = function (spec) {
 };
 
 /**
- * @static
  * Return the default locale for all of ilib if one has been set. This 
  * locale will be used when no explicit locale is passed to any ilib 
  * class. If the default
@@ -133,6 +133,7 @@ ilib.setLocale = function (spec) {
  * 
  * Depends directive: !depends ilibglobal.js 
  * 
+ * @static
  * @return {string} the locale specifier for the default locale
  */
 ilib.getLocale = function () {
@@ -184,7 +185,6 @@ ilib.getLocale = function () {
 };
 
 /**
- * @static
  * Sets the default time zone for all of ilib. This time zone will be used when
  * no explicit time zone is passed to any ilib class. If the default time zone
  * is not set, ilib will attempt to use the time zone of the
@@ -193,6 +193,7 @@ ilib.getLocale = function () {
  * 
  * Depends directive: !depends ilibglobal.js
  * 
+ * @static
  * @param {string} tz the name of the time zone to set as the default time zone
  */
 ilib.setTimeZone = function (tz) {
@@ -200,7 +201,6 @@ ilib.setTimeZone = function (tz) {
 };
 
 /**
- * @static
  * Return the default time zone for all of ilib if one has been set. This 
  * time zone will be used when no explicit time zone is passed to any ilib 
  * class. If the default time zone
@@ -210,6 +210,7 @@ ilib.setTimeZone = function (tz) {
  * 
  * Depends directive: !depends ilibglobal.js
  * 
+ * @static
  * @return {string} the default time zone for ilib
  */
 ilib.getTimeZone = function() {
@@ -243,10 +244,10 @@ ilib.getTimeZone = function() {
 };
 
 /**
- * @interface
  * Defines the interface for the loader class for ilib. The main method of the
  * loader object is loadFiles(), which loads a set of requested locale data files
- * from where-ever it is stored. 
+ * from where-ever it is stored.
+ * @interface
  */
 ilib.Loader = function() {};
 
@@ -387,11 +388,11 @@ ilib.Loader.prototype.listAvailableFiles = function() {};
 ilib.Loader.prototype.isAvailable = function(path) {};
 
 /**
- * @static
  * Set the custom loader used to load ilib's locale data in your environment. 
  * The instance passed in must implement the ilib.Loader interface. See the
  * ilib.Loader class documentation for more information about loaders. 
  * 
+ * @static
  * @param {ilib.Loader} loader class to call to access the requested data.
  * @return {boolean} true if the loader was installed correctly, or false
  * if not
@@ -410,7 +411,7 @@ ilib.setLoaderCallback = function(loader) {
 /*
  * locale.js - Locale specifier definition
  * 
- * Copyright © 2012, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -429,7 +430,6 @@ ilib.setLoaderCallback = function(loader) {
 // !depends ilibglobal.js
 
 /**
- * @class
  * Create a new locale instance. Locales are specified either with a specifier string 
  * that follows the BCP-47 convention (roughly: "language-region-script-variant") or 
  * with 4 parameters that specify the language, region, variant, and script individually.<p>
@@ -468,6 +468,7 @@ ilib.setLoaderCallback = function(loader) {
  * 
  * Depends directive: !depends locale.js
  * 
+ * @class
  * @constructor
  * @param {?string|ilib.Locale=} language the ISO 639 2-letter code for the language, or a full 
  * locale spec in BCP-47 format, or another ilib.Locale instance to copy from
@@ -1010,8 +1011,8 @@ ilib.Locale.a1toa3langmap = {
 };
 
 /**
- * @private
  * Tell whether or not the str does not start with a lower case ASCII char.
+ * @private
  * @param {string} str the char to check
  * @return {boolean} true if the char is not a lower case ASCII char
  */
@@ -1022,8 +1023,8 @@ ilib.Locale._notLower = function(str) {
 };
 
 /**
- * @private
  * Tell whether or not the str does not start with an upper case ASCII char.
+ * @private
  * @param {string} str the char to check
  * @return {boolean} true if the char is a not an upper case ASCII char
  */
@@ -1034,8 +1035,8 @@ ilib.Locale._notUpper = function(str) {
 };
 
 /**
- * @private
  * Tell whether or not the str does not start with a digit char.
+ * @private
  * @param {string} str the char to check
  * @return {boolean} true if the char is a not an upper case ASCII char
  */
@@ -1046,10 +1047,10 @@ ilib.Locale._notDigit = function(str) {
 };
 
 /**
- * @private
  * Tell whether or not the given string has the correct syntax to be 
  * an ISO 639 language code.
  * 
+ * @private
  * @param {string} str the string to parse
  * @return {boolean} true if the string could syntactically be a language code.
  */
@@ -1068,10 +1069,10 @@ ilib.Locale._isLanguageCode = function(str) {
 };
 
 /**
- * @private
  * Tell whether or not the given string has the correct syntax to be 
  * an ISO 3166 2-letter region code or M.49 3-digit region code.
  * 
+ * @private
  * @param {string} str the string to parse
  * @return {boolean} true if the string could syntactically be a language code.
  */
@@ -1098,10 +1099,10 @@ ilib.Locale._isRegionCode = function (str) {
 };
 
 /**
- * @private
  * Tell whether or not the given string has the correct syntax to be 
  * an ISO 639 language code.
  * 
+ * @private
  * @param {string} str the string to parse
  * @return {boolean} true if the string could syntactically be a language code.
  */
@@ -1121,10 +1122,10 @@ ilib.Locale._isScriptCode = function(str)
 };
 
 /**
- * @static
  * Return the ISO-3166 alpha3 equivalent region code for the given ISO 3166 alpha2
  * region code. If the given alpha2 code is not found, this function returns its
  * argument unchanged.
+ * @static
  * @param {string|undefined} alpha2 the alpha2 code to map
  * @return {string|undefined} the alpha3 equivalent of the given alpha2 code, or the alpha2
  * parameter if the alpha2 value is not found
@@ -1134,10 +1135,10 @@ ilib.Locale.regionAlpha2ToAlpha3 = function(alpha2) {
 };
 
 /**
- * @static
  * Return the ISO-639 alpha3 equivalent language code for the given ISO 639 alpha1
  * language code. If the given alpha1 code is not found, this function returns its
  * argument unchanged.
+ * @static
  * @param {string|undefined} alpha1 the alpha1 code to map
  * @return {string|undefined} the alpha3 equivalent of the given alpha1 code, or the alpha1
  * parameter if the alpha1 value is not found
@@ -1256,7 +1257,7 @@ ilib.Locale.getAvailableLocales = function () {
 /*
  * localeinfo.js - Encode locale-specific defaults
  * 
- * Copyright © 2012-2013, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1277,7 +1278,6 @@ ilib.Locale.getAvailableLocales = function () {
 // !data localeinfo
 
 /**
- * @class
  * Create a new locale info instance. Locale info instances give information about
  * the default settings for a particular locale. These settings may be overridden
  * by various parts of the code, and should be used as a fall-back setting of last
@@ -1314,6 +1314,7 @@ ilib.Locale.getAvailableLocales = function () {
  * 
  * Depends directive: !depends localeinfo.js
  * 
+ * @class
  * @constructor
  * @see {ilib.setLoaderCallback} for information about registering a loader callback
  * function
@@ -1781,7 +1782,7 @@ ilib.LocaleInfo.prototype = {
 /*
  * date.js - Represent a date in any calendar. This class is subclassed for each calendar.
  * 
- * Copyright © 2012, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1800,14 +1801,17 @@ ilib.LocaleInfo.prototype = {
 /* !depends ilibglobal.js localeinfo.js */
 
 /**
- * @class
  * Construct a new date object. Each parameter is a numeric value, but its 
  * accepted range can vary depending on the subclass of this date. For example,
  * Gregorian months can be from 1 to 12, whereas months in the Hebrew calendar
  * can be from 1 to 13.<p>
  * 
+ * Note that this really calls the newInstance factory method underneath in 
+ * order to instantiate the correct subclass of ilib.Date.
+ * 
  * Depends directive: !depends date.js
  * 
+ * @class
  * @constructor
  * @param {Object=} options The date components to initialize this date with
  */
@@ -1822,17 +1826,44 @@ ilib.Date = function(options) {
  * properties:
  * 
  * <ul>
- * <li><i>type</i> - specify the type of the date desired. The
+ * <li><i>type</i> - specify the type/calendar of the date desired. The
  * list of valid values changes depending on which calendars are 
  * defined. When assembling your iliball.js, include those date type 
  * you wish to use in your program or web page, and they will register 
  * themselves with this factory method. The "gregorian",
  * and "julian" calendars are all included by default, as they are the
- * standard calendars for much of the world.
+ * standard calendars for much of the world. If not specified, the type
+ * of the date returned is the one that is appropriate for the locale.
  * </ul>
  * 
  * The options object is also passed down to the date constructor, and 
- * thus can contain the same properties as the date object being instantiated.
+ * thus can contain the the properties as the date object being instantiated.
+ * See the documentation for {@link ilib.Date.GregDate}, and other
+ * subclasses for more details on other parameter that may be passed in.<p>
+ * 
+ * Please note that if you do not give the type parameter, this factory
+ * method will create a date object that is appropriate for the calendar
+ * that is most commonly used in the specified or current ilib locale. 
+ * For example, in Thailand, the most common calendar is the Thai solar 
+ * calendar. If the current locale is "th-TH" (Thai for Thailand) and you 
+ * use this factory method to construct a new date without specifying the
+ * type, it will automatically give you back an instance of 
+ * {@link ilib.Date.ThaiSolarDate}. This is convenient because you do not 
+ * need to know which locales use which types of dates. In fact, you 
+ * should always use this factory method to make new date instances unless
+ * you know that you specifically need a date in a particular calendar.<p>
+ * 
+ * Also note that when you pass in the date components such as year, month,
+ * day, etc., these components should be appropriate for the given date
+ * being instantiated. That is, in our Thai example in the previous
+ * paragraph, the year and such should be given as a Thai solar year, not
+ * the Gregorian year that you get from the Javascript Date class. In
+ * order to initialize a date instance when you don't know what subclass
+ * will be instantiated for the locale, use a parameter such as "unixtime" 
+ * or "julianday" which are unambiguous and based on UTC time, instead of
+ * the year/month/date date components. The date components for that UTC 
+ * time will be calculated and the time zone offset will be automatically 
+ * factored in.
  *  
  * @param {Object=} options options controlling the construction of this instance, or
  * undefined to use the default options
@@ -1860,9 +1891,6 @@ ilib.Date.newInstance = function(options) {
 };
 
 /**
- * @static
- * @private
- * 
  * Convert JavaScript Date objects and other types into native ilib Dates. This accepts any
  * string or number that can be translated by the JavaScript Date class,
  * (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse)
@@ -1871,6 +1899,8 @@ ilib.Date.newInstance = function(options) {
  * return null or undefined if input is null or undefined). Normal output is 
  * a standard native subclass of the ilib Date object as appropriate for the locale.
  * 
+ * @static
+ * @private
  * @param  {ilib.Date|Object|ilib.JulianDay|Date|string|number=} inDate The input date object, string or Number.
  * @param  {ilib.String|string=} timezone timezone to use if a new date object is created
  * @return {ilib.Date|null|undefined} an ilib.Date subclass equivalent to the given inDate
@@ -2078,9 +2108,9 @@ ilib.Date.prototype = {
 	},
 	
 	/**
-	 * @private
 	 * Return the Rata Die (fixed day) number of this date.
 	 * 
+	 * @protected
 	 * @return {number} the rd date as a number
 	 */
 	getRataDie: function() {
@@ -2088,8 +2118,8 @@ ilib.Date.prototype = {
 	},
 	
 	/**
-	 * @private
 	 * Set the date components of this instance based on the given rd.
+	 * @protected
 	 * @param {number} rd the rata die date to set
 	 */
 	setRd: function (rd) {
@@ -2151,8 +2181,8 @@ ilib.Date.prototype = {
 	},
 	
 	/**
-	 * @private
 	 * Return the rd number of the first Sunday of the given ISO year.
+	 * @protected
 	 * @param {number} year the year for which the first Sunday is being sought
 	 * @return {number} the rd of the first Sunday of the ISO year
 	 */
@@ -2243,7 +2273,7 @@ ilib.Date.prototype = {
 /*
  * util/utils.js - Core utility routines
  * 
- * Copyright © 2012-2013, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -2639,6 +2669,9 @@ ilib.isEmpty = function (obj) {
 };
 
 
+/**
+ * @private
+ */
 ilib.hashCode = function(obj) {
 	var hash = 0;
 	
@@ -2694,8 +2727,8 @@ ilib.hashCode = function(obj) {
 
 
 /**
- * @private
  * Load data using the new loader object or via the old function callback.
+ * @private
  */
 ilib._callLoadData = function (files, sync, params, callback) {
 	// console.log("ilib._callLoadData called");
@@ -2856,7 +2889,7 @@ ilib.loadData = function(params) {
 /*
  * strings.js - ilib string subclass definition
  * 
- * Copyright © 2012-2013, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -2877,7 +2910,6 @@ ilib.loadData = function(params) {
 // !data plurals
 
 /**
- * @class
  * Create a new string instance. This string inherits from the Javascript
  * String class, and adds two more methods, fmt and fmtChoice. It can be
  * used anywhere that a normal Javascript string is used. The formatting
@@ -2886,6 +2918,7 @@ ilib.loadData = function(params) {
  * 
  * Depends directive: !depends strings.js
  * 
+ * @class
  * @constructor
  * @param {string|ilib.String=} string initialize this instance with this string 
  */
@@ -2903,12 +2936,11 @@ ilib.String = function (string) {
 };
 
 /**
- * @private
- * @static
- * 
  * Return true if the given character is a Unicode surrogate character,
  * either high or low.
  * 
+ * @private
+ * @static
  * @param {string} ch character to check
  * @return {boolean} true if the character is a surrogate
  */
@@ -2918,7 +2950,6 @@ ilib.String._isSurrogate = function (ch) {
 };
 
 /**
- * @static
  * Convert a UCS-4 code point to a Javascript string. The codepoint can be any valid 
  * UCS-4 Unicode character, including supplementary characters. Standard Javascript
  * only supports supplementary characters using the UTF-16 encoding, which has 
@@ -2936,6 +2967,7 @@ ilib.String._isSurrogate = function (ch) {
  * ilib.String.codePointAt() to access code points in a string, or use 
  * an iterator to walk through the code points in a string. 
  * 
+ * @static
  * @param {number} codepoint UCS-4 code point to convert to a character
  * @return {string} a string containing the character represented by the codepoint
  */
@@ -3147,6 +3179,7 @@ ilib.String._fncs = {
 	},
 	
 	/**
+	 * @private
 	 * @param {Object} rule
 	 * @param {number} n
 	 * @return {boolean}
@@ -3158,7 +3191,6 @@ ilib.String._fncs = {
 
 ilib.String.prototype = {
 	/**
-	 * @private
 	 * Return the length of this string in characters. This function defers to the regular
 	 * Javascript string class in order to perform the length function. Please note that this
 	 * method is a real method, whereas the length property of Javascript strings is 
@@ -3170,6 +3202,7 @@ ilib.String.prototype = {
 	 * var str = new ilib.String("this is a string");
 	 * console.log("String is " + str._length() + " characters long.");
 	 * </pre>
+	 * @private
 	 */
 	_length: function () {
 		return this.str.length;
@@ -3656,9 +3689,9 @@ ilib.String.prototype = {
 	},
 	
 	/**
-	 * @private
 	 * Convert the character or the surrogate pair at the given
 	 * index into the string to a Unicode UCS-4 code point.
+	 * @protected
 	 * @param {number} index index into the string
 	 * @return {number} code point of the character at the
 	 * given index into the string
@@ -4038,6 +4071,7 @@ ilib.Cal.prototype = {
 /**
  * Return the sign of the given number. If the sign is negative, this function
  * returns -1. If the sign is positive or zero, this function returns 1.
+ * @static
  * @param {number} num the number to test
  * @return {number} -1 if the number is negative, and 1 otherwise
  */
@@ -4053,11 +4087,12 @@ ilib.signum = function (num) {
 
 
 /**
- * @private
+ * @protected
  */
 ilib._roundFnc = {
 	/**
-	 * @private
+	 * @static
+	 * @protected
 	 * @param {number} num number to round
 	 * @return {number} rounded number
 	 */
@@ -4066,7 +4101,8 @@ ilib._roundFnc = {
 	},
 	
 	/**
-	 * @private
+	 * @static
+	 * @protected
 	 * @param {number} num number to round
 	 * @return {number} rounded number
 	 */
@@ -4075,7 +4111,8 @@ ilib._roundFnc = {
 	},
 	
 	/**
-	 * @private
+	 * @static
+	 * @protected
 	 * @param {number} num number to round
 	 * @return {number} rounded number
 	 */
@@ -4084,7 +4121,8 @@ ilib._roundFnc = {
 	},
 	
 	/**
-	 * @private
+	 * @static
+	 * @protected
 	 * @param {number} num number to round
 	 * @return {number} rounded number
 	 */
@@ -4093,7 +4131,8 @@ ilib._roundFnc = {
 	},
 	
 	/**
-	 * @private
+	 * @static
+	 * @protected
 	 * @param {number} num number to round
 	 * @return {number} rounded number
 	 */
@@ -4102,7 +4141,8 @@ ilib._roundFnc = {
 	},
 	
 	/**
-	 * @private
+	 * @static
+	 * @protected
 	 * @param {number} num number to round
 	 * @return {number} rounded number
 	 */
@@ -4111,7 +4151,8 @@ ilib._roundFnc = {
 	},
 	
 	/**
-	 * @private
+	 * @static
+	 * @protected
 	 * @param {number} num number to round
 	 * @return {number} rounded number
 	 */
@@ -4120,7 +4161,8 @@ ilib._roundFnc = {
 	},
 	
 	/**
-	 * @private
+	 * @static
+	 * @protected
 	 * @param {number} num number to round
 	 * @return {number} rounded number
 	 */
@@ -4133,7 +4175,7 @@ ilib._roundFnc = {
 /*
  * julianday.js - A Julian date object.
  * 
- * Copyright © 2012, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -4152,7 +4194,6 @@ ilib._roundFnc = {
 /* !depends locale.js */
 
 /**
- * @class
  * A Julian Day class. A Julian Day is a date based on the Julian Day count
  * of time invented by Joseph Scaliger in 1583 for use with astronomical calculations. 
  * Do not confuse it with a date in the Julian calendar, which it has very
@@ -4160,6 +4201,7 @@ ilib._roundFnc = {
  * 
  * Depends directive: !depends julianday.js
  * 
+ * @class
  * @constructor
  * @param {number} num the Julian Day expressed as a floating point number 
  */
@@ -4248,7 +4290,7 @@ ilib.JulianDay.prototype = {
 /*
  * gregorian.js - Represent a Gregorian calendar object.
  * 
- * Copyright © 2012, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -4268,12 +4310,12 @@ ilib.JulianDay.prototype = {
 /* !depends calendar.js locale.js date.js julianday.js util/utils.js */
 
 /**
- * @class
  * Construct a new Gregorian calendar object. This class encodes information about
  * a Gregorian calendar.<p>
  * 
  * Depends directive: !depends gregorian.js
  * 
+ * @class
  * @constructor
  * @implements ilib.Cal
  */
@@ -4282,10 +4324,10 @@ ilib.Cal.Gregorian = function() {
 };
 
 /**
+ * the lengths of each month 
  * @private
  * @const
  * @type Array.<number> 
- * the lengths of each month 
  */
 ilib.Cal.Gregorian.monthLengths = [
 	31,  /* Jan */
@@ -4392,8 +4434,6 @@ julianday.js
 */
 
 /**
- * @class
- * 
  * Construct a new RD date number object. The constructor parameters can 
  * contain any of the following properties:
  * 
@@ -4442,6 +4482,8 @@ julianday.js
  * 
  * Depends directive: !depends ratadie.js
  * 
+ * @protected
+ * @class
  * @constructor
  * @param {Object=} params parameters that govern the settings and behaviour of this RD date
  */
@@ -4478,7 +4520,7 @@ ilib.Date.RataDie = function(params) {
 
 ilib.Date.RataDie.prototype = {
 	/**
-	 * @private
+	 * @protected
 	 * @const
 	 * @type number
 	 * the difference between a zero Julian day and the zero Gregorian date. 
@@ -4486,10 +4528,10 @@ ilib.Date.RataDie.prototype = {
 	epoch: 1721424.5,
 	
 	/**
-	 * @private
 	 * Set the RD of this instance according to the given unix time. Unix time is
 	 * the number of milliseconds since midnight on Jan 1, 1970.
-	 * 
+	 *
+	 * @protected
 	 * @param {number} millis the unix time to set this date to in milliseconds 
 	 */
 	_setTime: function(millis) {
@@ -4498,8 +4540,8 @@ ilib.Date.RataDie.prototype = {
 	},
 
 	/**
-	 * @private
 	 * Set the date of this instance using a Julian Day.
+	 * @protected
 	 * @param {number} date the Julian Day to use to set this date
 	 */
 	_setJulianDay: function (date) {
@@ -4508,9 +4550,9 @@ ilib.Date.RataDie.prototype = {
 	},
 
 	/**
-	 * @private
 	 * Return the rd number of the particular day of the week on or before the 
 	 * given rd. eg. The Sunday on or before the given rd.
+	 * @protected
 	 * @param {number} rd the rata die date of the reference date
 	 * @param {number} dayOfWeek the day of the week that is being sought relative 
 	 * to the current date
@@ -4663,8 +4705,6 @@ julianday.js
 */
 
 /**
- * @class
- * 
  * Construct a new Gregorian RD date number object. The constructor parameters can 
  * contain any of the following properties:
  * 
@@ -4707,7 +4747,10 @@ julianday.js
  * 
  * Depends directive: !depends gregratadie.js
  * 
+ * @protected
+ * @class
  * @constructor
+ * @extends ilib.Date.RataDie
  * @param {Object=} params parameters that govern the settings and behaviour of this Gregorian RD date
  */
 ilib.Date.GregRataDie = function(params) {
@@ -4721,10 +4764,10 @@ ilib.Date.GregRataDie.prototype.parent = ilib.Date.RataDie;
 ilib.Date.GregRataDie.prototype.constructor = ilib.Date.GregRataDie;
 
 /**
+ * the cumulative lengths of each month, for a non-leap year 
  * @private
  * @const
  * @type Array.<number>
- * the cumulative lengths of each month, for a non-leap year 
  */
 ilib.Date.GregRataDie.cumMonthLengths = [
     0,   /* Jan */
@@ -4743,10 +4786,10 @@ ilib.Date.GregRataDie.cumMonthLengths = [
 ];
 
 /**
+ * the cumulative lengths of each month, for a leap year 
  * @private
  * @const
  * @type Array.<number>
- * the cumulative lengths of each month, for a leap year 
  */
 ilib.Date.GregRataDie.cumMonthLengthsLeap = [
 	0,   /* Jan */
@@ -4765,9 +4808,9 @@ ilib.Date.GregRataDie.cumMonthLengthsLeap = [
 ];
 
 /**
- * @private
  * Calculate the Rata Die (fixed day) number of the given date.
  * 
+ * @private
  * @param {Object} date the date components to calculate the RD from
  */
 ilib.Date.GregRataDie.prototype._setDateComponents = function(date) {
@@ -4807,9 +4850,9 @@ ilib.Date.GregRataDie.prototype._setDateComponents = function(date) {
 };
 
 /**
- * @private
  * Return the rd number of the particular day of the week on or before the 
  * given rd. eg. The Sunday on or before the given rd.
+ * @private
  * @param {number} rd the rata die date of the reference date
  * @param {number} dayOfWeek the day of the week that is being sought relative 
  * to the current date
@@ -4851,7 +4894,7 @@ calendar/gregratadie.js
 // !data localeinfo zoneinfo
 
 /**
- * @class Create a time zone instance. 
+ * Create a time zone instance. 
  * 
  * This class reports and transforms
  * information about particular time zones.<p>
@@ -4939,6 +4982,7 @@ calendar/gregratadie.js
  * 
  * Depends directive: !depends timezone.js
  * 
+ * @class 
  * @constructor
  * @param {Object} options Options guiding the construction of this time zone instance
  */
@@ -5228,10 +5272,10 @@ ilib.TimeZone.prototype.getDisplayName = function (date, style) {
 };
 
 /**
- * @private
  * Convert the offset string to an object with an h, m, and possibly s property
  * to indicate the hours, minutes, and seconds.
  * 
+ * @private
  * @param {string} str the offset string to convert to an object
  * @return {Object.<{h:number,m:number,s:number}>} an object giving the offset for the zone at 
  * the given date/time, in hours, minutes, and seconds
@@ -5317,9 +5361,9 @@ ilib.TimeZone.prototype.getOffsetMillis = function (date) {
 };
 
 /**
- * @private
  * Return the offset in milliseconds when the date has an RD number in wall
  * time rather than in UTC time.
+ * @protected
  * @param date the date to check in wall time
  * @returns {number} the number of milliseconds of offset from UTC that the given date is
  */
@@ -5438,8 +5482,8 @@ ilib.TimeZone.prototype.getDSTSavingsStr = function () {
 };
 
 /**
- * @private
  * return the rd of the start of DST transition for the given year
+ * @protected
  * @param {Object} rule set of rules
  * @param {number} year year to check
  * @return {number} the rd of the start of DST for the year
@@ -5676,7 +5720,7 @@ ilib.TimeZone.prototype.getCountry = function () {
 /*
  * resources.js - Resource bundle definition
  * 
- * Copyright © 2012-2013, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -5697,7 +5741,6 @@ ilib.TimeZone.prototype.getCountry = function () {
 // !data pseudomap
 
 /**
- * @class
  * Create a new resource bundle instance. The resource bundle loads strings
  * appropriate for a particular locale and provides them via the getString 
  * method.<p>
@@ -5879,6 +5922,7 @@ ilib.TimeZone.prototype.getCountry = function () {
  * 
  * Depends directive: !depends resources.js
  * 
+ * @class
  * @constructor
  * @param {?Object} options Options controlling how the bundle is created
  */
@@ -6286,7 +6330,7 @@ ilib.ResBundle.prototype = {
 /*
  * util/jsutils.js - Misc utilities to work around Javascript engine differences
  * 
- * Copyright © 2013, JEDLSoft
+ * Copyright © 2013-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -6311,6 +6355,7 @@ ilib.ResBundle.prototype = {
  * 
  * Depends directive: !depends utils.js
  * 
+ * @static
  * @param {Object} source the source object to copy properties from
  * @param {Object} target the target object to copy properties into
  */
@@ -6326,12 +6371,11 @@ ilib.shallowCopy = function (source, target) {
 };
 
 /**
- * @static
- * 
  * Map a string to the given set of alternate characters. If the target set
  * does not contain a particular character in the input string, then that
  * character will be copied to the output unmapped.
  * 
+ * @static
  * @param {string} str a string to map to an alternate set of characters
  * @param {Array.<string>|Object} map a mapping to alternate characters
  * @return {string} the source string where each character is mapped to alternate characters
@@ -6350,14 +6394,17 @@ ilib.mapString = function (str, map) {
 };
 
 /**
+ * Check if an object is a member of the given array. If this javascript engine
+ * support indexOf, it is used directly. Otherwise, this function implements it
+ * itself. The idea is to make sure that you can use the quick indexOf if it is
+ * available, but use a slower implementation in older engines as well.
+ * 
  * @static
- * 
- * Check if an object is a memory of the given array. This works in older
- * browsers as well.
- * 
  * @param {Array.<Object>} array array to search
- * @param {Object} obj object to search for
- * @return {number} index of the object in the array, or -1 if it is not in the array
+ * @param {Object} obj object being sought. This should be of the same type as the
+ * members of the array being searched. If not, this function will not return
+ * any results.
+ * @return {number} index of the object in the array, or -1 if it is not in the array.
  */
 ilib.indexOf = function(array, obj) {
 	if (!array || !obj) {
@@ -6377,7 +6424,7 @@ ilib.indexOf = function(array, obj) {
 /*
  * datefmt.js - Date formatter definition
  * 
- * Copyright © 2012, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -6410,8 +6457,6 @@ util/jsutils.js
 // !data dateformats sysres
 
 /**
- * @class
- * 
  * Create a new date formatter instance. The date formatter is immutable once
  * it is created, but can format as many different dates as needed with the same
  * options. Create different date formatter instances for different purposes
@@ -6645,6 +6690,7 @@ util/jsutils.js
  * 
  * Depends directive: !depends datefmt.js
  * 
+ * @class
  * @constructor
  * @param {Object} options options governing the way this date formatter instance works
  */
@@ -7012,8 +7058,8 @@ ilib.DateFmt.prototype = {
 	},
     
 	/**
-	 * @protected
 	 * Convert the template into an array of date components separated by formatting chars.
+	 * @protected
 	 * @param {string} template Format template to tokenize into components
 	 * @return {Array.<string>} a tokenized array of date format components
 	 */
@@ -7687,7 +7733,7 @@ ilib.DateFmt.prototype = {
 /*
  * datefmt.js - Date formatter definition
  * 
- * Copyright © 2012, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -7720,8 +7766,6 @@ util/jsutils.js
 // !data dateformats sysres
 
 /**
- * @class
- * 
  * Create a new date range formatter instance. The date range formatter is immutable once
  * it is created, but can format as many different date ranges as needed with the same
  * options. Create different date range formatter instances for different purposes
@@ -7798,6 +7842,7 @@ util/jsutils.js
  * 
  * Depends directive: !depends daterangefmt.js
  * 
+ * @class
  * @constructor
  * @param {Object} options options governing the way this date range formatter instance works
  */
@@ -8044,7 +8089,7 @@ ilib.DateRngFmt.prototype = {
 /*
  * hebrew.js - Represent a Hebrew calendar object.
  * 
- * Copyright © 2012, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -8064,7 +8109,6 @@ ilib.DateRngFmt.prototype = {
 /* !depends calendar.js locale.js date.js julianday.js util/utils.js */
 
 /**
- * @class
  * Construct a new Hebrew calendar object. This class encodes information about
  * the Hebrew (Jewish) calendar. The Hebrew calendar is a tabular hebrew 
  * calendar where the dates are calculated by arithmetic rules. This differs from 
@@ -8079,6 +8123,7 @@ ilib.DateRngFmt.prototype = {
  * 
  * Depends directive: !depends hebrew.js
  * 
+ * @class
  * @constructor
  * @implements ilib.Cal
  */
@@ -8088,9 +8133,9 @@ ilib.Cal.Hebrew = function() {
 
 
 /**
- * @private
  * Return the number of days elapsed in the Hebrew calendar before the
  * given year starts.
+ * @private
  * @param {number} year the year for which the number of days is sought
  * @return {number} the number of days elapsed in the Hebrew calendar before the
  * given year starts
@@ -8105,7 +8150,6 @@ ilib.Cal.Hebrew.elapsedDays = function(year) {
 };
 
 /**
- * @private
  * Return the number of days that the New Year's (Rosh HaShanah) in the Hebrew 
  * calendar will be corrected for the given year. Corrections are caused because New 
  * Year's is not allowed to start on certain days of the week. To deal with 
@@ -8113,6 +8157,7 @@ ilib.Cal.Hebrew.elapsedDays = function(year) {
  * day to the 8th month (Heshvan) and/or the 9th month (Kislev) in the current
  * year to make them 30 days long instead of 29.
  * 
+ * @private
  * @param {number} year the year for which the correction is sought
  * @param {number} elapsed number of days elapsed up to this year
  * @return {number} the number of days correction in the current year to make sure
@@ -8127,8 +8172,8 @@ ilib.Cal.Hebrew.newYearsCorrection = function(year, elapsed) {
 };
 
 /**
- * @private
  * Return the rata die date of the new year for the given hebrew year.
+ * @private
  * @param {number} year the year for which the new year is needed
  * @return {number} the rata die date of the new year
  */
@@ -8139,7 +8184,6 @@ ilib.Cal.Hebrew.newYear = function(year) {
 };
 
 /**
- * @private
  * Return the number of days in the given year. Years contain a variable number of
  * days because the date of Rosh HaShanah (New Year's) changes so that it doesn't
  * fall on particular days of the week. Days are added to the months of Heshvan
@@ -8154,10 +8198,10 @@ ilib.Cal.Hebrew.daysInYear = function(year) {
 };
 
 /**
- * @private
  * Return true if the given year contains a long month of Heshvan. That is,
  * it is 30 days instead of 29.
  * 
+ * @private
  * @param {number} year the year in which that month is questioned
  * @return {boolean} true if the given year contains a long month of Heshvan
  */
@@ -8166,10 +8210,10 @@ ilib.Cal.Hebrew.longHeshvan = function(year) {
 };
 
 /**
- * @private
  * Return true if the given year contains a long month of Kislev. That is,
  * it is 30 days instead of 29.
  * 
+ * @private
  * @param {number} year the year in which that month is questioned
  * @return {boolean} true if the given year contains a short month of Kislev
  */
@@ -8178,7 +8222,6 @@ ilib.Cal.Hebrew.longKislev = function(year) {
 };
 
 /**
- * @private
  * Return the date of the last day of the month for the given year. The date of
  * the last day of the month is variable because a number of months gain an extra 
  * day in leap years, and it is variable which months gain a day for each leap 
@@ -8278,7 +8321,7 @@ ilib.Cal._constructors["hebrew"] = ilib.Cal.Hebrew;
 /*
  * hebrewdate.js - Represent a date in the Hebrew calendar
  * 
- * Copyright © 2012, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -8303,8 +8346,6 @@ julianday.js
 */
 
 /**
- * @class
- * 
  * Construct a new Hebrew RD date number object. The constructor parameters can 
  * contain any of the following properties:
  * 
@@ -8350,7 +8391,10 @@ julianday.js
  * 
  * Depends directive: !depends hebrewdate.js
  * 
+ * @private
+ * @class
  * @constructor
+ * @extends ilib.Date.RataDie
  * @param {Object=} params parameters that govern the settings and behaviour of this Hebrew RD date
  */
 ilib.Date.HebrewRataDie = function(params) {
@@ -8364,19 +8408,19 @@ ilib.Date.HebrewRataDie.prototype.parent = ilib.Date.RataDie;
 ilib.Date.HebrewRataDie.prototype.constructor = ilib.Date.HebrewRataDie;
 
 /**
+ * The difference between a zero Julian day and the first day of the Hebrew 
+ * calendar: sunset on Monday, Tishri 1, 1 = September 7, 3760 BC Gregorian = JD 347997.25
  * @private
  * @const
  * @type number
- * The difference between a zero Julian day and the first day of the Hebrew 
- * calendar: sunset on Monday, Tishri 1, 1 = September 7, 3760 BC Gregorian = JD 347997.25
  */
 ilib.Date.HebrewRataDie.prototype.epoch = 347997.25;
 
 /**
- * @private
  * Calculate the Rata Die (fixed day) number of the given date from the
  * date components.
  * 
+ * @private
  * @param {Object} date the date components to calculate the RD from
  */
 ilib.Date.HebrewRataDie.prototype._setDateComponents = function(date) {
@@ -8449,9 +8493,9 @@ ilib.Date.HebrewRataDie.prototype._setDateComponents = function(date) {
 };
 	
 /**
- * @private
  * Return the rd number of the particular day of the week on or before the 
  * given rd. eg. The Sunday on or before the given rd.
+ * @private
  * @param {number} rd the rata die date of the reference date
  * @param {number} dayOfWeek the day of the week that is being sought relative 
  * to the current date
@@ -8462,8 +8506,6 @@ ilib.Date.HebrewRataDie.prototype._onOrBefore = function(rd, dayOfWeek) {
 };
 
 /**
- * @class
- * 
  * Construct a new civil Hebrew date object. The constructor can be called
  * with a params object that can contain the following properties:<p>
  * 
@@ -8507,6 +8549,7 @@ ilib.Date.HebrewRataDie.prototype._onOrBefore = function(rd, dayOfWeek) {
  * 
  * Depends directive: !depends hebrewdate.js
  * 
+ * @class
  * @constructor
  * @extends ilib.Date
  * @param {Object=} params parameters that govern the settings and behaviour of this Hebrew date
@@ -8623,10 +8666,10 @@ ilib.Date.HebrewDate.prototype.parent = ilib.Date;
 ilib.Date.HebrewDate.prototype.constructor = ilib.Date.HebrewDate;
 
 /**
+ * the cumulative lengths of each month for a non-leap year, without new years corrections
  * @private
  * @const
  * @type Array.<number>
- * the cumulative lengths of each month for a non-leap year, without new years corrections
  */
 ilib.Date.HebrewDate.cumMonthLengths = [
 	176,  /* Nisan */
@@ -8644,11 +8687,11 @@ ilib.Date.HebrewDate.cumMonthLengths = [
 ];
 
 /**
+ * the cumulative lengths of each month for a non-leap year, without new years corrections,
+ * that can be used in reverse to map days to months
  * @private
  * @const
  * @type Array.<number>
- * the cumulative lengths of each month for a non-leap year, without new years corrections,
- * that can be used in reverse to map days to months
  */
 ilib.Date.HebrewDate.cumMonthLengthsReverse = [
 //  [days, monthnumber],                                                
@@ -8668,10 +8711,10 @@ ilib.Date.HebrewDate.cumMonthLengthsReverse = [
 ];
 
 /**
+ * the cumulative lengths of each month for a leap year, without new years corrections 
  * @private
  * @const
  * @type Array.<number>
- * the cumulative lengths of each month for a leap year, without new years corrections 
  */
 ilib.Date.HebrewDate.cumMonthLengthsLeap = [
 	206,  /* Nisan */
@@ -8690,11 +8733,12 @@ ilib.Date.HebrewDate.cumMonthLengthsLeap = [
 ];
 
 /**
+ * the cumulative lengths of each month for a leap year, without new years corrections
+ * that can be used in reverse to map days to months 
+ * 
  * @private
  * @const
  * @type Array.<number>
- * the cumulative lengths of each month for a leap year, without new years corrections
- * that can be used in reverse to map days to months 
  */
 ilib.Date.HebrewDate.cumMonthLengthsLeapReverse = [
 //  [days, monthnumber],                                                
@@ -8715,18 +8759,18 @@ ilib.Date.HebrewDate.cumMonthLengthsLeapReverse = [
 ];
 
 /**
- * @private
- * @const
- * @type number
  * Number of days difference between RD 0 of the Hebrew calendar 
  * (Jan 1, 1 Gregorian = JD 1721057.5) and RD 0 of the Hebrew calendar
  * (September 7, -3760 Gregorian = JD 347997.25)
+ * @private
+ * @const
+ * @type number
  */
 ilib.Date.HebrewDate.GregorianDiff = 1373060.25;
 
 /**
- * @private
  * Return a new RD for this date type using the given params.
+ * @private
  * @param {Object=} params the parameters used to create this rata die instance
  * @returns {ilib.Date.RataDie} the new RD instance for the given params
  */
@@ -8735,8 +8779,8 @@ ilib.Date.HebrewDate.prototype.newRd = function (params) {
 };
 
 /**
- * @private
  * Return the year for the given RD
+ * @protected
  * @param {number} rd RD to calculate from 
  * @returns {number} the year for the RD
  */
@@ -8760,8 +8804,8 @@ ilib.Date.HebrewDate.prototype._calcYear = function(rd) {
 };
 
 /**
- * @private
  * Calculate date components for the given RD date.
+ * @protected
  */
 ilib.Date.HebrewDate.prototype._calcDateComponents = function () {
 	var remainder,
@@ -8880,8 +8924,8 @@ ilib.Date.HebrewDate.prototype.getHalaqim = function() {
 };
 
 /**
- * @private
  * Return the rd number of the first Sunday of the given ISO year.
+ * @protected
  * @return the rd of the first Sunday of the ISO year
  */
 ilib.Date.HebrewDate.prototype.firstSunday = function (year) {
@@ -8987,7 +9031,7 @@ ilib.Date._constructors["hebrew"] = ilib.Date.HebrewDate;
 /*
  * islamic.js - Represent a Islamic calendar object.
  * 
- * Copyright © 2012, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -9007,7 +9051,6 @@ ilib.Date._constructors["hebrew"] = ilib.Date.HebrewDate;
 /* !depends calendar.js locale.js date.js julianday.js util/utils.js */
 
 /**
- * @class
  * Construct a new Islamic calendar object. This class encodes information about
  * the civil Islamic calendar. The civil Islamic calendar is a tabular islamic 
  * calendar where the dates are calculated by arithmetic rules. This differs from 
@@ -9022,6 +9065,7 @@ ilib.Date._constructors["hebrew"] = ilib.Date.HebrewDate;
  * 
  * Depends directive: !depends islamic.js
  * 
+ * @class
  * @constructor
  * @implements ilib.Cal
  */
@@ -9030,10 +9074,10 @@ ilib.Cal.Islamic = function() {
 };
 
 /**
+ * the lengths of each month 
  * @private
  * @const
  * @type Array.<number>
- * the lengths of each month 
  */
 ilib.Cal.Islamic.monthLengths = [
 	30,  /* Muharram */
@@ -9152,7 +9196,7 @@ ilib.Cal._constructors["islamic"] = ilib.Cal.Islamic;
  * 
  * Depends directive: !depends utils.js
  * 
- * 
+ * @static
  * @param {*} target element being sought 
  * @param {Array} arr the array being searched
  * @param {?function(*,*)=} comparator a comparator that is appropriate for comparing two entries
@@ -9188,12 +9232,11 @@ ilib.bsearch = function(target, arr, comparator) {
 };
 
 /**
- * @private
  * Returns whether or not the given element is greater than, less than,
  * or equal to the given target.<p>
  * 
- * Depends directive: !depends utils.js
- * 
+ * @private
+ * @static
  * @param {number} element the element being tested
  * @param {number} target the target being sought
  */
@@ -9204,7 +9247,7 @@ ilib.bsearch.numbers = function(element, target) {
 /*
  * islamicdate.js - Represent a date in the Islamic calendar
  * 
- * Copyright © 2012, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -9231,8 +9274,6 @@ julianday.js
 */
 
 /**
- * @class
- * 
  * Construct a new Islamic RD date number object. The constructor parameters can 
  * contain any of the following properties:
  * 
@@ -9275,7 +9316,10 @@ julianday.js
  * 
  * Depends directive: !depends islamicdate.js
  * 
+ * @private
+ * @class
  * @constructor
+ * @extends ilib.Date.RataDie
  * @param {Object=} params parameters that govern the settings and behaviour of this Islamic RD date
  */
 ilib.Date.IslamicRataDie = function(params) {
@@ -9289,19 +9333,19 @@ ilib.Date.IslamicRataDie.prototype.parent = ilib.Date.RataDie;
 ilib.Date.IslamicRataDie.prototype.constructor = ilib.Date.IslamicRataDie;
 
 /**
+ * The difference between a zero Julian day and the first Islamic date
+ * of Friday, July 16, 622 CE Julian. 
  * @private
  * @const
  * @type number
- * The difference between a zero Julian day and the first Islamic date
- * of Friday, July 16, 622 CE Julian. 
  */
 ilib.Date.IslamicRataDie.prototype.epoch = 1948439.5;
 
 /**
- * @private
  * Calculate the Rata Die (fixed day) number of the given date from the
  * date components.
- * 
+ *
+ * @protected
  * @param {Object} date the date components to calculate the RD from
  */
 ilib.Date.IslamicRataDie.prototype._setDateComponents = function(date) {
@@ -9324,8 +9368,6 @@ ilib.Date.IslamicRataDie.prototype._setDateComponents = function(date) {
 };
 	
 /**
- * @class
- * 
  * Construct a new civil Islamic date object. The constructor can be called
  * with a params object that can contain the following properties:<p>
  * 
@@ -9367,6 +9409,7 @@ ilib.Date.IslamicRataDie.prototype._setDateComponents = function(date) {
  * 
  * Depends directive: !depends islamicdate.js
  * 
+ * @class
  * @constructor
  * @extends ilib.Date
  * @param {Object=} params parameters that govern the settings and behaviour of this Islamic date
@@ -9468,10 +9511,10 @@ ilib.Date.IslamicDate.prototype.parent = ilib.Date;
 ilib.Date.IslamicDate.prototype.constructor = ilib.Date.IslamicDate;
 
 /**
+ * the cumulative lengths of each month, for a non-leap year 
  * @private
  * @const
  * @type Array.<number>
- * the cumulative lengths of each month, for a non-leap year 
  */
 ilib.Date.IslamicDate.cumMonthLengths = [
 	0,  /* Muharram */
@@ -9490,26 +9533,26 @@ ilib.Date.IslamicDate.cumMonthLengths = [
 ];
 
 /**
+ * Number of days difference between RD 0 of the Gregorian calendar and
+ * RD 0 of the Islamic calendar. 
  * @private
  * @const
  * @type number
- * Number of days difference between RD 0 of the Gregorian calendar and
- * RD 0 of the Islamic calendar. 
  */
 ilib.Date.IslamicDate.GregorianDiff = 227015;
 
 /**
+ * The difference between a zero Julian day and the first Islamic date
+ * of Friday, July 16, 622 CE Julian. 
  * @private
  * @const
  * @type number
- * The difference between a zero Julian day and the first Islamic date
- * of Friday, July 16, 622 CE Julian. 
  */
 ilib.Date.IslamicDate.epoch = 1948439.5;
 
 /**
- * @private
  * Return a new RD for this date type using the given params.
+ * @protected
  * @param {Object=} params the parameters used to create this rata die instance
  * @returns {ilib.Date.RataDie} the new RD instance for the given params
  */
@@ -9518,8 +9561,8 @@ ilib.Date.IslamicDate.prototype.newRd = function (params) {
 };
 
 /**
- * @private
  * Return the year for the given RD
+ * @protected
  * @param {number} rd RD to calculate from 
  * @returns {number} the year for the RD
  */
@@ -9528,8 +9571,8 @@ ilib.Date.IslamicDate.prototype._calcYear = function(rd) {
 };
 
 /**
- * @private
  * Calculate date components for the given RD date.
+ * @protected
  */
 ilib.Date.IslamicDate.prototype._calcDateComponents = function () {
 	var remainder,
@@ -9643,7 +9686,7 @@ ilib.Date._constructors["islamic"] = ilib.Date.IslamicDate;
 /*
  * julian.js - Represent a Julian calendar object.
  * 
- * Copyright © 2012, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -9663,12 +9706,12 @@ ilib.Date._constructors["islamic"] = ilib.Date.IslamicDate;
 /* !depends calendar.js locale.js date.js julianday.js util/utils.js */
 
 /**
- * @class
  * Construct a new Julian calendar object. This class encodes information about
  * a Julian calendar.<p>
  * 
  * Depends directive: !depends julian.js
  * 
+ * @class
  * @constructor
  * @implements ilib.Cal
  */
@@ -9757,7 +9800,7 @@ ilib.Cal._constructors["julian"] = ilib.Cal.Julian;
 /*
  * juliandate.js - Represent a date in the Julian calendar
  * 
- * Copyright © 2012-2013, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -9783,8 +9826,6 @@ julianday.js
 */
 
 /**
- * @class
- * 
  * Construct a new Julian RD date number object. The constructor parameters can 
  * contain any of the following properties:
  * 
@@ -9827,7 +9868,10 @@ julianday.js
  * 
  * Depends directive: !depends juliandate.js
  * 
+ * @private
+ * @class
  * @constructor
+ * @extends ilib.Date.RataDie
  * @param {Object=} params parameters that govern the settings and behaviour of this Julian RD date
  */
 ilib.Date.JulianRataDie = function(params) {
@@ -9841,19 +9885,19 @@ ilib.Date.JulianRataDie.prototype.parent = ilib.Date.RataDie;
 ilib.Date.JulianRataDie.prototype.constructor = ilib.Date.JulianRataDie;
 
 /**
+ * The difference between a zero Julian day and the first Julian date
+ * of Friday, July 16, 622 CE Julian. 
  * @private
  * @const
  * @type number
- * The difference between a zero Julian day and the first Julian date
- * of Friday, July 16, 622 CE Julian. 
  */
 ilib.Date.JulianRataDie.prototype.epoch = 1721422.5;
 
 /**
- * @private
  * Calculate the Rata Die (fixed day) number of the given date from the
  * date components.
  * 
+ * @protected
  * @param {Object} date the date components to calculate the RD from
  */
 ilib.Date.JulianRataDie.prototype._setDateComponents = function(date) {
@@ -9880,8 +9924,6 @@ ilib.Date.JulianRataDie.prototype._setDateComponents = function(date) {
 };
 
 /**
- * @class
- * 
  * Construct a new date object for the Julian Calendar. The constructor can be called
  * with a parameter object that contains any of the following properties:
  * 
@@ -9936,6 +9978,7 @@ ilib.Date.JulianRataDie.prototype._setDateComponents = function(date) {
  * 
  * Depends directive: !depends juliandate.js
  * 
+ * @class
  * @constructor
  * @extends ilib.Date
  * @param {Object=} params parameters that govern the settings and behaviour of this Julian date
@@ -10031,10 +10074,10 @@ ilib.Date.JulDate.prototype.parent = ilib.Date;
 ilib.Date.JulDate.prototype.constructor = ilib.Date.JulDate;
 
 /**
+ * the cumulative lengths of each month, for a non-leap year 
  * @private
  * @const
  * @type Array.<number>
- * the cumulative lengths of each month, for a non-leap year 
  */
 ilib.Date.JulDate.cumMonthLengths = [
     0,   /* Jan */
@@ -10053,10 +10096,10 @@ ilib.Date.JulDate.cumMonthLengths = [
 ];
 
 /**
+ * the cumulative lengths of each month, for a leap year 
  * @private
  * @const
  * @type Array.<number>
- * the cumulative lengths of each month, for a leap year 
  */
 ilib.Date.JulDate.cumMonthLengthsLeap = [
 	0,   /* Jan */
@@ -10075,15 +10118,16 @@ ilib.Date.JulDate.cumMonthLengthsLeap = [
 ];
 
 /**
+ * the difference between a zero Julian day and the first Julian date. 
  * @private
  * @const
  * @type number
- * the difference between a zero Julian day and the first Julian date. */
+ */
 ilib.Date.JulDate.epoch = 1721422.5;
 
 /**
- * @private
  * Return a new RD for this date type using the given params.
+ * @protected
  * @param {Object=} params the parameters used to create this rata die instance
  * @returns {ilib.Date.RataDie} the new RD instance for the given params
  */
@@ -10092,8 +10136,8 @@ ilib.Date.JulDate.prototype.newRd = function (params) {
 };
 
 /**
- * @private
  * Return the year for the given RD
+ * @protected
  * @param {number} rd RD to calculate from 
  * @returns {number} the year for the RD
  */
@@ -10104,8 +10148,8 @@ ilib.Date.JulDate.prototype._calcYear = function(rd) {
 };
 
 /**
- * @private
  * Calculate date components for the given RD date.
+ * @protected
  */
 ilib.Date.JulDate.prototype._calcDateComponents = function () {
 	var remainder,
@@ -10190,7 +10234,7 @@ ilib.Date._constructors["julian"] = ilib.Date.JulDate;
 /*
  * gregoriandate.js - Represent a date in the Gregorian calendar
  * 
- * Copyright © 2012-2013, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10218,8 +10262,6 @@ timezone.js
 */
 
 /**
- * @class
- * 
  * Construct a new Gregorian date object. The constructor parameters can 
  * contain any of the following properties:
  * 
@@ -10293,6 +10335,7 @@ timezone.js
  * 
  * Depends directive: !depends gregoriandate.js
  * 
+ * @class
  * @constructor
  * @extends ilib.Date
  * @param {Object=} params parameters that govern the settings and behaviour of this Gregorian date
@@ -10361,8 +10404,8 @@ ilib.Date.GregDate.prototype.parent = ilib.Date;
 ilib.Date.GregDate.prototype.constructor = ilib.Date.GregDate;
 
 /**
- * @private
  * Return a new RD for this date type using the given params.
+ * @private
  * @param {Object=} params the parameters used to create this rata die instance
  * @returns {ilib.Date.RataDie} the new RD instance for the given params
  */
@@ -10371,8 +10414,8 @@ ilib.Date.GregDate.prototype.newRd = function (params) {
 };
 
 /**
- * @private
  * Calculates the Gregorian year for a given rd number.
+ * @private
  */
 ilib.Date.GregDate.prototype._calcYear = function(rd) {
 	var days400,
@@ -10400,8 +10443,8 @@ ilib.Date.GregDate.prototype._calcYear = function(rd) {
 };
 
 /**
- * @private
  * Calculate the date components for the current time zone
+ * @private
  */
 ilib.Date.GregDate.prototype._calcDateComponents = function () {
 	if (this.timezone === "local" && this.rd.getRataDie() >= 719163 && this.rd.getRataDie() <= 744018.134803241) {
@@ -10558,7 +10601,7 @@ ilib.Date._constructors["gregorian"] = ilib.Date.GregDate;
 /*
  * thaisolar.js - Represent a Thai solar calendar object.
  * 
- * Copyright © 2013, JEDLSoft
+ * Copyright © 2013-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10578,12 +10621,12 @@ ilib.Date._constructors["gregorian"] = ilib.Date.GregDate;
 /* !depends calendar.js locale.js date.js julianday.js calendar/gregorian.js util/utils.js */
 
 /**
- * @class
  * Construct a new Thai solar calendar object. This class encodes information about
  * a Thai solar calendar.<p>
  * 
  * Depends directive: !depends thaisolar.js
  * 
+ * @class
  * @constructor
  * @implements ilib.Cal
  */
@@ -10624,7 +10667,7 @@ ilib.Cal._constructors["thaisolar"] = ilib.Cal.ThaiSolar;
 /*
  * thaisolardate.js - Represent a date in the ThaiSolar calendar
  * 
- * Copyright © 2013, JEDLSoft
+ * Copyright © 2013-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10647,8 +10690,6 @@ util/jsutils.js
 */
 
 /**
- * @class
- * 
  * Construct a new Thai solar date object. The constructor parameters can 
  * contain any of the following properties:
  * 
@@ -10706,6 +10747,7 @@ util/jsutils.js
  * 
  * Depends directive: !depends thaisolardate.js
  * 
+ * @class
  * @constructor
  * @extends ilib.Date.GregDate
  * @param {Object=} params parameters that govern the settings and behaviour of this Thai solar date
@@ -10736,17 +10778,17 @@ ilib.Date.ThaiSolarDate.prototype.parent = ilib.Date.GregDate.prototype;
 ilib.Date.ThaiSolarDate.prototype.constructor = ilib.Date.ThaiSolarDate;
 
 /**
+ * the difference between a zero Julian day and the zero Thai Solar date.
+ * This is some 543 years before the start of the Gregorian epoch. 
  * @private
  * @const
  * @type number
- * the difference between a zero Julian day and the zero Thai Solar date.
- * This is some 543 years before the start of the Gregorian epoch. 
  */
 ilib.Date.ThaiSolarDate.epoch = 1523097.5;
 
 /**
- * @private
  * Calculate the date components for the current time zone
+ * @protected
  */
 ilib.Date.ThaiSolarDate.prototype._calcDateComponents = function () {
 	// there is 198327 days difference between the Thai solar and 
@@ -10756,9 +10798,9 @@ ilib.Date.ThaiSolarDate.prototype._calcDateComponents = function () {
 };
 
 /**
- * @private
  * Return the Rata Die (fixed day) number of this date.
  * 
+ * @protected
  * @return {number} the rd date as a number
  */
 ilib.Date.ThaiSolarDate.prototype.getRataDie = function() {
@@ -10843,7 +10885,7 @@ ilib.Date._constructors["thaisolar"] = ilib.Date.ThaiSolarDate;
 /*
  * ctype.js - Character type definitions
  * 
- * Copyright © 2012-2013, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10864,15 +10906,14 @@ ilib.Date._constructors["thaisolar"] = ilib.Date.ThaiSolarDate;
 // !data ctype
 
 /**
- * @namespace
  * Provides a set of static routines that return information about characters.
  * These routines emulate the C-library ctype functions. The characters must be 
  * encoded in utf-16, as no other charsets are currently supported. Only the first
  * character of the given string is tested.
+ * @namespace
  */
 ilib.CType = {
 	/**
-	 * @protected
 	 * Actual implementation for withinRange. Searches the given object for ranges.
 	 * The range names are taken from the Unicode range names in 
 	 * http://www.unicode.org/Public/UNIDATA/extracted/DerivedGeneralCategory.txt
@@ -10910,6 +10951,7 @@ ilib.CType = {
 	 * <li>Pf - Final_Punctuation
 	 * </ul>
 	 * 
+	 * @protected
 	 * @param {string} ch character to examine
 	 * @param {string} rangeName the name of the range to check
 	 * @param {Object} obj object containing the character range data
@@ -11242,7 +11284,7 @@ ilib.CType.isSpace._init = function (sync, loadParams, onLoad) {
 /*
  * numprs.js - Parse a number in any locale
  * 
- * Copyright © 2012-2013, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -11268,7 +11310,6 @@ ctype.isspace.js
 */
 
 /**
- * @class
  * Parse a string as a number, ignoring all locale-specific formatting.<p>
  * 
  * This class is different from the standard Javascript parseInt() and parseFloat() 
@@ -11320,6 +11361,7 @@ ctype.isspace.js
  * 
  * Depends directive: !depends numprs.js
  * 
+ * @class
  * @constructor
  * @param {string|number|Number|ilib.Number|undefined} str a string to parse as a number, or a number value
  * @param {Object} options Options controlling how the instance should be created 
@@ -11505,7 +11547,7 @@ ilib.Number.prototype = {
 /*
  * currency.js - Currency definition
  * 
- * Copyright © 2012, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -11526,7 +11568,6 @@ ilib.Number.prototype = {
 // !data currency
 
 /**
- * @class
  * Create a new currency information instance. Instances of this class encode 
  * information about a particular currency.<p>
  * 
@@ -11587,6 +11628,7 @@ ilib.Number.prototype = {
  * 
  * Depends directive: !depends currency.js
  * 
+ * @class
  * @constructor
  * @param options {Object} a set of properties to govern how this instance is constructed.
  * @throws "currency xxx is unknown" when the given currency code is not in the list of 
@@ -11632,9 +11674,10 @@ ilib.Currency = function (options) {
 };
 
 /**
- * @static
  * Return an array of the ids for all ISO 4217 currencies that
  * this copy of ilib knows about.
+ * 
+ * @static
  * @return {Array.<string>} an array of currency ids that this copy of ilib knows about.
  */
 ilib.Currency.getAvailableCurrencies = function() {
@@ -11758,7 +11801,7 @@ ilib.Currency.prototype = {
 /*
  * numfmt.js - Number formatter definition
  *
- * Copyright © 2012-2013, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -11790,7 +11833,6 @@ util/jsutils.js
 // !data localeinfo currency
 
 /**
- * @class
  * Create a new number formatter instance. Locales differ in the way that digits
  * in a formatted number are grouped, in the way the decimal character is represented,
  * etc. Use this formatter to get it right for any locale.<p>
@@ -11877,6 +11919,7 @@ util/jsutils.js
  *
  * Depends directive: !depends numfmt.js
  *
+ * @class
  * @constructor
  * @param {Object.<string,*>} options A set of options that govern how the formatter will behave
  */
@@ -11992,8 +12035,8 @@ ilib.NumFmt = function (options) {
 };
 
 /**
- * @static
  * Return an array of available locales that this formatter can format
+ * @static
  * @return {Array.<ilib.Locale>|undefined} an array of available locales
  */
 ilib.NumFmt.getAvailableLocales = function () {
@@ -12099,9 +12142,9 @@ ilib.NumFmt.prototype = {
 	},
 
 	/**
-	 * @private
 	 * Format the number using scientific notation as a positive number. Negative
 	 * formatting to be applied later.
+	 * @private
 	 * @param {number} num the number to format
 	 * @return {string} the formatted number
 	 */
@@ -12132,8 +12175,8 @@ ilib.NumFmt.prototype = {
 	},
 
 	/**
-	 * @private
 	 * Formats the number as a positive number. Negative formatting to be applied later.
+	 * @private
 	 * @param {number} num the number to format
 	 * @return {string} the formatted number
 	 */
@@ -12336,7 +12379,7 @@ ilib.NumFmt.prototype = {
 /*
  * durfmt.js - Date formatter definition
  * 
- * Copyright © 2012-2013, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12367,8 +12410,6 @@ util/jsutils.js
 // !resbundle sysres
 
 /**
- * @class
- * 
  * Create a new duration formatter instance. The duration formatter is immutable once
  * it is created, but can format as many different durations as needed with the same
  * options. Create different duration formatter instances for different purposes
@@ -12429,6 +12470,7 @@ util/jsutils.js
  * 
  * Depends directive: !depends durfmt.js
  * 
+ * @class
  * @constructor
  * @param {?Object} options options governing the way this date formatter instance works
  */
@@ -13355,7 +13397,7 @@ ilib.CType.isScript._init = function (sync, loadParams, onLoad) {
 /*
  * scriptinfo.js - information about scripts
  * 
- * Copyright © 2012-2013, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13376,7 +13418,6 @@ ilib.CType.isScript._init = function (sync, loadParams, onLoad) {
 // !data scripts
 
 /**
- * @class
  * Create a new script info instance. This class encodes information about
  * scripts, which are sets of characters used in a writing system.<p>
  * 
@@ -13404,6 +13445,7 @@ ilib.CType.isScript._init = function (sync, loadParams, onLoad) {
  * 
  * Depends directive: !depends scriptinfo.js
  * 
+ * @class
  * @constructor
  * @param {string} script The ISO 15924 4-letter identifier for the script
  * @param {Object} options parameters to initialize this matcher 
@@ -13455,9 +13497,9 @@ ilib.ScriptInfo = function(script, options) {
 };
 
 /**
- * @static
  * Return an array of all ISO 15924 4-letter identifier script identifiers that
  * this copy of ilib knows about.
+ * @static
  * @return {Array.<string>} an array of all script identifiers that this copy of
  * ilib knows about
  */
@@ -13547,7 +13589,7 @@ ilib.ScriptInfo.prototype = {
 /*
  * nameprs.js - Person name parser
  *
- * Copyright © 2013, JEDLSoft
+ * Copyright © 2013-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13583,7 +13625,6 @@ util/jsutils.js
 // other countries with first name restrictions: Norway, China, New Zealand, Japan, Sweden, Germany, Hungary
 
 /**
- * @class
  * A class to parse names of people. Different locales have different conventions when it
  * comes to naming people.<p>
  *
@@ -13635,6 +13676,7 @@ util/jsutils.js
  *
  * Depends directive: !depends nameprs.js
  *
+ * @class
  * @constructor
  * @dict
  * @param {string|ilib.Name=} name the name to parse
@@ -13828,10 +13870,10 @@ ilib.Name.defaultInfo = ilib.data.name ||  {
 };
 
 /**
- * @static
- * @protected
  * Return true if the given character is in the range of the Han, Hangul, or kana
  * scripts.
+ * @static
+ * @protected
  */
 ilib.Name._isAsianChar = function(c) {
 	return ilib.CType.isIdeo(c) ||
@@ -13871,10 +13913,10 @@ ilib.Name._isAsianName = function (name) {
 };
 
 /**
- * @static
- * @protected
  * Return true if any Latin letters are found in the string. Return
  * false if all the characters are non-Latin.
+ * @static
+ * @protected
  */
 ilib.Name._isEuroName = function (name) {
     var c,
@@ -14098,8 +14140,8 @@ ilib.Name.prototype = {
     },
 
     /**
-     * @protected
      * Find the last instance of 'and' in the name
+     * @protected
      * @param {Array.<string>} parts
      * @return {number}
      */
@@ -14156,8 +14198,8 @@ ilib.Name.prototype = {
     },
 
     /**
-     * @protected
      * Adjoin auxillary words to their head words.
+     * @protected
      * @param {Array.<string>} parts the current array of name parts
      * @param {boolean} isAsian true if the name is being parsed as an Asian name
      * @return {Array.<string>} the parts after the auxillary words have been plucked onto their head word
@@ -14185,8 +14227,8 @@ ilib.Name.prototype = {
     },
 
     /**
-     * @protected
      * Recursively join an array or string into a long string.
+     * @protected
      */
     _joinArrayOrString: function _joinArrayOrString(part) {
         var i;
@@ -14523,7 +14565,7 @@ ilib.Name.prototype = {
 /*
  * namefmt.js - Format person names for display
  * 
- * Copyright © 2013, JEDLSoft
+ * Copyright © 2013-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14550,7 +14592,6 @@ ctype.ispunct.js
 // !data name
 
 /**
- * @class
  * Creates a formatter that can format person name instances (ilib.Name) for display to
  * a user. The options may contain the following properties:
  * 
@@ -14632,6 +14673,7 @@ ctype.ispunct.js
  * 
  * Depends directive: !depends namefmt.js
  * 
+ * @class
  * @constructor
  * @param {Object} options A set of options that govern how the formatter will behave
  */
@@ -14745,8 +14787,8 @@ ilib.NameFmt.prototype = {
 	},
 
 	/**
-	 * @protected
 	 * adjoin auxillary words to their head words
+	 * @protected
 	 */
 	_adjoinAuxillaries: function (parts, namePrefix) {
 		var start, i, prefixArray, prefix, prefixLower;
@@ -14884,7 +14926,7 @@ ilib.NameFmt.prototype = {
 /**
  * addressprs.js - Represent a mailing address
  * 
- * Copyright © 2013, JEDLSoft
+ * Copyright © 2013-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14913,9 +14955,6 @@ ctype.isdigit.js
 // !data address countries nativecountries ctrynames
 
 /**
- * @constructor
- * @class
- * 
  * Create a new Address instance and parse a physical address.<p>
  * 
  * This function parses a physical address written in a free-form string. 
@@ -14976,6 +15015,8 @@ ctype.isdigit.js
  * 
  * Depends directive: !depends addressprs.js
  * 
+ * @constructor
+ * @class
  * @dict
  * @param {string|ilib.Address} freeformAddress free-form address to parse, or a
  * javascript object containing the fields
@@ -15483,7 +15524,7 @@ ilib.Address.prototype = {
 /*
  * addressfmt.js - Format an address
  * 
- * Copyright © 2013, JEDLSoft
+ * Copyright © 2013-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15508,9 +15549,6 @@ addressprs.js
 // !data address
 
 /**
- * @constructor
- * @class
- * 
  * Create a new formatter object to format physical addresses in a particular way.
  *
  * The options object may contain the following properties, both of which are optional:
@@ -15543,6 +15581,8 @@ addressprs.js
  * 
  * Depends directive: !depends addressfmt.js
  * 
+ * @constructor
+ * @class
  * @param {Object} options options that configure how this formatter should work
  * Returns a formatter instance that can format multiple addresses.
  */
@@ -15675,7 +15715,7 @@ ilib.AddressFmt.prototype.format = function (address) {
 /*
  * collate.js - Collation routines
  * 
- * Copyright © 2013, JEDLSoft
+ * Copyright © 2013-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15696,9 +15736,6 @@ ilib.AddressFmt.prototype.format = function (address) {
 // !data collation
 
 /**
- * @class
- * @constructor
- * 
  * A class that implements a locale-sensitive comparator function 
  * for use with sorting function. The comparator function
  * assumes that the strings it is comparing contain Unicode characters
@@ -15919,6 +15956,8 @@ ilib.AddressFmt.prototype.format = function (address) {
  * characters, the Japanese names will sort at the end of the list after all German names,
  * and will sort according to the Unicode values of the characters.
  * 
+ * @class
+ * @constructor
  * @param {Object} options options governing how the resulting comparator 
  * function will operate
  */
@@ -16233,7 +16272,7 @@ ilib.data.nfkd_all = undefined;
 /*
  * localematch.js - Locale matcher definition
  * 
- * Copyright © 2013, JEDLSoft
+ * Copyright © 2013-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16253,7 +16292,6 @@ ilib.data.nfkd_all = undefined;
 // !data likelylocales
 
 /**
- * @class
  * Create a new locale matcher instance. This is used
  * to see which locales can be matched with each other in
  * various ways.<p>
@@ -16284,6 +16322,7 @@ ilib.data.nfkd_all = undefined;
  * 
  * Depends directive: !depends localematch.js
  * 
+ * @class
  * @constructor
  * @param {Object} options parameters to initialize this matcher 
  */
@@ -16372,7 +16411,7 @@ ilib.LocaleMatcher.prototype = {
 /*
  * normstring.js - ilib normalized string subclass definition
  * 
- * Copyright © 2013, JEDLSoft
+ * Copyright © 2013-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16391,13 +16430,13 @@ ilib.LocaleMatcher.prototype = {
 // !depends strings.js
 
 /**
- * @class
  * Create a new normalized string instance. This string inherits from 
  * the ilib.String class, and adds the normalize method. It can be
  * used anywhere that a normal Javascript string is used. <p>
  * 
  * Depends directive: !depends normstring.js
  * 
+ * @class
  * @constructor
  * @param {string|ilib.String=} str initialize this instance with this string 
  */
@@ -16479,11 +16518,10 @@ ilib.NormString.init = function(options) {
 };
 
 /**
- * @private
- * @static
- * 
  * Return true if the given character is a leading Jamo (Choseong) character.
  * 
+ * @private
+ * @static
  * @param {number} n code point to check
  * @return {boolean} true if the character is a leading Jamo character, 
  * false otherwise
@@ -16493,11 +16531,10 @@ ilib.NormString._isJamoL = function (n) {
 };
 
 /**
- * @private
- * @static
- * 
  * Return true if the given character is a vowel Jamo (Jungseong) character.
  * 
+ * @private
+ * @static
  * @param {number} n code point to check
  * @return {boolean} true if the character is a vowel Jamo character, 
  * false otherwise
@@ -16507,11 +16544,10 @@ ilib.NormString._isJamoV = function (n) {
 };
 
 /**
- * @private
- * @static
- * 
  * Return true if the given character is a trailing Jamo (Jongseong) character.
  * 
+ * @private
+ * @static
  * @param {number} n code point to check
  * @return {boolean} true if the character is a trailing Jamo character, 
  * false otherwise
@@ -16521,11 +16557,10 @@ ilib.NormString._isJamoT = function (n) {
 };
 
 /**
- * @private
- * @static
- * 
  * Return true if the given character is a precomposed Hangul character.
  * 
+ * @private
+ * @static
  * @param {number} n code point to check
  * @return {boolean} true if the character is a precomposed Hangul character, 
  * false otherwise
@@ -16535,13 +16570,12 @@ ilib.NormString._isHangul = function (n) {
 };
 
 /**
- * @private
- * @static
- *
  * Algorithmically decompose a precomposed Korean syllabic Hangul 
  * character into its individual combining Jamo characters. The given 
  * character must be in the range of Hangul characters U+AC00 to U+D7A3.
  * 
+ * @private
+ * @static
  * @param {number} cp code point of a Korean Hangul character to decompose
  * @return {string} the decomposed string of Jamo characters
  */
@@ -16557,13 +16591,12 @@ ilib.NormString._decomposeHangul = function (cp) {
 };
 
 /**
- * @private
- * @static
- *
  * Algorithmically compose an L and a V combining Jamo characters into
  * a precomposed Korean syllabic Hangul character. Both should already
  * be in the proper ranges for L and V characters. 
  * 
+ * @private
+ * @static
  * @param {number} lead the code point of the lead Jamo character to compose
  * @param {number} trail the code point of the trailing Jamo character to compose
  * @return {string} the composed Hangul character
@@ -16575,12 +16608,11 @@ ilib.NormString._composeJamoLV = function (lead, trail) {
 };
 
 /**
- * @private
- * @static
- *
  * Algorithmically compose a Hangul LV and a combining Jamo T character 
  * into a precomposed Korean syllabic Hangul character. 
  * 
+ * @private
+ * @static
  * @param {number} lead the code point of the lead Hangul character to compose
  * @param {number} trail the code point of the trailing Jamo T character to compose
  * @return {string} the composed Hangul character
@@ -16590,11 +16622,11 @@ ilib.NormString._composeJamoLVT = function (lead, trail) {
 };
 
 /**
- * @private
- * @static
- * 
  * Expand one character according to the given canonical and 
  * compatibility mappings.
+ *
+ * @private
+ * @static
  * @param {string} ch character to map
  * @param {Object} canon the canonical mappings to apply
  * @param {Object=} compat the compatibility mappings to apply, or undefined
@@ -16624,14 +16656,13 @@ ilib.NormString._expand = function (ch, canon, compat) {
 };
 
 /**
- * @private
- * @static
- * 
  * Compose one character out of a leading character and a 
  * trailing character. If the characters are Korean Jamo, they
  * will be composed algorithmically. If they are any other
  * characters, they will be looked up in the nfc tables.
- 
+ * 
+ * @private
+ * @static
  * @param {string} lead leading character to compose
  * @param {string} trail the trailing character to compose
  * @return {string} the fully composed character, or undefined if
@@ -16951,7 +16982,6 @@ ilib.NormString.prototype.normalize = function (form) {
 // !depends locale.js util/utils.js
 
 /**
- * @class
  * Create a new string mapper instance that maps strings to upper or
  * lower case. This mapping will work for any string as characters 
  * that have no case will be returned unchanged.<p>
@@ -16969,6 +16999,7 @@ ilib.NormString.prototype.normalize = function (form) {
  * 
  * Depends directive: !depends casemapper.js
  * 
+ * @class
  * @constructor
  * @param {Object=} options options to initialize this mapper 
  */
