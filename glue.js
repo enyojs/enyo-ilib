@@ -1,4 +1,61 @@
+/*
+ * glue.js - glue code to fit ilib into enyo
+ * 
+ * Copyright © 2013-2014 LG Electronics, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 (function() {
+	var enyoLoader = function() {
+		this.base = enyo.path.rewrite("$lib/enyo-ilib/ilib/");
+		if (enyo.platform.platformName === "webos") {
+			this.webos = true;
+		}
+	};
+
+	enyoLoader.prototype = new ilib.Loader();
+	enyoLoader.prototype.constructor = enyoLoader;
+
+	enyoLoader.prototype._createZoneFile = function (path) {
+		var zone = path.substring(path.indexOf("zoneinfo"));
+		
+		// remove the .json suffix to get the name of the zone
+		zone = zone.substring(0, zone.length-5);
+		
+		try {
+			var zif = new ZoneInfoFile("/usr/share/" + zone);
+			
+			// only get the info for this year. Later we can get the info
+			// for any historical or future year too
+			return zif.getIlibZoneInfo(new Date().getFullYear());
+		} catch (e) {
+			// no file, so just return nothing
+			return undefined;
+		}
+	};
+	
+	enyoLoader.prototype._pathjoin = function (root, subpath) {
+		if (!root || !root.length) {
+			return subpath;
+		}
+		if (!subpath || !subpath.length) {
+			return root;
+		}
+		return root + (root.charAt(root.length-1) !== '/' ? '/' : "") + subpath;
+	};
+	
 	/**
 	 * Load the list of files asynchronously. This uses recursion in
 	 * order to create a queue of files that will be loaded serially.
@@ -14,72 +71,106 @@
 	 * @param {function(Array.<Object>)} callback callback to call when this function is finished attempting
 	 * to load all the files that exist and can be loaded
 	 */
-	function loadFiles(context, paths, results, params, callback) {
-		var root = "resources/";
+	enyoLoader.prototype._loadFilesAsync = function (context, paths, results, params, callback) {
+		var root = "resources";
 		if (params && typeof(params.root) !== "undefined") {
-			root = params.root + '/';
+			root = params.root;
 		}
 		if (paths.length > 0) {
-			var path = paths.shift();
-			var ajax = new enyo.Ajax({url: enyo.path.rewrite("$lib/enyo-ilib/ilib/locale/" + path), cacheBust: false});
-			//console.log("moondemo2: browser/async: attempting to load lib/enyo-ilib/ilib/locale/" + path);
-			var resultFunc = function(inSender, json) {
-                // console.log("moondemo2: " + (!inSender.failed && json ? "success" : "failed"));
-				results.push(!inSender.failed && (typeof(json) === 'object') ? json : undefined);
-				if (paths.length > 0) {
-					loadFiles(context, paths, results, params, callback);
-				} else {
-					// only the bottom item on the stack will call
-					// the callback
-					callback.call(context, results);
+			var path = paths.shift(),
+				url = undefined;
+			
+			if (this.webos && path.indexOf("zoneinfo") !== -1) {
+				results.push(this._createZoneFile(path));
+			} else {
+				if (this.isAvailable(root, path)) {
+					url = this._pathjoin(root, path);
+				} else if (this.isAvailable(this.base + "locale", path)) {
+					url = this._pathjoin(this._pathjoin(this.base, "locale"), path)
 				}
-			};
-			ajax.response(this, resultFunc);
-			ajax.error(this, function(inSender, json) {
-				// not there? Try the standard place instead
-				var file = root + path;
-				// console.log("moondemo2: browser/async: attempting to load " + file);
-				var ajax2 = new enyo.Ajax({url: file, cacheBust: false});
 
-				ajax2.response(this, resultFunc);
-				ajax2.error(this, resultFunc);
-				ajax2.go();
-			});
-			ajax.go();
+				var resultFunc = function(inSender, json) {
+	                // console.log("enyo-ilib/glue: " + (!inSender.failed && json ? "success" : "failed"));
+					results.push(!inSender.failed && (typeof(json) === 'object') ? json : undefined);
+					if (paths.length > 0) {
+						this._loadFilesAsync(context, paths, results, params, callback);
+					} else {
+						// only the bottom item on the stack will call
+						// the callback
+						callback.call(context, results);
+					}
+				};
+				
+				if (url) {
+					var ajax = new enyo.Ajax({
+						url: url, 
+						cacheBust: false
+					});
+					// console.log("enyo-ilib/glue: browser/async: attempting to load " + url);
+					ajax.response(this, resultFunc);
+					ajax.error(this, resultFunc);
+					ajax.go();
+				} else {
+					// nothing to load, so go to the next file
+					resultFunc({}, undefined);
+				}
+			}
 		}
-	}
+	};
 
-	ilib.setLoaderCallback(enyo.bind(this, function(paths, sync, params, callback) {
+	enyoLoader.prototype.loadFiles = function(paths, sync, params, callback) {
 		if (sync) {
 			var ret = [];
-			var root = "resources/";
+			var root = "resources";
+			var locdata = this._pathjoin(this.base, "locale");
 			if (params && typeof(params.root) !== "undefined") {
-				root = params.root + '/';
+				root = params.root;
 			}
 			// synchronous
 			enyo.forEach(paths, function (path) {
-				// console.log("browser/sync: attempting to load lib/enyo-ilib/ilib/locale/" + path);
-				var ajax = new enyo.Ajax({
-					url: enyo.path.rewrite("$lib/enyo-ilib/ilib/locale/" + path),
-					sync: true, cacheBust: false
-				});
-
-				var handler = function(inSender, json) {
-                    // console.log((!inSender.failed && json ? "success" : "failed"));
-					ret.push(!inSender.failed && (typeof(json) === 'object') ? json : undefined);
-				};
-				ajax.response(this, handler);
-				ajax.error(this, function(inSender, json) {
-					// console.log("browser/sync: Now attempting to load " + root + path);
-					var ajax2 = new enyo.Ajax({
-						url: root + path,
-						sync: true, cacheBust: false
-					});
-					ajax2.response(this, handler);
-					ajax2.error(this, handler);
-					ajax2.go();
-				});
-				ajax.go();
+				if (this.webos && path.indexOf("zoneinfo") !== -1) {
+					ret.push(this._createZoneFile(path));
+				} else {
+					var found = false;
+					
+					var handler = function(inSender, json) {
+	                    // console.log((!inSender.failed && json ? "success" : "failed"));
+						if (!inSender.failed && typeof(json) === 'object') {
+							ret.push(json);
+							found = true;
+						}
+					};
+					
+					// console.log("browser/sync: attempting to load lib/enyo-ilib/ilib/locale/" + path);
+					if (this.isAvailable(root, path)) {
+						var ajax = new enyo.Ajax({
+							url: this._pathjoin(root, path),
+							sync: true, 
+							cacheBust: false
+						});
+		
+						ajax.response(this, handler);
+						ajax.error(this, handler);
+						ajax.go();
+					}
+					
+					if (!found && this.isAvailable(locdata, path)) {
+						var ajax = new enyo.Ajax({
+							url: this._pathjoin(locdata, path),
+							sync: true, 
+							cacheBust: false
+						});
+		
+						ajax.response(this, handler);
+						ajax.error(this, handler);
+						ajax.go();
+					} 
+					
+					if (!found) {
+						// not there, so fill in a blank entry in the array
+						ret.push(undefined);
+					}
+				}
 			}, this);
 
 			if (typeof(callback) === 'function') {
@@ -90,14 +181,95 @@
 
 		// asynchronous
 		var results = [];
-		loadFiles(this, paths, results, params, callback);
-	}));
+		this._loadFilesAsync(this, paths, results, params, callback);
+	};
 
+	enyoLoader.prototype._loadManifest = function (root, subpath) {
+		if (!this.manifest) {
+			this.manifest = {};
+		}
+		
+		var dirpath = this._pathjoin(root, subpath);
+		var filepath = this._pathjoin(dirpath, "ilibmanifest.json");
+
+		// util.print("enyo loader: loading manifest " + filepath + "\n");
+		var ajax = new enyo.Ajax({
+			url: filepath,
+			sync: true, 
+			cacheBust: false,
+			handleAs: "json"
+		});
+
+		var handler = function(inSender, json) {
+            // console.log((!inSender.failed && json ? "success" : "failed"));
+			// star indicates there was no ilibmanifest.json, so always try to load files from that dir
+			this.manifest[dirpath] = (!inSender.failed && typeof(json) === 'object') ? json.files : "*";
+		};
+		
+		ajax.response(this, handler);
+		ajax.error(this, handler);
+		ajax.go();
+	},
+	
+	enyoLoader.prototype._loadStandardManifests = function() {
+		// util.print("enyo loader: load manifests\n");
+		if (!this.manifest) {
+			this._loadManifest(this.base, "locale"); // standard ilib locale data
+			this._loadManifest("", "resources");     // the app's resources dir
+		}
+	};
+	enyoLoader.prototype.listAvailableFiles = function() {
+		// util.print("enyo loader: list available files called\n");
+		this._loadStandardManifests();
+		return this.manifest;
+	};
+	enyoLoader.prototype.isAvailable = function(root, path) {
+		this._loadStandardManifests();
+		
+		if (!this.manifest[root]) {
+			// maybe it's a custom root? If so, try to load
+			// the manifest file first in case it is there
+			this._loadManifest(root, "");
+		} 
+		
+		// util.print("enyo loader: isAvailable " + path + "? ");
+		// star means attempt to load everything because there was no manifest in that dir
+		if (this.manifest[root] === "*" || ilib.indexOf(this.manifest[root], path) !== -1) {
+			// util.print("true\n");
+			return true;
+		}
+		
+		// util.print("false\n");
+		return false;
+	};
+
+	ilib.setLoaderCallback(new enyoLoader());
+	
 	if (typeof(window.UILocale) !== 'undefined') {
 		// this is a hack until GF-1581 is fixed
 		ilib.setLocale(window.UILocale);
 	}
 
+	/*
+	 * Tell whether or not the given locale is considered a non-Latin locale for webOS purposes. This controls
+	 * which fonts are used in various places to show the various languages. An undefined spec parameter means
+	 * to test the current locale. 
+	 * 
+	 * @param {ilib.Locale|string|undefined} spec locale specifier or locale object of the locale to test, or undefined
+	 * to test the current locale
+	 */
+	enyo.isNonLatinLocale = function(spec) {
+		var li = new ilib.LocaleInfo(spec),
+			locale = li.getLocale();
+
+        // We use the non-latin fonts for these languages (even though their scripts are technically considered latin)
+        var nonLatinLanguageOverrides = ["bs", "cs", "hr", "hu", "lv", "lt", "pl", "ro", "sr", "sl", "tr", "vi"];
+        // We use the latin fonts (with non-Latin fallback) for these languages (even though their scripts are non-latin)
+        var latinLanguageOverrides = ["ko"];
+		return ((li.getScript() !== "Latn" || enyo.indexOf(locale.getLanguage(), nonLatinLanguageOverrides) !== -1) &&
+			(enyo.indexOf(locale.getLanguage(), latinLanguageOverrides) < 0));
+	};
+	
 	// enyo.updateI18NClasses should be called after every setLocale, but there isn't such a callback in current version
     enyo.updateI18NClasses = function updateBodyClasses() {
         var li = new ilib.LocaleInfo(); // for the current locale
@@ -109,13 +281,7 @@
             document.body.className = document.body.className.replace(new RegExp('(^|\\s)'+ base +'[^\\s]*', 'g'), '');
         }
 
-        // We use the non-latin fonts for these languages (even though their scripts are technically considered latin)
-        var nonLatinLanguageOverrides = ["bs", "cs", "hr", "hu", "lv", "lt", "pl", "ro", "sr", "sl", "tr", "vi"];
-        // We use the latin fonts (with non-Latin fallback) for these languages (even though their scripts are non-latin)
-        var latinLanguageOverrides = ["ko"];
-		var scriptName = li.getScript();
-		if ((scriptName !== "Latn" || enyo.indexOf(locale.getLanguage(), nonLatinLanguageOverrides) !== -1) &&
-			(enyo.indexOf(locale.getLanguage(), latinLanguageOverrides) < 0)) {
+		if (enyo.isNonLatinLocale(locale)) {
 			// allow enyo to define other fonts for non-Latin languages, or for certain
 			// Latin-based languages where the characters with some accents don't appear in the
 			// regular fonts, creating a strange "ransom note" look with a mix of fonts in the
@@ -123,6 +289,8 @@
 			// to display with the same font.
 			enyo.dom.addBodyClass(base + "non-latin");
 		}
+		
+		var scriptName = li.getScript();
 		if (scriptName !== 'Latn' && scriptName !== 'Cyrl' && scriptName !== 'Grek') {
 			// GF-45884: allow enyo to avoid setting italic fonts for those scripts that do not 
 			// commonly use italics
@@ -243,6 +411,8 @@ enyo.toUpperCase = function(inString) {
  */
 (function(originalUpdateLocale) {
 	enyo.updateLocale = function(inLocale) {
+		// blow away the cache to force it to reload the manifest files for the new app
+		if (ilib._load) ilib._load.manifest = undefined; 
 		ilib.setLocale(inLocale || navigator.language);
 		$L.setLocale(inLocale || navigator.language);
 		enyo.updateI18NClasses();

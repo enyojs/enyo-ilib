@@ -1,7 +1,7 @@
 /*
  * ilibglobal.js - define the ilib name space
  * 
- * Copyright © 2012-2013, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,11 +25,12 @@ var ilib = ilib || {};
 /**
  * Return the current version of ilib.
  * 
+ * @static
  * @return {string} a version string for this instance of ilib
  */
 ilib.getVersion = function () {
     // increment this for each release
-    return "5.0"
+    return "6.0"
     ;
 };
 
@@ -43,63 +44,66 @@ ilib.data = {
         nfd: {},
         nfkd: {},
         ccc: {}
+    },
+    zoneinfo: {
+        "Etc/UTC":{"o":"0:0","f":"UTC"},
+        "local":{"f":"local"}
     }
 };
 
 if (typeof(window) !== 'undefined') {
-	window["ilib"] = ilib;
+    window["ilib"] = ilib;
 }
 
 // export ilib for use as a module in nodejs
 if (typeof(exports) !== 'undefined') {
-	exports.ilib = ilib;
+    exports.ilib = ilib;
 }
 
 /**
+ * Return the name of the platform
  * @private
  * @static
- * Return the name of the platform
  * @return {string} string naming the platform
  */
 ilib._getPlatform = function () {
-	if (!ilib._platform) {
-		if (typeof(environment) !== 'undefined') {
-			ilib._platform = "rhino";
-		} else if (typeof(process) !== 'undefined' || typeof(require) !== 'undefined') {
-			ilib._platform = "nodejs";
-		} else if (typeof(window) !== 'undefined') {
-			ilib._platform = (typeof(PalmSystem) !== 'undefined') ? "webos" : "browser";
-		} else {
-			ilib._platform = "unknown";
-		}
-	}	
-	return ilib._platform;
+    if (!ilib._platform) {
+        if (typeof(environment) !== 'undefined') {
+            ilib._platform = "rhino";
+        } else if (typeof(process) !== 'undefined' || typeof(require) !== 'undefined') {
+            ilib._platform = "nodejs";
+        } else if (typeof(window) !== 'undefined') {
+            ilib._platform = (typeof(PalmSystem) !== 'undefined') ? "webos" : "browser";
+        } else {
+            ilib._platform = "unknown";
+        }
+    }    
+    return ilib._platform;
 };
 
 /**
+ * Return true if the global variable is defined on this platform.
  * @private
  * @static
- * Return true if the global variable is defined on this platform.
  * @return {boolean} true if the global variable is defined on this platform, false otherwise
  */
 ilib._isGlobal = function(name) {
-	switch (ilib._getPlatform()) {
-		case "rhino":
-			var top = (function() {
-			  return (typeof global === 'object') ? global : this;
-			})();
-			return typeof(top[name]) !== undefined;
-		case "nodejs":
-			var root = typeof(global) !== 'undefined' ? global : this;
-			return root && typeof(root[name]) !== undefined;
-			
-		default:
-			return typeof(window[name]) !== undefined;
-	}
+    switch (ilib._getPlatform()) {
+        case "rhino":
+            var top = (function() {
+              return (typeof global === 'object') ? global : this;
+            })();
+            return typeof(top[name]) !== undefined;
+        case "nodejs":
+            var root = typeof(global) !== 'undefined' ? global : this;
+            return root && typeof(root[name]) !== undefined;
+            
+        default:
+            return typeof(window[name]) !== undefined;
+    }
 };
 
 /**
- * @static
  * Sets the default locale for all of ilib. This locale will be used
  * when no explicit locale is passed to any ilib class. If the default
  * locale is not set, ilib will attempt to use the locale of the
@@ -108,18 +112,18 @@ ilib._isGlobal = function(name) {
  * 
  * Depends directive: !depends ilibglobal.js
  * 
+ * @static
  * @param {string} spec the locale specifier for the default locale
  */
 ilib.setLocale = function (spec) {
-	if (typeof(spec) === 'string') {
-		ilib.locale = spec;
-	}
+    if (typeof(spec) === 'string') {
+        ilib.locale = spec;
+    }
     // else ignore other data types, as we don't have the dependencies
-	// to look into them to find a locale
+    // to look into them to find a locale
 };
 
 /**
- * @static
  * Return the default locale for all of ilib if one has been set. This 
  * locale will be used when no explicit locale is passed to any ilib 
  * class. If the default
@@ -129,58 +133,58 @@ ilib.setLocale = function (spec) {
  * 
  * Depends directive: !depends ilibglobal.js 
  * 
+ * @static
  * @return {string} the locale specifier for the default locale
  */
 ilib.getLocale = function () {
-	if (typeof(ilib.locale) !== 'string') {
-		if (typeof(navigator) !== 'undefined' && typeof(navigator.language) !== 'undefined') {
-			// running in a browser
-			ilib.locale = navigator.language;  // FF/Opera/Chrome/Webkit
-			if (!ilib.locale) {
-				// IE on Windows
-				var lang = typeof(navigator.browserLanguage) !== 'undefined' ? 
-					navigator.browserLanguage : 
-					(typeof(navigator.userLanguage) !== 'undefined' ? 
-						navigator.userLanguage : 
-						(typeof(navigator.systemLanguage) !== 'undefined' ?
-							navigator.systemLanguage :
-							undefined));
-				if (typeof(lang) !== 'undefined' && lang) {
-					// for some reason, MS uses lower case region tags
-					ilib.locale = lang.substring(0,3) + lang.substring(3,5).toUpperCase();
-				}
-			}
-		} else if (typeof(PalmSystem) !== 'undefined' && typeof(PalmSystem.locales) !== 'undefined') {
-			// webOS
-			if (typeof(PalmSystem.locales.UI) != 'undefined' && PalmSystem.locales.UI.length > 0) {
-				ilib.locale = PalmSystem.locales.UI;
-			}
-		} else if (typeof(environment) !== 'undefined' && typeof(environment.user) !== 'undefined') {
-			// running under rhino
-			if (typeof(environment.user.language) === 'string' && environment.user.language.length > 0) {
-				ilib.locale = environment.user.language;
-				if (typeof(environment.user.country) === 'string' && environment.user.country.length > 0) {
-					ilib.locale += '-' + environment.user.country;
-				}
-			}
-		} else if (typeof(process) !== 'undefined' && typeof(process.env) !== 'undefined') {
-			// running under nodejs
-			var lang = process.env.LANG || process.env.LC_ALL;
-			// the LANG variable on unix is in the form "lang_REGION.CHARSET"
-			// where language and region are the correct ISO codes separated by
-			// an underscore. This translate it back to the BCP-47 form.
-			if (lang && lang !== 'undefined') {
-				ilib.locale = lang.substring(0,2).toLowerCase() + '-' + lang.substring(3,5).toUpperCase();
-			}
-		}
-			 
-		ilib.locale = typeof(ilib.locale) === 'string' ? ilib.locale : 'en-US';
-	}
+    if (typeof(ilib.locale) !== 'string') {
+        if (typeof(navigator) !== 'undefined' && typeof(navigator.language) !== 'undefined') {
+            // running in a browser
+            ilib.locale = navigator.language;  // FF/Opera/Chrome/Webkit
+            if (!ilib.locale) {
+                // IE on Windows
+                var lang = typeof(navigator.browserLanguage) !== 'undefined' ? 
+                    navigator.browserLanguage : 
+                    (typeof(navigator.userLanguage) !== 'undefined' ? 
+                        navigator.userLanguage : 
+                        (typeof(navigator.systemLanguage) !== 'undefined' ?
+                            navigator.systemLanguage :
+                            undefined));
+                if (typeof(lang) !== 'undefined' && lang) {
+                    // for some reason, MS uses lower case region tags
+                    ilib.locale = lang.substring(0,3) + lang.substring(3,5).toUpperCase();
+                }
+            }
+        } else if (typeof(PalmSystem) !== 'undefined' && typeof(PalmSystem.locales) !== 'undefined') {
+            // webOS
+            if (typeof(PalmSystem.locales.UI) != 'undefined' && PalmSystem.locales.UI.length > 0) {
+                ilib.locale = PalmSystem.locales.UI;
+            }
+        } else if (typeof(environment) !== 'undefined' && typeof(environment.user) !== 'undefined') {
+            // running under rhino
+            if (typeof(environment.user.language) === 'string' && environment.user.language.length > 0) {
+                ilib.locale = environment.user.language;
+                if (typeof(environment.user.country) === 'string' && environment.user.country.length > 0) {
+                    ilib.locale += '-' + environment.user.country;
+                }
+            }
+        } else if (typeof(process) !== 'undefined' && typeof(process.env) !== 'undefined') {
+            // running under nodejs
+            var lang = process.env.LANG || process.env.LC_ALL;
+            // the LANG variable on unix is in the form "lang_REGION.CHARSET"
+            // where language and region are the correct ISO codes separated by
+            // an underscore. This translate it back to the BCP-47 form.
+            if (lang && lang !== 'undefined') {
+                ilib.locale = lang.substring(0,2).toLowerCase() + '-' + lang.substring(3,5).toUpperCase();
+            }
+        }
+             
+        ilib.locale = typeof(ilib.locale) === 'string' ? ilib.locale : 'en-US';
+    }
     return ilib.locale;
 };
 
 /**
- * @static
  * Sets the default time zone for all of ilib. This time zone will be used when
  * no explicit time zone is passed to any ilib class. If the default time zone
  * is not set, ilib will attempt to use the time zone of the
@@ -189,6 +193,7 @@ ilib.getLocale = function () {
  * 
  * Depends directive: !depends ilibglobal.js
  * 
+ * @static
  * @param {string} tz the name of the time zone to set as the default time zone
  */
 ilib.setTimeZone = function (tz) {
@@ -196,7 +201,6 @@ ilib.setTimeZone = function (tz) {
 };
 
 /**
- * @static
  * Return the default time zone for all of ilib if one has been set. This 
  * time zone will be used when no explicit time zone is passed to any ilib 
  * class. If the default time zone
@@ -206,60 +210,65 @@ ilib.setTimeZone = function (tz) {
  * 
  * Depends directive: !depends ilibglobal.js
  * 
+ * @static
  * @return {string} the default time zone for ilib
  */
 ilib.getTimeZone = function() {
-	if (typeof(ilib.tz) === 'undefined') {
-		if (typeof(navigator) !== 'undefined' && typeof(navigator.timezone) !== 'undefined') {
-			// running in a browser
-			if (navigator.timezone.length > 0) {
-				ilib.tz = navigator.timezone;
-			}
-		} else if (typeof(PalmSystem) !== 'undefined' && typeof(PalmSystem.timezone) !== 'undefined') {
-			// running in webkit on webOS
-			if (PalmSystem.timezone.length > 0) {
-				ilib.tz = PalmSystem.timezone;
-			}
-		} else if (typeof(environment) !== 'undefined' && typeof(environment.user) !== 'undefined') {
-			// running under rhino
-			if (typeof(environment.user.timezone) !== 'undefined' && environment.user.timezone.length > 0) {
-				ilib.tz = environment.user.timezone;
-			}
-		} else if (typeof(process) !== 'undefined' && typeof(process.env) !== 'undefined') {
-			// running in nodejs
-			if (process.env.TZ && process.env.TZ !== "undefined") {
-				ilib.tz = process.env.TZ;
-			}
-		}
-		
-		ilib.tz = ilib.tz || "local"; 
-	}
+    if (typeof(ilib.tz) === 'undefined') {
+        if (typeof(navigator) !== 'undefined' && typeof(navigator.timezone) !== 'undefined') {
+            // running in a browser
+            if (navigator.timezone.length > 0) {
+                ilib.tz = navigator.timezone;
+            }
+        } else if (typeof(PalmSystem) !== 'undefined' && typeof(PalmSystem.timezone) !== 'undefined') {
+            // running in webkit on webOS
+            if (PalmSystem.timezone.length > 0) {
+                ilib.tz = PalmSystem.timezone;
+            }
+        } else if (typeof(environment) !== 'undefined' && typeof(environment.user) !== 'undefined') {
+            // running under rhino
+            if (typeof(environment.user.timezone) !== 'undefined' && environment.user.timezone.length > 0) {
+                ilib.tz = environment.user.timezone;
+            }
+        } else if (typeof(process) !== 'undefined' && typeof(process.env) !== 'undefined') {
+            // running in nodejs
+            if (process.env.TZ && process.env.TZ !== "undefined") {
+                ilib.tz = process.env.TZ;
+            }
+        }
+        
+        ilib.tz = ilib.tz || "local"; 
+    }
 
     return ilib.tz;
 };
 
 /**
- * @static
- * Define a callback function for loading missing locale data or resources.
+ * Defines the interface for the loader class for ilib. The main method of the
+ * loader object is loadFiles(), which loads a set of requested locale data files
+ * from where-ever it is stored.
+ * @interface
+ */
+ilib.Loader = function() {};
+
+/**
+ * Load a set of files from where-ever it is stored.<p>
+ * 
+ * This is the main function define a callback function for loading missing locale 
+ * data or resources.
  * If this copy of ilib is assembled without including the required locale data
  * or resources, then that data can be lazy loaded dynamically when it is 
- * needed by calling this callback function. Each ilib class will first
+ * needed by calling this method. Each ilib class will first
  * check for the existence of data under ilib.data, and if it is not there, 
- * it will attempt to load it by calling this loader function, and then place
+ * it will attempt to load it by calling this method of the laoder, and then place
  * it there.<p>
  * 
- * Suggested implementations of the callback function might be to load files 
+ * Suggested implementations of this method might load files 
  * directly from disk under nodejs or rhino, or within web pages, to load 
  * files from the server with XHR calls.<p>
  * 
- * The expected API for the call back is:
- * 
- * <pre>
- * function(paths, sync, params, callback) {}
- * </pre>
- * 
- * The first parameter to the callback
- * function, paths, is an array of relative paths within the ilib dir structure for the 
+ * The first parameter to this method, paths, is an array of relative paths within 
+ * the ilib dir structure for the 
  * requested data. These paths will already have the locale spec integrated 
  * into them, so no further tweaking needs to happen to load the data. Simply
  * load the named files. The second
@@ -288,24 +297,15 @@ ilib.getTimeZone = function() {
  * An example implementation for nodejs might be:
  * 
  * <pre>
- * function loadFiles(context, paths, results, callback) {
- *    if (paths.length > 0) {
- *        var file = paths.shift();
- *        fs.readFile(file, "utf-8", function(err, json) {
- *            results.push(err ? undefined : JSON.parse(json));
- *            if (paths.length > 0) {
- *                loadFiles(context, paths, results, callback);
- *            } else {
- *                callback.call(context, results);
- *            }
- *        });
- *     }
- * }
- * // bind to "this" so that "this" is relative to your own instance
- * ilib.setLoaderCallback(ilib.bind(this, function(paths, sync, params, callback) {
+ * var fs = require("fs");
+ * 
+ * var myLoader = function() {};
+ * myLoader.prototype = new ilib.Loader();
+ * myLoader.prototype.constructor = myLoader;
+ * myLoader.prototype.loadFiles = function(paths, sync, params, callback) {
  *    if (sync) {
  *        var ret = [];
- *        // synchronous
+ *        // synchronous load -- just return the result
  *        paths.forEach(function (path) {
  *            var json = fs.readFileSync(path, "utf-8");
  *            ret.push(json ? JSON.parse(json) : undefined);
@@ -313,22 +313,95 @@ ilib.getTimeZone = function() {
  *        
  *        return ret;
  *    }
+ *    this.callback = callback;
  *
  *    // asynchronous
- *    var results = [];
- *    loadFiles(this, paths, results, callback);
- * }));
- * </pre>
+ *    this.results = [];
+ *    this._loadFilesAsync(paths);
+ * }
+ * myLoader.prototype._loadFilesAsync = function (paths) {
+ *    if (paths.length > 0) {
+ *        var file = paths.shift();
+ *        fs.readFile(file, "utf-8", function(err, json) {
+ *            this.results.push(err ? undefined : JSON.parse(json));
+ *            // call self recursively so that the callback is only called at the end
+ *            // when all the files are loaded sequentially
+ *            if (paths.length > 0) {
+ *                this._loadFilesAsync(paths);
+ *            } else {
+ *                this.callback(this.results);
+ *            }
+ *        });
+ *     }
+ * }
  * 
- * @param {function(Array.<string>,Boolean,Object,function(Object))} loader function to call to 
- * load the requested data.
+ * // bind to "this" so that "this" is relative to your own instance
+ * ilib.setLoaderCallback(new myLoader());
+ * </pre>
+
+ * @param {Array.<string>} paths An array of paths to load from wherever the files are stored 
+ * @param {Boolean} sync if true, load the files synchronously, and false means asynchronously
+ * @param {Object} params an object with any extra parameters for the loader. These can be 
+ * anything. The caller of the ilib class passes these parameters in. Presumably, the code that
+ * calls ilib and the code that provides the loader are together and can have a private 
+ * agreement between them about what the parameters should contain.
+ * @param {function(Object)} callback function to call when the files are all loaded. The 
+ * parameter of the callback function is the contents of the files.
+ */
+ilib.Loader.prototype.loadFiles = function (paths, sync, params, callback) {};
+
+/**
+ * Return all files available for loading using this loader instance.
+ * This method returns an object where the properties are the paths to
+ * directories where files are loaded from and the values are an array
+ * of strings containing the relative paths under the directory of each
+ * file that can be loaded.<p>
+ * 
+ * Example:
+ *  <pre>
+ *  {
+ *      "/usr/share/javascript/ilib/locale": [
+ *          "dateformats.json",
+ *          "aa/dateformats.json",
+ *            "af/dateformats.json",
+ *            "agq/dateformats.json",
+ *            "ak/dateformats.json",
+ *            ...
+ *          "zxx/dateformats.json"
+ *      ]
+ *  }
+ *  </pre>
+ * @returns {Object} a hash containing directory names and
+ * paths to file that can be loaded by this loader 
+ */
+ilib.Loader.prototype.listAvailableFiles = function() {};
+
+/**
+ * Return true if the file in the named path is available for loading using
+ * this loader. The path may be given as an absolute path, in which case
+ * only that file is checked, or as a relative path, in which case, the
+ * relative path may appear underneath any of the directories that the loader
+ * knows about.
+ * @returns {boolean} true if the file in the named path is available for loading, and
+ * false otherwise
+ */
+ilib.Loader.prototype.isAvailable = function(path) {};
+
+/**
+ * Set the custom loader used to load ilib's locale data in your environment. 
+ * The instance passed in must implement the ilib.Loader interface. See the
+ * ilib.Loader class documentation for more information about loaders. 
+ * 
+ * @static
+ * @param {ilib.Loader} loader class to call to access the requested data.
  * @return {boolean} true if the loader was installed correctly, or false
  * if not
  */
 ilib.setLoaderCallback = function(loader) {
     // only a basic check
-    if (typeof(loader) === 'function' || typeof(loader) === 'undefined') {
-    	// console.log("setting callback loader to " + (loader ? loader.name : "undefined"));
+    if ((typeof(loader) === 'object' && loader instanceof ilib.Loader) || 
+            typeof(loader) === 'function' || typeof(loader) === 'undefined') {
+        // console.log("setting callback loader to " + (loader ? loader.name : "undefined"));
         ilib._load = loader;
         return true;
     }
@@ -338,7 +411,7 @@ ilib.setLoaderCallback = function(loader) {
 /*
  * util/utils.js - Core utility routines
  * 
- * Copyright © 2012-2013, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -734,6 +807,9 @@ ilib.isEmpty = function (obj) {
 };
 
 
+/**
+ * @private
+ */
 ilib.hashCode = function(obj) {
 	var hash = 0;
 	
@@ -787,6 +863,25 @@ ilib.hashCode = function(obj) {
 	return hash;
 };
 
+
+/**
+ * Load data using the new loader object or via the old function callback.
+ * @private
+ */
+ilib._callLoadData = function (files, sync, params, callback) {
+	// console.log("ilib._callLoadData called");
+	if (typeof(ilib._load) === 'function') {
+		// console.log("ilib._callLoadData: calling as a regular function");
+		return ilib._load(files, sync, params, callback);
+	} else if (typeof(ilib._load) === 'object' && ilib._load instanceof ilib.Loader) {
+		// console.log("ilib._callLoadData: calling as an object");
+		return ilib._load.loadFiles(files, sync, params, callback);
+	}
+	
+	// console.log("ilib._callLoadData: not calling. Type is " + typeof(ilib._load) + " and instanceof says " + (ilib._load instanceof ilib.Loader));
+	return undefined;
+};
+
 /**
  * Find locale data or load it in. If the data with the given name is preassembled, it will
  * find the data in ilib.data. If the data is not preassembled but there is a loader function,
@@ -801,6 +896,7 @@ ilib.hashCode = function(obj) {
  * <li><i>name</i> - String. The name of the file being loaded. Default: resources.json
  * <li><i>object</i> - Object. The class attempting to load data. The cache is stored inside of here.
  * <li><i>locale</i> - ilib.Locale. The locale for which data is loaded. Default is the current locale.
+ * <li><i>nonlocale</i> - boolean. If true, the data being loaded is not locale-specific.
  * <li><i>type</i> - String. Type of file to load. This can be "json" or "other" type. Default: "json" 
  * <li><i>loadParams</i> - Object. An object with parameters to pass to the loader function
  * <li><i>sync</i> - boolean. Whether or not to load the data synchronously
@@ -815,9 +911,10 @@ ilib.loadData = function(params) {
 		object = undefined, 
 		locale = new ilib.Locale(ilib.getLocale()), 
 		sync = false, 
-		type,
+		type = undefined,
 		loadParams = {},
-		callback = undefined;
+		callback = undefined,
+		nonlocale = false;
 	
 	if (!params || typeof(params.callback) !== 'function') {
 		return;
@@ -841,6 +938,9 @@ ilib.loadData = function(params) {
 	if (params.sync) {
 		sync = params.sync;
 	}
+	if (params.nonlocale) {
+		nonlocale = !!params.nonlocale;
+	}
 	
 	callback = params.callback;
 	
@@ -853,14 +953,21 @@ ilib.loadData = function(params) {
 		type = (dot !== -1) ? name.substring(dot+1) : "text";
 	}
 
-	var spec = (locale.getSpec().replace(/-/g, '_') || "root") + "," + name + "," + String(ilib.hashCode(loadParams));
+	var spec = ((!nonlocale && locale.getSpec().replace(/-/g, '_')) || "root") + "," + name + "," + String(ilib.hashCode(loadParams));
 	if (!object || typeof(object.cache[spec]) === 'undefined') {
 		var data;
 		
 		if (type === "json") {
+			// console.log("type is json");
 			var basename = name.substring(0, name.lastIndexOf("."));
-			data = ilib.mergeLocData(basename, locale);
+			if (nonlocale) {
+				basename = name.replace(/\//g, '.').replace(/[\\\+\-]/g, "_");
+				data = ilib.data[basename];
+			} else {
+				data = ilib.mergeLocData(basename, locale);
+			}
 			if (data) {
+				// console.log("found assembled data");
 				if (object) {
 					object.cache[spec] = data;
 				}
@@ -869,14 +976,15 @@ ilib.loadData = function(params) {
 			}
 		}
 		
-		if (typeof(ilib._load) === 'function') {
+		// console.log("ilib._load is " + typeof(ilib._load));
+		if (typeof(ilib._load) !== 'undefined') {
 			// the data is not preassembled, so attempt to load it dynamically
-			var files = ilib.getLocFiles(locale, name);
+			var files = nonlocale ? [ name || "resources.json" ] : ilib.getLocFiles(locale, name);
 			if (type !== "json") {
 				loadParams.returnOne = true;
 			}
 			
-			ilib._load(files, sync, loadParams, ilib.bind(this, function(arr) {
+			ilib._callLoadData(files, sync, loadParams, ilib.bind(this, function(arr) {
 				if (type === "json") {
 					data = ilib.data[basename] || {};
 					for (var i = 0; i < arr.length; i++) {
@@ -919,7 +1027,7 @@ ilib.loadData = function(params) {
 /*
  * locale.js - Locale specifier definition
  * 
- * Copyright © 2012, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -938,7 +1046,6 @@ ilib.loadData = function(params) {
 // !depends ilibglobal.js
 
 /**
- * @class
  * Create a new locale instance. Locales are specified either with a specifier string 
  * that follows the BCP-47 convention (roughly: "language-region-script-variant") or 
  * with 4 parameters that specify the language, region, variant, and script individually.<p>
@@ -977,6 +1084,7 @@ ilib.loadData = function(params) {
  * 
  * Depends directive: !depends locale.js
  * 
+ * @class
  * @constructor
  * @param {?string|ilib.Locale=} language the ISO 639 2-letter code for the language, or a full 
  * locale spec in BCP-47 format, or another ilib.Locale instance to copy from
@@ -1519,8 +1627,8 @@ ilib.Locale.a1toa3langmap = {
 };
 
 /**
- * @private
  * Tell whether or not the str does not start with a lower case ASCII char.
+ * @private
  * @param {string} str the char to check
  * @return {boolean} true if the char is not a lower case ASCII char
  */
@@ -1531,8 +1639,8 @@ ilib.Locale._notLower = function(str) {
 };
 
 /**
- * @private
  * Tell whether or not the str does not start with an upper case ASCII char.
+ * @private
  * @param {string} str the char to check
  * @return {boolean} true if the char is a not an upper case ASCII char
  */
@@ -1543,8 +1651,8 @@ ilib.Locale._notUpper = function(str) {
 };
 
 /**
- * @private
  * Tell whether or not the str does not start with a digit char.
+ * @private
  * @param {string} str the char to check
  * @return {boolean} true if the char is a not an upper case ASCII char
  */
@@ -1555,10 +1663,10 @@ ilib.Locale._notDigit = function(str) {
 };
 
 /**
- * @private
  * Tell whether or not the given string has the correct syntax to be 
  * an ISO 639 language code.
  * 
+ * @private
  * @param {string} str the string to parse
  * @return {boolean} true if the string could syntactically be a language code.
  */
@@ -1577,10 +1685,10 @@ ilib.Locale._isLanguageCode = function(str) {
 };
 
 /**
- * @private
  * Tell whether or not the given string has the correct syntax to be 
  * an ISO 3166 2-letter region code or M.49 3-digit region code.
  * 
+ * @private
  * @param {string} str the string to parse
  * @return {boolean} true if the string could syntactically be a language code.
  */
@@ -1607,10 +1715,10 @@ ilib.Locale._isRegionCode = function (str) {
 };
 
 /**
- * @private
  * Tell whether or not the given string has the correct syntax to be 
  * an ISO 639 language code.
  * 
+ * @private
  * @param {string} str the string to parse
  * @return {boolean} true if the string could syntactically be a language code.
  */
@@ -1630,10 +1738,10 @@ ilib.Locale._isScriptCode = function(str)
 };
 
 /**
- * @static
  * Return the ISO-3166 alpha3 equivalent region code for the given ISO 3166 alpha2
  * region code. If the given alpha2 code is not found, this function returns its
  * argument unchanged.
+ * @static
  * @param {string|undefined} alpha2 the alpha2 code to map
  * @return {string|undefined} the alpha3 equivalent of the given alpha2 code, or the alpha2
  * parameter if the alpha2 value is not found
@@ -1643,10 +1751,10 @@ ilib.Locale.regionAlpha2ToAlpha3 = function(alpha2) {
 };
 
 /**
- * @static
  * Return the ISO-639 alpha3 equivalent language code for the given ISO 639 alpha1
  * language code. If the given alpha1 code is not found, this function returns its
  * argument unchanged.
+ * @static
  * @param {string|undefined} alpha1 the alpha1 code to map
  * @return {string|undefined} the alpha3 equivalent of the given alpha1 code, or the alpha1
  * parameter if the alpha1 value is not found
@@ -1765,7 +1873,7 @@ ilib.Locale.getAvailableLocales = function () {
 /*
  * strings.js - ilib string subclass definition
  * 
- * Copyright © 2012-2013, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1786,7 +1894,6 @@ ilib.Locale.getAvailableLocales = function () {
 // !data plurals
 
 /**
- * @class
  * Create a new string instance. This string inherits from the Javascript
  * String class, and adds two more methods, fmt and fmtChoice. It can be
  * used anywhere that a normal Javascript string is used. The formatting
@@ -1795,6 +1902,7 @@ ilib.Locale.getAvailableLocales = function () {
  * 
  * Depends directive: !depends strings.js
  * 
+ * @class
  * @constructor
  * @param {string|ilib.String=} string initialize this instance with this string 
  */
@@ -1812,12 +1920,11 @@ ilib.String = function (string) {
 };
 
 /**
- * @private
- * @static
- * 
  * Return true if the given character is a Unicode surrogate character,
  * either high or low.
  * 
+ * @private
+ * @static
  * @param {string} ch character to check
  * @return {boolean} true if the character is a surrogate
  */
@@ -1827,7 +1934,6 @@ ilib.String._isSurrogate = function (ch) {
 };
 
 /**
- * @static
  * Convert a UCS-4 code point to a Javascript string. The codepoint can be any valid 
  * UCS-4 Unicode character, including supplementary characters. Standard Javascript
  * only supports supplementary characters using the UTF-16 encoding, which has 
@@ -1845,6 +1951,7 @@ ilib.String._isSurrogate = function (ch) {
  * ilib.String.codePointAt() to access code points in a string, or use 
  * an iterator to walk through the code points in a string. 
  * 
+ * @static
  * @param {number} codepoint UCS-4 code point to convert to a character
  * @return {string} a string containing the character represented by the codepoint
  */
@@ -2056,6 +2163,7 @@ ilib.String._fncs = {
 	},
 	
 	/**
+	 * @private
 	 * @param {Object} rule
 	 * @param {number} n
 	 * @return {boolean}
@@ -2067,7 +2175,6 @@ ilib.String._fncs = {
 
 ilib.String.prototype = {
 	/**
-	 * @private
 	 * Return the length of this string in characters. This function defers to the regular
 	 * Javascript string class in order to perform the length function. Please note that this
 	 * method is a real method, whereas the length property of Javascript strings is 
@@ -2079,6 +2186,7 @@ ilib.String.prototype = {
 	 * var str = new ilib.String("this is a string");
 	 * console.log("String is " + str._length() + " characters long.");
 	 * </pre>
+	 * @private
 	 */
 	_length: function () {
 		return this.str.length;
@@ -2565,9 +2673,9 @@ ilib.String.prototype = {
 	},
 	
 	/**
-	 * @private
 	 * Convert the character or the surrogate pair at the given
 	 * index into the string to a Unicode UCS-4 code point.
+	 * @protected
 	 * @param {number} index index into the string
 	 * @return {number} code point of the character at the
 	 * given index into the string
@@ -2767,7 +2875,7 @@ ilib.String.prototype = {
 /*
  * localeinfo.js - Encode locale-specific defaults
  * 
- * Copyright © 2012-2013, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -2788,7 +2896,6 @@ ilib.String.prototype = {
 // !data localeinfo
 
 /**
- * @class
  * Create a new locale info instance. Locale info instances give information about
  * the default settings for a particular locale. These settings may be overridden
  * by various parts of the code, and should be used as a fall-back setting of last
@@ -2825,6 +2932,7 @@ ilib.String.prototype = {
  * 
  * Depends directive: !depends localeinfo.js
  * 
+ * @class
  * @constructor
  * @see {ilib.setLoaderCallback} for information about registering a loader callback
  * function
@@ -3292,7 +3400,7 @@ ilib.LocaleInfo.prototype = {
 /*
  * resources.js - Resource bundle definition
  * 
- * Copyright © 2012-2013, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -3313,7 +3421,6 @@ ilib.LocaleInfo.prototype = {
 // !data pseudomap
 
 /**
- * @class
  * Create a new resource bundle instance. The resource bundle loads strings
  * appropriate for a particular locale and provides them via the getString 
  * method.<p>
@@ -3495,6 +3602,7 @@ ilib.LocaleInfo.prototype = {
  * 
  * Depends directive: !depends resources.js
  * 
+ * @class
  * @constructor
  * @param {?Object} options Options controlling how the bundle is created
  */
@@ -3902,7 +4010,7 @@ ilib.ResBundle.prototype = {
 /*
  * scriptinfo.js - information about scripts
  * 
- * Copyright © 2012-2013, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -3923,7 +4031,6 @@ ilib.ResBundle.prototype = {
 // !data scripts
 
 /**
- * @class
  * Create a new script info instance. This class encodes information about
  * scripts, which are sets of characters used in a writing system.<p>
  * 
@@ -3951,6 +4058,7 @@ ilib.ResBundle.prototype = {
  * 
  * Depends directive: !depends scriptinfo.js
  * 
+ * @class
  * @constructor
  * @param {string} script The ISO 15924 4-letter identifier for the script
  * @param {Object} options parameters to initialize this matcher 
@@ -4002,9 +4110,9 @@ ilib.ScriptInfo = function(script, options) {
 };
 
 /**
- * @static
  * Return an array of all ISO 15924 4-letter identifier script identifiers that
  * this copy of ilib knows about.
+ * @static
  * @return {Array.<string>} an array of all script identifiers that this copy of
  * ilib knows about
  */
@@ -4092,8 +4200,7 @@ ilib.ScriptInfo.prototype = {
 	}
 };
 /**
- * @license
- * Copyright © 2012, JEDLSoft
+ * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -4107,6 +4214,7 @@ ilib.ScriptInfo.prototype = {
  *
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * @license
  */
 
 /*
