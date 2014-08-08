@@ -30,7 +30,7 @@ var ilib = ilib || {};
  */
 ilib.getVersion = function () {
     // increment this for each release
-    return "6.0"
+    return "7.0"
     ;
 };
 
@@ -506,11 +506,13 @@ ilib.mod = function (dividend, modulus) {
  * 
  * @param {*} object1 the object to merge into
  * @param {*} object2 the object to merge
+ * @param {boolean=} replace if true, replace the array elements in object1 with those in object2.
+ * If false, concatenate array elements in object1 with items in object2.
  * @param {string=} name1 name of the object being merged into
  * @param {string=} name2 name of the object being merged in
  * @return {Object} the merged object
  */
-ilib.merge = function (object1, object2, name1, name2) {
+ilib.merge = function (object1, object2, replace, name1, name2) {
 	var prop = undefined,
 		newObj = {};
 	for (prop in object1) {
@@ -521,11 +523,15 @@ ilib.merge = function (object1, object2, name1, name2) {
 	for (prop in object2) {
 		if (prop && typeof(object2[prop]) !== 'undefined') {
 			if (object1[prop] instanceof Array && object2[prop] instanceof Array) {
-				newObj[prop] = new Array();
-				newObj[prop] = newObj[prop].concat(object1[prop]);
-				newObj[prop] = newObj[prop].concat(object2[prop]);
+				if (typeof(replace) !== 'boolean' || !replace) {
+					newObj[prop] = new Array();
+					newObj[prop] = newObj[prop].concat(object1[prop]);
+					newObj[prop] = newObj[prop].concat(object2[prop]);
+				} else {
+					newObj[prop] = object2[prop];
+				}
 			} else if (typeof(object1[prop]) === 'object' && typeof(object2[prop]) === 'object') {
-				newObj[prop] = ilib.merge(object1[prop], object2[prop]);
+				newObj[prop] = ilib.merge(object1[prop], object2[prop], replace);
 			} else {
 				// for debugging. Used to determine whether or not json files are overriding their parents unnecessarily
 				if (name1 && name2 && newObj[prop] == object2[prop]) {
@@ -558,9 +564,11 @@ ilib.merge = function (object1, object2, name1, name2) {
  *  
  * @param {string} prefix prefix under ilib.data of the data to merge
  * @param {ilib.Locale} locale locale of the data being sought
+ * @param {boolean=} replaceArrays if true, replace the array elements in object1 with those in object2.
+ * If false, concatenate array elements in object1 with items in object2.
  * @return {Object?} the merged locale data
  */
-ilib.mergeLocData = function (prefix, locale) {
+ilib.mergeLocData = function (prefix, locale, replaceArrays) {
 	var data = undefined;
 	var loc = locale || new ilib.Locale();
 	var foundLocaleData = false;
@@ -571,7 +579,7 @@ ilib.mergeLocData = function (prefix, locale) {
 		property = prefix + '_' + loc.getLanguage();
 		if (ilib.data[property]) {
 			foundLocaleData = true;
-			data = ilib.merge(data, ilib.data[property]);
+			data = ilib.merge(data, ilib.data[property], replaceArrays);
 		}
 	}
 	
@@ -579,7 +587,7 @@ ilib.mergeLocData = function (prefix, locale) {
 		property = prefix + '_' + loc.getRegion();
 		if (ilib.data[property]) {
 			foundLocaleData = true;
-			data = ilib.merge(data, ilib.data[property]);
+			data = ilib.merge(data, ilib.data[property], replaceArrays);
 		}
 	}
 	
@@ -590,7 +598,7 @@ ilib.mergeLocData = function (prefix, locale) {
 			property = prefix + '_' + loc.getLanguage() + '_' + loc.getScript();
 			if (ilib.data[property]) {
 				foundLocaleData = true;
-				data = ilib.merge(data, ilib.data[property]);
+				data = ilib.merge(data, ilib.data[property], replaceArrays);
 			}
 		}
 		
@@ -598,7 +606,7 @@ ilib.mergeLocData = function (prefix, locale) {
 			property = prefix + '_' + loc.getLanguage() + '_' + loc.getRegion();
 			if (ilib.data[property]) {
 				foundLocaleData = true;
-				data = ilib.merge(data, ilib.data[property]);
+				data = ilib.merge(data, ilib.data[property], replaceArrays);
 			}
 		}
 		
@@ -608,7 +616,7 @@ ilib.mergeLocData = function (prefix, locale) {
 		property = prefix + '_' + loc.getLanguage() + '_' + loc.getVariant();
 		if (ilib.data[property]) {
 			foundLocaleData = true;
-			data = ilib.merge(data, ilib.data[property]);
+			data = ilib.merge(data, ilib.data[property], replaceArrays);
 		}
 	}
 
@@ -616,7 +624,7 @@ ilib.mergeLocData = function (prefix, locale) {
 		property = prefix + '_' + loc.getLanguage() + '_' + loc.getScript() + '_' + loc.getRegion();
 		if (ilib.data[property]) {
 			foundLocaleData = true;
-			data = ilib.merge(data, ilib.data[property]);
+			data = ilib.merge(data, ilib.data[property], replaceArrays);
 		}
 	}
 
@@ -624,7 +632,7 @@ ilib.mergeLocData = function (prefix, locale) {
 		property = prefix + '_' + loc.getLanguage() + '_' + loc.getRegion() + '_' + loc.getVariant();
 		if (ilib.data[property]) {
 			foundLocaleData = true;
-			data = ilib.merge(data, ilib.data[property]);
+			data = ilib.merge(data, ilib.data[property], replaceArrays);
 		}
 	}
 
@@ -632,7 +640,7 @@ ilib.mergeLocData = function (prefix, locale) {
 		property = prefix + '_' + loc.getLanguage() + '_' + loc.getScript() + '_' + loc.getRegion() + '_' + loc.getVariant();
 		if (ilib.data[property]) {
 			foundLocaleData = true;
-			data = ilib.merge(data, ilib.data[property]);
+			data = ilib.merge(data, ilib.data[property], replaceArrays);
 		}
 	}
 
@@ -898,6 +906,9 @@ ilib._callLoadData = function (files, sync, params, callback) {
  * <li><i>locale</i> - ilib.Locale. The locale for which data is loaded. Default is the current locale.
  * <li><i>nonlocale</i> - boolean. If true, the data being loaded is not locale-specific.
  * <li><i>type</i> - String. Type of file to load. This can be "json" or "other" type. Default: "json" 
+ * <li><i>replace</i> - boolean. When merging json objects, this parameter controls whether to merge arrays
+ * or have arrays replace each other. If true, arrays in child objects replace the arrays in parent 
+ * objects. When false, the arrays in child objects are concatenated with the arrays in parent objects.  
  * <li><i>loadParams</i> - Object. An object with parameters to pass to the loader function
  * <li><i>sync</i> - boolean. Whether or not to load the data synchronously
  * <li><i>callback</i> - function(?)=. callback Call back function to call when the data is available.
@@ -914,7 +925,9 @@ ilib.loadData = function(params) {
 		type = undefined,
 		loadParams = {},
 		callback = undefined,
-		nonlocale = false;
+		nonlocale = false,
+		replace = false,
+		basename;
 	
 	if (!params || typeof(params.callback) !== 'function') {
 		return;
@@ -941,6 +954,9 @@ ilib.loadData = function(params) {
 	if (params.nonlocale) {
 		nonlocale = !!params.nonlocale;
 	}
+	if (typeof(params.replace) === 'boolean') {
+		replace = params.replace;
+	}
 	
 	callback = params.callback;
 	
@@ -959,12 +975,12 @@ ilib.loadData = function(params) {
 		
 		if (type === "json") {
 			// console.log("type is json");
-			var basename = name.substring(0, name.lastIndexOf("."));
+			basename = name.substring(0, name.lastIndexOf("."));
 			if (nonlocale) {
 				basename = name.replace(/\//g, '.').replace(/[\\\+\-]/g, "_");
 				data = ilib.data[basename];
 			} else {
-				data = ilib.mergeLocData(basename, locale);
+				data = ilib.mergeLocData(basename, locale, replace);
 			}
 			if (data) {
 				// console.log("found assembled data");
@@ -989,7 +1005,7 @@ ilib.loadData = function(params) {
 					data = ilib.data[basename] || {};
 					for (var i = 0; i < arr.length; i++) {
 						if (typeof(arr[i]) !== 'undefined') {
-							data = ilib.merge(data, arr[i]);
+							data = ilib.merge(data, arr[i], replace);
 						}
 					}
 					
@@ -1908,7 +1924,11 @@ ilib.Locale.getAvailableLocales = function () {
  */
 ilib.String = function (string) {
 	if (typeof(string) === 'object') {
-		this.str = string.str;
+		if (string instanceof ilib.String) {
+			this.str = string.str;	
+		} else {
+			this.str = string.toString();
+		}
 	} else if (typeof(string) === 'string') {
 		this.str = new String(string);
 	} else {
@@ -4200,6 +4220,7 @@ ilib.ScriptInfo.prototype = {
 	}
 };
 /**
+ * @license
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -4214,7 +4235,6 @@ ilib.ScriptInfo.prototype = {
  *
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * @license
  */
 
 /*
