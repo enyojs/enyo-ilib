@@ -3740,6 +3740,65 @@ ilib.String.prototype = {
 	},
 	
 	/**
+	 * Call the callback with each character in the string one at 
+	 * a time, taking care to step through the surrogate pairs in 
+	 * the UTF-16 encoding properly.<p>
+	 * 
+	 * The standard Javascript String's charAt() method only
+	 * returns a particular 16-bit character in the 
+	 * UTF-16 encoding scheme.
+	 * If the index to charAt() is pointing to a low- or 
+	 * high-surrogate character,
+	 * it will return the surrogate character rather 
+	 * than the the character 
+	 * in the supplementary planes that the two surrogates together 
+	 * encode. This function will call the callback with the full
+	 * character, making sure to join two  
+	 * surrogates into one character in the supplementary planes
+	 * where necessary.<p>
+	 * 
+	 * @param {Function(String)} callback a callback function to call with each
+	 * full character in the current string
+	 */
+	forEach: function(callback) {
+		if (typeof(callback) === 'function') {
+			var it = this.charIterator();
+			while (it.hasNext()) {
+				callback(it.next());
+			}
+		}
+	},
+
+	/**
+	 * Call the callback with each numeric code point in the string one at 
+	 * a time, taking care to step through the surrogate pairs in 
+	 * the UTF-16 encoding properly.<p>
+	 * 
+	 * The standard Javascript String's charCodeAt() method only
+	 * returns information about a particular 16-bit character in the 
+	 * UTF-16 encoding scheme.
+	 * If the index to charCodeAt() is pointing to a low- or 
+	 * high-surrogate character,
+	 * it will return the code point of the surrogate character rather 
+	 * than the code point of the character 
+	 * in the supplementary planes that the two surrogates together 
+	 * encode. This function will call the callback with the full
+	 * code point of each character, making sure to join two  
+	 * surrogates into one code point in the supplementary planes.<p>
+	 * 
+	 * @param {Function(String)} callback a callback function to call with each
+	 * code point in the current string
+	 */
+	forEachCodePoint: function(callback) {
+		if (typeof(callback) === 'function') {
+			var it = this.iterator();
+			while (it.hasNext()) {
+				callback(it.next());
+			}
+		}
+	},
+
+	/**
 	 * Return an iterator that will step through all of the characters
 	 * in the string one at a time and return their code points, taking 
 	 * care to step through the surrogate pairs in UTF-16 encoding 
@@ -12821,7 +12880,7 @@ ilib.CType = {
 	 * <li>Lt - Titlecase_Letter
 	 * <li>Lm - Modifier_Letter
 	 * <li>Lo - Other_Letter
-	 * <li>mn - Nonspacing_Mark
+	 * <li>Mn - Nonspacing_Mark
 	 * <li>Me - Enclosing_Mark
 	 * <li>Mc - Spacing_Mark
 	 * <li>Nd - Decimal_Number
@@ -17609,6 +17668,403 @@ ilib.AddressFmt.prototype.format = function (address) {
 };
 
 /*
+ * glyphstring.js - ilib string subclass that allows you to access 
+ * whole glyphs at a time
+ * 
+ * Copyright © 2014, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// !depends strings.js ctype.js
+// !data norm ctype_m
+
+/**
+ * Create a new glyph string instance. This string inherits from 
+ * the ilib.String class, and adds methods that allow you to access
+ * whole glyphs at a time. <p>
+ * 
+ * In Unicode, various accented characters can be created by using
+ * a base character and one or more combining characters following
+ * it. These appear on the screen to the user as a single glyph.
+ * For example, the Latin character "a" (U+0061) followed by the
+ * combining diaresis character "¨" (U+0308) combine together to
+ * form the "a with diaresis" glyph "ä", which looks like a single
+ * character on the screen.<p>
+ * 
+ * The big problem with combining characters for web developers is
+ * that many CSS engines do not ellipsize text between glyphs. They
+ * only deal with single Unicode characters. So if a particular space 
+ * only allows for 4 characters, the CSS engine will truncate a
+ * string at 4 Unicode characters and then add the ellipsis (...)
+ * character. What if the fourth Unicode character is the "a" and
+ * the fifth one is the diaresis? Then a string like "xxxäxxx" that
+ * is ellipsized at 4 characters will appear as "xxxa..." on the 
+ * screen instead of "xxxä...".<p>
+ * 
+ * In the Latin script as it is commonly used, it is not so common
+ * to form accented characters using combining accents, so the above
+ * example is mostly for illustrative purposes. It is not unheard of
+ * however. The situation is much, much worse in scripts such as Thai and 
+ * Devanagari that normally make very heavy use of combining characters.
+ * These scripts do so because Unicode does not include pre-composed 
+ * versions of the accented characters like it does for Latin, so 
+ * combining accents are the only way to create these accented and 
+ * combined versions of the characters.<p>
+ * 
+ * The solution to thise problem is not to use the the CSS property 
+ * "text-overflow: ellipsis" in your web site, ever. Instead, use
+ * a glyph string to truncate text between glyphs instead of between
+ * characters.<p>
+ * 
+ * Glyph strings are also useful for truncation, hyphenation, and 
+ * line wrapping, as all of these should be done between glyphs instead
+ * of between characters.<p>
+ * 
+ * The options parameter is optional, and may contain any combination
+ * of the following properties:<p>
+ * 
+ * <ul>
+ * <li><i>onLoad</i> - a callback function to call when the locale data are
+ * fully loaded. When the onLoad option is given, this object will attempt to
+ * load any missing locale data using the ilib loader callback.
+ * When the constructor is done (even if the data is already preassembled), the 
+ * onLoad function is called with the current instance as a parameter, so this
+ * callback can be used with preassembled or dynamic loading or a mix of the two.
+ * 
+ * <li><i>sync</i> - tell whether to load any missing locale data synchronously or 
+ * asynchronously. If this option is given as "false", then the "onLoad"
+ * callback must be given, as the instance returned from this constructor will
+ * not be usable for a while.
+ *  
+ * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ * loader callback function when locale data is missing. The parameters are not
+ * interpretted or modified in any way. They are simply passed along. The object 
+ * may contain any property/value pairs as long as the calling code is in
+ * agreement with the loader callback function as to what those parameters mean.
+ * </ul>
+ * 
+ * 
+ * Depends directive: !depends glyphstring.js
+ * 
+ * @class
+ * @constructor
+ * @param {string|ilib.String=} str initialize this instance with this string 
+ * @param {Object=} options options governing the way this instance works
+ */
+ilib.GlyphString = function (str, options) {
+	ilib.String.call(this, str);
+	
+	var sync = true;
+	var loadParams = {};
+	if (options) {
+		if (typeof(options.sync) === 'boolean') {
+			sync = options.sync;
+		}
+		if (options.loadParams) {
+			loadParams = options.loadParams;
+		}
+	}
+	
+	ilib.CType._load("ctype_m", sync, loadParams, function() {
+		if (typeof(ilib.data.norm.ccc) === 'undefined') {
+			ilib.loadData({
+				object: ilib.GlyphString, 
+				locale: "-", 
+				name: "norm.json",
+				nonlocale: true,
+				sync: sync, 
+				loadParams: loadParams, 
+				callback: ilib.bind(this, function (norm) {
+					ilib.data.norm = norm;
+					if (options && typeof(options.onLoad) === 'function') {
+						options.onLoad(this);
+					}
+				})
+			});
+		} else {
+			if (options && typeof(options.onLoad) === 'function') {
+				options.onLoad(this);
+			}
+		}
+	});
+};
+
+ilib.GlyphString.prototype = new ilib.String();
+ilib.GlyphString.parent = ilib.String;
+ilib.GlyphString.prototype.constructor = ilib.GlyphString;
+
+//ilib.GlyphString.prototype.iterator = function () {
+
+//};
+
+/**
+ * Return true if the given character is a leading Jamo (Choseong) character.
+ * 
+ * @private
+ * @static
+ * @param {number} n code point to check
+ * @return {boolean} true if the character is a leading Jamo character, 
+ * false otherwise
+ */
+ilib.GlyphString._isJamoL = function (n) {
+	return (n >= 0x1100 && n <= 0x1112);
+};
+
+/**
+ * Return true if the given character is a vowel Jamo (Jungseong) character.
+ * 
+ * @private
+ * @static
+ * @param {number} n code point to check
+ * @return {boolean} true if the character is a vowel Jamo character, 
+ * false otherwise
+ */
+ilib.GlyphString._isJamoV = function (n) {
+	return (n >= 0x1161 && n <= 0x1175);
+};
+
+/**
+ * Return true if the given character is a trailing Jamo (Jongseong) character.
+ * 
+ * @private
+ * @static
+ * @param {number} n code point to check
+ * @return {boolean} true if the character is a trailing Jamo character, 
+ * false otherwise
+ */
+ilib.GlyphString._isJamoT = function (n) {
+	return (n >= 0x11A8 && n <= 0x11C2);
+};
+
+/**
+ * Return true if the given character is a precomposed Hangul character.
+ * 
+ * @private
+ * @static
+ * @param {number} n code point to check
+ * @return {boolean} true if the character is a precomposed Hangul character, 
+ * false otherwise
+ */
+ilib.GlyphString._isHangul = function (n) {
+	return (n >= 0xAC00 && n <= 0xD7A3);
+};
+
+/**
+ * Algorithmically compose an L and a V combining Jamo characters into
+ * a precomposed Korean syllabic Hangul character. Both should already
+ * be in the proper ranges for L and V characters. 
+ * 
+ * @private
+ * @static
+ * @param {number} lead the code point of the lead Jamo character to compose
+ * @param {number} trail the code point of the trailing Jamo character to compose
+ * @return {string} the composed Hangul character
+ */
+ilib.GlyphString._composeJamoLV = function (lead, trail) {
+	var lindex = lead - 0x1100;
+	var vindex = trail - 0x1161;
+	return ilib.String.fromCodePoint(0xAC00 + (lindex * 21 + vindex) * 28);
+};
+
+/**
+ * Algorithmically compose a Hangul LV and a combining Jamo T character 
+ * into a precomposed Korean syllabic Hangul character. 
+ * 
+ * @private
+ * @static
+ * @param {number} lead the code point of the lead Hangul character to compose
+ * @param {number} trail the code point of the trailing Jamo T character to compose
+ * @return {string} the composed Hangul character
+ */
+ilib.GlyphString._composeJamoLVT = function (lead, trail) {
+	return ilib.String.fromCodePoint(lead + (trail - 0x11A7));
+};
+
+/**
+ * Compose one character out of a leading character and a 
+ * trailing character. If the characters are Korean Jamo, they
+ * will be composed algorithmically. If they are any other
+ * characters, they will be looked up in the nfc tables.
+ * 
+ * @private
+ * @static
+ * @param {string} lead leading character to compose
+ * @param {string} trail the trailing character to compose
+ * @return {string} the fully composed character, or undefined if
+ * there is no composition for those two characters
+ */
+ilib.GlyphString._compose = function (lead, trail) {
+	var first = lead.charCodeAt(0);
+	var last = trail.charCodeAt(0);
+	if (ilib.GlyphString._isHangul(first) && ilib.GlyphString._isJamoT(last)) {
+		return ilib.GlyphString._composeJamoLVT(first, last);
+	} else if (ilib.GlyphString._isJamoL(first) && ilib.GlyphString._isJamoV(last)) {
+		return ilib.GlyphString._composeJamoLV(first, last);
+	}
+
+	var c = lead + trail;
+	return (ilib.data.norm.nfc && ilib.data.norm.nfc[c]);
+};
+
+/**
+ * Return an iterator that will step through all of the characters
+ * in the string one at a time, taking care to step through decomposed 
+ * characters and through surrogate pairs in the UTF-16 encoding 
+ * as single characters. <p>
+ * 
+ * The GlyphString class will return decomposed Unicode characters
+ * as a single unit that a user might see on the screen as a single
+ * glyph. If the 
+ * next character in the iteration is a base character and it is 
+ * followed by combining characters, the base and all its following 
+ * combining characters are returned as a single unit.<p>
+ * 
+ * The standard Javascript String's charAt() method only
+ * returns information about a particular 16-bit character in the 
+ * UTF-16 encoding scheme.
+ * If the index is pointing to a low- or high-surrogate character,
+ * it will return that surrogate character rather 
+ * than the surrogate pair which represents a character 
+ * in the supplementary planes.<p>
+ * 
+ * The iterator instance returned has two methods, hasNext() which
+ * returns true if the iterator has more characters to iterate through,
+ * and next() which returns the next character.<p>
+ * 
+ * @override
+ * @return {Object} an iterator 
+ * that iterates through all the characters in the string
+ */
+ilib.GlyphString.prototype.charIterator = function() {
+	var it = ilib.String.prototype.charIterator.call(this);
+	
+	/**
+	 * @constructor
+	 */
+	function _chiterator (istring) {
+		this.index = 0;
+		this.spacingCombining = false;
+		this.hasNext = function () {
+			return !!this.nextChar || it.hasNext();
+		};
+		this.next = function () {
+			var ch = this.nextChar || it.next(),
+				prevCcc = ilib.data.norm.ccc[ch],
+				nextCcc,
+				composed = ch;
+			
+			this.nextChar = undefined;
+			this.spacingCombining = false;
+			
+			if (ilib.data.norm.ccc && 
+					(typeof(ilib.data.norm.ccc[ch]) === 'undefined' || ilib.data.norm.ccc[ch] === 0)) {
+				// found a starter... find all the non-starters until the next starter. Must include
+				// the next starter because under some odd circumstances, two starters sometimes recompose 
+				// together to form another character
+				var notdone = true;
+				while (it.hasNext() && notdone) {
+					this.nextChar = it.next();
+					nextCcc = ilib.data.norm.ccc[this.nextChar];
+					// Mn characters are Marks that are non-spacing. These do not take more room than an accent, so they should be 
+					// considered part of the on-screen glyph, even if they are non-combining. Mc are marks that are spacing
+					// and combining, which means they are part of the glyph, but they cause the glyph to use up more space than
+					// just the base character alone.
+					var isMn = ilib.CType._inRange(this.nextChar, "Mn", ilib.data.ctype_m);
+					var isMc = ilib.CType._inRange(this.nextChar, "Mc", ilib.data.ctype_m);
+					if (isMn || isMc || (typeof(nextCcc) !== 'undefined' && nextCcc !== 0)) {
+						if (isMc) {
+							this.spacingCombining = true;
+						}
+						ch += this.nextChar;
+						this.nextChar = undefined;
+					} else {
+						// found the next starter. See if this can be composed with the previous starter
+						var testChar = ilib.GlyphString._compose(composed, this.nextChar);
+						if (prevCcc === 0 && typeof(testChar) !== 'undefined') { 
+							// not blocked and there is a mapping 
+							composed = testChar;
+							ch += this.nextChar;
+							this.nextChar = undefined;
+						} else {
+							// finished iterating, leave this.nextChar for the next next() call 
+							notdone = false;
+						}
+					}
+					prevCcc = nextCcc;
+				}
+			}
+			return ch;
+		};
+		// Returns true if the last character returned by the "next" method included
+		// spacing combining characters. If it does, then the character was wider than
+		// just the base character alone, and the truncation code will not add it.
+		this.wasSpacingCombining = function() {
+			return this.spacingCombining;
+		};
+	};
+	return new _chiterator(this);
+};
+
+/**
+ * Truncate the current string at the given number of whole glyphs and return
+ * the resulting string.
+ * 
+ * @param {number} length the number of whole glyphs to keep in the string
+ * @return {string} a string truncated to the requested number of glyphs
+ */
+ilib.GlyphString.prototype.truncate = function(length) {
+	var it = this.charIterator();
+	var tr = "";
+	for (var i = 0; i < length-1 && it.hasNext(); i++) {
+		tr += it.next();
+	}
+	
+	/*
+	 * handle the last character separately. If it contains spacing combining
+	 * accents, then we must assume that it uses up more horizontal space on
+	 * the screen than just the base character by itself, and therefore this
+	 * method will not truncate enough characters to fit in the given length.
+	 * In this case, we have to chop off not only the combining characters, 
+	 * but also the base character as well because the base without the
+	 * combining accents is considered a different character.
+	 */
+	if (i < length && it.hasNext()) {
+		var c = it.next();
+		if (!it.wasSpacingCombining()) {
+			tr += c;
+		}
+	}
+	return tr;
+};
+
+/**
+ * Truncate the current string at the given number of glyphs and add an ellipsis
+ * to indicate that is more to the string. The ellipsis forms the last character
+ * in the string, so the string is actually truncated at length-1 glyphs.
+ * 
+ * @param {number} length the number of whole glyphs to keep in the string 
+ * including the ellipsis
+ * @return {string} a string truncated to the requested number of glyphs
+ * with an ellipsis
+ */
+ilib.GlyphString.prototype.ellipsize = function(length) {
+	return this.truncate(length > 0 ? length-1 : 0) + "…";
+};
+
+
+/*
  * normstring.js - ilib normalized string subclass definition
  * 
  * Copyright © 2013-2014, JEDLSoft
@@ -17627,11 +18083,11 @@ ilib.AddressFmt.prototype.format = function (address) {
  * limitations under the License.
  */
 
-// !depends strings.js
+// !depends strings.js glyphstring.js
 
 /**
  * Create a new normalized string instance. This string inherits from 
- * the ilib.String class, and adds the normalize method. It can be
+ * the ilib.GlyphString class, and adds the normalize method. It can be
  * used anywhere that a normal Javascript string is used. <p>
  * 
  * Depends directive: !depends normstring.js
@@ -17641,13 +18097,12 @@ ilib.AddressFmt.prototype.format = function (address) {
  * @param {string|ilib.String=} str initialize this instance with this string 
  */
 ilib.NormString = function (str) {
-	ilib.NormString.baseConstructor.call(this, str);
-	
+	ilib.GlyphString.call(this, str);
 };
-ilib.NormString.prototype = new ilib.String();
+
+ilib.NormString.prototype = new ilib.GlyphString();
+ilib.NormString.parent = ilib.GlyphString;
 ilib.NormString.prototype.constructor = ilib.NormString;
-ilib.NormString.baseConstructor = ilib.String;
-ilib.NormString.prototype.parent = ilib.String.prototype;
 
 /**
  * Initialize the normalized string routines statically. This
@@ -17692,18 +18147,18 @@ ilib.NormString.init = function(options) {
 	}
 	var formDependencies = {
 		"nfd": ["nfd"],
-		"nfc": ["nfc", "nfd"],
+		"nfc": ["nfd"],
 		"nfkd": ["nfkd", "nfd"],
-		"nfkc": ["nfkd", "nfd", "nfc"]
+		"nfkc": ["nfkd", "nfd"]
 	};
-	var files = ["norm.ccc.json"];
+	var files = ["norm.json"];
 	var forms = formDependencies[form];
 	for (var f in forms) {
 		files.push(forms[f] + "/" + script + ".json");
 	}
 	
 	ilib._callLoadData(files, sync, loadParams, function(arr) {
-		ilib.data.norm.ccc = arr[0];
+		ilib.data.norm = arr[0];
 		for (var i = 1; i < arr.length; i++) {
 			if (typeof(arr[i]) !== 'undefined') {
 				ilib.data.norm[forms[i-1]] = arr[i];
@@ -17714,58 +18169,6 @@ ilib.NormString.init = function(options) {
 			onLoad(arr);
 		}
 	});
-};
-
-/**
- * Return true if the given character is a leading Jamo (Choseong) character.
- * 
- * @private
- * @static
- * @param {number} n code point to check
- * @return {boolean} true if the character is a leading Jamo character, 
- * false otherwise
- */
-ilib.NormString._isJamoL = function (n) {
-	return (n >= 0x1100 && n <= 0x1112);
-};
-
-/**
- * Return true if the given character is a vowel Jamo (Jungseong) character.
- * 
- * @private
- * @static
- * @param {number} n code point to check
- * @return {boolean} true if the character is a vowel Jamo character, 
- * false otherwise
- */
-ilib.NormString._isJamoV = function (n) {
-	return (n >= 0x1161 && n <= 0x1175);
-};
-
-/**
- * Return true if the given character is a trailing Jamo (Jongseong) character.
- * 
- * @private
- * @static
- * @param {number} n code point to check
- * @return {boolean} true if the character is a trailing Jamo character, 
- * false otherwise
- */
-ilib.NormString._isJamoT = function (n) {
-	return (n >= 0x11A8 && n <= 0x11C2);
-};
-
-/**
- * Return true if the given character is a precomposed Hangul character.
- * 
- * @private
- * @static
- * @param {number} n code point to check
- * @return {boolean} true if the character is a precomposed Hangul character, 
- * false otherwise
- */
-ilib.NormString._isHangul = function (n) {
-	return (n >= 0xAC00 && n <= 0xD7A3);
 };
 
 /**
@@ -17790,37 +18193,6 @@ ilib.NormString._decomposeHangul = function (cp) {
 };
 
 /**
- * Algorithmically compose an L and a V combining Jamo characters into
- * a precomposed Korean syllabic Hangul character. Both should already
- * be in the proper ranges for L and V characters. 
- * 
- * @private
- * @static
- * @param {number} lead the code point of the lead Jamo character to compose
- * @param {number} trail the code point of the trailing Jamo character to compose
- * @return {string} the composed Hangul character
- */
-ilib.NormString._composeJamoLV = function (lead, trail) {
-	var lindex = lead - 0x1100;
-	var vindex = trail - 0x1161;
-	return ilib.String.fromCodePoint(0xAC00 + (lindex * 21 + vindex) * 28);
-};
-
-/**
- * Algorithmically compose a Hangul LV and a combining Jamo T character 
- * into a precomposed Korean syllabic Hangul character. 
- * 
- * @private
- * @static
- * @param {number} lead the code point of the lead Hangul character to compose
- * @param {number} trail the code point of the trailing Jamo T character to compose
- * @return {string} the composed Hangul character
- */
-ilib.NormString._composeJamoLVT = function (lead, trail) {
-	return ilib.String.fromCodePoint(lead + (trail - 0x11A7));
-};
-
-/**
  * Expand one character according to the given canonical and 
  * compatibility mappings.
  *
@@ -17836,7 +18208,7 @@ ilib.NormString._expand = function (ch, canon, compat) {
 	var i, 
 		expansion = "",
 		n = ch.charCodeAt(0);
-	if (ilib.NormString._isHangul(n)) {
+	if (ilib.GlyphString._isHangul(n)) {
 		expansion = ilib.NormString._decomposeHangul(n);
 	} else {
 		var result = canon[ch];
@@ -17853,33 +18225,6 @@ ilib.NormString._expand = function (ch, canon, compat) {
 	}
 	return expansion;
 };
-
-/**
- * Compose one character out of a leading character and a 
- * trailing character. If the characters are Korean Jamo, they
- * will be composed algorithmically. If they are any other
- * characters, they will be looked up in the nfc tables.
- * 
- * @private
- * @static
- * @param {string} lead leading character to compose
- * @param {string} trail the trailing character to compose
- * @return {string} the fully composed character, or undefined if
- * there is no composition for those two characters
- */
-ilib.NormString._compose = function (lead, trail) {
-	var first = lead.charCodeAt(0);
-	var last = trail.charCodeAt(0);
-	if (ilib.NormString._isHangul(first) && ilib.NormString._isJamoT(last)) {
-		return ilib.NormString._composeJamoLVT(first, last);
-	} else if (ilib.NormString._isJamoL(first) && ilib.NormString._isJamoV(last)) {
-		return ilib.NormString._composeJamoLV(first, last);
-	}
-
-	var c = lead + trail;
-	return (ilib.data.norm.nfc && ilib.data.norm.nfc[c]);
-};
-
 
 /**
  * Perform the Unicode Normalization Algorithm upon the string and return 
@@ -18055,13 +18400,13 @@ ilib.NormString.prototype.normalize = function (form) {
 	var decomp = "";
 	
 	if (nfkd) {
-		var ch, it = this.parent.charIterator.call(this);
+		var ch, it = ilib.String.prototype.charIterator.call(this);
 		while (it.hasNext()) {
 			ch = it.next();
 			decomp += ilib.NormString._expand(ch, ilib.data.norm.nfd, ilib.data.norm.nfkd);
 		}
 	} else {
-		var ch, it = this.parent.charIterator.call(this);
+		var ch, it = ilib.String.prototype.charIterator.call(this);
 		while (it.hasNext()) {
 			ch = it.next();
 			decomp += ilib.NormString._expand(ch, ilib.data.norm.nfd);
@@ -18120,7 +18465,7 @@ ilib.NormString.prototype.normalize = function (form) {
 						ilib.data.norm.ccc[cpArray[end]] !== 0) {
 						if (ccc(cpArray[end-1]) < ccc(cpArray[end])) { 
 							// not blocked 
-							var testChar = ilib.NormString._compose(cpArray[i], cpArray[end]);
+							var testChar = ilib.GlyphString._compose(cpArray[i], cpArray[end]);
 							if (typeof(testChar) !== 'undefined') {
 								cpArray[i] = testChar;
 								
@@ -18134,7 +18479,7 @@ ilib.NormString.prototype.normalize = function (form) {
 						end++;
 					} else {
 						// found the next starter. See if this can be composed with the previous starter
-						var testChar = ilib.NormString._compose(cpArray[i], cpArray[end]);
+						var testChar = ilib.GlyphString._compose(cpArray[i], cpArray[end]);
 						if (ccc(cpArray[end-1]) === 0 && typeof(testChar) !== 'undefined') { 
 							// not blocked and there is a mapping 
 							cpArray[i] = testChar;
@@ -18187,7 +18532,7 @@ ilib.NormString.prototype.normalize = function (form) {
  * that iterates through all the characters in the string
  */
 ilib.NormString.prototype.charIterator = function() {
-	var it = this.parent.charIterator.call(this);
+	var it = ilib.String.prototype.charIterator.call(this);
 	
 	/**
 	 * @constructor
@@ -18226,7 +18571,7 @@ ilib.NormString.prototype.charIterator = function() {
 						this.nextChar = undefined;
 					} else {
 						// found the next starter. See if this can be composed with the previous starter
-						var testChar = ilib.NormString._compose(composed, this.nextChar);
+						var testChar = ilib.GlyphString._compose(composed, this.nextChar);
 						if (prevCcc === 0 && typeof(testChar) !== 'undefined') { 
 							// not blocked and there is a mapping 
 							composed = testChar;
@@ -19065,7 +19410,7 @@ ilib.Collator.getAvailableScripts = function () {
  */
 /* WARNING: THIS IS A FILE GENERATED BY gennorm.js. DO NOT EDIT BY HAND. */
 // !depends util/utils.js 
-// !data norm.ccc nfd/all
+// !data norm nfd/all
 ilib.data.norm.nfd = ilib.merge(ilib.data.norm.nfd || {}, ilib.data.nfd_all);
 ilib.data.nfd_all = undefined;
 /*
@@ -19089,9 +19434,8 @@ ilib.data.nfd_all = undefined;
 /* WARNING: THIS IS A FILE GENERATED BY gennorm.js. DO NOT EDIT BY HAND. */
 // !depends util/utils.js 
 // !depends nfd/all.js
-// !data norm.ccc nfc/all
-ilib.data.norm.nfc = ilib.merge(ilib.data.norm.nfc || {}, ilib.data.nfc_all);
-ilib.data.nfc_all = undefined;
+// !data norm
+
 /*
  * all.js - include file for normalization data for a particular script
  * 
@@ -19113,7 +19457,7 @@ ilib.data.nfc_all = undefined;
 /* WARNING: THIS IS A FILE GENERATED BY gennorm.js. DO NOT EDIT BY HAND. */
 // !depends util/utils.js 
 // !depends nfd/all.js
-// !data norm.ccc nfkd/all
+// !data norm nfkd/all
 ilib.data.norm.nfkd = ilib.merge(ilib.data.norm.nfkd || {}, ilib.data.nfkd_all);
 ilib.data.nfkd_all = undefined;
 /*
@@ -19137,7 +19481,7 @@ ilib.data.nfkd_all = undefined;
 /* WARNING: THIS IS A FILE GENERATED BY gennorm.js. DO NOT EDIT BY HAND. */
 // !depends util/utils.js 
 // !depends nfd/all.js nfc/all.js nfkd/all.js
-// !data norm.ccc
+// !data norm
 
 /*
  * localematch.js - Locale matcher definition
@@ -19547,4 +19891,5 @@ nfkc/all.js
 localematch.js
 normstring.js
 maps/casemapper.js
+glyphstring.js
 */
