@@ -72,7 +72,7 @@
 	 * to load all the files that exist and can be loaded
 	 */
 	enyoLoader.prototype._loadFilesAsync = function (context, paths, results, params, callback) {
-		var root = "resources";
+		var root = "assets/resources";
 		if (params && typeof(params.root) !== "undefined") {
 			root = params.root;
 		}
@@ -121,7 +121,7 @@
 	enyoLoader.prototype.loadFiles = function(paths, sync, params, callback) {
 		if (sync) {
 			var ret = [];
-			var root = "resources";
+			var root = "assets/resources";
 			var locdata = this._pathjoin(this.base, "locale");
 			if (params && typeof(params.root) !== "undefined") {
 				root = params.root;
@@ -215,7 +215,7 @@
 		// util.print("enyo loader: load manifests\n");
 		if (!this.manifest) {
 			this._loadManifest(this.base, "locale"); // standard ilib locale data
-			this._loadManifest("", "resources");     // the app's resources dir
+			this._loadManifest("", "assets/resources");     // the app's resources dir
 		}
 	};
 	enyoLoader.prototype.listAvailableFiles = function() {
