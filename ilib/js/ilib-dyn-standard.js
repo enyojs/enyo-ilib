@@ -30,7 +30,7 @@ var ilib = ilib || {};
  */
 ilib.getVersion = function () {
     // increment this for each release
-    return "7.0"
+    return "8.0"
     ;
 };
 
@@ -544,28 +544,7 @@ ilib.Locale = function(language, region, variant, script) {
 			this.script = undefined;
 		}
 	}
-	this.spec = this.language || "";
-	
-	if (this.script) {
-		if (this.spec.length > 0) {
-			this.spec += "-";
-		}
-		this.spec += this.script;
-	}
-	
-	if (this.region) {
-		if (this.spec.length > 0) {
-			this.spec += "-";
-		}
-		this.spec += this.region;
-	}
-	
-	if (this.variant) {
-		if (this.spec.length > 0) {
-			this.spec += "-";
-		}
-		this.spec += this.variant;
-	}
+	this._genSpec();
 };
 
 // from http://en.wikipedia.org/wiki/ISO_3166-1
@@ -1148,6 +1127,34 @@ ilib.Locale.languageAlpha1ToAlpha3 = function(alpha1) {
 };
 
 ilib.Locale.prototype = {
+	/**
+	 * @private
+	 */
+	_genSpec: function () {
+		this.spec = this.language || "";
+		
+		if (this.script) {
+			if (this.spec.length > 0) {
+				this.spec += "-";
+			}
+			this.spec += this.script;
+		}
+		
+		if (this.region) {
+			if (this.spec.length > 0) {
+				this.spec += "-";
+			}
+			this.spec += this.region;
+		}
+		
+		if (this.variant) {
+			if (this.spec.length > 0) {
+				this.spec += "-";
+			}
+			this.spec += this.variant;
+		}
+	},
+
 	/**
 	 * Return the ISO 639 language code for this locale. 
 	 * @return {string|undefined} the language code for this locale 
@@ -2431,20 +2438,27 @@ ilib.merge = function (object1, object2, replace, name1, name2) {
  * @param {ilib.Locale} locale locale of the data being sought
  * @param {boolean=} replaceArrays if true, replace the array elements in object1 with those in object2.
  * If false, concatenate array elements in object1 with items in object2.
+ * @param {boolean=} returnOne if true, only return the most locale-specific data. If false,
+ * merge all the relevant locale data together.
  * @return {Object?} the merged locale data
  */
-ilib.mergeLocData = function (prefix, locale, replaceArrays) {
+ilib.mergeLocData = function (prefix, locale, replaceArrays, returnOne) {
 	var data = undefined;
 	var loc = locale || new ilib.Locale();
 	var foundLocaleData = false;
 	var property = prefix;
+	var mostSpecific;
+
 	data = ilib.data[prefix] || {};
-	
+
+	mostSpecific = data;
+
 	if (loc.getLanguage()) {
 		property = prefix + '_' + loc.getLanguage();
 		if (ilib.data[property]) {
 			foundLocaleData = true;
 			data = ilib.merge(data, ilib.data[property], replaceArrays);
+			mostSpecific = ilib.data[property];
 		}
 	}
 	
@@ -2453,6 +2467,7 @@ ilib.mergeLocData = function (prefix, locale, replaceArrays) {
 		if (ilib.data[property]) {
 			foundLocaleData = true;
 			data = ilib.merge(data, ilib.data[property], replaceArrays);
+			mostSpecific = ilib.data[property];
 		}
 	}
 	
@@ -2464,6 +2479,7 @@ ilib.mergeLocData = function (prefix, locale, replaceArrays) {
 			if (ilib.data[property]) {
 				foundLocaleData = true;
 				data = ilib.merge(data, ilib.data[property], replaceArrays);
+				mostSpecific = ilib.data[property];
 			}
 		}
 		
@@ -2472,9 +2488,9 @@ ilib.mergeLocData = function (prefix, locale, replaceArrays) {
 			if (ilib.data[property]) {
 				foundLocaleData = true;
 				data = ilib.merge(data, ilib.data[property], replaceArrays);
+				mostSpecific = ilib.data[property];
 			}
-		}
-		
+		}		
 	}
 	
 	if (loc.getRegion() && loc.getVariant()) {
@@ -2482,6 +2498,7 @@ ilib.mergeLocData = function (prefix, locale, replaceArrays) {
 		if (ilib.data[property]) {
 			foundLocaleData = true;
 			data = ilib.merge(data, ilib.data[property], replaceArrays);
+			mostSpecific = ilib.data[property];
 		}
 	}
 
@@ -2490,6 +2507,7 @@ ilib.mergeLocData = function (prefix, locale, replaceArrays) {
 		if (ilib.data[property]) {
 			foundLocaleData = true;
 			data = ilib.merge(data, ilib.data[property], replaceArrays);
+			mostSpecific = ilib.data[property];
 		}
 	}
 
@@ -2498,6 +2516,7 @@ ilib.mergeLocData = function (prefix, locale, replaceArrays) {
 		if (ilib.data[property]) {
 			foundLocaleData = true;
 			data = ilib.merge(data, ilib.data[property], replaceArrays);
+			mostSpecific = ilib.data[property];
 		}
 	}
 
@@ -2506,10 +2525,11 @@ ilib.mergeLocData = function (prefix, locale, replaceArrays) {
 		if (ilib.data[property]) {
 			foundLocaleData = true;
 			data = ilib.merge(data, ilib.data[property], replaceArrays);
+			mostSpecific = ilib.data[property];
 		}
 	}
-
-	return foundLocaleData ? data : undefined;
+	
+	return foundLocaleData ? (returnOne ? mostSpecific : data) : undefined;
 };
 
 /**
@@ -2836,16 +2856,16 @@ ilib.loadData = function(params) {
 
 	var spec = ((!nonlocale && locale.getSpec().replace(/-/g, '_')) || "root") + "," + name + "," + String(ilib.hashCode(loadParams));
 	if (!object || typeof(object.cache[spec]) === 'undefined') {
-		var data;
+		var data, returnOne = (loadParams && loadParams.returnOne);
 		
 		if (type === "json") {
 			// console.log("type is json");
 			basename = name.substring(0, name.lastIndexOf("."));
 			if (nonlocale) {
-				basename = name.replace(/\//g, '.').replace(/[\\\+\-]/g, "_");
+				basename = basename.replace(/\//g, '.').replace(/[\\\+\-]/g, "_");
 				data = ilib.data[basename];
 			} else {
-				data = ilib.mergeLocData(basename, locale, replace);
+				data = ilib.mergeLocData(basename, locale, replace, returnOne);
 			}
 			if (data) {
 				// console.log("found assembled data");
@@ -2870,7 +2890,7 @@ ilib.loadData = function(params) {
 					data = ilib.data[basename] || {};
 					for (var i = 0; i < arr.length; i++) {
 						if (typeof(arr[i]) !== 'undefined') {
-							data = ilib.merge(data, arr[i], replace);
+							data = loadParams.returnOne ? arr[i] : ilib.merge(data, arr[i], replace);
 						}
 					}
 					
@@ -2895,6 +2915,9 @@ ilib.loadData = function(params) {
 			}));
 		} else {
 			// no data other than the generic shared data
+			if (type === "json") {
+				data = ilib.data[basename];
+			}
 			if (object && data) {
 				object.cache[spec] = data;
 			}
@@ -3757,7 +3780,7 @@ ilib.String.prototype = {
 	 * surrogates into one character in the supplementary planes
 	 * where necessary.<p>
 	 * 
-	 * @param {Function(String)} callback a callback function to call with each
+	 * @param {function(string)} callback a callback function to call with each
 	 * full character in the current string
 	 */
 	forEach: function(callback) {
@@ -3786,7 +3809,7 @@ ilib.String.prototype = {
 	 * code point of each character, making sure to join two  
 	 * surrogates into one code point in the supplementary planes.<p>
 	 * 
-	 * @param {Function(String)} callback a callback function to call with each
+	 * @param {function(string)} callback a callback function to call with each
 	 * code point in the current string
 	 */
 	forEachCodePoint: function(callback) {
@@ -6453,6 +6476,25 @@ ilib.shallowCopy = function (source, target) {
 			}
 		}
 	}
+};
+
+/** [Need Comment]
+ * 
+ */
+ilib.deepCopy = function(from, to) {
+	var prop;
+
+	for (prop in from) {
+		if (prop) {
+			if (typeof(from[prop]) === 'object') {
+				to[prop] ={};
+				ilib.deepCopy(from[prop], to[prop]);
+			} else {
+				to[prop] = from[prop];
+			}
+		}
+	}
+	return to;
 };
 
 /**
@@ -11978,7 +12020,7 @@ ilib.DurFmt.prototype._mapDigits = function(str) {
 /**
  * @private
  * @param {ilib.LocaleInfo} locinfo
- * @param {Function|undefined} onLoad
+ * @param {function(ilib.DurFmt)|undefined} onLoad
  */
 ilib.DurFmt.prototype._init = function(locinfo, onLoad) {
 	var digits;
