@@ -36,7 +36,6 @@ ilib.getVersion = function () {
 
 /**
  * Place where resources and such are eventually assigned.
- * @dict
  */
 ilib.data = {
     norm: {
@@ -48,7 +47,15 @@ ilib.data = {
     zoneinfo: {
         "Etc/UTC":{"o":"0:0","f":"UTC"},
         "local":{"f":"local"}
-    }
+    },
+    /** @type {null|Object.<string,Array.<Array.<number>>>} */ ctype: null,
+    /** @type {null|Object.<string,Array.<Array.<number>>>} */ ctype_c: null,
+    /** @type {null|Object.<string,Array.<Array.<number>>>} */ ctype_l: null,
+    /** @type {null|Object.<string,Array.<Array.<number>>>} */ ctype_m: null,
+    /** @type {null|Object.<string,Array.<Array.<number>>>} */ ctype_p: null,
+    /** @type {null|Object.<string,Array.<Array.<number>>>} */ ctype_z: null,
+    /** @type {null|Object.<string,Array.<Array.<number>>>} */ scriptToRange: null,
+    /** @type {null|Object.<string,string|Object.<string|Object.<string,string>>>} */ dateformats: null
 };
 
 if (typeof(window) !== 'undefined') {
@@ -430,6 +437,7 @@ ilib.setLoaderCallback = function(loader) {
 // !depends ilibglobal.js
 
 /**
+ * @class
  * Create a new locale instance. Locales are specified either with a specifier string 
  * that follows the BCP-47 convention (roughly: "language-region-script-variant") or 
  * with 4 parameters that specify the language, region, variant, and script individually.<p>
@@ -468,7 +476,6 @@ ilib.setLoaderCallback = function(loader) {
  * 
  * Depends directive: !depends locale.js
  * 
- * @class
  * @constructor
  * @param {?string|ilib.Locale=} language the ISO 639 2-letter code for the language, or a full 
  * locale spec in BCP-47 format, or another ilib.Locale instance to copy from
@@ -1285,6 +1292,7 @@ ilib.Locale.getAvailableLocales = function () {
 // !data localeinfo
 
 /**
+ * @class
  * Create a new locale info instance. Locale info instances give information about
  * the default settings for a particular locale. These settings may be overridden
  * by various parts of the code, and should be used as a fall-back setting of last
@@ -1321,7 +1329,6 @@ ilib.Locale.getAvailableLocales = function () {
  * 
  * Depends directive: !depends localeinfo.js
  * 
- * @class
  * @constructor
  * @see {ilib.setLoaderCallback} for information about registering a loader callback
  * function
@@ -1808,6 +1815,7 @@ ilib.LocaleInfo.prototype = {
 /* !depends ilibglobal.js localeinfo.js */
 
 /**
+ * @class
  * Construct a new date object. Each parameter is a numeric value, but its 
  * accepted range can vary depending on the subclass of this date. For example,
  * Gregorian months can be from 1 to 12, whereas months in the Hebrew calendar
@@ -1818,7 +1826,6 @@ ilib.LocaleInfo.prototype = {
  * 
  * Depends directive: !depends date.js
  * 
- * @class
  * @constructor
  * @param {Object=} options The date components to initialize this date with
  */
@@ -1981,6 +1988,24 @@ ilib.Date.prototype = {
 	},
 	
 	/**
+	 * Return the extended unix time equivalent to this Gregorian date instance. Unix time is
+	 * the number of milliseconds since midnight on Jan 1, 1970 UTC. Traditionally unix time
+	 * (or the type "time_t" in C/C++) is only encoded with an unsigned 32 bit integer, and thus 
+	 * runs out on Jan 19, 2038. However, most Javascript engines encode numbers well above 
+	 * 32 bits and the Date object allows you to encode up to 100 million days worth of time 
+	 * after Jan 1, 1970, and even more interestingly, 100 million days worth of time before
+	 * Jan 1, 1970 as well. This method returns the number of milliseconds in that extended 
+	 * range. If this instance encodes a date outside of that range, this method will return
+	 * NaN.
+	 * 
+	 * @return {number} a number giving the extended unix time, or Nan if the date is outside 
+	 * the valid extended unix time range
+	 */
+	getTimeExtended: function() {
+		return this.rd.getTimeExtended();
+	},
+
+	/**
 	 * Set the time of this instance according to the given unix time. Unix time is
 	 * the number of milliseconds since midnight on Jan 1, 1970.
 	 * 
@@ -2113,8 +2138,8 @@ ilib.Date.prototype = {
 	 * @return {Date|undefined} a javascript Date object
 	 */
 	getJSDate: function() {
-		var unix = this.rd.getTime();
-		return (unix === -1) ? undefined : new Date(unix); 
+		var unix = this.rd.getTimeExtended();
+		return isNaN(unix) ? undefined : new Date(unix); 
 	},
 	
 	/**
@@ -2952,6 +2977,7 @@ ilib.loadData = function(params) {
 // !data plurals
 
 /**
+ * @class
  * Create a new string instance. This string inherits from the Javascript
  * String class, and adds two more methods, fmt and fmtChoice. It can be
  * used anywhere that a normal Javascript string is used. The formatting
@@ -2960,7 +2986,6 @@ ilib.loadData = function(params) {
  * 
  * Depends directive: !depends strings.js
  * 
- * @class
  * @constructor
  * @param {string|ilib.String=} string initialize this instance with this string 
  */
@@ -4299,6 +4324,7 @@ ilib._roundFnc = {
 /* !depends locale.js */
 
 /**
+ * @class
  * A Julian Day class. A Julian Day is a date based on the Julian Day count
  * of time invented by Joseph Scaliger in 1583 for use with astronomical calculations. 
  * Do not confuse it with a date in the Julian calendar, which it has very
@@ -4306,7 +4332,6 @@ ilib._roundFnc = {
  * 
  * Depends directive: !depends julianday.js
  * 
- * @class
  * @constructor
  * @param {number} num the Julian Day expressed as a floating point number 
  */
@@ -4415,12 +4440,12 @@ ilib.JulianDay.prototype = {
 /* !depends calendar.js locale.js date.js julianday.js util/utils.js */
 
 /**
+ * @class
  * Construct a new Gregorian calendar object. This class encodes information about
  * a Gregorian calendar.<p>
  * 
  * Depends directive: !depends gregorian.js
  * 
- * @class
  * @constructor
  * @implements ilib.Cal
  */
@@ -4539,6 +4564,7 @@ julianday.js
 */
 
 /**
+ * @class
  * Construct a new RD date number object. The constructor parameters can 
  * contain any of the following properties:
  * 
@@ -4587,8 +4613,7 @@ julianday.js
  * 
  * Depends directive: !depends ratadie.js
  * 
- * @protected
- * @class
+ * @private
  * @constructor
  * @param {Object=} params parameters that govern the settings and behaviour of this RD date
  */
@@ -4764,6 +4789,34 @@ ilib.Date.RataDie.prototype = {
 	},
 
 	/**
+	 * Return the extended unix time equivalent to this Gregorian date instance. Unix time is
+	 * the number of milliseconds since midnight on Jan 1, 1970 UTC. Traditionally unix time
+	 * (or the type "time_t" in C/C++) is only encoded with a unsigned 32 bit integer, and thus 
+	 * runs out on Jan 19, 2038. However, most Javascript engines encode numbers well above 
+	 * 32 bits and the Date object allows you to encode up to 100 million days worth of time 
+	 * after Jan 1, 1970, and even more interestingly 100 million days worth of time before
+	 * Jan 1, 1970 as well. This method returns the number of milliseconds in that extended 
+	 * range. If this instance encodes a date outside of that range, this method will return
+	 * NaN.
+	 * 
+	 * @return {number} a number giving the extended unix time, or NaN if the date is outside 
+	 * the valid extended unix time range
+	 */
+	getTimeExtended: function() {
+		var jd = this.getJulianDay();
+		
+		// test if earlier than Jan 1, 1970 - 100 million days
+		// or later than Jan 1, 1970 + 100 million days
+		if (jd < -97559412.5 || jd > 102440587.5) { 
+			return NaN;
+		}
+	
+		// avoid the rounding errors in the floating point math by only using
+		// the whole days from the rd, and then calculating the milliseconds directly
+		return Math.round((jd - 2440587.5) * 86400000);
+	},
+
+	/**
 	 * Return the Julian Day equivalent to this calendar date as a number.
 	 * This returns the julian day in UTC.
 	 * 
@@ -4811,6 +4864,7 @@ julianday.js
 */
 
 /**
+ * @class
  * Construct a new Gregorian RD date number object. The constructor parameters can 
  * contain any of the following properties:
  * 
@@ -4853,8 +4907,7 @@ julianday.js
  * 
  * Depends directive: !depends gregratadie.js
  * 
- * @protected
- * @class
+ * @private
  * @constructor
  * @extends ilib.Date.RataDie
  * @param {Object=} params parameters that govern the settings and behaviour of this Gregorian RD date
@@ -5001,6 +5054,7 @@ calendar/gregratadie.js
 // !data localeinfo zoneinfo
 
 /**
+ * @class
  * Create a time zone instance. 
  * 
  * This class reports and transforms
@@ -5089,7 +5143,6 @@ calendar/gregratadie.js
  * 
  * Depends directive: !depends timezone.js
  * 
- * @class 
  * @constructor
  * @param {Object} options Options guiding the construction of this time zone instance
  */
@@ -5733,7 +5786,7 @@ ilib.TimeZone.prototype.inDaylightTime = function (date, wallTime) {
 			offset = this.dstSavings * 60000;
 		}
 		
-		var d = new Date(date ? date.getTime() + offset: undefined);
+		var d = new Date(date ? date.getTimeExtended() + offset: undefined);
 		// the DST offset is always the one that is closest to positive infinity, no matter 
 		// if you are in the northern or southern hemisphere, east or west
 		var dst = Math.max(this.offsetJan1, this.offsetJun1);
@@ -5849,6 +5902,7 @@ ilib.TimeZone.prototype.getCountry = function () {
 // !data pseudomap
 
 /**
+ * @class
  * Create a new resource bundle instance. The resource bundle loads strings
  * appropriate for a particular locale and provides them via the getString 
  * method.<p>
@@ -6030,7 +6084,6 @@ ilib.TimeZone.prototype.getCountry = function () {
  * 
  * Depends directive: !depends resources.js
  * 
- * @class
  * @constructor
  * @param {?Object} options Options controlling how the bundle is created
  */
@@ -6610,6 +6663,7 @@ util/jsutils.js
 // !data dateformats sysres
 
 /**
+ * @class
  * Create a new date formatter instance. The date formatter is immutable once
  * it is created, but can format as many different dates as needed with the same
  * options. Create different date formatter instances for different purposes
@@ -6848,7 +6902,6 @@ util/jsutils.js
  * 
  * Depends directive: !depends datefmt.js
  * 
- * @class
  * @constructor
  * @param {Object} options options governing the way this date formatter instance works
  */
@@ -7017,7 +7070,7 @@ ilib.DateFmt = function(options) {
 							loadParams: loadParams, 
 							callback: ilib.bind(this, function (formats) {
 								if (!formats) {
-									formats = ilib.DateFmt.defaultFmt;
+									formats = ilib.data.dateformats || ilib.DateFmt.defaultFmt;
 									var spec = this.locale.getSpec().replace(/-/g, '_');
 									ilib.DateFmt.cache[spec] = formats;
 								}
@@ -7054,7 +7107,7 @@ ilib.DateFmt.lenmap = {
 
 ilib.DateFmt.zeros = "0000";
 
-ilib.DateFmt.defaultFmt = ilib.data.dateformats || {
+ilib.DateFmt.defaultFmt = {
 	"gregorian": {
 		"order": "{date} {time}",
 		"date": {
@@ -7935,6 +7988,7 @@ util/jsutils.js
 // !data dateformats sysres
 
 /**
+ * @class
  * Create a new date range formatter instance. The date range formatter is immutable once
  * it is created, but can format as many different date ranges as needed with the same
  * options. Create different date range formatter instances for different purposes
@@ -8011,7 +8065,6 @@ util/jsutils.js
  * 
  * Depends directive: !depends daterangefmt.js
  * 
- * @class
  * @constructor
  * @param {Object} options options governing the way this date range formatter instance works
  */
@@ -8377,6 +8430,7 @@ timezone.js
 */
 
 /**
+ * @class
  * Construct a new Gregorian date object. The constructor parameters can 
  * contain any of the following properties:
  * 
@@ -8450,7 +8504,6 @@ timezone.js
  * 
  * Depends directive: !depends gregoriandate.js
  * 
- * @class
  * @constructor
  * @extends ilib.Date
  * @param {Object=} params parameters that govern the settings and behaviour of this Gregorian date
@@ -8744,12 +8797,12 @@ ilib.Date._constructors["gregorian"] = ilib.Date.GregDate;
 /* !depends calendar.js locale.js date.js julianday.js calendar/gregorian.js util/utils.js */
 
 /**
+ * @class
  * Construct a new Thai solar calendar object. This class encodes information about
  * a Thai solar calendar.<p>
  * 
  * Depends directive: !depends thaisolar.js
  * 
- * @class
  * @constructor
  * @implements ilib.Cal
  */
@@ -8813,6 +8866,7 @@ util/jsutils.js
 */
 
 /**
+ * @class
  * Construct a new Thai solar date object. The constructor parameters can 
  * contain any of the following properties:
  * 
@@ -8870,7 +8924,6 @@ util/jsutils.js
  * 
  * Depends directive: !depends thaisolardate.js
  * 
- * @class
  * @constructor
  * @extends ilib.Date.GregDate
  * @param {Object=} params parameters that govern the settings and behaviour of this Thai solar date
@@ -10321,7 +10374,7 @@ ilib.CType = {
 	 */
 	_inRange: function(ch, rangeName, obj) {
 		var range, i, num;
-		if (!ch || ch.length === 0 || !rangeName || typeof(obj) === 'undefined') {
+		if (!ch || ch.length === 0 || !rangeName || !obj) {
 			return false;
 		}
 		
@@ -10671,6 +10724,7 @@ ctype.isspace.js
 */
 
 /**
+ * @class
  * Parse a string as a number, ignoring all locale-specific formatting.<p>
  * 
  * This class is different from the standard Javascript parseInt() and parseFloat() 
@@ -10722,7 +10776,6 @@ ctype.isspace.js
  * 
  * Depends directive: !depends numprs.js
  * 
- * @class
  * @constructor
  * @param {string|number|Number|ilib.Number|undefined} str a string to parse as a number, or a number value
  * @param {Object=} options Options controlling how the instance should be created 
@@ -10929,6 +10982,7 @@ ilib.Number.prototype = {
 // !data currency
 
 /**
+ * @class
  * Create a new currency information instance. Instances of this class encode 
  * information about a particular currency.<p>
  * 
@@ -10989,7 +11043,6 @@ ilib.Number.prototype = {
  * 
  * Depends directive: !depends currency.js
  * 
- * @class
  * @constructor
  * @param options {Object} a set of properties to govern how this instance is constructed.
  * @throws "currency xxx is unknown" when the given currency code is not in the list of 
@@ -11194,6 +11247,7 @@ util/jsutils.js
 // !data localeinfo currency
 
 /**
+ * @class
  * Create a new number formatter instance. Locales differ in the way that digits
  * in a formatted number are grouped, in the way the decimal character is represented,
  * etc. Use this formatter to get it right for any locale.<p>
@@ -11280,7 +11334,6 @@ util/jsutils.js
  *
  * Depends directive: !depends numfmt.js
  *
- * @class
  * @constructor
  * @param {Object.<string,*>} options A set of options that govern how the formatter will behave
  */
@@ -11771,6 +11824,7 @@ util/jsutils.js
 // !resbundle sysres
 
 /**
+ * @class
  * Create a new duration formatter instance. The duration formatter is immutable once
  * it is created, but can format as many different durations as needed with the same
  * options. Create different duration formatter instances for different purposes
@@ -11831,7 +11885,6 @@ util/jsutils.js
  * 
  * Depends directive: !depends durfmt.js
  * 
- * @class
  * @constructor
  * @param {?Object} options options governing the way this date formatter instance works
  */
@@ -12164,6 +12217,7 @@ ilib.DurFmt.prototype.getStyle = function () {
 // !data scripts
 
 /**
+ * @class
  * Create a new script info instance. This class encodes information about
  * scripts, which are sets of characters used in a writing system.<p>
  * 
@@ -12191,7 +12245,6 @@ ilib.DurFmt.prototype.getStyle = function () {
  * 
  * Depends directive: !depends scriptinfo.js
  * 
- * @class
  * @constructor
  * @param {string} script The ISO 15924 4-letter identifier for the script
  * @param {Object} options parameters to initialize this matcher 
@@ -12354,6 +12407,7 @@ ilib.ScriptInfo.prototype = {
 // !depends locale.js util/utils.js
 
 /**
+ * @class
  * Create a new string mapper instance that maps strings to upper or
  * lower case. This mapping will work for any string as characters 
  * that have no case will be returned unchanged.<p>
@@ -12371,7 +12425,6 @@ ilib.ScriptInfo.prototype = {
  * 
  * Depends directive: !depends casemapper.js
  * 
- * @class
  * @constructor
  * @param {Object=} options options to initialize this mapper 
  */
