@@ -36,7 +36,6 @@ ilib.getVersion = function () {
 
 /**
  * Place where resources and such are eventually assigned.
- * @dict
  */
 ilib.data = {
     norm: {
@@ -48,7 +47,15 @@ ilib.data = {
     zoneinfo: {
         "Etc/UTC":{"o":"0:0","f":"UTC"},
         "local":{"f":"local"}
-    }
+    },
+    /** @type {null|Object.<string,Array.<Array.<number>>>} */ ctype: null,
+    /** @type {null|Object.<string,Array.<Array.<number>>>} */ ctype_c: null,
+    /** @type {null|Object.<string,Array.<Array.<number>>>} */ ctype_l: null,
+    /** @type {null|Object.<string,Array.<Array.<number>>>} */ ctype_m: null,
+    /** @type {null|Object.<string,Array.<Array.<number>>>} */ ctype_p: null,
+    /** @type {null|Object.<string,Array.<Array.<number>>>} */ ctype_z: null,
+    /** @type {null|Object.<string,Array.<Array.<number>>>} */ scriptToRange: null,
+    /** @type {null|Object.<string,string|Object.<string|Object.<string,string>>>} */ dateformats: null
 };
 
 if (typeof(window) !== 'undefined') {
@@ -1078,6 +1085,7 @@ ilib.loadData = function(params) {
 // !depends ilibglobal.js
 
 /**
+ * @class
  * Create a new locale instance. Locales are specified either with a specifier string 
  * that follows the BCP-47 convention (roughly: "language-region-script-variant") or 
  * with 4 parameters that specify the language, region, variant, and script individually.<p>
@@ -1116,7 +1124,6 @@ ilib.loadData = function(params) {
  * 
  * Depends directive: !depends locale.js
  * 
- * @class
  * @constructor
  * @param {?string|ilib.Locale=} language the ISO 639 2-letter code for the language, or a full 
  * locale spec in BCP-47 format, or another ilib.Locale instance to copy from
@@ -1933,6 +1940,7 @@ ilib.Locale.getAvailableLocales = function () {
 // !data plurals
 
 /**
+ * @class
  * Create a new string instance. This string inherits from the Javascript
  * String class, and adds two more methods, fmt and fmtChoice. It can be
  * used anywhere that a normal Javascript string is used. The formatting
@@ -1941,7 +1949,6 @@ ilib.Locale.getAvailableLocales = function () {
  * 
  * Depends directive: !depends strings.js
  * 
- * @class
  * @constructor
  * @param {string|ilib.String=} string initialize this instance with this string 
  */
@@ -2998,6 +3005,7 @@ ilib.String.prototype = {
 // !data localeinfo
 
 /**
+ * @class
  * Create a new locale info instance. Locale info instances give information about
  * the default settings for a particular locale. These settings may be overridden
  * by various parts of the code, and should be used as a fall-back setting of last
@@ -3034,7 +3042,6 @@ ilib.String.prototype = {
  * 
  * Depends directive: !depends localeinfo.js
  * 
- * @class
  * @constructor
  * @see {ilib.setLoaderCallback} for information about registering a loader callback
  * function
@@ -3523,6 +3530,7 @@ ilib.LocaleInfo.prototype = {
 // !data pseudomap
 
 /**
+ * @class
  * Create a new resource bundle instance. The resource bundle loads strings
  * appropriate for a particular locale and provides them via the getString 
  * method.<p>
@@ -3704,7 +3712,6 @@ ilib.LocaleInfo.prototype = {
  * 
  * Depends directive: !depends resources.js
  * 
- * @class
  * @constructor
  * @param {?Object} options Options controlling how the bundle is created
  */
@@ -4133,6 +4140,7 @@ ilib.ResBundle.prototype = {
 // !data scripts
 
 /**
+ * @class
  * Create a new script info instance. This class encodes information about
  * scripts, which are sets of characters used in a writing system.<p>
  * 
@@ -4160,7 +4168,6 @@ ilib.ResBundle.prototype = {
  * 
  * Depends directive: !depends scriptinfo.js
  * 
- * @class
  * @constructor
  * @param {string} script The ISO 15924 4-letter identifier for the script
  * @param {Object} options parameters to initialize this matcher 

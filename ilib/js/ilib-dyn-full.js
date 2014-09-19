@@ -36,7 +36,6 @@ ilib.getVersion = function () {
 
 /**
  * Place where resources and such are eventually assigned.
- * @dict
  */
 ilib.data = {
     norm: {
@@ -48,7 +47,15 @@ ilib.data = {
     zoneinfo: {
         "Etc/UTC":{"o":"0:0","f":"UTC"},
         "local":{"f":"local"}
-    }
+    },
+    /** @type {null|Object.<string,Array.<Array.<number>>>} */ ctype: null,
+    /** @type {null|Object.<string,Array.<Array.<number>>>} */ ctype_c: null,
+    /** @type {null|Object.<string,Array.<Array.<number>>>} */ ctype_l: null,
+    /** @type {null|Object.<string,Array.<Array.<number>>>} */ ctype_m: null,
+    /** @type {null|Object.<string,Array.<Array.<number>>>} */ ctype_p: null,
+    /** @type {null|Object.<string,Array.<Array.<number>>>} */ ctype_z: null,
+    /** @type {null|Object.<string,Array.<Array.<number>>>} */ scriptToRange: null,
+    /** @type {null|Object.<string,string|Object.<string|Object.<string,string>>>} */ dateformats: null
 };
 
 if (typeof(window) !== 'undefined') {
@@ -430,6 +437,7 @@ ilib.setLoaderCallback = function(loader) {
 // !depends ilibglobal.js
 
 /**
+ * @class
  * Create a new locale instance. Locales are specified either with a specifier string 
  * that follows the BCP-47 convention (roughly: "language-region-script-variant") or 
  * with 4 parameters that specify the language, region, variant, and script individually.<p>
@@ -468,7 +476,6 @@ ilib.setLoaderCallback = function(loader) {
  * 
  * Depends directive: !depends locale.js
  * 
- * @class
  * @constructor
  * @param {?string|ilib.Locale=} language the ISO 639 2-letter code for the language, or a full 
  * locale spec in BCP-47 format, or another ilib.Locale instance to copy from
@@ -1285,6 +1292,7 @@ ilib.Locale.getAvailableLocales = function () {
 // !data localeinfo
 
 /**
+ * @class
  * Create a new locale info instance. Locale info instances give information about
  * the default settings for a particular locale. These settings may be overridden
  * by various parts of the code, and should be used as a fall-back setting of last
@@ -1321,7 +1329,6 @@ ilib.Locale.getAvailableLocales = function () {
  * 
  * Depends directive: !depends localeinfo.js
  * 
- * @class
  * @constructor
  * @see {ilib.setLoaderCallback} for information about registering a loader callback
  * function
@@ -1808,6 +1815,7 @@ ilib.LocaleInfo.prototype = {
 /* !depends ilibglobal.js localeinfo.js */
 
 /**
+ * @class
  * Construct a new date object. Each parameter is a numeric value, but its 
  * accepted range can vary depending on the subclass of this date. For example,
  * Gregorian months can be from 1 to 12, whereas months in the Hebrew calendar
@@ -1818,7 +1826,6 @@ ilib.LocaleInfo.prototype = {
  * 
  * Depends directive: !depends date.js
  * 
- * @class
  * @constructor
  * @param {Object=} options The date components to initialize this date with
  */
@@ -1981,6 +1988,24 @@ ilib.Date.prototype = {
 	},
 	
 	/**
+	 * Return the extended unix time equivalent to this Gregorian date instance. Unix time is
+	 * the number of milliseconds since midnight on Jan 1, 1970 UTC. Traditionally unix time
+	 * (or the type "time_t" in C/C++) is only encoded with an unsigned 32 bit integer, and thus 
+	 * runs out on Jan 19, 2038. However, most Javascript engines encode numbers well above 
+	 * 32 bits and the Date object allows you to encode up to 100 million days worth of time 
+	 * after Jan 1, 1970, and even more interestingly, 100 million days worth of time before
+	 * Jan 1, 1970 as well. This method returns the number of milliseconds in that extended 
+	 * range. If this instance encodes a date outside of that range, this method will return
+	 * NaN.
+	 * 
+	 * @return {number} a number giving the extended unix time, or Nan if the date is outside 
+	 * the valid extended unix time range
+	 */
+	getTimeExtended: function() {
+		return this.rd.getTimeExtended();
+	},
+
+	/**
 	 * Set the time of this instance according to the given unix time. Unix time is
 	 * the number of milliseconds since midnight on Jan 1, 1970.
 	 * 
@@ -2113,8 +2138,8 @@ ilib.Date.prototype = {
 	 * @return {Date|undefined} a javascript Date object
 	 */
 	getJSDate: function() {
-		var unix = this.rd.getTime();
-		return (unix === -1) ? undefined : new Date(unix); 
+		var unix = this.rd.getTimeExtended();
+		return isNaN(unix) ? undefined : new Date(unix); 
 	},
 	
 	/**
@@ -2952,6 +2977,7 @@ ilib.loadData = function(params) {
 // !data plurals
 
 /**
+ * @class
  * Create a new string instance. This string inherits from the Javascript
  * String class, and adds two more methods, fmt and fmtChoice. It can be
  * used anywhere that a normal Javascript string is used. The formatting
@@ -2960,7 +2986,6 @@ ilib.loadData = function(params) {
  * 
  * Depends directive: !depends strings.js
  * 
- * @class
  * @constructor
  * @param {string|ilib.String=} string initialize this instance with this string 
  */
@@ -4299,6 +4324,7 @@ ilib._roundFnc = {
 /* !depends locale.js */
 
 /**
+ * @class
  * A Julian Day class. A Julian Day is a date based on the Julian Day count
  * of time invented by Joseph Scaliger in 1583 for use with astronomical calculations. 
  * Do not confuse it with a date in the Julian calendar, which it has very
@@ -4306,7 +4332,6 @@ ilib._roundFnc = {
  * 
  * Depends directive: !depends julianday.js
  * 
- * @class
  * @constructor
  * @param {number} num the Julian Day expressed as a floating point number 
  */
@@ -4415,12 +4440,12 @@ ilib.JulianDay.prototype = {
 /* !depends calendar.js locale.js date.js julianday.js util/utils.js */
 
 /**
+ * @class
  * Construct a new Gregorian calendar object. This class encodes information about
  * a Gregorian calendar.<p>
  * 
  * Depends directive: !depends gregorian.js
  * 
- * @class
  * @constructor
  * @implements ilib.Cal
  */
@@ -4539,6 +4564,7 @@ julianday.js
 */
 
 /**
+ * @class
  * Construct a new RD date number object. The constructor parameters can 
  * contain any of the following properties:
  * 
@@ -4587,8 +4613,7 @@ julianday.js
  * 
  * Depends directive: !depends ratadie.js
  * 
- * @protected
- * @class
+ * @private
  * @constructor
  * @param {Object=} params parameters that govern the settings and behaviour of this RD date
  */
@@ -4764,6 +4789,34 @@ ilib.Date.RataDie.prototype = {
 	},
 
 	/**
+	 * Return the extended unix time equivalent to this Gregorian date instance. Unix time is
+	 * the number of milliseconds since midnight on Jan 1, 1970 UTC. Traditionally unix time
+	 * (or the type "time_t" in C/C++) is only encoded with a unsigned 32 bit integer, and thus 
+	 * runs out on Jan 19, 2038. However, most Javascript engines encode numbers well above 
+	 * 32 bits and the Date object allows you to encode up to 100 million days worth of time 
+	 * after Jan 1, 1970, and even more interestingly 100 million days worth of time before
+	 * Jan 1, 1970 as well. This method returns the number of milliseconds in that extended 
+	 * range. If this instance encodes a date outside of that range, this method will return
+	 * NaN.
+	 * 
+	 * @return {number} a number giving the extended unix time, or NaN if the date is outside 
+	 * the valid extended unix time range
+	 */
+	getTimeExtended: function() {
+		var jd = this.getJulianDay();
+		
+		// test if earlier than Jan 1, 1970 - 100 million days
+		// or later than Jan 1, 1970 + 100 million days
+		if (jd < -97559412.5 || jd > 102440587.5) { 
+			return NaN;
+		}
+	
+		// avoid the rounding errors in the floating point math by only using
+		// the whole days from the rd, and then calculating the milliseconds directly
+		return Math.round((jd - 2440587.5) * 86400000);
+	},
+
+	/**
 	 * Return the Julian Day equivalent to this calendar date as a number.
 	 * This returns the julian day in UTC.
 	 * 
@@ -4811,6 +4864,7 @@ julianday.js
 */
 
 /**
+ * @class
  * Construct a new Gregorian RD date number object. The constructor parameters can 
  * contain any of the following properties:
  * 
@@ -4853,8 +4907,7 @@ julianday.js
  * 
  * Depends directive: !depends gregratadie.js
  * 
- * @protected
- * @class
+ * @private
  * @constructor
  * @extends ilib.Date.RataDie
  * @param {Object=} params parameters that govern the settings and behaviour of this Gregorian RD date
@@ -5001,6 +5054,7 @@ calendar/gregratadie.js
 // !data localeinfo zoneinfo
 
 /**
+ * @class
  * Create a time zone instance. 
  * 
  * This class reports and transforms
@@ -5089,7 +5143,6 @@ calendar/gregratadie.js
  * 
  * Depends directive: !depends timezone.js
  * 
- * @class 
  * @constructor
  * @param {Object} options Options guiding the construction of this time zone instance
  */
@@ -5733,7 +5786,7 @@ ilib.TimeZone.prototype.inDaylightTime = function (date, wallTime) {
 			offset = this.dstSavings * 60000;
 		}
 		
-		var d = new Date(date ? date.getTime() + offset: undefined);
+		var d = new Date(date ? date.getTimeExtended() + offset: undefined);
 		// the DST offset is always the one that is closest to positive infinity, no matter 
 		// if you are in the northern or southern hemisphere, east or west
 		var dst = Math.max(this.offsetJan1, this.offsetJun1);
@@ -5849,6 +5902,7 @@ ilib.TimeZone.prototype.getCountry = function () {
 // !data pseudomap
 
 /**
+ * @class
  * Create a new resource bundle instance. The resource bundle loads strings
  * appropriate for a particular locale and provides them via the getString 
  * method.<p>
@@ -6030,7 +6084,6 @@ ilib.TimeZone.prototype.getCountry = function () {
  * 
  * Depends directive: !depends resources.js
  * 
- * @class
  * @constructor
  * @param {?Object} options Options controlling how the bundle is created
  */
@@ -6610,6 +6663,7 @@ util/jsutils.js
 // !data dateformats sysres
 
 /**
+ * @class
  * Create a new date formatter instance. The date formatter is immutable once
  * it is created, but can format as many different dates as needed with the same
  * options. Create different date formatter instances for different purposes
@@ -6848,7 +6902,6 @@ util/jsutils.js
  * 
  * Depends directive: !depends datefmt.js
  * 
- * @class
  * @constructor
  * @param {Object} options options governing the way this date formatter instance works
  */
@@ -7017,7 +7070,7 @@ ilib.DateFmt = function(options) {
 							loadParams: loadParams, 
 							callback: ilib.bind(this, function (formats) {
 								if (!formats) {
-									formats = ilib.DateFmt.defaultFmt;
+									formats = ilib.data.dateformats || ilib.DateFmt.defaultFmt;
 									var spec = this.locale.getSpec().replace(/-/g, '_');
 									ilib.DateFmt.cache[spec] = formats;
 								}
@@ -7054,7 +7107,7 @@ ilib.DateFmt.lenmap = {
 
 ilib.DateFmt.zeros = "0000";
 
-ilib.DateFmt.defaultFmt = ilib.data.dateformats || {
+ilib.DateFmt.defaultFmt = {
 	"gregorian": {
 		"order": "{date} {time}",
 		"date": {
@@ -7935,6 +7988,7 @@ util/jsutils.js
 // !data dateformats sysres
 
 /**
+ * @class
  * Create a new date range formatter instance. The date range formatter is immutable once
  * it is created, but can format as many different date ranges as needed with the same
  * options. Create different date range formatter instances for different purposes
@@ -8011,7 +8065,6 @@ util/jsutils.js
  * 
  * Depends directive: !depends daterangefmt.js
  * 
- * @class
  * @constructor
  * @param {Object} options options governing the way this date range formatter instance works
  */
@@ -8282,6 +8335,7 @@ ilib.DateRngFmt.prototype = {
 /* !depends calendar.js locale.js date.js julianday.js util/utils.js */
 
 /**
+ * @class
  * Construct a new Hebrew calendar object. This class encodes information about
  * the Hebrew (Jewish) calendar. The Hebrew calendar is a tabular hebrew 
  * calendar where the dates are calculated by arithmetic rules. This differs from 
@@ -8296,7 +8350,6 @@ ilib.DateRngFmt.prototype = {
  * 
  * Depends directive: !depends hebrew.js
  * 
- * @class
  * @constructor
  * @implements ilib.Cal
  */
@@ -8519,6 +8572,7 @@ julianday.js
 */
 
 /**
+ * @class
  * Construct a new Hebrew RD date number object. The constructor parameters can 
  * contain any of the following properties:
  * 
@@ -8565,7 +8619,6 @@ julianday.js
  * Depends directive: !depends hebrewdate.js
  * 
  * @private
- * @class
  * @constructor
  * @extends ilib.Date.RataDie
  * @param {Object=} params parameters that govern the settings and behaviour of this Hebrew RD date
@@ -8679,6 +8732,7 @@ ilib.Date.HebrewRataDie.prototype._onOrBefore = function(rd, dayOfWeek) {
 };
 
 /**
+ * @class
  * Construct a new civil Hebrew date object. The constructor can be called
  * with a params object that can contain the following properties:<p>
  * 
@@ -8722,7 +8776,6 @@ ilib.Date.HebrewRataDie.prototype._onOrBefore = function(rd, dayOfWeek) {
  * 
  * Depends directive: !depends hebrewdate.js
  * 
- * @class
  * @constructor
  * @extends ilib.Date
  * @param {Object=} params parameters that govern the settings and behaviour of this Hebrew date
@@ -8834,7 +8887,7 @@ ilib.Date.HebrewDate = function(params) {
 	}
 };
 
-ilib.Date.HebrewDate.prototype = new ilib.Date({noinstance: true});
+ilib.Date.HebrewDate.prototype = new ilib.Date();
 ilib.Date.HebrewDate.prototype.parent = ilib.Date;
 ilib.Date.HebrewDate.prototype.constructor = ilib.Date.HebrewDate;
 
@@ -9224,6 +9277,7 @@ ilib.Date._constructors["hebrew"] = ilib.Date.HebrewDate;
 /* !depends calendar.js locale.js date.js julianday.js util/utils.js */
 
 /**
+ * @class
  * Construct a new Islamic calendar object. This class encodes information about
  * the civil Islamic calendar. The civil Islamic calendar is a tabular islamic 
  * calendar where the dates are calculated by arithmetic rules. This differs from 
@@ -9238,7 +9292,6 @@ ilib.Date._constructors["hebrew"] = ilib.Date.HebrewDate;
  * 
  * Depends directive: !depends islamic.js
  * 
- * @class
  * @constructor
  * @implements ilib.Cal
  */
@@ -9447,6 +9500,7 @@ julianday.js
 */
 
 /**
+ * @class
  * Construct a new Islamic RD date number object. The constructor parameters can 
  * contain any of the following properties:
  * 
@@ -9490,7 +9544,6 @@ julianday.js
  * Depends directive: !depends islamicdate.js
  * 
  * @private
- * @class
  * @constructor
  * @extends ilib.Date.RataDie
  * @param {Object=} params parameters that govern the settings and behaviour of this Islamic RD date
@@ -9541,6 +9594,7 @@ ilib.Date.IslamicRataDie.prototype._setDateComponents = function(date) {
 };
 	
 /**
+ * @class
  * Construct a new civil Islamic date object. The constructor can be called
  * with a params object that can contain the following properties:<p>
  * 
@@ -9582,7 +9636,6 @@ ilib.Date.IslamicRataDie.prototype._setDateComponents = function(date) {
  * 
  * Depends directive: !depends islamicdate.js
  * 
- * @class
  * @constructor
  * @extends ilib.Date
  * @param {Object=} params parameters that govern the settings and behaviour of this Islamic date
@@ -9679,7 +9732,7 @@ ilib.Date.IslamicDate = function(params) {
 	}
 };
 
-ilib.Date.IslamicDate.prototype = new ilib.Date({noinstance: true});
+ilib.Date.IslamicDate.prototype = new ilib.Date();
 ilib.Date.IslamicDate.prototype.parent = ilib.Date;
 ilib.Date.IslamicDate.prototype.constructor = ilib.Date.IslamicDate;
 
@@ -9870,12 +9923,12 @@ ilib.Date._constructors["islamic"] = ilib.Date.IslamicDate;
 /* !depends calendar.js locale.js date.js julianday.js util/utils.js */
 
 /**
+ * @class
  * Construct a new Julian calendar object. This class encodes information about
  * a Julian calendar.<p>
  * 
  * Depends directive: !depends julian.js
  * 
- * @class
  * @constructor
  * @implements ilib.Cal
  */
@@ -9990,6 +10043,7 @@ julianday.js
 */
 
 /**
+ * @class
  * Construct a new Julian RD date number object. The constructor parameters can 
  * contain any of the following properties:
  * 
@@ -10033,7 +10087,6 @@ julianday.js
  * Depends directive: !depends juliandate.js
  * 
  * @private
- * @class
  * @constructor
  * @extends ilib.Date.RataDie
  * @param {Object=} params parameters that govern the settings and behaviour of this Julian RD date
@@ -10088,6 +10141,7 @@ ilib.Date.JulianRataDie.prototype._setDateComponents = function(date) {
 };
 
 /**
+ * @class
  * Construct a new date object for the Julian Calendar. The constructor can be called
  * with a parameter object that contains any of the following properties:
  * 
@@ -10142,7 +10196,6 @@ ilib.Date.JulianRataDie.prototype._setDateComponents = function(date) {
  * 
  * Depends directive: !depends juliandate.js
  * 
- * @class
  * @constructor
  * @extends ilib.Date
  * @param {Object=} params parameters that govern the settings and behaviour of this Julian date
@@ -10233,7 +10286,7 @@ ilib.Date.JulDate = function(params) {
 	}
 };
 
-ilib.Date.JulDate.prototype = new ilib.Date({noinstance: true});
+ilib.Date.JulDate.prototype = new ilib.Date();
 ilib.Date.JulDate.prototype.parent = ilib.Date;
 ilib.Date.JulDate.prototype.constructor = ilib.Date.JulDate;
 
@@ -10418,6 +10471,7 @@ timezone.js
 */
 
 /**
+ * @class
  * Construct a new Gregorian date object. The constructor parameters can 
  * contain any of the following properties:
  * 
@@ -10491,7 +10545,6 @@ timezone.js
  * 
  * Depends directive: !depends gregoriandate.js
  * 
- * @class
  * @constructor
  * @extends ilib.Date
  * @param {Object=} params parameters that govern the settings and behaviour of this Gregorian date
@@ -10785,12 +10838,12 @@ ilib.Date._constructors["gregorian"] = ilib.Date.GregDate;
 /* !depends calendar.js locale.js date.js julianday.js calendar/gregorian.js util/utils.js */
 
 /**
+ * @class
  * Construct a new Thai solar calendar object. This class encodes information about
  * a Thai solar calendar.<p>
  * 
  * Depends directive: !depends thaisolar.js
  * 
- * @class
  * @constructor
  * @implements ilib.Cal
  */
@@ -10854,6 +10907,7 @@ util/jsutils.js
 */
 
 /**
+ * @class
  * Construct a new Thai solar date object. The constructor parameters can 
  * contain any of the following properties:
  * 
@@ -10911,7 +10965,6 @@ util/jsutils.js
  * 
  * Depends directive: !depends thaisolardate.js
  * 
- * @class
  * @constructor
  * @extends ilib.Date.GregDate
  * @param {Object=} params parameters that govern the settings and behaviour of this Thai solar date
@@ -12957,7 +13010,7 @@ ilib.CType = {
 	 */
 	_inRange: function(ch, rangeName, obj) {
 		var range, i, num;
-		if (!ch || ch.length === 0 || !rangeName || typeof(obj) === 'undefined') {
+		if (!ch || ch.length === 0 || !rangeName || !obj) {
 			return false;
 		}
 		
@@ -13307,6 +13360,7 @@ ctype.isspace.js
 */
 
 /**
+ * @class
  * Parse a string as a number, ignoring all locale-specific formatting.<p>
  * 
  * This class is different from the standard Javascript parseInt() and parseFloat() 
@@ -13358,7 +13412,6 @@ ctype.isspace.js
  * 
  * Depends directive: !depends numprs.js
  * 
- * @class
  * @constructor
  * @param {string|number|Number|ilib.Number|undefined} str a string to parse as a number, or a number value
  * @param {Object=} options Options controlling how the instance should be created 
@@ -13565,6 +13618,7 @@ ilib.Number.prototype = {
 // !data currency
 
 /**
+ * @class
  * Create a new currency information instance. Instances of this class encode 
  * information about a particular currency.<p>
  * 
@@ -13625,7 +13679,6 @@ ilib.Number.prototype = {
  * 
  * Depends directive: !depends currency.js
  * 
- * @class
  * @constructor
  * @param options {Object} a set of properties to govern how this instance is constructed.
  * @throws "currency xxx is unknown" when the given currency code is not in the list of 
@@ -13830,6 +13883,7 @@ util/jsutils.js
 // !data localeinfo currency
 
 /**
+ * @class
  * Create a new number formatter instance. Locales differ in the way that digits
  * in a formatted number are grouped, in the way the decimal character is represented,
  * etc. Use this formatter to get it right for any locale.<p>
@@ -13916,7 +13970,6 @@ util/jsutils.js
  *
  * Depends directive: !depends numfmt.js
  *
- * @class
  * @constructor
  * @param {Object.<string,*>} options A set of options that govern how the formatter will behave
  */
@@ -14407,6 +14460,7 @@ util/jsutils.js
 // !resbundle sysres
 
 /**
+ * @class
  * Create a new duration formatter instance. The duration formatter is immutable once
  * it is created, but can format as many different durations as needed with the same
  * options. Create different duration formatter instances for different purposes
@@ -14467,7 +14521,6 @@ util/jsutils.js
  * 
  * Depends directive: !depends durfmt.js
  * 
- * @class
  * @constructor
  * @param {?Object} options options governing the way this date formatter instance works
  */
@@ -15415,6 +15468,7 @@ ilib.CType.isScript._init = function (sync, loadParams, onLoad) {
 // !data scripts
 
 /**
+ * @class
  * Create a new script info instance. This class encodes information about
  * scripts, which are sets of characters used in a writing system.<p>
  * 
@@ -15442,7 +15496,6 @@ ilib.CType.isScript._init = function (sync, loadParams, onLoad) {
  * 
  * Depends directive: !depends scriptinfo.js
  * 
- * @class
  * @constructor
  * @param {string} script The ISO 15924 4-letter identifier for the script
  * @param {Object} options parameters to initialize this matcher 
@@ -15622,6 +15675,7 @@ util/jsutils.js
 // other countries with first name restrictions: Norway, China, New Zealand, Japan, Sweden, Germany, Hungary
 
 /**
+ * @class
  * A class to parse names of people. Different locales have different conventions when it
  * comes to naming people.<p>
  *
@@ -15673,9 +15727,7 @@ util/jsutils.js
  *
  * Depends directive: !depends nameprs.js
  *
- * @class
  * @constructor
- * @dict
  * @param {string|ilib.Name=} name the name to parse
  * @param {Object=} options Options governing the construction of this name instance
  */
@@ -16614,6 +16666,7 @@ ctype.ispunct.js
 // !data name
 
 /**
+ * @class
  * Creates a formatter that can format person name instances (ilib.Name) for display to
  * a user. The options may contain the following properties:
  * 
@@ -16695,7 +16748,6 @@ ctype.ispunct.js
  * 
  * Depends directive: !depends namefmt.js
  * 
- * @class
  * @constructor
  * @param {Object} options A set of options that govern how the formatter will behave
  */
@@ -16977,6 +17029,7 @@ ctype.isdigit.js
 // !data address countries nativecountries ctrynames
 
 /**
+ * @class
  * Create a new Address instance and parse a physical address.<p>
  * 
  * This function parses a physical address written in a free-form string. 
@@ -17038,8 +17091,6 @@ ctype.isdigit.js
  * Depends directive: !depends addressprs.js
  * 
  * @constructor
- * @class
- * @dict
  * @param {string|ilib.Address} freeformAddress free-form address to parse, or a
  * javascript object containing the fields
  * @param {Object} options options to the parser
@@ -17326,7 +17377,6 @@ ilib.Address.prototype = {
 			for (var j = 0; j < this.lines.length; j++) {
 				var line = new ilib.String(this.lines[j]);
 				var it = line.charIterator();
-				// TODO: use a char iterator here
 				while (it.hasNext()) {
 					var c = it.next();
 					if (ilib.CType.isIdeo(c) || ilib.CType.withinRange(c, "Hangul")) {
@@ -17586,6 +17636,7 @@ addressprs.js
 // !data address
 
 /**
+ * @class
  * Create a new formatter object to format physical addresses in a particular way.
  *
  * The options object may contain the following properties, both of which are optional:
@@ -17619,7 +17670,6 @@ addressprs.js
  * Depends directive: !depends addressfmt.js
  * 
  * @constructor
- * @class
  * @param {Object} options options that configure how this formatter should work
  * Returns a formatter instance that can format multiple addresses.
  */
@@ -17627,6 +17677,7 @@ ilib.AddressFmt = function(options) {
 	this.sync = true;
 	this.styleName = 'default';
 	this.loadParams = {};
+	this.locale = new ilib.Locale();
 	
 	if (options) {
 		if (options.locale) {
@@ -17645,7 +17696,7 @@ ilib.AddressFmt = function(options) {
 			this.loadParams = options.loadParams;
 		}
 	}
-
+	
 	// console.log("Creating formatter for region: " + this.locale.region);
 	ilib.loadData({
 		name: "address.json",
@@ -17665,7 +17716,7 @@ ilib.AddressFmt = function(options) {
 					callback: /** @type function(Object?):undefined */ ilib.bind(this, function(info) {
 						this.info = info;
 						this._init();
-						if (typeof(options.onLoad) === 'function') {
+						if (options && typeof(options.onLoad) === 'function') {
 							options.onLoad(this);
 						}
 					})
@@ -17673,7 +17724,7 @@ ilib.AddressFmt = function(options) {
 			} else {
 				this.info = info;
 				this._init();
-				if (typeof(options.onLoad) === 'function') {
+				if (options && typeof(options.onLoad) === 'function') {
 					options.onLoad(this);
 				}
 			}
@@ -17781,6 +17832,7 @@ ilib.AddressFmt.prototype.format = function (address) {
 // !data norm ctype_m
 
 /**
+ * @class
  * Create a new glyph string instance. This string inherits from 
  * the ilib.String class, and adds methods that allow you to access
  * whole glyphs at a time. <p>
@@ -17848,7 +17900,6 @@ ilib.AddressFmt.prototype.format = function (address) {
  * 
  * Depends directive: !depends glyphstring.js
  * 
- * @class
  * @constructor
  * @param {string|ilib.String=} str initialize this instance with this string 
  * @param {Object=} options options governing the way this instance works
@@ -18176,13 +18227,13 @@ ilib.GlyphString.prototype.ellipsize = function(length) {
 // !depends strings.js glyphstring.js
 
 /**
+ * @class
  * Create a new normalized string instance. This string inherits from 
  * the ilib.GlyphString class, and adds the normalize method. It can be
  * used anywhere that a normal Javascript string is used. <p>
  * 
  * Depends directive: !depends normstring.js
  * 
- * @class
  * @constructor
  * @param {string|ilib.String=} str initialize this instance with this string 
  */
@@ -18706,13 +18757,14 @@ ilib.NormString.prototype.charIterator = function() {
 // !data collation
 
 /**
+ * @class
  * Represents a buffered source of code points. The input string is first
  * normalized so that combining characters come out in a standardized order.
  * If the "ignorePunctuation" flag is turned on, then punctuation 
  * characters are skipped.
  * 
- * @class
  * @constructor
+ * @private
  * @param {ilib.NormString|string} str a string to get code points from
  * @param {boolean} ignorePunctuation whether or not to ignore punctuation
  * characters
@@ -18769,13 +18821,14 @@ ilib.CodePointSource.prototype.consume = function(num) {
 
 
 /**
+ * @class
  * An iterator through a sequence of collation elements. This
  * iterator takes a source of code points, converts them into
  * collation elements, and allows the caller to get single
  * elements at a time.
  * 
- * @class
  * @constructor
+ * @private
  * @param {ilib.CodePointSource} source source of code points to 
  * convert to collation elements
  * @param {Object} map mapping from sequences of code points to
@@ -18853,6 +18906,7 @@ ilib.ElementIterator.prototype.next = function () {
 
 
 /**
+ * @class
  * A class that implements a locale-sensitive comparator function 
  * for use with sorting function. The comparator function
  * assumes that the strings it is comparing contain Unicode characters
@@ -19090,7 +19144,6 @@ ilib.ElementIterator.prototype.next = function () {
  * characters, the Japanese names will sort at the end of the list after all German names,
  * and will sort according to the Unicode values of the characters.
  * 
- * @class
  * @constructor
  * @param {Object} options options governing how the resulting comparator 
  * function will operate
@@ -19601,6 +19654,7 @@ ilib.data.nfkd_all = undefined;
 // !data likelylocales
 
 /**
+ * @class
  * Create a new locale matcher instance. This is used
  * to see which locales can be matched with each other in
  * various ways.<p>
@@ -19631,7 +19685,6 @@ ilib.data.nfkd_all = undefined;
  * 
  * Depends directive: !depends localematch.js
  * 
- * @class
  * @constructor
  * @param {Object} options parameters to initialize this matcher 
  */
@@ -19740,6 +19793,7 @@ ilib.LocaleMatcher.prototype = {
 // !depends locale.js util/utils.js
 
 /**
+ * @class
  * Create a new string mapper instance that maps strings to upper or
  * lower case. This mapping will work for any string as characters 
  * that have no case will be returned unchanged.<p>
@@ -19757,7 +19811,6 @@ ilib.LocaleMatcher.prototype = {
  * 
  * Depends directive: !depends casemapper.js
  * 
- * @class
  * @constructor
  * @param {Object=} options options to initialize this mapper 
  */
@@ -19938,6 +19991,7 @@ localeinfo.js
 // !data numplan
 
 /**
+ * @class
  * Create a numbering plan information instance for a particular country's plan.<p>
  * 
  * The options may contain any of the following properties:
@@ -19968,8 +20022,8 @@ localeinfo.js
  * 
  * Depends directive: !depends phone/numplan.js
  * 
- * @class
  * @constructor
+ * @package
  * @param {Object} options options governing the way this plan is loaded
  */
 ilib.NumPlan = function (options) {
@@ -20016,6 +20070,21 @@ ilib.NumPlan = function (options) {
 				};
 			}
 
+			/** 
+			 * @type {{
+			 *   region:string,
+			 *   skipTrunk:boolean,
+			 *   trunkCode:string,
+			 *   iddCode:string,
+			 *   dialingPlan:string,
+			 *   commonFormatChars:string,
+			 *   fieldLengths:Object.<string,number>,
+			 *   contextFree:boolean,
+			 *   findExtensions:boolean,
+			 *   trunkRequired:boolean,
+			 *   extendedAreaCodes:boolean
+			 * }}
+			 */
 			this.npdata = npdata;
 			if (options && typeof(options.onLoad) === 'function') {
 				options.onLoad(this);
@@ -20162,10 +20231,11 @@ localeinfo.js
 // !data phoneloc
 
 /**
+ * @class
  *
  * @param {Object} options Options that govern how this phone locale works
  * @constructor
- * @class
+ * @private
  * @extends ilib.Locale
  */
 ilib.Locale.PhoneLoc = function(options) {
@@ -20207,6 +20277,7 @@ ilib.Locale.PhoneLoc = function(options) {
 		sync: sync, 
 		loadParams: loadParams, 
 		callback: ilib.bind(this, function (data) {
+			/** @type {{mcc2reg:Object.<string,string>,cc2reg:Object.<string,string>,reg2cc:Object.<string,string>,area2reg:Object.<string,string>}} */
 			this.mappings = data;
 			
 			if (typeof(mcc) !== 'undefined') {
@@ -20239,59 +20310,60 @@ ilib.Locale.PhoneLoc.prototype.constructor = ilib.Locale.PhoneLoc;
  * Map a mobile carrier code to a region code.
  *
  * @static
- * @protected
- * @param {string} mcc MCC string to parse
- * @return {Object} components of the MCC number
+ * @package
+ * @param {string|undefined} mcc the MCC to map
+ * @return {string|undefined} the region code
  */
 
 ilib.Locale.PhoneLoc.prototype._mapMCCtoRegion = function(mcc) {
 	if (!mcc) {
-		return null;
+		return undefined;
 	}
 	return this.mappings.mcc2reg && this.mappings.mcc2reg[mcc] || "XX";
 };
 
 /**
- * Map a Country code to a region code.
+ * Map a country code to a region code.
  *
  * @static
- * @protected
- * @param {string} cc CC string to parse
- * @return {Object} components of the CC number
+ * @package
+ * @param {string|undefined} cc the country code to map
+ * @return {string|undefined} the region code
  */
 ilib.Locale.PhoneLoc.prototype._mapCCtoRegion = function(cc) {
 	if (!cc) {
-		return null;
+		return undefined;
 	}
 	return this.mappings.cc2reg && this.mappings.cc2reg[cc] || "XX";
 };
 
 /**
- * Map a Region code to a dialing code.
+ * Map a region code to a country code.
  *
  * @static
- * @protected
- * @param {string} region Region string to parse
- * @return {Object} components of the CC number
+ * @package
+ * @param {string|undefined} region the region code to map
+ * @return {string|undefined} the country code
  */
 ilib.Locale.PhoneLoc.prototype._mapRegiontoCC = function(region) {
 	if (!region) {
-		return null;
+		return undefined;
 	}
 	return this.mappings.reg2cc && this.mappings.reg2cc[region] || "0";
 };
 
 /**
- * Map a Country code to a region code.
+ * Map a country code to a region code.
  *
  * @static
- * @protected
- * @param {string} cc CC string to parse
- * @return {Object} components of the CC number
+ * @package
+ * @param {string|undefined} cc the country code to map
+ * @param {string|undefined} area the area code within the country code's numbering plan
+ * @return {string|undefined} the region code
  */
 ilib.Locale.PhoneLoc.prototype._mapAreatoRegion = function(cc, area) {
 	if (!cc) {
-		return null;
+		return undefined;
 	}
 	if (cc in this.mappings.area2reg) {
 		return this.mappings.area2reg[cc][area] || this.mappings.area2reg[cc]["default"];
@@ -20300,10 +20372,15 @@ ilib.Locale.PhoneLoc.prototype._mapAreatoRegion = function(cc, area) {
 	}
 };
 
-/*
-* Return the region that controls the dialing plan in the given
-* region. (ie. the "normalized phone region".)
-*/
+/**
+ * Return the region that controls the dialing plan in the given
+ * region. (ie. the "normalized phone region".)
+ * 
+ * @static
+ * @package
+ * @param {string} region the region code to normalize
+ * @return {string} the normalized region code
+ */
 ilib.Locale.PhoneLoc.prototype._normPhoneReg = function(region) {
 	var norm;
 	
@@ -20387,9 +20464,10 @@ phone/phoneloc.js
 */
 
 /**
+ * @class
  * [Need Comments] globals console ilib PhoneLoc 
  *
- * @class
+ * @private
  * @constructor
  */
 ilib.StateHandler = function _StateHandler () {
@@ -20609,7 +20687,7 @@ ilib.StateHandler.prototype = {
 	 * @param {Object} regionSettings settings used to parse the rest of the number
 	 */	
 	country: function(number, currentChar, fields, regionSettings) {
-		var ret, cc, locale;
+		var ret, cc;
 		
 		// found the country code of an IDD number, so save it and cause the function to 
 		// parse the rest of the number with the regular table for this locale
@@ -20918,6 +20996,11 @@ ilib.StateHandler.prototype = {
 };
 
 // context-sensitive handler
+/**
+ * @class
+ * @private
+ * @constructor
+ */
 ilib.CSStateHandler = function () {
 	return this;
 };
@@ -20944,6 +21027,11 @@ ilib.CSStateHandler.prototype.special = function (number, currentChar, fields, r
 	return ret;
 };
 
+/**
+ * @class
+ * @private
+ * @constructor
+ */
 ilib.USStateHandler = function () {
 	return this;
 };
@@ -20963,6 +21051,10 @@ ilib.USStateHandler.prototype.vsc = function (number, currentChar, fields, regio
 	return ret;
 };
 
+/**
+ * @protected
+ * @static
+ */
 ilib._handlerFactory = function (locale, plan) {
 	if (plan.getContextFree() !== undefined && typeof(plan.getContextFree()) === 'boolean' && plan.getContextFree() === false) {
 		return new ilib.CSStateHandler();
@@ -21008,6 +21100,7 @@ phone/handler.js
 // !data states idd mnc
 
 /**
+ * @class
  * Create a new phone number instance that parses the phone number parameter for its 
  * constituent parts, and store them as separate fields in the returned object.
  * 
@@ -21129,12 +21222,10 @@ phone/handler.js
  * <li>Korea
  * </ul>
  * 
- * @class
  * @constructor
- * @param {string|ilib.PhoneNumber} number A free-form phone number to be parsed, or another phone
+ * @param {!string|ilib.PhoneNumber} number A free-form phone number to be parsed, or another phone
  * number instance to copy
- * @param {Object=} options options that guide the parser in parsing the number 
-
+ * @param {Object=} options options that guide the parser in parsing the number
  */
 ilib.PhoneNumber = function(number, options) {
 	var stateData,
@@ -21157,7 +21248,80 @@ ilib.PhoneNumber = function(number, options) {
 		}
 
 		if (typeof(options.onLoad) === 'function') {
+			/** @type {function(ilib.PhoneNumber)} */
 			this.onLoad = options.onLoad;
+		}
+	}
+
+	if (typeof number === "object") {
+		/** @type {string|undefined} */
+		this.vsc = number.vsc;
+
+		/** @type {string} */
+		this.iddPrefix = number.iddPrefix;
+		
+		/** @type {string|undefined} */
+		this.countryCode = number.countryCode;
+		
+		/** @type {string|undefined} */
+		this.trunkAccess = number.trunkAccess;
+		
+		/** @type {string|undefined} */
+		this.cic = number.cic;
+		
+		/** @type {string|undefined} */
+		this.emergency = number.emergency;
+		
+		/** @type {string|undefined} */
+		this.mobilePrefix = number.mobilePrefix;
+		
+		/** @type {string|undefined} */
+		this.serviceCode = number.serviceCode;
+		
+		/** @type {string|undefined} */
+		this.areaCode = number.areaCode;
+		
+		/** @type {string|undefined} */
+		this.subscriberNumber = number.subscriberNumber;
+		
+		/** @type {string|undefined} */
+		this.extension = number.extension;
+		
+		/**
+		 * @protected
+		 * @type {boolean} 
+		 */
+		this.invalid = number.invalid;
+
+		if (number.plan && number.locale) {
+			/** 
+			 * @protected
+			 * @type {ilib.NumPlan} 
+			 */
+			this.plan = number.plan;
+			
+			/** 
+			 * @protected
+			 * @type {ilib.Locale.PhoneLoc} 
+			 */
+			this.locale = number.locale;
+	
+			/** 
+			 * @protected
+			 * @type {ilib.NumPlan} 
+			 */
+			this.destinationPlan = number.destinationPlan;
+			
+			/** 
+			 * @protected
+			 * @type {ilib.Locale.PhoneLoc} 
+			 */
+			this.destinationLocale = number.destinationLocale;
+	
+			if (options && typeof(options.onLoad) === 'function') {
+				options.onLoad(this);
+			}
+			return;
 		}
 	}
 
@@ -21168,33 +21332,33 @@ ilib.PhoneNumber = function(number, options) {
 		loadParams: this.loadParams,
 		onLoad: ilib.bind(this, function(loc) {
 			this.locale = this.destinationLocale = loc;
-			
-			if (typeof number === "object") {
-				ilib.deepCopy(number, this);
-				return;
-			}
-			
-			ilib.loadData({
-				name: "states.json",
-				object: ilib.PhoneNumber,
+			new ilib.NumPlan({
 				locale: this.locale,
 				sync: this.sync,
-				loadParams: ilib.merge(this.loadParams, {
-					returnOne: true
-				}),
-				callback: ilib.bind(this, function (stdata) {
-					if (!stdata) {
-						stdata = {"states" : [[-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,1,-1],[2,-1,-1,-1,-1,-1,-1,-1,-1,-1,-3,-1,-1,-1,-1],[-4,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]]};
+				loadParms: this.loadParams,
+				onLoad: ilib.bind(this, function (plan) {
+					this.plan = this.destinationPlan = plan;
+			
+					if (typeof number === "object") {
+						// the copy constructor code above did not find the locale 
+						// or plan before, but now they are loaded, so we can return 
+						// already without going further
+						return;
 					}
-
-					stateData = stdata;
-					new ilib.NumPlan({
+					ilib.loadData({
+						name: "states.json",
+						object: ilib.PhoneNumber,
 						locale: this.locale,
 						sync: this.sync,
-						loadParms: this.loadParams,
-						onLoad: ilib.bind(this, function (plan) {
-							/** @type {ilib.NumPlan} */
-							this.plan = this.destinationPlan = plan;
+						loadParams: ilib.merge(this.loadParams, {
+							returnOne: true
+						}),
+						callback: ilib.bind(this, function (stdata) {
+							if (!stdata) {
+								stdata = {"states" : [[-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,1,-1],[2,-1,-1,-1,-1,-1,-1,-1,-1,-1,-3,-1,-1,-1,-1],[-4,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]]};
+							}
+		
+							stateData = stdata;
 
 							regionSettings = {
 								stateData: stateData,
@@ -21247,7 +21411,7 @@ ilib.PhoneNumber = function(number, options) {
  * @static
  * @param {string} imsi IMSI number to parse
  * @param {Object} options options controlling the loading of the locale data
- * @return {{mcc:string,mnc:string,msin:string}} components of the IMSI number, when the locale data
+ * @return {{mcc:string,mnc:string,msin:string}|undefined} components of the IMSI number, when the locale data
  * is loaded synchronously, or undefined if asynchronous
  */
 ilib.PhoneNumber.parseImsi = function(imsi, options) {
@@ -21269,21 +21433,29 @@ ilib.PhoneNumber.parseImsi = function(imsi, options) {
 		}
 	}	
 
-	ilib.loadData({
-		name: "mnc.json", 
-		object: ilib.PhoneNumber, 
-		nonlocale: true, 
-		sync: sync, 
-		loadParams: loadParams, 
-		callback: ilib.bind(this, function(data) {
-			this.mncdata = data;
-			fields = this._parseImsi(this.mncdata, imsi);
-			
-			if (options && typeof(options.onLoad) === 'function') {
-				options.onLoad(fields);
-			}
-		})
-	});
+	if (ilib.data.mnc) {
+		fields = ilib.PhoneNumber._parseImsi(ilib.data.mnc, imsi);
+		
+		if (options && typeof(options.onLoad) === 'function') {
+			options.onLoad(fields);
+		}
+	} else {
+		ilib.loadData({
+			name: "mnc.json", 
+			object: ilib.PhoneNumber, 
+			nonlocale: true, 
+			sync: sync, 
+			loadParams: loadParams, 
+			callback: ilib.bind(this, function(data) {
+				ilib.data.mnc = data;
+				fields = ilib.PhoneNumber._parseImsi(data, imsi);
+				
+				if (options && typeof(options.onLoad) === 'function') {
+					options.onLoad(fields);
+				}
+			})
+		});
+	}
 	return fields;
 };
 
@@ -21544,9 +21716,7 @@ ilib.PhoneNumber.prototype = {
 			newState,
 			dot,
 			handlerMethod,
-			result,
-			loadName,
-			loadLocale;
+			result;
 
 		regionSettings = regionData;
 		stateData = regionSettings.stateData;
@@ -21929,8 +22099,25 @@ ilib.PhoneNumber.prototype = {
 
 	/**
 	 * @private
+	 * @param {{
+	 *   mcc:string,
+	 *   defaultAreaCode:string,
+	 *   country:string,
+	 *   networkType:string,
+	 *   assistedDialing:boolean,
+	 *   sms:boolean,
+	 *   manualDialing:boolean
+	 * }} options an object containing options to help in normalizing. 
+	 * @param {ilib.PhoneNumber} norm
+	 * @param {ilib.Locale.PhoneLoc} homeLocale
+	 * @param {ilib.Locale.PhoneLoc} currentLocale
+	 * @param {ilib.NumPlan} currentPlan
+	 * @param {ilib.Locale.PhoneLoc} destinationLocale
+	 * @param {ilib.NumPlan} destinationPlan
+	 * @param {boolean} sync
+	 * @param {Object|undefined} loadParams
 	 */
-	_doNormalize: function(options, norm, homeLocale, currentLocale, currentPlan, destinationLocale, destinationPlan, sync, loadParams, callback) {
+	_doNormalize: function(options, norm, homeLocale, currentLocale, currentPlan, destinationLocale, destinationPlan, sync, loadParams) {
 		var formatted = "";
 		
 		if (!norm.invalid && options && options.assistedDialing) {
@@ -22070,6 +22257,24 @@ ilib.PhoneNumber.prototype = {
 	
 	/**
 	 * @private
+	 * @param {{
+	 *   mcc:string,
+	 *   defaultAreaCode:string,
+	 *   country:string,
+	 *   networkType:string,
+	 *   assistedDialing:boolean,
+	 *   sms:boolean,
+	 *   manualDialing:boolean
+	 * }} options an object containing options to help in normalizing. 
+	 * @param {ilib.PhoneNumber} norm
+	 * @param {ilib.Locale.PhoneLoc} homeLocale
+	 * @param {ilib.Locale.PhoneLoc} currentLocale
+	 * @param {ilib.NumPlan} currentPlan
+	 * @param {ilib.Locale.PhoneLoc} destinationLocale
+	 * @param {ilib.NumPlan} destinationPlan
+	 * @param {boolean} sync
+	 * @param {Object|undefined} loadParams
+	 * @param {function(string)} callback
 	 */
 	_doReparse: function(options, norm, homeLocale, currentLocale, currentPlan, destinationLocale, destinationPlan, sync, loadParams, callback) {
 		var formatted, 
@@ -22266,7 +22471,15 @@ ilib.PhoneNumber.prototype = {
 	 * returned from thhomeLocaleis method is simply an uninterrupted and unformatted string 
 	 * of dialable digits.
 	 * 
-	 * @param {Object} options an object containing options to help in normalizing. 
+	 * @param {{
+	 *   mcc:string,
+	 *   defaultAreaCode:string,
+	 *   country:string,
+	 *   networkType:string,
+	 *   assistedDialing:boolean,
+	 *   sms:boolean,
+	 *   manualDialing:boolean
+	 * }} options an object containing options to help in normalizing. 
 	 * @return {string|undefined} the normalized string, or undefined if the number
 	 * could not be normalized
 	 */
@@ -22362,6 +22575,7 @@ phone/phonenum.js
 // !data phonefmt
 
 /**
+ * @class
  * Create a new phone number formatter object that formats numbers according to the parameters.<p>
  * 
  * The options object can contain zero or more of the following parameters:
@@ -22402,7 +22616,6 @@ phone/phonenum.js
  * the country in the locale will be used. If neither the locale or MCC are not given,
  * then the country of the current ilib locale is used. 
  *
- * @class
  * @constructor
  * @param {Object} options properties that control how this formatter behaves
  */
@@ -22522,6 +22735,7 @@ ilib.PhoneFmt.prototype = {
 	 * Returns the style with the given name, or the default style if there
 	 * is no style with that name.
 	 * @protected
+	 * @return {{example:string,whole:Object.<string,string>,partial:Object.<string,string>}|Object.<string,string>}
 	 */
 	_getStyle: function (name, fmtdata) {
 		return fmtdata[name] || fmtdata["default"];
@@ -22531,8 +22745,16 @@ ilib.PhoneFmt.prototype = {
 	 * Do the actual work of formatting the phone number starting at the given
 	 * field in the regular field order.
 	 * 
-	 * @param {ilib.PhoneNumber} number
-	 * @param {Object} options
+	 * @param {!ilib.PhoneNumber} number
+	 * @param {{
+	 *   partial:boolean,
+	 *   style:string,
+	 *   mcc:string,
+	 *   locale:(string|ilib.Locale),
+	 *   sync:boolean,
+	 *   loadParams:Object,
+	 *   onLoad:function(string)
+	 * }} options Parameters which control how to format the number
 	 * @param {number} startField
 	 */
 	_doFormat: function(number, options, startField, locale, fmtdata, callback) {
@@ -22543,10 +22765,8 @@ ilib.PhoneFmt.prototype = {
 			fieldName, 
 			countryCode, 
 			isWhole, 
-			field,
 			style,
 			formatted = "",
-			styles,
 			styleTemplates;
 	
 		if (options) {
@@ -22701,38 +22921,23 @@ ilib.PhoneFmt.prototype = {
 	 * places, such as the call log in the phone app, should pass in partial: false, or 
 	 * leave the partial flag out of the parameters entirely. 
 	 * 
-	 * @param {string|ilib.PhoneNumber} number object containing the phone number to format, or a 
-	 * string containing a phone number to parse and then reformat
-	 * @param {Object} options Parameters which control how to format the number
+	 * @param {!ilib.PhoneNumber} number object containing the phone number to format
+	 * @param {{
+	 *   partial:boolean,
+	 *   style:string,
+	 *   mcc:string,
+	 *   locale:(string|ilib.Locale),
+	 *   sync:boolean,
+	 *   loadParams:Object,
+	 *   onLoad:function(string)
+	 * }} options Parameters which control how to format the number
 	 * @return {string} Returns the formatted phone number as a string.
 	 */
 	format: function (number, options) {
-		var sync = true,
-			loadParams = {},
-			temp, 
-			templates, 
-			fieldName, 
-			countryCode, 
-			isWhole, 
-			style,
-			field,
-			formatted = "",
-			styles,
-			locale,
-			styleTemplates,
-			callback;
+		var formatted = "",
+		    callback;
 
-		if (options) {
-			if (typeof(options.sync) !== 'undefined') {
-				sync = (options.sync == true);				
-			}
-		
-			if (options.loadParams) {
-				loadParams = options.loadParams;
-			}
-			
-			callback = options.onLoad;
-		}
+		callback = options && options.onLoad;
 
 		try {
 			this._doFormat(number, options, 0, this.locale, this.fmtdata, function (fmt) {
@@ -22747,7 +22952,7 @@ ilib.PhoneFmt.prototype = {
 				// console.warn("caught exception: " + e + ". Using last resort rule.");
 				// if there was some exception, use this last resort rule
 				formatted = "";
-				for (field in ilib.PhoneNumber._fieldOrder) {
+				for (var field in ilib.PhoneNumber._fieldOrder) {
 					if (typeof field === 'string' && typeof ilib.PhoneNumber._fieldOrder[field] === 'string' && number[ilib.PhoneNumber._fieldOrder[field]] !== undefined) {
 						// just concatenate without any formatting
 						formatted += number[ilib.PhoneNumber._fieldOrder[field]];
@@ -22799,6 +23004,7 @@ ilib.PhoneFmt.prototype = {
 		return this.fmtdata[style].example || undefined;
 	}
 };
+
 /*
  * phonegeo.js - Represent a phone number geolocator object.
  * 
@@ -22831,6 +23037,7 @@ phone/phonenum.js
 // !data iddarea area extarea extstates phoneres
 
 /**
+ * @class
  * Create an instance that can geographically locate a phone number.<p>
  * 
  * The location of the number is calculated according to the following rules:
@@ -22897,7 +23104,6 @@ phone/phonenum.js
  * agreement with the loader callback function as to what those parameters mean.
  * </ul>
  * 
- * @class
  * @constructor
  * @param {Object} options parameters controlling the geolocation of the phone number.
  */
