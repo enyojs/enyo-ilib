@@ -200,7 +200,7 @@ ZoneInfoFile.prototype._parseInfo = function(buffer) {
 			return {
 				offset: that.zoneInfo[item].offset,
 				isdst: that.zoneInfo[item].isdst,
-				abbreviation: that.zoneInfo[item].abbreviation,
+				abbreviation: that.zoneInfo[item].abbreviation
 			};
 		});
 
