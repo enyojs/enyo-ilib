@@ -44,11 +44,11 @@ PackedBuffer.prototype.getLongs = function(num) {
 	if (this.buffer && this.index < this.buffer.length) {
 		result = [];
 		for (var i = 0; i < num && this.index+3 < this.buffer.length; i++) {
-			var long = this.buffer[this.index] << 24 | 
+			var longnum = this.buffer[this.index] << 24 | 
 				this.buffer[this.index+1] << 16 | 
 				this.buffer[this.index+2] << 8 | 
 				this.buffer[this.index+3];
-			result.push(long);
+			result.push(longnum);
 			this.index += 4;
 		}
 	}
@@ -78,7 +78,7 @@ PackedBuffer.prototype.getLong = function() {
  * This method will only return as many bytes as are available in the rest of the
  * buffer.
  * 
- * @param {number} num The number of bytes to return
+ * @param {number|undefined} num The number of bytes to return
  * @returns {Array.<number>} the array of signed byte integers
  */
 PackedBuffer.prototype.getBytes = function(num) {
@@ -86,11 +86,11 @@ PackedBuffer.prototype.getBytes = function(num) {
 	if (this.buffer && this.index < this.buffer.length) {
 		result = [];
 		for (var i = 0; i < num && this.index < this.buffer.length; i++) {
-			var byte = this.buffer[this.index++];
-			if (byte & 0x80) {
-				byte -= 0x100;
+			var bytenum = this.buffer[this.index++];
+			if (bytenum & 0x80) {
+				bytenum -= 0x100;
 			}
-			result.push(byte);
+			result.push(bytenum);
 		}
 	}
 	return result;
