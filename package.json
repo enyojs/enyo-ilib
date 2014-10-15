@@ -18,11 +18,11 @@
 	],
 	"license": "apache2",
 	"files": [
-		"./packedbuffer.js",
-		"./zoneinfo.js",
-		"./nodeglue.js",
-		"./ilib/js",
-		"./ilib/locale",
+		"packedbuffer.js",
+		"zoneinfo.js",
+		"nodeglue.js",
+		"ilib/js",
+		"ilib/locale",
 		"README.md"
 	]
 }
