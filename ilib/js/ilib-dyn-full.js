@@ -30,7 +30,7 @@ var ilib = ilib || {};
  */
 ilib.getVersion = function () {
     // increment this for each release
-    return "8.0"
+    return "9.0"
     ;
 };
 
@@ -120,10 +120,10 @@ ilib._isGlobal = function(name) {
  * Depends directive: !depends ilibglobal.js
  * 
  * @static
- * @param {string} spec the locale specifier for the default locale
+ * @param {string|undefined|null} spec the locale specifier for the default locale
  */
 ilib.setLocale = function (spec) {
-    if (typeof(spec) === 'string') {
+    if (typeof(spec) === 'string' || !spec) {
         ilib.locale = spec;
     }
     // else ignore other data types, as we don't have the dependencies
@@ -1349,6 +1349,7 @@ ilib.LocaleInfo = function(locale, options) {
 		clock:string,
 		currency:string,
 		firstDayOfWeek:number,
+		unitfmt: {long:string,short:string},
 		numfmt:Object.<{
 			currencyFormats:Object.<{common:string,commonNegative:string,iso:string,isoNegative:string}>,
 			script:string,
@@ -1422,6 +1423,7 @@ ilib.LocaleInfo.defaultInfo = /** @type {{
 	clock:string,
 	currency:string,
 	firstDayOfWeek:number,
+	unitfmt: {long:string,short:string},
 	numfmt:Object.<{
 		currencyFormats:Object.<{
 			common:string,
@@ -1518,6 +1520,10 @@ ilib.LocaleInfo.prototype = {
 	getUnits: function () {
 		return this.info.units;
 	},
+        
+        getUnitFormat: function () {
+                return this.info.unitfmt;
+        },
 	
 	/**
 	 * Return the name of the calendar that is commonly used in the given locale.
@@ -3055,11 +3061,41 @@ ilib.String.fromCodePoint = function (codepoint) {
 };
 
 /**
+ * Convert the character or the surrogate pair at the given
+ * index into the intrinsic Javascript string to a Unicode 
+ * UCS-4 code point.
+ * 
+ * @param {string} str string to get the code point from
+ * @param {number} index index into the string
+ * @return {number} code point of the character at the
+ * given index into the string
+ */
+ilib.String.toCodePoint = function(str, index) {
+	if (!str || str.length === 0) {
+		return -1;
+	}
+	var code = -1, high = str.charCodeAt(index);
+	if (high >= 0xD800 && high <= 0xDBFF) {
+		if (str.length > index+1) {
+			var low = str.charCodeAt(index+1);
+			if (low >= 0xDC00 && low <= 0xDFFF) {
+				code = (((high & 0x3C0) >> 6) + 1) << 16 |
+					(((high & 0x3F) << 10) | (low & 0x3FF));
+			}
+		}
+	} else {
+		code = high;
+	}
+	
+	return code;
+};
+
+/**
  * Load the plural the definitions of plurals for the locale.
- * @param {ilib.Locale|string} locale
- * @param {boolean} sync
- * @param {Object} loadParams
- * @param {function(*)|undefined} onLoad
+ * @param {boolean=} sync
+ * @param {ilib.Locale|string=} locale
+ * @param {Object=} loadParams
+ * @param {function(*)=} onLoad
  */
 ilib.String.loadPlurals = function (sync, locale, loadParams, onLoad) {
 	var loc;
@@ -3768,23 +3804,7 @@ ilib.String.prototype = {
 	 * given index into the string
 	 */
 	_toCodePoint: function (index) {
-		if (this.str.length === 0) {
-			return -1;
-		}
-		var code = -1, high = this.str.charCodeAt(index);
-		if (high >= 0xD800 && high <= 0xDBFF) {
-			if (this.str.length > index+1) {
-				var low = this.str.charCodeAt(index+1);
-				if (low >= 0xDC00 && low <= 0xDFFF) {
-					code = (((high & 0x3C0) >> 6) + 1) << 16 |
-						(((high & 0x3F) << 10) | (low & 0x3FF));
-				}
-			}
-		} else {
-			code = high;
-		}
-		
-		return code;
+		return ilib.String.toCodePoint(this.str, index);
 	},
 	
 	/**
@@ -3967,9 +3987,9 @@ ilib.String.prototype = {
 	 * 3 or 4".
 	 * @param {ilib.Locale|string} locale locale to use when processing choice
 	 * formats with this string
-	 * @param {boolean} sync [optional] whether to load the locale data synchronously 
+	 * @param {boolean=} sync [optional] whether to load the locale data synchronously 
 	 * or not
-	 * @param {Object} loadParams [optional] parameters to pass to the loader function
+	 * @param {Object=} loadParams [optional] parameters to pass to the loader function
 	 * @param {function(*)=} onLoad [optional] function to call when the loading is done
 	 */
 	setLocale: function (locale, sync, loadParams, onLoad) {
@@ -12951,7 +12971,7 @@ ilib.Date._constructors["persian"] = ilib.Date.PersDate;
  * limitations under the License.
  */
 
-// !depends ilibglobal.js locale.js
+// !depends ilibglobal.js locale.js util/search.js
 
 // !data ctype
 
@@ -13002,37 +13022,33 @@ ilib.CType = {
 	 * </ul>
 	 * 
 	 * @protected
-	 * @param {string} ch character to examine
+	 * @param {number} num code point of the character to examine
 	 * @param {string} rangeName the name of the range to check
 	 * @param {Object} obj object containing the character range data
 	 * @return {boolean} true if the first character is within the named
 	 * range
 	 */
-	_inRange: function(ch, rangeName, obj) {
-		var range, i, num;
-		if (!ch || ch.length === 0 || !rangeName || !obj) {
+	_inRange: function(num, rangeName, obj) {
+		var range, i;
+		if (num < 0 || !rangeName || !obj) {
 			return false;
 		}
 		
-		num = new ilib.String(ch).codePointAt(0);
 		range = obj[rangeName];
 		if (!range) {
 			return false;
 		}
 		
-		for (i = 0; i < range.length; i++) {
-			if (range[i].length === 1) {
-				// single character range
-				if (num === range[i][0]) {
-					return true;
-				}
-			} else if (num >= range[i][0] && num <= range[i][1]) {
-				// multi-character range
-				return true;
+		var compare = function(singlerange, target) {
+			if (singlerange.length === 1) {
+				return singlerange[0] - target;
+			} else {
+				return target < singlerange[0] ? singlerange[0] - target :
+					(target > singlerange[1] ? singlerange[1] - target : 0);
 			}
-		}
-		
-		return false;
+		};
+		var result = ilib.bsearch(num, range, compare);
+		return result < range.length && compare(range[result], num) === 0;
 	},
 	
 	/**
@@ -13182,7 +13198,7 @@ ilib.CType = {
 	 * 
 	 * Depends directive: !depends ctype.js
 	 * 
-	 * @param {string} ch character to examine
+	 * @param {string|ilib.String|number} ch character or code point to examine
 	 * @param {string} rangeName the name of the range to check
 	 * @return {boolean} true if the first character is within the named
 	 * range
@@ -13191,7 +13207,22 @@ ilib.CType = {
 		if (!rangeName) {
 			return false;
 		}
-		return ilib.CType._inRange(ch, rangeName.toLowerCase(), ilib.data.ctype);
+		var num;
+		switch (typeof(ch)) {
+			case 'number':
+				num = ch;
+				break;
+			case 'string':
+				num = ilib.String.toCodePoint(ch, 0);
+				break;
+			case 'undefined':
+				return false;
+			default:
+				num = ch._toCodePoint(0);
+				break;
+		}
+
+		return ilib.CType._inRange(num, rangeName.toLowerCase(), ilib.data.ctype);
 	},
 	
 	/**
@@ -13217,6 +13248,7 @@ ilib.CType = {
 			ilib.loadData({
 				name: loadName,
 				locale: "-",
+				nonlocale: true,
 				sync: sync,
 				loadParams: loadParams, 
 				callback: /** @type function(Object=):undefined */ ilib.bind(this, /** @type function() */ function(ct) {
@@ -13263,12 +13295,26 @@ ilib.CType = {
  * 
  * Depends directive: !depends ctype.isdigit.js
  * 
- * @param {string} ch character to examine
+ * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is a digit character in the
  * Latin script. 
  */
 ilib.CType.isDigit = function (ch) {
-	return ilib.CType._inRange(ch, 'digit', ilib.data.ctype);
+	var num;
+	switch (typeof(ch)) {
+		case 'number':
+			num = ch;
+			break;
+		case 'string':
+			num = ilib.String.toCodePoint(ch, 0);
+			break;
+		case 'undefined':
+			return false;
+		default:
+			num = ch._toCodePoint(0);
+			break;
+	}
+	return ilib.CType._inRange(num, 'digit', ilib.data.ctype);
 };
 
 /**
@@ -13309,14 +13355,29 @@ ilib.CType.isDigit._init = function (sync, loadParams, onLoad) {
  * 
  * Depends directive: !depends ctype.isspace.js
  * 
- * @param {string} ch character to examine
+ * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is a whitespace character.
  */
 ilib.CType.isSpace = function (ch) {
-	return ilib.CType._inRange(ch, 'space', ilib.data.ctype) ||
-		ilib.CType._inRange(ch, 'Zs', ilib.data.ctype_z) ||
-		ilib.CType._inRange(ch, 'Zl', ilib.data.ctype_z) ||
-		ilib.CType._inRange(ch, 'Zp', ilib.data.ctype_z);
+	var num;
+	switch (typeof(ch)) {
+		case 'number':
+			num = ch;
+			break;
+		case 'string':
+			num = ilib.String.toCodePoint(ch, 0);
+			break;
+		case 'undefined':
+			return false;
+		default:
+			num = ch._toCodePoint(0);
+			break;
+	}
+
+	return ilib.CType._inRange(num, 'space', ilib.data.ctype) ||
+		ilib.CType._inRange(num, 'Zs', ilib.data.ctype_z) ||
+		ilib.CType._inRange(num, 'Zl', ilib.data.ctype_z) ||
+		ilib.CType._inRange(num, 'Zp', ilib.data.ctype_z);
 };
 
 /**
@@ -13965,6 +14026,12 @@ util/jsutils.js
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
  * not be usable for a while.
+ *
+ * <li><i>loadParams</i> - an object containing parameters to pass to the
+ * loader callback function when locale data is missing. The parameters are not
+ * interpretted or modified in any way. They are simply passed along. The object
+ * may contain any property/value pairs as long as the calling code is in
+ * agreement with the loader callback function as to what those parameters mean.
  * </ul>
  * <p>
  *
@@ -13978,6 +14045,7 @@ ilib.NumFmt = function (options) {
 	this.locale = new ilib.Locale();
 	/** @type {string} */
 	this.type = "number";
+	var loadParams = undefined;
 
 	if (options) {
 		if (options.locale) {
@@ -14019,6 +14087,8 @@ ilib.NumFmt = function (options) {
 			/** @type {boolean} */
 			sync = (options.sync == true);
 		}
+		
+		loadParams = options.loadParams;
 	}
 
 	/** @type {ilib.LocaleInfo|undefined} */
@@ -14026,6 +14096,7 @@ ilib.NumFmt = function (options) {
 	
 	new ilib.LocaleInfo(this.locale, {
 		sync: sync,
+		loadParams: loadParams,
 		onLoad: ilib.bind(this, function (li) {
 			/** @type {ilib.LocaleInfo|undefined} */
 			this.localeInfo = li;
@@ -14043,6 +14114,7 @@ ilib.NumFmt = function (options) {
 					locale: this.locale,
 					code: this.currency,
 					sync: sync,
+					loadParams: loadParams,
 					onLoad: ilib.bind(this, function (cur) {
 						this.currencyInfo = cur;
 						if (this.style !== "common" && this.style !== "iso") {
@@ -14857,15 +14929,29 @@ ilib.DurFmt.prototype.getStyle = function () {
  * 
  * Depends directive: !depends ctype.isalnum.js
  * 
- * @param {string} ch character to examine
+ * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is alphabetic.
  */
 ilib.CType.isAlpha = function (ch) {
-	return ilib.CType._inRange(ch, 'Lu', ilib.data.ctype_l) ||
-		ilib.CType._inRange(ch, 'Ll', ilib.data.ctype_l) ||
-		ilib.CType._inRange(ch, 'Lt', ilib.data.ctype_l) ||
-		ilib.CType._inRange(ch, 'Lm', ilib.data.ctype_l) ||
-		ilib.CType._inRange(ch, 'Lo', ilib.data.ctype_l);
+	var num;
+	switch (typeof(ch)) {
+		case 'number':
+			num = ch;
+			break;
+		case 'string':
+			num = ilib.String.toCodePoint(ch, 0);
+			break;
+		case 'undefined':
+			return false;
+		default:
+			num = ch._toCodePoint(0);
+			break;
+	}
+	return ilib.CType._inRange(num, 'Lu', ilib.data.ctype_l) ||
+		ilib.CType._inRange(num, 'Ll', ilib.data.ctype_l) ||
+		ilib.CType._inRange(num, 'Lt', ilib.data.ctype_l) ||
+		ilib.CType._inRange(num, 'Lm', ilib.data.ctype_l) ||
+		ilib.CType._inRange(num, 'Lo', ilib.data.ctype_l);
 };
 
 /**
@@ -14906,11 +14992,25 @@ ilib.CType.isAlpha._init = function (sync, loadParams, onLoad) {
  * 
  * Depends directive: !depends ctype.isalnum.js
  * 
- * @param {string} ch character to examine
+ * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is alphabetic or numeric
  */
 ilib.CType.isAlnum = function isAlnum(ch) {
-	return ilib.CType.isAlpha(ch) || ilib.CType.isDigit(ch);
+	var num;
+	switch (typeof(ch)) {
+		case 'number':
+			num = ch;
+			break;
+		case 'string':
+			num = ilib.String.toCodePoint(ch, 0);
+			break;
+		case 'undefined':
+			return false;
+		default:
+			num = ch._toCodePoint(0);
+			break;
+	}
+	return ilib.CType.isAlpha(num) || ilib.CType.isDigit(num);
 };
 
 /**
@@ -14953,11 +15053,25 @@ ilib.CType.isAlnum._init = function (sync, loadParams, onLoad) {
  * 
  * Depends directive: !depends ctype.isascii.js
  * 
- * @param {string} ch character to examine
+ * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is in the ASCII range.
  */
 ilib.CType.isAscii = function (ch) {
-	return ilib.CType._inRange(ch, 'ascii', ilib.data.ctype);
+	var num;
+	switch (typeof(ch)) {
+		case 'number':
+			num = ch;
+			break;
+		case 'string':
+			num = ilib.String.toCodePoint(ch, 0);
+			break;
+		case 'undefined':
+			return false;
+		default:
+			num = ch._toCodePoint(0);
+			break;
+	}
+	return ilib.CType._inRange(num, 'ascii', ilib.data.ctype);
 };
 
 /**
@@ -14999,11 +15113,25 @@ ilib.CType.isAscii._init = function (sync, loadParams, onLoad) {
  * Depends directive: !depends ctype.isblank.js
  * 
  * ie. a space or a tab.
- * @param {string} ch character to examine
+ * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is a blank character.
  */
 ilib.CType.isBlank = function (ch) {
-	return ilib.CType._inRange(ch, 'blank', ilib.data.ctype);
+	var num;
+	switch (typeof(ch)) {
+		case 'number':
+			num = ch;
+			break;
+		case 'string':
+			num = ilib.String.toCodePoint(ch, 0);
+			break;
+		case 'undefined':
+			return false;
+		default:
+			num = ch._toCodePoint(0);
+			break;
+	}
+	return ilib.CType._inRange(num, 'blank', ilib.data.ctype);
 };
 
 /**
@@ -15044,11 +15172,25 @@ ilib.CType.isBlank._init = function (sync, loadParams, onLoad) {
  * 
  * Depends directive: !depends ctype.iscntrl.js
  * 
- * @param {string} ch character to examine
+ * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is a control character.
  */
 ilib.CType.isCntrl = function (ch) {
-	return ilib.CType._inRange(ch, 'Cc', ilib.data.ctype_c);
+	var num;
+	switch (typeof(ch)) {
+		case 'number':
+			num = ch;
+			break;
+		case 'string':
+			num = ilib.String.toCodePoint(ch, 0);
+			break;
+		case 'undefined':
+			return false;
+		default:
+			num = ch._toCodePoint(0);
+			break;
+	}
+	return ilib.CType._inRange(num, 'Cc', ilib.data.ctype_c);
 };
 
 /**
@@ -15088,12 +15230,26 @@ ilib.CType.isCntrl._init = function (sync, loadParams, onLoad) {
  * 
  * Depends directive: !depends ctype.isgraph.js
  * 
- * @param {string} ch character to examine
+ * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is any printable character
  * other than space. 
  */
 ilib.CType.isGraph = function (ch) {
-	return typeof(ch) !== 'undefined' && ch.length > 0 && !ilib.CType.isSpace(ch) && !ilib.CType.isCntrl(ch);
+	var num;
+	switch (typeof(ch)) {
+		case 'number':
+			num = ch;
+			break;
+		case 'string':
+			num = ilib.String.toCodePoint(ch, 0);
+			break;
+		case 'undefined':
+			return false;
+		default:
+			num = ch._toCodePoint(0);
+			break;
+	}
+	return typeof(ch) !== 'undefined' && ch.length > 0 && !ilib.CType.isSpace(num) && !ilib.CType.isCntrl(num);
 };
 
 /**
@@ -15136,16 +15292,30 @@ ilib.CType.isGraph._init = function (sync, loadParams, onLoad) {
  * 
  * Depends directive: !depends ctype.isideo.js
  * 
- * @param {string} ch character to examine
+ * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is an ideographic character.
  */
 ilib.CType.isIdeo = function (ch) {
-	return ilib.CType._inRange(ch, 'cjk', ilib.data.ctype) ||
-		ilib.CType._inRange(ch, 'cjkradicals', ilib.data.ctype) ||
-		ilib.CType._inRange(ch, 'enclosedcjk', ilib.data.ctype) ||
-		ilib.CType._inRange(ch, 'cjkpunct', ilib.data.ctype) ||
-		ilib.CType._inRange(ch, 'cjkcompatibility', ilib.data.ctype);
-	
+	var num;
+	switch (typeof(ch)) {
+		case 'number':
+			num = ch;
+			break;
+		case 'string':
+			num = ilib.String.toCodePoint(ch, 0);
+			break;
+		case 'undefined':
+			return false;
+		default:
+			num = ch._toCodePoint(0);
+			break;
+	}
+
+	return ilib.CType._inRange(num, 'cjk', ilib.data.ctype) ||
+		ilib.CType._inRange(num, 'cjkradicals', ilib.data.ctype) ||
+		ilib.CType._inRange(num, 'enclosedcjk', ilib.data.ctype) ||
+		ilib.CType._inRange(num, 'cjkpunct', ilib.data.ctype) ||
+		ilib.CType._inRange(num, 'cjkcompatibility', ilib.data.ctype);
 };
 
 /**
@@ -15188,11 +15358,26 @@ ilib.CType.isIdeo._init = function (sync, loadParams, onLoad) {
  * 
  * Depends directive: !depends ctype.islower.js
  * 
- * @param {string} ch character to examine
+ * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is lower-case.
  */
 ilib.CType.isLower = function (ch) {
-	return ilib.CType._inRange(ch, 'Ll', ilib.data.ctype_l);
+	var num;
+	switch (typeof(ch)) {
+		case 'number':
+			num = ch;
+			break;
+		case 'string':
+			num = ilib.String.toCodePoint(ch, 0);
+			break;
+		case 'undefined':
+			return false;
+		default:
+			num = ch._toCodePoint(0);
+			break;
+	}
+
+	return ilib.CType._inRange(num, 'Ll', ilib.data.ctype_l);
 };
 
 /**
@@ -15232,7 +15417,7 @@ ilib.CType.isLower._init = function (sync, loadParams, onLoad) {
  * 
  * Depends directive: !depends ctype.isprint.js
  * 
- * @param {string} ch character to examine
+ * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is printable.
  */
 ilib.CType.isPrint = function (ch) {
@@ -15277,17 +15462,32 @@ ilib.CType.isPrint._init = function (sync, loadParams, onLoad) {
  * 
  * Depends directive: !depends ctype.isprint.js
  * 
- * @param {string} ch character to examine
+ * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is punctuation.
  */
 ilib.CType.isPunct = function (ch) {
-	return ilib.CType._inRange(ch, 'Pd', ilib.data.ctype_p) ||
-		ilib.CType._inRange(ch, 'Ps', ilib.data.ctype_p) ||
-		ilib.CType._inRange(ch, 'Pe', ilib.data.ctype_p) ||
-		ilib.CType._inRange(ch, 'Pc', ilib.data.ctype_p) ||
-		ilib.CType._inRange(ch, 'Po', ilib.data.ctype_p) ||
-		ilib.CType._inRange(ch, 'Pi', ilib.data.ctype_p) ||
-		ilib.CType._inRange(ch, 'Pf', ilib.data.ctype_p);
+	var num;
+	switch (typeof(ch)) {
+		case 'number':
+			num = ch;
+			break;
+		case 'string':
+			num = ilib.String.toCodePoint(ch, 0);
+			break;
+		case 'undefined':
+			return false;
+		default:
+			num = ch._toCodePoint(0);
+			break;
+	}
+
+	return ilib.CType._inRange(num, 'Pd', ilib.data.ctype_p) ||
+		ilib.CType._inRange(num, 'Ps', ilib.data.ctype_p) ||
+		ilib.CType._inRange(num, 'Pe', ilib.data.ctype_p) ||
+		ilib.CType._inRange(num, 'Pc', ilib.data.ctype_p) ||
+		ilib.CType._inRange(num, 'Po', ilib.data.ctype_p) ||
+		ilib.CType._inRange(num, 'Pi', ilib.data.ctype_p) ||
+		ilib.CType._inRange(num, 'Pf', ilib.data.ctype_p);
 };
 
 /**
@@ -15330,11 +15530,26 @@ ilib.CType.isPunct._init = function (sync, loadParams, onLoad) {
  * 
  * Depends directive: !depends ctype.isupper.js
  * 
- * @param {string} ch character to examine
+ * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is upper-case.
  */
 ilib.CType.isUpper = function (ch) {
-	return ilib.CType._inRange(ch, 'Lu', ilib.data.ctype_l);
+	var num;
+	switch (typeof(ch)) {
+		case 'number':
+			num = ch;
+			break;
+		case 'string':
+			num = ilib.String.toCodePoint(ch, 0);
+			break;
+		case 'undefined':
+			return false;
+		default:
+			num = ch._toCodePoint(0);
+			break;
+	}
+
+	return ilib.CType._inRange(num, 'Lu', ilib.data.ctype_l);
 };
 
 /**
@@ -15376,12 +15591,27 @@ ilib.CType.isUpper._init = function (sync, loadParams, onLoad) {
  * 
  * Depends directive: !depends ctype.isxdigit.js
  * 
- * @param {string} ch character to examine
+ * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is a hexadecimal digit written
  * in the Latin script.
  */
 ilib.CType.isXdigit = function (ch) {
-	return ilib.CType._inRange(ch, 'xdigit', ilib.data.ctype);
+	var num;
+	switch (typeof(ch)) {
+		case 'number':
+			num = ch;
+			break;
+		case 'string':
+			num = ilib.String.toCodePoint(ch, 0);
+			break;
+		case 'undefined':
+			return false;
+		default:
+			num = ch._toCodePoint(0);
+			break;
+	}
+
+	return ilib.CType._inRange(num, 'xdigit', ilib.data.ctype);
 };
 
 /**
@@ -15424,13 +15654,28 @@ ilib.CType.isXdigit._init = function (sync, loadParams, onLoad) {
  * 
  * Depends directive: !depends ctype.isscript.js
  * 
- * @param {string} ch character to examine
+ * @param {string|ilib.String|number} ch character or code point to examine
  * @param {string} script the 4-letter ISO 15924 to query against
  * @return {boolean} true if the first character is in the given script, and
  * false otherwise
  */
 ilib.CType.isScript = function (ch, script) {
-	return ilib.CType._inRange(ch, script, ilib.data.scriptToRange);
+	var num;
+	switch (typeof(ch)) {
+		case 'number':
+			num = ch;
+			break;
+		case 'string':
+			num = ilib.String.toCodePoint(ch, 0);
+			break;
+		case 'undefined':
+			return false;
+		default:
+			num = ch._toCodePoint(0);
+			break;
+	}
+
+	return ilib.CType._inRange(num, script, ilib.data.scriptToRange);
 };
 
 /**
@@ -15734,6 +15979,9 @@ util/jsutils.js
 ilib.Name = function (name, options) {
     var sync = true;
 
+    if (!name || name.length === 0) {
+    	return;
+    }
     if (typeof (name) === 'object') {
         // copy constructor
         /**
@@ -15770,6 +16018,7 @@ ilib.Name = function (name, options) {
         this.style = name.style;
         this.order = name.order;
         this.useSpaces = name.useSpaces;
+        this.isAsianName = name.isAsianName;
         return;
     }
 
@@ -16001,7 +16250,7 @@ ilib.Name.prototype = {
     _init: function (name) {
         var parts, prefixArray, prefix, prefixLower,
             suffixArray, suffix, suffixLower,
-            asianName, i, info, hpSuffix;
+            i, info, hpSuffix;
 
         if (name) {
             // for DFISH-12905, pick off the part that the LDAP server automatically adds to our names in HP emails
@@ -16020,14 +16269,14 @@ ilib.Name.prototype = {
             }
 
             if (this.info.nameStyle === "asian" || this.info.order === "fmg" || this.info.order === "fgm") {
-                asianName = !ilib.Name._isEuroName(name);
-                info = asianName ? this.info : ilib.data.name;
+                this.isAsianName = !ilib.Name._isEuroName(name);
+                info = this.isAsianName ? this.info : ilib.data.name;
             } else {
-                asianName = ilib.Name._isAsianName(name);
-                info = asianName ? ilib.data.name : this.info;
+                this.isAsianName = ilib.Name._isAsianName(name);
+                info = this.isAsianName ? ilib.data.name : this.info;
             }
 
-            if (asianName) {
+            if (this.isAsianName) {
                 // all-asian names
                 if (this.useSpaces == false) {
                     name = name.replace(/\s+/g, ''); // eliminate all whitespaces
@@ -16045,13 +16294,13 @@ ilib.Name.prototype = {
             if (parts.length > 1) {
                 for (i = parts.length; i > 0; i--) {
                     prefixArray = parts.slice(0, i);
-                    prefix = prefixArray.join(asianName ? '' : ' ');
+                    prefix = prefixArray.join(this.isAsianName ? '' : ' ');
                     prefixLower = prefix.toLowerCase();
                     prefixLower = prefixLower.replace(/[,\.]/g, ''); // ignore commas and periods
                     if (this.info.prefixes &&
                         (this.info.prefixes.indexOf(prefixLower) > -1 || this._isConjunction(prefixLower))) {
                         if (this.prefix) {
-                            if (!asianName) {
+                            if (!this.isAsianName) {
                                 this.prefix += ' ';
                             }
                             this.prefix += prefix;
@@ -16067,12 +16316,12 @@ ilib.Name.prototype = {
             if (parts.length > 1) {
                 for (i = parts.length; i > 0; i--) {
                     suffixArray = parts.slice(-i);
-                    suffix = suffixArray.join(asianName ? '' : ' ');
+                    suffix = suffixArray.join(this.isAsianName ? '' : ' ');
                     suffixLower = suffix.toLowerCase();
                     suffixLower = suffixLower.replace(/[\.]/g, ''); // ignore periods
                     if (this.info.suffixes && this.info.suffixes.indexOf(suffixLower) > -1) {
                         if (this.suffix) {
-                            if (!asianName && !ilib.CType.isPunct(this.suffix.charAt(0))) {
+                            if (!this.isAsianName && !ilib.CType.isPunct(this.suffix.charAt(0))) {
                                 this.suffix = ' ' + this.suffix;
                             }
                             this.suffix = suffix + this.suffix;
@@ -16090,11 +16339,11 @@ ilib.Name.prototype = {
             }
 
             // adjoin auxillary words to their headwords
-            if (parts.length > 1 && !asianName) {
-                parts = this._joinAuxillaries(parts, asianName);
+            if (parts.length > 1 && !this.isAsianName) {
+                parts = this._joinAuxillaries(parts, this.isAsianName);
             }
 
-            if (asianName) {
+            if (this.isAsianName) {
                 this._parseAsianName(parts);
             } else {
                 this._parseWesternName(parts);
@@ -16630,9 +16879,7 @@ ilib.Name.prototype = {
      * Return a shallow copy of the current instance.
      */
     clone: function () {
-        var other = new ilib.Name();
-        ilib.shallowCopy(this, other);
-        return other;
+        return new ilib.Name(this);
     }
 };
 
@@ -16944,9 +17191,8 @@ ilib.NameFmt.prototype = {
 			return undefined;
 		}
 		
-		if ((!name.givenName || ilib.Name._isEuroName(name.givenName)) &&
-				 (!name.middleName || ilib.Name._isEuroName(name.middleName)) &&
-				 (!name.familyName || ilib.Name._isEuroName(name.familyName))) {
+		if ((typeof(name.isAsianName) === 'boolean' && !name.isAsianName) ||
+				ilib.Name._isEuroName([name.givenName, name.middleName, name.familyName].join(""))) {
 			isAsianName = false;	// this is a euro name, even if the locale is asian
 			modified = name.clone();
 			
@@ -18118,12 +18364,13 @@ ilib.GlyphString.prototype.charIterator = function() {
 				while (it.hasNext() && notdone) {
 					this.nextChar = it.next();
 					nextCcc = ilib.data.norm.ccc[this.nextChar];
+					var codePoint = ilib.String.toCodePoint(this.nextChar, 0);
 					// Mn characters are Marks that are non-spacing. These do not take more room than an accent, so they should be 
 					// considered part of the on-screen glyph, even if they are non-combining. Mc are marks that are spacing
 					// and combining, which means they are part of the glyph, but they cause the glyph to use up more space than
 					// just the base character alone.
-					var isMn = ilib.CType._inRange(this.nextChar, "Mn", ilib.data.ctype_m);
-					var isMc = ilib.CType._inRange(this.nextChar, "Mc", ilib.data.ctype_m);
+					var isMn = ilib.CType._inRange(codePoint, "Mn", ilib.data.ctype_m);
+					var isMc = ilib.CType._inRange(codePoint, "Mc", ilib.data.ctype_m);
 					if (isMn || isMc || (typeof(nextCcc) !== 'undefined' && nextCcc !== 0)) {
 						if (isMc) {
 							this.spacingCombining = true;
@@ -20486,15 +20733,17 @@ ilib.StateHandler.prototype = {
 		
 		last = number.search(/[xwtp]/i);	// last digit of the local number
 
-		if ( last > -1 ) {
-			if ( last > 0 ) {
+		if (last > -1) {
+			if (last > 0) {
 				fields.subscriberNumber = number.substring(0, last);
 			}
 			// strip x's which are there to indicate a break between the local subscriber number and the extension, but
 			// are not themselves a dialable character
 			fields.extension = number.substring(last).replace('x', '');
 		} else {
-			fields.subscriberNumber = number;
+			if (number.length) {
+				fields.subscriberNumber = number;
+			}
 		}
 		
 		if (regionSettings.plan.getFieldLength('maxLocalLength') &&
@@ -20514,14 +20763,12 @@ ilib.StateHandler.prototype = {
 	 * @param {boolean} noExtractTrunk 
 	 */
 	processFieldWithSubscriberNumber: function(fieldName, length, number, currentChar, fields, regionSettings, noExtractTrunk) {
-		var ret, end, last;
+		var ret, end;
 		
-		last = number.search(/[xwtp]/i);	// last digit of the local number
-		
-		if ( length !== undefined && length > 0 ) {
+		if (length !== undefined && length > 0) {
 			// fixed length
 			end = length;
-			if ( regionSettings.plan.getTrunkCode() === "0" && number.charAt(0) === "0" ) {
+			if (regionSettings.plan.getTrunkCode() === "0" && number.charAt(0) === "0") {
 				end += regionSettings.plan.getTrunkCode().length;  // also extract the trunk access code
 			}
 		} else {
@@ -20530,21 +20777,21 @@ ilib.StateHandler.prototype = {
 			end = currentChar + 1 - length;
 		}
 		
-		if ( fields[fieldName] !== undefined ) {
+		if (fields[fieldName] !== undefined) {
 			// we have a spurious recognition, because this number already contains that field! So, just put
 			// everything into the subscriberNumber as the default
 			this.processSubscriberNumber(number, fields, regionSettings);
 		} else {
 			// substring() extracts the part of the string up to but not including the end character,
 			// so add one to compensate
-			if ( !noExtractTrunk && regionSettings.plan.getTrunkCode() === "0" && number.charAt(0) === "0" ) {
+			if (!noExtractTrunk && regionSettings.plan.getTrunkCode() === "0" && number.charAt(0) === "0") {
 				fields.trunkAccess = number.charAt(0);
 				fields[fieldName] = number.substring(1, end);
 			} else {
 				fields[fieldName] = number.substring(0, end);
 			}
 			
-			if ( number.length > end ) {
+			if (number.length > end) {
 				this.processSubscriberNumber(number.substring(end), fields, regionSettings);
 			}
 		}
@@ -20567,10 +20814,10 @@ ilib.StateHandler.prototype = {
 	processField: function(fieldName, length, number, currentChar, fields, regionSettings) {
 		var ret = {}, end;
 		
-		if ( length !== undefined && length > 0 ) {
+		if (length !== undefined && length > 0) {
 			// fixed length
 			end = length;
-			if ( regionSettings.plan.getTrunkCode() === "0" && number.charAt(0) === "0" ) {
+			if (regionSettings.plan.getTrunkCode() === "0" && number.charAt(0) === "0") {
 				end += regionSettings.plan.getTrunkCode().length;  // also extract the trunk access code
 			}
 		} else {
@@ -20579,7 +20826,7 @@ ilib.StateHandler.prototype = {
 			end = currentChar + 1 - length;
 		}
 		
-		if ( fields[fieldName] !== undefined ) {
+		if (fields[fieldName] !== undefined) {
 			// we have a spurious recognition, because this number already contains that field! So, just put
 			// everything into the subscriberNumber as the default
 			this.processSubscriberNumber(number, fields, regionSettings);
@@ -20587,7 +20834,7 @@ ilib.StateHandler.prototype = {
 		} else {
 			// substring() extracts the part of the string up to but not including the end character,
 			// so add one to compensate
-			if ( regionSettings.plan.getTrunkCode() === "0" && number.charAt(0) === "0" ) {
+			if (regionSettings.plan.getTrunkCode() === "0" && number.charAt(0) === "0") {
 				fields.trunkAccess = number.charAt(0);
 				fields[fieldName] = number.substring(1, end);
 				ret.skipTrunk = true;
@@ -20610,7 +20857,7 @@ ilib.StateHandler.prototype = {
 	trunk: function(number, currentChar, fields, regionSettings) {
 		var ret, trunkLength;
 		
-		if ( fields.trunkAccess !== undefined ) {
+		if (fields.trunkAccess !== undefined) {
 			// What? We already have one? Okay, put the rest of this in the subscriber number as the default behaviour then.
 			this.processSubscriberNumber(number, fields, regionSettings);
 			number = "";
@@ -20636,7 +20883,7 @@ ilib.StateHandler.prototype = {
 	plus: function(number, currentChar, fields, regionSettings) {
 		var ret = {};
 		
-		if ( fields.iddPrefix !== undefined ) {
+		if (fields.iddPrefix !== undefined) {
 			// What? We already have one? Okay, put the rest of this in the subscriber number as the default behaviour then.
 			this.processSubscriberNumber(number, fields, regionSettings);
 			ret.number = "";
@@ -20662,7 +20909,7 @@ ilib.StateHandler.prototype = {
 	idd: function(number, currentChar, fields, regionSettings) {
 		var ret = {};
 		
-		if ( fields.iddPrefix !== undefined ) {
+		if (fields.iddPrefix !== undefined) {
 			// What? We already have one? Okay, put the rest of this in the subscriber number as the default behaviour then.
 			this.processSubscriberNumber(number, fields, regionSettings);
 			ret.number = "";
@@ -20735,10 +20982,10 @@ ilib.StateHandler.prototype = {
 		last = number.search(/[xwtp]/i);	// last digit of the local number
 		localLength = (last > -1) ? last : number.length;
 
-		if ( regionSettings.plan.getFieldLength('areaCode') > 0 ) {
+		if (regionSettings.plan.getFieldLength('areaCode') > 0) {
 			// fixed length
 			end = regionSettings.plan.getFieldLength('areaCode');
-			if ( regionSettings.plan.getTrunkCode() === number.charAt(0) ) {
+			if (regionSettings.plan.getTrunkCode() === number.charAt(0)) {
 				end += regionSettings.plan.getTrunkCode().length;  // also extract the trunk access code
 				localLength -= regionSettings.plan.getTrunkCode().length;
 			}
@@ -20750,22 +20997,14 @@ ilib.StateHandler.prototype = {
 		
 		// substring() extracts the part of the string up to but not including the end character,
 		// so add one to compensate
-		if ( regionSettings.plan.getTrunkCode() === number.charAt(0) ) {
-			fields.trunkAccess = number.charAt(0);
-			if ( number.length > 1 ) {
-				fields.areaCode = number.substring(1, end);
-			}
-			if ( number.length > end ) {
-				this.processSubscriberNumber(number.substring(end), fields, regionSettings);
-			}
-		} else if ( regionSettings.plan.getFieldLength('maxLocalLength') !== undefined ) {
-			if ( fields.trunkAccess !== undefined || fields.mobilePrefix !== undefined ||
+		if (regionSettings.plan.getFieldLength('maxLocalLength') !== undefined) {
+			if (fields.trunkAccess !== undefined || fields.mobilePrefix !== undefined ||
 					fields.countryCode !== undefined ||
-					localLength > regionSettings.plan.getFieldLength('maxLocalLength') ) {
+					localLength > regionSettings.plan.getFieldLength('maxLocalLength')) {
 				// too long for a local number by itself, or a different final state already parsed out the trunk
 				// or mobile prefix, then consider the rest of this number to be an area code + part of the subscriber number
 				fields.areaCode = number.substring(0, end);
-				if ( number.length > end ) {
+				if (number.length > end) {
 					this.processSubscriberNumber(number.substring(end), fields, regionSettings);
 				}
 			} else {
@@ -20774,7 +21013,7 @@ ilib.StateHandler.prototype = {
 			}
 		} else {
 			fields.areaCode = number.substring(0, end);
-			if ( number.length > end ) {
+			if (number.length > end) {
 				this.processSubscriberNumber(number.substring(end), fields, regionSettings);
 			}
 		}
@@ -20806,7 +21045,7 @@ ilib.StateHandler.prototype = {
 		
 		// this is a last resort function that is called when nothing is recognized.
 		// When this happens, just put the whole stripped number into the subscriber number
-		if ( regionSettings.plan && number.charAt(0) === regionSettings.plan.getTrunkCode()) {
+		if (regionSettings.plan && number.charAt(0) === regionSettings.plan.getTrunkCode()) {
 			fields.trunkAccess = number.charAt(0);
 			number = number.substring(1);
 			//currentChar--;
@@ -20814,7 +21053,7 @@ ilib.StateHandler.prototype = {
 			
 		if (number.length > 0) {
 			this.processSubscriberNumber(number, fields, regionSettings);
-			if ( currentChar > 0 && currentChar < number.length ) {
+			if (currentChar > 0 && currentChar < number.length) {
 				// if we were part-way through parsing, and we hit an invalid digit,
 				// indicate that the number could not be parsed properly
 				fields.invalid = true;
@@ -20837,9 +21076,9 @@ ilib.StateHandler.prototype = {
 	vsc: function(number, currentChar, fields, regionSettings) {
 		var ret, length, end;
 
-		if ( fields.vsc === undefined ) {
+		if (fields.vsc === undefined) {
 			length = regionSettings.plan.getFieldLength('vsc') || 0;
-			if ( length !== undefined && length > 0 ) {
+			if (length !== undefined && length > 0) {
 				// fixed length
 				end = length;
 			} else {
@@ -21038,7 +21277,7 @@ ilib.USStateHandler = function () {
 
 ilib.USStateHandler.prototype = new ilib.StateHandler();
 ilib.USStateHandler.prototype.vsc = function (number, currentChar, fields, regionSettings) {
-	var ret, length, end;
+	var ret;
 
 	// found a VSC code (ie. a "star code")
 	fields.vsc = number;
@@ -21355,7 +21594,7 @@ ilib.PhoneNumber = function(number, options) {
 						}),
 						callback: ilib.bind(this, function (stdata) {
 							if (!stdata) {
-								stdata = {"states" : [[-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,1,-1],[2,-1,-1,-1,-1,-1,-1,-1,-1,-1,-3,-1,-1,-1,-1],[-4,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]]};
+								stdata = ilib.PhoneNumber._defaultStates;
 							}
 		
 							stateData = stdata;
@@ -21467,55 +21706,81 @@ ilib.PhoneNumber.parseImsi = function(imsi, options) {
 ilib.PhoneNumber._parseImsi = function(data, imsi) {
 	var ch, 
 		i,
-		stateTable, 
+		currentState, 
 		end, 
 		handlerMethod,
 		state = 0,
 		newState,
-		fields = {};
+		fields = {},
+		lastLeaf,
+		consumed = 0;
 	
-	stateTable = data;
-	if (!stateTable) {
+	currentState = data;
+	if (!currentState) {
 		// can't parse anything
 		return undefined;
 	}
+	
 	i = 0;
-	while ( i < imsi.length ) {
+	while (i < imsi.length) {
 		ch = ilib.PhoneNumber._getCharacterCode(imsi.charAt(i));
 		// console.info("parsing char " + imsi.charAt(i) + " code: " + ch);
 		if (ch >= 0) {
-			newState = stateTable.states[state][ch];
+			newState = currentState.s && currentState.s[ch];
 			
-			if (newState < 0) {
-				// reached a final state. First convert the state to a positive array index
-				// in order to look up the name of the handler function name in the array
-				state = newState;
-				newState = -newState - 1;
-				handlerMethod = ilib.PhoneNumber._states[newState];
-				// console.info("reached final state " + newState + " handler method is " + handlerMethod + " and i is " + i);
-
-				// deal with syntactic ambiguity by using the "special" end state instead of "area"
-				if ( handlerMethod === "area" ) {
-					end = i+1;
-				} else if ( handlerMethod === "special" ) {
-					end = i;
-				} else {
-					// unrecognized imsi, so just assume the mnc is 3 digits
-					end = 6;
+			if (typeof(newState) === 'object') {
+				if (typeof(newState.l) !== 'undefined') {
+					// save for latter if needed
+					lastLeaf = newState;
+					consumed = i;
+				}
+				// console.info("recognized digit " + ch + " continuing...");
+				// recognized digit, so continue parsing
+				currentState = newState;
+				i++;
+			} else {
+				if ((typeof(newState) === 'undefined' || newState === 0 ||
+					(typeof(newState) === 'object' && typeof(newState.l) === 'undefined')) &&
+					 lastLeaf) {
+					// this is possibly a look-ahead and it didn't work... 
+					// so fall back to the last leaf and use that as the
+					// final state
+					newState = lastLeaf;
+					i = consumed;
 				}
 				
-				fields.mcc = imsi.substring(0,3);
-				fields.mnc = imsi.substring(3,end);
-				fields.msin = imsi.substring(end);
+				if ((typeof(newState) === 'number' && newState) ||
+					(typeof(newState) === 'object' && typeof(newState.l) !== 'undefined')) {
+					// final state
+					var stateNumber = typeof(newState) === 'number' ? newState : newState.l;
+					handlerMethod = ilib.PhoneNumber._states[stateNumber];
 
-				break;
-			} else {
-				// console.info("recognized digit " + optionalch + " continuing...");
-				// recognized digit, so continue parsing
-				state = newState;
-				i++;
+					// console.info("reached final state " + newState + " handler method is " + handlerMethod + " and i is " + i);
+	
+					// deal with syntactic ambiguity by using the "special" end state instead of "area"
+					if ( handlerMethod === "area" ) {
+						end = i+1;
+					} else {
+						// unrecognized imsi, so just assume the mnc is 3 digits
+						end = 6;
+					}
+					
+					fields.mcc = imsi.substring(0,3);
+					fields.mnc = imsi.substring(3,end);
+					fields.msin = imsi.substring(end);
+	
+					return fields;
+				} else {
+					// parse error
+					if (imsi.length >= 6) {
+						fields.mcc = imsi.substring(0,3);
+						fields.mnc = imsi.substring(3,6);
+						fields.msin = imsi.substring(6);
+					}
+					return fields;
+				}
 			}
-		} else if ( ch === -1 ) {
+		} else if (ch === -1) {
 			// non-transition character, continue parsing in the same state
 			i++;
 		} else {
@@ -21526,17 +21791,15 @@ ilib.PhoneNumber._parseImsi = function(data, imsi) {
 		}
 	}
 		
-	if ( state > 0 ) {
-		if ( i >= imsi.length && i >= 6 ) {
-			// we reached the end of the imsi, but did not finish recognizing anything. 
-			// Default to last resort and assume 3 digit mnc
-			fields.mcc = imsi.substring(0,3);
-			fields.mnc = imsi.substring(3,6);
-			fields.msin = imsi.substring(6);
-		} else {
-			// unknown or not enough characters for a real imsi 
-			fields = undefined;
-		}
+	if (i >= imsi.length && imsi.length >= 6) {
+		// we reached the end of the imsi, but did not finish recognizing anything. 
+		// Default to last resort and assume 3 digit mnc
+		fields.mcc = imsi.substring(0,3);
+		fields.mnc = imsi.substring(3,6);
+		fields.msin = imsi.substring(6);
+	} else {
+		// unknown or not enough characters for a real imsi 
+		fields = undefined;
 	}
 		
 	// console.info("Globalization.Phone.parseImsi: final result is: " + JSON.stringify(fields));
@@ -21635,6 +21898,40 @@ ilib.PhoneNumber._fieldOrder = [
 	"extension"
 ];
 
+ilib.PhoneNumber._defaultStates = {
+	"s": [
+        0,
+		21,  // 1 -> local
+        21,  // 2 -> local
+        21,  // 3 -> local
+        21,  // 4 -> local
+        21,  // 5 -> local
+        21,  // 6 -> local
+        21,  // 7 -> local
+        21,  // 8 -> local
+        21,  // 9 -> local
+        0,0,0,
+	    { // ^
+	    	"s": [
+				{ // ^0
+					"s": [3], // ^00 -> idd
+					"l": 12   // ^0  -> trunk
+				},
+				21,  // ^1 -> local
+	            21,  // ^2 -> local
+	            21,  // ^3 -> local
+	            21,  // ^4 -> local
+	            21,  // ^5 -> local
+	            21,  // ^6 -> local
+	            21,  // ^7 -> local
+	            21,  // ^8 -> local
+	            21,  // ^9 -> local
+	            2    // ^+ -> plus
+	        ]
+	    }
+	]
+};
+
 ilib.PhoneNumber.prototype = {
 	/**
 	 * @protected
@@ -21668,7 +21965,7 @@ ilib.PhoneNumber.prototype = {
 					}),
 					callback: ilib.bind(this, function (stateData) {
 						if (!stateData) {
-							stateData = {"states" : [[-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,1,-1],[2,-1,-1,-1,-1,-1,-1,-1,-1,-1,-3,-1,-1,-1,-1],[-4,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]]};
+							stateData = ilib.PhoneNumber._defaultStates;
 						}
 						
 						new ilib.NumPlan({
@@ -21691,6 +21988,15 @@ ilib.PhoneNumber.prototype = {
 									handler: ilib._handlerFactory(this.destinationLocale, plan)
 								};
 								
+								// for plans that do not skip the trunk code when dialing from
+								// abroad, we need to treat the number from here on in as if it 
+								// were parsing a local number from scratch. That way, the parser
+								// does not get confused between parts of the number at the
+								// beginning of the number, and parts in the middle.
+								if (!plan.getSkipTrunk()) {
+									number = '^' + number;
+								}
+									
 								// recursively call the parser with the new states data
 								// to finish the parsing
 								this._parseNumber(number, regionSettings, options);
@@ -21709,89 +22015,120 @@ ilib.PhoneNumber.prototype = {
 	 * @param {Object} options
 	 */
 	_parseNumber: function(number, regionData, options) {
-		var stateData,
-			i, ch,
+		var i, ch,
 			regionSettings,
-			state = 0, //begin state
 			newState,
 			dot,
 			handlerMethod,
-			result;
+			result,
+			currentState = regionData.stateData,
+			lastLeaf = undefined,
+			consumed = 0;
 
 		regionSettings = regionData;
-		stateData = regionSettings.stateData;
 		dot = 14; // special transition which matches all characters. See AreaCodeTableMaker.java
 
 		i = 0;
 		while (i < number.length) {
 			ch = ilib.PhoneNumber._getCharacterCode(number.charAt(i));
 			if (ch >= 0) {
-				newState = stateData.states[state][ch];
-	
-				if (newState === -1 && stateData.states[state][dot] !== -1 ) {
-					// check if this character can match the dot instead
-					newState = stateData.states[state][dot];
-					//console.log("char " + ch + " doesn't have a transition. Using dot to transition to state " + newState);
+				// newState = stateData.states[state][ch];
+				newState = currentState.s && currentState.s[ch];
+				
+				if (!newState && currentState.s && currentState.s[dot]) {
+					newState = currentState.s[dot];
 				}
-	
-				if (newState < 0) {
-					// this final state. First convert the state to a positive array index
-					// in order to look up the name of the handler function name in the array
-					newState = -newState -1;
-					handlerMethod = ilib.PhoneNumber._states[newState];
-
-					if (number.charAt(0) === '^') {
-						result = regionSettings.handler[handlerMethod](number.slice(1), i-1, this, regionSettings);
-					} else {
-						result = regionSettings.handler[handlerMethod](number, i, this, regionSettings);
+				
+				if (typeof(newState) === 'object' && i+1 < number.length) {
+					if (typeof(newState.l) !== 'undefined') {
+						// this is a leaf node, so save that for later if needed
+						lastLeaf = newState;
+						consumed = i;
 					}
-	
-					// reparse whatever is left
-					number = result.number;
-					i= 0;
-					//console.log("reparsing with new number: " +  number);
-					state = 0;
-					// if the handler requested a special sub-table, use it for this round of parsing,
-					// otherwise, set it back to the regular table to continue parsing
-
-					if (result.countryCode !== undefined) {
-						this._parseOtherCountry(number, regionData, options, result.countryCode);
-						// don't process any further -- let the work be done in the onLoad callbacks
-						return;
-					} else if (result.table !== undefined) {
-						ilib.loadData({
-							name: result.table + ".json",
-							object: ilib.PhoneNumber,
-							nonlocale: true,
-							sync: this.sync,
-							loadParams: this.loadParams,
-							callback: ilib.bind(this, function (data) {
-								if (!data) {
-									data = {"states" : [[-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,1,-1],[2,-1,-1,-1,-1,-1,-1,-1,-1,-1,-3,-1,-1,-1,-1],[-4,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]]};
-								}
-
-								regionSettings = {
-									stateData : data,
-									plan: regionSettings.plan,
-									handler: regionSettings.handler
-								};
-								
-								// recursively call the parser with the new states data
-								// to finish the parsing
-								this._parseNumber(number, regionSettings, options);
-							})
-						});
-						// don't process any further -- let the work be done in the onLoad callbacks
-						return;
-					} else if (result.skipTrunk !== undefined) {
-						ch = ilib.PhoneNumber._getCharacterCode(regionSettings.plan.getTrunkCode());
-						state = stateData[state][ch];
-					}
-				} else {
 					// console.info("recognized digit " + ch + " continuing...");
 					// recognized digit, so continue parsing
-					state = newState;
+					currentState = newState;
 					i++;
+				} else {
+					if ((typeof(newState) === 'undefined' || newState === 0 ||
+						(typeof(newState) === 'object' && typeof(newState.l) === 'undefined')) &&
+						 lastLeaf) {
+						// this is possibly a look-ahead and it didn't work... 
+						// so fall back to the last leaf and use that as the
+						// final state
+						newState = lastLeaf;
+						i = consumed;
+						consumed = 0;
+						lastLeaf = undefined;
+					}
+					
+					if ((typeof(newState) === 'number' && newState) ||
+						(typeof(newState) === 'object' && typeof(newState.l) !== 'undefined')) {
+						// final state
+						var stateNumber = typeof(newState) === 'number' ? newState : newState.l;
+						handlerMethod = ilib.PhoneNumber._states[stateNumber];
+						
+						if (number.charAt(0) === '^') {
+							result = regionSettings.handler[handlerMethod](number.slice(1), i-1, this, regionSettings);
+						} else {
+							result = regionSettings.handler[handlerMethod](number, i, this, regionSettings);
+						}
+		
+						// reparse whatever is left
+						number = result.number;
+						i = consumed = 0;
+						lastLeaf = undefined;
+						
+						//console.log("reparsing with new number: " +  number);
+						currentState = regionSettings.stateData;
+						// if the handler requested a special sub-table, use it for this round of parsing,
+						// otherwise, set it back to the regular table to continue parsing
+	
+						if (result.countryCode !== undefined) {
+							this._parseOtherCountry(number, regionData, options, result.countryCode);
+							// don't process any further -- let the work be done in the onLoad callbacks
+							return;
+						} else if (result.table !== undefined) {
+							ilib.loadData({
+								name: result.table + ".json",
+								object: ilib.PhoneNumber,
+								nonlocale: true,
+								sync: this.sync,
+								loadParams: this.loadParams,
+								callback: ilib.bind(this, function (data) {
+									if (!data) {
+										data = ilib.PhoneNumber._defaultStates;
+									}
+	
+									regionSettings = {
+										stateData: data,
+										plan: regionSettings.plan,
+										handler: regionSettings.handler
+									};
+									
+									// recursively call the parser with the new states data
+									// to finish the parsing
+									this._parseNumber(number, regionSettings, options);
+								})
+							});
+							// don't process any further -- let the work be done in the onLoad callbacks
+							return;
+						} else if (result.skipTrunk !== undefined) {
+							ch = ilib.PhoneNumber._getCharacterCode(regionSettings.plan.getTrunkCode());
+							currentState = currentState.s && currentState.s[ch];
+						}
+					} else {
+						handlerMethod = (typeof(newState) === 'number') ? "none" : "local";
+						// failed parse. Either no last leaf to fall back to, or there was an explicit
+						// zero in the table. Put everything else in the subscriberNumber field as the
+						// default place
+						if (number.charAt(0) === '^') {
+							result = regionSettings.handler[handlerMethod](number.slice(1), i-1, this, regionSettings);
+						} else {
+							result = regionSettings.handler[handlerMethod](number, i, this, regionSettings);
+						}
+						break;
+					}
 				}
 			} else if (ch === -1) {
 				// non-transition character, continue parsing in the same state
@@ -21803,14 +22140,15 @@ ilib.PhoneNumber.prototype = {
 				i++;
 			}
 		}
-		if (state > 0 && i > 0) {
+		if (i >= number.length && currentState !== regionData.stateData) {
+			handlerMethod = (typeof(currentState.l) === 'undefined' || currentState === 0) ? "none" : "local";
 			// we reached the end of the phone number, but did not finish recognizing anything. 
 			// Default to last resort and put everything that is left into the subscriber number
 			//console.log("Reached end of number before parsing was complete. Using handler for method none.")
 			if (number.charAt(0) === '^') {
-				result = regionSettings.handler.none(number.slice(1), i-1, this, regionSettings);
+				result = regionSettings.handler[handlerMethod](number.slice(1), i-1, this, regionSettings);
 			} else {
-				result = regionSettings.handler.none(number, i, this, regionSettings);
+				result = regionSettings.handler[handlerMethod](number, i, this, regionSettings);
 			}
 		}
 
@@ -23197,12 +23535,13 @@ ilib.GeoLocator.prototype = {
 		var ch,
 			i,
 			handlerMethod,
-			state = 0,
 			newState,
 			prefix = "",
+			consumed,
+			lastLeaf,
+			currentState,
 			dot = 14;	// special transition which matches all characters. See AreaCodeTableMaker.java
 
-		i = 0;
 		if (!number || !stateTable) {
 			// can't parse anything
 			return undefined;
@@ -23210,35 +23549,51 @@ ilib.GeoLocator.prototype = {
 
 		//console.log("GeoLocator._parseAreaAndSubscriber: parsing number " + number);
 
+		currentState = stateTable;
+		i = 0;
 		while (i < number.length) {
 			ch = ilib.PhoneNumber._getCharacterCode(number.charAt(i));
-			//console.info("parsing char " + number.charAt(i) + " code: " + ch);
 			if (ch >= 0) {
-				newState = stateTable.states[state][ch];
-
-				if (newState === -1 && stateTable.states[state][dot] !== -1) {
-					// check if this character can match the dot instead
-					newState = stateTable.states[state][dot];
-					//console.log("char " + ch + " doesn't have a transition. Using dot to transition to state " + newState);
-					prefix += '.';
-				} else {
-					prefix += ch;
+				// newState = stateData.states[state][ch];
+				newState = currentState.s && currentState.s[ch];
+				
+				if (!newState && currentState.s && currentState.s[dot]) {
+					newState = currentState.s[dot];
 				}
 				
-				if (newState < 0) {
-					// reached a final state. First convert the state to a positive array index
-					// in order to look up the name of the handler function name in the array
-					state = newState;
-					newState = -newState - 1;
-					handlerMethod = ilib.PhoneNumber._states[newState];
-					//console.info("reached final state " + newState + " handler method is " + handlerMethod + " and i is " + i);
-
-					return (handlerMethod === "area") ? prefix : undefined;
-				} else {
-					//console.info("recognized digit " + ch + " continuing...");
+				if (typeof(newState) === 'object') {
+					if (typeof(newState.l) !== 'undefined') {
+						// save for latter if needed
+						lastLeaf = newState;
+						consumed = i;
+					}
+					// console.info("recognized digit " + ch + " continuing...");
 					// recognized digit, so continue parsing
-					state = newState;
+					currentState = newState;
 					i++;
+				} else {
+					if (typeof(newState) === 'undefined' || newState === 0) {
+						// this is possibly a look-ahead and it didn't work... 
+						// so fall back to the last leaf and use that as the
+						// final state
+						newState = lastLeaf;
+						i = consumed;
+					}
+					
+					if ((typeof(newState) === 'number' && newState) ||
+						(typeof(newState) === 'object' && typeof(newState.l) !== 'undefined')) {
+						// final state
+						var stateNumber = typeof(newState) === 'number' ? newState : newState.l;
+						handlerMethod = ilib.PhoneNumber._states[stateNumber];
+
+						//console.info("reached final state " + newState + " handler method is " + handlerMethod + " and i is " + i);
+	
+						return (handlerMethod === "area") ? number.substring(0, i+1) : undefined;
+					} else {
+						// failed parse. Either no last leaf to fall back to, or there was an explicit
+						// zero in the table
+						break;
+					}
 				}
 			} else if (ch === -1) {
 				// non-transition character, continue parsing in the same state
@@ -23252,6 +23607,12 @@ ilib.GeoLocator.prototype = {
 		}
 		return undefined;
 	},
+	/**
+	 * @private
+	 * @param prefix
+	 * @param table
+	 * @returns
+	 */
 	_matchPrefix: function(prefix, table)  {
 		var i, matchedDot, matchesWithDots = [];
 
@@ -23290,6 +23651,15 @@ ilib.GeoLocator.prototype = {
 		
 		return undefined;
 	},
+	/**
+	 * @private
+	 * @param number
+	 * @param data
+	 * @param locale
+	 * @param plan
+	 * @param options
+	 * @returns {Object}
+	 */
 	_getAreaInfo: function(number, data, locale, plan, options) {
 		var sync = true,
 			ret = {}, 
@@ -23625,6 +23995,3164 @@ ilib.GeoLocator.prototype = {
 		return region;
 	}
 };
+/*
+ * unit.js - Unit class
+ * 
+ * Copyright © 2014, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+!depends 
+ilibglobal.js 
+locale.js 
+localeinfo.js
+*/
+
+
+/**
+ * Create a measurement instance. The measurement is immutable once
+ * it is created, but can be converted to other measurements later.<p>
+ * 
+ * The options may contain any of the following properties:
+ * 
+ * <ul>
+ * <li><i>amount</i> - either a numeric amount for this measurement given
+ * as a number of the specified units, or another ilib.Measurement instance 
+ * to convert to the requested units. If converting to new units, the type
+ * of measure between the other instance's units and the current units
+ * must be the same. That is, you can only convert one unit of mass to
+ * another. You cannot convert a unit of mass into a unit of length. 
+ * 
+ * <li><i>unit</i> - units of this measurement. Use the 
+ * static call {@link ilib.Measurement.getAvailableUnits}
+ * to find out what units this version of ilib supports. If the given unit
+ * is not a base unit, the amount will be normalized to the number of base units
+ * and stored as that number of base units.
+ * For example, if an instance is constructed with 1 kg, this will be converted
+ * automatically into 1000 g, as grams are the base unit and kg is merely a 
+ * commonly used scale of grams.
+ * </ul>
+ * 
+ * Here are some examples of converting a length into new units. The first method
+ * is via the constructor by passing the old measurement in as the amount property.
+ * 
+ * <code>
+ * var measurement1 = new ilib.Measurement({
+ *   amount: 5,
+ *   units: "kilometers"
+ * });
+ * var measurement2 = new ilib.Measurement({
+ *   amount: measurement1,
+ *   units: "miles"
+ * });
+ * </code>
+ * 
+ * The value in measurement2 will end up being about 3.125 miles.
+ * 
+ * The second method will be using the convert method.
+ * 
+ * <code>
+ * var measurement1 = new ilib.Measurement({
+ *   amount: 5,
+ *   units: "kilometers"
+ * });
+ * var measurement2 = measurement1.convert("miles");
+ * });
+ * </code>
+ *
+ * The value in measurement2 will again end up being about 3.125 miles.
+ * 
+ * @constructor
+ * @class
+ * @param {Object} options options that control the construction of this instance
+ */
+ilib.Measurement = function(options) {
+	if (!options || typeof(options.unit) === 'undefined') {
+		return undefined;
+	}
+
+	this.amount = options.amount || 0;
+	var measure = undefined;
+
+	for (var c in ilib.Measurement._constructors) {
+		var measurement = ilib.Measurement._constructors[c];
+		if (typeof(measurement.aliases[options.unit]) !== 'undefined') {
+			measure = c;
+			break;
+		}
+	}
+
+	if (!measure || typeof(measure) === 'undefined') {
+		return new ilib.Measurement.Unknown({
+			unit: options.unit,
+			amount: options.amount
+		});                
+	} else {
+		return new ilib.Measurement._constructors[measure](options);
+	}
+};
+
+/**
+ * @private
+ */
+ilib.Measurement._constructors = {};
+
+/**
+ * Return a list of all possible units that this version of ilib supports.
+ * Typically, the units are given as their full names in English. Unit names
+ * are case-insensitive.
+ * 
+ * @static
+ * @return {Array.<string>} an array of strings containing names of units available
+ */
+ilib.Measurement.getAvailableUnits = function () {
+	var units = [];
+	for (var c in ilib.Measurement._constructors) {
+		var measure = ilib.Measurement._constructors[c];
+		units = units.concat(measure.getMeasures());
+	}
+	return units;
+};
+
+ilib.Measurement.metricScales = {
+	"femto": {"symbol": "f", "scale": -15},
+	"pico": {"symbol": "p", "scale": -12},
+	"nano": {"symbol": "n", "scale": -9},
+	"micro": {"symbol": "µ", "scale": -6},
+	"milli": {"symbol": "m", "scale": -3},
+	"centi": {"symbol": "c", "scale": -2},
+	"deci": {"symbol": "d", "scale": -1},
+	"deca": {"symbol": "da", "scale": 1},
+	"hecto": {"symbol": "h", "scale": 2},
+	"kilo": {"symbol": "k", "scale": 3},
+	"mega": {"symbol": "M", "scale": 6},
+	"giga": {"symbol": "G", "scale": 9},
+	"peta": {"symbol": "P", "scale": 12},
+	"exa": {"symbol": "E", "scale": 18}
+};
+
+ilib.Measurement.prototype = {
+	/**
+	 * Return the normalized name of the given units. If the units are
+	 * not recognized, this method returns its parameter unmodified.<p>
+	 * 
+	 * Examples:
+	 * 
+	 * <ui>
+	 * <li>"metres" gets normalized to "meter"<br>
+	 * <li>"ml" gets normalized to "milliliter"<br>
+	 * <li>"foobar" gets normalized to "foobar" (no change because it is not recognized)
+	 * </ul>
+	 *  
+	 * @param {string} name name of the units to normalize. 
+	 * @returns {string} normalized name of the units
+	 */
+	normalizeUnits: function(name) {
+		return this.aliases[name] || name;
+	},
+
+	/**
+	 * Return the normalized units used in this measurement.
+	 * @return {string} name of the unit of measurement 
+	 */
+	getUnit: function() {
+		return this.unit;
+	},
+        
+        getUnitLong: function() {},
+        
+        getUnitShort: function() {},
+	
+	/**
+	 * Return the units originally used to construct this measurement
+	 * before it was normalized.
+	 * @return {string} name of the unit of measurement 
+	 */
+	getOriginalUnit: function() {
+		return this.originalUnit;
+	},
+	
+	/**
+	 * Return the numeric amount of this measurement.
+	 * @return {number} the numeric amount of this measurement
+	 */
+	getAmount: function() {
+		return this.amount;
+	},
+	
+	/**
+	 * Return the type of this measurement. Examples are "mass",
+	 * "length", "speed", etc. Measurements can only be converted
+	 * to measurements of the same type.<p>
+	 * 
+	 * The type of the units is determined automatically from the 
+	 * units. For example, the unit "grams" is type "mass". Use the 
+	 * static call {@link ilib.Measurement.getAvailableUnits}
+	 * to find out what units this version of ilib supports.
+	 * 
+	 * @abstract
+	 * @return {string} the name of the type of this measurement
+	 */
+	getMeasure: function() {},
+	
+	/**
+	 * Return a new measurement instance that is converted to a new
+	 * measurement unit. Measurements can only be converted
+	 * to measurements of the same type.<p>
+	 * 
+	 * @abstract
+	 * @param {string} to The name of the units to convert to
+	 * @return {ilib.Measurement|undefined} the converted measurement
+	 * or undefined if the requested units are for a different
+	 * measurement type
+	 */
+	convert: function(to) {},     
+        
+        /**
+	 * Scale the measurement unit to an acceptable level. The scaling
+	 * happens so that the integer part of the amount is as small as
+	 * possible without being below zero. This will result in the 
+	 * largest units that can represent this measurement without
+	 * fractions. Measurements can only be scaled to other measurements 
+	 * of the same type.
+	 * 
+	 * @abstract
+	 * @param {string=} measurementsystem system to use (uscustomary|imperial|metric),
+	 * or undefined if the system can be inferred from the current measure
+	 * @return {ilib.Measurement} a new instance that is scaled to the 
+	 * right level
+	 */
+	scale: function(measurementsystem) {},
+        
+        localize: function(locale) {}
+};
+
+/*
+ * unitfmt.js - Unit formatter class
+ * 
+ * Copyright © 2014, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+!depends 
+ilibglobal.js 
+locale.js 
+resources.js 
+localeinfo.js
+strings.js
+*/
+
+// !data unitfmt
+
+/**
+ * Create a new unit formatter instance. The unit formatter is immutable once
+ * it is created, but can format as many different strings with different values
+ * as needed with the same options. Create different unit formatter instances 
+ * for different purposes and then keep them cached for use later if you have 
+ * more than one unit string to format.<p>
+ * 
+ * The options may contain any of the following properties:
+ * 
+ * <ul>
+ * <li><i>locale</i> - locale to use when formatting the units. The locale also
+ * controls the translation of the names of the units. If the locale is
+ * not specified, then the default locale of the app or web page will be used.
+ * 
+ * <li><i>autoScale</i> - when true, automatically scale the amount to get the smallest
+ * number greater than 1, where possible, possibly by converting units within the locale's
+ * measurement system. For example, if the current locale is "en-US", and we have
+ * a measurement containing 278 fluid ounces, then the number "278" can be scaled down
+ * by converting the units to a larger one such as gallons. The scaled size would be
+ * 2.17188 gallons. Since iLib does not have a US customary measure larger than gallons,
+ * it cannot scale it down any further. If the amount is less than the smallest measure
+ * already, it cannot be scaled down any further and no autoscaling will be applied.
+ * Default for the autoScale property is "true", so it only needs to be specified when
+ * you want to turn off autoscaling.
+ * 
+ * <li><i>autoConvert</i> - automatically convert the units to the nearest appropriate
+ * measure of the same type in the measurement system used by the locale. For example, 
+ * if a measurement of length is given in meters, but the current locale is "en-US" 
+ * which uses the US Customary system, then the nearest appropriate measure would be 
+ * "yards", and the amount would be converted from meters to yards automatically before
+ * being formatted. Default for the autoConvert property is "true", so it only needs to 
+ * be specified when you want to turn off autoconversion.
+ *  
+ * <li><i>onLoad</i> - a callback function to call when the date format object is fully 
+ * loaded. When the onLoad option is given, the UnitFmt object will attempt to
+ * load any missing locale data using the ilib loader callback.
+ * When the constructor is done (even if the data is already preassembled), the 
+ * onLoad function is called with the current instance as a parameter, so this
+ * callback can be used with preassembled or dynamic loading or a mix of the two.
+ * 
+ * <li><i>sync</i> - tell whether to load any missing locale data synchronously or 
+ * asynchronously. If this option is given as "false", then the "onLoad"
+ * callback must be given, as the instance returned from this constructor will
+ * not be usable for a while.
+ *  
+ * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ * loader callback function when locale data is missing. The parameters are not
+ * interpretted or modified in any way. They are simply passed along. The object 
+ * may contain any property/value pairs as long as the calling code is in
+ * agreement with the loader callback function as to what those parameters mean.
+ * </ul>
+ * 
+ * Here is an example of how you might use the unit formatter to format a string with
+ * the correct units.<p>
+ * 
+ * Depends directive: !depends unitfmt.js
+ * 
+ * @class
+ * @constructor
+ * @param {Object} options options governing the way this date formatter instance works
+ */
+ilib.UnitFmt = function(options) {
+	var sync = true, 
+		loadParams = undefined;
+	
+    this.length = "long";
+    this.scale  = true;
+    this.measurementType = 'undefined';
+    this.convert = true;
+	this.locale = new ilib.Locale();
+
+    if (options) {
+    	if (options.locale) {
+    		this.locale = (typeof(options.locale) === 'string') ? new ilib.Locale(options.locale) : options.locale;
+    	}
+
+    	if (typeof(options.sync) === 'boolean') {
+    		sync = options.sync;
+    	}
+
+    	if (typeof(options.loadParams) !== 'undefined') {
+    		loadParams = options.loadParams;
+    	}
+
+    	if (options.length) {
+    		this.length = options.length;
+    	}
+
+    	if (typeof(options.autoScale) === 'boolean') {
+    		this.scale = options.autoScale;
+    	}
+
+    	if (typeof(options.autoConvert) === 'boolean') {
+    		this.convert = options.autoConvert;
+    	}
+        
+        if (typeof(options.useNative) === 'boolean') {
+    		this.useNative = options.useNative;
+    	}
+
+    	if (options.measurementSystem) {
+    		this.measurementSystem = options.measurementSystem;
+    	}
+    }
+
+    if (!ilib.UnitFmt.cache) {
+    	ilib.UnitFmt.cache = {};
+    }
+
+	ilib.loadData({
+		object: ilib.UnitFmt, 
+		locale: this.locale, 
+		name: "unitfmt.json", 
+		sync: sync, 
+		loadParams: loadParams, 
+		callback: ilib.bind(this, function (format) {                      
+			var formatted = format;
+			this.template = formatted["unitfmt"][this.length];
+			if (options && typeof(options.onLoad) === 'function') {
+				options.onLoad(this);
+			}
+		})
+	});
+};
+
+ilib.UnitFmt.prototype = {
+	
+	/**
+	 * Return the locale used with this formatter instance.
+	 * @return {ilib.Locale} the ilib.Locale instance for this formatter
+	 */
+	getLocale: function() {
+		return this.locale;
+	},
+	
+	/**
+	 * Return the template string that is used to format date/times for this
+	 * formatter instance. This will work, even when the template property is not explicitly 
+	 * given in the options to the constructor. Without the template option, the constructor 
+	 * will build the appropriate template according to the options and use that template
+	 * in the format method. 
+	 * 
+	 * @return {string} the format template for this formatter
+	 */
+	getTemplate: function() {
+		return this.template;
+	},
+	
+	/**
+	 * Convert this formatter to a string representation by returning the
+	 * format template. This method delegates to getTemplate.
+	 * 
+	 * @return {string} the format template
+	 */
+	toString: function() {
+		return this.getTemplate();
+	},
+    
+	/**
+	 * Return whether or not this formatter will auto-scale the units while formatting.
+	 * @returns {boolean} true if auto-scaling is turned on
+	 */
+    getScale: function() {
+        return this.scale;
+    },
+
+    /**
+     * Return the measurement system that is used for this formatter.
+     * @returns {string} the measurement system used in this formatter
+     */
+    getMeasurementSystem: function() {
+        return this.measurementSystem;
+    },
+
+	/**
+	 * Format a particular unit instance according to the settings of this
+	 * formatter object.
+	 * 
+	 * @param {ilib.Measurement} measurement measurement to format	 
+	 * @return {string} the formatted version of the given date instance
+	 */
+    format: function (measurement) {
+    	var u = this.convert ? measurement.localize(this.locale.getSpec()) : measurement;
+    	u = this.scale ? u.scale(this.measurementSystem) : u;
+    	var formatted = new ilib.String(this.template[u.getUnit()]);
+    	// make sure to use the right plural rules
+    	formatted.setLocale(this.locale, true, undefined, undefined);
+    	var numFmt = new ilib.NumFmt({
+    		locale: this.locale,
+    		useNative: this.useNative
+    	});
+    	formatted = formatted.formatChoice(u.amount,{n:numFmt.format(u.amount)});
+    	return formatted.length > 0 ? formatted : u.amount +" " + u.unit;
+    }
+};
+
+/*
+ * Length.js - Unit conversions for Lengths/lengths
+ * 
+ * Copyright © 2014, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+!depends 
+ilibglobal.js 
+*/
+
+/**
+ * Create a new length measurement.
+ * 
+ * @class
+ * @constructor
+ * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
+ * the construction of this instance
+ */
+ilib.Measurement.Length = function (options) {
+	this.unit = "meter";
+	this.amount = 0;
+	this.aliases = ilib.Measurement.Length.aliases; // share this table in all instances
+	
+	if (options) {
+		if (typeof(options.unit) !== 'undefined') {
+			this.originalUnit = options.unit;
+			this.unit = this.aliases[options.unit] || options.unit;
+		}
+		
+		if (typeof(options.amount) === 'object') {
+			if (options.amount.getMeasure() === "length") {
+				this.amount = ilib.Measurement.Length.convert(this.unit, options.amount.getUnit(), options.amount.getAmount());
+			} else {
+				throw "Cannot convert unit " + options.amount.unit + " to a length";
+			}
+		} else if (typeof(options.amount) !== 'undefined') {
+			this.amount = parseFloat(options.amount);
+		}
+	}
+	
+	if (typeof(ilib.Measurement.Length.ratios[this.unit]) === 'undefined') {
+		throw "Unknown unit: " + options.unit;
+	}
+};
+
+ilib.Measurement.Length.ratios = {
+	/*              index, µm           mm           cm           inch         dm           foot          yard          m             dam            hm              km              mile            nm            Mm             Gm             */ 
+	"micrometer":   [ 1,   1,           1e-3,        1e-4,        3.93701e-5,  1e-5,        3.28084e-6,   1.09361e-6,   1e-6,         1e-7,          1e-8,           1e-9,           6.21373e-10,  5.39957e-10,  1e-12,          1e-15           ],
+	"millimeter":   [ 2,   1000,        1,           0.1,         0.0393701,   0.01,        0.00328084,   1.09361e-3,   0.001,        1e-4,          1e-5,           1e-6,           6.21373e-7,   5.39957e-7,   1e-9,           1e-12           ],
+	"centimeter":   [ 3,   1e4,         10,          1,           0.393701,    0.1,         0.0328084,    0.0109361,    0.01,         0.001,         1e-4,           1e-5,           6.21373e-6,   5.39957e-6,   1e-8,           1e-9            ],
+        "inch":         [ 4,   25399.986,   25.399986,   2.5399986,   1,           0.25399986,  0.083333333,  0.027777778,  0.025399986,  2.5399986e-3,  2.5399986e-4,   2.5399986e-5,   1.5783e-5,    1.3715e-5,    2.5399986e-8,   2.5399986e-11   ],
+        "decimeter":    [ 5,   1e5,         100,         10,          3.93701,     1,           0.328084,     0.109361,     0.1,          0.01,          0.001,          1e-4,           6.21373e-5,   5.39957e-5,   1e-7,           1e-8            ],
+        "foot":         [ 6,   304799.99,   304.79999,   30.479999,   12,          3.0479999,   1,            0.33333333,   0.30479999,   0.030479999,   3.0479999e-3,   3.0479999e-4,   1.89394e-4,   1.64579e-4,   3.0479999e-7,   3.0479999e-10   ],
+        "yard":         [ 7,   914402.758,  914.402758,  91.4402758,  36,          9.14402758,  3,            1,            0.914402758,  0.0914402758,  9.14402758e-3,  9.14402758e-4,  5.68182e-4,   4.93737e-4,   9.14402758e-7,  9.14402758e-10  ],
+	"meter":        [ 8,   1e6,         1000,        100,         39.3701,     10,          3.28084,      1.09361,      1,            0.1,           0.01,           0.001,          6.213712e-4,  5.39957e-4,   1e-6,           1e-7            ],
+	"decameter":    [ 9,   1e7,         1e4,         1000,        393.701,     100,         32.8084,      10.9361,      10,           1,             0.1,            0.01,           6.21373e-3,   5.39957e-3,   1e-5,           1e-6            ],
+	"hectometer":   [ 10,  1e8,         1e5,         1e4,         3937.01,     1000,        328.084,      109.361,      100,          10,            1,              0.1,            0.0621373,    0.0539957,    1e-4,           1e-5            ],
+	"kilometer":    [ 11,  1e9,         1e6,         1e5,         39370.1,     1e4,         3280.84,      1093.61,      1000,         100,           10,             1,              0.621373,     0.539957,     0.001,          1e-4            ],
+        "mile":         [ 12,  1.60934e9,   1.60934e6,   1.60934e5,   63360,       1.60934e4,   5280,         1760,         1609.34,      160.934,       16.0934,        1.60934,        1,            0.868976,     1.60934e-3,     1.60934e-6      ],
+        "nauticalmile": [ 13,  1.852e9,     1.852e6,     1.852e5,     72913.4,     1.852e4,     6076.12,      2025.37,      1852,         185.2,         18.52,          1.852,          1.15078,      1,            1.852e-3,       1.852e-6        ],
+	"megameter":    [ 14,  1e12,        1e9,         1e6,         3.93701e7,   1e5,         3.28084e6,    1.09361e6,    1e4,          1000,          100,            10,             621.373,      539.957,      1,              0.001           ],        
+        "gigameter":    [ 15,  1e15,        1e12,        1e9,         3.93701e10,  1e8,         3.28084e9,    1.09361e9,    1e7,          1e6,           1e5,            1e4,            621373.0,     539957.0,     1000,           1               ]	
+};
+
+ilib.Measurement.Length.metricSystem      = {"micrometer":1,"millimeter":2,"centimeter":3,"decimeter":5,"meter":8,"decameter":9,"hectometer":10,"kilometer":11,"megameter":14,"gigameter":15}; 
+ilib.Measurement.Length.imperialSystem    = {"inch":4,"foot":6,"yard":7,"mile":12,"nauticalmile":13};
+ilib.Measurement.Length.uscustomarySystem = {"inch":4,"foot":6,"yard":7,"mile":12,"nauticalmile":13};
+
+ilib.Measurement.Length.metricToUScustomary = {"micrometer":"inch","millimeter":"inch","centimeter":"inch","decimeter":"inch","meter":"yard","decameter":"yard","hectometer":"mile","kilometer":"mile","megameter":"nauticalmile","gigameter":"nauticalmile"};
+ilib.Measurement.Length.usCustomaryToMetric = {"inch":"centimeter","foot":"centimeter","yard":"meter","mile":"kilometer","nauticalmile":"kilometer"};
+
+ilib.Measurement.Length.prototype = new ilib.Measurement({});
+ilib.Measurement.Length.prototype.parent = ilib.Measurement;
+ilib.Measurement.Length.prototype.constructor = ilib.Measurement.Length;
+
+/**
+ * @inheritDoc
+ */
+ilib.Measurement.Length.prototype.getMeasure = function() {
+	return "length";
+};
+
+ilib.Measurement.Length.prototype.localize = function(locale) {
+    var to;
+    if (locale === "en-US" || locale === "en-UK") {
+        to = ilib.Measurement.Length.metricToUScustomary[this.unit] || this.unit;
+    } else {
+        to = ilib.Measurement.Length.usCustomaryToMetric[this.unit] || this.unit;
+    }
+    return new ilib.Measurement.Length({
+        unit: to,
+        amount: this
+    });
+};
+
+/**
+ * @inheritDoc
+ */
+ilib.Measurement.Length.prototype.convert = function(to) {
+	if (!to || typeof(ilib.Measurement.Length.ratios[this.normalizeUnits(to)]) === 'undefined') {
+		return undefined;
+	}
+	return new ilib.Measurement({
+		unit: to,
+		amount: this
+	});
+};
+
+/**
+ * @inheritDoc
+ * @param {string=} measurementsystem
+ * @return {ilib.Measurement}
+ */
+ilib.Measurement.Length.prototype.scale = function(measurementsystem) {
+    var mSystem;    
+    if (measurementsystem === "metric" || (typeof(measurementsystem) === 'undefined' 
+            && typeof(ilib.Measurement.Length.metricSystem[this.unit]) !== 'undefined')) {
+        mSystem = ilib.Measurement.Length.metricSystem;
+    } else if (measurementsystem === "imperial" || (typeof(measurementsystem) === 'undefined' 
+            && typeof(ilib.Measurement.Length.imperialSystem[this.unit]) !== 'undefined')) {
+        mSystem = ilib.Measurement.Length.imperialSystem;
+    } else if (measurementsystem === "uscustomary" || (typeof(measurementsystem) === 'undefined' 
+            && typeof(ilib.Measurement.Length.uscustomarySystem[this.unit]) !== 'undefined')) {
+        mSystem = ilib.Measurement.Length.uscustomarySystem;
+    } else {
+        return new ilib.Measurement.Length({
+			unit: this.unit,
+			amount: this.amount
+		});
+    }    
+    
+    var length = this.amount;
+    var munit = this.unit;
+    var fromRow = ilib.Measurement.Length.ratios[this.unit];
+    
+    for (var m in mSystem) {
+        var tmp = this.amount * fromRow[mSystem[m]];
+        if (tmp < 1) break;
+        length = tmp;
+        munit = m;
+    }
+    
+    return new ilib.Measurement.Length({
+		unit: munit,
+		amount: length
+    });
+};
+
+ilib.Measurement.Length.aliases = {
+	"miles": "mile",
+	"mile":"mile",
+	"nauticalmiles": "nauticalmile",
+	"nautical mile": "nauticalmile",
+	"nautical miles": "nauticalmile",
+	"nauticalmile":"nauticalmile",
+	"yards": "yard",
+	"yard": "yard",
+	"feet": "foot",
+	"foot": "foot",
+	"inches": "inch",
+	"inch": "inch",
+	"meters": "meter",
+	"metre": "meter",
+	"metres": "meter",
+	"m": "meter",
+	"meter": "meter",        
+	"micrometers": "micrometer",
+	"micrometres": "micrometer",
+	"micrometre": "micrometer",
+	"µm": "micrometer",
+	"micrometer": "micrometer",
+	"millimeters": "millimeter",
+	"millimetres": "millimeter",
+	"millimetre": "millimeter",
+	"mm": "millimeter",
+	"millimeter": "millimeter",
+	"centimeters": "centimeter",
+	"centimetres": "centimeter",
+	"centimetre": "centimeter",
+	"cm": "centimeter",
+	"centimeter": "centimeter",
+	"decimeters": "decimeter",
+	"decimetres": "decimeter",
+	"decimetre": "decimeter",
+	"dm": "decimeter",
+	"decimeter": "decimeter",
+	"decameters": "decameter",
+	"decametres": "decameter",
+	"decametre": "decameter",
+	"dam": "decameter",
+	"decameter": "decameter",
+	"hectometers": "hectometer",
+	"hectometres": "hectometer",
+	"hectometre": "hectometer",
+	"hm": "hectometer",
+	"hectometer": "hectometer",
+	"kilometers": "kilometer",
+	"kilometres": "kilometer",
+	"kilometre": "kilometer",
+	"km": "kilometer",
+	"kilometer": "kilometer",
+	"megameters": "megameter",
+	"megametres": "megameter",
+	"megametre": "megameter",
+	"Mm": "megameter",
+	"megameter": "megameter",
+	"gigameters": "gigameter",
+	"gigametres": "gigameter",
+	"gigametre": "gigameter",
+	"Gm": "gigameter",
+	"gigameter": "gigameter"
+};
+
+/**
+ * Convert a length to another measure.
+ * @static
+ * @param to {string} unit to convert to
+ * @param from {string} unit to convert from
+ * @param length {number} amount to be convert
+ * @returns {number|undefined} the converted amount
+ */
+ilib.Measurement.Length.convert = function(to, from, length) {
+    from = ilib.Measurement.Length.aliases[from] || from;
+    to = ilib.Measurement.Length.aliases[to] || to;
+	var fromRow = ilib.Measurement.Length.ratios[from];
+	var toRow = ilib.Measurement.Length.ratios[to];
+	if (typeof(from) === 'undefined' || typeof(to) === 'undefined') {
+		return undefined;
+	}
+	return length * fromRow[toRow[0]];
+};
+
+/**
+ * @private
+ * @static
+ */
+ilib.Measurement.Length.getMeasures = function () {
+	var ret = [];
+	for (var m in ilib.Measurement.Length.ratios) {
+		ret.push(m);
+	}
+	return ret;
+};
+
+//register with the factory method
+ilib.Measurement._constructors["length"] = ilib.Measurement.Length;
+
+/*
+ * Speed.js - Unit conversions for Speeds/speeds
+ * 
+ * Copyright © 2014, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+!depends 
+ilibglobal.js 
+*/
+
+/**
+ * Create a new speed measurement.
+ * 
+ * @class
+ * @constructor
+ * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
+ * the construction of this instance
+ */
+ilib.Measurement.Speed = function (options) {
+	this.unit = "meters/second";
+	this.amount = 0;
+	this.aliases = ilib.Measurement.Speed.aliases; // share this table in all instances
+	
+	if (options) {
+		if (typeof(options.unit) !== 'undefined') {
+			this.originalUnit = options.unit;
+			this.unit = this.aliases[options.unit] || options.unit;
+		}
+		
+		if (typeof(options.amount) === 'object') {
+			if (options.amount.getMeasure() === "speed") {
+				this.amount = ilib.Measurement.Speed.convert(this.unit, options.amount.getUnit(), options.amount.getAmount());
+			} else {
+				throw "Cannot convert units " + options.amount.unit + " to a speed";
+			}
+		} else if (typeof(options.amount) !== 'undefined') {
+			this.amount = parseFloat(options.amount);
+		}
+	}
+	
+	if (typeof(ilib.Measurement.Speed.ratios[this.unit]) === 'undefined') {
+		throw "Unknown unit: " + options.unit;
+	}
+};
+
+ilib.Measurement.Speed.ratios = {
+	/*                 index, k/h         f/s         miles/h      knot         m/s        km/s         miles/s */
+    "kilometer/hour":   [ 1,  1,          0.911344,   0.621371,    0.539957,    0.277778,  2.77778e-4,  1.72603109e-4 ],
+	"feet/second":      [ 2,  1.09728,    1,          0.681818,    0.592484,    0.3048,    3.048e-4,    1.89393939e-4 ],  
+    "miles/hour":       [ 3,  1.60934,    1.46667,    1,           0.868976,    0.44704,   4.4704e-4,   2.77777778e-4 ],
+    "knot":             [ 4,  1.852,      1.68781,    1.15078,     1,           0.514444,  5.14444e-4,  3.19660958e-4 ],
+  	"meters/second":    [ 5,  3.6,        3.28084,    2.236936,    1.94384,     1,         0.001,       6.21371192e-4 ],	
+    "kilometer/second": [ 6,  3600,       3280.8399,  2236.93629,  1943.84449,  1000,      1,           0.621371192   ],
+    "miles/second":     [ 7,  5793.6384,  5280,       3600,        3128.31447,  1609.344,  1.609344,    1             ]
+};
+
+ilib.Measurement.Speed.metricSystem      = {"kilometer/hour":1,"meters/second":5,"kilometer/second":6};
+ilib.Measurement.Speed.imperialSystem    = {"feet/second":2,"miles/hour":3,"knot":4,"miles/second":7};
+ilib.Measurement.Speed.uscustomarySystem = {"feet/second":2,"miles/hour":3,"knot":4,"miles/second":7};
+
+ilib.Measurement.Speed.metricToUScustomary = {"kilometer/hour":"miles/hour","meters/second":"feet/second","kilometer/second":"miles/second"};
+ilib.Measurement.Speed.UScustomaryTometric = {"miles/hour":"kilometer/hour","feet/second":"meters/second","miles/second":"kilometer/second","knot":"kilometer/hour"};
+
+ilib.Measurement.Speed.prototype = new ilib.Measurement({});
+ilib.Measurement.Speed.prototype.parent = ilib.Measurement;
+ilib.Measurement.Speed.prototype.constructor = ilib.Measurement.Speed;
+
+/**
+ * @inheritDoc
+ */
+ilib.Measurement.Speed.prototype.getMeasure = function() {
+	return "speed";
+};
+
+/**
+ * Convert the current speed to another measure.
+ * 
+ * @inheritDoc
+ */
+ilib.Measurement.Speed.prototype.convert = function(to) {
+	if (!to || typeof(ilib.Measurement.Speed.ratios[this.normalizeUnits(to)]) === 'undefined') {
+		return undefined;
+	}
+	return new ilib.Measurement({
+		unit: to,
+		amount: this
+	});
+};
+
+/**
+ * @inheritDoc
+ * @param {string=} measurementsystem
+ * @return {ilib.Measurement}
+ */
+ilib.Measurement.Speed.prototype.scale = function(measurementsystem) {
+    var mSystem;    
+    if (measurementsystem === "metric" || (typeof(measurementsystem) === 'undefined' 
+            && typeof(ilib.Measurement.Speed.metricSystem[this.unit]) !== 'undefined')) {
+        mSystem = ilib.Measurement.Speed.metricSystem;
+    } else if (measurementsystem === "imperial" || (typeof(measurementsystem) === 'undefined' 
+            && typeof(ilib.Measurement.Speed.imperialSystem[this.unit]) !== 'undefined')) {
+        mSystem = ilib.Measurement.Speed.imperialSystem;
+    } else if (measurementsystem === "uscustomary" || (typeof(measurementsystem) === 'undefined' 
+            && typeof(ilib.Measurement.Speed.uscustomarySystem[this.unit]) !== 'undefined')) {
+        mSystem = ilib.Measurement.Speed.uscustomarySystem;
+    } else {
+        return new ilib.Measurement.Speed({
+			unit: this.unit,
+			amount: this.amount
+		});
+    }
+    
+    var speed = this.amount;
+    var munit = this.unit;
+    var fromRow = ilib.Measurement.Speed.ratios[this.unit];
+    
+    for (var m in mSystem) {
+        var tmp = this.amount * fromRow[mSystem[m]];
+        if (tmp < 1) break;
+        speed = tmp;
+        munit = m;
+    }
+    
+    return new ilib.Measurement.Speed({
+		unit: munit,
+		amount: speed
+    });    
+};
+
+ilib.Measurement.Speed.prototype.localize = function(locale) {
+    var to;
+    if (locale === "en-US" || locale === "en-UK") {
+        to = ilib.Measurement.Speed.metricToUScustomary[this.unit] || this.unit;
+    } else {
+        to = ilib.Measurement.Speed.UScustomaryTometric[this.unit] || this.unit;
+    }
+    return new ilib.Measurement.Speed({
+		unit: to,
+		amount: this
+    });
+};
+
+ilib.Measurement.Speed.aliases = {
+    "foot/sec":"feet/second",
+    "foot/s":"feet/second",
+    "feet/s":"feet/second",
+    "f/s":"feet/second",
+    "feet/second" : "feet/second",
+    "feet/sec" : "feet/second",
+    "meter/sec":"meters/second",
+    "meter/s":"meters/second",
+    "meters/s":"meters/second",
+    "metre/sec":"meters/second",
+    "metre/s":"meters/second",
+    "metres/s":"meters/second",
+    "mt/sec":"meters/second",
+    "m/sec":"meters/second",
+    "mt/s":"meters/second",
+    "m/s":"meters/second",
+    "mps":"meters/second",
+    "meters/second":"meters/second",
+    "meters/sec":"meters/second",
+    "kilometer/hour":"kilometer/hour",
+    "km/hour":"kilometer/hour",
+    "kilometers/hour":"kilometer/hour",
+    "kmh":"kilometer/hour",
+    "km/h":"kilometer/hour",
+    "kilometer/h":"kilometer/hour",
+    "kilometers/h":"kilometer/hour",
+    "km/hr":"kilometer/hour",
+    "kilometer/hr":"kilometer/hour",
+    "kilometers/hr":"kilometer/hour",
+    "kilometre/hour":"kilometer/hour",
+    "mph": "miles/hour",
+    "mile/hour": "miles/hour",
+    "mile/hr": "miles/hour",
+    "mile/h": "miles/hour",
+    "miles/h": "miles/hour",
+    "miles/hr": "miles/hour",
+    "miles/hour":"miles/hour",
+    "kn": "knot",
+    "kt": "knot",
+    "kts": "knot",
+    "knots": "knot",
+    "nm/h": "knot",
+    "nm/hr": "knot",
+    "nauticalmile/h": "knot",
+    "nauticalmile/hr": "knot",
+    "nauticalmile/hour": "knot",
+    "nauticalmiles/hr": "knot",
+    "nauticalmiles/hour": "knot",
+    "knot":"knot",
+    "kilometer/second":"kilometer/second",
+    "kilometer/sec":"kilometer/second",
+    "kilometre/sec":"kilometer/second",
+    "Kilometre/sec":"kilometer/second",
+    "kilometers/second":"kilometer/second",
+    "kilometers/sec":"kilometer/second",
+    "kilometres/sec":"kilometer/second",
+    "Kilometres/sec":"kilometer/second",
+    "km/sec":"kilometer/second",
+    "Km/s":"kilometer/second",
+    "km/s":"kilometer/second",
+    "miles/second": "miles/second",
+    "miles/sec": "miles/second",
+    "miles/s": "miles/second",
+    "mile/s": "miles/second",
+    "mile/sec": "miles/second",
+    "Mile/s": "miles/second"
+};
+
+/**
+ * Convert a speed to another measure.
+ * @static
+ * @param to {string} unit to convert to
+ * @param from {string} unit to convert from
+ * @param speed {number} amount to be convert
+ * @returns {number|undefined} the converted amount
+ */
+ilib.Measurement.Speed.convert = function(to, from, speed) {
+    from = ilib.Measurement.Speed.aliases[from] || from;
+    to = ilib.Measurement.Speed.aliases[to] || to;
+	var fromRow = ilib.Measurement.Speed.ratios[from];
+	var toRow = ilib.Measurement.Speed.ratios[to];
+	if (typeof(from) === 'undefined' || typeof(to) === 'undefined') {
+		return undefined;
+	}	
+	var result = speed * fromRow[toRow[0]];
+    return result;
+};
+
+/**
+ * @private
+ * @static
+ */
+ilib.Measurement.Speed.getMeasures = function () {
+	var ret = [];
+	for (var m in ilib.Measurement.Speed.ratios) {
+		ret.push(m);
+	}
+	return ret;
+};
+
+//register with the factory method
+ilib.Measurement._constructors["speed"] = ilib.Measurement.Speed;
+
+/*
+ * digitalStorage.js - Unit conversions for Digital Storage
+ * 
+ * Copyright © 2014, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+!depends 
+ilibglobal.js 
+*/
+
+/**
+ * Create a new DigitalStorage measurement.
+ * 
+ * @class
+ * @constructor
+ * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
+ * the construction of this instance
+ */
+ilib.Measurement.DigitalStorage = function (options) {
+	this.unit = "bit";
+	this.amount = 0;
+	this.aliases = ilib.Measurement.DigitalStorage.aliases; // share this table in all instances
+	
+	if (options) {
+		if (typeof(options.unit) !== 'undefined') {
+			this.originalUnit = options.unit;
+			this.unit = this.aliases[options.unit] || options.unit;
+		}
+		
+		if (typeof(options.amount) === 'object') {
+			if (options.amount.getMeasure() === "digitalStorage") {
+				this.amount = ilib.Measurement.DigitalStorage.convert(this.unit, options.amount.getUnit(), options.amount.getAmount());
+			} else {
+				throw "Cannot convert unit " + options.amount.unit + " to a digitalStorage";
+			}
+		} else if (typeof(options.amount) !== 'undefined') {
+			this.amount = parseFloat(options.amount);
+		}
+	}
+	
+	if (typeof(ilib.Measurement.DigitalStorage.ratios[this.unit]) === 'undefined') {
+		throw "Unknown unit: " + options.unit;
+	}
+};
+
+ilib.Measurement.DigitalStorage.ratios = {
+    /*                 bit             byte            kb              kB              mb              mB              gb               gB               tb               tB               pb               pB   */           
+
+"bit":      [ 1,   1,              0.125,          0.0009765625,   1.220703125e-4, 9.536743164e-7, 1.192092896e-7, 9.313225746e-10, 1.164153218e-10, 9.094947017e-13, 1.136868377e-13, 8.881784197e-16, 1.110223025e-16 ],
+    "byte":     [ 2,   8,              1,              0.0078125,      0.0009765625,   7.629394531e-6, 9.536743164e-7, 7.450580597e-9,  9.313225746e-10, 7.275957614e-12, 9.094947017e-13, 7.105427358e-15, 8.881784197e-16 ],
+    "kilobit":  [ 3,   1024,           128,            1,              0.125,          0.0009765625,   1.220703125e-4, 9.536743164e-7,  1.192092896e-7,  9.313225746e-10, 1.164153218e-10, 9.094947017e-13, 1.136868377e-13 ],
+     "kilobyte": [ 4,   8192,           1024,           8,              1,              0.0078125,      0.0009765625,   7.629394531e-6,  9.536743164e-7,  7.450580597e-9,  9.313225746e-10, 7.275957614e-12, 9.094947017e-13 ],
+    "megabit":  [ 5,   1048576,        131072,         1024,           128,            1,              0.125,          0.0009765625,    1.220703125e-4,  9.536743164e-7,  1.192092896e-7,  9.313225746e-10, 1.164153218e-10 ],
+    "megabyte": [ 6,   8388608,        1048576,        8192,           1024,           8,              1,              0.0078125,       0.0009765625,    7.629394531e-6,  9.536743164e-7,  7.450580597e-9,  9.313225746e-10 ],
+    "gigabit":  [ 7,   1073741824,     134217728,      1048576,        131072,         1024,           128,            1,               0.125,           0.0009765625,    1.220703125e-4,  9.536743164e-7,  1.192092896e-7  ],
+    "gigabyte": [ 8,   8589934592,     1073741824,     8388608,        1048576,        8192,           1024,           8,               1,               0.0078125,       0.0009765625,    7.629394531e-6,  9.536743164e-7  ],
+    "terabit":  [ 9,   1.099511628e12, 137438953472,   1073741824,     134217728,      1048576,        131072,         1024,            128,             1,               0.125,           0.0009765625,    1.220703125e-4  ],
+    "terabyte": [ 10,  8.796093022e12, 1.099511628e12, 8589934592,     1073741824,     8388608,        1048576,        8192,            1024,            8,               1,               0.0078125,       0.0009765625    ],
+    "petabit":  [ 11,  1.125899907e15, 1.407374884e14, 1.099511628e12, 137438953472,   1073741824,     134217728,      1048576,         131072,          1024,            128,             1,               0.125           ],
+    "petabyte": [ 12,  9.007199255e15, 1.125899907e15, 8.796093022e12, 1.099511628e12, 8589934592,     1073741824,     8388608,         1048576,         8192,            1024,            8,               1               ]
+};
+ilib.Measurement.DigitalStorage.prototype = new ilib.Measurement({});
+ilib.Measurement.DigitalStorage.prototype.parent = ilib.Measurement;
+ilib.Measurement.DigitalStorage.prototype.constructor = ilib.Measurement.DigitalStorage;
+
+/**
+ * @inheritDoc
+ */
+ilib.Measurement.DigitalStorage.prototype.getMeasure = function() {
+	return "digitalStorage";
+};
+
+/**
+ * Convert the current digitalStorage to another measure.
+ * 
+ * @inheritDoc
+ */
+ilib.Measurement.DigitalStorage.prototype.convert = function(to) {
+	if (!to || typeof(ilib.Measurement.DigitalStorage.ratios[this.normalizeUnits(to)]) === 'undefined') {
+		return undefined;
+	}
+	return new ilib.Measurement({
+		unit: to,
+		amount: this
+	});
+};
+
+ilib.Measurement.DigitalStorage.prototype.localize = function(locale) {
+    return new ilib.Measurement.DigitalStorage({
+        unit: this.unit,
+        amount: this.amount
+    });
+};
+
+/**
+ * @inheritDoc
+ * @param {string=} measurementsystem
+ * @return {ilib.Measurement}
+ */
+ilib.Measurement.DigitalStorage.prototype.scale = function(measurementsystem) {
+    
+    var fromRow = ilib.Measurement.DigitalStorage.ratios[this.unit];    
+    var dStorage = this.amount;
+    var munit = this.unit;
+    var i=1;
+    
+    for (var m in ilib.Measurement.DigitalStorage.ratios) {
+        var tmp = this.amount * fromRow[i];
+        if (tmp < 1) break;
+        dStorage = tmp;
+        munit = m;
+        ++i
+    }
+    
+    return new ilib.Measurement.DigitalStorage({
+	unit: munit,
+	amount: dStorage
+    });    
+};
+
+ilib.Measurement.DigitalStorage.aliases = {
+    "bits":"bit",
+    "bit":"bit",
+    "Bits":"bit",
+    "Bit":"bit",
+    "byte":"byte",
+    "bytes":"byte",
+    "Byte":"byte",
+    "Bytes":"byte",
+    "kilobits":"kilobit",
+    "Kilobits":"kilobit",
+    "KiloBits":"kilobit",
+    "kiloBits":"kilobit",
+    "kilobit":"kilobit",
+    "Kilobit":"kilobit",
+    "kiloBit":"kilobit",
+    "KiloBit":"kilobit",
+    "kb":"kilobit",
+    "Kb":"kilobit",
+    "kilobyte":"kilobyte",
+    "Kilobyte":"kilobyte",
+    "kiloByte":"kilobyte",
+    "KiloByte":"kilobyte",
+    "kilobytes":"kilobyte",
+    "Kilobytes":"kilobyte",
+    "kiloBytes":"kilobyte",
+    "KiloBytes":"kilobyte",
+    "kB":"kilobyte",
+    "KB":"kilobyte",
+    "megabit":"megabit",
+    "Megabit":"megabit",
+    "megaBit":"megabit",
+    "MegaBit":"megabit",
+    "megabits":"megabit",
+    "Megabits":"megabit",
+    "megaBits":"megabit",
+    "MegaBits":"megabit",
+    "Mb":"megabit",
+    "mb":"megabit",
+    "megabyte":"megabyte",
+    "Megabyte":"megabyte",
+    "megaByte":"megabyte",
+    "MegaByte":"megabyte",
+    "megabytes":"megabyte",
+    "Megabytes":"megabyte",
+    "megaBytes":"megabyte",
+    "MegaBytes":"megabyte",
+    "MB":"megabyte",
+    "mB":"megabyte",
+    "gigabit":"gigabit",
+    "Gigabit":"gigabit",
+    "gigaBit":"gigabit",
+    "GigaBit":"gigabit",
+    "gigabits":"gigabit",
+    "Gigabits":"gigabit",
+    "gigaBits":"gigabyte",
+    "GigaBits":"gigabit",
+    "Gb":"gigabit",
+    "gb":"gigabit",        
+    "gigabyte":"gigabyte",
+    "Gigabyte":"gigabyte",
+    "gigaByte":"gigabyte",
+    "GigaByte":"gigabyte",
+    "gigabytes":"gigabyte",
+    "Gigabytes":"gigabyte",
+    "gigaBytes":"gigabyte",
+    "GigaBytes":"gigabyte",
+    "GB":"gigabyte",
+    "gB":"gigabyte",
+    "terabit":"terabit",
+    "Terabit":"terabit",
+    "teraBit":"terabit",
+    "TeraBit":"terabit",
+    "terabits":"terabit",
+    "Terabits":"terabit",
+    "teraBits":"terabit",
+    "TeraBits":"terabit",
+    "tb":"terabit",
+    "Tb":"terabit",
+    "terabyte":"terabyte",
+    "Terabyte":"terabyte",
+    "teraByte":"terabyte",
+    "TeraByte":"terabyte",
+    "terabytes":"terabyte",
+    "Terabytes":"terabyte",
+    "teraBytes":"terabyte",
+    "TeraBytes":"terabyte",
+    "TB":"terabyte",
+    "tB":"terabyte",
+    "petabit":"petabit",
+    "Petabit":"petabit",
+    "petaBit":"petabit",
+    "PetaBit":"petabit",
+    "petabits":"petabit",
+    "Petabits":"petabit",
+    "petaBits":"petabit",
+    "PetaBits":"petabit",
+    "pb":"petabit",
+    "Pb":"petabit",
+    "petabyte":"petabyte",
+    "Petabyte":"petabyte",
+    "petaByte":"petabyte",
+    "PetaByte":"petabyte",
+    "petabytes":"petabyte",
+    "Petabytes":"petabyte",
+    "petaBytes":"petabyte",
+    "PetaBytes":"petabyte",
+    "PB":"petabyte",
+    "pB":"petabyte"
+};
+
+/**
+ * Convert a digitalStorage to another measure.
+ * @static
+ * @param to {string} unit to convert to
+ * @param from {string} unit to convert from
+ * @param digitalStorage {number} amount to be convert
+ * @returns {number|undefined} the converted amount
+ */
+ilib.Measurement.DigitalStorage.convert = function(to, from, digitalStorage) {
+    from = ilib.Measurement.DigitalStorage.aliases[from] || from;
+    to = ilib.Measurement.DigitalStorage.aliases[to] || to;
+	var fromRow = ilib.Measurement.DigitalStorage.ratios[from];
+	var toRow = ilib.Measurement.DigitalStorage.ratios[to];
+	if (typeof(from) === 'undefined' || typeof(to) === 'undefined') {
+		return undefined;
+	}	
+	var result = digitalStorage * fromRow[toRow[0]];
+    return result;
+};
+
+/**
+ * @private
+ * @static
+ */
+ilib.Measurement.DigitalStorage.getMeasures = function () {
+	var ret = [];
+	for (var m in ilib.Measurement.DigitalStorage.ratios) {
+		ret.push(m);
+	}
+	return ret;
+};
+
+ilib.Measurement.DigitalStorage.prototype.localize = function(locale) {
+
+    return new ilib.Measurement.DigitalStorage({
+        unit: this.unit,
+        amount: this
+    });
+};
+//register with the factory method
+ilib.Measurement._constructors["digitalStorage"] = ilib.Measurement.DigitalStorage;
+
+/*
+ * temperature.js - Unit conversions for Temperature/temperature
+ * 
+ * Copyright © 2014, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+!depends 
+ilibglobal.js 
+*/
+
+/**
+ * Create a new Temperature measurement.
+ * 
+ * @class
+ * @constructor
+ * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
+ * the construction of this instance
+ */
+ilib.Measurement.Temperature = function (options) {
+	this.unit = "celsius";
+	this.amount = 0;
+	this.aliases = ilib.Measurement.Temperature.aliases; // share this table in all instances
+
+	if (options) {
+		if (typeof(options.unit) !== 'undefined') {
+			this.originalUnit = options.unit;
+			this.unit = this.aliases[options.unit] || options.unit;
+		}
+
+		if (typeof(options.amount) === 'object') {
+			if (options.amount.getMeasure() === "temperature") {
+				this.amount = ilib.Measurement.Temperature.convert(this.unit, options.amount.getUnit(), options.amount.getAmount());
+			} else {
+				throw "Cannot convert unit " + options.amount.unit + " to a temperature";
+			}
+		} else if (typeof(options.amount) !== 'undefined') {
+			this.amount = parseFloat(options.amount);
+		}
+	}
+};
+
+ilib.Measurement.Temperature.prototype = new ilib.Measurement({});
+ilib.Measurement.Temperature.prototype.parent = ilib.Measurement;
+ilib.Measurement.Temperature.prototype.constructor = ilib.Measurement.Temperature;
+
+/**
+ * @inheritDoc
+ */
+ilib.Measurement.Temperature.prototype.getMeasure = function() {
+	return "temperature";
+};
+
+ilib.Measurement.Temperature.aliases = {
+	"Celsius": "celsius",
+	"celsius": "celsius",
+	"C": "celsius",
+	"centegrade": "celsius",
+	"Centegrade": "celsius",
+	"centigrade": "celsius",
+	"Centigrade": "celsius",
+	"fahrenheit": "fahrenheit",
+	"Fahrenheit": "fahrenheit",
+	"F": "fahrenheit",
+	"kelvin": "kelvin",
+	"K": "kelvin",
+	"Kelvin": "kelvin",
+    "°F": "fahrenheit",
+    "℉" : "fahrenheit",
+    "℃": "celsius",
+    "°C": "celsius"
+};
+
+/**
+ * Convert a temperature to another measure.
+ * @static
+ * @param to {string} unit to convert to
+ * @param from {string} unit to convert from
+ * @param temperature {number} amount to be convert
+ * @returns {number|undefined} the converted amount
+ */
+ilib.Measurement.Temperature.convert = function(to, from, temperature) {
+	var result = 0;
+	from = ilib.Measurement.Temperature.aliases[from] || from;
+	to = ilib.Measurement.Temperature.aliases[to] || to;
+
+	if (from === "celsius") {
+		if (to === "fahrenheit") {
+			result = ((temperature * 9 / 5) + 32);
+		} else if (to === "kelvin") {
+			result = (temperature + 273.15);
+		}
+	} else if (from === "fahrenheit") {
+		if (to === "celsius") {
+			result = ((5 / 9 * (temperature - 32)));
+		} else if (to === "kelvin") {
+			result = ((temperature + 459.67) * 5 / 9);
+		}
+	} else if (from === "kelvin") {
+		if (to === "celsius") {
+			result = (temperature - 273.15);
+		} else if (to === "fahrenheit") {
+			result = ((temperature * 9 / 5) - 459.67);
+		}
+	}
+	
+	return result;
+};
+
+ilib.Measurement.Temperature.prototype.localize = function(locale) {
+    return new ilib.Measurement.Temperature({
+        unit: this.unit,
+        amount: this.amount
+    });
+};
+
+/**
+ * @inheritDoc
+ * @param {string=} measurementsystem
+ * @return {ilib.Measurement}
+ */
+ilib.Measurement.Temperature.prototype.scale = function(measurementsystem) {
+    return new ilib.Measurement.Temperature({
+        unit: this.unit,
+        amount: this.amount
+    }); 
+};
+
+/**
+ * @private
+ * @static
+ */
+ilib.Measurement.Temperature.getMeasures = function () {
+	return ["celsius", "kelvin", "fahrenheit"];
+};
+
+//register with the factory method
+ilib.Measurement._constructors["temperature"] = ilib.Measurement.Temperature;
+
+/*
+ * Unknown.js - Dummy unit conversions for unknown types
+ * 
+ * Copyright © 2014, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+!depends 
+ilibglobal.js 
+*/
+
+/**
+ * Create a new unknown measurement.
+ * 
+ * @class
+ * @constructor
+ * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
+ * the construction of this instance
+ */
+ilib.Measurement.Unknown = function (options) {
+	if (options) {
+		this.unit = options.unit;
+		this.amount = options.amount;
+	}
+};
+
+ilib.Measurement.Unknown.prototype = new ilib.Measurement({});
+ilib.Measurement.Unknown.prototype.parent = ilib.Measurement;
+ilib.Measurement.Unknown.prototype.constructor = ilib.Measurement.Unknown;
+
+ilib.Measurement.Unknown.aliases = {
+	"unknown":"unknown"
+};
+
+
+/**
+ * @inheritDoc
+ */
+ilib.Measurement.Unknown.prototype.getMeasure = function() {
+	return "unknown";
+};
+
+/**
+ * Convert the current Unknown to another measure.
+ * 
+ * @inheritDoc
+ */
+ilib.Measurement.Unknown.prototype.convert = function(to) {
+	return undefined;
+};
+
+/**
+ * Convert a unknown to another measure.
+ * @static
+ * @param {string} to unit to convert to
+ * @param {string} from unit to convert from
+ * @param {number} unknown amount to be convert
+ * @returns {number|undefined} the converted amount
+ */
+ilib.Measurement.Unknown.convert = function(to, from, unknown) {
+    return undefined;
+};
+
+ilib.Measurement.Unknown.prototype.localize = function(locale) {
+    return new ilib.Measurement.Unknown({
+        unit: this.unit,
+        amount: this.amount
+    });
+};
+/**
+ * @inheritDoc
+ * @param {string=} measurementsystem
+ * @return {ilib.Measurement}
+ */
+ilib.Measurement.Unknown.prototype.scale = function(measurementsystem) {
+    return new ilib.Measurement.Unknown({
+        unit: this.unit,
+        amount: this.amount
+    }); 
+};
+
+/**
+ * @private
+ * @static
+ */
+ilib.Measurement.Unknown.getMeasures = function () {
+	return [];
+};
+
+//register with the factory method
+ilib.Measurement._constructors["unknown"] = ilib.Measurement.Unknown;
+
+
+/*
+ * Time.js - Unit conversions for Times/times
+ * 
+ * Copyright © 2014, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+!depends 
+ilibglobal.js 
+*/
+
+/**
+ * Create a new time measurement.
+ * 
+ * @class
+ * @constructor
+ * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
+ * the construction of this instance
+ */
+ilib.Measurement.Time = function (options) {
+	this.unit = "ns";
+	this.amount = 0;
+	this.aliases = ilib.Measurement.Time.aliases; // share this table in all instances
+	
+	if (options) {
+		if (typeof(options.unit) !== 'undefined') {
+			this.originalUnit = options.unit;
+			this.unit = this.aliases[options.unit] || options.unit;
+		}
+		
+		if (typeof(options.amount) === 'object') {
+			if (options.amount.getMeasure() === "time") {
+				this.amount = ilib.Measurement.Time.convert(this.unit, options.amount.getUnit(), options.amount.getAmount());
+			} else {
+				throw "Cannot convert units " + options.amount.unit + " to a time";
+			}
+		} else if (typeof(options.amount) !== 'undefined') {
+			this.amount = parseFloat(options.amount);
+		}
+	}
+	
+	if (typeof(ilib.Measurement.Time.ratios[this.unit]) === 'undefined') {
+		throw "Unknown unit: " + options.unit;
+	}
+};
+
+ilib.Measurement.Time.ratios = {
+	/*              index  nsec        msec        mlsec       sec        min          hour          day           week         month        year         decade        century    */           
+	"nanosecond":   [ 1,   1,          0.001,      1e-6,       1e-9,      1.6667e-11,  2.7778e-13,   1.1574e-14,   1.6534e-15,  3.8027e-16,  3.1689e-17,  3.1689e-18,   3.1689e-19  ],  
+	"microsecond":  [ 2,   1000,       1,          0.001,      1e-6,      1.6667e-8,   2.7778e-10,   1.1574e-11,   1.6534e-12,  3.8027e-13,  3.1689e-14,  3.1689e-15,   3.1689e-16  ],  
+	"millisecond":  [ 3,   1e+6,       1000,       1,          0.001,     1.6667e-5,   2.7778e-7,    1.1574e-8,    1.6534e-9,   3.8027e-10,  3.1689e-11,  3.1689e-12,   3.1689e-13  ],
+	"second":       [ 4,   1e+9,       1e+6,       1000,       1,         0.0166667,   0.000277778,  1.1574e-5,    1.6534e-6,   3.8027e-7,   3.1689e-8,   3.1689e-9,    3.1689e-10  ],
+	"minute":       [ 5,   6e+10,      6e+7,       60000,      60,        1,           0.0166667,    0.000694444,  9.9206e-5,   2.2816e-5,   1.9013e-6,   1.9013e-7,    1.9013e-8   ],
+        "hour":         [ 6,   3.6e+12,    3.6e+9,     3.6e+6,     3600,      60,          1,            0.0416667,    0.00595238,  0.00136895,  0.00011408,  1.1408e-5,    1.1408e-6   ],
+        "day":          [ 7,   8.64e+13,   8.64e+10,   8.64e+7,    86400,     1440,        24,           1,            0.142857,    0.0328549,   0.00273791,  0.000273791,  2.7379e-5   ],
+        "week":         [ 8,   6.048e+14,  6.048e+11,  6.048e+8,   604800,    10080,       168,          7,            1,           0.229984,    0.0191654,   0.00191654,   0.000191654 ],
+        "month":        [ 9,   2.63e+15,   2.63e+12,   2.63e+9,    2.63e+6,   43829.1,     730.484,      30.4368,      4.34812,     1,           0.0833333,   0.00833333,   0.000833333 ],
+        "year":         [ 10,  3.156e+16,  3.156e+13,  3.156e+10,  3.156e+7,  525949,      8765.81,      365.242,      52.1775,     12,          1,           0.1,          0.01        ],
+        "decade":       [ 11,  3.156e+17,  3.156e+14,  3.156e+11,  3.156e+8,  5.259e+6,    87658.1,      3652.42,      521.775,     120,         10,          1,            0.1         ],
+        "century":      [ 12,  3.156e+18,  3.156e+18,  3.156e+12,  3.156e+9,  5.259e+7,    876581,       36524.2,      5217.75,     1200,        100,         10,           1           ]
+};
+
+ilib.Measurement.Time.prototype = new ilib.Measurement({});
+ilib.Measurement.Time.prototype.parent = ilib.Measurement;
+ilib.Measurement.Time.prototype.constructor = ilib.Measurement.Time;
+
+/**
+ * @inheritDoc
+ */
+ilib.Measurement.Time.prototype.getMeasure = function() {
+	return "time";
+};
+
+/**
+ * Convert the current time to another measure.
+ * 
+ * @inheritDoc
+ */
+ilib.Measurement.Time.prototype.convert = function(to) {
+	if (!to || typeof(ilib.Measurement.Time.ratios[this.normalizeUnits(to)]) === 'undefined') {
+		return undefined;
+	}
+	return new ilib.Measurement({
+		unit: to,
+		amount: this
+	});
+};
+
+ilib.Measurement.Time.aliases = {
+    "ns":"nanosecond",
+    "NS":"nanosecond",
+    "nS":"nanosecond",
+    "Ns":"nanosecond",
+    "Nanosecond":"nanosecond",
+    "Nanoseconds":"nanosecond",
+    "nanosecond":"nanosecond",
+    "nanoseconds":"nanosecond",
+    "NanoSecond":"nanosecond",
+    "NanoSeconds":"nanosecond",
+    "μs":"microsecond",
+    "μS":"microsecond",
+    "microsecond":"microsecond",
+    "microseconds":"microsecond",
+    "Microsecond":"microsecond",
+    "Microseconds":"microsecond",
+    "MicroSecond":"microsecond",
+    "MicroSeconds":"microsecond",
+    "ms":"millisecond",
+    "MS":"millisecond",
+    "mS":"millisecond",
+    "Ms":"millisecond",
+    "millisecond":"millisecond",
+    "milliseconds":"millisecond",
+    "Millisecond":"millisecond",
+    "Milliseconds":"millisecond",
+    "MilliSecond":"millisecond",
+    "MilliSeconds":"millisecond",
+    "s":"second",
+    "S":"second",
+    "sec":"second",
+    "second":"second",
+    "seconds":"second",
+    "Second":"second",
+    "Seconds":"second",
+    "min":"minute",
+    "Min":"minute",
+    "minute":"minute",
+    "minutes":"minute",
+    "Minute":"minute",
+    "Minutes":"minute",
+    "h":"hour",
+    "H":"hour",
+    "hr":"hour",
+    "Hr":"hour",
+    "hR":"hour",
+    "HR":"hour",
+    "hour":"hour",
+    "hours":"hour",
+    "Hour":"hour",
+    "Hours":"hour",
+    "Hrs":"hour",
+    "hrs":"hour",
+    "day":"day",
+    "days":"day",
+    "Day":"day",
+    "Days":"day",
+    "week":"week",
+    "weeks":"week",
+    "Week":"week",
+    "Weeks":"week",
+    "month":"month",
+    "Month":"month",
+    "months":"month",
+    "Months":"month",
+    "year":"year",
+    "years":"year",
+    "Year":"year",
+    "Years":"year",
+    "yr":"year",
+    "Yr":"year",
+    "yrs":"year",
+    "Yrs":"year",
+    "decade":"decade",
+    "decades":"decade",
+    "Decade":"decade",
+    "Decades":"decade",
+    "century":"century",
+    "centuries":"century",
+    "Century":"century",
+    "Centuries":"century"
+};
+
+/**
+ * Convert a time to another measure.
+ * @static
+ * @param to {string} unit to convert to
+ * @param from {string} unit to convert from
+ * @param time {number} amount to be convert
+ * @returns {number|undefined} the converted amount
+ */
+ilib.Measurement.Time.convert = function(to, from, time) {
+    from = ilib.Measurement.Time.aliases[from] || from;
+    to = ilib.Measurement.Time.aliases[to] || to;
+    var fromRow = ilib.Measurement.Time.ratios[from];
+    var toRow = ilib.Measurement.Time.ratios[to];
+    if (typeof(from) === 'undefined' || typeof(to) === 'undefined') {
+        return undefined;
+    }	
+    return time * fromRow[toRow[0]];
+};
+
+ilib.Measurement.Time.prototype.localize = function(locale) {
+    return new ilib.Measurement.Time({
+        unit: this.unit,
+        amount: this.amount
+    });
+};
+
+/**
+ * @inheritDoc
+ * @param {string=} measurementsystem
+ * @return {ilib.Measurement}
+ */
+ilib.Measurement.Time.prototype.scale = function(measurementsystem) {
+
+    var fromRow = ilib.Measurement.Time.ratios[this.unit];
+    var time = this.amount;
+    var munit = this.unit;
+    var i=1;
+
+    for (var m in ilib.Measurement.Time.ratios) {
+        var tmp = this.amount * fromRow[i];
+        if (tmp < 1) break;
+        time = tmp;
+        munit = m;
+        ++i
+    }
+
+    return new ilib.Measurement.Time({
+        unit: munit,
+        amount: time
+    });
+};
+/**
+ * @private
+ * @static
+ */
+ilib.Measurement.Time.getMeasures = function () {
+	var ret = [];
+	for (var m in ilib.Measurement.Time.ratios) {
+		ret.push(m);
+	}
+	return ret;
+};
+
+//register with the factory method
+ilib.Measurement._constructors["time"] = ilib.Measurement.Time;
+
+/*
+ * Mass.js - Unit conversions for Mass/mass
+ * 
+ * Copyright © 2014, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+!depends 
+ilibglobal.js 
+*/
+
+/**
+ * Create a new mass measurement.
+ * 
+ * @class
+ * @constructor
+ * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
+ * the construction of this instance
+ */
+ilib.Measurement.Mass = function (options) {
+	this.unit = "ns";
+	this.amount = 0;
+	this.aliases = ilib.Measurement.Mass.aliases; // share this table in all instances
+	
+	if (options) {
+		if (typeof(options.unit) !== 'undefined') {
+			this.originalUnit = options.unit;
+			this.unit = this.aliases[options.unit] || options.unit;
+		}
+		
+		if (typeof(options.amount) === 'object') {
+			if (options.amount.getMeasure() === "mass") {
+				this.amount = ilib.Measurement.Mass.convert(this.unit, options.amount.getUnit(), options.amount.getAmount());
+			} else {
+				throw "Cannot convert units " + options.amount.unit + " to a mass";
+			}
+		} else if (typeof(options.amount) !== 'undefined') {
+			this.amount = parseFloat(options.amount);
+		}
+	}
+	
+	if (typeof(ilib.Measurement.Mass.ratios[this.unit]) === 'undefined') {
+		throw "Unknown unit: " + options.unit;
+	}
+};
+
+ilib.Measurement.Mass.ratios = {
+	/*             index  µg          mg         g          oz          lp           kg          st            sh ton       mt ton        ln ton      */           
+	"microgram":   [ 1,   1,          0.001,     1e-6,      3.5274e-8,  2.2046e-9,   1e-9,       1.5747e-10,   1.1023e-12,  1e-12,        9.8421e-13   ],  
+	"milligram":   [ 2,   1000,       1,         0.001,     3.5274e-5,  2.2046e-6,   1e-6,       1.5747e-7,    1.1023e-9,   1e-9,         9.8421e-10   ],  
+	"gram":        [ 3,   1e+6,       1000,      1,         0.035274,   0.00220462,  0.001,      0.000157473,  1.1023e-6,   1e-6,         9.8421e-7    ],
+	"ounce":       [ 4,   2.835e+7,   28349.5,   28.3495,   1,          0.0625,      0.0283495,  0.00446429,   3.125e-5,    2.835e-5,     2.7902e-5    ],
+	"pound":       [ 5,   4.536e+8,   453592,    453.592,   16,         1,           0.453592,   0.0714286,    0.0005,      0.000453592,  0.000446429  ],
+        "kilogram":    [ 6,   1e+9,       1e+6,      1000,      35.274,     2.20462,     1,          0.157473,     0.00110231,  0.001,        0.000984207  ],
+        "stone":       [ 7,   6.35e+9,    6.35e+6,   6350.29,   224,        14,          6.35029,    1,            0.007,       0.00635029,   0.00625      ],
+        "short ton":   [ 8,   9.072e+11,  9.072e+8,  907185,    32000,      2000,        907.185,    142.857,      1,           0.907185,     0.892857     ],
+        "metric ton":  [ 9,   1e+12,      1e+9,      1e+6,      35274,      2204.62,     1000,       157.473,      1.10231,     1,            0.984207     ],
+        "long ton":    [ 10,  1.016e+12,  1.016e+9,  1.016e+6,  35840,      2240,        1016.05,    160,          1.12,        1.01605,      1            ]
+};
+
+ilib.Measurement.Mass.metricSystem      = {"microgram":1,"milligram":2,"gram":3,"kilogram":6,"metric ton":9};
+ilib.Measurement.Mass.imperialSystem    = {"ounce":4,"pound":5,"stone":7,"long ton":10};
+ilib.Measurement.Mass.uscustomarySystem = {"ounce":4,"pound":5,"short ton":8};
+
+ilib.Measurement.Mass.metricToUScustomary =   {"microgram":"ounce","milligram":"ounce","gram":"ounce","kilogram":"pound","metric ton":"long ton"};
+ilib.Measurement.Mass.metricToImperial    =   {"microgram":"ounce","milligram":"ounce","gram":"ounce","kilogram":"pound","metric ton":"short ton"};
+
+ilib.Measurement.Mass.imperialToMetric      = {"ounce":"gram","pound":"kilogram","stone":"kilogram","short ton":"metric ton"};
+ilib.Measurement.Mass.imperialToUScustomary = {"ounce":"ounce","pound":"pound","stone":"stone","short ton":"long ton"};
+
+
+ilib.Measurement.Mass.uScustomaryToImperial   = {"ounce":"ounce","pound":"pound","stone":"stone","long ton":"short ton"};
+ilib.Measurement.Mass.uScustomarylToMetric    = {"ounce":"gram","pound":"kilogram","stone":"kilogram","long ton":"metric ton"};
+
+
+ilib.Measurement.Mass.prototype = new ilib.Measurement({});
+ilib.Measurement.Mass.prototype.parent = ilib.Measurement;
+ilib.Measurement.Mass.prototype.constructor = ilib.Measurement.Mass;
+
+
+ilib.Measurement.Mass.prototype.localize = function(locale) {
+    var to;
+    if (locale === "en-US") {
+        to = ilib.Measurement.Mass.metricToUScustomary[this.unit] || ilib.Measurement.Mass.imperialToUScustomary[this.unit] || this.unit;
+    } else if (locale === "en-UK") {
+        to = ilib.Measurement.Mass.metricToImperial[this.unit] || ilib.Measurement.Mass.uScustomaryToImperial[this.unit] || this.unit;
+    }
+    else
+        to = ilib.Measurement.Mass.uScustomarylToMetric[this.unit] || ilib.Measurement.Mass.imperialToUScustomary[this.unit] || this.unit;
+
+    return new ilib.Measurement.Mass({
+        unit: to,
+        amount: this
+    });
+};
+
+/**
+ * @inheritDoc
+ */
+ilib.Measurement.Mass.prototype.getMeasure = function() {
+	return "mass";
+};
+
+/**
+ * Convert the current mass to another measure.
+ * 
+ * @inheritDoc
+ */
+ilib.Measurement.Mass.prototype.convert = function(to) {
+	if (!to || typeof(ilib.Measurement.Mass.ratios[this.normalizeUnits(to)]) === 'undefined') {
+		return undefined;
+	}
+	return new ilib.Measurement({
+		unit: to,
+		amount: this
+	});
+};
+
+ilib.Measurement.Mass.aliases = {
+    "µg":"microgram",
+    "microgram":"microgram",
+    "mcg":"microgram",  
+    "milligram":"milligram",
+    "mg":"milligram",
+    "milligrams":"milligram",
+    "Milligram":"milligram",
+    "Milligrams":"milligram",
+    "MilliGram":"milligram",
+    "MilliGrams":"milligram",
+    "g":"gram",
+    "gram":"gram",
+    "grams":"gram",
+    "Gram":"gram",
+    "Grams":"gram",
+    "ounce":"ounce",
+    "oz":"ounce",
+    "Ounce":"ounce",
+    "℥":"ounce",
+    "pound":"pound",
+    "poundm":"pound",
+    "℔":"pound",
+    "lb":"pound",
+    "pounds":"pound",
+    "Pound":"pound",
+    "Pounds":"pound",
+    "kilogram":"kilogram",
+    "kg":"kilogram",
+    "kilograms":"kilogram",
+    "kilo grams":"kilogram",
+    "kilo gram":"kilogram",
+    "Kilogram":"kilogram",    
+    "Kilograms":"kilogram",
+    "KiloGram":"kilogram",
+    "KiloGrams":"kilogram",
+    "Kilo gram":"kilogram",
+    "Kilo grams":"kilogram",
+    "Kilo Gram":"kilogram",
+    "Kilo Grams":"kilogram",
+    "stone":"stone",
+    "st":"stone",
+    "stones":"stone",
+    "Stone":"stone",
+    "short ton":"short ton",
+    "Short ton":"short ton",
+    "Short Ton":"short ton",
+    "metric ton":"metric ton",
+    "metricton":"metric ton",
+    "t":"metric ton",
+    "tonne":"metric ton",
+    "Tonne":"metric ton",
+    "Metric Ton":"metric ton",
+    "MetricTon":"metric ton",    
+    "long ton":"long ton",
+    "longton":"long ton",
+    "Longton":"long ton",
+    "Long ton":"long ton",
+    "Long Ton":"long ton",
+    "ton":"long ton",
+    "Ton":"long ton"
+};
+
+/**
+ * Convert a mass to another measure.
+ * @static
+ * @param to {string} unit to convert to
+ * @param from {string} unit to convert from
+ * @param mass {number} amount to be convert
+ * @returns {number|undefined} the converted amount
+ */
+ilib.Measurement.Mass.convert = function(to, from, mass) {
+    from = ilib.Measurement.Mass.aliases[from] || from;
+    to = ilib.Measurement.Mass.aliases[to] || to;
+    var fromRow = ilib.Measurement.Mass.ratios[from];
+    var toRow = ilib.Measurement.Mass.ratios[to];
+    if (typeof(from) === 'undefined' || typeof(to) === 'undefined') {
+        return undefined;
+    }	
+    return mass * fromRow[toRow[0]];    
+};
+
+/**
+ * @inheritDoc
+ * @param {string=} measurementsystem
+ * @return {ilib.Measurement}
+ */
+ilib.Measurement.Mass.prototype.scale = function(measurementsystem) {
+    var mSystem;    
+    if (measurementsystem === "metric" || (typeof(measurementsystem) === 'undefined' 
+            && typeof(ilib.Measurement.Mass.metricSystem[this.unit]) !== 'undefined')) {
+        mSystem = ilib.Measurement.Mass.metricSystem;
+    } else if (measurementsystem === "imperial" || (typeof(measurementsystem) === 'undefined' 
+            && typeof(ilib.Measurement.Mass.imperialSystem[this.unit]) !== 'undefined')) {
+        mSystem = ilib.Measurement.Mass.imperialSystem;
+    } else if (measurementsystem === "uscustomary" || (typeof(measurementsystem) === 'undefined' 
+            && typeof(ilib.Measurement.Mass.uscustomarySystem[this.unit]) !== 'undefined')) {
+        mSystem = ilib.Measurement.Mass.uscustomarySystem;
+    } else {
+        return new ilib.Measurement.Mass({
+			unit: this.unit,
+			amount: this.amount
+		});
+    }    
+    
+    var mass = this.amount;
+    var munit = this.amount;
+    var fromRow = ilib.Measurement.Mass.ratios[this.unit];
+    
+    for (var m in mSystem) {
+        var tmp = this.amount * fromRow[mSystem[m]];
+        if (tmp < 1) break;
+        mass = tmp;
+        munit = m;
+    }
+    
+    return new ilib.Measurement.Mass({
+		unit: munit,
+		amount: mass
+    });
+};
+
+/**
+ * @private
+ * @static
+ */
+ilib.Measurement.Mass.getMeasures = function () {
+	var ret = [];
+	for (var m in ilib.Measurement.Mass.ratios) {
+		ret.push(m);
+	}
+	return ret;
+};
+
+//register with the factory method
+ilib.Measurement._constructors["mass"] = ilib.Measurement.Mass;
+
+/*
+ * area.js - Unit conversions for Area
+ * 
+ * Copyright © 2014, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+!depends 
+ilibglobal.js 
+*/
+
+/**
+ * Create a new area measurement.
+ * 
+ * @class
+ * @constructor
+ * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
+ * the construction of this instance
+ */
+ilib.Measurement.Area = function (options) {
+	this.unit = "square km";
+	this.amount = 0;
+	this.aliases = ilib.Measurement.Area.aliases; // share this table in all instances
+	
+	if (options) {
+		if (typeof(options.unit) !== 'undefined') {
+			this.originalUnit = options.unit;
+			this.unit = this.aliases[options.unit] || options.unit;
+		}
+		
+		if (typeof(options.amount) === 'object') {
+			if (options.amount.getMeasure() === "area") {
+				this.amount = ilib.Measurement.Area.convert(this.unit, options.amount.getUnit(), options.amount.getAmount());
+			} else {
+				throw "Cannot convert unit " + options.amount.unit + " to area";
+			}
+		} else if (typeof(options.amount) !== 'undefined') {
+			this.amount = parseFloat(options.amount);
+		}
+	}
+	
+	if (typeof(ilib.Measurement.Area.ratios[this.unit]) === 'undefined') {
+		throw "Unknown unit: " + options.unit;
+	}
+};
+
+ilib.Measurement.Area.ratios = {
+    /*               index		square cm,		square meter,   hectare,   	square km, 	, square inch 	square foot, 		square yard, 	  	  		acre,			square mile			        */
+    "square centimeter":[1,   	1,				0.0001,			1e-8,	    1e-10,        0.15500031,	0.00107639104,		0.000119599005,			2.47105381e-8,		3.86102159e-11 		],
+    "square meter": 	[2,   	10000,			1,              1e-4,       1e-6,         1550,    	 	10.7639,    	  	1.19599,   				0.000247105,		3.861e-7     	    ],
+    "hectare":      	[3,	 	100000000,  	10000,          1,          0.01,         1.55e+7, 	  	107639,     	 	11959.9,   				2.47105	,			0.00386102    	    ],
+    "square km":    	[4,	  	10000000000, 	1e+6,          	100,        1,	          1.55e+9, 	  	1.076e+7,   	 	1.196e+6,  				247.105 ,   		0.386102     	    ],
+    "square inch":  	[5,	  	6.4516,			0.00064516,     6.4516e-8,  6.4516e-10,   1,			0.000771605,	  	0.0007716051, 			1.5942e-7,			2.491e-10    	    ],
+    "square foot":  	[6,		929.0304,		0.092903,       9.2903e-6,  9.2903e-8,    144,			1,          	  	0.111111,  				2.2957e-5,			3.587e-8    		],
+    "square yard":  	[7,		8361.2736,		0.836127,       8.3613e-5,  8.3613e-7,    1296,    	  	9,          	  	1,         				0.000206612,		3.2283e-7    	    ],
+    "acre":         	[8,		40468564.2,		4046.86,        0.404686,   0.00404686,   6.273e+6,	  	43560,      	  	4840,      				1,		    		0.0015625    	    ],
+    "square mile":  	[9,	   	2.58998811e+10,	2.59e+6,        258.999,    2.58999,      4.014e+9,	 	2.788e+7,   	  	3.098e+6,  				640,     			1   	     		]
+}
+
+ilib.Measurement.Area.prototype = new ilib.Measurement({});
+ilib.Measurement.Area.prototype.parent = ilib.Measurement;
+ilib.Measurement.Area.prototype.constructor = ilib.Measurement.Area;
+
+/**
+ * @inheritDoc
+ */ 
+ilib.Measurement.Area.prototype.getMeasure = function() {
+	return "area";
+}; 
+
+/**
+ * Convert the current Area to another measure.
+ * 
+ * @inheritDoc
+ */
+ilib.Measurement.Area.prototype.convert = function(to) {
+	if (!to || typeof(ilib.Measurement.Area.ratios[this.normalizeUnits(to)]) === 'undefined') {
+		return undefined;
+	}
+	return new ilib.Measurement({
+		unit: to, 
+		amount: this
+	});
+};
+
+ilib.Measurement.Area.aliases = {
+    "square centimeter":"square centimeter",
+    "square cm":"square centimeter",
+    "sq cm":"square centimeter",
+    "Square Cm":"square centimeter",
+    "square Centimeters":"square centimeter",
+    "square Centimeter":"square centimeter",
+    "square Centimetre":"square centimeter",
+    "square Centimetres":"square centimeter",
+    "square centimeters":"square centimeter",
+    "Square km": "square km",
+	"Square kilometre":"square km",
+	"square kilometer":"square km",
+	"square kilometre":"square km",
+	"square kilometers":"square km",
+	"square kilometres":"square km",
+        "square km":"square km",
+	"sq km":"square km",
+	"km2":"square km",
+	"Hectare":"hectare",
+	"hectare":"hectare",
+	"ha":"hectare",
+	"Square meter": "square meter",
+	"Square meters":"square meter",
+	"square meter": "square meter",
+	"square meters":"square meter",
+	"Square metre": "square meter",
+	"Square metres":"square meter",
+	"square metres": "square meter",
+	"square metres":"square meter",
+	"sqm":"square meter",
+	"m2": "square meter",
+	"Square mile":"square mile",
+	"Square miles":"square mile",
+	"square mile":"square mile",
+	"square miles":"square mile",
+	"square mi":"square mile",
+	"Square mi":"square mile",
+	"sq mi":"square mile",
+	"mi2":"square mile",
+	"Acre": "acre",
+	"acre": "acre",
+	"Acres":"acre",
+	"acres":"acre",
+	"Square yard": "square yard",
+	"Square yards":"square yard",
+	"square yard": "square yard",
+	"square yards":"square yard",
+	"yd2":"square yard",
+	"Square foot": "square foot",
+	"square foot": "square foot",
+	"Square feet": "square foot",
+	"Square feet": "square foot",
+	"sq ft":"square foot",
+	"ft2":"square foot",
+	"Square inch":"square inch",
+	"square inch":"square inch",
+	"Square inches":"square inch",
+	"square inches":"square inch",
+	"in2":"square inch"
+};
+
+/**
+ * Convert a Area to another measure.
+ * @static
+ * @param to {string} unit to convert to
+ * @param from {string} unit to convert from
+ * @param area {number} amount to be convert
+ * @returns {number|undefined} the converted amount
+ */
+ilib.Measurement.Area.convert = function(to, from, area) {
+    from = ilib.Measurement.Area.aliases[from] || from;
+    to = ilib.Measurement.Area.aliases[to] || to;
+	var fromRow = ilib.Measurement.Area.ratios[from];
+	var toRow = ilib.Measurement.Area.ratios[to];
+	if (typeof(from) === 'undefined' || typeof(to) === 'undefined') {
+		return undefined;
+	}
+	return area* fromRow[toRow[0]];
+};
+
+/**
+ * @private
+ * @static
+ */
+ilib.Measurement.Area.getMeasures = function () {
+	var ret = [];
+	for (var m in ilib.Measurement.Area.ratios) {
+		ret.push(m);
+	}
+	return ret;
+};
+
+ilib.Measurement.Area.metricSystem      = {"square centimeter":1,"square meter":2,"hectare":3,"square km":4};
+ilib.Measurement.Area.imperialSystem    = {"square inch":5,"square foot":6,"square yard":7,"acre":8,"square mile":9};
+ilib.Measurement.Area.uscustomarySystem = {"square inch":5,"square foot":6,"square yard":7,"acre":8,"square mile":9};
+
+ilib.Measurement.Area.metricToUScustomary = {"square centimeter":"square inch","square meter":"square yard","hectare":"acre","square km":"square mile"};
+ilib.Measurement.Area.usCustomaryToMetric = {"square inch":"square centimeter","square foot":"square meter","square yard":"square meter","acre":"hectare","square mile":"square km"};
+
+
+/**
+ * @inheritDoc
+ * @param {string=} measurementsystem
+ * @return {ilib.Measurement}
+ */
+ilib.Measurement.Area.prototype.scale = function(measurementsystem) {
+    var fromRow = ilib.Measurement.Area.ratios[this.unit];
+    var mSystem;
+
+    if (measurementsystem === "metric" || (typeof(measurementsystem) === 'undefined'
+        && typeof(ilib.Measurement.Area.metricSystem[this.unit]) !== 'undefined')) {
+        mSystem = ilib.Measurement.Area.metricSystem;
+    }
+
+    else  if (measurementsystem === "uscustomary" || (typeof(measurementsystem) === 'undefined'
+        && typeof(ilib.Measurement.Area.metricSystem[this.unit]) !== 'undefined')) {
+        mSystem = ilib.Measurement.Area.uscustomarySystem;
+    }
+
+    else if (measurementsystem === "imperial" || (typeof(measurementsystem) === 'undefined'
+        && typeof(ilib.Measurement.Area.metricSystem[this.unit]) !== 'undefined')) {
+        mSystem = ilib.Measurement.Area.imperialSystem;
+    }
+
+    var area = this.amount;
+    var munit = this.unit;
+
+    for (var m in mSystem) {
+        var tmp = this.amount * fromRow[mSystem[m]];
+        if (tmp < 1) break;
+        area = tmp;
+        munit = m;
+    }
+
+    return new ilib.Measurement.Area({
+        unit: munit,
+        amount: area
+    });
+};
+
+ilib.Measurement.Area.prototype.localize = function(locale) {
+    var to;
+    if (locale === "en-US" || locale === "en-UK") {
+        to = ilib.Measurement.Area.metricToUScustomary[this.unit] || this.unit;
+    } else {
+        to = ilib.Measurement.Area.usCustomaryToMetric[this.unit] || this.unit;
+    }
+    return new ilib.Measurement.Area({
+        unit: to,
+        amount: this
+    });
+};
+
+
+//register with the factory method
+ilib.Measurement._constructors["area"] = ilib.Measurement.Area;
+
+/*
+ * fuelconsumption.js - Unit conversions for FuelConsumption
+ *
+ * Copyright © 2014, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/*
+!depends 
+ilibglobal.js 
+*/
+/**
+ * Create a new fuelconsumption measurement.
+ *
+ * @class
+ * @constructor
+ * @param options {{unit:string,amount:number|string|undefined}} Options controlling
+ * the construction of this instance
+ */
+ilib.Measurement.FuelConsumption = function(options) {
+    this.unit = "km/liter";
+    this.amount = 0;
+    this.aliases = ilib.Measurement.FuelConsumption.aliases; // share this table in all instances
+
+    if (options) {
+        if (typeof(options.unit) !== 'undefined') {
+            this.originalUnit = options.unit;
+            this.unit = this.aliases[options.unit] || options.unit;
+        }
+
+        if (typeof(options.amount) === 'object') {
+            if (options.amount.getMeasure() === "fuelconsumption") {
+                this.amount = ilib.Measurement.FuelConsumption.convert(this.unit, options.amount.getUnit(), options.amount.getAmount());
+            } else {
+                throw "Cannot convert unit " + options.amount.unit + " to fuelconsumption";
+            }
+        } else if (typeof(options.amount) !== 'undefined') {
+            this.amount = parseFloat(options.amount);
+        }
+    }
+};
+
+ilib.Measurement.FuelConsumption.ratios = ["km/liter", "liter/100km", "mpg", "mpg(imp)"];
+
+ilib.Measurement.FuelConsumption.prototype = new ilib.Measurement({});
+ilib.Measurement.FuelConsumption.prototype.parent = ilib.Measurement;
+ilib.Measurement.FuelConsumption.prototype.constructor = ilib.Measurement.FuelConsumption;
+
+/**
+ * @inheritDoc
+ */
+ilib.Measurement.FuelConsumption.prototype.getMeasure = function() {
+    return "fuelconsumption";
+};
+
+/**
+ * Convert the current FuelConsumption to another measure.
+ *
+ * @inheritDoc
+ */
+ilib.Measurement.FuelConsumption.prototype.convert = function(to) {
+    if (!to || typeof(ilib.Measurement.FuelConsumption.ratios[this.normalizeUnits(to)]) === 'undefined') {
+        return undefined;
+    }
+    return new ilib.Measurement({
+        unit: to,
+        amount: this
+    });
+};
+/*["km/liter", "liter/100km", "mpg", "mpg(imp)"*/
+ilib.Measurement.FuelConsumption.aliases = {
+	"Km/liter": "km/liter",
+	"KM/Liter": "km/liter",
+	"KM/L": "km/liter",
+	"Kilometers Per Liter": "km/liter",
+	"kilometers per liter": "km/liter",
+	"km/l": "km/liter",
+	"Kilometers/Liter": "km/liter",
+	"Kilometer/Liter": "km/liter",
+	"kilometers/liter": "km/liter",
+	"kilometer/liter": "km/liter",
+        "km/liter":"km/liter",
+	"Liter/100km":"liter/100km",
+	"Liters/100km":"liter/100km",
+	"Liter/100kms":"liter/100km",
+	"Liters/100kms":"liter/100km",
+	"liter/100km":"liter/100km",
+	"liters/100kms":"liter/100km",
+	"liters/100km":"liter/100km",
+	"liter/100kms":"liter/100km",
+	"Liter/100KM":"liter/100km",
+	"Liters/100KM":"liter/100km",
+	"L/100km":"liter/100km",
+	"L/100KM":"liter/100km",
+	"l/100KM":"liter/100km",
+	"l/100km":"liter/100km",
+	"l/100kms":"liter/100km",
+	"MPG(US)":"mpg",
+        "USMPG ": "mpg",
+        "mpg":"mpg",
+	"mpgUS":"mpg",
+	"mpg(US)":"mpg",
+	"mpg(us)":"mpg",
+	"mpg-us":"mpg",
+	"mpg Imp":"mpg(imp)",
+	"MPG(imp)":"mpg(imp)",
+	"mpg(imp)":"mpg(imp)",
+	"mpg-imp":"mpg(imp)"
+};
+
+ilib.Measurement.FuelConsumption.metricToUScustomary =   {"km/liter":"mpg","liter/100km":"mpg"};
+ilib.Measurement.FuelConsumption.metricToImperial    =   {"km/liter":"mpg(imp)","liter/100km":"mpg(imp)"};
+
+ilib.Measurement.FuelConsumption.imperialToMetric      = {"mpg(imp)":"km/liter"};
+ilib.Measurement.FuelConsumption.imperialToUScustomary = {"mpg(imp)":"mpg"};
+
+
+ilib.Measurement.FuelConsumption.uScustomaryToImperial   = {"mpg":"mpg(imp)"};
+ilib.Measurement.FuelConsumption.uScustomarylToMetric    = {"mpg":"km/liter"};
+
+
+
+ilib.Measurement.FuelConsumption.prototype.localize = function(locale) {
+    var to;
+    if (locale === "en-US") {
+        to = ilib.Measurement.FuelConsumption.metricToUScustomary[this.unit] || ilib.Measurement.FuelConsumption.imperialToUScustomary[this.unit] || this.unit;
+    } else if (locale === "en-UK") {
+        to = ilib.Measurement.FuelConsumption.metricToImperial[this.unit] || ilib.Measurement.FuelConsumption.uScustomaryToImperial[this.unit] || this.unit;
+    }
+    else
+        to = ilib.Measurement.FuelConsumption.uScustomarylToMetric[this.unit] || ilib.Measurement.FuelConsumption.imperialToUScustomary[this.unit] || this.unit;
+
+    return new ilib.Measurement.FuelConsumption({
+        unit: to,
+        amount: this
+    });
+};
+
+
+/**
+ * Convert a FuelConsumption to another measure.
+ * @static
+ * @param to {string} unit to convert to
+ * @param from {string} unit to convert from
+ * @param fuelConsumption {number} amount to be convert
+ * @returns {number|undefined} the converted amount
+ */
+ilib.Measurement.FuelConsumption.convert = function(to, from, fuelConsumption) {
+    from = ilib.Measurement.FuelConsumption.aliases[from] || from;
+    to = ilib.Measurement.FuelConsumption.aliases[to] || to;
+    var returnValue = 0;
+
+    switch (from) {
+        case "km/liter":
+            switch (to) {
+                case "km/liter":
+                    returnValue = fuelConsumption * 1;
+                    break;
+                case "liter/100km":
+                    returnValue = 100 / fuelConsumption;
+                    break;
+                case "mpg":
+                    returnValue = fuelConsumption * 2.35215;
+                    break;
+                case "mpg(imp)":
+                    returnValue = fuelConsumption * 2.82481;
+                    break;
+            }
+            break;
+        case "liter/100km":
+            switch (to) {
+                case "km/liter":
+                    returnValue = 100 / fuelConsumption;
+                    break;
+                case "liter/100km":
+                    returnValue = fuelConsumption * 1;
+                    break;
+                case "mpg":
+                    returnValue = 235.215 / fuelConsumption;
+                    break;
+                case "mpg(imp)":
+                    returnValue = 282.481 / fuelConsumption;
+                    break;
+            }
+            break;
+        case "mpg":
+            switch (to) {
+                case "km/liter":
+                    returnValue = fuelConsumption * 0.425144;
+                    break;
+                case "liter/100km":
+                    returnValue = 235.215 / fuelConsumption;
+                    break;
+                case "mpg":
+                    returnValue = 1 * fuelConsumption;
+                    break;
+                case "mpg(imp)":
+                    returnValue = 1.20095 * fuelConsumption;
+                    break;
+            }
+            break;
+        case "mpg(imp)":
+            switch (to) {
+                case "km/liter":
+                    returnValue = fuelConsumption * 0.354006;
+                    break;
+                case "liter/100km":
+                    returnValue = 282.481 / fuelConsumption;
+                    break;
+                case "mpg":
+                    returnValue = 0.832674 * fuelConsumption;
+                    break;
+                case "mpg(imp)":
+                    returnValue = 1 * fuelConsumption;
+                    break;
+            }
+            break;
+    }
+    return returnValue;
+};
+
+/**
+ * @inheritDoc
+ * @param {string=} measurementsystem
+ * @return {ilib.Measurement}
+ */
+ilib.Measurement.FuelConsumption.prototype.scale = function(measurementsystem) {
+    return new ilib.Measurement.FuelConsumption({
+        unit: this.unit,
+        amount: this.amount
+    }); 
+};
+
+/**
+ * @private
+ * @static
+ */
+ilib.Measurement.FuelConsumption.getMeasures = function() {
+    var ret = [];
+    ret.push("km/liter");
+    ret.push("liter/100km");
+    ret.push("mpg");
+    ret.push("mpg(imp)");
+    
+    return ret;
+};
+
+//register with the factory method
+ilib.Measurement._constructors["fuelconsumption"] = ilib.Measurement.FuelConsumption;
+
+/*
+ * volume.js - Unit conversions for volume
+ * 
+ * Copyright © 2014, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+!depends 
+ilibglobal.js 
+*/
+
+/**
+ * Create a new Volume measurement.
+ * 
+ * @class
+ * @constructor
+ * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
+ * the construction of this instance
+ */
+ilib.Measurement.Volume = function (options) {
+	this.unit = "cubic meter";
+	this.amount = 0;
+	this.aliases = ilib.Measurement.Volume.aliases; // share this table in all instances
+	
+	if (options) {
+		if (typeof(options.unit) !== 'undefined') {
+			this.originalUnit = options.unit;
+			this.unit = this.aliases[options.unit] || options.unit;
+		}
+		
+		if (typeof(options.amount) === 'object') {
+			if (options.amount.getMeasure() === "volume") {
+				this.amount = ilib.Measurement.Volume.convert(this.unit, options.amount.getUnit(), options.amount.getAmount());
+			} else {
+				throw "Cannot convert unit " + options.amount.unit + " to a volume";
+			}
+		} else if (typeof(options.amount) !== 'undefined') {
+			this.amount = parseFloat(options.amount);
+		}
+	}
+	
+	if (typeof(ilib.Measurement.Volume.ratios[this.unit]) === 'undefined') {
+		throw "Unknown unit: " + options.unit;
+	}
+};
+
+ilib.Measurement.Volume.ratios = {
+    /* 	              index, tsp,  	tbsp,      	cubic inch			 us ounce,    cup,       	pint,       quart,      		gallon,    		cubic foot,  	milliliter   liter,     cubic meter, imperial tsp, 	imperial tbsp,imperial ounce,  	imperial pint, 	imperial quart,	imperial gal, */
+    "tsp" :	       [1,    1,        0.333333,  	0.300781 ,			0.166667, 0.0208333, 	0.0104167,  0.00130208,  		0.00130208, 	0.000174063, 	4.92892,    0.00492892, 4.9289e-6,   0.832674,     	0.277558,      0.173474,    	 0.00867369,     0.00433684,    0.00108421 			],
+    "tbsp":	       [2,    3,        1,         	0.902344 ,			0.5,      0.0625,    	0.0312,     0.015625,    		0.00390625, 	0.00052219,  	14.7868,    0.0147868,  1.4787e-5,   2.49802,      	0.832674,      0.520421,    	 0.0260211,      0.0130105,     0.00325263  		],
+    "cubic inch":      [3,    3.32468,  1.10823,  	1        ,			0.554113, 0.0692641, 	0.034632,   0.017316,    		0.004329,   	0.000578704, 	16.3871,    0.0163871,  1.6387e-5,   2.76837,      	0.92279,       0.576744,    	 0.0288372,      0.0144186,     0.00360465  		],
+    "us ounce":	       [4,    6,        2,         	1.80469 , 			1,        0.125,     	0.0625,     0.0078125,   		0.0078125,  	0.00104438,  	29.5735,    0.0295735,  2.9574e-5,   4.99604,      	1.04084,       1.04084,     	 0.0520421,      0.0260211,     0.00650526  		],
+    "cup":	       [5,    48,     	16,        	14.4375 ,			8,        1,         	0.5,        0.25,        	 	0.0625,     	0.00835503,  	236.588,    0.236588,   0.000236588, 39.9683,      	13.3228,       8.32674,     	 0.416337,       0.208168,      0.0520421   		],
+    "pint":	       [6,    96,       32,        	28.875   ,			16,       2,         	1,          0.5,         		0.125,      	0.0167101,   	473.176,    0.473176,   0.000473176, 79.9367,     	26.6456,       16.6535,     	 0.832674,       0.416337,      0.104084    		],
+    "quart":	       [7,    192,     	64,       	57.75	 , 			32,       4,         	2,          1,           		0.25,       	0.0334201,  	946.353,    0.946353,   0.000946353, 159.873,      	53.2911,       33.307,      	 1.66535,        0.832674,      0.208168    		],
+    "gallon":	       [8,    768,      256,       	231 	  ,			128,      16,        	8,          4,           		1,          	0.133681,    	3785.41,    3.78541,    0.00378541,  639.494,      	213.165,       133.228,     	 6.66139,        3.3307,        0.832674    		],
+    "cubic foot":      [9,    5745.04,  1915.01,   	1728    , 			957.506,  119.688,   	59.8442,    29.9221,     		7.48052,    	1,           	28316.8,    28.3168,    0.0283168,   4783.74,      	1594.58,       996.613,     	 49.8307,        24.9153,       6.22883     		],
+    "milliliter":      [10,   0.202884, 0.067628,  	0.0610237,			0.033814, 0.00422675, 	0.00211338, 0.00105669,   		0.000264172,	3.5315e-5,   	1,         	0.001,      1e-6,        0.168936,     	0.0563121,     0.0351951,   	 0.00175975,     0.000879877,   0.000219969 		],
+    "liter":	       [11,   202.884,  67.628,    	61.0237  ,			33.814,   4.22675,    	2.11338,    1.05669,     		0.264172,   	0.0353147,   	1000,       1,          0.001,       56.3121,      	56.3121,       35.191,      	 1.75975,        0.879877,      0.219969  			],
+    "cubic meter":     [12,   202884,   67628,     	61023.7  ,			33814,    4226.75,  	2113.38,    1056.69,     		264.172,    	35.3147, 		1e+6,       1000,       1,           168936,        56312.1,        35195.1,     	  1759.75,        879.877,       219.969    	  	],
+    "imperial tsp":    [13,   1.20095, 	0.200158,  	0.361223 ,			0.600475, 0.0250198, 	0.0125099,  0.00625495,  		0.00156374, 	0.000209041,  	5.91939,    0.00591939, 5.9194e-6,   1,            	0.333333,      0.208333,    	 0.0104167,      0.00520833,    0.00130208  		],
+    "imperial tbsp":   [14,   3.60285,  1.20095,   	1.08367 , 			0.600475, 0.0750594, 	0.0375297,  0.0187649,   		0.00469121, 	0.000627124, 	17.7582,    0.0177582,  1.7758e-5,   3,            	1,             0.625,       	 0.03125,        0.015625,     0.00390625  		    ],
+    "imperial ounce":  [15,   5.76456,  1.92152,   	1.73387 , 			0.96076,  0.120095,  	0.0600475,  0.0300238,   		0.00750594, 	0.0010034,   	28.4131,    0.0284131,  2.8413e-5,   4.8,          	1.6,           1,           	 0.05,           0.025,         0.00625     		],
+    "imperial pint":   [16,   115.291,  38.4304,   	34.6774 , 			19.2152,  2.4019,    	1.20095,    0.600475,    		0.150119,   	0.020068,    	568.261,    0.568261,   0.000568261, 96,           	32,            20,          	 1,              0.5,           0.125       		],
+    "imperial quart":  [17,   230.582,  76.8608,   	69.3549 , 			38.4304,  4.8038,    	2.4019,     1.20095,     		0.300238,   	0.0401359,   	1136.52,    1.13652,    0.00113652,  192,          	64,            40,          	 2,              1,             0.25        		],
+    "imperial gallon": [18,   922.33,   307.443,   	277.42  , 			153.722,  19.2152,   	9.6076,     4.8038,      		1.20095,    	0.160544,    	4546.09,    4.54609,    0.00454609,  768,          	256,           160,         	 8,              4,             1           		]
+};
+
+ilib.Measurement.Volume.prototype = new ilib.Measurement({});
+ilib.Measurement.Volume.prototype.parent = ilib.Measurement;
+ilib.Measurement.Volume.prototype.constructor = ilib.Measurement.Volume;
+
+/**
+ * @inheritDoc
+ */
+ilib.Measurement.Volume.prototype.getMeasure = function() {
+	return "volume";
+};
+
+/**
+ * Convert the current volume to another measure.
+ * 
+ * @inheritDoc
+ */
+ilib.Measurement.Volume.prototype.convert = function(to) {
+	if (!to || typeof(ilib.Measurement.Volume.ratios[this.normalizeUnits(to)]) === 'undefined') {
+		return undefined;
+	}
+	return new ilib.Measurement({
+		unit: to,
+		amount: this
+	});
+};
+
+ilib.Measurement.Volume.aliases = {
+	"US gal":"gallon",
+	"US gallon":"gallon",
+	"US Gal":"gallon",
+	"US Gallons":"gallon",
+	"Gal(US)":"gallon",
+	"gal(US)":"gallon",
+        "gallon":"gallon",
+    "quart":"quart",
+	"US quart":"quart",
+	"US quarts":"quart",
+	"US Quart":"quart",
+	"US Quarts":"quart",
+	"US qt":"quart",
+	"Qt(US)":"quart",
+	"qt(US)":"quart",
+	"US pint":"pint",
+	"US Pint":"pint",
+        "pint":"pint",
+	"pint(US)":"pint",
+	"Pint(US)":"pint",
+	"US cup":"cup", 
+	"US Cup":"cup",
+	"cup(US)":"cup",
+	"Cup(US)":"cup",
+        "cup":"cup",
+        "us ounce":"us ounce",
+	"US ounce":"us ounce",
+	"℥":"us ounce",
+	"US Oz":"us ounce",
+	"oz(US)":"us ounce",
+	"Oz(US)":"us ounce",
+        "US tbsp":"tbsp",
+        "tbsp":"tbsp",
+	"tbsp(US)":"tbsp",
+	"US tablespoon":"tbsp",
+	"US tsp":"tsp",
+	"tsp(US)":"tsp",
+        "tsp":"tsp",
+	"Cubic meter":"cubic meter",
+	"cubic meter":"cubic meter",
+        "Cubic metre":"cubic meter", 
+        "cubic metre":"cubic meter", 
+        "m3":"cubic meter",
+	"Liter":"liter",
+	"Liters":"liter",
+	"liter":"liter",
+	"L":"liter",
+	"l":"liter",
+	"Milliliter":"milliliter",
+	"ML":"milliliter",
+	"ml":"milliliter",
+	"milliliter":"milliliter",
+	"mL":"milliliter",
+	"Imperial gal":"imperial gallon",
+        "imperial gallon":"imperial gallon",
+	"Imperial gallon":"imperial gallon",
+	"gallon(imperial)":"imperial gallon",
+	"gal(imperial)":"imperial gallon",
+	"Imperial quart":"imperial quart",
+        "imperial quart":"imperial quart",
+	"Imperial Quart":"imperial quart",
+	"IMperial qt":"imperial quart",
+	"qt(Imperial)":"imperial quart",
+	"quart(imperial)":"imperial quart",
+	"Imperial pint":"imperial pint",
+        "imperial pint":"imperial pint",
+	"pint(Imperial)":"imperial pint",
+	"imperial oz":"imperial ounce",
+	"imperial ounce":"imperial ounce",
+	"Imperial Ounce":"imperial ounce",
+	"Imperial tbsp":"imperial tbsp",
+        "imperial tbsp":"imperial tbsp",
+	"tbsp(Imperial)":"imperial tbsp",
+	"Imperial tsp":"imperial tsp",
+        "imperial tsp":"imperial tsp",
+	"tsp(Imperial)":"imperial tsp",
+	"Cubic foot":"cubic foot",
+        "cubic foot":"cubic foot",
+	"Cubic Foot":"cubic foot",
+	"Cubic feet":"cubic foot",
+	"cubic Feet":"cubic foot",
+	"cubic ft":"cubic foot",
+	"ft3":"cubic foot",
+	"Cubic inch":"cubic inch",
+	"Cubic inches":"cubic inch",
+	"cubic inches":"cubic inch",
+	"cubic inch":"cubic inch",
+	"cubic in":"cubic inch",
+	"cu in":"cubic inch",
+	"cu inch":"cubic inch",
+	"inch³":"cubic inch",
+	"in³":"cubic inch",
+	"inch^3":"cubic inch",
+	"in^3":"cubic inch",
+	"c.i":"cubic inch",
+	"CI":"cubic inch",
+	"cui":"cubic inch"
+};
+
+/**
+ * Convert a volume to another measure.
+ * @static
+ * @param to {string} unit to convert to
+ * @param from {string} unit to convert from
+ * @param volume {number} amount to be convert
+ * @returns {number|undefined} the converted amount
+ */
+ilib.Measurement.Volume.convert = function(to, from, volume) {
+    from = ilib.Measurement.Volume.aliases[from] || from;
+    to = ilib.Measurement.Volume.aliases[to] || to;
+	var fromRow = ilib.Measurement.Volume.ratios[from];
+	var toRow = ilib.Measurement.Volume.ratios[to];
+	if (typeof(from) === 'undefined' || typeof(to) === 'undefined') {
+		return undefined;
+	}	
+	var result = volume * fromRow[toRow[0]];
+    return result;
+};
+
+/**
+ * @private
+ * @static
+ */
+ilib.Measurement.Volume.getMeasures = function () {
+	var ret = [];
+	for (var m in ilib.Measurement.Volume.ratios) {
+		ret.push(m);
+	}
+	return ret;
+};
+ilib.Measurement.Volume.metricSystem	= {"milliliter":10, "liter":11,"cubic meter":12};
+ilib.Measurement.Volume.imperialSystem	= {"imperial tsp":13,"imperial tbsp":14,"imperial ounce":15,"imperial pint":16,"imperial quart":17,"imperial gallon":18};
+ilib.Measurement.Volume.uscustomarySystem = {"tsp":1,"tbsp":2,"cubic inch":3,"us ounce":4,"cup":5,"pint":6,"quart":7,"gallon":8,"cubic foot":9};
+
+ilib.Measurement.Volume.metricToUScustomary =   {"milliliter":"tsp","liter":"quart","cubic meter":"cubic foot"};
+ilib.Measurement.Volume.metricToImperial    =   {"milliliter":"imperial tsp","liter":"imperial quart","cubic meter":"imperial gallon"};
+
+ilib.Measurement.Volume.imperialToMetric      = {"imperial tsp":"milliliter","imperial tbsp":"milliliter","imperial ounce":"milliliter","imperial pint":"liter","imperial quart":"liter","imperial gallon":"cubic meter"};
+ilib.Measurement.Volume.imperialToUScustomary = {"imperial tsp":"tsp","imperial tbsp":"tbsp","imperial ounce":"us ounce","imperial pint":"pint","imperial quart":"quart","imperial gallon":"gallon"};
+
+
+ilib.Measurement.Volume.uScustomaryToImperial   = {"tsp":"imperial tsp","tbsp":"imperial tbsp","cubic inch":"imperial tbsp","us ounce":"imperial ounce","cup":"imperial ounce","pint":"imperial pint","quart":"imperial quart","gallon":"imperial gallon","cubic foot":"imperial gallon"};
+ilib.Measurement.Volume.uScustomarylToMetric    = {"tsp":"milliliter","tbsp":"milliliter","cubic inch":"milliliter","us ounce":"milliliter","cup":"milliliter","pint":"liter","quart":"liter","gallon":"cubic meter","cubic foot":"cubic meter"};
+
+
+
+ilib.Measurement.Volume.prototype.localize = function(locale) {
+    var to;
+    if (locale === "en-US") {
+        to = ilib.Measurement.Volume.metricToUScustomary[this.unit] || ilib.Measurement.Volume.imperialToUScustomary[this.unit] || this.unit;
+    } else if (locale === "en-UK") {
+        to = ilib.Measurement.Volume.metricToImperial[this.unit] || ilib.Measurement.Volume.uScustomaryToImperial[this.unit] || this.unit;
+    }
+    else
+        to = ilib.Measurement.Volume.uScustomarylToMetric[this.unit] || ilib.Measurement.Volume.imperialToUScustomary[this.unit] || this.unit;
+
+    return new ilib.Measurement.Volume({
+        unit: to,
+        amount: this
+    });
+};
+
+/**
+ * @inheritDoc
+ * @param {string=} measurementsystem
+ * @return {ilib.Measurement}
+ */
+ilib.Measurement.Volume.prototype.scale = function(measurementsystem) {
+    var fromRow = ilib.Measurement.Volume.ratios[this.unit];
+    var mSystem;
+
+    if (measurementsystem === "metric"|| (typeof(measurementsystem) === 'undefined'
+        && typeof(ilib.Measurement.Volume.metricSystem[this.unit]) !== 'undefined')) {
+        mSystem = ilib.Measurement.Volume.metricSystem;
+    } else if (measurementsystem === "uscustomary" || (typeof(measurementsystem) === 'undefined'
+        && typeof(ilib.Measurement.Volume.uscustomarySystem[this.unit]) !== 'undefined')) {
+        mSystem = ilib.Measurement.Volume.uscustomarySystem;
+    } else if (measurementsystem === "imperial"|| (typeof(measurementsystem) === 'undefined'
+        && typeof(ilib.Measurement.Volume.imperialSystem[this.unit]) !== 'undefined')) {
+        mSystem = ilib.Measurement.Volume.imperialSystem;
+    }
+
+    var volume = this.amount;
+    var munit = this.unit;
+
+    for (var m in mSystem) {
+        var tmp = this.amount * fromRow[mSystem[m]];
+        if (tmp < 1) break;
+        volume = tmp;
+        munit = m;
+    }
+
+    return new ilib.Measurement.Volume({
+        unit: munit,
+        amount: volume
+    });
+};
+
+
+
+//register with the factory method
+ilib.Measurement._constructors["volume"] = ilib.Measurement.Volume;
+
+
+/*
+ * Energy.js - Unit conversions for Energys/energys
+ *
+ * Copyright © 2014, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+!depends
+ilibglobal.js
+*/
+
+/**
+ * Create a new energy measurement.
+ *
+ * @class
+ * @constructor
+ * @param options {{unit:string,amount:number|string|undefined}} Options controlling
+ * the construction of this instance
+ */
+ilib.Measurement.Energy = function (options) {
+	this.unit = "ns";
+	this.amount = 0;
+	this.aliases = ilib.Measurement.Energy.aliases; // share this table in all instances
+
+	if (options) {
+		if (typeof(options.unit) !== 'undefined') {
+			this.originalUnit = options.unit;
+			this.unit = this.aliases[options.unit] || options.unit;
+		}
+
+		if (typeof(options.amount) === 'object') {
+			if (options.amount.getMeasure() === "energy") {
+				this.amount = ilib.Measurement.Energy.convert(this.unit, options.amount.getUnit(), options.amount.getAmount());
+			} else {
+				throw "Cannot convert units " + options.amount.unit + " to a energy";
+			}
+		} else if (typeof(options.amount) !== 'undefined') {
+			this.amount = parseFloat(options.amount);
+		}
+	}
+
+	if (typeof(ilib.Measurement.Energy.ratios[this.unit]) === 'undefined') {
+		throw "Unknown unit: " + options.unit;
+	}
+};
+
+ilib.Measurement.Energy.ratios = {
+       /*                index mJ          J           BTU               kJ          Wh                Cal               MJ             kWh                gJ             MWh                 GWh         */
+        "millijoule":   [ 1,   1,          0.001,      9.4781707775e-7,  1e-6,       2.7777777778e-7,  2.3884589663e-7,  1.0e-9,        2.7777777778e-10,  1.0e-12,       2.7777777778e-13,   2.7777777778e-16  ],
+        "joule":        [ 2,   1000,       1,          9.4781707775e-4,  0.001,      2.7777777778e-4,  2.3884589663e-4,  1.0e-6,        2.7777777778e-7,   1.0e-9,        2.7777777778e-10,   2.7777777778e-13  ],
+        "BTU":          [ 3,   1055055.9,  1055.0559,  1,                1.0550559,  0.29307108333,    0.25199577243,    1.0550559e-3,  2.9307108333e-4,   1.0550559e-6,  2.9307108333e-7,    2.9307108333e-10  ],
+        "kilojoule":    [ 4,   1000000,    1000,       0.94781707775,    1,          0.27777777778,    0.23884589663,    0.001,         2.7777777778e-4,   1.0e-6,        2.7777777778e-7,    2.7777777778e-10  ],
+        "watt hour":    [ 5,   3.6e+6,     3600,       3.4121414799,     3.6,        1,                0.85984522786,    0.0036,        0.001,             3.6e-6,        1.0e-6,             1.0e-9            ],
+        "calorie":      [ 6,   4.868e+5,   4186.8,     3.9683205411,     4.1868,     1.163,            1,                4.1868e-3,     1.163e-3,          4.1868e-6,     1.163e-6,           1.163e-9          ],
+        "megajoule":    [ 7,   1e+9,       1e+6,       947.81707775,     1000,       277.77777778,     238.84589663,     1,             0.27777777778,     0.001,         2.7777777778e-4,    2.7777777778e-7   ],
+        "kilowatt hour":[ 8,   3.6e+9,     3.6e+6,     3412.1414799,     3600,       1000,             859.84522786,     3.6,           1,                 3.6e-3,        0.001,              1e-6              ],
+        "gigajoule":    [ 9,   1e+12,      1e+9,       947817.07775,     1e+6,       277777.77778,     238845.89663,     1000,          277.77777778,      1,             0.27777777778,      2.7777777778e-4   ],
+        "megawatt hour":[ 10,  3.6e+12,    3.6e+9,     3412141.4799,     3.6e+6,     1e+6,             859845.22786,     3600,          1000,              3.6,           1,                  0.001             ],
+        "gigawatt hour":[ 11,  3.6e+15,    3.6e+12,    3412141479.9,     3.6e+9,     1e+9,             859845227.86,     3.6e+6,        1e+6,              3600,          1000,               1                 ]
+};
+
+ilib.Measurement.Energy.prototype = new ilib.Measurement({});
+ilib.Measurement.Energy.prototype.parent = ilib.Measurement;
+ilib.Measurement.Energy.prototype.constructor = ilib.Measurement.Energy;
+
+/**
+ * @inheritDoc
+ */
+ilib.Measurement.Energy.prototype.getMeasure = function() {
+	return "energy";
+};
+
+/**
+ * Convert the current energy to another measure.
+ *
+ * @inheritDoc
+ */
+ilib.Measurement.Energy.prototype.convert = function(to) {
+	if (!to || typeof(ilib.Measurement.Energy.ratios[this.normalizeUnits(to)]) === 'undefined') {
+		return undefined;
+	}
+	return new ilib.Measurement({
+		unit: to,
+		amount: this
+	});
+};
+
+ilib.Measurement.Energy.aliases = {
+	"milli joule":"millijoule",
+	"millijoule":"millijoule",
+    "MilliJoule":"millijoule",
+    "milliJ":"millijoule",
+    "joule":"joule",
+    "J":"joule",
+    "j":"joule",
+    "Joule":"joule",
+    "Joules":"joule",
+    "joules":"joule",
+    "BTU":"BTU",
+    "btu":"BTU",
+    "British thermal unit":"BTU",
+    "british thermal unit":"BTU",
+    "kilo joule":"kilojoule",
+    "kJ":"kilojoule",
+    "kj":"kilojoule",
+    "Kj":"kilojoule",
+    "kiloJoule":"kilojoule",
+    "kilojoule":"kilojoule",
+    "kjoule":"kilojoule",
+    "watt hour":"watt hour",
+    "Wh":"watt hour",
+    "wh":"watt hour",
+    "watt-hour":"watt hour",
+    "calorie":"calorie",
+    "Cal":"calorie",
+    "cal":"calorie",
+    "Calorie":"calorie",
+    "calories":"calorie",
+    "mega joule":"megajoule",
+    "MJ":"megajoule",
+    "megajoule":"megajoule",
+    "megajoules":"megajoule",
+    "Megajoules":"megajoule",
+    "megaJoules":"megajoule",
+    "MegaJoules":"megajoule",
+    "megaJoule":"megajoule",
+    "MegaJoule":"megajoule",
+    "kilo Watt hour": "kilowatt hour",
+    "kWh":"kilowatt hour",
+    "kiloWh":"kilowatt hour",
+    "KiloWh":"kilowatt hour",
+    "KiloWatt-hour":"kilowatt hour",
+    "kilowatt hour":"kilowatt hour",
+    "kilowatt-hour":"kilowatt hour",
+    "KiloWatt-hours":"kilowatt hour",
+    "kilowatt-hours":"kilowatt hour",
+    "Kilo Watt-hour":"kilowatt hour",
+    "Kilo Watt-hours":"kilowatt hour",
+    "giga joule":"gigajoule",
+    "gJ":"gigajoule",
+    "GJ":"gigajoule",
+    "GigaJoule":"gigajoule",
+    "gigaJoule":"gigajoule",
+    "gigajoule":"gigajoule",
+    "gigajoule":"gigajoule",
+    "GigaJoules":"gigajoule",
+    "gigaJoules":"gigajoule",
+    "Gigajoules":"gigajoule",
+    "gigajoules":"gigajoule",
+    "mega watt hour":"megawatt hour",
+    "MWh":"megawatt hour",
+    "MegaWh":"megawatt hour",
+    "megaWh":"megawatt hour",
+    "megaWatthour":"megawatt hour",
+    "megaWatt-hour":"megawatt hour",
+    "mega Watt-hour":"megawatt hour",
+    "megaWatt hour":"megawatt hour",
+    "megawatt hour":"megawatt hour",
+    "mega Watt hour":"megawatt hour",
+    "giga watt hour":"gigawatt hour",
+    "gWh":"gigawatt hour",
+    "GWh":"gigawatt hour",
+    "gigaWh":"gigawatt hour",
+    "gigaWatt-hour":"gigawatt hour",
+    "gigawatt-hour":"gigawatt hour",
+    "gigaWatt hour":"gigawatt hour",
+    "gigawatt hour":"gigawatt hour",
+    "gigawatthour":"gigawatt hour"
+};
+
+/**
+ * Convert a energy to another measure.
+ * @static
+ * @param to {string} unit to convert to
+ * @param from {string} unit to convert from
+ * @param energy {number} amount to be convert
+ * @returns {number|undefined} the converted amount
+ */
+ilib.Measurement.Energy.convert = function(to, from, energy) {
+    from = ilib.Measurement.Energy.aliases[from] || from;
+    to = ilib.Measurement.Energy.aliases[to] || to;
+    var fromRow = ilib.Measurement.Energy.ratios[from];
+    var toRow = ilib.Measurement.Energy.ratios[to];
+    if (typeof(from) === 'undefined' || typeof(to) === 'undefined') {
+        return undefined;
+    }
+    return energy * fromRow[toRow[0]];
+};
+
+/**
+ * @private
+ * @static
+ */
+ilib.Measurement.Energy.getMeasures = function () {
+	var ret = [];
+	for (var m in ilib.Measurement.Energy.ratios) {
+		ret.push(m);
+	}
+	return ret;
+};
+
+ilib.Measurement.Energy.metricJouleSystem	= {"millijoule":1, "joule":2,"kilojoule":4,"megajoule":7,"gigajoule":9};
+ilib.Measurement.Energy.metricWattHourSystem = {"watt hour":5,"kilowatt hour":8,"megawatt hour":10,"gigawatt hour":11};
+
+ilib.Measurement.Energy.imperialSystem	= {"BTU":3};
+ilib.Measurement.Energy.uscustomarySystem = {"calorie":6};
+
+ilib.Measurement.Energy.prototype.localize = function(locale) {
+    return new ilib.Measurement.Energy({
+        unit: this.unit,
+        amount: this.amount
+    });
+};
+
+/**
+ * @inheritDoc
+ * @param {string=} measurementsystem
+ * @return {ilib.Measurement}
+ */
+ilib.Measurement.Energy.prototype.scale = function(measurementsystem) {
+    var fromRow = ilib.Measurement.Energy.ratios[this.unit];
+    var mSystem;
+
+    if ((measurementsystem === "metric" && typeof(ilib.Measurement.Energy.metricJouleSystem[this.unit]) !== 'undefined')|| (typeof(measurementsystem) === 'undefined'
+        && typeof(ilib.Measurement.Energy.metricJouleSystem[this.unit]) !== 'undefined')) {
+        mSystem = ilib.Measurement.Energy.metricJouleSystem;
+    }
+    else if ((measurementsystem === "metric" && typeof(ilib.Measurement.Energy.metricWattHourSystem[this.unit]) !== 'undefined')|| (typeof(measurementsystem) === 'undefined'
+        && typeof(ilib.Measurement.Energy.metricWattHourSystem[this.unit]) !== 'undefined')) {
+        mSystem = ilib.Measurement.Energy.metricWattHourSystem;
+    }
+
+    else  if (measurementsystem === "uscustomary" || (typeof(measurementsystem) === 'undefined'
+        && typeof(ilib.Measurement.Energy.uscustomarySystem[this.unit]) !== 'undefined')) {
+        mSystem = ilib.Measurement.Energy.uscustomarySystem;
+    }
+    else if (measurementsystem === "imperial"|| (typeof(measurementsystem) === 'undefined'
+        && typeof(ilib.Measurement.Energy.imperialSystem[this.unit]) !== 'undefined')) {
+        mSystem = ilib.Measurement.Energy.imperialSystem;
+    }
+
+    var energy = this.amount;
+    var munit = this.unit;
+
+    for (var m in mSystem) {
+        var tmp = this.amount * fromRow[mSystem[m]];
+        if (tmp < 1) break;
+        energy = tmp;
+        munit = m;
+    }
+
+    return new ilib.Measurement.Energy({
+        unit: munit,
+        amount: energy
+    });
+};
+//register with the factory method
+ilib.Measurement._constructors["energy"] = ilib.Measurement.Energy;
+
 /**
  * @license
  * Copyright © 2012-2013, JEDLSoft
@@ -23707,4 +27235,18 @@ glyphstring.js
 phone/phonefmt.js
 phone/phonegeo.js
 phone/phonenum.js
+unit.js
+unitfmt.js
+units/length.js
+units/speed.js
+units/digitalStorage.js
+units/temperature.js
+units/unknown.js
+units/time.js
+units/mass.js
+units/area.js
+units/fuelConsumption.js
+units/volume.js	
+units/energy.js
 */
+
