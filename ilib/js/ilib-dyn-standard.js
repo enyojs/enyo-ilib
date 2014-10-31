@@ -30,7 +30,7 @@ var ilib = ilib || {};
  */
 ilib.getVersion = function () {
     // increment this for each release
-    return "8.0"
+    return "9.0"
     ;
 };
 
@@ -120,10 +120,10 @@ ilib._isGlobal = function(name) {
  * Depends directive: !depends ilibglobal.js
  * 
  * @static
- * @param {string} spec the locale specifier for the default locale
+ * @param {string|undefined|null} spec the locale specifier for the default locale
  */
 ilib.setLocale = function (spec) {
-    if (typeof(spec) === 'string') {
+    if (typeof(spec) === 'string' || !spec) {
         ilib.locale = spec;
     }
     // else ignore other data types, as we don't have the dependencies
@@ -1349,6 +1349,7 @@ ilib.LocaleInfo = function(locale, options) {
 		clock:string,
 		currency:string,
 		firstDayOfWeek:number,
+		unitfmt: {long:string,short:string},
 		numfmt:Object.<{
 			currencyFormats:Object.<{common:string,commonNegative:string,iso:string,isoNegative:string}>,
 			script:string,
@@ -1422,6 +1423,7 @@ ilib.LocaleInfo.defaultInfo = /** @type {{
 	clock:string,
 	currency:string,
 	firstDayOfWeek:number,
+	unitfmt: {long:string,short:string},
 	numfmt:Object.<{
 		currencyFormats:Object.<{
 			common:string,
@@ -1518,6 +1520,10 @@ ilib.LocaleInfo.prototype = {
 	getUnits: function () {
 		return this.info.units;
 	},
+        
+        getUnitFormat: function () {
+                return this.info.unitfmt;
+        },
 	
 	/**
 	 * Return the name of the calendar that is commonly used in the given locale.
@@ -3055,11 +3061,41 @@ ilib.String.fromCodePoint = function (codepoint) {
 };
 
 /**
+ * Convert the character or the surrogate pair at the given
+ * index into the intrinsic Javascript string to a Unicode 
+ * UCS-4 code point.
+ * 
+ * @param {string} str string to get the code point from
+ * @param {number} index index into the string
+ * @return {number} code point of the character at the
+ * given index into the string
+ */
+ilib.String.toCodePoint = function(str, index) {
+	if (!str || str.length === 0) {
+		return -1;
+	}
+	var code = -1, high = str.charCodeAt(index);
+	if (high >= 0xD800 && high <= 0xDBFF) {
+		if (str.length > index+1) {
+			var low = str.charCodeAt(index+1);
+			if (low >= 0xDC00 && low <= 0xDFFF) {
+				code = (((high & 0x3C0) >> 6) + 1) << 16 |
+					(((high & 0x3F) << 10) | (low & 0x3FF));
+			}
+		}
+	} else {
+		code = high;
+	}
+	
+	return code;
+};
+
+/**
  * Load the plural the definitions of plurals for the locale.
- * @param {ilib.Locale|string} locale
- * @param {boolean} sync
- * @param {Object} loadParams
- * @param {function(*)|undefined} onLoad
+ * @param {boolean=} sync
+ * @param {ilib.Locale|string=} locale
+ * @param {Object=} loadParams
+ * @param {function(*)=} onLoad
  */
 ilib.String.loadPlurals = function (sync, locale, loadParams, onLoad) {
 	var loc;
@@ -3768,23 +3804,7 @@ ilib.String.prototype = {
 	 * given index into the string
 	 */
 	_toCodePoint: function (index) {
-		if (this.str.length === 0) {
-			return -1;
-		}
-		var code = -1, high = this.str.charCodeAt(index);
-		if (high >= 0xD800 && high <= 0xDBFF) {
-			if (this.str.length > index+1) {
-				var low = this.str.charCodeAt(index+1);
-				if (low >= 0xDC00 && low <= 0xDFFF) {
-					code = (((high & 0x3C0) >> 6) + 1) << 16 |
-						(((high & 0x3F) << 10) | (low & 0x3FF));
-				}
-			}
-		} else {
-			code = high;
-		}
-		
-		return code;
+		return ilib.String.toCodePoint(this.str, index);
 	},
 	
 	/**
@@ -3967,9 +3987,9 @@ ilib.String.prototype = {
 	 * 3 or 4".
 	 * @param {ilib.Locale|string} locale locale to use when processing choice
 	 * formats with this string
-	 * @param {boolean} sync [optional] whether to load the locale data synchronously 
+	 * @param {boolean=} sync [optional] whether to load the locale data synchronously 
 	 * or not
-	 * @param {Object} loadParams [optional] parameters to pass to the loader function
+	 * @param {Object=} loadParams [optional] parameters to pass to the loader function
 	 * @param {function(*)=} onLoad [optional] function to call when the loading is done
 	 */
 	setLocale: function (locale, sync, loadParams, onLoad) {
@@ -10315,7 +10335,7 @@ ilib.Date._constructors["persian"] = ilib.Date.PersDate;
  * limitations under the License.
  */
 
-// !depends ilibglobal.js locale.js
+// !depends ilibglobal.js locale.js util/search.js
 
 // !data ctype
 
@@ -10366,37 +10386,33 @@ ilib.CType = {
 	 * </ul>
 	 * 
 	 * @protected
-	 * @param {string} ch character to examine
+	 * @param {number} num code point of the character to examine
 	 * @param {string} rangeName the name of the range to check
 	 * @param {Object} obj object containing the character range data
 	 * @return {boolean} true if the first character is within the named
 	 * range
 	 */
-	_inRange: function(ch, rangeName, obj) {
-		var range, i, num;
-		if (!ch || ch.length === 0 || !rangeName || !obj) {
+	_inRange: function(num, rangeName, obj) {
+		var range, i;
+		if (num < 0 || !rangeName || !obj) {
 			return false;
 		}
 		
-		num = new ilib.String(ch).codePointAt(0);
 		range = obj[rangeName];
 		if (!range) {
 			return false;
 		}
 		
-		for (i = 0; i < range.length; i++) {
-			if (range[i].length === 1) {
-				// single character range
-				if (num === range[i][0]) {
-					return true;
-				}
-			} else if (num >= range[i][0] && num <= range[i][1]) {
-				// multi-character range
-				return true;
+		var compare = function(singlerange, target) {
+			if (singlerange.length === 1) {
+				return singlerange[0] - target;
+			} else {
+				return target < singlerange[0] ? singlerange[0] - target :
+					(target > singlerange[1] ? singlerange[1] - target : 0);
 			}
-		}
-		
-		return false;
+		};
+		var result = ilib.bsearch(num, range, compare);
+		return result < range.length && compare(range[result], num) === 0;
 	},
 	
 	/**
@@ -10546,7 +10562,7 @@ ilib.CType = {
 	 * 
 	 * Depends directive: !depends ctype.js
 	 * 
-	 * @param {string} ch character to examine
+	 * @param {string|ilib.String|number} ch character or code point to examine
 	 * @param {string} rangeName the name of the range to check
 	 * @return {boolean} true if the first character is within the named
 	 * range
@@ -10555,7 +10571,22 @@ ilib.CType = {
 		if (!rangeName) {
 			return false;
 		}
-		return ilib.CType._inRange(ch, rangeName.toLowerCase(), ilib.data.ctype);
+		var num;
+		switch (typeof(ch)) {
+			case 'number':
+				num = ch;
+				break;
+			case 'string':
+				num = ilib.String.toCodePoint(ch, 0);
+				break;
+			case 'undefined':
+				return false;
+			default:
+				num = ch._toCodePoint(0);
+				break;
+		}
+
+		return ilib.CType._inRange(num, rangeName.toLowerCase(), ilib.data.ctype);
 	},
 	
 	/**
@@ -10581,6 +10612,7 @@ ilib.CType = {
 			ilib.loadData({
 				name: loadName,
 				locale: "-",
+				nonlocale: true,
 				sync: sync,
 				loadParams: loadParams, 
 				callback: /** @type function(Object=):undefined */ ilib.bind(this, /** @type function() */ function(ct) {
@@ -10627,12 +10659,26 @@ ilib.CType = {
  * 
  * Depends directive: !depends ctype.isdigit.js
  * 
- * @param {string} ch character to examine
+ * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is a digit character in the
  * Latin script. 
  */
 ilib.CType.isDigit = function (ch) {
-	return ilib.CType._inRange(ch, 'digit', ilib.data.ctype);
+	var num;
+	switch (typeof(ch)) {
+		case 'number':
+			num = ch;
+			break;
+		case 'string':
+			num = ilib.String.toCodePoint(ch, 0);
+			break;
+		case 'undefined':
+			return false;
+		default:
+			num = ch._toCodePoint(0);
+			break;
+	}
+	return ilib.CType._inRange(num, 'digit', ilib.data.ctype);
 };
 
 /**
@@ -10673,14 +10719,29 @@ ilib.CType.isDigit._init = function (sync, loadParams, onLoad) {
  * 
  * Depends directive: !depends ctype.isspace.js
  * 
- * @param {string} ch character to examine
+ * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is a whitespace character.
  */
 ilib.CType.isSpace = function (ch) {
-	return ilib.CType._inRange(ch, 'space', ilib.data.ctype) ||
-		ilib.CType._inRange(ch, 'Zs', ilib.data.ctype_z) ||
-		ilib.CType._inRange(ch, 'Zl', ilib.data.ctype_z) ||
-		ilib.CType._inRange(ch, 'Zp', ilib.data.ctype_z);
+	var num;
+	switch (typeof(ch)) {
+		case 'number':
+			num = ch;
+			break;
+		case 'string':
+			num = ilib.String.toCodePoint(ch, 0);
+			break;
+		case 'undefined':
+			return false;
+		default:
+			num = ch._toCodePoint(0);
+			break;
+	}
+
+	return ilib.CType._inRange(num, 'space', ilib.data.ctype) ||
+		ilib.CType._inRange(num, 'Zs', ilib.data.ctype_z) ||
+		ilib.CType._inRange(num, 'Zl', ilib.data.ctype_z) ||
+		ilib.CType._inRange(num, 'Zp', ilib.data.ctype_z);
 };
 
 /**
@@ -11329,6 +11390,12 @@ util/jsutils.js
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
  * not be usable for a while.
+ *
+ * <li><i>loadParams</i> - an object containing parameters to pass to the
+ * loader callback function when locale data is missing. The parameters are not
+ * interpretted or modified in any way. They are simply passed along. The object
+ * may contain any property/value pairs as long as the calling code is in
+ * agreement with the loader callback function as to what those parameters mean.
  * </ul>
  * <p>
  *
@@ -11342,6 +11409,7 @@ ilib.NumFmt = function (options) {
 	this.locale = new ilib.Locale();
 	/** @type {string} */
 	this.type = "number";
+	var loadParams = undefined;
 
 	if (options) {
 		if (options.locale) {
@@ -11383,6 +11451,8 @@ ilib.NumFmt = function (options) {
 			/** @type {boolean} */
 			sync = (options.sync == true);
 		}
+		
+		loadParams = options.loadParams;
 	}
 
 	/** @type {ilib.LocaleInfo|undefined} */
@@ -11390,6 +11460,7 @@ ilib.NumFmt = function (options) {
 	
 	new ilib.LocaleInfo(this.locale, {
 		sync: sync,
+		loadParams: loadParams,
 		onLoad: ilib.bind(this, function (li) {
 			/** @type {ilib.LocaleInfo|undefined} */
 			this.localeInfo = li;
@@ -11407,6 +11478,7 @@ ilib.NumFmt = function (options) {
 					locale: this.locale,
 					code: this.currency,
 					sync: sync,
+					loadParams: loadParams,
 					onLoad: ilib.bind(this, function (cur) {
 						this.currencyInfo = cur;
 						if (this.style !== "common" && this.style !== "iso") {

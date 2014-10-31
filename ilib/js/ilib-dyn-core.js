@@ -30,7 +30,7 @@ var ilib = ilib || {};
  */
 ilib.getVersion = function () {
     // increment this for each release
-    return "8.0"
+    return "9.0"
     ;
 };
 
@@ -120,10 +120,10 @@ ilib._isGlobal = function(name) {
  * Depends directive: !depends ilibglobal.js
  * 
  * @static
- * @param {string} spec the locale specifier for the default locale
+ * @param {string|undefined|null} spec the locale specifier for the default locale
  */
 ilib.setLocale = function (spec) {
-    if (typeof(spec) === 'string') {
+    if (typeof(spec) === 'string' || !spec) {
         ilib.locale = spec;
     }
     // else ignore other data types, as we don't have the dependencies
@@ -2018,11 +2018,41 @@ ilib.String.fromCodePoint = function (codepoint) {
 };
 
 /**
+ * Convert the character or the surrogate pair at the given
+ * index into the intrinsic Javascript string to a Unicode 
+ * UCS-4 code point.
+ * 
+ * @param {string} str string to get the code point from
+ * @param {number} index index into the string
+ * @return {number} code point of the character at the
+ * given index into the string
+ */
+ilib.String.toCodePoint = function(str, index) {
+	if (!str || str.length === 0) {
+		return -1;
+	}
+	var code = -1, high = str.charCodeAt(index);
+	if (high >= 0xD800 && high <= 0xDBFF) {
+		if (str.length > index+1) {
+			var low = str.charCodeAt(index+1);
+			if (low >= 0xDC00 && low <= 0xDFFF) {
+				code = (((high & 0x3C0) >> 6) + 1) << 16 |
+					(((high & 0x3F) << 10) | (low & 0x3FF));
+			}
+		}
+	} else {
+		code = high;
+	}
+	
+	return code;
+};
+
+/**
  * Load the plural the definitions of plurals for the locale.
- * @param {ilib.Locale|string} locale
- * @param {boolean} sync
- * @param {Object} loadParams
- * @param {function(*)|undefined} onLoad
+ * @param {boolean=} sync
+ * @param {ilib.Locale|string=} locale
+ * @param {Object=} loadParams
+ * @param {function(*)=} onLoad
  */
 ilib.String.loadPlurals = function (sync, locale, loadParams, onLoad) {
 	var loc;
@@ -2731,23 +2761,7 @@ ilib.String.prototype = {
 	 * given index into the string
 	 */
 	_toCodePoint: function (index) {
-		if (this.str.length === 0) {
-			return -1;
-		}
-		var code = -1, high = this.str.charCodeAt(index);
-		if (high >= 0xD800 && high <= 0xDBFF) {
-			if (this.str.length > index+1) {
-				var low = this.str.charCodeAt(index+1);
-				if (low >= 0xDC00 && low <= 0xDFFF) {
-					code = (((high & 0x3C0) >> 6) + 1) << 16 |
-						(((high & 0x3F) << 10) | (low & 0x3FF));
-				}
-			}
-		} else {
-			code = high;
-		}
-		
-		return code;
+		return ilib.String.toCodePoint(this.str, index);
 	},
 	
 	/**
@@ -2930,9 +2944,9 @@ ilib.String.prototype = {
 	 * 3 or 4".
 	 * @param {ilib.Locale|string} locale locale to use when processing choice
 	 * formats with this string
-	 * @param {boolean} sync [optional] whether to load the locale data synchronously 
+	 * @param {boolean=} sync [optional] whether to load the locale data synchronously 
 	 * or not
-	 * @param {Object} loadParams [optional] parameters to pass to the loader function
+	 * @param {Object=} loadParams [optional] parameters to pass to the loader function
 	 * @param {function(*)=} onLoad [optional] function to call when the loading is done
 	 */
 	setLocale: function (locale, sync, loadParams, onLoad) {
@@ -3062,6 +3076,7 @@ ilib.LocaleInfo = function(locale, options) {
 		clock:string,
 		currency:string,
 		firstDayOfWeek:number,
+		unitfmt: {long:string,short:string},
 		numfmt:Object.<{
 			currencyFormats:Object.<{common:string,commonNegative:string,iso:string,isoNegative:string}>,
 			script:string,
@@ -3135,6 +3150,7 @@ ilib.LocaleInfo.defaultInfo = /** @type {{
 	clock:string,
 	currency:string,
 	firstDayOfWeek:number,
+	unitfmt: {long:string,short:string},
 	numfmt:Object.<{
 		currencyFormats:Object.<{
 			common:string,
@@ -3231,6 +3247,10 @@ ilib.LocaleInfo.prototype = {
 	getUnits: function () {
 		return this.info.units;
 	},
+        
+        getUnitFormat: function () {
+                return this.info.unitfmt;
+        },
 	
 	/**
 	 * Return the name of the calendar that is commonly used in the given locale.
