@@ -199,8 +199,9 @@ enyo.kind({
     create: function() {
         this.inherited(arguments);
         var curLocale = ilib.getLocale();
-        for(var i = 0; i < this.locales.length; i++)
-            this.$.switcherLocale.createComponent({locale: this.locales[i].locale, content: this.locales[i].locale +" ("+ this.locales[i].label +" / "+ this.locales[i].label_ol +")", active: this.locales[i].locale === curLocale});
+        for(var i = 0; i < this.locales.length; i++) {
+            this.$.switcherLocale.createComponent({locale: this.locales[i].locale, content: this.locales[i].locale +" ("+ this.locales[i].label +" / "+ this.locales[i].label_ol +")", active: this.locales[i].locale.toLowerCase() === curLocale.toLowerCase()});
+        }
     },
 
     setLocale: function(inSender, inEvent) {
