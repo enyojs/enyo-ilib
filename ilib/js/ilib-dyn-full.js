@@ -14003,14 +14003,18 @@ util/jsutils.js
  * eg. "USD 57.35" for the same amount. The default is "common" style if the style is
  * not specified.<p>
  *
- * When the type of this formatter is "number",
- * the style can be either "standard" or "scientific" or "native". A "standard" style means
- * a fully specified floating point number formatted for the locale, whereas "scientific" uses
- * scientific notation for all numbers. That is, 1 integral digit, followed by a number
- * of fractional digits, followed by an "e" which denotes exponentiation, followed digits
- * which give the power of 10 in the exponent. The native style will format a floating point
- * number using the native digits and formatting symbols for the script of the locale. Note
- * that if you specify a maximum number
+ * When the type of this formatter is "number", the style can be one of the following:
+ * <ul>
+ *   <li><i>standard - format a fully specified floating point number properly for the locale
+ *   <li><i>scientific</i> - use scientific notation for all numbers. That is, 1 integral 
+ *   digit, followed by a number of fractional digits, followed by an "e" which denotes 
+ *   exponentiation, followed digits which give the power of 10 in the exponent. 
+ *   <li><i>native</i> - format a floating point number using the native digits and 
+ *   formatting symbols for the script of the locale. 
+ *   <li><i>nogrouping</i> - format a floating point number without grouping digits for
+ *   the integral portion of the number
+ * </ul>
+ * Note that if you specify a maximum number
  * of integral digits, the formatter with a standard style will give you standard
  * formatting for smaller numbers and scientific notation for larger numbers. The default
  * is standard style if this is not specified.
@@ -14212,9 +14216,13 @@ ilib.NumFmt.prototype = {
 			this.round = ilib._roundFnc[this.roundingMode];
 		}
 		
-		this.prigroupSize = this.localeInfo.getPrimaryGroupingDigits(),
-		this.secgroupSize = this.localeInfo.getSecondaryGroupingDigits(),
-		this.groupingSeparator = this.getUseNative() ? this.localeInfo.getNativeGroupingSeparator() : this.localeInfo.getGroupingSeparator();
+		if (this.style === "nogrouping") {
+			this.prigroupSize = this.secgroupSize = 0;
+		} else {
+			this.prigroupSize = this.localeInfo.getPrimaryGroupingDigits();
+			this.secgroupSize = this.localeInfo.getSecondaryGroupingDigits();
+			this.groupingSeparator = this.getUseNative() ? this.localeInfo.getNativeGroupingSeparator() : this.localeInfo.getGroupingSeparator();
+		} 
 		this.decimalSeparator = this.getUseNative() ? this.localeInfo.getNativeDecimalSeparator() : this.localeInfo.getDecimalSeparator();
 		
 		if (this.getUseNative()) {
@@ -15986,30 +15994,30 @@ ilib.Name = function (name, options) {
         // copy constructor
         /**
          * The prefixes for this name
-         * @type string
+         * @type {string|Array.<string>}
          */
         this.prefix = name.prefix;
         /**
          * The given (personal) name in this name.
-         * @type string
+         * @type {string|Array.<string>}
          */
         this.givenName = name.givenName;
         /**
          * The middle names used in this name. If there are multiple middle names, they all
          * appear in this field separated by spaces.
-         * @type string
+         * @type {string|Array.<string>}
          */
         this.middleName = name.middleName;
         /**
          * The family names in this name. If there are multiple family names, they all
          * appear in this field separated by spaces.
-         * @type string
+         * @type {string|Array.<string>}
          */
         this.familyName = name.familyName;
         /**
          * The suffixes for this name. If there are multiple suffixes, they all
          * appear in this field separated by spaces.
-         * @type string
+         * @type {string|Array.<string>}
          */
         this.suffix = name.suffix;
 
@@ -16075,6 +16083,7 @@ ilib.Name = function (name, options) {
 							 *   prefixes:Array.<string>,
 							 *   suffixes:Array.<string>,
 							 *   auxillaries:Array.<string>,
+							 *   honorifics:Array.<string>,
 							 *   knownFamilyNames:Array.<string>,
 							 *   noCompoundFamilyNames:boolean,
 							 *   sortByHeadWord:boolean
@@ -16175,7 +16184,9 @@ ilib.Name.defaultInfo = ilib.data.name ||  {
 		"esq",
 		"phd",
 		"md"
-	]
+	],
+    "patronymicName":[ ],
+    "familyNames":[ ]
 };
 
 /**
@@ -16585,20 +16596,65 @@ ilib.Name.prototype = {
      * @protected
      */
     _parseAsianName: function (parts) {
+        
         var familyNameArray = this._findPrefix(parts, this.info.knownFamilyNames, true, this.info.noCompoundFamilyNames);
 
         if (familyNameArray && familyNameArray.length > 0) {
             this.familyName = familyNameArray.join('');
 
             this.givenName = parts.slice(this.familyName.length).join('');
-
+        } else if (this.locale.getLanguage() === "ja") {
+            this._parseJapaneseName(parts);
         } else if (this.suffix || this.prefix) {
             this.familyName = parts.join('');
-
         } else {
             this.givenName = parts.join('');
-
         }
+    },
+    
+    /**
+     * @protected
+     */
+    _parseJapaneseName: function (parts) {
+    	if (this.suffix && this.suffix.length > 1 && this.info.honorifics.indexOf(this.suffix)>-1) {
+    		if (parts.length === 1) {
+    			if (ilib.CType.withinRange(parts[0], "cjk")) {
+    				this.familyName = parts[0];
+    			} else {
+    				this.givenName = parts[0];
+    			}
+    			return;
+    		} else if (parts.length === 2) {
+    			this.familyName = parts.slice(0,parts.length).join("")
+    			return;
+    		}
+    	}
+    	if (parts.length > 1) {
+    		var fn = "";                                                                    
+    		for (var i = 0; i < parts.length; i++) {
+    			if (ilib.CType.withinRange(parts[i], "cjk")) {
+    				fn += parts[i];
+    			} else if (fn.length > 1 && ilib.CType.withinRange(parts[i], "hiragana")) {
+    				this.familyName = fn;
+    				this.givenName = parts.slice(i,parts.length).join("");
+    				return;
+    			} else {
+    				break;
+    			}
+    		}
+    	}
+    	if (parts.length === 1) {
+    		this.familyName = parts[0];
+    	} else if (parts.length === 2) {
+    		this.familyName = parts[0];
+    		this.givenName = parts[1];
+    	} else if (parts.length === 3) {
+    		this.familyName = parts[0];
+    		this.givenName = parts.slice(1,parts.length).join("");
+    	} else if (parts.length > 3) {
+    		this.familyName = parts.slice(0,2).join("")
+    		this.givenName = parts.slice(2,parts.length).join("");
+    	}      
     },
 
     /**
@@ -16790,6 +16846,192 @@ ilib.Name.prototype = {
         }
     },
     
+     /**
+     * parse patrinomic name from the russian names 
+     * @protected
+     * @param {Array.<string>} parts the current array of name parts
+     * @return number  index of the part which contains patronymic name
+     */
+    _findPatronymicName: function(parts) {
+    	var index, part;
+    	for (index = 0; index < parts.length; index++) {
+    		part = parts[index];
+    		if (typeof (part) === 'string') {
+    			part = part.toLowerCase();
+
+    			var subLength = this.info.patronymicName.length;
+    			while(subLength--) {
+    				if(part.indexOf(this.info.patronymicName[subLength])!== -1 )
+    					return index;
+    			}
+    		}
+    	}
+    	return -1;
+    },
+
+    /**
+	 * find if the given part is patronymic name
+	 * 
+	 * @protected
+	 * @param {string} part string from name parts @
+	 * @return number index of the part which contains familyName
+	 */
+    _isPatronymicName: function(part) {
+	    var pName;
+	    if ( typeof (part) === 'string') {
+		    pName = part.toLowerCase();
+
+		    var subLength = this.info.patronymicName.length;
+		    while (subLength--) {
+			    if (pName.indexOf(this.info.patronymicName[subLength]) !== -1)
+				    return true;
+		    }
+	    }
+	    return false;
+    },
+
+    /**
+	 * find family name from the russian name
+	 * 
+	 * @protected
+	 * @param {Array.<string>} parts the current array of name parts
+	 * @return boolean true if patronymic, false otherwise
+	 */
+    _findFamilyName: function(parts) {
+	    var index, part, substring;
+	    for (index = 0; index < parts.length; index++) {
+		    part = parts[index];
+
+		    if ( typeof (part) === 'string') {
+			    part = part.toLowerCase();
+			    var length = part.length - 1;
+
+			    if (this.info.familyName.indexOf(part) !== -1) {
+				    return index;
+			    } else if (part[length] === 'в' || part[length] === 'н' ||
+			        part[length] === 'й') {
+				    substring = part.slice(0, -1);
+				    if (this.info.familyName.indexOf(substring) !== -1) {
+					    return index;
+				    }
+			    } else if ((part[length - 1] === 'в' && part[length] === 'а') ||
+			        (part[length - 1] === 'н' && part[length] === 'а') ||
+			        (part[length - 1] === 'а' && part[length] === 'я')) {
+				    substring = part.slice(0, -2);
+				    if (this.info.familyName.indexOf(substring) !== -1) {
+					    return index;
+				    }
+			    }
+		    }
+	    }
+	    return -1;
+    },
+
+    /**
+	 * parse russian name
+	 * 
+	 * @protected
+	 * @param {Array.<string>} parts the current array of name parts
+	 * @return
+	 */
+    _parseRussianName: function(parts) {
+	    var conjunctionIndex, familyIndex = -1;
+
+	    if (parts.length === 1) {
+		    if (this.prefix || typeof (parts[0]) === 'object') {
+			    // already has a prefix, so assume it goes with the family name
+				// like "Dr. Roberts" or
+			    // it is a name with auxillaries, which is almost always a
+				// family name
+			    this.familyName = parts[0];
+		    } else {
+			    this.givenName = parts[0];
+		    }
+	    } else if (parts.length === 2) {
+		    // we do G F
+		    if (this.info.order === 'fgm') {
+			    this.givenName = parts[1];
+			    this.familyName = parts[0];
+		    } else if (this.info.order === "gmf") {
+			    this.givenName = parts[0];
+			    this.familyName = parts[1];
+		    } else if ( typeof (this.info.order) === 'undefined') {
+			    if (this._isPatronymicName(parts[1]) === true) {
+				    this.middleName = parts[1];
+				    this.givenName = parts[0];
+			    } else if ((familyIndex = this._findFamilyName(parts)) !== -1) {
+				    if (familyIndex === 1) {
+					    this.givenName = parts[0];
+					    this.familyName = parts[1];
+				    } else {
+					    this.familyName = parts[0];
+					    this.givenName = parts[1];
+				    }
+
+			    } else {
+				    this.givenName = parts[0];
+				    this.familyName = parts[1];
+			    }
+
+		    }
+	    } else if (parts.length >= 3) {
+		    // find the first instance of 'and' in the name
+		    conjunctionIndex = this._findLastConjunction(parts);
+		    var patronymicNameIndex = this._findPatronymicName(parts);
+		    if (conjunctionIndex > 0) {
+			    // if there's a conjunction that's not the first token, put
+				// everything up to and
+			    // including the token after it into the first name, the last
+				// token into
+			    // the family name (if it exists) and everything else in to the
+				// middle name
+			    // 0 1 2 3 4 5
+			    // G A G M M F
+			    // G G A G M F
+			    // G G G A G F
+			    // G G G G A G
+			    // if(this.order == "gmf") {
+			    this.givenName = parts.slice(0, conjunctionIndex + 2);
+
+			    if (conjunctionIndex + 1 < parts.length - 1) {
+				    this.familyName = parts.splice(parts.length - 1, 1);
+				    // //console.log(this.familyName);
+				    if (conjunctionIndex + 2 < parts.length - 1) {
+					    this.middleName = parts.slice(conjunctionIndex + 2,
+					        parts.length - conjunctionIndex - 3);
+				    }
+			    } else if (this.order == "fgm") {
+				    this.familyName = parts.slice(0, conjunctionIndex + 2);
+				    if (conjunctionIndex + 1 < parts.length - 1) {
+					    this.middleName = parts.splice(parts.length - 1, 1);
+					    if (conjunctionIndex + 2 < parts.length - 1) {
+						    this.givenName = parts.slice(conjunctionIndex + 2,
+						        parts.length - conjunctionIndex - 3);
+					    }
+				    }
+			    }
+		    } else if (patronymicNameIndex !== -1) {
+			    this.middleName = parts[patronymicNameIndex];
+
+			    if (patronymicNameIndex === (parts.length - 1)) {
+				    this.familyName = parts[0];
+				    this.givenName = parts.slice(1, patronymicNameIndex);
+			    } else {
+				    this.givenName = parts.slice(0, patronymicNameIndex);
+
+				    this.familyName = parts[parts.length - 1];
+			    }
+		    } else {
+			    this.givenName = parts[0];
+
+			    this.middleName = parts.slice(1, parts.length - 1);
+
+			    this.familyName = parts[parts.length - 1];
+		    }
+	    }
+    },
+    
+    
     /**
      * @protected
      */
@@ -16805,8 +17047,7 @@ ilib.Name.prototype = {
              * or family-given. Use the value of the "order" property of the
              * constructor options to give the default when the order is ambiguous.
              */
-            // TODO: this._parseRussianName(parts);
-        	this._parseGenericWesternName(parts); // for now, just do western names
+            this._parseRussianName(parts);
         } else if (this.locale.getLanguage() === "id") {
             // in indonesia, we parse names differently than in the rest of the world 
             // because names don't have family names usually.
@@ -20782,15 +21023,7 @@ ilib.StateHandler.prototype = {
 			// everything into the subscriberNumber as the default
 			this.processSubscriberNumber(number, fields, regionSettings);
 		} else {
-			// substring() extracts the part of the string up to but not including the end character,
-			// so add one to compensate
-			if (!noExtractTrunk && regionSettings.plan.getTrunkCode() === "0" && number.charAt(0) === "0") {
-				fields.trunkAccess = number.charAt(0);
-				fields[fieldName] = number.substring(1, end);
-			} else {
-				fields[fieldName] = number.substring(0, end);
-			}
-			
+			fields[fieldName] = number.substring(0, end);
 			if (number.length > end) {
 				this.processSubscriberNumber(number.substring(end), fields, regionSettings);
 			}
@@ -20832,16 +21065,7 @@ ilib.StateHandler.prototype = {
 			this.processSubscriberNumber(number, fields, regionSettings);
 			ret.number = "";
 		} else {
-			// substring() extracts the part of the string up to but not including the end character,
-			// so add one to compensate
-			if (regionSettings.plan.getTrunkCode() === "0" && number.charAt(0) === "0") {
-				fields.trunkAccess = number.charAt(0);
-				fields[fieldName] = number.substring(1, end);
-				ret.skipTrunk = true;
-			} else {
-				fields[fieldName] = number.substring(0, end);
-			}
-			
+			fields[fieldName] = number.substring(0, end);			
 			ret.number = (number.length > end) ? number.substring(end) : "";
 		}
 		
@@ -24171,11 +24395,7 @@ ilib.Measurement.prototype = {
 	getUnit: function() {
 		return this.unit;
 	},
-        
-        getUnitLong: function() {},
-        
-        getUnitShort: function() {},
-	
+     
 	/**
 	 * Return the units originally used to construct this measurement
 	 * before it was normalized.
@@ -24221,7 +24441,7 @@ ilib.Measurement.prototype = {
 	 */
 	convert: function(to) {},     
         
-        /**
+    /**
 	 * Scale the measurement unit to an acceptable level. The scaling
 	 * happens so that the integer part of the amount is as small as
 	 * possible without being below zero. This will result in the 
@@ -24237,7 +24457,18 @@ ilib.Measurement.prototype = {
 	 */
 	scale: function(measurementsystem) {},
         
-        localize: function(locale) {}
+	/**
+	 * Localize the measurement to the commonly used measurement in that locale, for example
+	 * If a user's locale is "en-US" and the measurement is given as "60 kmh", 
+	 * the formatted number should be automatically converted to the most appropriate 
+	 * measure in the other system, in this case, mph. The formatted result should
+	 * appear as "37.3 mph". 
+	 * 
+	 * @abstract
+	 * @param {string} locale current locale string
+	 * @returns {ilib.Measurement} a new instance that is converted to locale
+	 */
+	localize: function(locale) {}
 };
 
 /*
@@ -24302,7 +24533,29 @@ strings.js
  * "yards", and the amount would be converted from meters to yards automatically before
  * being formatted. Default for the autoConvert property is "true", so it only needs to 
  * be specified when you want to turn off autoconversion.
- *  
+ * 
+ * <li><i>maxFractionDigits</i> - the maximum number of digits that should appear in the
+ * formatted output after the decimal. A value of -1 means unlimited, and 0 means only print
+ * the integral part of the number.
+ * 
+ * <li><i>minFractionDigits</i> - the minimum number of fractional digits that should
+ * appear in the formatted output. If the number does not have enough fractional digits
+ * to reach this minimum, the number will be zero-padded at the end to get to the limit.
+ * 
+ * <li><i>roundingMode</i> - When the maxFractionDigits or maxIntegerDigits is specified,
+ * this property governs how the least significant digits are rounded to conform to that
+ * maximum. The value of this property is a string with one of the following values:
+ * <ul>
+ *   <li><i>up</i> - round away from zero
+ *   <li><i>down</i> - round towards zero. This has the effect of truncating the number
+ *   <li><i>ceiling</i> - round towards positive infinity
+ *   <li><i>floor</i> - round towards negative infinity
+ *   <li><i>halfup</i> - round towards nearest neighbour. If equidistant, round up.
+ *   <li><i>halfdown</i> - round towards nearest neighbour. If equidistant, round down.
+ *   <li><i>halfeven</i> - round towards nearest neighbour. If equidistant, round towards the even neighbour
+ *   <li><i>halfodd</i> - round towards nearest neighbour. If equidistant, round towards the odd neighbour
+ * </ul>
+ * 
  * <li><i>onLoad</i> - a callback function to call when the date format object is fully 
  * loaded. When the onLoad option is given, the UnitFmt object will attempt to
  * load any missing locale data using the ilib loader callback.
@@ -24373,6 +24626,17 @@ ilib.UnitFmt = function(options) {
     	if (options.measurementSystem) {
     		this.measurementSystem = options.measurementSystem;
     	}
+        
+        if (typeof (options.maxFractionDigits) === 'number') {
+            /** @type {number|undefined} */
+            this.maxFractionDigits = options.maxFractionDigits;
+        }
+        if (typeof (options.minFractionDigits) === 'number') {
+            /** @type {number|undefined} */
+            this.minFractionDigits = options.minFractionDigits;
+        }
+        /** @type {string} */
+        this.roundingMode = options.roundingMode;
     }
 
     if (!ilib.UnitFmt.cache) {
@@ -24459,7 +24723,10 @@ ilib.UnitFmt.prototype = {
     	formatted.setLocale(this.locale, true, undefined, undefined);
     	var numFmt = new ilib.NumFmt({
     		locale: this.locale,
-    		useNative: this.useNative
+    		useNative: this.useNative,
+            maxFractionDigits: this.maxFractionDigits,
+            minFractionDigits: this.minFractionDigits,
+            roundingMode: this.roundingMode
     	});
     	formatted = formatted.formatChoice(u.amount,{n:numFmt.format(u.amount)});
     	return formatted.length > 0 ? formatted : u.amount +" " + u.unit;
@@ -24530,26 +24797,66 @@ ilib.Measurement.Length.ratios = {
 	"micrometer":   [ 1,   1,           1e-3,        1e-4,        3.93701e-5,  1e-5,        3.28084e-6,   1.09361e-6,   1e-6,         1e-7,          1e-8,           1e-9,           6.21373e-10,  5.39957e-10,  1e-12,          1e-15           ],
 	"millimeter":   [ 2,   1000,        1,           0.1,         0.0393701,   0.01,        0.00328084,   1.09361e-3,   0.001,        1e-4,          1e-5,           1e-6,           6.21373e-7,   5.39957e-7,   1e-9,           1e-12           ],
 	"centimeter":   [ 3,   1e4,         10,          1,           0.393701,    0.1,         0.0328084,    0.0109361,    0.01,         0.001,         1e-4,           1e-5,           6.21373e-6,   5.39957e-6,   1e-8,           1e-9            ],
-        "inch":         [ 4,   25399.986,   25.399986,   2.5399986,   1,           0.25399986,  0.083333333,  0.027777778,  0.025399986,  2.5399986e-3,  2.5399986e-4,   2.5399986e-5,   1.5783e-5,    1.3715e-5,    2.5399986e-8,   2.5399986e-11   ],
-        "decimeter":    [ 5,   1e5,         100,         10,          3.93701,     1,           0.328084,     0.109361,     0.1,          0.01,          0.001,          1e-4,           6.21373e-5,   5.39957e-5,   1e-7,           1e-8            ],
-        "foot":         [ 6,   304799.99,   304.79999,   30.479999,   12,          3.0479999,   1,            0.33333333,   0.30479999,   0.030479999,   3.0479999e-3,   3.0479999e-4,   1.89394e-4,   1.64579e-4,   3.0479999e-7,   3.0479999e-10   ],
-        "yard":         [ 7,   914402.758,  914.402758,  91.4402758,  36,          9.14402758,  3,            1,            0.914402758,  0.0914402758,  9.14402758e-3,  9.14402758e-4,  5.68182e-4,   4.93737e-4,   9.14402758e-7,  9.14402758e-10  ],
+    "inch":         [ 4,   25399.986,   25.399986,   2.5399986,   1,           0.25399986,  0.083333333,  0.027777778,  0.025399986,  2.5399986e-3,  2.5399986e-4,   2.5399986e-5,   1.5783e-5,    1.3715e-5,    2.5399986e-8,   2.5399986e-11   ],
+    "decimeter":    [ 5,   1e5,         100,         10,          3.93701,     1,           0.328084,     0.109361,     0.1,          0.01,          0.001,          1e-4,           6.21373e-5,   5.39957e-5,   1e-7,           1e-8            ],
+    "foot":         [ 6,   304799.99,   304.79999,   30.479999,   12,          3.0479999,   1,            0.33333333,   0.30479999,   0.030479999,   3.0479999e-3,   3.0479999e-4,   1.89394e-4,   1.64579e-4,   3.0479999e-7,   3.0479999e-10   ],
+    "yard":         [ 7,   914402.758,  914.402758,  91.4402758,  36,          9.14402758,  3,            1,            0.914402758,  0.0914402758,  9.14402758e-3,  9.14402758e-4,  5.68182e-4,   4.93737e-4,   9.14402758e-7,  9.14402758e-10  ],
 	"meter":        [ 8,   1e6,         1000,        100,         39.3701,     10,          3.28084,      1.09361,      1,            0.1,           0.01,           0.001,          6.213712e-4,  5.39957e-4,   1e-6,           1e-7            ],
 	"decameter":    [ 9,   1e7,         1e4,         1000,        393.701,     100,         32.8084,      10.9361,      10,           1,             0.1,            0.01,           6.21373e-3,   5.39957e-3,   1e-5,           1e-6            ],
 	"hectometer":   [ 10,  1e8,         1e5,         1e4,         3937.01,     1000,        328.084,      109.361,      100,          10,            1,              0.1,            0.0621373,    0.0539957,    1e-4,           1e-5            ],
 	"kilometer":    [ 11,  1e9,         1e6,         1e5,         39370.1,     1e4,         3280.84,      1093.61,      1000,         100,           10,             1,              0.621373,     0.539957,     0.001,          1e-4            ],
-        "mile":         [ 12,  1.60934e9,   1.60934e6,   1.60934e5,   63360,       1.60934e4,   5280,         1760,         1609.34,      160.934,       16.0934,        1.60934,        1,            0.868976,     1.60934e-3,     1.60934e-6      ],
-        "nauticalmile": [ 13,  1.852e9,     1.852e6,     1.852e5,     72913.4,     1.852e4,     6076.12,      2025.37,      1852,         185.2,         18.52,          1.852,          1.15078,      1,            1.852e-3,       1.852e-6        ],
+    "mile":         [ 12,  1.60934e9,   1.60934e6,   1.60934e5,   63360,       1.60934e4,   5280,         1760,         1609.34,      160.934,       16.0934,        1.60934,        1,            0.868976,     1.60934e-3,     1.60934e-6      ],
+    "nauticalmile": [ 13,  1.852e9,     1.852e6,     1.852e5,     72913.4,     1.852e4,     6076.12,      2025.37,      1852,         185.2,         18.52,          1.852,          1.15078,      1,            1.852e-3,       1.852e-6        ],
 	"megameter":    [ 14,  1e12,        1e9,         1e6,         3.93701e7,   1e5,         3.28084e6,    1.09361e6,    1e4,          1000,          100,            10,             621.373,      539.957,      1,              0.001           ],        
-        "gigameter":    [ 15,  1e15,        1e12,        1e9,         3.93701e10,  1e8,         3.28084e9,    1.09361e9,    1e7,          1e6,           1e5,            1e4,            621373.0,     539957.0,     1000,           1               ]	
+    "gigameter":    [ 15,  1e15,        1e12,        1e9,         3.93701e10,  1e8,         3.28084e9,    1.09361e9,    1e7,          1e6,           1e5,            1e4,            621373.0,     539957.0,     1000,           1               ]	
 };
 
-ilib.Measurement.Length.metricSystem      = {"micrometer":1,"millimeter":2,"centimeter":3,"decimeter":5,"meter":8,"decameter":9,"hectometer":10,"kilometer":11,"megameter":14,"gigameter":15}; 
-ilib.Measurement.Length.imperialSystem    = {"inch":4,"foot":6,"yard":7,"mile":12,"nauticalmile":13};
-ilib.Measurement.Length.uscustomarySystem = {"inch":4,"foot":6,"yard":7,"mile":12,"nauticalmile":13};
+ilib.Measurement.Length.metricSystem = {
+    "micrometer": 1,
+    "millimeter": 2,
+    "centimeter": 3,
+    "decimeter": 5,
+    "meter": 8,
+    "decameter": 9,
+    "hectometer": 10,
+    "kilometer": 11,
+    "megameter": 14,
+    "gigameter": 15
+};
+ilib.Measurement.Length.imperialSystem = {
+    "inch": 4,
+    "foot": 6,
+    "yard": 7,
+    "mile": 12,
+    "nauticalmile": 13
+};
+ilib.Measurement.Length.uscustomarySystem = {
+    "inch": 4,
+    "foot": 6,
+    "yard": 7,
+    "mile": 12,
+    "nauticalmile": 13
+};
 
-ilib.Measurement.Length.metricToUScustomary = {"micrometer":"inch","millimeter":"inch","centimeter":"inch","decimeter":"inch","meter":"yard","decameter":"yard","hectometer":"mile","kilometer":"mile","megameter":"nauticalmile","gigameter":"nauticalmile"};
-ilib.Measurement.Length.usCustomaryToMetric = {"inch":"centimeter","foot":"centimeter","yard":"meter","mile":"kilometer","nauticalmile":"kilometer"};
+ilib.Measurement.Length.metricToUScustomary = {
+    "micrometer": "inch",
+    "millimeter": "inch",
+    "centimeter": "inch",
+    "decimeter": "inch",
+    "meter": "yard",
+    "decameter": "yard",
+    "hectometer": "mile",
+    "kilometer": "mile",
+    "megameter": "nauticalmile",
+    "gigameter": "nauticalmile"
+};
+ilib.Measurement.Length.usCustomaryToMetric = {
+    "inch": "centimeter",
+    "foot": "centimeter",
+    "yard": "meter",
+    "mile": "kilometer",
+    "nauticalmile": "kilometer"
+};
 
 ilib.Measurement.Length.prototype = new ilib.Measurement({});
 ilib.Measurement.Length.prototype.parent = ilib.Measurement;
@@ -24562,9 +24869,12 @@ ilib.Measurement.Length.prototype.getMeasure = function() {
 	return "length";
 };
 
+/**
+ * @inheritDoc
+ */
 ilib.Measurement.Length.prototype.localize = function(locale) {
     var to;
-    if (locale === "en-US" || locale === "en-UK") {
+    if (locale === "en-US" || locale === "en-GB") {
         to = ilib.Measurement.Length.metricToUScustomary[this.unit] || this.unit;
     } else {
         to = ilib.Measurement.Length.usCustomaryToMetric[this.unit] || this.unit;
@@ -24591,7 +24901,6 @@ ilib.Measurement.Length.prototype.convert = function(to) {
 /**
  * @inheritDoc
  * @param {string=} measurementsystem
- * @return {ilib.Measurement}
  */
 ilib.Measurement.Length.prototype.scale = function(measurementsystem) {
     var mSystem;    
@@ -24748,7 +25057,8 @@ ilib.Measurement._constructors["length"] = ilib.Measurement.Length;
 
 /*
 !depends 
-ilibglobal.js 
+ilibglobal.js
+unit.js
 */
 
 /**
@@ -24756,6 +25066,7 @@ ilibglobal.js
  * 
  * @class
  * @constructor
+ * @extends {ilib.Measurement}
  * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
  * the construction of this instance
  */
@@ -24797,12 +25108,35 @@ ilib.Measurement.Speed.ratios = {
     "miles/second":     [ 7,  5793.6384,  5280,       3600,        3128.31447,  1609.344,  1.609344,    1             ]
 };
 
-ilib.Measurement.Speed.metricSystem      = {"kilometer/hour":1,"meters/second":5,"kilometer/second":6};
-ilib.Measurement.Speed.imperialSystem    = {"feet/second":2,"miles/hour":3,"knot":4,"miles/second":7};
-ilib.Measurement.Speed.uscustomarySystem = {"feet/second":2,"miles/hour":3,"knot":4,"miles/second":7};
+ilib.Measurement.Speed.metricSystem = {
+    "kilometer/hour": 1,
+    "meters/second": 5,
+    "kilometer/second": 6
+};
+ilib.Measurement.Speed.imperialSystem = {
+    "feet/second": 2,
+    "miles/hour": 3,
+    "knot": 4,
+    "miles/second": 7
+};
+ilib.Measurement.Speed.uscustomarySystem = {
+    "feet/second": 2,
+    "miles/hour": 3,
+    "knot": 4,
+    "miles/second": 7
+};
 
-ilib.Measurement.Speed.metricToUScustomary = {"kilometer/hour":"miles/hour","meters/second":"feet/second","kilometer/second":"miles/second"};
-ilib.Measurement.Speed.UScustomaryTometric = {"miles/hour":"kilometer/hour","feet/second":"meters/second","miles/second":"kilometer/second","knot":"kilometer/hour"};
+ilib.Measurement.Speed.metricToUScustomary = {
+    "kilometer/hour": "miles/hour",
+    "meters/second": "feet/second",
+    "kilometer/second": "miles/second"
+};
+ilib.Measurement.Speed.UScustomaryTometric = {
+    "miles/hour": "kilometer/hour",
+    "feet/second": "meters/second",
+    "miles/second": "kilometer/second",
+    "knot": "kilometer/hour"
+};
 
 ilib.Measurement.Speed.prototype = new ilib.Measurement({});
 ilib.Measurement.Speed.prototype.parent = ilib.Measurement;
@@ -24816,8 +25150,6 @@ ilib.Measurement.Speed.prototype.getMeasure = function() {
 };
 
 /**
- * Convert the current speed to another measure.
- * 
  * @inheritDoc
  */
 ilib.Measurement.Speed.prototype.convert = function(to) {
@@ -24833,46 +25165,49 @@ ilib.Measurement.Speed.prototype.convert = function(to) {
 /**
  * @inheritDoc
  * @param {string=} measurementsystem
- * @return {ilib.Measurement}
  */
 ilib.Measurement.Speed.prototype.scale = function(measurementsystem) {
-    var mSystem;    
-    if (measurementsystem === "metric" || (typeof(measurementsystem) === 'undefined' 
-            && typeof(ilib.Measurement.Speed.metricSystem[this.unit]) !== 'undefined')) {
-        mSystem = ilib.Measurement.Speed.metricSystem;
-    } else if (measurementsystem === "imperial" || (typeof(measurementsystem) === 'undefined' 
-            && typeof(ilib.Measurement.Speed.imperialSystem[this.unit]) !== 'undefined')) {
-        mSystem = ilib.Measurement.Speed.imperialSystem;
-    } else if (measurementsystem === "uscustomary" || (typeof(measurementsystem) === 'undefined' 
-            && typeof(ilib.Measurement.Speed.uscustomarySystem[this.unit]) !== 'undefined')) {
-        mSystem = ilib.Measurement.Speed.uscustomarySystem;
-    } else {
-        return new ilib.Measurement.Speed({
-			unit: this.unit,
-			amount: this.amount
+	var mSystem;
+	if (measurementsystem === "metric" ||
+	    (typeof (measurementsystem) === 'undefined' && typeof (ilib.Measurement.Speed.metricSystem[this.unit]) !== 'undefined')) {
+		mSystem = ilib.Measurement.Speed.metricSystem;
+	} else if (measurementsystem === "imperial" ||
+	    (typeof (measurementsystem) === 'undefined' && typeof (ilib.Measurement.Speed.imperialSystem[this.unit]) !== 'undefined')) {
+		mSystem = ilib.Measurement.Speed.imperialSystem;
+	} else if (measurementsystem === "uscustomary" ||
+	    (typeof (measurementsystem) === 'undefined' && typeof (ilib.Measurement.Speed.uscustomarySystem[this.unit]) !== 'undefined')) {
+		mSystem = ilib.Measurement.Speed.uscustomarySystem;
+	} else {
+		return new ilib.Measurement.Speed({
+		    unit: this.unit,
+		    amount: this.amount
 		});
-    }
-    
-    var speed = this.amount;
-    var munit = this.unit;
-    var fromRow = ilib.Measurement.Speed.ratios[this.unit];
-    
-    for (var m in mSystem) {
-        var tmp = this.amount * fromRow[mSystem[m]];
-        if (tmp < 1) break;
-        speed = tmp;
-        munit = m;
-    }
-    
-    return new ilib.Measurement.Speed({
-		unit: munit,
-		amount: speed
-    });    
+	}
+
+	var speed = this.amount;
+	var munit = this.unit;
+	var fromRow = ilib.Measurement.Speed.ratios[this.unit];
+
+	for ( var m in mSystem) {
+		var tmp = this.amount * fromRow[mSystem[m]];
+		if (tmp < 1)
+			break;
+		speed = tmp;
+		munit = m;
+	}
+
+	return new ilib.Measurement.Speed({
+	    unit: munit,
+	    amount: speed
+	});
 };
 
+/**
+ * @inheritDoc
+ */
 ilib.Measurement.Speed.prototype.localize = function(locale) {
     var to;
-    if (locale === "en-US" || locale === "en-UK") {
+    if (locale === "en-US" || locale === "en-GB") {
         to = ilib.Measurement.Speed.metricToUScustomary[this.unit] || this.unit;
     } else {
         to = ilib.Measurement.Speed.UScustomaryTometric[this.unit] || this.unit;
@@ -24884,43 +25219,43 @@ ilib.Measurement.Speed.prototype.localize = function(locale) {
 };
 
 ilib.Measurement.Speed.aliases = {
-    "foot/sec":"feet/second",
-    "foot/s":"feet/second",
-    "feet/s":"feet/second",
-    "f/s":"feet/second",
-    "feet/second" : "feet/second",
-    "feet/sec" : "feet/second",
-    "meter/sec":"meters/second",
-    "meter/s":"meters/second",
-    "meters/s":"meters/second",
-    "metre/sec":"meters/second",
-    "metre/s":"meters/second",
-    "metres/s":"meters/second",
-    "mt/sec":"meters/second",
-    "m/sec":"meters/second",
-    "mt/s":"meters/second",
-    "m/s":"meters/second",
-    "mps":"meters/second",
-    "meters/second":"meters/second",
-    "meters/sec":"meters/second",
-    "kilometer/hour":"kilometer/hour",
-    "km/hour":"kilometer/hour",
-    "kilometers/hour":"kilometer/hour",
-    "kmh":"kilometer/hour",
-    "km/h":"kilometer/hour",
-    "kilometer/h":"kilometer/hour",
-    "kilometers/h":"kilometer/hour",
-    "km/hr":"kilometer/hour",
-    "kilometer/hr":"kilometer/hour",
-    "kilometers/hr":"kilometer/hour",
-    "kilometre/hour":"kilometer/hour",
+    "foot/sec": "feet/second",
+    "foot/s": "feet/second",
+    "feet/s": "feet/second",
+    "f/s": "feet/second",
+    "feet/second": "feet/second",
+    "feet/sec": "feet/second",
+    "meter/sec": "meters/second",
+    "meter/s": "meters/second",
+    "meters/s": "meters/second",
+    "metre/sec": "meters/second",
+    "metre/s": "meters/second",
+    "metres/s": "meters/second",
+    "mt/sec": "meters/second",
+    "m/sec": "meters/second",
+    "mt/s": "meters/second",
+    "m/s": "meters/second",
+    "mps": "meters/second",
+    "meters/second": "meters/second",
+    "meters/sec": "meters/second",
+    "kilometer/hour": "kilometer/hour",
+    "km/hour": "kilometer/hour",
+    "kilometers/hour": "kilometer/hour",
+    "kmh": "kilometer/hour",
+    "km/h": "kilometer/hour",
+    "kilometer/h": "kilometer/hour",
+    "kilometers/h": "kilometer/hour",
+    "km/hr": "kilometer/hour",
+    "kilometer/hr": "kilometer/hour",
+    "kilometers/hr": "kilometer/hour",
+    "kilometre/hour": "kilometer/hour",
     "mph": "miles/hour",
     "mile/hour": "miles/hour",
     "mile/hr": "miles/hour",
     "mile/h": "miles/hour",
     "miles/h": "miles/hour",
     "miles/hr": "miles/hour",
-    "miles/hour":"miles/hour",
+    "miles/hour": "miles/hour",
     "kn": "knot",
     "kt": "knot",
     "kts": "knot",
@@ -24932,18 +25267,18 @@ ilib.Measurement.Speed.aliases = {
     "nauticalmile/hour": "knot",
     "nauticalmiles/hr": "knot",
     "nauticalmiles/hour": "knot",
-    "knot":"knot",
-    "kilometer/second":"kilometer/second",
-    "kilometer/sec":"kilometer/second",
-    "kilometre/sec":"kilometer/second",
-    "Kilometre/sec":"kilometer/second",
-    "kilometers/second":"kilometer/second",
-    "kilometers/sec":"kilometer/second",
-    "kilometres/sec":"kilometer/second",
-    "Kilometres/sec":"kilometer/second",
-    "km/sec":"kilometer/second",
-    "Km/s":"kilometer/second",
-    "km/s":"kilometer/second",
+    "knot": "knot",
+    "kilometer/second": "kilometer/second",
+    "kilometer/sec": "kilometer/second",
+    "kilometre/sec": "kilometer/second",
+    "Kilometre/sec": "kilometer/second",
+    "kilometers/second": "kilometer/second",
+    "kilometers/sec": "kilometer/second",
+    "kilometres/sec": "kilometer/second",
+    "Kilometres/sec": "kilometer/second",
+    "km/sec": "kilometer/second",
+    "Km/s": "kilometer/second",
+    "km/s": "kilometer/second",
     "miles/second": "miles/second",
     "miles/sec": "miles/second",
     "miles/s": "miles/second",
@@ -25009,6 +25344,7 @@ ilib.Measurement._constructors["speed"] = ilib.Measurement.Speed;
 /*
 !depends 
 ilibglobal.js 
+unit.js
 */
 
 /**
@@ -25016,6 +25352,7 @@ ilibglobal.js
  * 
  * @class
  * @constructor
+ * @extends {ilib.Measurement}
  * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
  * the construction of this instance
  */
@@ -25048,11 +25385,10 @@ ilib.Measurement.DigitalStorage = function (options) {
 
 ilib.Measurement.DigitalStorage.ratios = {
     /*                 bit             byte            kb              kB              mb              mB              gb               gB               tb               tB               pb               pB   */           
-
-"bit":      [ 1,   1,              0.125,          0.0009765625,   1.220703125e-4, 9.536743164e-7, 1.192092896e-7, 9.313225746e-10, 1.164153218e-10, 9.094947017e-13, 1.136868377e-13, 8.881784197e-16, 1.110223025e-16 ],
+	"bit":      [ 1,   1,              0.125,          0.0009765625,   1.220703125e-4, 9.536743164e-7, 1.192092896e-7, 9.313225746e-10, 1.164153218e-10, 9.094947017e-13, 1.136868377e-13, 8.881784197e-16, 1.110223025e-16 ],
     "byte":     [ 2,   8,              1,              0.0078125,      0.0009765625,   7.629394531e-6, 9.536743164e-7, 7.450580597e-9,  9.313225746e-10, 7.275957614e-12, 9.094947017e-13, 7.105427358e-15, 8.881784197e-16 ],
     "kilobit":  [ 3,   1024,           128,            1,              0.125,          0.0009765625,   1.220703125e-4, 9.536743164e-7,  1.192092896e-7,  9.313225746e-10, 1.164153218e-10, 9.094947017e-13, 1.136868377e-13 ],
-     "kilobyte": [ 4,   8192,           1024,           8,              1,              0.0078125,      0.0009765625,   7.629394531e-6,  9.536743164e-7,  7.450580597e-9,  9.313225746e-10, 7.275957614e-12, 9.094947017e-13 ],
+    "kilobyte": [ 4,   8192,           1024,           8,              1,              0.0078125,      0.0009765625,   7.629394531e-6,  9.536743164e-7,  7.450580597e-9,  9.313225746e-10, 7.275957614e-12, 9.094947017e-13 ],
     "megabit":  [ 5,   1048576,        131072,         1024,           128,            1,              0.125,          0.0009765625,    1.220703125e-4,  9.536743164e-7,  1.192092896e-7,  9.313225746e-10, 1.164153218e-10 ],
     "megabyte": [ 6,   8388608,        1048576,        8192,           1024,           8,              1,              0.0078125,       0.0009765625,    7.629394531e-6,  9.536743164e-7,  7.450580597e-9,  9.313225746e-10 ],
     "gigabit":  [ 7,   1073741824,     134217728,      1048576,        131072,         1024,           128,            1,               0.125,           0.0009765625,    1.220703125e-4,  9.536743164e-7,  1.192092896e-7  ],
@@ -25074,8 +25410,6 @@ ilib.Measurement.DigitalStorage.prototype.getMeasure = function() {
 };
 
 /**
- * Convert the current digitalStorage to another measure.
- * 
  * @inheritDoc
  */
 ilib.Measurement.DigitalStorage.prototype.convert = function(to) {
@@ -25088,6 +25422,9 @@ ilib.Measurement.DigitalStorage.prototype.convert = function(to) {
 	});
 };
 
+/**
+ * @inheritDoc
+ */
 ilib.Measurement.DigitalStorage.prototype.localize = function(locale) {
     return new ilib.Measurement.DigitalStorage({
         unit: this.unit,
@@ -25098,7 +25435,6 @@ ilib.Measurement.DigitalStorage.prototype.localize = function(locale) {
 /**
  * @inheritDoc
  * @param {string=} measurementsystem
- * @return {ilib.Measurement}
  */
 ilib.Measurement.DigitalStorage.prototype.scale = function(measurementsystem) {
     
@@ -25122,114 +25458,114 @@ ilib.Measurement.DigitalStorage.prototype.scale = function(measurementsystem) {
 };
 
 ilib.Measurement.DigitalStorage.aliases = {
-    "bits":"bit",
-    "bit":"bit",
-    "Bits":"bit",
-    "Bit":"bit",
-    "byte":"byte",
-    "bytes":"byte",
-    "Byte":"byte",
-    "Bytes":"byte",
-    "kilobits":"kilobit",
-    "Kilobits":"kilobit",
-    "KiloBits":"kilobit",
-    "kiloBits":"kilobit",
-    "kilobit":"kilobit",
-    "Kilobit":"kilobit",
-    "kiloBit":"kilobit",
-    "KiloBit":"kilobit",
-    "kb":"kilobit",
-    "Kb":"kilobit",
-    "kilobyte":"kilobyte",
-    "Kilobyte":"kilobyte",
-    "kiloByte":"kilobyte",
-    "KiloByte":"kilobyte",
-    "kilobytes":"kilobyte",
-    "Kilobytes":"kilobyte",
-    "kiloBytes":"kilobyte",
-    "KiloBytes":"kilobyte",
-    "kB":"kilobyte",
-    "KB":"kilobyte",
-    "megabit":"megabit",
-    "Megabit":"megabit",
-    "megaBit":"megabit",
-    "MegaBit":"megabit",
-    "megabits":"megabit",
-    "Megabits":"megabit",
-    "megaBits":"megabit",
-    "MegaBits":"megabit",
-    "Mb":"megabit",
-    "mb":"megabit",
-    "megabyte":"megabyte",
-    "Megabyte":"megabyte",
-    "megaByte":"megabyte",
-    "MegaByte":"megabyte",
-    "megabytes":"megabyte",
-    "Megabytes":"megabyte",
-    "megaBytes":"megabyte",
-    "MegaBytes":"megabyte",
-    "MB":"megabyte",
-    "mB":"megabyte",
-    "gigabit":"gigabit",
-    "Gigabit":"gigabit",
-    "gigaBit":"gigabit",
-    "GigaBit":"gigabit",
-    "gigabits":"gigabit",
-    "Gigabits":"gigabit",
-    "gigaBits":"gigabyte",
-    "GigaBits":"gigabit",
-    "Gb":"gigabit",
-    "gb":"gigabit",        
-    "gigabyte":"gigabyte",
-    "Gigabyte":"gigabyte",
-    "gigaByte":"gigabyte",
-    "GigaByte":"gigabyte",
-    "gigabytes":"gigabyte",
-    "Gigabytes":"gigabyte",
-    "gigaBytes":"gigabyte",
-    "GigaBytes":"gigabyte",
-    "GB":"gigabyte",
-    "gB":"gigabyte",
-    "terabit":"terabit",
-    "Terabit":"terabit",
-    "teraBit":"terabit",
-    "TeraBit":"terabit",
-    "terabits":"terabit",
-    "Terabits":"terabit",
-    "teraBits":"terabit",
-    "TeraBits":"terabit",
-    "tb":"terabit",
-    "Tb":"terabit",
-    "terabyte":"terabyte",
-    "Terabyte":"terabyte",
-    "teraByte":"terabyte",
-    "TeraByte":"terabyte",
-    "terabytes":"terabyte",
-    "Terabytes":"terabyte",
-    "teraBytes":"terabyte",
-    "TeraBytes":"terabyte",
-    "TB":"terabyte",
-    "tB":"terabyte",
-    "petabit":"petabit",
-    "Petabit":"petabit",
-    "petaBit":"petabit",
-    "PetaBit":"petabit",
-    "petabits":"petabit",
-    "Petabits":"petabit",
-    "petaBits":"petabit",
-    "PetaBits":"petabit",
-    "pb":"petabit",
-    "Pb":"petabit",
-    "petabyte":"petabyte",
-    "Petabyte":"petabyte",
-    "petaByte":"petabyte",
-    "PetaByte":"petabyte",
-    "petabytes":"petabyte",
-    "Petabytes":"petabyte",
-    "petaBytes":"petabyte",
-    "PetaBytes":"petabyte",
-    "PB":"petabyte",
-    "pB":"petabyte"
+    "bits": "bit",
+    "bit": "bit",
+    "Bits": "bit",
+    "Bit": "bit",
+    "byte": "byte",
+    "bytes": "byte",
+    "Byte": "byte",
+    "Bytes": "byte",
+    "kilobits": "kilobit",
+    "Kilobits": "kilobit",
+    "KiloBits": "kilobit",
+    "kiloBits": "kilobit",
+    "kilobit": "kilobit",
+    "Kilobit": "kilobit",
+    "kiloBit": "kilobit",
+    "KiloBit": "kilobit",
+    "kb": "kilobit",
+    "Kb": "kilobit",
+    "kilobyte": "kilobyte",
+    "Kilobyte": "kilobyte",
+    "kiloByte": "kilobyte",
+    "KiloByte": "kilobyte",
+    "kilobytes": "kilobyte",
+    "Kilobytes": "kilobyte",
+    "kiloBytes": "kilobyte",
+    "KiloBytes": "kilobyte",
+    "kB": "kilobyte",
+    "KB": "kilobyte",
+    "megabit": "megabit",
+    "Megabit": "megabit",
+    "megaBit": "megabit",
+    "MegaBit": "megabit",
+    "megabits": "megabit",
+    "Megabits": "megabit",
+    "megaBits": "megabit",
+    "MegaBits": "megabit",
+    "Mb": "megabit",
+    "mb": "megabit",
+    "megabyte": "megabyte",
+    "Megabyte": "megabyte",
+    "megaByte": "megabyte",
+    "MegaByte": "megabyte",
+    "megabytes": "megabyte",
+    "Megabytes": "megabyte",
+    "megaBytes": "megabyte",
+    "MegaBytes": "megabyte",
+    "MB": "megabyte",
+    "mB": "megabyte",
+    "gigabit": "gigabit",
+    "Gigabit": "gigabit",
+    "gigaBit": "gigabit",
+    "GigaBit": "gigabit",
+    "gigabits": "gigabit",
+    "Gigabits": "gigabit",
+    "gigaBits": "gigabyte",
+    "GigaBits": "gigabit",
+    "Gb": "gigabit",
+    "gb": "gigabit",
+    "gigabyte": "gigabyte",
+    "Gigabyte": "gigabyte",
+    "gigaByte": "gigabyte",
+    "GigaByte": "gigabyte",
+    "gigabytes": "gigabyte",
+    "Gigabytes": "gigabyte",
+    "gigaBytes": "gigabyte",
+    "GigaBytes": "gigabyte",
+    "GB": "gigabyte",
+    "gB": "gigabyte",
+    "terabit": "terabit",
+    "Terabit": "terabit",
+    "teraBit": "terabit",
+    "TeraBit": "terabit",
+    "terabits": "terabit",
+    "Terabits": "terabit",
+    "teraBits": "terabit",
+    "TeraBits": "terabit",
+    "tb": "terabit",
+    "Tb": "terabit",
+    "terabyte": "terabyte",
+    "Terabyte": "terabyte",
+    "teraByte": "terabyte",
+    "TeraByte": "terabyte",
+    "terabytes": "terabyte",
+    "Terabytes": "terabyte",
+    "teraBytes": "terabyte",
+    "TeraBytes": "terabyte",
+    "TB": "terabyte",
+    "tB": "terabyte",
+    "petabit": "petabit",
+    "Petabit": "petabit",
+    "petaBit": "petabit",
+    "PetaBit": "petabit",
+    "petabits": "petabit",
+    "Petabits": "petabit",
+    "petaBits": "petabit",
+    "PetaBits": "petabit",
+    "pb": "petabit",
+    "Pb": "petabit",
+    "petabyte": "petabyte",
+    "Petabyte": "petabyte",
+    "petaByte": "petabyte",
+    "PetaByte": "petabyte",
+    "petabytes": "petabyte",
+    "Petabytes": "petabyte",
+    "petaBytes": "petabyte",
+    "PetaBytes": "petabyte",
+    "PB": "petabyte",
+    "pB": "petabyte"
 };
 
 /**
@@ -25264,13 +25600,6 @@ ilib.Measurement.DigitalStorage.getMeasures = function () {
 	return ret;
 };
 
-ilib.Measurement.DigitalStorage.prototype.localize = function(locale) {
-
-    return new ilib.Measurement.DigitalStorage({
-        unit: this.unit,
-        amount: this
-    });
-};
 //register with the factory method
 ilib.Measurement._constructors["digitalStorage"] = ilib.Measurement.DigitalStorage;
 
@@ -25295,7 +25624,8 @@ ilib.Measurement._constructors["digitalStorage"] = ilib.Measurement.DigitalStora
 
 /*
 !depends 
-ilibglobal.js 
+ilibglobal.js
+unit.js
 */
 
 /**
@@ -25303,6 +25633,7 @@ ilibglobal.js
  * 
  * @class
  * @constructor
+ * @extends {ilib.Measurement}
  * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
  * the construction of this instance
  */
@@ -25341,21 +25672,21 @@ ilib.Measurement.Temperature.prototype.getMeasure = function() {
 };
 
 ilib.Measurement.Temperature.aliases = {
-	"Celsius": "celsius",
-	"celsius": "celsius",
-	"C": "celsius",
-	"centegrade": "celsius",
-	"Centegrade": "celsius",
-	"centigrade": "celsius",
-	"Centigrade": "celsius",
-	"fahrenheit": "fahrenheit",
-	"Fahrenheit": "fahrenheit",
-	"F": "fahrenheit",
-	"kelvin": "kelvin",
-	"K": "kelvin",
-	"Kelvin": "kelvin",
+    "Celsius": "celsius",
+    "celsius": "celsius",
+    "C": "celsius",
+    "centegrade": "celsius",
+    "Centegrade": "celsius",
+    "centigrade": "celsius",
+    "Centigrade": "celsius",
+    "fahrenheit": "fahrenheit",
+    "Fahrenheit": "fahrenheit",
+    "F": "fahrenheit",
+    "kelvin": "kelvin",
+    "K": "kelvin",
+    "Kelvin": "kelvin",
     "°F": "fahrenheit",
-    "℉" : "fahrenheit",
+    "℉": "fahrenheit",
     "℃": "celsius",
     "°C": "celsius"
 };
@@ -25372,13 +25703,16 @@ ilib.Measurement.Temperature.convert = function(to, from, temperature) {
 	var result = 0;
 	from = ilib.Measurement.Temperature.aliases[from] || from;
 	to = ilib.Measurement.Temperature.aliases[to] || to;
+	if (from === to)
+		return temperature;
 
-	if (from === "celsius") {
+	else if (from === "celsius") {
 		if (to === "fahrenheit") {
 			result = ((temperature * 9 / 5) + 32);
 		} else if (to === "kelvin") {
 			result = (temperature + 273.15);
 		}
+
 	} else if (from === "fahrenheit") {
 		if (to === "celsius") {
 			result = ((5 / 9 * (temperature - 32)));
@@ -25392,21 +25726,13 @@ ilib.Measurement.Temperature.convert = function(to, from, temperature) {
 			result = ((temperature * 9 / 5) - 459.67);
 		}
 	}
-	
-	return result;
-};
 
-ilib.Measurement.Temperature.prototype.localize = function(locale) {
-    return new ilib.Measurement.Temperature({
-        unit: this.unit,
-        amount: this.amount
-    });
+	return result;
 };
 
 /**
  * @inheritDoc
  * @param {string=} measurementsystem
- * @return {ilib.Measurement}
  */
 ilib.Measurement.Temperature.prototype.scale = function(measurementsystem) {
     return new ilib.Measurement.Temperature({
@@ -25422,7 +25748,28 @@ ilib.Measurement.Temperature.prototype.scale = function(measurementsystem) {
 ilib.Measurement.Temperature.getMeasures = function () {
 	return ["celsius", "kelvin", "fahrenheit"];
 };
+ilib.Measurement.Temperature.metricToUScustomary = {
+	"celsius": "fahrenheit"
+};
+ilib.Measurement.Temperature.usCustomaryToMetric = {
+	"fahrenheit": "celsius"
+};
 
+/**
+ * @inheritDoc
+ */
+ilib.Measurement.Temperature.prototype.localize = function(locale) {
+    var to;
+    if (locale === "en-US" ) {
+        to = ilib.Measurement.Temperature.metricToUScustomary[this.unit] || this.unit;
+    } else {
+        to = ilib.Measurement.Temperature.usCustomaryToMetric[this.unit] || this.unit;
+    }
+    return new ilib.Measurement.Temperature({
+        unit: to,
+        amount: this
+    });
+};
 //register with the factory method
 ilib.Measurement._constructors["temperature"] = ilib.Measurement.Temperature;
 
@@ -25448,6 +25795,7 @@ ilib.Measurement._constructors["temperature"] = ilib.Measurement.Temperature;
 /*
 !depends 
 ilibglobal.js 
+unit.js
 */
 
 /**
@@ -25455,6 +25803,7 @@ ilibglobal.js
  * 
  * @class
  * @constructor
+ * @extends {ilib.Measurement}
  * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
  * the construction of this instance
  */
@@ -25482,8 +25831,6 @@ ilib.Measurement.Unknown.prototype.getMeasure = function() {
 };
 
 /**
- * Convert the current Unknown to another measure.
- * 
  * @inheritDoc
  */
 ilib.Measurement.Unknown.prototype.convert = function(to) {
@@ -25502,6 +25849,9 @@ ilib.Measurement.Unknown.convert = function(to, from, unknown) {
     return undefined;
 };
 
+/**
+ * @inheritDoc
+ */
 ilib.Measurement.Unknown.prototype.localize = function(locale) {
     return new ilib.Measurement.Unknown({
         unit: this.unit,
@@ -25511,7 +25861,6 @@ ilib.Measurement.Unknown.prototype.localize = function(locale) {
 /**
  * @inheritDoc
  * @param {string=} measurementsystem
- * @return {ilib.Measurement}
  */
 ilib.Measurement.Unknown.prototype.scale = function(measurementsystem) {
     return new ilib.Measurement.Unknown({
@@ -25554,6 +25903,7 @@ ilib.Measurement._constructors["unknown"] = ilib.Measurement.Unknown;
 /*
 !depends 
 ilibglobal.js 
+unit.js
 */
 
 /**
@@ -25561,6 +25911,7 @@ ilibglobal.js
  * 
  * @class
  * @constructor
+ * @extends {ilib.Measurement}
  * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
  * the construction of this instance
  */
@@ -25598,13 +25949,13 @@ ilib.Measurement.Time.ratios = {
 	"millisecond":  [ 3,   1e+6,       1000,       1,          0.001,     1.6667e-5,   2.7778e-7,    1.1574e-8,    1.6534e-9,   3.8027e-10,  3.1689e-11,  3.1689e-12,   3.1689e-13  ],
 	"second":       [ 4,   1e+9,       1e+6,       1000,       1,         0.0166667,   0.000277778,  1.1574e-5,    1.6534e-6,   3.8027e-7,   3.1689e-8,   3.1689e-9,    3.1689e-10  ],
 	"minute":       [ 5,   6e+10,      6e+7,       60000,      60,        1,           0.0166667,    0.000694444,  9.9206e-5,   2.2816e-5,   1.9013e-6,   1.9013e-7,    1.9013e-8   ],
-        "hour":         [ 6,   3.6e+12,    3.6e+9,     3.6e+6,     3600,      60,          1,            0.0416667,    0.00595238,  0.00136895,  0.00011408,  1.1408e-5,    1.1408e-6   ],
-        "day":          [ 7,   8.64e+13,   8.64e+10,   8.64e+7,    86400,     1440,        24,           1,            0.142857,    0.0328549,   0.00273791,  0.000273791,  2.7379e-5   ],
-        "week":         [ 8,   6.048e+14,  6.048e+11,  6.048e+8,   604800,    10080,       168,          7,            1,           0.229984,    0.0191654,   0.00191654,   0.000191654 ],
-        "month":        [ 9,   2.63e+15,   2.63e+12,   2.63e+9,    2.63e+6,   43829.1,     730.484,      30.4368,      4.34812,     1,           0.0833333,   0.00833333,   0.000833333 ],
-        "year":         [ 10,  3.156e+16,  3.156e+13,  3.156e+10,  3.156e+7,  525949,      8765.81,      365.242,      52.1775,     12,          1,           0.1,          0.01        ],
-        "decade":       [ 11,  3.156e+17,  3.156e+14,  3.156e+11,  3.156e+8,  5.259e+6,    87658.1,      3652.42,      521.775,     120,         10,          1,            0.1         ],
-        "century":      [ 12,  3.156e+18,  3.156e+18,  3.156e+12,  3.156e+9,  5.259e+7,    876581,       36524.2,      5217.75,     1200,        100,         10,           1           ]
+    "hour":         [ 6,   3.6e+12,    3.6e+9,     3.6e+6,     3600,      60,          1,            0.0416667,    0.00595238,  0.00136895,  0.00011408,  1.1408e-5,    1.1408e-6   ],
+    "day":          [ 7,   8.64e+13,   8.64e+10,   8.64e+7,    86400,     1440,        24,           1,            0.142857,    0.0328549,   0.00273791,  0.000273791,  2.7379e-5   ],
+    "week":         [ 8,   6.048e+14,  6.048e+11,  6.048e+8,   604800,    10080,       168,          7,            1,           0.229984,    0.0191654,   0.00191654,   0.000191654 ],
+    "month":        [ 9,   2.63e+15,   2.63e+12,   2.63e+9,    2.63e+6,   43829.1,     730.484,      30.4368,      4.34812,     1,           0.0833333,   0.00833333,   0.000833333 ],
+    "year":         [ 10,  3.156e+16,  3.156e+13,  3.156e+10,  3.156e+7,  525949,      8765.81,      365.242,      52.1775,     12,          1,           0.1,          0.01        ],
+    "decade":       [ 11,  3.156e+17,  3.156e+14,  3.156e+11,  3.156e+8,  5.259e+6,    87658.1,      3652.42,      521.775,     120,         10,          1,            0.1         ],
+    "century":      [ 12,  3.156e+18,  3.156e+18,  3.156e+12,  3.156e+9,  5.259e+7,    876581,       36524.2,      5217.75,     1200,        100,         10,           1           ]
 };
 
 ilib.Measurement.Time.prototype = new ilib.Measurement({});
@@ -25612,7 +25963,7 @@ ilib.Measurement.Time.prototype.parent = ilib.Measurement;
 ilib.Measurement.Time.prototype.constructor = ilib.Measurement.Time;
 
 /**
- * @inheritDoc
+ * {@inheritDoc}
  */
 ilib.Measurement.Time.prototype.getMeasure = function() {
 	return "time";
@@ -25634,87 +25985,87 @@ ilib.Measurement.Time.prototype.convert = function(to) {
 };
 
 ilib.Measurement.Time.aliases = {
-    "ns":"nanosecond",
-    "NS":"nanosecond",
-    "nS":"nanosecond",
-    "Ns":"nanosecond",
-    "Nanosecond":"nanosecond",
-    "Nanoseconds":"nanosecond",
-    "nanosecond":"nanosecond",
-    "nanoseconds":"nanosecond",
-    "NanoSecond":"nanosecond",
-    "NanoSeconds":"nanosecond",
-    "μs":"microsecond",
-    "μS":"microsecond",
-    "microsecond":"microsecond",
-    "microseconds":"microsecond",
-    "Microsecond":"microsecond",
-    "Microseconds":"microsecond",
-    "MicroSecond":"microsecond",
-    "MicroSeconds":"microsecond",
-    "ms":"millisecond",
-    "MS":"millisecond",
-    "mS":"millisecond",
-    "Ms":"millisecond",
-    "millisecond":"millisecond",
-    "milliseconds":"millisecond",
-    "Millisecond":"millisecond",
-    "Milliseconds":"millisecond",
-    "MilliSecond":"millisecond",
-    "MilliSeconds":"millisecond",
-    "s":"second",
-    "S":"second",
-    "sec":"second",
-    "second":"second",
-    "seconds":"second",
-    "Second":"second",
-    "Seconds":"second",
-    "min":"minute",
-    "Min":"minute",
-    "minute":"minute",
-    "minutes":"minute",
-    "Minute":"minute",
-    "Minutes":"minute",
-    "h":"hour",
-    "H":"hour",
-    "hr":"hour",
-    "Hr":"hour",
-    "hR":"hour",
-    "HR":"hour",
-    "hour":"hour",
-    "hours":"hour",
-    "Hour":"hour",
-    "Hours":"hour",
-    "Hrs":"hour",
-    "hrs":"hour",
-    "day":"day",
-    "days":"day",
-    "Day":"day",
-    "Days":"day",
-    "week":"week",
-    "weeks":"week",
-    "Week":"week",
-    "Weeks":"week",
-    "month":"month",
-    "Month":"month",
-    "months":"month",
-    "Months":"month",
-    "year":"year",
-    "years":"year",
-    "Year":"year",
-    "Years":"year",
-    "yr":"year",
-    "Yr":"year",
-    "yrs":"year",
-    "Yrs":"year",
-    "decade":"decade",
-    "decades":"decade",
-    "Decade":"decade",
-    "Decades":"decade",
-    "century":"century",
-    "centuries":"century",
-    "Century":"century",
-    "Centuries":"century"
+    "ns": "nanosecond",
+    "NS": "nanosecond",
+    "nS": "nanosecond",
+    "Ns": "nanosecond",
+    "Nanosecond": "nanosecond",
+    "Nanoseconds": "nanosecond",
+    "nanosecond": "nanosecond",
+    "nanoseconds": "nanosecond",
+    "NanoSecond": "nanosecond",
+    "NanoSeconds": "nanosecond",
+    "μs": "microsecond",
+    "μS": "microsecond",
+    "microsecond": "microsecond",
+    "microseconds": "microsecond",
+    "Microsecond": "microsecond",
+    "Microseconds": "microsecond",
+    "MicroSecond": "microsecond",
+    "MicroSeconds": "microsecond",
+    "ms": "millisecond",
+    "MS": "millisecond",
+    "mS": "millisecond",
+    "Ms": "millisecond",
+    "millisecond": "millisecond",
+    "milliseconds": "millisecond",
+    "Millisecond": "millisecond",
+    "Milliseconds": "millisecond",
+    "MilliSecond": "millisecond",
+    "MilliSeconds": "millisecond",
+    "s": "second",
+    "S": "second",
+    "sec": "second",
+    "second": "second",
+    "seconds": "second",
+    "Second": "second",
+    "Seconds": "second",
+    "min": "minute",
+    "Min": "minute",
+    "minute": "minute",
+    "minutes": "minute",
+    "Minute": "minute",
+    "Minutes": "minute",
+    "h": "hour",
+    "H": "hour",
+    "hr": "hour",
+    "Hr": "hour",
+    "hR": "hour",
+    "HR": "hour",
+    "hour": "hour",
+    "hours": "hour",
+    "Hour": "hour",
+    "Hours": "hour",
+    "Hrs": "hour",
+    "hrs": "hour",
+    "day": "day",
+    "days": "day",
+    "Day": "day",
+    "Days": "day",
+    "week": "week",
+    "weeks": "week",
+    "Week": "week",
+    "Weeks": "week",
+    "month": "month",
+    "Month": "month",
+    "months": "month",
+    "Months": "month",
+    "year": "year",
+    "years": "year",
+    "Year": "year",
+    "Years": "year",
+    "yr": "year",
+    "Yr": "year",
+    "yrs": "year",
+    "Yrs": "year",
+    "decade": "decade",
+    "decades": "decade",
+    "Decade": "decade",
+    "Decades": "decade",
+    "century": "century",
+    "centuries": "century",
+    "Century": "century",
+    "Centuries": "century"
 };
 
 /**
@@ -25736,6 +26087,9 @@ ilib.Measurement.Time.convert = function(to, from, time) {
     return time * fromRow[toRow[0]];
 };
 
+/**
+ * @inheritDoc
+ */
 ilib.Measurement.Time.prototype.localize = function(locale) {
     return new ilib.Measurement.Time({
         unit: this.unit,
@@ -25746,7 +26100,6 @@ ilib.Measurement.Time.prototype.localize = function(locale) {
 /**
  * @inheritDoc
  * @param {string=} measurementsystem
- * @return {ilib.Measurement}
  */
 ilib.Measurement.Time.prototype.scale = function(measurementsystem) {
 
@@ -25849,47 +26202,97 @@ ilib.Measurement.Mass.ratios = {
 	"gram":        [ 3,   1e+6,       1000,      1,         0.035274,   0.00220462,  0.001,      0.000157473,  1.1023e-6,   1e-6,         9.8421e-7    ],
 	"ounce":       [ 4,   2.835e+7,   28349.5,   28.3495,   1,          0.0625,      0.0283495,  0.00446429,   3.125e-5,    2.835e-5,     2.7902e-5    ],
 	"pound":       [ 5,   4.536e+8,   453592,    453.592,   16,         1,           0.453592,   0.0714286,    0.0005,      0.000453592,  0.000446429  ],
-        "kilogram":    [ 6,   1e+9,       1e+6,      1000,      35.274,     2.20462,     1,          0.157473,     0.00110231,  0.001,        0.000984207  ],
-        "stone":       [ 7,   6.35e+9,    6.35e+6,   6350.29,   224,        14,          6.35029,    1,            0.007,       0.00635029,   0.00625      ],
-        "short ton":   [ 8,   9.072e+11,  9.072e+8,  907185,    32000,      2000,        907.185,    142.857,      1,           0.907185,     0.892857     ],
-        "metric ton":  [ 9,   1e+12,      1e+9,      1e+6,      35274,      2204.62,     1000,       157.473,      1.10231,     1,            0.984207     ],
-        "long ton":    [ 10,  1.016e+12,  1.016e+9,  1.016e+6,  35840,      2240,        1016.05,    160,          1.12,        1.01605,      1            ]
+    "kilogram":    [ 6,   1e+9,       1e+6,      1000,      35.274,     2.20462,     1,          0.157473,     0.00110231,  0.001,        0.000984207  ],
+    "stone":       [ 7,   6.35e+9,    6.35e+6,   6350.29,   224,        14,          6.35029,    1,            0.007,       0.00635029,   0.00625      ],
+    "short ton":   [ 8,   9.072e+11,  9.072e+8,  907185,    32000,      2000,        907.185,    142.857,      1,           0.907185,     0.892857     ],
+    "metric ton":  [ 9,   1e+12,      1e+9,      1e+6,      35274,      2204.62,     1000,       157.473,      1.10231,     1,            0.984207     ],
+    "long ton":    [ 10,  1.016e+12,  1.016e+9,  1.016e+6,  35840,      2240,        1016.05,    160,          1.12,        1.01605,      1            ]
 };
 
-ilib.Measurement.Mass.metricSystem      = {"microgram":1,"milligram":2,"gram":3,"kilogram":6,"metric ton":9};
-ilib.Measurement.Mass.imperialSystem    = {"ounce":4,"pound":5,"stone":7,"long ton":10};
-ilib.Measurement.Mass.uscustomarySystem = {"ounce":4,"pound":5,"short ton":8};
+ilib.Measurement.Mass.metricSystem = {
+    "microgram": 1,
+    "milligram": 2,
+    "gram": 3,
+    "kilogram": 6,
+    "metric ton": 9
+};
+ilib.Measurement.Mass.imperialSystem = {
+    "ounce": 4,
+    "pound": 5,
+    "stone": 7,
+    "long ton": 10
+};
+ilib.Measurement.Mass.uscustomarySystem = {
+    "ounce": 4,
+    "pound": 5,
+    "short ton": 8
+};
 
-ilib.Measurement.Mass.metricToUScustomary =   {"microgram":"ounce","milligram":"ounce","gram":"ounce","kilogram":"pound","metric ton":"long ton"};
-ilib.Measurement.Mass.metricToImperial    =   {"microgram":"ounce","milligram":"ounce","gram":"ounce","kilogram":"pound","metric ton":"short ton"};
+ilib.Measurement.Mass.metricToUScustomary = {
+    "microgram": "ounce",
+    "milligram": "ounce",
+    "gram": "ounce",
+    "kilogram": "pound",
+    "metric ton": "long ton"
+};
+ilib.Measurement.Mass.metricToImperial = {
+    "microgram": "ounce",
+    "milligram": "ounce",
+    "gram": "ounce",
+    "kilogram": "pound",
+    "metric ton": "short ton"
+};
 
-ilib.Measurement.Mass.imperialToMetric      = {"ounce":"gram","pound":"kilogram","stone":"kilogram","short ton":"metric ton"};
-ilib.Measurement.Mass.imperialToUScustomary = {"ounce":"ounce","pound":"pound","stone":"stone","short ton":"long ton"};
+ilib.Measurement.Mass.imperialToMetric = {
+    "ounce": "gram",
+    "pound": "kilogram",
+    "stone": "kilogram",
+    "short ton": "metric ton"
+};
+ilib.Measurement.Mass.imperialToUScustomary = {
+    "ounce": "ounce",
+    "pound": "pound",
+    "stone": "stone",
+    "short ton": "long ton"
+};
 
-
-ilib.Measurement.Mass.uScustomaryToImperial   = {"ounce":"ounce","pound":"pound","stone":"stone","long ton":"short ton"};
-ilib.Measurement.Mass.uScustomarylToMetric    = {"ounce":"gram","pound":"kilogram","stone":"kilogram","long ton":"metric ton"};
+ilib.Measurement.Mass.uScustomaryToImperial = {
+    "ounce": "ounce",
+    "pound": "pound",
+    "stone": "stone",
+    "long ton": "short ton"
+};
+ilib.Measurement.Mass.uScustomarylToMetric = {
+    "ounce": "gram",
+    "pound": "kilogram",
+    "stone": "kilogram",
+    "long ton": "metric ton"
+};
 
 
 ilib.Measurement.Mass.prototype = new ilib.Measurement({});
 ilib.Measurement.Mass.prototype.parent = ilib.Measurement;
 ilib.Measurement.Mass.prototype.constructor = ilib.Measurement.Mass;
 
-
+/**
+ * @inheritDoc
+ */
 ilib.Measurement.Mass.prototype.localize = function(locale) {
-    var to;
-    if (locale === "en-US") {
-        to = ilib.Measurement.Mass.metricToUScustomary[this.unit] || ilib.Measurement.Mass.imperialToUScustomary[this.unit] || this.unit;
-    } else if (locale === "en-UK") {
-        to = ilib.Measurement.Mass.metricToImperial[this.unit] || ilib.Measurement.Mass.uScustomaryToImperial[this.unit] || this.unit;
-    }
-    else
-        to = ilib.Measurement.Mass.uScustomarylToMetric[this.unit] || ilib.Measurement.Mass.imperialToUScustomary[this.unit] || this.unit;
-
-    return new ilib.Measurement.Mass({
-        unit: to,
-        amount: this
-    });
+	var to;
+	if (locale === "en-US") {
+		to = ilib.Measurement.Mass.metricToUScustomary[this.unit] ||
+		    ilib.Measurement.Mass.imperialToUScustomary[this.unit] || this.unit;
+	} else if (locale === "en-GB") {
+		to = ilib.Measurement.Mass.metricToImperial[this.unit] ||
+		    ilib.Measurement.Mass.uScustomaryToImperial[this.unit] || this.unit;
+	} else {
+		to = ilib.Measurement.Mass.uScustomarylToMetric[this.unit] ||
+		    ilib.Measurement.Mass.imperialToUScustomary[this.unit] || this.unit;
+	}
+	return new ilib.Measurement.Mass({
+	    unit: to,
+	    amount: this
+	});
 };
 
 /**
@@ -25999,7 +26402,6 @@ ilib.Measurement.Mass.convert = function(to, from, mass) {
 /**
  * @inheritDoc
  * @param {string=} measurementsystem
- * @return {ilib.Measurement}
  */
 ilib.Measurement.Mass.prototype.scale = function(measurementsystem) {
     var mSystem;    
@@ -26072,7 +26474,8 @@ ilib.Measurement._constructors["mass"] = ilib.Measurement.Mass;
 
 /*
 !depends 
-ilibglobal.js 
+ilibglobal.js
+unit.js
 */
 
 /**
@@ -26080,6 +26483,7 @@ ilibglobal.js
  * 
  * @class
  * @constructor
+ * @extends {ilib.Measurement}
  * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
  * the construction of this instance
  */
@@ -26242,18 +26646,45 @@ ilib.Measurement.Area.getMeasures = function () {
 	return ret;
 };
 
-ilib.Measurement.Area.metricSystem      = {"square centimeter":1,"square meter":2,"hectare":3,"square km":4};
-ilib.Measurement.Area.imperialSystem    = {"square inch":5,"square foot":6,"square yard":7,"acre":8,"square mile":9};
-ilib.Measurement.Area.uscustomarySystem = {"square inch":5,"square foot":6,"square yard":7,"acre":8,"square mile":9};
+ilib.Measurement.Area.metricSystem = {
+	"square centimeter" : 1,
+	"square meter" : 2,
+	"hectare" : 3,
+	"square km" : 4
+};
+ilib.Measurement.Area.imperialSystem = {
+	"square inch" : 5,
+	"square foot" : 6,
+	"square yard" : 7,
+	"acre" : 8,
+	"square mile" : 9
+};
+ilib.Measurement.Area.uscustomarySystem = {
+	"square inch" : 5,
+	"square foot" : 6,
+	"square yard" : 7,
+	"acre" : 8,
+	"square mile" : 9
+};
 
-ilib.Measurement.Area.metricToUScustomary = {"square centimeter":"square inch","square meter":"square yard","hectare":"acre","square km":"square mile"};
-ilib.Measurement.Area.usCustomaryToMetric = {"square inch":"square centimeter","square foot":"square meter","square yard":"square meter","acre":"hectare","square mile":"square km"};
+ilib.Measurement.Area.metricToUScustomary = {
+	"square centimeter" : "square inch",
+	"square meter" : "square yard",
+	"hectare" : "acre",
+	"square km" : "square mile"
+};
+ilib.Measurement.Area.usCustomaryToMetric = {
+	"square inch" : "square centimeter",
+	"square foot" : "square meter",
+	"square yard" : "square meter",
+	"acre" : "hectare",
+	"square mile" : "square km"
+};
 
 
 /**
  * @inheritDoc
  * @param {string=} measurementsystem
- * @return {ilib.Measurement}
  */
 ilib.Measurement.Area.prototype.scale = function(measurementsystem) {
     var fromRow = ilib.Measurement.Area.ratios[this.unit];
@@ -26290,9 +26721,12 @@ ilib.Measurement.Area.prototype.scale = function(measurementsystem) {
     });
 };
 
+/**
+ * @inheritDoc
+ */
 ilib.Measurement.Area.prototype.localize = function(locale) {
     var to;
-    if (locale === "en-US" || locale === "en-UK") {
+    if (locale === "en-US" || locale === "en-GB") {
         to = ilib.Measurement.Area.metricToUScustomary[this.unit] || this.unit;
     } else {
         to = ilib.Measurement.Area.usCustomaryToMetric[this.unit] || this.unit;
@@ -26360,7 +26794,13 @@ ilib.Measurement.FuelConsumption = function(options) {
     }
 };
 
-ilib.Measurement.FuelConsumption.ratios = ["km/liter", "liter/100km", "mpg", "mpg(imp)"];
+/** @static @private */
+ilib.Measurement.FuelConsumption.ratios = [
+    "km/liter",
+    "liter/100km",
+    "mpg",
+    "mpg(imp)"
+];
 
 ilib.Measurement.FuelConsumption.prototype = new ilib.Measurement({});
 ilib.Measurement.FuelConsumption.prototype.parent = ilib.Measurement;
@@ -26374,8 +26814,6 @@ ilib.Measurement.FuelConsumption.prototype.getMeasure = function() {
 };
 
 /**
- * Convert the current FuelConsumption to another measure.
- *
  * @inheritDoc
  */
 ilib.Measurement.FuelConsumption.prototype.convert = function(to) {
@@ -26389,76 +26827,95 @@ ilib.Measurement.FuelConsumption.prototype.convert = function(to) {
 };
 /*["km/liter", "liter/100km", "mpg", "mpg(imp)"*/
 ilib.Measurement.FuelConsumption.aliases = {
-	"Km/liter": "km/liter",
-	"KM/Liter": "km/liter",
-	"KM/L": "km/liter",
-	"Kilometers Per Liter": "km/liter",
-	"kilometers per liter": "km/liter",
-	"km/l": "km/liter",
-	"Kilometers/Liter": "km/liter",
-	"Kilometer/Liter": "km/liter",
-	"kilometers/liter": "km/liter",
-	"kilometer/liter": "km/liter",
-        "km/liter":"km/liter",
-	"Liter/100km":"liter/100km",
-	"Liters/100km":"liter/100km",
-	"Liter/100kms":"liter/100km",
-	"Liters/100kms":"liter/100km",
-	"liter/100km":"liter/100km",
-	"liters/100kms":"liter/100km",
-	"liters/100km":"liter/100km",
-	"liter/100kms":"liter/100km",
-	"Liter/100KM":"liter/100km",
-	"Liters/100KM":"liter/100km",
-	"L/100km":"liter/100km",
-	"L/100KM":"liter/100km",
-	"l/100KM":"liter/100km",
-	"l/100km":"liter/100km",
-	"l/100kms":"liter/100km",
-	"MPG(US)":"mpg",
-        "USMPG ": "mpg",
-        "mpg":"mpg",
-	"mpgUS":"mpg",
-	"mpg(US)":"mpg",
-	"mpg(us)":"mpg",
-	"mpg-us":"mpg",
-	"mpg Imp":"mpg(imp)",
-	"MPG(imp)":"mpg(imp)",
-	"mpg(imp)":"mpg(imp)",
-	"mpg-imp":"mpg(imp)"
+    "Km/liter": "km/liter",
+    "KM/Liter": "km/liter",
+    "KM/L": "km/liter",
+    "Kilometers Per Liter": "km/liter",
+    "kilometers per liter": "km/liter",
+    "km/l": "km/liter",
+    "Kilometers/Liter": "km/liter",
+    "Kilometer/Liter": "km/liter",
+    "kilometers/liter": "km/liter",
+    "kilometer/liter": "km/liter",
+    "km/liter": "km/liter",
+    "Liter/100km": "liter/100km",
+    "Liters/100km": "liter/100km",
+    "Liter/100kms": "liter/100km",
+    "Liters/100kms": "liter/100km",
+    "liter/100km": "liter/100km",
+    "liters/100kms": "liter/100km",
+    "liters/100km": "liter/100km",
+    "liter/100kms": "liter/100km",
+    "Liter/100KM": "liter/100km",
+    "Liters/100KM": "liter/100km",
+    "L/100km": "liter/100km",
+    "L/100KM": "liter/100km",
+    "l/100KM": "liter/100km",
+    "l/100km": "liter/100km",
+    "l/100kms": "liter/100km",
+    "MPG(US)": "mpg",
+    "USMPG ": "mpg",
+    "mpg": "mpg",
+    "mpgUS": "mpg",
+    "mpg(US)": "mpg",
+    "mpg(us)": "mpg",
+    "mpg-us": "mpg",
+    "mpg Imp": "mpg(imp)",
+    "MPG(imp)": "mpg(imp)",
+    "mpg(imp)": "mpg(imp)",
+    "mpg-imp": "mpg(imp)"
 };
 
-ilib.Measurement.FuelConsumption.metricToUScustomary =   {"km/liter":"mpg","liter/100km":"mpg"};
-ilib.Measurement.FuelConsumption.metricToImperial    =   {"km/liter":"mpg(imp)","liter/100km":"mpg(imp)"};
+ilib.Measurement.FuelConsumption.metricToUScustomary = {
+    "km/liter": "mpg",
+    "liter/100km": "mpg"
+};
+ilib.Measurement.FuelConsumption.metricToImperial = {
+    "km/liter": "mpg(imp)",
+    "liter/100km": "mpg(imp)"
+};
 
-ilib.Measurement.FuelConsumption.imperialToMetric      = {"mpg(imp)":"km/liter"};
-ilib.Measurement.FuelConsumption.imperialToUScustomary = {"mpg(imp)":"mpg"};
+ilib.Measurement.FuelConsumption.imperialToMetric = {
+	"mpg(imp)": "km/liter"
+};
+ilib.Measurement.FuelConsumption.imperialToUScustomary = {
+	"mpg(imp)": "mpg"
+};
 
+ilib.Measurement.FuelConsumption.uScustomaryToImperial = {
+	"mpg": "mpg(imp)"
+};
+ilib.Measurement.FuelConsumption.uScustomarylToMetric = {
+	"mpg": "km/liter"
+};
 
-ilib.Measurement.FuelConsumption.uScustomaryToImperial   = {"mpg":"mpg(imp)"};
-ilib.Measurement.FuelConsumption.uScustomarylToMetric    = {"mpg":"km/liter"};
-
-
-
+/**
+ * @inheritDoc
+ */
 ilib.Measurement.FuelConsumption.prototype.localize = function(locale) {
-    var to;
-    if (locale === "en-US") {
-        to = ilib.Measurement.FuelConsumption.metricToUScustomary[this.unit] || ilib.Measurement.FuelConsumption.imperialToUScustomary[this.unit] || this.unit;
-    } else if (locale === "en-UK") {
-        to = ilib.Measurement.FuelConsumption.metricToImperial[this.unit] || ilib.Measurement.FuelConsumption.uScustomaryToImperial[this.unit] || this.unit;
-    }
-    else
-        to = ilib.Measurement.FuelConsumption.uScustomarylToMetric[this.unit] || ilib.Measurement.FuelConsumption.imperialToUScustomary[this.unit] || this.unit;
-
-    return new ilib.Measurement.FuelConsumption({
-        unit: to,
-        amount: this
-    });
+	var to;
+	if (locale === "en-US") {
+		to = ilib.Measurement.FuelConsumption.metricToUScustomary[this.unit] ||
+		    ilib.Measurement.FuelConsumption.imperialToUScustomary[this.unit] ||
+		    this.unit;
+	} else if (locale === "en-GB") {
+		to = ilib.Measurement.FuelConsumption.metricToImperial[this.unit] ||
+		    ilib.Measurement.FuelConsumption.uScustomaryToImperial[this.unit] ||
+		    this.unit;
+	} else {
+		to = ilib.Measurement.FuelConsumption.uScustomarylToMetric[this.unit] ||
+		    ilib.Measurement.FuelConsumption.imperialToUScustomary[this.unit] ||
+		    this.unit;
+	}
+	return new ilib.Measurement.FuelConsumption({
+	    unit: to,
+	    amount: this
+	});
 };
-
 
 /**
  * Convert a FuelConsumption to another measure.
+ * 
  * @static
  * @param to {string} unit to convert to
  * @param from {string} unit to convert from
@@ -26542,7 +26999,6 @@ ilib.Measurement.FuelConsumption.convert = function(to, from, fuelConsumption) {
 /**
  * @inheritDoc
  * @param {string=} measurementsystem
- * @return {ilib.Measurement}
  */
 ilib.Measurement.FuelConsumption.prototype.scale = function(measurementsystem) {
     return new ilib.Measurement.FuelConsumption({
@@ -26591,6 +27047,7 @@ ilib.Measurement._constructors["fuelconsumption"] = ilib.Measurement.FuelConsump
 /*
 !depends 
 ilibglobal.js 
+unit.js
 */
 
 /**
@@ -26598,6 +27055,7 @@ ilibglobal.js
  * 
  * @class
  * @constructor
+ * @extends {ilib.Measurement}
  * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
  * the construction of this instance
  */
@@ -26629,25 +27087,25 @@ ilib.Measurement.Volume = function (options) {
 };
 
 ilib.Measurement.Volume.ratios = {
-    /* 	              index, tsp,  	tbsp,      	cubic inch			 us ounce,    cup,       	pint,       quart,      		gallon,    		cubic foot,  	milliliter   liter,     cubic meter, imperial tsp, 	imperial tbsp,imperial ounce,  	imperial pint, 	imperial quart,	imperial gal, */
-    "tsp" :	       [1,    1,        0.333333,  	0.300781 ,			0.166667, 0.0208333, 	0.0104167,  0.00130208,  		0.00130208, 	0.000174063, 	4.92892,    0.00492892, 4.9289e-6,   0.832674,     	0.277558,      0.173474,    	 0.00867369,     0.00433684,    0.00108421 			],
-    "tbsp":	       [2,    3,        1,         	0.902344 ,			0.5,      0.0625,    	0.0312,     0.015625,    		0.00390625, 	0.00052219,  	14.7868,    0.0147868,  1.4787e-5,   2.49802,      	0.832674,      0.520421,    	 0.0260211,      0.0130105,     0.00325263  		],
-    "cubic inch":      [3,    3.32468,  1.10823,  	1        ,			0.554113, 0.0692641, 	0.034632,   0.017316,    		0.004329,   	0.000578704, 	16.3871,    0.0163871,  1.6387e-5,   2.76837,      	0.92279,       0.576744,    	 0.0288372,      0.0144186,     0.00360465  		],
-    "us ounce":	       [4,    6,        2,         	1.80469 , 			1,        0.125,     	0.0625,     0.0078125,   		0.0078125,  	0.00104438,  	29.5735,    0.0295735,  2.9574e-5,   4.99604,      	1.04084,       1.04084,     	 0.0520421,      0.0260211,     0.00650526  		],
-    "cup":	       [5,    48,     	16,        	14.4375 ,			8,        1,         	0.5,        0.25,        	 	0.0625,     	0.00835503,  	236.588,    0.236588,   0.000236588, 39.9683,      	13.3228,       8.32674,     	 0.416337,       0.208168,      0.0520421   		],
-    "pint":	       [6,    96,       32,        	28.875   ,			16,       2,         	1,          0.5,         		0.125,      	0.0167101,   	473.176,    0.473176,   0.000473176, 79.9367,     	26.6456,       16.6535,     	 0.832674,       0.416337,      0.104084    		],
-    "quart":	       [7,    192,     	64,       	57.75	 , 			32,       4,         	2,          1,           		0.25,       	0.0334201,  	946.353,    0.946353,   0.000946353, 159.873,      	53.2911,       33.307,      	 1.66535,        0.832674,      0.208168    		],
-    "gallon":	       [8,    768,      256,       	231 	  ,			128,      16,        	8,          4,           		1,          	0.133681,    	3785.41,    3.78541,    0.00378541,  639.494,      	213.165,       133.228,     	 6.66139,        3.3307,        0.832674    		],
-    "cubic foot":      [9,    5745.04,  1915.01,   	1728    , 			957.506,  119.688,   	59.8442,    29.9221,     		7.48052,    	1,           	28316.8,    28.3168,    0.0283168,   4783.74,      	1594.58,       996.613,     	 49.8307,        24.9153,       6.22883     		],
-    "milliliter":      [10,   0.202884, 0.067628,  	0.0610237,			0.033814, 0.00422675, 	0.00211338, 0.00105669,   		0.000264172,	3.5315e-5,   	1,         	0.001,      1e-6,        0.168936,     	0.0563121,     0.0351951,   	 0.00175975,     0.000879877,   0.000219969 		],
-    "liter":	       [11,   202.884,  67.628,    	61.0237  ,			33.814,   4.22675,    	2.11338,    1.05669,     		0.264172,   	0.0353147,   	1000,       1,          0.001,       56.3121,      	56.3121,       35.191,      	 1.75975,        0.879877,      0.219969  			],
-    "cubic meter":     [12,   202884,   67628,     	61023.7  ,			33814,    4226.75,  	2113.38,    1056.69,     		264.172,    	35.3147, 		1e+6,       1000,       1,           168936,        56312.1,        35195.1,     	  1759.75,        879.877,       219.969    	  	],
-    "imperial tsp":    [13,   1.20095, 	0.200158,  	0.361223 ,			0.600475, 0.0250198, 	0.0125099,  0.00625495,  		0.00156374, 	0.000209041,  	5.91939,    0.00591939, 5.9194e-6,   1,            	0.333333,      0.208333,    	 0.0104167,      0.00520833,    0.00130208  		],
-    "imperial tbsp":   [14,   3.60285,  1.20095,   	1.08367 , 			0.600475, 0.0750594, 	0.0375297,  0.0187649,   		0.00469121, 	0.000627124, 	17.7582,    0.0177582,  1.7758e-5,   3,            	1,             0.625,       	 0.03125,        0.015625,     0.00390625  		    ],
-    "imperial ounce":  [15,   5.76456,  1.92152,   	1.73387 , 			0.96076,  0.120095,  	0.0600475,  0.0300238,   		0.00750594, 	0.0010034,   	28.4131,    0.0284131,  2.8413e-5,   4.8,          	1.6,           1,           	 0.05,           0.025,         0.00625     		],
-    "imperial pint":   [16,   115.291,  38.4304,   	34.6774 , 			19.2152,  2.4019,    	1.20095,    0.600475,    		0.150119,   	0.020068,    	568.261,    0.568261,   0.000568261, 96,           	32,            20,          	 1,              0.5,           0.125       		],
-    "imperial quart":  [17,   230.582,  76.8608,   	69.3549 , 			38.4304,  4.8038,    	2.4019,     1.20095,     		0.300238,   	0.0401359,   	1136.52,    1.13652,    0.00113652,  192,          	64,            40,          	 2,              1,             0.25        		],
-    "imperial gallon": [18,   922.33,   307.443,   	277.42  , 			153.722,  19.2152,   	9.6076,     4.8038,      		1.20095,    	0.160544,    	4546.09,    4.54609,    0.00454609,  768,          	256,           160,         	 8,              4,             1           		]
+    /*                 index, tsp,      tbsp,          cubic inch  us ounce, cup,        pint,       quart,      gallon,      cubic foot,  milliliter  liter,      cubic meter, imperial tsp,  imperial tbsp, imperial ounce,  imperial pint,  imperial quart, imperial gal, */
+    "tsp" :            [1,    1,        0.333333,      0.300781,   0.166667, 0.0208333,  0.0104167,  0.00130208, 0.00130208,  0.000174063, 4.92892,    0.00492892, 4.9289e-6,   0.832674,      0.277558,      0.173474,        0.00867369,     0.00433684,     0.00108421          ],
+    "tbsp":            [2,    3,        1,             0.902344,   0.5,      0.0625,     0.0312,     0.015625,   0.00390625,  0.00052219,  14.7868,    0.0147868,  1.4787e-5,   2.49802,       0.832674,      0.520421,        0.0260211,      0.0130105,      0.00325263          ],
+    "cubic inch":      [3,    3.32468,  1.10823,       1,          0.554113, 0.0692641,  0.034632,   0.017316,   0.004329,    0.000578704, 16.3871,    0.0163871,  1.6387e-5,   2.76837,       0.92279,       0.576744,        0.0288372,      0.0144186,      0.00360465          ],
+    "us ounce":        [4,    6,        2,             1.80469,    1,        0.125,      0.0625,     0.0078125,  0.0078125,   0.00104438,  29.5735,    0.0295735,  2.9574e-5,   4.99604,       1.04084,       1.04084,         0.0520421,      0.0260211,      0.00650526          ],
+    "cup":             [5,    48,       16,            14.4375,    8,        1,          0.5,        0.25,       0.0625,      0.00835503,  236.588,    0.236588,   0.000236588, 39.9683,       13.3228,       8.32674,         0.416337,       0.208168,       0.0520421           ],
+    "pint":            [6,    96,       32,            28.875,     16,       2,          1,          0.5,        0.125,       0.0167101,   473.176,    0.473176,   0.000473176, 79.9367,       26.6456,       16.6535,         0.832674,       0.416337,       0.104084            ],
+    "quart":           [7,    192,      64,            57.75,      32,       4,          2,          1,          0.25,        0.0334201,   946.353,    0.946353,   0.000946353, 159.873,       53.2911,       33.307,          1.66535,        0.832674,       0.208168            ],
+    "gallon":          [8,    768,      256,           231,        128,      16,         8,          4,          1,           0.133681,    3785.41,    3.78541,    0.00378541,  639.494,       213.165,       133.228,         6.66139,        3.3307,         0.832674            ],
+    "cubic foot":      [9,    5745.04,  1915.01,       1728,       957.506,  119.688,    59.8442,    29.9221,    7.48052,     1,           28316.8,    28.3168,    0.0283168,   4783.74,       1594.58,       996.613,         49.8307,        24.9153,        6.22883             ],
+    "milliliter":      [10,   0.202884, 0.067628,      0.0610237,  0.033814, 0.00422675, 0.00211338, 0.00105669, 0.000264172, 3.5315e-5,   1,          0.001,      1e-6,        0.168936,      0.0563121,     0.0351951,       0.00175975,     0.000879877,    0.000219969         ],
+    "liter":           [11,   202.884,  67.628,        61.0237,    33.814,   4.22675,    2.11338,    1.05669,    0.264172,    0.0353147,   1000,       1,          0.001,       56.3121,       56.3121,       35.191,          1.75975,        0.879877,       0.219969            ],
+    "cubic meter":     [12,   202884,   67628,         61023.7,    33814,    4226.75,    2113.38,    1056.69,    264.172,     35.3147,     1e+6,       1000,       1,           168936,        56312.1,       35195.1,         1759.75,        879.877,        219.969             ],
+    "imperial tsp":    [13,   1.20095,  0.200158,      0.361223,   0.600475, 0.0250198,  0.0125099,  0.00625495, 0.00156374,  0.000209041, 5.91939,    0.00591939, 5.9194e-6,   1,             0.333333,      0.208333,        0.0104167,      0.00520833,     0.00130208          ],
+    "imperial tbsp":   [14,   3.60285,  1.20095,       1.08367,    0.600475, 0.0750594,  0.0375297,  0.0187649,  0.00469121,  0.000627124, 17.7582,    0.0177582,  1.7758e-5,   3,             1,             0.625,           0.03125,        0.015625,       0.00390625          ],
+    "imperial ounce":  [15,   5.76456,  1.92152,       1.73387,    0.96076,  0.120095,   0.0600475,  0.0300238,  0.00750594,  0.0010034,   28.4131,    0.0284131,  2.8413e-5,   4.8,           1.6,           1,               0.05,           0.025,          0.00625             ],
+    "imperial pint":   [16,   115.291,  38.4304,       34.6774,    19.2152,  2.4019,     1.20095,    0.600475,   0.150119,    0.020068,    568.261,    0.568261,   0.000568261, 96,            32,            20,              1,              0.5,            0.125               ],
+    "imperial quart":  [17,   230.582,  76.8608,       69.3549,    38.4304,  4.8038,     2.4019,     1.20095,    0.300238,    0.0401359,   1136.52,    1.13652,    0.00113652,  192,           64,            40,              2,              1,              0.25                ],
+    "imperial gallon": [18,   922.33,   307.443,       277.42,     153.722,  19.2152,    9.6076,     4.8038,     1.20095,     0.160544,    4546.09,    4.54609,    0.00454609,  768,           256,           160,             8,              4,              1                   ]
 };
 
 ilib.Measurement.Volume.prototype = new ilib.Measurement({});
@@ -26677,103 +27135,103 @@ ilib.Measurement.Volume.prototype.convert = function(to) {
 };
 
 ilib.Measurement.Volume.aliases = {
-	"US gal":"gallon",
-	"US gallon":"gallon",
-	"US Gal":"gallon",
-	"US Gallons":"gallon",
-	"Gal(US)":"gallon",
-	"gal(US)":"gallon",
-        "gallon":"gallon",
-    "quart":"quart",
-	"US quart":"quart",
-	"US quarts":"quart",
-	"US Quart":"quart",
-	"US Quarts":"quart",
-	"US qt":"quart",
-	"Qt(US)":"quart",
-	"qt(US)":"quart",
-	"US pint":"pint",
-	"US Pint":"pint",
-        "pint":"pint",
-	"pint(US)":"pint",
-	"Pint(US)":"pint",
-	"US cup":"cup", 
-	"US Cup":"cup",
-	"cup(US)":"cup",
-	"Cup(US)":"cup",
-        "cup":"cup",
-        "us ounce":"us ounce",
-	"US ounce":"us ounce",
-	"℥":"us ounce",
-	"US Oz":"us ounce",
-	"oz(US)":"us ounce",
-	"Oz(US)":"us ounce",
-        "US tbsp":"tbsp",
-        "tbsp":"tbsp",
-	"tbsp(US)":"tbsp",
-	"US tablespoon":"tbsp",
-	"US tsp":"tsp",
-	"tsp(US)":"tsp",
-        "tsp":"tsp",
-	"Cubic meter":"cubic meter",
-	"cubic meter":"cubic meter",
-        "Cubic metre":"cubic meter", 
-        "cubic metre":"cubic meter", 
-        "m3":"cubic meter",
-	"Liter":"liter",
-	"Liters":"liter",
-	"liter":"liter",
-	"L":"liter",
-	"l":"liter",
-	"Milliliter":"milliliter",
-	"ML":"milliliter",
-	"ml":"milliliter",
-	"milliliter":"milliliter",
-	"mL":"milliliter",
-	"Imperial gal":"imperial gallon",
-        "imperial gallon":"imperial gallon",
-	"Imperial gallon":"imperial gallon",
-	"gallon(imperial)":"imperial gallon",
-	"gal(imperial)":"imperial gallon",
-	"Imperial quart":"imperial quart",
-        "imperial quart":"imperial quart",
-	"Imperial Quart":"imperial quart",
-	"IMperial qt":"imperial quart",
-	"qt(Imperial)":"imperial quart",
-	"quart(imperial)":"imperial quart",
-	"Imperial pint":"imperial pint",
-        "imperial pint":"imperial pint",
-	"pint(Imperial)":"imperial pint",
-	"imperial oz":"imperial ounce",
-	"imperial ounce":"imperial ounce",
-	"Imperial Ounce":"imperial ounce",
-	"Imperial tbsp":"imperial tbsp",
-        "imperial tbsp":"imperial tbsp",
-	"tbsp(Imperial)":"imperial tbsp",
-	"Imperial tsp":"imperial tsp",
-        "imperial tsp":"imperial tsp",
-	"tsp(Imperial)":"imperial tsp",
-	"Cubic foot":"cubic foot",
-        "cubic foot":"cubic foot",
-	"Cubic Foot":"cubic foot",
-	"Cubic feet":"cubic foot",
-	"cubic Feet":"cubic foot",
-	"cubic ft":"cubic foot",
-	"ft3":"cubic foot",
-	"Cubic inch":"cubic inch",
-	"Cubic inches":"cubic inch",
-	"cubic inches":"cubic inch",
-	"cubic inch":"cubic inch",
-	"cubic in":"cubic inch",
-	"cu in":"cubic inch",
-	"cu inch":"cubic inch",
-	"inch³":"cubic inch",
-	"in³":"cubic inch",
-	"inch^3":"cubic inch",
-	"in^3":"cubic inch",
-	"c.i":"cubic inch",
-	"CI":"cubic inch",
-	"cui":"cubic inch"
+    "US gal": "gallon",
+    "US gallon": "gallon",
+    "US Gal": "gallon",
+    "US Gallons": "gallon",
+    "Gal(US)": "gallon",
+    "gal(US)": "gallon",
+    "gallon": "gallon",
+    "quart": "quart",
+    "US quart": "quart",
+    "US quarts": "quart",
+    "US Quart": "quart",
+    "US Quarts": "quart",
+    "US qt": "quart",
+    "Qt(US)": "quart",
+    "qt(US)": "quart",
+    "US pint": "pint",
+    "US Pint": "pint",
+    "pint": "pint",
+    "pint(US)": "pint",
+    "Pint(US)": "pint",
+    "US cup": "cup",
+    "US Cup": "cup",
+    "cup(US)": "cup",
+    "Cup(US)": "cup",
+    "cup": "cup",
+    "us ounce": "us ounce",
+    "US ounce": "us ounce",
+    "℥": "us ounce",
+    "US Oz": "us ounce",
+    "oz(US)": "us ounce",
+    "Oz(US)": "us ounce",
+    "US tbsp": "tbsp",
+    "tbsp": "tbsp",
+    "tbsp(US)": "tbsp",
+    "US tablespoon": "tbsp",
+    "US tsp": "tsp",
+    "tsp(US)": "tsp",
+    "tsp": "tsp",
+    "Cubic meter": "cubic meter",
+    "cubic meter": "cubic meter",
+    "Cubic metre": "cubic meter",
+    "cubic metre": "cubic meter",
+    "m3": "cubic meter",
+    "Liter": "liter",
+    "Liters": "liter",
+    "liter": "liter",
+    "L": "liter",
+    "l": "liter",
+    "Milliliter": "milliliter",
+    "ML": "milliliter",
+    "ml": "milliliter",
+    "milliliter": "milliliter",
+    "mL": "milliliter",
+    "Imperial gal": "imperial gallon",
+    "imperial gallon": "imperial gallon",
+    "Imperial gallon": "imperial gallon",
+    "gallon(imperial)": "imperial gallon",
+    "gal(imperial)": "imperial gallon",
+    "Imperial quart": "imperial quart",
+    "imperial quart": "imperial quart",
+    "Imperial Quart": "imperial quart",
+    "IMperial qt": "imperial quart",
+    "qt(Imperial)": "imperial quart",
+    "quart(imperial)": "imperial quart",
+    "Imperial pint": "imperial pint",
+    "imperial pint": "imperial pint",
+    "pint(Imperial)": "imperial pint",
+    "imperial oz": "imperial ounce",
+    "imperial ounce": "imperial ounce",
+    "Imperial Ounce": "imperial ounce",
+    "Imperial tbsp": "imperial tbsp",
+    "imperial tbsp": "imperial tbsp",
+    "tbsp(Imperial)": "imperial tbsp",
+    "Imperial tsp": "imperial tsp",
+    "imperial tsp": "imperial tsp",
+    "tsp(Imperial)": "imperial tsp",
+    "Cubic foot": "cubic foot",
+    "cubic foot": "cubic foot",
+    "Cubic Foot": "cubic foot",
+    "Cubic feet": "cubic foot",
+    "cubic Feet": "cubic foot",
+    "cubic ft": "cubic foot",
+    "ft3": "cubic foot",
+    "Cubic inch": "cubic inch",
+    "Cubic inches": "cubic inch",
+    "cubic inches": "cubic inch",
+    "cubic inch": "cubic inch",
+    "cubic in": "cubic inch",
+    "cu in": "cubic inch",
+    "cu inch": "cubic inch",
+    "inch³": "cubic inch",
+    "in³": "cubic inch",
+    "inch^3": "cubic inch",
+    "in^3": "cubic inch",
+    "c.i": "cubic inch",
+    "CI": "cubic inch",
+    "cui": "cubic inch"
 };
 
 /**
@@ -26807,42 +27265,109 @@ ilib.Measurement.Volume.getMeasures = function () {
 	}
 	return ret;
 };
-ilib.Measurement.Volume.metricSystem	= {"milliliter":10, "liter":11,"cubic meter":12};
-ilib.Measurement.Volume.imperialSystem	= {"imperial tsp":13,"imperial tbsp":14,"imperial ounce":15,"imperial pint":16,"imperial quart":17,"imperial gallon":18};
-ilib.Measurement.Volume.uscustomarySystem = {"tsp":1,"tbsp":2,"cubic inch":3,"us ounce":4,"cup":5,"pint":6,"quart":7,"gallon":8,"cubic foot":9};
+ilib.Measurement.Volume.metricSystem = {
+    "milliliter": 10,
+    "liter": 11,
+    "cubic meter": 12
+};
+ilib.Measurement.Volume.imperialSystem = {
+    "imperial tsp": 13,
+    "imperial tbsp": 14,
+    "imperial ounce": 15,
+    "imperial pint": 16,
+    "imperial quart": 17,
+    "imperial gallon": 18
+};
+ilib.Measurement.Volume.uscustomarySystem = {
+    "tsp": 1,
+    "tbsp": 2,
+    "cubic inch": 3,
+    "us ounce": 4,
+    "cup": 5,
+    "pint": 6,
+    "quart": 7,
+    "gallon": 8,
+    "cubic foot": 9
+};
 
-ilib.Measurement.Volume.metricToUScustomary =   {"milliliter":"tsp","liter":"quart","cubic meter":"cubic foot"};
-ilib.Measurement.Volume.metricToImperial    =   {"milliliter":"imperial tsp","liter":"imperial quart","cubic meter":"imperial gallon"};
+ilib.Measurement.Volume.metricToUScustomary = {
+    "milliliter": "tsp",
+    "liter": "quart",
+    "cubic meter": "cubic foot"
+};
+ilib.Measurement.Volume.metricToImperial = {
+    "milliliter": "imperial tsp",
+    "liter": "imperial quart",
+    "cubic meter": "imperial gallon"
+};
 
-ilib.Measurement.Volume.imperialToMetric      = {"imperial tsp":"milliliter","imperial tbsp":"milliliter","imperial ounce":"milliliter","imperial pint":"liter","imperial quart":"liter","imperial gallon":"cubic meter"};
-ilib.Measurement.Volume.imperialToUScustomary = {"imperial tsp":"tsp","imperial tbsp":"tbsp","imperial ounce":"us ounce","imperial pint":"pint","imperial quart":"quart","imperial gallon":"gallon"};
+ilib.Measurement.Volume.imperialToMetric = {
+    "imperial tsp": "milliliter",
+    "imperial tbsp": "milliliter",
+    "imperial ounce": "milliliter",
+    "imperial pint": "liter",
+    "imperial quart": "liter",
+    "imperial gallon": "cubic meter"
+};
+ilib.Measurement.Volume.imperialToUScustomary = {
+    "imperial tsp": "tsp",
+    "imperial tbsp": "tbsp",
+    "imperial ounce": "us ounce",
+    "imperial pint": "pint",
+    "imperial quart": "quart",
+    "imperial gallon": "gallon"
+};
 
+ilib.Measurement.Volume.uScustomaryToImperial = {
+    "tsp": "imperial tsp",
+    "tbsp": "imperial tbsp",
+    "cubic inch": "imperial tbsp",
+    "us ounce": "imperial ounce",
+    "cup": "imperial ounce",
+    "pint": "imperial pint",
+    "quart": "imperial quart",
+    "gallon": "imperial gallon",
+    "cubic foot": "imperial gallon"
+};
+ilib.Measurement.Volume.uScustomarylToMetric = {
+    "tsp": "milliliter",
+    "tbsp": "milliliter",
+    "cubic inch": "milliliter",
+    "us ounce": "milliliter",
+    "cup": "milliliter",
+    "pint": "liter",
+    "quart": "liter",
+    "gallon": "cubic meter",
+    "cubic foot": "cubic meter"
+};
 
-ilib.Measurement.Volume.uScustomaryToImperial   = {"tsp":"imperial tsp","tbsp":"imperial tbsp","cubic inch":"imperial tbsp","us ounce":"imperial ounce","cup":"imperial ounce","pint":"imperial pint","quart":"imperial quart","gallon":"imperial gallon","cubic foot":"imperial gallon"};
-ilib.Measurement.Volume.uScustomarylToMetric    = {"tsp":"milliliter","tbsp":"milliliter","cubic inch":"milliliter","us ounce":"milliliter","cup":"milliliter","pint":"liter","quart":"liter","gallon":"cubic meter","cubic foot":"cubic meter"};
-
-
-
+/**
+ * @inheritDoc
+ */
 ilib.Measurement.Volume.prototype.localize = function(locale) {
-    var to;
-    if (locale === "en-US") {
-        to = ilib.Measurement.Volume.metricToUScustomary[this.unit] || ilib.Measurement.Volume.imperialToUScustomary[this.unit] || this.unit;
-    } else if (locale === "en-UK") {
-        to = ilib.Measurement.Volume.metricToImperial[this.unit] || ilib.Measurement.Volume.uScustomaryToImperial[this.unit] || this.unit;
-    }
-    else
-        to = ilib.Measurement.Volume.uScustomarylToMetric[this.unit] || ilib.Measurement.Volume.imperialToUScustomary[this.unit] || this.unit;
-
-    return new ilib.Measurement.Volume({
-        unit: to,
-        amount: this
-    });
+	var to;
+	if (locale === "en-US") {
+		to = ilib.Measurement.Volume.metricToUScustomary[this.unit] ||
+		    ilib.Measurement.Volume.imperialToUScustomary[this.unit] ||
+		    this.unit;
+	} else if (locale === "en-GB") {
+		to = ilib.Measurement.Volume.metricToImperial[this.unit] ||
+		    ilib.Measurement.Volume.uScustomaryToImperial[this.unit] ||
+		    this.unit;
+	} else {
+		to = ilib.Measurement.Volume.uScustomarylToMetric[this.unit] ||
+		    ilib.Measurement.Volume.imperialToUScustomary[this.unit] ||
+		    this.unit;
+	}
+	return new ilib.Measurement.Volume({
+	    unit: to,
+	    amount: this
+	});
 };
 
 /**
  * @inheritDoc
  * @param {string=} measurementsystem
- * @return {ilib.Measurement}
  */
 ilib.Measurement.Volume.prototype.scale = function(measurementsystem) {
     var fromRow = ilib.Measurement.Volume.ratios[this.unit];
@@ -26941,18 +27466,18 @@ ilib.Measurement.Energy = function (options) {
 };
 
 ilib.Measurement.Energy.ratios = {
-       /*                index mJ          J           BTU               kJ          Wh                Cal               MJ             kWh                gJ             MWh                 GWh         */
-        "millijoule":   [ 1,   1,          0.001,      9.4781707775e-7,  1e-6,       2.7777777778e-7,  2.3884589663e-7,  1.0e-9,        2.7777777778e-10,  1.0e-12,       2.7777777778e-13,   2.7777777778e-16  ],
-        "joule":        [ 2,   1000,       1,          9.4781707775e-4,  0.001,      2.7777777778e-4,  2.3884589663e-4,  1.0e-6,        2.7777777778e-7,   1.0e-9,        2.7777777778e-10,   2.7777777778e-13  ],
-        "BTU":          [ 3,   1055055.9,  1055.0559,  1,                1.0550559,  0.29307108333,    0.25199577243,    1.0550559e-3,  2.9307108333e-4,   1.0550559e-6,  2.9307108333e-7,    2.9307108333e-10  ],
-        "kilojoule":    [ 4,   1000000,    1000,       0.94781707775,    1,          0.27777777778,    0.23884589663,    0.001,         2.7777777778e-4,   1.0e-6,        2.7777777778e-7,    2.7777777778e-10  ],
-        "watt hour":    [ 5,   3.6e+6,     3600,       3.4121414799,     3.6,        1,                0.85984522786,    0.0036,        0.001,             3.6e-6,        1.0e-6,             1.0e-9            ],
-        "calorie":      [ 6,   4.868e+5,   4186.8,     3.9683205411,     4.1868,     1.163,            1,                4.1868e-3,     1.163e-3,          4.1868e-6,     1.163e-6,           1.163e-9          ],
-        "megajoule":    [ 7,   1e+9,       1e+6,       947.81707775,     1000,       277.77777778,     238.84589663,     1,             0.27777777778,     0.001,         2.7777777778e-4,    2.7777777778e-7   ],
-        "kilowatt hour":[ 8,   3.6e+9,     3.6e+6,     3412.1414799,     3600,       1000,             859.84522786,     3.6,           1,                 3.6e-3,        0.001,              1e-6              ],
-        "gigajoule":    [ 9,   1e+12,      1e+9,       947817.07775,     1e+6,       277777.77778,     238845.89663,     1000,          277.77777778,      1,             0.27777777778,      2.7777777778e-4   ],
-        "megawatt hour":[ 10,  3.6e+12,    3.6e+9,     3412141.4799,     3.6e+6,     1e+6,             859845.22786,     3600,          1000,              3.6,           1,                  0.001             ],
-        "gigawatt hour":[ 11,  3.6e+15,    3.6e+12,    3412141479.9,     3.6e+9,     1e+9,             859845227.86,     3.6e+6,        1e+6,              3600,          1000,               1                 ]
+   /*                index mJ          J           BTU               kJ          Wh                Cal               MJ             kWh                gJ             MWh                 GWh         */
+    "millijoule":   [ 1,   1,          0.001,      9.4781707775e-7,  1e-6,       2.7777777778e-7,  2.3884589663e-7,  1.0e-9,        2.7777777778e-10,  1.0e-12,       2.7777777778e-13,   2.7777777778e-16  ],
+    "joule":        [ 2,   1000,       1,          9.4781707775e-4,  0.001,      2.7777777778e-4,  2.3884589663e-4,  1.0e-6,        2.7777777778e-7,   1.0e-9,        2.7777777778e-10,   2.7777777778e-13  ],
+    "BTU":          [ 3,   1055055.9,  1055.0559,  1,                1.0550559,  0.29307108333,    0.25199577243,    1.0550559e-3,  2.9307108333e-4,   1.0550559e-6,  2.9307108333e-7,    2.9307108333e-10  ],
+    "kilojoule":    [ 4,   1000000,    1000,       0.94781707775,    1,          0.27777777778,    0.23884589663,    0.001,         2.7777777778e-4,   1.0e-6,        2.7777777778e-7,    2.7777777778e-10  ],
+    "watt hour":    [ 5,   3.6e+6,     3600,       3.4121414799,     3.6,        1,                0.85984522786,    0.0036,        0.001,             3.6e-6,        1.0e-6,             1.0e-9            ],
+    "calorie":      [ 6,   4.868e+5,   4186.8,     3.9683205411,     4.1868,     1.163,            1,                4.1868e-3,     1.163e-3,          4.1868e-6,     1.163e-6,           1.163e-9          ],
+    "megajoule":    [ 7,   1e+9,       1e+6,       947.81707775,     1000,       277.77777778,     238.84589663,     1,             0.27777777778,     0.001,         2.7777777778e-4,    2.7777777778e-7   ],
+    "kilowatt hour":[ 8,   3.6e+9,     3.6e+6,     3412.1414799,     3600,       1000,             859.84522786,     3.6,           1,                 3.6e-3,        0.001,              1e-6              ],
+    "gigajoule":    [ 9,   1e+12,      1e+9,       947817.07775,     1e+6,       277777.77778,     238845.89663,     1000,          277.77777778,      1,             0.27777777778,      2.7777777778e-4   ],
+    "megawatt hour":[ 10,  3.6e+12,    3.6e+9,     3412141.4799,     3.6e+6,     1e+6,             859845.22786,     3600,          1000,              3.6,           1,                  0.001             ],
+    "gigawatt hour":[ 11,  3.6e+15,    3.6e+12,    3412141479.9,     3.6e+9,     1e+9,             859845227.86,     3.6e+6,        1e+6,              3600,          1000,               1                 ]
 };
 
 ilib.Measurement.Energy.prototype = new ilib.Measurement({});
@@ -26982,86 +27507,86 @@ ilib.Measurement.Energy.prototype.convert = function(to) {
 };
 
 ilib.Measurement.Energy.aliases = {
-	"milli joule":"millijoule",
-	"millijoule":"millijoule",
-    "MilliJoule":"millijoule",
-    "milliJ":"millijoule",
-    "joule":"joule",
-    "J":"joule",
-    "j":"joule",
-    "Joule":"joule",
-    "Joules":"joule",
-    "joules":"joule",
-    "BTU":"BTU",
-    "btu":"BTU",
-    "British thermal unit":"BTU",
-    "british thermal unit":"BTU",
-    "kilo joule":"kilojoule",
-    "kJ":"kilojoule",
-    "kj":"kilojoule",
-    "Kj":"kilojoule",
-    "kiloJoule":"kilojoule",
-    "kilojoule":"kilojoule",
-    "kjoule":"kilojoule",
-    "watt hour":"watt hour",
-    "Wh":"watt hour",
-    "wh":"watt hour",
-    "watt-hour":"watt hour",
-    "calorie":"calorie",
-    "Cal":"calorie",
-    "cal":"calorie",
-    "Calorie":"calorie",
-    "calories":"calorie",
-    "mega joule":"megajoule",
-    "MJ":"megajoule",
-    "megajoule":"megajoule",
-    "megajoules":"megajoule",
-    "Megajoules":"megajoule",
-    "megaJoules":"megajoule",
-    "MegaJoules":"megajoule",
-    "megaJoule":"megajoule",
-    "MegaJoule":"megajoule",
+    "milli joule": "millijoule",
+    "millijoule": "millijoule",
+    "MilliJoule": "millijoule",
+    "milliJ": "millijoule",
+    "joule": "joule",
+    "J": "joule",
+    "j": "joule",
+    "Joule": "joule",
+    "Joules": "joule",
+    "joules": "joule",
+    "BTU": "BTU",
+    "btu": "BTU",
+    "British thermal unit": "BTU",
+    "british thermal unit": "BTU",
+    "kilo joule": "kilojoule",
+    "kJ": "kilojoule",
+    "kj": "kilojoule",
+    "Kj": "kilojoule",
+    "kiloJoule": "kilojoule",
+    "kilojoule": "kilojoule",
+    "kjoule": "kilojoule",
+    "watt hour": "watt hour",
+    "Wh": "watt hour",
+    "wh": "watt hour",
+    "watt-hour": "watt hour",
+    "calorie": "calorie",
+    "Cal": "calorie",
+    "cal": "calorie",
+    "Calorie": "calorie",
+    "calories": "calorie",
+    "mega joule": "megajoule",
+    "MJ": "megajoule",
+    "megajoule": "megajoule",
+    "megajoules": "megajoule",
+    "Megajoules": "megajoule",
+    "megaJoules": "megajoule",
+    "MegaJoules": "megajoule",
+    "megaJoule": "megajoule",
+    "MegaJoule": "megajoule",
     "kilo Watt hour": "kilowatt hour",
-    "kWh":"kilowatt hour",
-    "kiloWh":"kilowatt hour",
-    "KiloWh":"kilowatt hour",
-    "KiloWatt-hour":"kilowatt hour",
-    "kilowatt hour":"kilowatt hour",
-    "kilowatt-hour":"kilowatt hour",
-    "KiloWatt-hours":"kilowatt hour",
-    "kilowatt-hours":"kilowatt hour",
-    "Kilo Watt-hour":"kilowatt hour",
-    "Kilo Watt-hours":"kilowatt hour",
-    "giga joule":"gigajoule",
-    "gJ":"gigajoule",
-    "GJ":"gigajoule",
-    "GigaJoule":"gigajoule",
-    "gigaJoule":"gigajoule",
-    "gigajoule":"gigajoule",
-    "gigajoule":"gigajoule",
-    "GigaJoules":"gigajoule",
-    "gigaJoules":"gigajoule",
-    "Gigajoules":"gigajoule",
-    "gigajoules":"gigajoule",
-    "mega watt hour":"megawatt hour",
-    "MWh":"megawatt hour",
-    "MegaWh":"megawatt hour",
-    "megaWh":"megawatt hour",
-    "megaWatthour":"megawatt hour",
-    "megaWatt-hour":"megawatt hour",
-    "mega Watt-hour":"megawatt hour",
-    "megaWatt hour":"megawatt hour",
-    "megawatt hour":"megawatt hour",
-    "mega Watt hour":"megawatt hour",
-    "giga watt hour":"gigawatt hour",
-    "gWh":"gigawatt hour",
-    "GWh":"gigawatt hour",
-    "gigaWh":"gigawatt hour",
-    "gigaWatt-hour":"gigawatt hour",
-    "gigawatt-hour":"gigawatt hour",
-    "gigaWatt hour":"gigawatt hour",
-    "gigawatt hour":"gigawatt hour",
-    "gigawatthour":"gigawatt hour"
+    "kWh": "kilowatt hour",
+    "kiloWh": "kilowatt hour",
+    "KiloWh": "kilowatt hour",
+    "KiloWatt-hour": "kilowatt hour",
+    "kilowatt hour": "kilowatt hour",
+    "kilowatt-hour": "kilowatt hour",
+    "KiloWatt-hours": "kilowatt hour",
+    "kilowatt-hours": "kilowatt hour",
+    "Kilo Watt-hour": "kilowatt hour",
+    "Kilo Watt-hours": "kilowatt hour",
+    "giga joule": "gigajoule",
+    "gJ": "gigajoule",
+    "GJ": "gigajoule",
+    "GigaJoule": "gigajoule",
+    "gigaJoule": "gigajoule",
+    "gigajoule": "gigajoule",
+    "gigajoule": "gigajoule",
+    "GigaJoules": "gigajoule",
+    "gigaJoules": "gigajoule",
+    "Gigajoules": "gigajoule",
+    "gigajoules": "gigajoule",
+    "mega watt hour": "megawatt hour",
+    "MWh": "megawatt hour",
+    "MegaWh": "megawatt hour",
+    "megaWh": "megawatt hour",
+    "megaWatthour": "megawatt hour",
+    "megaWatt-hour": "megawatt hour",
+    "mega Watt-hour": "megawatt hour",
+    "megaWatt hour": "megawatt hour",
+    "megawatt hour": "megawatt hour",
+    "mega Watt hour": "megawatt hour",
+    "giga watt hour": "gigawatt hour",
+    "gWh": "gigawatt hour",
+    "GWh": "gigawatt hour",
+    "gigaWh": "gigawatt hour",
+    "gigaWatt-hour": "gigawatt hour",
+    "gigawatt-hour": "gigawatt hour",
+    "gigaWatt hour": "gigawatt hour",
+    "gigawatt hour": "gigawatt hour",
+    "gigawatthour": "gigawatt hour"
 };
 
 /**
@@ -27095,23 +27620,58 @@ ilib.Measurement.Energy.getMeasures = function () {
 	return ret;
 };
 
-ilib.Measurement.Energy.metricJouleSystem	= {"millijoule":1, "joule":2,"kilojoule":4,"megajoule":7,"gigajoule":9};
-ilib.Measurement.Energy.metricWattHourSystem = {"watt hour":5,"kilowatt hour":8,"megawatt hour":10,"gigawatt hour":11};
+ilib.Measurement.Energy.metricJouleSystem = {
+    "millijoule": 1,
+    "joule": 2,
+    "kilojoule": 4,
+    "megajoule": 7,
+    "gigajoule": 9
+};
+ilib.Measurement.Energy.metricWattHourSystem = {
+    "watt hour": 5,
+    "kilowatt hour": 8,
+    "megawatt hour": 10,
+    "gigawatt hour": 11
+};
 
-ilib.Measurement.Energy.imperialSystem	= {"BTU":3};
-ilib.Measurement.Energy.uscustomarySystem = {"calorie":6};
+ilib.Measurement.Energy.imperialSystem = {
+	"BTU": 3
+};
+ilib.Measurement.Energy.uscustomarySystem = {
+	"calorie": 6
+};
 
+ilib.Measurement.Energy.metricToImperial = {
+    "millijoule": "BTU",
+    "joule": "BTU",
+    "kilojoule": "BTU",
+    "megajoule": "BTU",
+    "gigajoule": "BTU"
+};
+ilib.Measurement.Energy.imperialToMetric = {
+	"BTU": "joule"
+};
+
+/**
+ * @inheritDoc
+ */
 ilib.Measurement.Energy.prototype.localize = function(locale) {
-    return new ilib.Measurement.Energy({
-        unit: this.unit,
-        amount: this.amount
-    });
+	var to;
+	if (locale === "en-GB") {
+		to = ilib.Measurement.Energy.metricToImperial[this.unit] || this.unit;
+	} else {
+		to = ilib.Measurement.Energy.imperialToMetric[this.unit] || this.unit;
+	}
+
+	return new ilib.Measurement.Energy({
+	    unit: to,
+	    amount: this
+	});
 };
 
 /**
  * @inheritDoc
  * @param {string=} measurementsystem
- * @return {ilib.Measurement}
  */
 ilib.Measurement.Energy.prototype.scale = function(measurementsystem) {
     var fromRow = ilib.Measurement.Energy.ratios[this.unit];

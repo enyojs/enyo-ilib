@@ -11367,14 +11367,18 @@ util/jsutils.js
  * eg. "USD 57.35" for the same amount. The default is "common" style if the style is
  * not specified.<p>
  *
- * When the type of this formatter is "number",
- * the style can be either "standard" or "scientific" or "native". A "standard" style means
- * a fully specified floating point number formatted for the locale, whereas "scientific" uses
- * scientific notation for all numbers. That is, 1 integral digit, followed by a number
- * of fractional digits, followed by an "e" which denotes exponentiation, followed digits
- * which give the power of 10 in the exponent. The native style will format a floating point
- * number using the native digits and formatting symbols for the script of the locale. Note
- * that if you specify a maximum number
+ * When the type of this formatter is "number", the style can be one of the following:
+ * <ul>
+ *   <li><i>standard - format a fully specified floating point number properly for the locale
+ *   <li><i>scientific</i> - use scientific notation for all numbers. That is, 1 integral 
+ *   digit, followed by a number of fractional digits, followed by an "e" which denotes 
+ *   exponentiation, followed digits which give the power of 10 in the exponent. 
+ *   <li><i>native</i> - format a floating point number using the native digits and 
+ *   formatting symbols for the script of the locale. 
+ *   <li><i>nogrouping</i> - format a floating point number without grouping digits for
+ *   the integral portion of the number
+ * </ul>
+ * Note that if you specify a maximum number
  * of integral digits, the formatter with a standard style will give you standard
  * formatting for smaller numbers and scientific notation for larger numbers. The default
  * is standard style if this is not specified.
@@ -11576,9 +11580,13 @@ ilib.NumFmt.prototype = {
 			this.round = ilib._roundFnc[this.roundingMode];
 		}
 		
-		this.prigroupSize = this.localeInfo.getPrimaryGroupingDigits(),
-		this.secgroupSize = this.localeInfo.getSecondaryGroupingDigits(),
-		this.groupingSeparator = this.getUseNative() ? this.localeInfo.getNativeGroupingSeparator() : this.localeInfo.getGroupingSeparator();
+		if (this.style === "nogrouping") {
+			this.prigroupSize = this.secgroupSize = 0;
+		} else {
+			this.prigroupSize = this.localeInfo.getPrimaryGroupingDigits();
+			this.secgroupSize = this.localeInfo.getSecondaryGroupingDigits();
+			this.groupingSeparator = this.getUseNative() ? this.localeInfo.getNativeGroupingSeparator() : this.localeInfo.getGroupingSeparator();
+		} 
 		this.decimalSeparator = this.getUseNative() ? this.localeInfo.getNativeDecimalSeparator() : this.localeInfo.getDecimalSeparator();
 		
 		if (this.getUseNative()) {
