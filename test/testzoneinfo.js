@@ -106,7 +106,7 @@ function testZoneInfoFileGetOffsetNone() {
 
     assertNotNull(zif);
 
-    assertEquals(0, zif.getRawOffset(2014));
+    assertEquals(0, zif.getRawOffset(new Date()));
 }
 
 function testZoneInfoFileGetOffsetWest() {
@@ -114,7 +114,7 @@ function testZoneInfoFileGetOffsetWest() {
 
     assertNotNull(zif);
 
-    assertEquals(-480, zif.getRawOffset(2014));
+    assertEquals(-480, zif.getRawOffset(new Date()));
 }
 
 function testZoneInfoFileGetOffsetEastNoDST() {
@@ -122,7 +122,7 @@ function testZoneInfoFileGetOffsetEastNoDST() {
 
     assertNotNull(zif);
 
-    assertEquals(480, zif.getRawOffset(2014));
+    assertEquals(480, zif.getRawOffset(new Date()));
 }
 
 function testZoneInfoFileGetOffsetEastWithDST() {
@@ -130,7 +130,7 @@ function testZoneInfoFileGetOffsetEastWithDST() {
 
     assertNotNull(zif);
 
-    assertEquals(600, zif.getRawOffset(2014));
+    assertEquals(600, zif.getRawOffset(new Date()));
 }
 
 function testZoneInfoFileUsesDSTWest() {
@@ -138,7 +138,7 @@ function testZoneInfoFileUsesDSTWest() {
 
     assertNotNull(zif);
     
-    assertFalse(zif.usesDST(2014));
+    assertFalse(zif.usesDST(new Date()));
 }
 
 function testZoneInfoFileUsesDSTTrue() {
@@ -146,7 +146,7 @@ function testZoneInfoFileUsesDSTTrue() {
 
     assertNotNull(zif);
 
-    assertTrue(zif.usesDST(2014));
+    assertTrue(zif.usesDST(new Date()));
 }
 
 function testZoneInfoFileUsesDSTFalseEast() {
@@ -154,7 +154,7 @@ function testZoneInfoFileUsesDSTFalseEast() {
 
     assertNotNull(zif);
 
-    assertFalse(zif.usesDST(2014));
+    assertFalse(zif.usesDST(new Date()));
 }
 
 function testZoneInfoFileGetDSTSavings() {
@@ -162,7 +162,7 @@ function testZoneInfoFileGetDSTSavings() {
 
     assertNotNull(zif);
 
-    assertEquals(60, zif.getDSTSavings(2014));
+    assertEquals(60, zif.getDSTSavings(new Date()));
 }
 
 function testZoneInfoFileGetDSTSavingsOdd() {
@@ -170,7 +170,7 @@ function testZoneInfoFileGetDSTSavingsOdd() {
 
     assertNotNull(zif);
 
-    assertEquals(30, zif.getDSTSavings(2014));
+    assertEquals(30, zif.getDSTSavings(new Date()));
 }
 
 function testZoneInfoFileGetDSTSavingsNone() {
@@ -178,7 +178,7 @@ function testZoneInfoFileGetDSTSavingsNone() {
 
     assertNotNull(zif);
 
-    assertEquals(0, zif.getDSTSavings(2014));
+    assertEquals(0, zif.getDSTSavings(new Date()));
 }
 
 function testZoneInfoFileGetDSTStartDateNorthernHemisphere() {
@@ -187,7 +187,7 @@ function testZoneInfoFileGetDSTStartDateNorthernHemisphere() {
     assertNotNull(zif);
 
     // unix time of March 9, 2014 2:00am PST -> 3:00am PDT
-    assertEquals(1394359200000, zif.getDSTStartDate(2014));
+    assertEquals(1394359200000, zif.getDSTStartDate(new Date(2014, 11, 20)));
 }
 
 function testZoneInfoFileGetDSTEndDateNorthernHemisphere() {
@@ -196,7 +196,7 @@ function testZoneInfoFileGetDSTEndDateNorthernHemisphere() {
     assertNotNull(zif);
 
     // unix time of Nov 2, 2014 2:00am PDT -> 1:00am PST
-    assertEquals(1414918800000, zif.getDSTEndDate(2014));
+    assertEquals(1414918800000, zif.getDSTEndDate(new Date(2014, 11, 20)));
 }
 
 function testZoneInfoFileGetDSTStartDateSouthernHemisphere() {
@@ -205,7 +205,7 @@ function testZoneInfoFileGetDSTStartDateSouthernHemisphere() {
     assertNotNull(zif);
 
     // unix time of Oct 5, 2014 2:00am EST -> 3:00am EDT
-    assertEquals(1412438400000, zif.getDSTStartDate(2014));
+    assertEquals(1412438400000, zif.getDSTStartDate(new Date(2014, 11, 20)));
 }
 
 function testZoneInfoFileGetDSTEndDateSouthernHemisphere() {
@@ -214,7 +214,7 @@ function testZoneInfoFileGetDSTEndDateSouthernHemisphere() {
     assertNotNull(zif);
 
     // unix time of Apr 6, 2014 3:00am EDT -> 2:00am EST
-    assertEquals(1396713600000, zif.getDSTEndDate(2014));
+    assertEquals(1396713600000, zif.getDSTEndDate(new Date(2014, 11, 20)));
 }
 
 function testZoneInfoFileGetDSTStartDateNone() {
@@ -223,7 +223,7 @@ function testZoneInfoFileGetDSTStartDateNone() {
     assertNotNull(zif);
 
     // no DST in Arizona
-    assertEquals(-1, zif.getDSTStartDate(2014));
+    assertEquals(-1, zif.getDSTStartDate(new Date()));
 }
 
 function testZoneInfoFileGetDSTEndDateNone() {
@@ -232,7 +232,7 @@ function testZoneInfoFileGetDSTEndDateNone() {
     assertNotNull(zif);
 
     // no DST in Arizona
-    assertEquals(-1, zif.getDSTEndDate(2014));
+    assertEquals(-1, zif.getDSTEndDate(new Date()));
 }
 
 function testZoneInfoFileGetAbbreviationSimple() {
@@ -241,7 +241,7 @@ function testZoneInfoFileGetAbbreviationSimple() {
     assertNotNull(zif);
 
     // no DST in UTC
-    assertEquals("UTC", zif.getAbbreviation(2014));
+    assertEquals("UTC", zif.getAbbreviation(new Date()));
 }
 
 function testZoneInfoFileGetAbbreviationNoDST() {
@@ -250,7 +250,7 @@ function testZoneInfoFileGetAbbreviationNoDST() {
     assertNotNull(zif);
 
     // no DST in Arizona
-    assertEquals("MST", zif.getAbbreviation(2014));
+    assertEquals("MST", zif.getAbbreviation(new Date()));
 }
 
 function testZoneInfoFileGetDSTAbbreviationNoDST() {
@@ -259,7 +259,7 @@ function testZoneInfoFileGetDSTAbbreviationNoDST() {
     assertNotNull(zif);
 
     // no DST in Arizona
-    assertEquals("MST", zif.getDSTAbbreviation(2014));
+    assertEquals("MST", zif.getDSTAbbreviation(new Date()));
 }
 
 function testZoneInfoFileGetAbbreviationWithDST() {
@@ -268,7 +268,7 @@ function testZoneInfoFileGetAbbreviationWithDST() {
     assertNotNull(zif);
 
     // standard time
-    assertEquals("PST", zif.getAbbreviation(2014));
+    assertEquals("PST", zif.getAbbreviation(new Date()));
 }
 
 function testZoneInfoFileGetDSTAbbreviationWithDST() {
@@ -277,7 +277,7 @@ function testZoneInfoFileGetDSTAbbreviationWithDST() {
     assertNotNull(zif);
 
     // standard time
-    assertEquals("PDT", zif.getDSTAbbreviation(2014));
+    assertEquals("PDT", zif.getDSTAbbreviation(new Date()));
 }
 
 function testZoneInfoFileGetDSTAbbreviationSimple() {
@@ -286,7 +286,7 @@ function testZoneInfoFileGetDSTAbbreviationSimple() {
     assertNotNull(zif);
 
     // no DST in UTC
-    assertEquals("UTC", zif.getDSTAbbreviation(2014));
+    assertEquals("UTC", zif.getDSTAbbreviation(new Date()));
 }
 
 function testZoneInfoGetIlibFormatSimpleZone() {
@@ -296,7 +296,7 @@ function testZoneInfoGetIlibFormatSimpleZone() {
 		"o": "0:0",
 		"f": "UTC"
 	};
-    assertObjectEquals(info, zif.getIlibZoneInfo(2014));
+    assertObjectEquals(info, zif.getIlibZoneInfo(new Date()));
 }
 
 function testZoneInfoGetIlibFormatComplexZone() {
@@ -315,7 +315,7 @@ function testZoneInfoGetIlibFormatComplexZone() {
 			"j": 2456963.875
 		}
 	};
-    assertObjectEquals(info, zif.getIlibZoneInfo(2014));
+    assertObjectEquals(info, zif.getIlibZoneInfo(new Date(2014, 11, 20)));
 }
 
 function testZoneInfoGetIlibFormatSouthernHemisphere() {
@@ -325,14 +325,14 @@ function testZoneInfoGetIlibFormatSouthernHemisphere() {
 		"o": "10:0",
 		"f": "{c}",
 		"s": {
-			"c": "EST",
+			"c": "AEDT",
 			"j": 2456935.1666666665, // Oct 5, 2014 2:00am
 			"v": "1:0"
 		},
 		"e": {
-			"c": "EST",
+			"c": "AEST",
 			"j": 2456753.1666666665 // Apr 6, 2014 3:00am
 		}
 	};
-    assertObjectEquals(info, zif.getIlibZoneInfo(2014));
+    assertObjectEquals(info, zif.getIlibZoneInfo(new Date(2014, 11, 20)));
 }
