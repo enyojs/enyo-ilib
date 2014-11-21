@@ -234,7 +234,7 @@ ZoneInfoFile.prototype._parseInfo = function(buffer) {
 				this.standardTime = this.daylightTime;
 			}
 
-			for (var k in this.zoneInfo) {
+			for (var k = this.zoneInfo.length-1; k > 0; k--) {
 				if (!this.zoneInfo[k].isdst) {
 					this.defaultTime = this.zoneInfo[k];
 					break;
@@ -242,7 +242,7 @@ ZoneInfoFile.prototype._parseInfo = function(buffer) {
 			}
 		}
 		if (!this.defaultTime) {
-			this.defaultTime = this.zoneInfo[0];
+			this.defaultTime = this.zoneInfo[this.zoneInfo.length-1];
 		}
 	}
 };
@@ -291,12 +291,12 @@ ZoneInfoFile.prototype.bsearch = function(target, arr) {
 /**
  * Return whether or not this zone uses DST in the given year.
  *
- * @param {number} year the Gregorian year to test
+ * @param {Date} date the Gregorian date to test
  * @returns {boolean} true if the zone uses DST in the given year
  */
-ZoneInfoFile.prototype.usesDST = function(year) {
-	var thisYear = new Date(year, 0, 1).getTime();
-	var nextyear = new Date(year+1, 0, 1).getTime();
+ZoneInfoFile.prototype.usesDST = function(date) {
+	var thisYear = date.getTime();
+	var nextYear = thisYear + 31536000000; // this is the number of ms in 1 Gregorian year
 
 	// search for the zone that was effective Jan 1 of this year
 	// to Jan 1 of next year, and if any of the infos is DST, then
@@ -304,7 +304,7 @@ ZoneInfoFile.prototype.usesDST = function(year) {
 
 	var index = this.bsearch(thisYear, this.transitionTimes);
 	if (index !== -1) {
-		while (index < this.transitionTimes.length && this.transitionTimes[index] < nextyear) {
+		while (index < this.transitionTimes.length && this.transitionTimes[index] < nextYear) {
 			if (this.ruleIndex[index++].isdst) {
 				return true;
 			}
@@ -315,15 +315,15 @@ ZoneInfoFile.prototype.usesDST = function(year) {
 };
 
 /**
- * Return the raw offset from UTC that this zone uses in the given year.
+ * Return the raw offset from UTC that this zone uses at the given time.
  *
- * @param {number} year the Gregorian year to test
+ * @param {Date} date the Gregorian date to test
  * @returns {number} offset from from UTC in number of minutes. Negative
  * numbers are west of Greenwich, positive are east of Greenwich
  */
-ZoneInfoFile.prototype.getRawOffset = function(year) {
-	var thisYear = new Date(year, 0, 1).getTime();
-	var nextYear = new Date(year+1, 0, 1).getTime();
+ZoneInfoFile.prototype.getRawOffset = function(date) {
+	var thisYear = date.getTime();
+	var nextYear = thisYear + 31536000000; // this is the number of ms in 1 Gregorian year
 
 	var index = this.bsearch(thisYear, this.transitionTimes);
 
@@ -346,17 +346,16 @@ ZoneInfoFile.prototype.getRawOffset = function(year) {
  * in use. If the zone does not use DST in the given year, this
  * method will return 0.
  *
- * @param {number} year the Gregorian year to test
+ * @param {Date} date the Gregorian date to test
  * @returns {number} number of minutes in DST savings if the zone
  * uses DST in the given year, or zero otherwise
  */
-ZoneInfoFile.prototype.getDSTSavings = function(year) {
-	var thisYear = new Date(year, 0, 1).getTime();
-	var nextYear = new Date(year+1, 0, 1).getTime();
+ZoneInfoFile.prototype.getDSTSavings = function(date) {
+	var thisYear = date.getTime();
+	var nextYear = thisYear + 31536000000; // this is the number of ms in 1 Gregorian year
 
-	// search for all transitions between Jan 1 of this year
-	// to Jan 1 of next year, and calculate the difference
-	// in DST (if any)
+	// search for all transitions between now and one year 
+	// from now, and calculate the difference in DST (if any)
 
 	var index = this.bsearch(thisYear, this.transitionTimes);
 	var savings = 0;
@@ -377,12 +376,13 @@ ZoneInfoFile.prototype.getDSTSavings = function(year) {
  * Return the start date/time of DST if this zone uses
  * DST in the given year.
  *
- * @param {number} year the Gregorian year to test
+ * @param {Date} date the Gregorian date to test
  * @returns {number} unixtime representation of the start
  * of DST in the given year, or -1 if the zone does not
  * use DST in the given year
  */
-ZoneInfoFile.prototype.getDSTStartDate = function(year) {
+ZoneInfoFile.prototype.getDSTStartDate = function(date) {
+	var year = date.getFullYear();
 	var thisYear = new Date(year, 0, 1).getTime();
 	var nextYear = new Date(year+1, 0, 1).getTime();
 
@@ -412,12 +412,13 @@ ZoneInfoFile.prototype.getDSTStartDate = function(year) {
  * Return the end date/time of DST if this zone uses
  * DST in the given year.
  *
- * @param {number} year the Gregorian year to test
+ * @param {Date} date the Gregorian date to test
  * @returns {number} unixtime representation of the end
  * of DST in the given year, or -1 if the zone does not
  * use DST in the given year
  */
-ZoneInfoFile.prototype.getDSTEndDate = function(year) {
+ZoneInfoFile.prototype.getDSTEndDate = function(date) {
+	var year = date.getFullYear();
 	var thisYear = new Date(year, 0, 1).getTime();
 	var nextYear = new Date(year+1, 0, 1).getTime();
 
@@ -447,16 +448,15 @@ ZoneInfoFile.prototype.getDSTEndDate = function(year) {
  * Return the abbreviation used by this zone in standard
  * time.
  *
- * @param {number} year the Gregorian year to test
+ * @param {Date} date the Gregorian date to test
  * @returns {string} a string representing the abbreviation
  * used in this time zone during standard time
  */
-ZoneInfoFile.prototype.getAbbreviation = function(year) {
-	var thisYear = new Date(year, 0, 1).getTime();
-	var nextYear = new Date(year+1, 0, 1).getTime();
+ZoneInfoFile.prototype.getAbbreviation = function(date) {
+	var thisYear = date.getTime();
+	var nextYear = thisYear + 31536000000; // this is the number of ms in 1 Gregorian year
 
-	// search for all transitions between Jan 1 of this year
-	// to Jan 1 of next year, and calculate the difference
+	// search for all transitions between now and one year from now, and calculate the difference
 	// in DST (if any)
 	var abbr;
 	if (this.transitionTimes.length > 0) {
@@ -483,16 +483,15 @@ ZoneInfoFile.prototype.getAbbreviation = function(year) {
  * time. If the zone does not use DST in the given year,
  * this returns the same thing as getAbbreviation().
  *
- * @param {number} year the Gregorian year to test
+ * @param {Date} date the Gregorian date to test
  * @returns {string} a string representing the abbreviation
  * used in this time zone during daylight time
  */
-ZoneInfoFile.prototype.getDSTAbbreviation = function(year) {
-	var thisYear = new Date(year, 0, 1).getTime();
-	var nextYear = new Date(year+1, 0, 1).getTime();
+ZoneInfoFile.prototype.getDSTAbbreviation = function(date) {
+	var thisYear = date.getTime();
+	var nextYear = thisYear + 31536000000; // this is the number of ms in 1 Gregorian year
 
-	// search for all transitions between Jan 1 of this year
-	// to Jan 1 of next year, and calculate the difference
+	// search for all transitions between now and one year from now, and calculate the difference
 	// in DST (if any)
 
 	var abbr;
@@ -516,14 +515,14 @@ ZoneInfoFile.prototype.getDSTAbbreviation = function(year) {
 };
 
 /**
- * Return the zone information for the given year in ilib
+ * Return the zone information for the given date in ilib
  * format.
  *
- * @param {number} year the Gregorian year to test
+ * @param {Date} date the Gregorian date to test
  * @returns {Object} an object containing the zone information
- * for the given year in the format that ilib can use directly
+ * for the given date in the format that ilib can use directly
  */
-ZoneInfoFile.prototype.getIlibZoneInfo = function(year) {
+ZoneInfoFile.prototype.getIlibZoneInfo = function(date) {
 	function minutesToStr(min) {
 		var hours = Math.floor(min / 60);
 		var minutes = min - hours * 60;
@@ -535,21 +534,21 @@ ZoneInfoFile.prototype.getIlibZoneInfo = function(year) {
 		return 2440587.5 + millis / 86400000;
 	}
 	var res = {
-		"o": minutesToStr(this.getRawOffset(year))
+		"o": minutesToStr(this.getRawOffset(date))
 	};
-	if (this.usesDST(year)) {
+	if (this.usesDST(date)) {
 		res.f = "{c}";
 		res.e = {
-			"c": this.getAbbreviation(year),
-			"j": unixtimeToJD(this.getDSTEndDate(year))
+			"c": this.getAbbreviation(date),
+			"j": unixtimeToJD(this.getDSTEndDate(date))
 		};
 		res.s = {
-			"c": this.getDSTAbbreviation(year),
-			"j": unixtimeToJD(this.getDSTStartDate(year)),
-			"v": minutesToStr(this.getDSTSavings(year))
+			"c": this.getDSTAbbreviation(date),
+			"j": unixtimeToJD(this.getDSTStartDate(date)),
+			"v": minutesToStr(this.getDSTSavings(date))
 		};
 	} else {
-		res.f = this.getAbbreviation(year);
+		res.f = this.getAbbreviation(date);
 	}
 
 	return res;

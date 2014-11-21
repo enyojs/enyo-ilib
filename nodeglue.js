@@ -57,7 +57,7 @@ nodeLoader.prototype._createZoneFile = function (path) {
 		
 		// only get the info for this year. Later we can get the info
 		// for any historical or future year too
-		return zif.getIlibZoneInfo(new Date().getFullYear());
+		return zif.getIlibZoneInfo(new Date());
 	} catch (e) {
 		return undefined;
 	}
