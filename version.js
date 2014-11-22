@@ -1,3 +1,3 @@
 if (enyo && enyo.version) {
-	enyo.version["enyo-ilib"] = "2.5.2-pre.6";
+	enyo.version["enyo-ilib"] = "2.5.2-rc.1";
 }
