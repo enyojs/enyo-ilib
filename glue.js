@@ -304,6 +304,10 @@
 			if (enyo.Control) {
 				enyo.Control.prototype.rtl = true;
 			}
+		} else {
+			if (enyo.Control) {
+				enyo.Control.prototype.rtl = false;
+			}
 		}
 
 		// allow enyo or the apps to give CSS classes that are specific to the language, country, or script
