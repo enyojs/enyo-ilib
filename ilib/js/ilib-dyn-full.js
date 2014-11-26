@@ -1341,7 +1341,9 @@ ilib.LocaleInfo = function(locale, options) {
 	    loadParams = undefined;
 	
 	/* these are all the defaults. Essentially, en-US */
-	/** @type {{
+	/**
+	  @private 
+	  @type {{
 		scripts:Array.<string>,
 		timezone:string,
 		units:string,
@@ -1365,7 +1367,8 @@ ilib.LocaleInfo = function(locale, options) {
 			exponential:string,
 			digits:string
 		}>
-	}}*/
+	  }}
+	*/
 	this.info = ilib.LocaleInfo.defaultInfo;
 	
 	switch (typeof(locale)) {
@@ -14047,7 +14050,10 @@ util/jsutils.js
 ilib.NumFmt = function (options) {
 	var sync = true;
 	this.locale = new ilib.Locale();
-	/** @type {string} */
+	/** 
+	 * @private
+	 * @type {string} 
+	 */
 	this.type = "number";
 	var loadParams = undefined;
 
@@ -14065,26 +14071,45 @@ ilib.NumFmt = function (options) {
 		}
 
 		if (options.currency) {
-			/** @type {string} */
+			/** 
+			 * @private 
+			 * @type {string} 
+			 */
 			this.currency = options.currency;
 		}
 
 		if (typeof (options.maxFractionDigits) === 'number') {
-			/** @type {number|undefined} */
+			/** 
+			 * @private 
+			 * @type {number|undefined} 
+			 */
 			this.maxFractionDigits = this._toPrimitive(options.maxFractionDigits);
 		}
 		if (typeof (options.minFractionDigits) === 'number') {
-			/** @type {number|undefined} */
+			/** 
+			 * @private 
+			 * @type {number|undefined} 
+			 */
 			this.minFractionDigits = this._toPrimitive(options.minFractionDigits);
 		}
 		if (options.style) {
-			/** @type {string} */
+			/** 
+			 * @private 
+			 * @type {string} 
+			 */
 			this.style = options.style;
 		}
 		if (typeof(options.useNative) === 'boolean') {
+			/** 
+			 * @private 
+			 * @type {boolean} 
+			 * */
 			this.useNative = options.useNative;
 		}
-		/** @type {string} */
+		/** 
+		 * @private 
+		 * @type {string} 
+		 */
 		this.roundingMode = options.roundingMode;
 
 		if (typeof (options.sync) !== 'undefined') {
@@ -14095,14 +14120,20 @@ ilib.NumFmt = function (options) {
 		loadParams = options.loadParams;
 	}
 
-	/** @type {ilib.LocaleInfo|undefined} */
+	/** 
+	 * @private 
+	 * @type {ilib.LocaleInfo|undefined} 
+	 */
 	this.localeInfo = undefined;
 	
 	new ilib.LocaleInfo(this.locale, {
 		sync: sync,
 		loadParams: loadParams,
 		onLoad: ilib.bind(this, function (li) {
-			/** @type {ilib.LocaleInfo|undefined} */
+			/** 
+			 * @private 
+			 * @type {ilib.LocaleInfo|undefined} 
+			 */
 			this.localeInfo = li;
 
 			if (this.type === "number") {
@@ -16207,7 +16238,7 @@ ilib.Name._isAsianChar = function(c) {
  * @static
  * @protected
  */
-ilib.Name._isAsianName = function (name) {
+ilib.Name._isAsianName = function (name, language) {
     // the idea is to count the number of asian chars and the number
     // of latin chars. If one is greater than the other, choose
     // that style.
@@ -16218,10 +16249,16 @@ ilib.Name._isAsianName = function (name) {
     if (name && name.length > 0) {
         for (i = 0; i < name.length; i++) {
         	var c = name.charAt(i);
-             
+
             if (ilib.Name._isAsianChar(c)) {
+                if (language =="ko" || language =="ja" || language =="zh") {
+                    return true;
+                }
                 asian++;
             } else if (ilib.CType.isAlpha(c)) {
+                if (!language =="ko" || !language =="ja" || !language =="zh") {
+                    return false;
+                }
                 latin++;
             }
         }
@@ -16238,7 +16275,7 @@ ilib.Name._isAsianName = function (name) {
  * @static
  * @protected
  */
-ilib.Name._isEuroName = function (name) {
+ilib.Name._isEuroName = function (name, language) {
     var c,
         n = new ilib.String(name),
         it = n.charIterator();
@@ -16248,9 +16285,10 @@ ilib.Name._isEuroName = function (name) {
 
         if (!ilib.Name._isAsianChar(c) && !ilib.CType.isPunct(c) && !ilib.CType.isSpace(c)) {
             return true;
+        } else if (ilib.Name._isAsianChar(c) && (language =="ko" || language =="ja" || language =="zh")) {
+            return false;
         }
     }
-
     return false;
 };
 
@@ -16262,10 +16300,11 @@ ilib.Name.prototype = {
         var parts, prefixArray, prefix, prefixLower,
             suffixArray, suffix, suffixLower,
             i, info, hpSuffix;
+        var currentLanguage = this.locale.getLanguage();
 
         if (name) {
             // for DFISH-12905, pick off the part that the LDAP server automatically adds to our names in HP emails
-            i = name.search(/\s*[,\(\[\{<]/);
+            i = name.search(/\s*[,\/\(\[\{<]/);
             if (i !== -1) {
                 hpSuffix = name.substring(i);
                 hpSuffix = hpSuffix.replace(/\s+/g, ' '); // compress multiple whitespaces
@@ -16279,11 +16318,10 @@ ilib.Name.prototype = {
                 }
             }
 
+            this.isAsianName = ilib.Name._isAsianName(name, currentLanguage);
             if (this.info.nameStyle === "asian" || this.info.order === "fmg" || this.info.order === "fgm") {
-                this.isAsianName = !ilib.Name._isEuroName(name);
                 info = this.isAsianName ? this.info : ilib.data.name;
             } else {
-                this.isAsianName = ilib.Name._isAsianName(name);
                 info = this.isAsianName ? ilib.data.name : this.info;
             }
 
@@ -16355,7 +16393,7 @@ ilib.Name.prototype = {
             }
 
             if (this.isAsianName) {
-                this._parseAsianName(parts);
+                this._parseAsianName(parts, currentLanguage);
             } else {
                 this._parseWesternName(parts);
             }
@@ -16595,14 +16633,15 @@ ilib.Name.prototype = {
     /**
      * @protected
      */
-    _parseAsianName: function (parts) {
-        
+    _parseAsianName: function (parts, language) {
         var familyNameArray = this._findPrefix(parts, this.info.knownFamilyNames, true, this.info.noCompoundFamilyNames);
 
         if (familyNameArray && familyNameArray.length > 0) {
             this.familyName = familyNameArray.join('');
-
             this.givenName = parts.slice(this.familyName.length).join('');
+            if (language === "ko" && this.givenName.search(/\s*[/\s]/) > -1) {
+                this._parseKoreanName(parts);
+            }
         } else if (this.locale.getLanguage() === "ja") {
             this._parseJapaneseName(parts);
         } else if (this.suffix || this.prefix) {
@@ -16611,7 +16650,19 @@ ilib.Name.prototype = {
             this.givenName = parts.join('');
         }
     },
-    
+
+    /**
+     * @protected
+     */
+    _parseKoreanName: function (parts) {
+        var index = this.givenName.indexOf(" ");
+        var temp = this.givenName.substr(0, index);
+        if (!this.suffix) {
+            this.suffix = this.givenName.substr(index + 1);     
+        }
+        this.givenName = temp;
+    },
+
     /**
      * @protected
      */
@@ -17427,13 +17478,14 @@ ilib.NameFmt.prototype = {
 	 */
 	format: function(name) {
 		var formatted, temp, modified, isAsianName;
-		
+		var currentLanguage = this.locale.getLanguage();
+		 
 		if (!name || typeof(name) !== 'object') {
 			return undefined;
 		}
 		
 		if ((typeof(name.isAsianName) === 'boolean' && !name.isAsianName) ||
-				ilib.Name._isEuroName([name.givenName, name.middleName, name.familyName].join(""))) {
+				ilib.Name._isEuroName([name.givenName, name.middleName, name.familyName].join(""), currentLanguage)) {
 			isAsianName = false;	// this is a euro name, even if the locale is asian
 			modified = name.clone();
 			
@@ -17463,6 +17515,9 @@ ilib.NameFmt.prototype = {
 		} else {
 			isAsianName = true;
 			modified = name;
+			if (currentLanguage === "ko" && this.info.honorifics.indexOf(name.suffix) == -1) {
+				modified.suffix = ' ' + modified.suffix; 
+			}
 		}
 		
 		if (!this.template || isAsianName !== this.isAsianLocale) {
@@ -17657,7 +17712,7 @@ ilib.Address = function (freeformAddress, options) {
 		}
 		if (freeformAddress.format) {
 			/**
-			 * @protected
+			 * private
 			 * @type {string}
 			 */
 			this.format = freeformAddress.format;
@@ -19642,15 +19697,28 @@ ilib.Collator = function(options) {
 		useNative = true;
 
 	// defaults
-	/** @type ilib.Locale */
+	/** 
+	 * @private
+	 * @type {ilib.Locale} 
+	 */
 	this.locale = new ilib.Locale(ilib.getLocale());
+	
+	/** @private */
 	this.caseFirst = "upper";
+	/** @private */
 	this.sensitivity = "variant";
+	/** @private */
 	this.level = 4;
+	/** @private */
 	this.usage = "sort";
+	/** @private */
 	this.reverse = false;
+	/** @private */
 	this.numeric = false;
+	/** @private */
 	this.style = "standard";
+	/** @private */
+	this.ignorePunctuation = false;
 	
 	if (options) {
 		if (options.locale) {
@@ -19681,12 +19749,10 @@ ilib.Collator = function(options) {
 			}
 		}
 		if (typeof(options.upperFirst) !== 'undefined') {
-			/** @type string */
 			this.caseFirst = options.upperFirst ? "upper" : "lower"; 
 		}
 		
 		if (typeof(options.ignorePunctuation) !== 'undefined') {
-			/** @type boolean */
 			this.ignorePunctuation = options.ignorePunctuation;
 		}
 		if (typeof(options.sync) !== 'undefined') {
@@ -19723,7 +19789,10 @@ ilib.Collator = function(options) {
 	if (useNative && typeof(Intl) !== 'undefined' && Intl) {
 		// this engine is modern and supports the new Intl object!
 		//console.log("implemented natively");
-		/** @type {{compare:function(string,string)}} */
+		/** 
+		 * @private
+		 * @type {{compare:function(string,string)}} 
+		 */
 		this.collator = new Intl.Collator(this.locale.getSpec(), this);
 		
 		if (options && typeof(options.onLoad) === 'function') {
@@ -19822,7 +19891,10 @@ ilib.Collator.prototype = {
      * @private
      */
     _init: function(rules) {
-    	/** @type {{scripts:Array.<string>,bits:Array.<number>,maxes:Array.<number>,bases:Array.<number>,map:Object.<string,Array.<number|null|Array.<number>>>}} */
+    	/** 
+    	 * @private
+    	 * @type {{scripts:Array.<string>,bits:Array.<number>,maxes:Array.<number>,bases:Array.<number>,map:Object.<string,Array.<number|null|Array.<number>>>}}
+    	 */
     	this.collation = rules[this.style];
     	this.map = {};
     	this.keysize = 0;
@@ -21683,6 +21755,9 @@ phone/handler.js
  * <li>New Zealand
  * <li>Singapore
  * <li>Korea
+ * <li>Japan
+ * <li>Russia
+ * <li>Brazil
  * </ul>
  * 
  * @constructor
@@ -21711,72 +21786,118 @@ ilib.PhoneNumber = function(number, options) {
 		}
 
 		if (typeof(options.onLoad) === 'function') {
-			/** @type {function(ilib.PhoneNumber)} */
+			/** 
+			 * @private
+			 * @type {function(ilib.PhoneNumber)} 
+			 */
 			this.onLoad = options.onLoad;
 		}
 	}
 
 	if (typeof number === "object") {
-		/** @type {string|undefined} */
+		/**
+		 * The vertical service code. These are codes that typically
+		 * start with a star or hash, like "*69" for "dial back the 
+		 * last number that called me".
+		 * @type {string|undefined} 
+		 */
 		this.vsc = number.vsc;
 
-		/** @type {string} */
+		/**
+		 * The international direct dialing prefix. This is always
+		 * followed by the country code. 
+		 * @type {string} 
+		 */
 		this.iddPrefix = number.iddPrefix;
 		
-		/** @type {string|undefined} */
+		/**
+		 * The unique IDD country code for the country where the
+		 * phone number is serviced. 
+		 * @type {string|undefined} 
+		 */
 		this.countryCode = number.countryCode;
 		
-		/** @type {string|undefined} */
+		/**
+		 * The digits required to access the trunk. 
+		 * @type {string|undefined} 
+		 */
 		this.trunkAccess = number.trunkAccess;
 		
-		/** @type {string|undefined} */
+		/**
+		 * The carrier identification code used to identify 
+		 * alternate long distance or international carriers. 
+		 * @type {string|undefined} 
+		 */
 		this.cic = number.cic;
 		
-		/** @type {string|undefined} */
+		/**
+		 * Identifies an emergency number that is typically
+		 * short, such as "911" in North America or "112" in
+		 * many other places in the world. 
+		 * @type {string|undefined} 
+		 */
 		this.emergency = number.emergency;
 		
-		/** @type {string|undefined} */
+		/**
+		 * The prefix of the subscriber number that indicates
+		 * that this is the number of a mobile phone. 
+		 * @type {string|undefined} 
+		 */
 		this.mobilePrefix = number.mobilePrefix;
 		
-		/** @type {string|undefined} */
+		/**
+		 * The prefix that identifies this number as commercial
+		 * service number. 
+		 * @type {string|undefined} 
+		 */
 		this.serviceCode = number.serviceCode;
 		
-		/** @type {string|undefined} */
+		/**
+		 * The area code prefix of a land line number. 
+		 * @type {string|undefined} 
+		 */
 		this.areaCode = number.areaCode;
 		
-		/** @type {string|undefined} */
+		/**
+		 * The unique number associated with the subscriber
+		 * of this phone. 
+		 * @type {string|undefined} 
+		 */
 		this.subscriberNumber = number.subscriberNumber;
 		
-		/** @type {string|undefined} */
+		/**
+		 * The direct dial extension number. 
+		 * @type {string|undefined} 
+		 */
 		this.extension = number.extension;
 		
 		/**
-		 * @protected
+		 * @private
 		 * @type {boolean} 
 		 */
 		this.invalid = number.invalid;
 
 		if (number.plan && number.locale) {
 			/** 
-			 * @protected
+			 * @private
 			 * @type {ilib.NumPlan} 
 			 */
 			this.plan = number.plan;
 			
 			/** 
-			 * @protected
+			 * @private
 			 * @type {ilib.Locale.PhoneLoc} 
 			 */
 			this.locale = number.locale;
 	
 			/** 
-			 * @protected
+			 * @private
 			 * @type {ilib.NumPlan} 
 			 */
 			this.destinationPlan = number.destinationPlan;
 			
 			/** 
-			 * @protected
+			 * @private
 			 * @type {ilib.Locale.PhoneLoc} 
 			 */
 			this.destinationLocale = number.destinationLocale;
@@ -24628,14 +24749,23 @@ ilib.UnitFmt = function(options) {
     	}
         
         if (typeof (options.maxFractionDigits) === 'number') {
-            /** @type {number|undefined} */
+            /** 
+             * @private
+             * @type {number|undefined} 
+             */
             this.maxFractionDigits = options.maxFractionDigits;
         }
         if (typeof (options.minFractionDigits) === 'number') {
-            /** @type {number|undefined} */
+            /** 
+             * @private
+             * @type {number|undefined} 
+             */
             this.minFractionDigits = options.minFractionDigits;
         }
-        /** @type {string} */
+        /** 
+         * @private
+         * @type {string} 
+         */
         this.roundingMode = options.roundingMode;
     }
 
@@ -24863,14 +24993,31 @@ ilib.Measurement.Length.prototype.parent = ilib.Measurement;
 ilib.Measurement.Length.prototype.constructor = ilib.Measurement.Length;
 
 /**
- * @inheritDoc
+ * Return the type of this measurement. Examples are "mass",
+ * "length", "speed", etc. Measurements can only be converted
+ * to measurements of the same type.<p>
+ * 
+ * The type of the units is determined automatically from the 
+ * units. For example, the unit "grams" is type "mass". Use the 
+ * static call {@link ilib.Measurement.getAvailableUnits}
+ * to find out what units this version of ilib supports.
+ *  
+ * @return {string} the name of the type of this measurement
  */
 ilib.Measurement.Length.prototype.getMeasure = function() {
 	return "length";
 };
 
 /**
- * @inheritDoc
+ * Localize the measurement to the commonly used measurement in that locale. For example
+ * If a user's locale is "en-US" and the measurement is given as "60 kmh", 
+ * the formatted number should be automatically converted to the most appropriate 
+ * measure in the other system, in this case, mph. The formatted result should
+ * appear as "37.3 mph". 
+ * 
+ * @abstract
+ * @param {string} locale current locale string
+ * @returns {ilib.Measurement} a new instance that is converted to locale
  */
 ilib.Measurement.Length.prototype.localize = function(locale) {
     var to;
@@ -24886,7 +25033,14 @@ ilib.Measurement.Length.prototype.localize = function(locale) {
 };
 
 /**
- * @inheritDoc
+ * Return a new measurement instance that is converted to a new
+ * measurement unit. Measurements can only be converted
+ * to measurements of the same type.<p>
+ *  
+ * @param {string} to The name of the units to convert to
+ * @return {ilib.Measurement|undefined} the converted measurement
+ * or undefined if the requested units are for a different
+ * measurement type 
  */
 ilib.Measurement.Length.prototype.convert = function(to) {
 	if (!to || typeof(ilib.Measurement.Length.ratios[this.normalizeUnits(to)]) === 'undefined') {
@@ -24899,8 +25053,17 @@ ilib.Measurement.Length.prototype.convert = function(to) {
 };
 
 /**
- * @inheritDoc
- * @param {string=} measurementsystem
+ * Scale the measurement unit to an acceptable level. The scaling
+ * happens so that the integer part of the amount is as small as
+ * possible without being below zero. This will result in the 
+ * largest units that can represent this measurement without
+ * fractions. Measurements can only be scaled to other measurements 
+ * of the same type.
+ * 
+ * @param {string=} measurementsystem system to use (uscustomary|imperial|metric),
+ * or undefined if the system can be inferred from the current measure
+ * @return {ilib.Measurement} a new instance that is scaled to the 
+ * right level
  */
 ilib.Measurement.Length.prototype.scale = function(measurementsystem) {
     var mSystem;    
@@ -25143,14 +25306,30 @@ ilib.Measurement.Speed.prototype.parent = ilib.Measurement;
 ilib.Measurement.Speed.prototype.constructor = ilib.Measurement.Speed;
 
 /**
- * @inheritDoc
+ * Return the type of this measurement. Examples are "mass",
+ * "length", "speed", etc. Measurements can only be converted
+ * to measurements of the same type.<p>
+ * 
+ * The type of the units is determined automatically from the 
+ * units. For example, the unit "grams" is type "mass". Use the 
+ * static call {@link ilib.Measurement.getAvailableUnits}
+ * to find out what units this version of ilib supports.
+ *  
+ * @return {string} the name of the type of this measurement
  */
 ilib.Measurement.Speed.prototype.getMeasure = function() {
 	return "speed";
 };
 
 /**
- * @inheritDoc
+ * Return a new measurement instance that is converted to a new
+ * measurement unit. Measurements can only be converted
+ * to measurements of the same type.<p>
+ *  
+ * @param {string} to The name of the units to convert to
+ * @return {ilib.Measurement|undefined} the converted measurement
+ * or undefined if the requested units are for a different
+ * measurement type 
  */
 ilib.Measurement.Speed.prototype.convert = function(to) {
 	if (!to || typeof(ilib.Measurement.Speed.ratios[this.normalizeUnits(to)]) === 'undefined') {
@@ -25163,8 +25342,17 @@ ilib.Measurement.Speed.prototype.convert = function(to) {
 };
 
 /**
- * @inheritDoc
- * @param {string=} measurementsystem
+ * Scale the measurement unit to an acceptable level. The scaling
+ * happens so that the integer part of the amount is as small as
+ * possible without being below zero. This will result in the 
+ * largest units that can represent this measurement without
+ * fractions. Measurements can only be scaled to other measurements 
+ * of the same type.
+ * 
+ * @param {string=} measurementsystem system to use (uscustomary|imperial|metric),
+ * or undefined if the system can be inferred from the current measure
+ * @return {ilib.Measurement} a new instance that is scaled to the 
+ * right level
  */
 ilib.Measurement.Speed.prototype.scale = function(measurementsystem) {
 	var mSystem;
@@ -25203,7 +25391,15 @@ ilib.Measurement.Speed.prototype.scale = function(measurementsystem) {
 };
 
 /**
- * @inheritDoc
+ * Localize the measurement to the commonly used measurement in that locale. For example
+ * If a user's locale is "en-US" and the measurement is given as "60 kmh", 
+ * the formatted number should be automatically converted to the most appropriate 
+ * measure in the other system, in this case, mph. The formatted result should
+ * appear as "37.3 mph". 
+ * 
+ * @abstract
+ * @param {string} locale current locale string
+ * @returns {ilib.Measurement} a new instance that is converted to locale
  */
 ilib.Measurement.Speed.prototype.localize = function(locale) {
     var to;
@@ -25403,14 +25599,31 @@ ilib.Measurement.DigitalStorage.prototype.parent = ilib.Measurement;
 ilib.Measurement.DigitalStorage.prototype.constructor = ilib.Measurement.DigitalStorage;
 
 /**
- * @inheritDoc
+ * Return the type of this measurement. Examples are "mass",
+ * "length", "speed", etc. Measurements can only be converted
+ * to measurements of the same type.<p>
+ * 
+ * The type of the units is determined automatically from the 
+ * units. For example, the unit "grams" is type "mass". Use the 
+ * static call {@link ilib.Measurement.getAvailableUnits}
+ * to find out what units this version of ilib supports.
+ *  
+ * @return {string} the name of the type of this measurement
  */
 ilib.Measurement.DigitalStorage.prototype.getMeasure = function() {
 	return "digitalStorage";
 };
 
 /**
- * @inheritDoc
+ * Return a new measurement instance that is converted to a new
+ * measurement unit. Measurements can only be converted
+ * to measurements of the same type.<p>
+ *  
+ * @param {string} to The name of the units to convert to
+ * @return {ilib.Measurement|undefined} the converted measurement
+ * or undefined if the requested units are for a different
+ * measurement type
+ * 
  */
 ilib.Measurement.DigitalStorage.prototype.convert = function(to) {
 	if (!to || typeof(ilib.Measurement.DigitalStorage.ratios[this.normalizeUnits(to)]) === 'undefined') {
@@ -25423,7 +25636,15 @@ ilib.Measurement.DigitalStorage.prototype.convert = function(to) {
 };
 
 /**
- * @inheritDoc
+ * Localize the measurement to the commonly used measurement in that locale. For example
+ * If a user's locale is "en-US" and the measurement is given as "60 kmh", 
+ * the formatted number should be automatically converted to the most appropriate 
+ * measure in the other system, in this case, mph. The formatted result should
+ * appear as "37.3 mph". 
+ * 
+ * @abstract
+ * @param {string} locale current locale string
+ * @returns {ilib.Measurement} a new instance that is converted to locale
  */
 ilib.Measurement.DigitalStorage.prototype.localize = function(locale) {
     return new ilib.Measurement.DigitalStorage({
@@ -25433,8 +25654,17 @@ ilib.Measurement.DigitalStorage.prototype.localize = function(locale) {
 };
 
 /**
- * @inheritDoc
- * @param {string=} measurementsystem
+ * Scale the measurement unit to an acceptable level. The scaling
+ * happens so that the integer part of the amount is as small as
+ * possible without being below zero. This will result in the 
+ * largest units that can represent this measurement without
+ * fractions. Measurements can only be scaled to other measurements 
+ * of the same type.
+ * 
+ * @param {string=} measurementsystem system to use (uscustomary|imperial|metric),
+ * or undefined if the system can be inferred from the current measure
+ * @return {ilib.Measurement} a new instance that is scaled to the 
+ * right level
  */
 ilib.Measurement.DigitalStorage.prototype.scale = function(measurementsystem) {
     
@@ -25665,7 +25895,16 @@ ilib.Measurement.Temperature.prototype.parent = ilib.Measurement;
 ilib.Measurement.Temperature.prototype.constructor = ilib.Measurement.Temperature;
 
 /**
- * @inheritDoc
+ * Return the type of this measurement. Examples are "mass",
+ * "length", "speed", etc. Measurements can only be converted
+ * to measurements of the same type.<p>
+ * 
+ * The type of the units is determined automatically from the 
+ * units. For example, the unit "grams" is type "mass". Use the 
+ * static call {@link ilib.Measurement.getAvailableUnits}
+ * to find out what units this version of ilib supports.
+ *  
+ * @return {string} the name of the type of this measurement
  */
 ilib.Measurement.Temperature.prototype.getMeasure = function() {
 	return "temperature";
@@ -25689,6 +25928,26 @@ ilib.Measurement.Temperature.aliases = {
     "℉": "fahrenheit",
     "℃": "celsius",
     "°C": "celsius"
+};
+
+/**
+ * Return a new measurement instance that is converted to a new
+ * measurement unit. Measurements can only be converted
+ * to measurements of the same type.<p>
+ *  
+ * @param {string} to The name of the units to convert to
+ * @return {ilib.Measurement|undefined} the converted measurement
+ * or undefined if the requested units are for a different
+ * measurement type 
+ */
+ilib.Measurement.Temperature.prototype.convert = function(to) {
+	if (!to || typeof(ilib.Measurement.Temperature.ratios[this.normalizeUnits(to)]) === 'undefined') {
+		return undefined;
+	}
+	return new ilib.Measurement({
+		unit: to,
+		amount: this
+	});
 };
 
 /**
@@ -25731,8 +25990,17 @@ ilib.Measurement.Temperature.convert = function(to, from, temperature) {
 };
 
 /**
- * @inheritDoc
- * @param {string=} measurementsystem
+ * Scale the measurement unit to an acceptable level. The scaling
+ * happens so that the integer part of the amount is as small as
+ * possible without being below zero. This will result in the 
+ * largest units that can represent this measurement without
+ * fractions. Measurements can only be scaled to other measurements 
+ * of the same type.
+ * 
+ * @param {string=} measurementsystem system to use (uscustomary|imperial|metric),
+ * or undefined if the system can be inferred from the current measure
+ * @return {ilib.Measurement} a new instance that is scaled to the 
+ * right level
  */
 ilib.Measurement.Temperature.prototype.scale = function(measurementsystem) {
     return new ilib.Measurement.Temperature({
@@ -25756,7 +26024,15 @@ ilib.Measurement.Temperature.usCustomaryToMetric = {
 };
 
 /**
- * @inheritDoc
+ * Localize the measurement to the commonly used measurement in that locale. For example
+ * If a user's locale is "en-US" and the measurement is given as "60 kmh", 
+ * the formatted number should be automatically converted to the most appropriate 
+ * measure in the other system, in this case, mph. The formatted result should
+ * appear as "37.3 mph". 
+ * 
+ * @abstract
+ * @param {string} locale current locale string
+ * @returns {ilib.Measurement} a new instance that is converted to locale
  */
 ilib.Measurement.Temperature.prototype.localize = function(locale) {
     var to;
@@ -25824,14 +26100,30 @@ ilib.Measurement.Unknown.aliases = {
 
 
 /**
- * @inheritDoc
+ * Return the type of this measurement. Examples are "mass",
+ * "length", "speed", etc. Measurements can only be converted
+ * to measurements of the same type.<p>
+ * 
+ * The type of the units is determined automatically from the 
+ * units. For example, the unit "grams" is type "mass". Use the 
+ * static call {@link ilib.Measurement.getAvailableUnits}
+ * to find out what units this version of ilib supports.
+ *  
+ * @return {string} the name of the type of this measurement
  */
 ilib.Measurement.Unknown.prototype.getMeasure = function() {
 	return "unknown";
 };
 
 /**
- * @inheritDoc
+ * Return a new measurement instance that is converted to a new
+ * measurement unit. Measurements can only be converted
+ * to measurements of the same type.<p>
+ *  
+ * @param {string} to The name of the units to convert to
+ * @return {ilib.Measurement|undefined} the converted measurement
+ * or undefined if the requested units are for a different
+ * measurement type 
  */
 ilib.Measurement.Unknown.prototype.convert = function(to) {
 	return undefined;
@@ -25850,7 +26142,15 @@ ilib.Measurement.Unknown.convert = function(to, from, unknown) {
 };
 
 /**
- * @inheritDoc
+ * Localize the measurement to the commonly used measurement in that locale. For example
+ * If a user's locale is "en-US" and the measurement is given as "60 kmh", 
+ * the formatted number should be automatically converted to the most appropriate 
+ * measure in the other system, in this case, mph. The formatted result should
+ * appear as "37.3 mph". 
+ * 
+ * @abstract
+ * @param {string} locale current locale string
+ * @returns {ilib.Measurement} a new instance that is converted to locale
  */
 ilib.Measurement.Unknown.prototype.localize = function(locale) {
     return new ilib.Measurement.Unknown({
@@ -25858,9 +26158,19 @@ ilib.Measurement.Unknown.prototype.localize = function(locale) {
         amount: this.amount
     });
 };
+
 /**
- * @inheritDoc
- * @param {string=} measurementsystem
+ * Scale the measurement unit to an acceptable level. The scaling
+ * happens so that the integer part of the amount is as small as
+ * possible without being below zero. This will result in the 
+ * largest units that can represent this measurement without
+ * fractions. Measurements can only be scaled to other measurements 
+ * of the same type.
+ * 
+ * @param {string=} measurementsystem system to use (uscustomary|imperial|metric),
+ * or undefined if the system can be inferred from the current measure
+ * @return {ilib.Measurement} a new instance that is scaled to the 
+ * right level
  */
 ilib.Measurement.Unknown.prototype.scale = function(measurementsystem) {
     return new ilib.Measurement.Unknown({
@@ -25963,16 +26273,30 @@ ilib.Measurement.Time.prototype.parent = ilib.Measurement;
 ilib.Measurement.Time.prototype.constructor = ilib.Measurement.Time;
 
 /**
- * {@inheritDoc}
+ * Return the type of this measurement. Examples are "mass",
+ * "length", "speed", etc. Measurements can only be converted
+ * to measurements of the same type.<p>
+ * 
+ * The type of the units is determined automatically from the 
+ * units. For example, the unit "grams" is type "mass". Use the 
+ * static call {@link ilib.Measurement.getAvailableUnits}
+ * to find out what units this version of ilib supports.
+ *  
+ * @return {string} the name of the type of this measurement
  */
 ilib.Measurement.Time.prototype.getMeasure = function() {
 	return "time";
 };
 
 /**
- * Convert the current time to another measure.
- * 
- * @inheritDoc
+ * Return a new measurement instance that is converted to a new
+ * measurement unit. Measurements can only be converted
+ * to measurements of the same type.<p>
+ *  
+ * @param {string} to The name of the units to convert to
+ * @return {ilib.Measurement|undefined} the converted measurement
+ * or undefined if the requested units are for a different
+ * measurement type 
  */
 ilib.Measurement.Time.prototype.convert = function(to) {
 	if (!to || typeof(ilib.Measurement.Time.ratios[this.normalizeUnits(to)]) === 'undefined') {
@@ -26088,7 +26412,15 @@ ilib.Measurement.Time.convert = function(to, from, time) {
 };
 
 /**
- * @inheritDoc
+ * Localize the measurement to the commonly used measurement in that locale. For example
+ * If a user's locale is "en-US" and the measurement is given as "60 kmh", 
+ * the formatted number should be automatically converted to the most appropriate 
+ * measure in the other system, in this case, mph. The formatted result should
+ * appear as "37.3 mph". 
+ * 
+ * @abstract
+ * @param {string} locale current locale string
+ * @returns {ilib.Measurement} a new instance that is converted to locale
  */
 ilib.Measurement.Time.prototype.localize = function(locale) {
     return new ilib.Measurement.Time({
@@ -26098,8 +26430,17 @@ ilib.Measurement.Time.prototype.localize = function(locale) {
 };
 
 /**
- * @inheritDoc
- * @param {string=} measurementsystem
+ * Scale the measurement unit to an acceptable level. The scaling
+ * happens so that the integer part of the amount is as small as
+ * possible without being below zero. This will result in the 
+ * largest units that can represent this measurement without
+ * fractions. Measurements can only be scaled to other measurements 
+ * of the same type.
+ * 
+ * @param {string=} measurementsystem system to use (uscustomary|imperial|metric),
+ * or undefined if the system can be inferred from the current measure
+ * @return {ilib.Measurement} a new instance that is scaled to the 
+ * right level
  */
 ilib.Measurement.Time.prototype.scale = function(measurementsystem) {
 
@@ -26275,7 +26616,15 @@ ilib.Measurement.Mass.prototype.parent = ilib.Measurement;
 ilib.Measurement.Mass.prototype.constructor = ilib.Measurement.Mass;
 
 /**
- * @inheritDoc
+ * Localize the measurement to the commonly used measurement in that locale. For example
+ * If a user's locale is "en-US" and the measurement is given as "60 kmh", 
+ * the formatted number should be automatically converted to the most appropriate 
+ * measure in the other system, in this case, mph. The formatted result should
+ * appear as "37.3 mph". 
+ * 
+ * @abstract
+ * @param {string} locale current locale string
+ * @returns {ilib.Measurement} a new instance that is converted to locale
  */
 ilib.Measurement.Mass.prototype.localize = function(locale) {
 	var to;
@@ -26296,16 +26645,30 @@ ilib.Measurement.Mass.prototype.localize = function(locale) {
 };
 
 /**
- * @inheritDoc
+ * Return the type of this measurement. Examples are "mass",
+ * "length", "speed", etc. Measurements can only be converted
+ * to measurements of the same type.<p>
+ * 
+ * The type of the units is determined automatically from the 
+ * units. For example, the unit "grams" is type "mass". Use the 
+ * static call {@link ilib.Measurement.getAvailableUnits}
+ * to find out what units this version of ilib supports.
+ *  
+ * @return {string} the name of the type of this measurement
  */
 ilib.Measurement.Mass.prototype.getMeasure = function() {
 	return "mass";
 };
 
 /**
- * Convert the current mass to another measure.
- * 
- * @inheritDoc
+ * Return a new measurement instance that is converted to a new
+ * measurement unit. Measurements can only be converted
+ * to measurements of the same type.<p>
+ *  
+ * @param {string} to The name of the units to convert to
+ * @return {ilib.Measurement|undefined} the converted measurement
+ * or undefined if the requested units are for a different
+ * measurement type 
  */
 ilib.Measurement.Mass.prototype.convert = function(to) {
 	if (!to || typeof(ilib.Measurement.Mass.ratios[this.normalizeUnits(to)]) === 'undefined') {
@@ -26400,8 +26763,17 @@ ilib.Measurement.Mass.convert = function(to, from, mass) {
 };
 
 /**
- * @inheritDoc
- * @param {string=} measurementsystem
+ * Scale the measurement unit to an acceptable level. The scaling
+ * happens so that the integer part of the amount is as small as
+ * possible without being below zero. This will result in the 
+ * largest units that can represent this measurement without
+ * fractions. Measurements can only be scaled to other measurements 
+ * of the same type.
+ * 
+ * @param {string=} measurementsystem system to use (uscustomary|imperial|metric),
+ * or undefined if the system can be inferred from the current measure
+ * @return {ilib.Measurement} a new instance that is scaled to the 
+ * right level
  */
 ilib.Measurement.Mass.prototype.scale = function(measurementsystem) {
     var mSystem;    
@@ -26532,16 +26904,31 @@ ilib.Measurement.Area.prototype.parent = ilib.Measurement;
 ilib.Measurement.Area.prototype.constructor = ilib.Measurement.Area;
 
 /**
- * @inheritDoc
- */ 
+ * Return the type of this measurement. Examples are "mass",
+ * "length", "speed", etc. Measurements can only be converted
+ * to measurements of the same type.<p>
+ * 
+ * The type of the units is determined automatically from the 
+ * units. For example, the unit "grams" is type "mass". Use the 
+ * static call {@link ilib.Measurement.getAvailableUnits}
+ * to find out what units this version of ilib supports.
+ *  
+ * @return {string} the name of the type of this measurement
+ */
 ilib.Measurement.Area.prototype.getMeasure = function() {
 	return "area";
 }; 
 
 /**
- * Convert the current Area to another measure.
+ * Return a new measurement instance that is converted to a new
+ * measurement unit. Measurements can only be converted
+ * to measurements of the same type.<p>
+ *  
+ * @param {string} to The name of the units to convert to
+ * @return {ilib.Measurement|undefined} the converted measurement
+ * or undefined if the requested units are for a different
+ * measurement type
  * 
- * @inheritDoc
  */
 ilib.Measurement.Area.prototype.convert = function(to) {
 	if (!to || typeof(ilib.Measurement.Area.ratios[this.normalizeUnits(to)]) === 'undefined') {
@@ -26582,7 +26969,7 @@ ilib.Measurement.Area.aliases = {
 	"Square metre": "square meter",
 	"Square metres":"square meter",
 	"square metres": "square meter",
-	"square metres":"square meter",
+	"Square Metres":"square meter",
 	"sqm":"square meter",
 	"m2": "square meter",
 	"Square mile":"square mile",
@@ -26605,7 +26992,7 @@ ilib.Measurement.Area.aliases = {
 	"Square foot": "square foot",
 	"square foot": "square foot",
 	"Square feet": "square foot",
-	"Square feet": "square foot",
+	"Square Feet": "square foot",
 	"sq ft":"square foot",
 	"ft2":"square foot",
 	"Square inch":"square inch",
@@ -26683,8 +27070,17 @@ ilib.Measurement.Area.usCustomaryToMetric = {
 
 
 /**
- * @inheritDoc
- * @param {string=} measurementsystem
+ * Scale the measurement unit to an acceptable level. The scaling
+ * happens so that the integer part of the amount is as small as
+ * possible without being below zero. This will result in the 
+ * largest units that can represent this measurement without
+ * fractions. Measurements can only be scaled to other measurements 
+ * of the same type.
+ * 
+ * @param {string=} measurementsystem system to use (uscustomary|imperial|metric),
+ * or undefined if the system can be inferred from the current measure
+ * @return {ilib.Measurement} a new instance that is scaled to the 
+ * right level
  */
 ilib.Measurement.Area.prototype.scale = function(measurementsystem) {
     var fromRow = ilib.Measurement.Area.ratios[this.unit];
@@ -26722,7 +27118,15 @@ ilib.Measurement.Area.prototype.scale = function(measurementsystem) {
 };
 
 /**
- * @inheritDoc
+ * Localize the measurement to the commonly used measurement in that locale. For example
+ * If a user's locale is "en-US" and the measurement is given as "60 kmh", 
+ * the formatted number should be automatically converted to the most appropriate 
+ * measure in the other system, in this case, mph. The formatted result should
+ * appear as "37.3 mph". 
+ * 
+ * @abstract
+ * @param {string} locale current locale string
+ * @returns {ilib.Measurement} a new instance that is converted to locale
  */
 ilib.Measurement.Area.prototype.localize = function(locale) {
     var to;
@@ -26794,7 +27198,7 @@ ilib.Measurement.FuelConsumption = function(options) {
     }
 };
 
-/** @static @private */
+
 ilib.Measurement.FuelConsumption.ratios = [
     "km/liter",
     "liter/100km",
@@ -26807,14 +27211,30 @@ ilib.Measurement.FuelConsumption.prototype.parent = ilib.Measurement;
 ilib.Measurement.FuelConsumption.prototype.constructor = ilib.Measurement.FuelConsumption;
 
 /**
- * @inheritDoc
+ * Return the type of this measurement. Examples are "mass",
+ * "length", "speed", etc. Measurements can only be converted
+ * to measurements of the same type.<p>
+ * 
+ * The type of the units is determined automatically from the 
+ * units. For example, the unit "grams" is type "mass". Use the 
+ * static call {@link ilib.Measurement.getAvailableUnits}
+ * to find out what units this version of ilib supports.
+ *  
+ * @return {string} the name of the type of this measurement
  */
 ilib.Measurement.FuelConsumption.prototype.getMeasure = function() {
     return "fuelconsumption";
 };
 
 /**
- * @inheritDoc
+ * Return a new measurement instance that is converted to a new
+ * measurement unit. Measurements can only be converted
+ * to measurements of the same type.<p>
+ *  
+ * @param {string} to The name of the units to convert to
+ * @return {ilib.Measurement|undefined} the converted measurement
+ * or undefined if the requested units are for a different
+ * measurement type 
  */
 ilib.Measurement.FuelConsumption.prototype.convert = function(to) {
     if (!to || typeof(ilib.Measurement.FuelConsumption.ratios[this.normalizeUnits(to)]) === 'undefined') {
@@ -26890,7 +27310,15 @@ ilib.Measurement.FuelConsumption.uScustomarylToMetric = {
 };
 
 /**
- * @inheritDoc
+ * Localize the measurement to the commonly used measurement in that locale. For example
+ * If a user's locale is "en-US" and the measurement is given as "60 kmh", 
+ * the formatted number should be automatically converted to the most appropriate 
+ * measure in the other system, in this case, mph. The formatted result should
+ * appear as "37.3 mph". 
+ * 
+ * @abstract
+ * @param {string} locale current locale string
+ * @returns {ilib.Measurement} a new instance that is converted to locale
  */
 ilib.Measurement.FuelConsumption.prototype.localize = function(locale) {
 	var to;
@@ -26997,8 +27425,17 @@ ilib.Measurement.FuelConsumption.convert = function(to, from, fuelConsumption) {
 };
 
 /**
- * @inheritDoc
- * @param {string=} measurementsystem
+ * Scale the measurement unit to an acceptable level. The scaling
+ * happens so that the integer part of the amount is as small as
+ * possible without being below zero. This will result in the 
+ * largest units that can represent this measurement without
+ * fractions. Measurements can only be scaled to other measurements 
+ * of the same type.
+ * 
+ * @param {string=} measurementsystem system to use (uscustomary|imperial|metric),
+ * or undefined if the system can be inferred from the current measure
+ * @return {ilib.Measurement} a new instance that is scaled to the 
+ * right level
  */
 ilib.Measurement.FuelConsumption.prototype.scale = function(measurementsystem) {
     return new ilib.Measurement.FuelConsumption({
@@ -27113,16 +27550,30 @@ ilib.Measurement.Volume.prototype.parent = ilib.Measurement;
 ilib.Measurement.Volume.prototype.constructor = ilib.Measurement.Volume;
 
 /**
- * @inheritDoc
+ * Return the type of this measurement. Examples are "mass",
+ * "length", "speed", etc. Measurements can only be converted
+ * to measurements of the same type.<p>
+ * 
+ * The type of the units is determined automatically from the 
+ * units. For example, the unit "grams" is type "mass". Use the 
+ * static call {@link ilib.Measurement.getAvailableUnits}
+ * to find out what units this version of ilib supports.
+ *  
+ * @return {string} the name of the type of this measurement
  */
 ilib.Measurement.Volume.prototype.getMeasure = function() {
 	return "volume";
 };
 
 /**
- * Convert the current volume to another measure.
- * 
- * @inheritDoc
+ * Return a new measurement instance that is converted to a new
+ * measurement unit. Measurements can only be converted
+ * to measurements of the same type.<p>
+ *  
+ * @param {string} to The name of the units to convert to
+ * @return {ilib.Measurement|undefined} the converted measurement
+ * or undefined if the requested units are for a different
+ * measurement type 
  */
 ilib.Measurement.Volume.prototype.convert = function(to) {
 	if (!to || typeof(ilib.Measurement.Volume.ratios[this.normalizeUnits(to)]) === 'undefined') {
@@ -27342,7 +27793,15 @@ ilib.Measurement.Volume.uScustomarylToMetric = {
 };
 
 /**
- * @inheritDoc
+ * Localize the measurement to the commonly used measurement in that locale. For example
+ * If a user's locale is "en-US" and the measurement is given as "60 kmh", 
+ * the formatted number should be automatically converted to the most appropriate 
+ * measure in the other system, in this case, mph. The formatted result should
+ * appear as "37.3 mph". 
+ * 
+ * @abstract
+ * @param {string} locale current locale string
+ * @returns {ilib.Measurement} a new instance that is converted to locale
  */
 ilib.Measurement.Volume.prototype.localize = function(locale) {
 	var to;
@@ -27366,8 +27825,17 @@ ilib.Measurement.Volume.prototype.localize = function(locale) {
 };
 
 /**
- * @inheritDoc
- * @param {string=} measurementsystem
+ * Scale the measurement unit to an acceptable level. The scaling
+ * happens so that the integer part of the amount is as small as
+ * possible without being below zero. This will result in the 
+ * largest units that can represent this measurement without
+ * fractions. Measurements can only be scaled to other measurements 
+ * of the same type.
+ * 
+ * @param {string=} measurementsystem system to use (uscustomary|imperial|metric),
+ * or undefined if the system can be inferred from the current measure
+ * @return {ilib.Measurement} a new instance that is scaled to the 
+ * right level
  */
 ilib.Measurement.Volume.prototype.scale = function(measurementsystem) {
     var fromRow = ilib.Measurement.Volume.ratios[this.unit];
@@ -27485,16 +27953,30 @@ ilib.Measurement.Energy.prototype.parent = ilib.Measurement;
 ilib.Measurement.Energy.prototype.constructor = ilib.Measurement.Energy;
 
 /**
- * @inheritDoc
+ * Return the type of this measurement. Examples are "mass",
+ * "length", "speed", etc. Measurements can only be converted
+ * to measurements of the same type.<p>
+ * 
+ * The type of the units is determined automatically from the 
+ * units. For example, the unit "grams" is type "mass". Use the 
+ * static call {@link ilib.Measurement.getAvailableUnits}
+ * to find out what units this version of ilib supports.
+ *  
+ * @return {string} the name of the type of this measurement
  */
 ilib.Measurement.Energy.prototype.getMeasure = function() {
 	return "energy";
 };
 
 /**
- * Convert the current energy to another measure.
- *
- * @inheritDoc
+ * Return a new measurement instance that is converted to a new
+ * measurement unit. Measurements can only be converted
+ * to measurements of the same type.<p>
+ *  
+ * @param {string} to The name of the units to convert to
+ * @return {ilib.Measurement|undefined} the converted measurement
+ * or undefined if the requested units are for a different
+ * measurement type 
  */
 ilib.Measurement.Energy.prototype.convert = function(to) {
 	if (!to || typeof(ilib.Measurement.Energy.ratios[this.normalizeUnits(to)]) === 'undefined') {
@@ -27562,8 +28044,7 @@ ilib.Measurement.Energy.aliases = {
     "GJ": "gigajoule",
     "GigaJoule": "gigajoule",
     "gigaJoule": "gigajoule",
-    "gigajoule": "gigajoule",
-    "gigajoule": "gigajoule",
+    "gigajoule": "gigajoule",   
     "GigaJoules": "gigajoule",
     "gigaJoules": "gigajoule",
     "Gigajoules": "gigajoule",
@@ -27653,7 +28134,15 @@ ilib.Measurement.Energy.imperialToMetric = {
 };
 
 /**
- * @inheritDoc
+ * Localize the measurement to the commonly used measurement in that locale. For example
+ * If a user's locale is "en-US" and the measurement is given as "60 kmh", 
+ * the formatted number should be automatically converted to the most appropriate 
+ * measure in the other system, in this case, mph. The formatted result should
+ * appear as "37.3 mph". 
+ * 
+ * @abstract
+ * @param {string} locale current locale string
+ * @returns {ilib.Measurement} a new instance that is converted to locale
  */
 ilib.Measurement.Energy.prototype.localize = function(locale) {
 	var to;
@@ -27670,8 +28159,17 @@ ilib.Measurement.Energy.prototype.localize = function(locale) {
 };
 
 /**
- * @inheritDoc
- * @param {string=} measurementsystem
+ * Scale the measurement unit to an acceptable level. The scaling
+ * happens so that the integer part of the amount is as small as
+ * possible without being below zero. This will result in the 
+ * largest units that can represent this measurement without
+ * fractions. Measurements can only be scaled to other measurements 
+ * of the same type.
+ * 
+ * @param {string=} measurementsystem system to use (uscustomary|imperial|metric),
+ * or undefined if the system can be inferred from the current measure
+ * @return {ilib.Measurement} a new instance that is scaled to the 
+ * right level
  */
 ilib.Measurement.Energy.prototype.scale = function(measurementsystem) {
     var fromRow = ilib.Measurement.Energy.ratios[this.unit];
