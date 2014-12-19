@@ -67,6 +67,12 @@ if (typeof(exports) !== 'undefined') {
     exports.ilib = ilib;
 }
 
+ilib.pseudoLocales = ["zxx-XX"];
+
+ilib.setAsPseudoLocale = function (localename) {
+   ilib.pseudoLocales.push(localename)
+};
+
 /**
  * Return the name of the platform
  * @private
@@ -1244,7 +1250,12 @@ ilib.Locale.prototype = {
 	 * @return {boolean} true if the current locale is the special pseudo locale
 	 */
 	isPseudo: function () {
-		return (this.language === 'zxx' && this.region === 'XX');
+		var localeName = this.language + "-" + this.region;
+		var index;
+		for (index = 0; index < ilib.pseudoLocales.length; index++) {
+		    if(ilib.pseudoLocales[index] === localeName) return true;
+		}
+		return false;
 	}
 };
 
@@ -1268,6 +1279,7 @@ ilib.Locale.locales = [
 ilib.Locale.getAvailableLocales = function () {
 	return ilib.Locale.locales;
 };
+
 /*
  * localeinfo.js - Encode locale-specific defaults
  * 
@@ -5329,11 +5341,13 @@ ilib.TimeZone.getAvailableIds = function (country) {
 			var hash = ilib._load.listAvailableFiles();
 			for (var dir in hash) {
 				var files = hash[dir];
-				files.forEach(function (filename) {
-					if (filename && filename.match(/^zoneinfo/)) {
-						ilib.data.timezone.list.push(filename.replace(/^zoneinfo\//, "").replace(/\.json$/, ""));
-					}
-				});
+				if (typeof(files) === 'object' && files instanceof Array) {
+					files.forEach(function (filename) {
+						if (filename && filename.match(/^zoneinfo/)) {
+							ilib.data.timezone.list.push(filename.replace(/^zoneinfo\//, "").replace(/\.json$/, ""));
+						}
+					});
+				}
 			}
 		} else {
 			for (tz in ilib.data.zoneinfo) {
@@ -18139,10 +18153,14 @@ ilib.Address.prototype = {
 		for (j = 0; j < pattern.length; j++) {
 			start = address.compare(line, pattern[j]); 
 			if (start !== -1) {
-				ret.match = line.substring(start, start+pattern[j].length);
-				ret.line = line.substring(0,start).trim();
+                            ret.match = line.substring(start, start+pattern[j].length);
+                            if (start !== 0) {
+                                ret.line = line.substring(0,start).trim();
+                            } else {
+                                ret.line = line.substring(pattern[j].length).trim();
+                            }
 				//console.log("found match " + ret.match + " and rest of line is " + ret.line);
-				return ret;
+                            return ret;
 			}
 		}
 		
@@ -18461,7 +18479,7 @@ ilib.GlyphString = function (str, options) {
 	}
 	
 	ilib.CType._load("ctype_m", sync, loadParams, function() {
-		if (typeof(ilib.data.norm.ccc) === 'undefined') {
+		if (typeof(ilib.data.norm) === 'undefined' || typeof(ilib.data.norm.ccc) === 'undefined') {
 			ilib.loadData({
 				object: ilib.GlyphString, 
 				locale: "-", 
@@ -21044,7 +21062,7 @@ ilib.StateHandler.prototype = {
 	processSubscriberNumber: function(number, fields, regionSettings) {
 		var last;
 		
-		last = number.search(/[xwtp]/i);	// last digit of the local number
+		last = number.search(/[xwtp,;]/i);	// last digit of the local number
 
 		if (last > -1) {
 			if (last > 0) {
@@ -21341,11 +21359,6 @@ ilib.StateHandler.prototype = {
 		
 		// this is a last resort function that is called when nothing is recognized.
 		// When this happens, just put the whole stripped number into the subscriber number
-		if (regionSettings.plan && number.charAt(0) === regionSettings.plan.getTrunkCode()) {
-			fields.trunkAccess = number.charAt(0);
-			number = number.substring(1);
-			//currentChar--;
-		} 
 			
 		if (number.length > 0) {
 			this.processSubscriberNumber(number, fields, regionSettings);
@@ -22192,7 +22205,9 @@ ilib.PhoneNumber._getCharacterCode = function(ch) {
 	case 'W':
 		return -1;
 	case 'x':
-	case 'X':		// extension char
+	case 'X':
+	case ',':
+	case ';':		// extension char
 		return -1;
 	}
 	return -2;
@@ -23377,6 +23392,7 @@ ilib.PhoneFmt.prototype = {
 		var formatString,
 			formatted = "",
 			partIndex = 0,
+			templates,
 			i;
 
 		// console.info("Globalization.Phone._substituteDigits: typeof(formats) is " + typeof(formats));
@@ -23385,13 +23401,14 @@ ilib.PhoneFmt.prototype = {
 		}
 
 		if (typeof(formats) === "object") {
-			if (part.length > formats.length) {
+			templates = (typeof(formats.template) !== 'undefined') ? formats.template : formats;
+			if (part.length > templates.length) {
 				// too big, so just use last resort rule.
 				throw "part " + part + " is too big. We do not have a format template to format it.";
 			}
 			// use the format in this array that corresponds to the digit length of this
 			// part of the phone number
-			formatString = formats[part.length-1];
+			formatString =  templates[part.length-1];
 			// console.info("Globalization.Phone._substituteDigits: formats is an Array: " + JSON.stringify(formats));
 		} else {
 			formatString = formats;
@@ -23450,7 +23467,8 @@ ilib.PhoneFmt.prototype = {
 			isWhole, 
 			style,
 			formatted = "",
-			styleTemplates;
+			styleTemplates,
+			lastFieldName;
 	
 		if (options) {
 			if (typeof(options.sync) !== 'undefined') {
@@ -23493,6 +23511,13 @@ ilib.PhoneFmt.prototype = {
 							templates = "X";
 						}
 					}
+					if (lastFieldName && typeof(styleTemplates[lastFieldName].suffix) !== 'undefined') {
+						if (fieldName !== "extension" && number[fieldName].search(/[xwtp,;]/i) <= -1) {
+							formatted += styleTemplates[lastFieldName].suffix;	
+						}
+					}
+					lastFieldName = fieldName;
+					
 					// console.info("format: formatting field " + fieldName + " with templates " + JSON.stringify(templates));
 					temp = this._substituteDigits(number[fieldName], templates, (fieldName === "subscriberNumber"));
 					// console.info("format: formatted is: " + temp);
@@ -24368,6 +24393,7 @@ localeinfo.js
 
 
 /**
+ * @class
  * Create a measurement instance. The measurement is immutable once
  * it is created, but can be converted to other measurements later.<p>
  * 
@@ -24394,7 +24420,7 @@ localeinfo.js
  * Here are some examples of converting a length into new units. The first method
  * is via the constructor by passing the old measurement in as the amount property.
  * 
- * <code>
+ * <pre>
  * var measurement1 = new ilib.Measurement({
  *   amount: 5,
  *   units: "kilometers"
@@ -24403,25 +24429,24 @@ localeinfo.js
  *   amount: measurement1,
  *   units: "miles"
  * });
- * </code>
+ * </pre>
  * 
  * The value in measurement2 will end up being about 3.125 miles.
  * 
  * The second method will be using the convert method.
  * 
- * <code>
+ * <pre>
  * var measurement1 = new ilib.Measurement({
  *   amount: 5,
  *   units: "kilometers"
  * });
  * var measurement2 = measurement1.convert("miles");
  * });
- * </code>
+ * </pre>
  *
  * The value in measurement2 will again end up being about 3.125 miles.
  * 
- * @constructor
- * @class
+ * @constructor 
  * @param {Object} options options that control the construction of this instance
  */
 ilib.Measurement = function(options) {
@@ -24562,7 +24587,7 @@ ilib.Measurement.prototype = {
 	 */
 	convert: function(to) {},     
         
-    /**
+        /**
 	 * Scale the measurement unit to an acceptable level. The scaling
 	 * happens so that the integer part of the amount is as small as
 	 * possible without being below zero. This will result in the 
@@ -24623,6 +24648,7 @@ strings.js
 // !data unitfmt
 
 /**
+ * @class
  * Create a new unit formatter instance. The unit formatter is immutable once
  * it is created, but can format as many different strings with different values
  * as needed with the same options. Create different unit formatter instances 
@@ -24700,8 +24726,7 @@ strings.js
  * the correct units.<p>
  * 
  * Depends directive: !depends unitfmt.js
- * 
- * @class
+ *  
  * @constructor
  * @param {Object} options options governing the way this date formatter instance works
  */
@@ -24888,10 +24913,11 @@ ilibglobal.js
 */
 
 /**
- * Create a new length measurement.
- * 
  * @class
+ * Create a new length measurement instance.
+ *  
  * @constructor
+ * @extends ilib.Measurement
  * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
  * the construction of this instance
  */
@@ -25225,11 +25251,11 @@ unit.js
 */
 
 /**
- * Create a new speed measurement.
- * 
  * @class
+ * Create a new speed measurement instance.
+ * 
  * @constructor
- * @extends {ilib.Measurement}
+ * @extends ilib.Measurement
  * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
  * the construction of this instance
  */
@@ -25544,11 +25570,11 @@ unit.js
 */
 
 /**
- * Create a new DigitalStorage measurement.
- * 
  * @class
+ * Create a new DigitalStorage measurement instance.
+ *  
  * @constructor
- * @extends {ilib.Measurement}
+ * @extends ilib.Measurement
  * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
  * the construction of this instance
  */
@@ -25859,11 +25885,11 @@ unit.js
 */
 
 /**
- * Create a new Temperature measurement.
- * 
  * @class
+ * Create a new Temperature measurement instance.
+ *  
  * @constructor
- * @extends {ilib.Measurement}
+ * @extends ilib.Measurement
  * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
  * the construction of this instance
  */
@@ -26075,11 +26101,11 @@ unit.js
 */
 
 /**
- * Create a new unknown measurement.
- * 
  * @class
+ * Create a new unknown measurement instance.
+ * 
  * @constructor
- * @extends {ilib.Measurement}
+ * @extends ilib.Measurement
  * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
  * the construction of this instance
  */
@@ -26217,11 +26243,11 @@ unit.js
 */
 
 /**
- * Create a new time measurement.
- * 
  * @class
+ * Create a new time measurement instance.
+ * 
  * @constructor
- * @extends {ilib.Measurement}
+ * @extends ilib.Measurement
  * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
  * the construction of this instance
  */
@@ -26502,10 +26528,11 @@ ilibglobal.js
 */
 
 /**
- * Create a new mass measurement.
- * 
  * @class
+ * Create a new mass measurement instance.
+ *
  * @constructor
+ * @extends ilib.Measurement
  * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
  * the construction of this instance
  */
@@ -26851,11 +26878,10 @@ unit.js
 */
 
 /**
- * Create a new area measurement.
- * 
  * @class
+ * Create a new area measurement instance.
  * @constructor
- * @extends {ilib.Measurement}
+ * @extends ilib.Measurement
  * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
  * the construction of this instance
  */
@@ -27168,10 +27194,11 @@ ilib.Measurement._constructors["area"] = ilib.Measurement.Area;
 ilibglobal.js 
 */
 /**
- * Create a new fuelconsumption measurement.
- *
  * @class
+ * Create a new fuelconsumption measurement instance.
+ * 
  * @constructor
+ * @extends ilib.Measurement
  * @param options {{unit:string,amount:number|string|undefined}} Options controlling
  * the construction of this instance
  */
@@ -27488,11 +27515,11 @@ unit.js
 */
 
 /**
- * Create a new Volume measurement.
- * 
  * @class
+ * Create a new Volume measurement instance.
+ * 
  * @constructor
- * @extends {ilib.Measurement}
+ * @extends ilib.Measurement
  * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
  * the construction of this instance
  */
@@ -27899,10 +27926,11 @@ ilibglobal.js
 */
 
 /**
- * Create a new energy measurement.
- *
  * @class
+ * Create a new energy measurement instance.
+ * 
  * @constructor
+ * @extends ilib.Measurement
  * @param options {{unit:string,amount:number|string|undefined}} Options controlling
  * the construction of this instance
  */
