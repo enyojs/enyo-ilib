@@ -67,6 +67,12 @@ if (typeof(exports) !== 'undefined') {
     exports.ilib = ilib;
 }
 
+ilib.pseudoLocales = ["zxx-XX"];
+
+ilib.setAsPseudoLocale = function (localename) {
+   ilib.pseudoLocales.push(localename)
+};
+
 /**
  * Return the name of the platform
  * @private
@@ -1244,7 +1250,12 @@ ilib.Locale.prototype = {
 	 * @return {boolean} true if the current locale is the special pseudo locale
 	 */
 	isPseudo: function () {
-		return (this.language === 'zxx' && this.region === 'XX');
+		var localeName = this.language + "-" + this.region;
+		var index;
+		for (index = 0; index < ilib.pseudoLocales.length; index++) {
+		    if(ilib.pseudoLocales[index] === localeName) return true;
+		}
+		return false;
 	}
 };
 
@@ -1268,6 +1279,7 @@ ilib.Locale.locales = [
 ilib.Locale.getAvailableLocales = function () {
 	return ilib.Locale.locales;
 };
+
 /*
  * localeinfo.js - Encode locale-specific defaults
  * 
@@ -5329,11 +5341,13 @@ ilib.TimeZone.getAvailableIds = function (country) {
 			var hash = ilib._load.listAvailableFiles();
 			for (var dir in hash) {
 				var files = hash[dir];
-				files.forEach(function (filename) {
-					if (filename && filename.match(/^zoneinfo/)) {
-						ilib.data.timezone.list.push(filename.replace(/^zoneinfo\//, "").replace(/\.json$/, ""));
-					}
-				});
+				if (typeof(files) === 'object' && files instanceof Array) {
+					files.forEach(function (filename) {
+						if (filename && filename.match(/^zoneinfo/)) {
+							ilib.data.timezone.list.push(filename.replace(/^zoneinfo\//, "").replace(/\.json$/, ""));
+						}
+					});
+				}
 			}
 		} else {
 			for (tz in ilib.data.zoneinfo) {
