@@ -7,5 +7,9 @@ enyo.depends(
     "LocaleInfo.js",
     "DateFormatting.js",
     "AdvDateFormatting.js",
-    "NumberFormatting.js"
+    "NumberFormatting.js",
+    "NameParsing.js",
+    "NameFormatting.js",
+    "AddressParsing.js",
+    "AddressFormatting.js"
 );
