@@ -7,7 +7,7 @@ enyo.kind({
         {kind: "Scroller", fit: false, components: [
             {kind: "FittableColumns", components: [
                 /* Header with selecting locale */
-                {kind: "ilib.sample.ChooseLocale", name: "localeSelector", onSelectedLocale: "setLocale"},
+                {kind: "ilib.sample.ChooseLocale", name: "localeSelector"},
                 {style: "width: 20px"},
                 {kind: "onyx.Button", content: rb.getString("Apply"), ontap: "calcFormat", style: "vertical-align: bottom;", classes: "onyx-affirmative"},
                
