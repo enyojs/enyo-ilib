@@ -22,34 +22,34 @@ enyo.kind({
             ]},
             
             {content: rb.getString("(or) Parts"), classes: "ilib-onyx-sample-divider"},
-	    {classes: "namepart", components: [
-		{kind:"enyo.Checkbox", name: "prefixCbox", content: "Prefix ", onchange:"checkboxChanged"},
- 		{kind:"enyo.Checkbox", name: "givenCbox",  content: "Given ",  onchange:"checkboxChanged"},
-		{kind:"enyo.Checkbox", name: "middleCbox", content: "Middle ", onchange:"checkboxChanged"},
-		{kind:"enyo.Checkbox", name: "familyCbox", content: "Family ",  onchange:"checkboxChanged"},
-		{kind:"enyo.Checkbox", name: "suffixCbox", content: "Suffix ",  onchange:"checkboxChanged"}
-	    ]},
+            {classes: "namepart", components: [
+                {kind:"enyo.Checkbox", name: "prefixCbox", content: "Prefix ", onchange:"checkboxChanged"},
+                {kind:"enyo.Checkbox", name: "givenCbox",  content: "Given ",  onchange:"checkboxChanged"},
+                {kind:"enyo.Checkbox", name: "middleCbox", content: "Middle ", onchange:"checkboxChanged"},
+                {kind:"enyo.Checkbox", name: "familyCbox", content: "Family ",  onchange:"checkboxChanged"},
+                {kind:"enyo.Checkbox", name: "suffixCbox", content: "Suffix ",  onchange:"checkboxChanged"}
+            ]},
 
-	    {components: [
+            {components: [
                 {content: rb.getString("Prefix"), classes: "ilib-onyx-sample-divider"},
-                    {kind: "onyx.InputDecorator", alwaysLooksFocused: true, components: [
-                        {kind: "onyx.Input", name: "prefixInput", placeholder: rb.getString("Prefix")}
+                {kind: "onyx.InputDecorator", alwaysLooksFocused: true, components: [
+                    {kind: "onyx.Input", name: "prefixInput", placeholder: rb.getString("Prefix")}
                 ]},
-		{content: rb.getString("Given Name"), classes: "ilib-onyx-sample-divider"},
-                    {kind: "onyx.InputDecorator", alwaysLooksFocused: true, components: [
-                        {kind: "onyx.Input", name: "givenInput", placeholder: rb.getString("Given Name")}
+                {content: rb.getString("Given Name"), classes: "ilib-onyx-sample-divider"},
+                {kind: "onyx.InputDecorator", alwaysLooksFocused: true, components: [
+                    {kind: "onyx.Input", name: "givenInput", placeholder: rb.getString("Given Name")}
                 ]},
-		{content: rb.getString("Middle Name"), classes: "ilib-onyx-sample-divider"},
-                    {kind: "onyx.InputDecorator", alwaysLooksFocused: true, components: [
-                        {kind: "onyx.Input", name: "middleInput", placeholder: rb.getString("Middle Name")}
+                {content: rb.getString("Middle Name"), classes: "ilib-onyx-sample-divider"},
+                {kind: "onyx.InputDecorator", alwaysLooksFocused: true, components: [
+                    {kind: "onyx.Input", name: "middleInput", placeholder: rb.getString("Middle Name")}
                 ]},
-		{content: rb.getString("Family Name"), classes: "ilib-onyx-sample-divider"},
-                    {kind: "onyx.InputDecorator", alwaysLooksFocused: true, components: [
-                        {kind: "onyx.Input", name: "familyInput", placeholder: rb.getString("Family Name")}
+                {content: rb.getString("Family Name"), classes: "ilib-onyx-sample-divider"},
+                {kind: "onyx.InputDecorator", alwaysLooksFocused: true, components: [
+                    {kind: "onyx.Input", name: "familyInput", placeholder: rb.getString("Family Name")}
                 ]},
-		{content: rb.getString("Suffix"), classes: "ilib-onyx-sample-divider"},
-                    {kind: "onyx.InputDecorator", alwaysLooksFocused: true, components: [
-                        {kind: "onyx.Input", name: "suffixInput", placeholder: rb.getString("Suffix")}
+                {content: rb.getString("Suffix"), classes: "ilib-onyx-sample-divider"},
+                {kind: "onyx.InputDecorator", alwaysLooksFocused: true, components: [
+                    {kind: "onyx.Input", name: "suffixInput", placeholder: rb.getString("Suffix")}
                 ]}
             ]}
         ]},
@@ -61,61 +61,61 @@ enyo.kind({
     ],
  
     buttonActivated: function(inSender, inEvent) {
-	
-	if (this.$.length.getActive().content === 'Short') {
-		this.$.prefixCbox.setChecked(false);
-		this.$.givenCbox.setChecked(true);
-		this.$.middleCbox.setChecked(false);
-		this.$.familyCbox.setChecked(true);
-		this.$.suffixCbox.setChecked(false);
-	} else if (this.$.length.getActive().content === 'Medium') {
-		this.$.prefixCbox.setChecked(false);
-		this.$.givenCbox.setChecked(true);
-		this.$.middleCbox.setChecked(true);
-		this.$.familyCbox.setChecked(true);
-		this.$.suffixCbox.setChecked(false);
-	} else if (this.$.length.getActive().content === 'Long') {
-		this.$.prefixCbox.setChecked(true);
-		this.$.givenCbox.setChecked(true);
-		this.$.middleCbox.setChecked(true);
-		this.$.familyCbox.setChecked(true);
-		this.$.suffixCbox.setChecked(true);
-	}
+
+        if (this.$.length.getActive().content === 'Short') {
+            this.$.prefixCbox.setChecked(false);
+            this.$.givenCbox.setChecked(true);
+            this.$.middleCbox.setChecked(false);
+            this.$.familyCbox.setChecked(true);
+            this.$.suffixCbox.setChecked(false);
+        } else if (this.$.length.getActive().content === 'Medium') {
+            this.$.prefixCbox.setChecked(false);
+            this.$.givenCbox.setChecked(true);
+            this.$.middleCbox.setChecked(true);
+            this.$.familyCbox.setChecked(true);
+            this.$.suffixCbox.setChecked(false);
+        } else if (this.$.length.getActive().content === 'Long') {
+            this.$.prefixCbox.setChecked(true);
+            this.$.givenCbox.setChecked(true);
+            this.$.middleCbox.setChecked(true);
+            this.$.familyCbox.setChecked(true);
+            this.$.suffixCbox.setChecked(true);
+        }
     },
 
     checkboxChanged: function(inSender, inEvent) {
-	if (!this.$.prefixCbox.getChecked() && !this.$.givenCbox.getChecked() && !this.$.middleCbox.getChecked() &&
-		!this.$.familyCbox.getChecked() && !this.$.suffixCbox.getChecked()) {
-		this.$.short.setActive(true);
-	} else {
-		this.$.length.setActive(false);
-	}
+        if (!this.$.prefixCbox.getChecked() && !this.$.givenCbox.getChecked() && !this.$.middleCbox.getChecked() &&
+            !this.$.familyCbox.getChecked() && !this.$.suffixCbox.getChecked()) {
+            this.$.short.setActive(true);
+        } else {
+            this.$.length.setActive(false);
+        }
     },
 
     nameFormat: function(inSender, inEvent) {
 
-	// Processing parameters
+        // Processing parameters
 
         var nameLength = this.$.length.getActive().content;
         var parts = [];
     
         if (this.$.prefixCbox.getChecked()) {
-               parts.push("p");
+            parts.push("p");
         }
         if (this.$.givenCbox.getChecked()) {
-               parts.push("g");
+            parts.push("g");
         }
         if (this.$.middleCbox.getChecked()) {
-               parts.push("m");
+            parts.push("m");
         }
         if (this.$.familyCbox.getChecked()) {
-               parts.push("f");
+            parts.push("f");
         }
         if (this.$.suffixCbox.getChecked()) {
-               parts.push("s");
+            parts.push("s");
         }
-	             
-        options = {
+
+        var options = {
             locale : this.$.localeSelector.getValue()
         };
             

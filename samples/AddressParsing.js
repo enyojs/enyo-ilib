@@ -4,7 +4,7 @@ enyo.kind({
     classes: "onyx ilib-onyx-sample enyo-fit",
     
     components: [
-      {kind: "Scroller", fit: false, components: [
+        {kind: "Scroller", fit: false, components: [
             {kind: "FittableColumns", components: [
                 /* Header with selecting locale */
                 {kind: "ilib.sample.ChooseLocale", name: "localeSelector"},
@@ -26,30 +26,31 @@ enyo.kind({
         ]}
     ],
         
-       calcFormat: function (inSender, inEvent) {
-        // Processing parameters
-        var options = {
-            locale: this.$.localeSelector.getValue()
-        };
-
+    calcFormat: function (inSender, inEvent) {
         // Formatting
         var parsedAddress = new ilib.Address(this.$.address.getValue());
 
-        var output;
+        var output = "";
 
         if (parsedAddress) {
-            if (parsedAddress.streetAddress)
-                output = "streetAddress:" + parsedAddress.streetAddress + "<br>";
-            if (parsedAddress.locality)
-                output = "locality:" + parsedAddress.locality + "<br>";
-            if (parsedAddress.region)
-                output = "region:" + parsedAddress.region + "<br>";
-            if (parsedAddress.postalCode)
-                output = output + "Postal code:" + parsedAddress.postalCode + "<br>";
-            if (parsedAddress.country)
-                output = output + "country:" + parsedAddress.country + "<br>";
-            if (parsedAddress.countryCode)
-                output = output + "countryCode:" + parsedAddress.countryCode + "<br>";
+            if (parsedAddress.streetAddress) {
+                output += "streetAddress:" + parsedAddress.streetAddress + "<br>";
+            }
+            if (parsedAddress.locality) {
+                output += "locality:" + parsedAddress.locality + "<br>";
+            }
+            if (parsedAddress.region) {
+                output += "region:" + parsedAddress.region + "<br>";
+            }
+            if (parsedAddress.postalCode) {
+                output += "Postal code:" + parsedAddress.postalCode + "<br>";
+            }
+            if (parsedAddress.country) {
+                output += "country:" + parsedAddress.country + "<br>";
+            }
+            if (parsedAddress.countryCode) {
+                output += "countryCode:" + parsedAddress.countryCode + "<br>";
+            }
         }
 
         this.$.rtlResult.setContent(output);
