@@ -4,7 +4,7 @@ enyo.kind({
     classes: "onyx ilib-onyx-sample enyo-fit",
     
     components: [
-      {kind: "Scroller", fit: false, components: [
+        {kind: "Scroller", fit: false, components: [
             {kind: "FittableColumns", components: [
                 /* Header with selecting locale */
                 {kind: "ilib.sample.ChooseLocale", name: "localeSelector"},
@@ -19,28 +19,28 @@ enyo.kind({
                 {kind: "onyx.Input",style:"width:100%", name: "stAddress",placeholder: rb.getString("Enter Street")}
             ]}
         ]},
-   {tag: "br"},
+        {tag: "br"},
         {kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
             {kind: "onyx.GroupboxHeader", content: rb.getString("City/Locality")},
             {kind: "onyx.InputDecorator", alwaysLooksFocused: true, components: [
                 {kind: "onyx.Input",style:"width:100%", name: "city", placeholder: rb.getString("Enter city")}
             ]}
         ]},
-   {tag: "br"},
+        {tag: "br"},
         {kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
             {kind: "onyx.GroupboxHeader", content: rb.getString("postal code/Zip")},
             {kind: "onyx.InputDecorator", alwaysLooksFocused: true, components: [
                 {kind: "onyx.Input",style:"width:100%", name: "postalCode", placeholder: rb.getString("Enter postalcode")}
             ]}
         ]},
-   {tag: "br"},
+        {tag: "br"},
         {kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
             {kind: "onyx.GroupboxHeader", content: rb.getString("State/Province")},
             {kind: "onyx.InputDecorator", alwaysLooksFocused: true, components: [
                 {kind: "onyx.Input",style:"width:100%", name: "state", placeholder: rb.getString("Enter state")}
             ]}
         ]},
-   {tag: "br"},
+        {tag: "br"},
         {kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
             {kind: "onyx.GroupboxHeader", content: rb.getString("Country")},
             {kind: "onyx.InputDecorator", alwaysLooksFocused: true, components: [
@@ -54,19 +54,22 @@ enyo.kind({
         ]}
     ],
         
-       calcFormat: function (inSender, inEvent) {
-        var options = {};
-        options['locale'] = this.$.localeSelector.getValue();
+    calcFormat: function (inSender, inEvent) {
+        // Processing parameters
+        var options = {
+            locale: this.$.localeSelector.getValue()
+        };
        
-	var address =  new ilib.Address({
-	streetAddress:this.$.stAddress.getValue(),
-	locality: this.$.city.getValue(),
-	postalCode: this.$.postalCode.getValue(),
-	region: this.$.state.getValue(),
-	country:this.$.country.getValue()});
+        var address =  new ilib.Address({
+            streetAddress:this.$.stAddress.getValue(),
+            locality: this.$.city.getValue(),
+            postalCode: this.$.postalCode.getValue(),
+            region: this.$.state.getValue(),
+            country:this.$.country.getValue()
+        });
 
-	var formatter = new ilib.AddressFmt(options);
-	var postFmtData = formatter.format(address);  
-	this.$.rtlResult.setContent(postFmtData);        
+        var formatter = new ilib.AddressFmt(options);
+        var postFmtData = formatter.format(address);
+        this.$.rtlResult.setContent(postFmtData);
     }
 });

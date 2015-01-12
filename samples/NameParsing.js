@@ -9,11 +9,10 @@ enyo.kind({
                 /* Header with selecting locale */
                 {kind: "ilib.sample.ChooseLocale", name: "localeSelector"},
                 {style: "width: 20px"},
-                {kind: "onyx.Button", content: rb.getString("Apply"), ontap: "calcFormat", style: "vertical-align: bottom;", classes: "onyx-affirmative"},
-               
-            ]},
+                {kind: "onyx.Button", content: rb.getString("Apply"), ontap: "calcFormat", style: "vertical-align: bottom;", classes: "onyx-affirmative"}
+            ]}
         ]},
-	{tag: "br"},
+        {tag: "br"},
         {kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
             {kind: "onyx.GroupboxHeader", content: rb.getString("Name")},
             {kind: "onyx.InputDecorator", alwaysLooksFocused: true, fit:true, components: [
@@ -23,23 +22,23 @@ enyo.kind({
         {tag: "br"},
         {kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
             {kind: "onyx.GroupboxHeader", content: rb.getString("Parsed result:")},
-	    {name: "rtlResult", fit: true, content: "-", allowHtml:true, style: "padding: 10px"}
+            {name: "rtlResult", fit: true, content: "-", allowHtml:true, style: "padding: 10px"}
         ]}
     ],
    
     calcFormat: function(inSender, inEvent) {
         // Processing parameters
         var options = {
-            locale: this.$.localeSelector.getValue(),
+            locale: this.$.localeSelector.getValue()
         };
       
         // Parsing
-	var nameStr = this.$.name.getValue();       
-	var name = new ilib.Name(nameStr, options);
-   	var output = "";
+        var nameStr = this.$.name.getValue();       
+        var name = new ilib.Name(nameStr, options);
+        var output = "";
         if (name.prefix) {
-	    output += "Prefix: " + name.prefix + "<br>";
-    	}
+            output += "Prefix: " + name.prefix + "<br>";
+        }
         if (name.givenName) {
             output += "Given name: " + name.givenName + "<br>";
         }
@@ -48,11 +47,11 @@ enyo.kind({
         }
         if (name.familyName) {
             output += "Family name: " + name.familyName + "<br>";
-	}
+        }
         if (name.suffix) {
             output += "Suffix: " + name.suffix + "<br>";
         } 
         output += '<br/>';
- 	this.$.rtlResult.setContent(output);
+        this.$.rtlResult.setContent(output);
     }
 });
