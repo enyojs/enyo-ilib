@@ -7,7 +7,7 @@ enyo.kind({
         {kind: "Scroller", fit: true, components: [
             {kind: "FittableColumns", components: [
                 /* Header with selecting locale */
-                {kind: "ilib.sample.ChooseLocale", name: "localeSelector", onSelectedLocale: "setLocale"},
+                {kind: "ilib.sample.ChooseLocale", name: "localeSelector"},
                 {style: "width: 20px"},
                 {kind: "onyx.Button", content: rb.getString("Apply"), ontap: "nameFormat", style: "vertical-align: bottom;", classes: "onyx-affirmative"},
                 {fit: true}
@@ -16,7 +16,7 @@ enyo.kind({
             
             {content: rb.getString("Length"), classes: "ilib-onyx-sample-divider"},
             {kind: "onyx.RadioGroup", name: "length", onActivate: "buttonActivated", components: [
-                {content: "Short"},
+                {content: "Short", active: true, name:"short"},
                 {content: "Medium"},
                 {content: "Long"}
             ]},
@@ -84,7 +84,12 @@ enyo.kind({
     },
 
     checkboxChanged: function(inSender, inEvent) {
-	this.$.length.setActive(false);
+	if (!this.$.prefixCbox.getChecked() && !this.$.givenCbox.getChecked() && !this.$.middleCbox.getChecked() &&
+		!this.$.familyCbox.getChecked() && !this.$.suffixCbox.getChecked()) {
+		this.$.short.setActive(true);
+	} else {
+		this.$.length.setActive(false);
+	}
     },
 
     nameFormat: function(inSender, inEvent) {
