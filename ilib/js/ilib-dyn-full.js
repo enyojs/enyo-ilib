@@ -30,7 +30,7 @@ var ilib = ilib || {};
  */
 ilib.getVersion = function () {
     // increment this for each release
-    return "9.0"
+    return "10.0"
     ;
 };
 
@@ -69,8 +69,28 @@ if (typeof(exports) !== 'undefined') {
 
 ilib.pseudoLocales = ["zxx-XX"];
 
+/**
+ * Sets the pseudo locale. Pseudolocalization (or pseudo-localization) is used for testing
+ * internationalization aspects of software. Instead of translating the text of the software
+ * into a foreign language, as in the process of localization, the textual elements of an application
+ * are replaced with an altered version of the original language.These specific alterations make
+ * the original words appear readable, but include the most problematic characteristics of 
+ * the world's languages: varying length of text or characters, language direction, and so on.
+ * Regular Latin pseudo locale: eu-ES and RTL pseudo locale: ps-AF
+ * 
+ * @param {string|undefined|null} localename the locale specifier for the pseudo locale
+ */
 ilib.setAsPseudoLocale = function (localename) {
-   ilib.pseudoLocales.push(localename)
+   if (localename) {
+	   ilib.pseudoLocales.push(localename)
+   }
+};
+
+/**
+ * Reset the list of pseudo locales back to the default single locale of zxx-XX.
+ */
+ilib.clearPseudoLocales = function() {
+	ilib.pseudoLocales = ["zxx-XX"];
 };
 
 /**
@@ -1251,11 +1271,7 @@ ilib.Locale.prototype = {
 	 */
 	isPseudo: function () {
 		var localeName = this.language + "-" + this.region;
-		var index;
-		for (index = 0; index < ilib.pseudoLocales.length; index++) {
-		    if(ilib.pseudoLocales[index] === localeName) return true;
-		}
-		return false;
+		return ilib.pseudoLocales.indexOf(localeName) > -1;
 	}
 };
 
@@ -2306,7 +2322,7 @@ ilib.Date.prototype = {
 		
 		var first = this.newRd({
 			year: this._calcYear(this.rd.getRataDie()+this.offset),
-			month: this.month,
+			month: this.getMonths(),
 			day: 1,
 			hour: 0,
 			minute: 0,
@@ -2389,26 +2405,6 @@ ilib.bind = function(scope, method/*, bound arguments*/){
 		return func;
 	}
 	return undefined;
-};
-
-/**
- * Do a proper modulo function. The Javascript % operator will give the truncated
- * division algorithm, but for calendrical calculations, we need the Euclidean
- * division algorithm where the remainder of any division, whether the dividend
- * is negative or not, is always a positive number between 0 and the modulus.<p>
- * 
- * Depends directive: !depends utils.js
- * 
- * @param {number} dividend the number being divided
- * @param {number} modulus the number dividing the dividend. This should always be a positive number.
- * @return the remainder of dividing the dividend by the modulus.  
- */
-ilib.mod = function (dividend, modulus) {
-	if (modulus == 0) {
-		return 0;
-	}
-	var x = dividend % modulus;
-	return (x < 0) ? x + modulus : x;
 };
 
 /**
@@ -2975,6 +2971,172 @@ ilib.loadData = function(params) {
 };
 
 /*
+ * util/math.js - Misc math utility routines
+ * 
+ * Copyright © 2013, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// !depends ilibglobal.js
+
+/**
+ * Return the sign of the given number. If the sign is negative, this function
+ * returns -1. If the sign is positive or zero, this function returns 1.
+ * @static
+ * @param {number} num the number to test
+ * @return {number} -1 if the number is negative, and 1 otherwise
+ */
+ilib.signum = function (num) {
+	var n = num;
+	if (typeof(num) === 'string') {
+		n = parseInt(num, 10);
+	} else if (typeof(num) !== 'number') {
+		return 1;
+	}
+	return (n < 0) ? -1 : 1;
+};
+
+
+/**
+ * @protected
+ */
+ilib._roundFnc = {
+	/**
+	 * @static
+	 * @protected
+	 * @param {number} num number to round
+	 * @return {number} rounded number
+	 */
+	floor: function (num) {
+		return Math.floor(num);
+	},
+	
+	/**
+	 * @static
+	 * @protected
+	 * @param {number} num number to round
+	 * @return {number} rounded number
+	 */
+	ceiling: function (num) {
+		return Math.ceil(num);
+	},
+	
+	/**
+	 * @static
+	 * @protected
+	 * @param {number} num number to round
+	 * @return {number} rounded number
+	 */
+	down: function (num) {
+		return (num < 0) ? Math.ceil(num) : Math.floor(num);
+	},
+	
+	/**
+	 * @static
+	 * @protected
+	 * @param {number} num number to round
+	 * @return {number} rounded number
+	 */
+	up: function (num) {
+		return (num < 0) ? Math.floor(num) : Math.ceil(num);
+	},
+	
+	/**
+	 * @static
+	 * @protected
+	 * @param {number} num number to round
+	 * @return {number} rounded number
+	 */
+	halfup: function (num) {
+		return (num < 0) ? Math.ceil(num - 0.5) : Math.floor(num + 0.5);
+	},
+	
+	/**
+	 * @static
+	 * @protected
+	 * @param {number} num number to round
+	 * @return {number} rounded number
+	 */
+	halfdown: function (num) {
+		return (num < 0) ? Math.floor(num + 0.5) : Math.ceil(num - 0.5);
+	},
+	
+	/**
+	 * @static
+	 * @protected
+	 * @param {number} num number to round
+	 * @return {number} rounded number
+	 */
+	halfeven: function (num) {
+		return (Math.floor(num) % 2 === 0) ? Math.ceil(num - 0.5) : Math.floor(num + 0.5);
+	},
+	
+	/**
+	 * @static
+	 * @protected
+	 * @param {number} num number to round
+	 * @return {number} rounded number
+	 */
+	halfodd: function (num) {
+		return (Math.floor(num) % 2 !== 0) ? Math.ceil(num - 0.5) : Math.floor(num + 0.5);
+	}
+};
+
+/**
+ * Do a proper modulo function. The Javascript % operator will give the truncated
+ * division algorithm, but for calendrical calculations, we need the Euclidean
+ * division algorithm where the remainder of any division, whether the dividend
+ * is negative or not, is always a positive number in the range [0, modulus).<p>
+ * 
+ * Depends directive: !depends utils.js
+ * 
+ * @param {number} dividend the number being divided
+ * @param {number} modulus the number dividing the dividend. This should always be a positive number.
+ * @return the remainder of dividing the dividend by the modulus.  
+ */
+ilib.mod = function (dividend, modulus) {
+	if (modulus == 0) {
+		return 0;
+	}
+	var x = dividend % modulus;
+	return (x < 0) ? x + modulus : x;
+};
+
+/**
+ * Do a proper adjusted modulo function. The Javascript % operator will give the truncated
+ * division algorithm, but for calendrical calculations, we need the Euclidean
+ * division algorithm where the remainder of any division, whether the dividend
+ * is negative or not, is always a positive number in the range (0, modulus]. The adjusted
+ * modulo function differs from the regular modulo function in that when the remainder is
+ * zero, the modulus should be returned instead.<p>
+ * 
+ * Depends directive: !depends utils.js
+ * 
+ * @param {number} dividend the number being divided
+ * @param {number} modulus the number dividing the dividend. This should always be a positive number.
+ * @return the remainder of dividing the dividend by the modulus.  
+ */
+ilib.amod = function (dividend, modulus) {
+	if (modulus == 0) {
+		return 0;
+	}
+	var x = dividend % modulus;
+	return (x <= 0) ? x + modulus : x;
+};
+
+/*
  * strings.js - ilib string subclass definition
  * 
  * Copyright © 2012-2014, JEDLSoft
@@ -2993,7 +3155,7 @@ ilib.loadData = function(params) {
  * limitations under the License.
  */
 
-// !depends ilibglobal.js util/utils.js locale.js
+// !depends ilibglobal.js util/utils.js locale.js util/math.js
 
 // !data plurals
 
@@ -4213,131 +4375,6 @@ ilib.Cal.prototype = {
 };
 
 /*
- * util/math.js - Misc math utility routines
- * 
- * Copyright © 2013, JEDLSoft
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-// !depends ilibglobal.js
-
-/**
- * Return the sign of the given number. If the sign is negative, this function
- * returns -1. If the sign is positive or zero, this function returns 1.
- * @static
- * @param {number} num the number to test
- * @return {number} -1 if the number is negative, and 1 otherwise
- */
-ilib.signum = function (num) {
-	var n = num;
-	if (typeof(num) === 'string') {
-		n = parseInt(num, 10);
-	} else if (typeof(num) !== 'number') {
-		return 1;
-	}
-	return (n < 0) ? -1 : 1;
-};
-
-
-/**
- * @protected
- */
-ilib._roundFnc = {
-	/**
-	 * @static
-	 * @protected
-	 * @param {number} num number to round
-	 * @return {number} rounded number
-	 */
-	floor: function (num) {
-		return Math.floor(num);
-	},
-	
-	/**
-	 * @static
-	 * @protected
-	 * @param {number} num number to round
-	 * @return {number} rounded number
-	 */
-	ceiling: function (num) {
-		return Math.ceil(num);
-	},
-	
-	/**
-	 * @static
-	 * @protected
-	 * @param {number} num number to round
-	 * @return {number} rounded number
-	 */
-	down: function (num) {
-		return (num < 0) ? Math.ceil(num) : Math.floor(num);
-	},
-	
-	/**
-	 * @static
-	 * @protected
-	 * @param {number} num number to round
-	 * @return {number} rounded number
-	 */
-	up: function (num) {
-		return (num < 0) ? Math.floor(num) : Math.ceil(num);
-	},
-	
-	/**
-	 * @static
-	 * @protected
-	 * @param {number} num number to round
-	 * @return {number} rounded number
-	 */
-	halfup: function (num) {
-		return (num < 0) ? Math.ceil(num - 0.5) : Math.floor(num + 0.5);
-	},
-	
-	/**
-	 * @static
-	 * @protected
-	 * @param {number} num number to round
-	 * @return {number} rounded number
-	 */
-	halfdown: function (num) {
-		return (num < 0) ? Math.floor(num + 0.5) : Math.ceil(num - 0.5);
-	},
-	
-	/**
-	 * @static
-	 * @protected
-	 * @param {number} num number to round
-	 * @return {number} rounded number
-	 */
-	halfeven: function (num) {
-		return (Math.floor(num) % 2 === 0) ? Math.ceil(num - 0.5) : Math.floor(num + 0.5);
-	},
-	
-	/**
-	 * @static
-	 * @protected
-	 * @param {number} num number to round
-	 * @return {number} rounded number
-	 */
-	halfodd: function (num) {
-		return (Math.floor(num) % 2 !== 0) ? Math.ceil(num - 0.5) : Math.floor(num + 0.5);
-	}
-};
-
-
-/*
  * julianday.js - A Julian date object.
  * 
  * Copyright © 2012-2014, JEDLSoft
@@ -4472,7 +4509,7 @@ ilib.JulianDay.prototype = {
  */
 
 
-/* !depends calendar.js locale.js date.js julianday.js util/utils.js */
+/* !depends calendar.js locale.js date.js julianday.js util/utils.js util/math.js */
 
 /**
  * @class
@@ -4595,6 +4632,7 @@ ilib.Cal._constructors["gregorian"] = ilib.Cal.Gregorian;
 
 /* !depends 
 util/utils.js
+util/math.js
 julianday.js 
 */
 
@@ -4609,6 +4647,12 @@ julianday.js
  * 
  * <li><i>julianday</i> - sets the time of this instance according to the given
  * Julian Day instance or the Julian Day given as a float
+ * 
+ * <li><i>cycle</i> - any integer giving the number of 60-year cycle in which the date is located.
+ * If the cycle is not given but the year is, it is assumed that the year parameter is a fictitious 
+ * linear count of years since the beginning of the epoch, much like other calendars. This linear
+ * count is never used. If both the cycle and year are given, the year is wrapped to the range 0 
+ * to 60 and treated as if it were a year in the regular 60-year cycle.
  * 
  * <li><i>year</i> - any integer, including 0
  * 
@@ -4667,7 +4711,7 @@ ilib.Date.RataDie = function(params) {
 			// JD time is defined to be UTC
 			this._setJulianDay(parseFloat(params.julianday));
 		} else if (params.year || params.month || params.day || params.hour ||
-				params.minute || params.second || params.millisecond || params.parts) {
+				params.minute || params.second || params.millisecond || params.parts || params.cycle) {
 			this._setDateComponents(params);
 		} else if (typeof(params.rd) !== 'undefined') {
 			this.rd = (typeof(params.rd) === 'object' && params.rd instanceof ilib.Date.RataDie) ? params.rd.rd : params.rd;
@@ -4683,14 +4727,21 @@ ilib.Date.RataDie = function(params) {
 	}
 };
 
+/**
+ * @private
+ * @const
+ * @type {number}
+ */
+ilib.Date.RataDie.gregorianEpoch = 1721424.5;
+
 ilib.Date.RataDie.prototype = {
 	/**
 	 * @protected
 	 * @const
-	 * @type number
+	 * @type {number}
 	 * the difference between a zero Julian day and the zero Gregorian date. 
 	 */
-	epoch: 1721424.5,
+	epoch: ilib.Date.RataDie.gregorianEpoch,
 	
 	/**
 	 * Set the RD of this instance according to the given unix time. Unix time is
@@ -4895,6 +4946,7 @@ date.js
 calendar/gregorian.js
 calendar/ratadie.js
 util/utils.js
+util/math.js
 julianday.js 
 */
 
@@ -7181,7 +7233,8 @@ ilib.DateFmt.defaultFmt = {
 	"julian": "gregorian",
 	"buddhist": "gregorian",
 	"persian": "gregorian",
-	"persian-algo": "gregorian"
+	"persian-algo": "gregorian",
+	"han": "gregorian"
 };
 
 /**
@@ -8369,7 +8422,7 @@ ilib.DateRngFmt.prototype = {
  */
 
 
-/* !depends calendar.js locale.js date.js julianday.js util/utils.js */
+/* !depends calendar.js locale.js date.js julianday.js util/utils.js util/math.js */
 
 /**
  * @class
@@ -8605,6 +8658,7 @@ date.js
 calendar/hebrew.js
 calendar/ratadie.js
 util/utils.js
+util/math.js
 julianday.js 
 */
 
@@ -9311,7 +9365,7 @@ ilib.Date._constructors["hebrew"] = ilib.Date.HebrewDate;
  */
 
 
-/* !depends calendar.js locale.js date.js julianday.js util/utils.js */
+/* !depends calendar.js locale.js date.js julianday.js util/utils.js util/math.js */
 
 /**
  * @class
@@ -9506,6 +9560,61 @@ ilib.bsearch = function(target, arr, comparator) {
 ilib.bsearch.numbers = function(element, target) {
 	return element - target;
 };
+
+/**
+ * Do a bisection search of a function for a particular target value.<p> 
+ * 
+ * The function to search is a function that takes a numeric parameter, 
+ * does calculations, and returns gives a numeric result. The 
+ * function should should be smooth and not have any discontinuities 
+ * between the low and high values of the parameter.
+ *  
+ * Depends directive: !depends utils.js
+ * 
+ * @static
+ * @param {number} target value being sought
+ * @param {number} low the lower bounds to start searching
+ * @param {number} high the upper bounds to start searching
+ * @param {number} precision minimum precision to support. Use 0 if you want to use the default.
+ * @param {?function(number)=} func function to search 
+ * @return an approximation of the input value to the function that gives the desired
+ * target output value, correct to within the error range of Javascript floating point 
+ * arithmetic, or NaN if there was some error
+ */
+ilib.bisectionSearch = function(target, low, high, precision, func) {
+	if (typeof(target) !== 'number' || 
+			typeof(low) !== 'number' || 
+			typeof(high) !== 'number' || 
+			typeof(func) !== 'function') {
+		return NaN;
+	}
+	
+	var mid = 0,
+		value,
+		pre = precision > 0 ? precision : 1e-13;
+	
+	function compareSignificantDigits(a, b) {
+		var leftParts = a.toExponential().split('e');
+		var rightParts = b.toExponential().split('e');
+		var left = new Number(leftParts[0]);
+		var right = new Number(rightParts[0]);
+		
+		return leftParts[1] === rightParts[1] && Math.abs(left - right) < pre; 
+	}
+	
+	do {
+		mid = (high+low)/2;
+		value = func(mid);
+		if (value > target) {
+			high = mid;
+		} else if (value < target) {
+			low = mid;
+		}
+	} while (high - low > pre);
+	
+	return mid;
+};
+
 
 /*
  * islamicdate.js - Represent a date in the Islamic calendar
@@ -9957,7 +10066,7 @@ ilib.Date._constructors["islamic"] = ilib.Date.IslamicDate;
  */
 
 
-/* !depends calendar.js locale.js date.js julianday.js util/utils.js */
+/* !depends calendar.js locale.js date.js julianday.js util/utils.js util/math.js */
 
 /**
  * @class
@@ -10075,6 +10184,7 @@ date.js
 calendar/julian.js 
 util/utils.js
 util/search.js 
+util/math.js
 localeinfo.js 
 julianday.js 
 */
@@ -10500,7 +10610,8 @@ ilib.Date._constructors["julian"] = ilib.Date.JulDate;
 date.js 
 calendar/gregorian.js 
 util/utils.js
-util/search.js 
+util/search.js
+util/math.js
 localeinfo.js 
 julianday.js
 calendar/gregratadie.js
@@ -10662,8 +10773,9 @@ ilib.Date.GregDate.prototype.newRd = function (params) {
 /**
  * Calculates the Gregorian year for a given rd number.
  * @private
+ * @static
  */
-ilib.Date.GregDate.prototype._calcYear = function(rd) {
+ilib.Date.GregDate._calcYear = function(rd) {
 	var days400,
 		days100,
 		days4,
@@ -10686,6 +10798,13 @@ ilib.Date.GregDate.prototype._calcYear = function(rd) {
 		year++;
 	}
 	return year;
+};
+
+/**
+ * @private
+ */
+ilib.Date.GregDate.prototype._calcYear = function(rd) {
+	return ilib.Date.GregDate._calcYear(rd);
 };
 
 /**
@@ -10872,7 +10991,7 @@ ilib.Date._constructors["gregorian"] = ilib.Date.GregDate;
  */
 
 
-/* !depends calendar.js locale.js date.js julianday.js calendar/gregorian.js util/utils.js */
+/* !depends calendar.js locale.js date.js julianday.js calendar/gregorian.js util/utils.js util/math.js */
 
 /**
  * @class
@@ -11161,7 +11280,7 @@ ilib.Date._constructors["thaisolar"] = ilib.Date.ThaiSolarDate;
  */
 
 
-/* !depends calendar.js locale.js date.js julianday.js util/utils.js */
+/* !depends calendar.js locale.js date.js julianday.js util/utils.js util/math.js */
 
 /**
  * @class
@@ -11299,7 +11418,8 @@ ilib.Cal._constructors["persian-algo"] = ilib.Cal.PersianAlgo;
 date.js 
 calendar/persian.js 
 util/utils.js
-util/search.js 
+util/search.js
+util/math.js
 localeinfo.js 
 julianday.js 
 */
@@ -11757,14 +11877,91 @@ ilib.Date._constructors["persian-algo"] = ilib.Date.PersAlgoDate;
 
 /* !depends
 ilibglobal.js
-date.js 
+date.js
+calendar/gregoriandate.js
+calendar/gregratadie.js
 */
+
+// !data astro
 
 /*
  * These routines were derived from a public domain set of JavaScript 
  * functions for positional astronomy by John Walker of Fourmilab, 
  * September 1999.
  */
+
+/**
+ * Load in all the data needed for astrological calculations.
+ * 
+ * @param {boolean} sync
+ * @param {*} loadParams
+ * @param {function(*)|undefined} callback
+ */
+ilib.Date.initAstro = function(sync, loadParams, callback) {
+	if (!ilib.data.astro) {
+		ilib.loadData({
+			name: "astro.json", // countries in their own language 
+			locale: "-", // only need to load the root file 
+			nonLocale: true,
+			sync: sync, 
+			loadParams: loadParams, 
+			callback: ilib.bind(this, /** @type function() */ function(astroData) {
+				/** 
+				 * @type {{
+				 *  	_EquinoxpTerms:Array.<number>, 
+				 *  	_JDE0tab1000:Array.<number>, 
+				 *  	_JDE0tab2000:Array.<number>, 
+				 *  	_deltaTtab:Array.<number>,
+				 *  	_oterms:Array.<number>,
+				 *  	_nutArgMult:Array.<number>, 
+				 *  	_nutArgCoeff:Array.<number>, 
+				 *  	_nutCoeffA:Array.<number>,
+				 *  	_nutCoeffB:Array.<number>,
+				 *  	_coeff19th:Array.<number>,
+				 *  	_coeff18th:Array.<number>,
+				 *  	_solarLongCoeff:Array.<number>, 
+				 *  	_solarLongMultipliers:Array.<number>, 
+				 *  	_solarLongAddends:Array.<number>, 
+				 *  	_meanMoonCoeff:Array.<number>,
+				 *  	_elongationCoeff:Array.<number>,
+				 *  	_solarAnomalyCoeff:Array.<number>,
+				 *  	_lunarAnomalyCoeff:Array.<number>,
+				 *  	_moonFromNodeCoeff:Array.<number>,
+				 *  	_eCoeff:Array.<number>,
+				 *  	_lunarElongationLongCoeff:Array.<number>,
+				 *  	_solarAnomalyLongCoeff:Array.<number>,
+				 *  	_lunarAnomalyLongCoeff:Array.<number>,
+				 *  	_moonFromNodeLongCoeff:Array.<number>,
+				 *  	_sineCoeff:Array.<number>,
+				 *  	_nmApproxCoeff:Array.<number>,
+				 *  	_nmCapECoeff:Array.<number>,
+				 *  	_nmSolarAnomalyCoeff:Array.<number>,
+				 *  	_nmLunarAnomalyCoeff:Array.<number>,
+				 *  	_nmMoonArgumentCoeff:Array.<number>,
+				 *  	_nmCapOmegaCoeff:Array.<number>,
+				 *  	_nmEFactor:Array.<number>,
+				 *  	_nmSolarCoeff:Array.<number>,
+				 *  	_nmLunarCoeff:Array.<number>,
+				 *  	_nmMoonCoeff:Array.<number>,
+				 *  	_nmSineCoeff:Array.<number>,
+				 *  	_nmAddConst:Array.<number>,
+				 *  	_nmAddCoeff:Array.<number>,
+				 *  	_nmAddFactor:Array.<number>,
+				 *  	_nmExtra:Array.<number>
+				 *  }}
+				 */ 	
+			 	ilib.data.astro = astroData;
+				if (callback && typeof(callback) === 'function') {
+					callback(astroData);
+				}
+			})
+		});
+	} else {
+		if (callback && typeof(callback) === 'function') {
+			callback(ilib.data.astro);
+		}
+	}
+};
 
 /**
  * Convert degrees to radians.
@@ -11790,6 +11987,7 @@ ilib.Date._rtd = function(r) {
 
 /**
  * Return the cosine of an angle given in degrees.
+ * @static
  * @param {number} d angle in degrees
  * @return {number} cosine of the angle.
  */  
@@ -11799,11 +11997,22 @@ ilib.Date._dcos = function(d) {
 
 /**
  * Return the sine of an angle given in degrees.
+ * @static
  * @param {number} d angle in degrees
- * @return {number} cosine of the angle.
+ * @return {number} sine of the angle.
  */  
 ilib.Date._dsin = function(d) {
 	return Math.sin(ilib.Date._dtr(d));
+};
+
+/**
+ * Return the tan of an angle given in degrees.
+ * @static
+ * @param {number} d angle in degrees
+ * @return {number} tan of the angle.
+ */  
+ilib.Date._dtan = function(d) {
+	return Math.tan(ilib.Date._dtr(d));
 };
 
 /**
@@ -11828,33 +12037,6 @@ ilib.Date._fixangr = function(a) {
 	return a - (2 * Math.PI) * (Math.floor(a / (2 * Math.PI)));
 };
 
-//  Periodic terms to obtain true time
-ilib.Date._EquinoxpTerms = [ 
-	485, 324.96, 1934.136, 203, 337.23, 32964.467,
-	199, 342.08, 20.186, 182, 27.85, 445267.112, 156, 73.14, 45036.886,
-	136, 171.52, 22518.443, 77, 222.54, 65928.934, 74, 296.72, 3034.906,
-	70, 243.58, 9037.513, 58, 119.81, 33718.147, 52, 297.17, 150.678, 50,
-	21.02, 2281.226, 45, 247.54, 29929.562, 44, 325.15, 31555.956, 29,
-	60.93, 4443.417, 18, 155.12, 67555.328, 17, 288.79, 4562.452, 16,
-	198.04, 62894.029, 14, 199.76, 31436.921, 12, 95.39, 14577.848, 12,
-	287.11, 31931.756, 12, 320.81, 34777.259, 9, 227.73, 1222.114, 8,
-	15.45, 16859.074
-];
-
-ilib.Date._JDE0tab1000 = [ 
-	[ 1721139.29189, 365242.13740, 0.06134, 0.00111, -0.00071 ],
-	[ 1721233.25401, 365241.72562, -0.05323, 0.00907, 0.00025 ],
-	[ 1721325.70455, 365242.49558, -0.11677, -0.00297, 0.00074 ],
-	[ 1721414.39987, 365242.88257, -0.00769, -0.00933, -0.00006 ] 
-];
-
-ilib.Date._JDE0tab2000 = [ 
-	[ 2451623.80984, 365242.37404, 0.05169, -0.00411, -0.00057 ],
-	[ 2451716.56767, 365241.62603, 0.00325, 0.00888, -0.00030 ],
-	[ 2451810.21715, 365242.01767, -0.11575, 0.00337, 0.00078 ],
-	[ 2451900.05952, 365242.74049, -0.06223, -0.00823, 0.00032 ] 
-];
-
 /**
  * Determine the Julian Ephemeris Day of an equinox or solstice.  The "which" 
  * argument selects the item to be computed:
@@ -11878,10 +12060,10 @@ ilib.Date._equinox = function(year, which) {
 	    for subsequent years.  */
 
 	if (year < 1000) {
-		JDE0tab = ilib.Date._JDE0tab1000;
+		JDE0tab = ilib.data.astro._JDE0tab1000;
 		Y = year / 1000;
 	} else {
-		JDE0tab = ilib.Date._JDE0tab2000;
+		JDE0tab = ilib.data.astro._JDE0tab2000;
 		Y = (year - 2000) / 1000;
 	}
 
@@ -11903,8 +12085,8 @@ ilib.Date._equinox = function(year, which) {
 	S = 0;
 	j = 0;
 	for (i = 0; i < 24; i++) {
-		S += ilib.Date._EquinoxpTerms[j]
-				* ilib.Date._dcos(ilib.Date._EquinoxpTerms[j + 1] + (ilib.Date._EquinoxpTerms[j + 2] * T));
+		S += ilib.data.astro._EquinoxpTerms[j]
+				* ilib.Date._dcos(ilib.data.astro._EquinoxpTerms[j + 1] + (ilib.data.astro._EquinoxpTerms[j + 2] * T));
 		j += 3;
 	}
 
@@ -11916,25 +12098,13 @@ ilib.Date._equinox = function(year, which) {
 	return JDE;
 };
 
-/*  Table of observed Delta T values at the beginning of
-even numbered years from 1620 through 2002.  */
-
-ilib.Date._deltaTtab = [ 
-    121, 112, 103, 95, 88, 82, 77, 72, 68, 63, 60, 56,
-	53, 51, 48, 46, 44, 42, 40, 38, 35, 33, 31, 29, 26, 24, 22, 20, 18, 16,
-	14, 12, 11, 10, 9, 8, 7, 7, 7, 7, 7, 7, 8, 8, 9, 9, 9, 9, 9, 10, 10,
-	10, 10, 10, 10, 10, 10, 11, 11, 11, 11, 11, 12, 12, 12, 12, 13, 13, 13,
-	14, 14, 14, 14, 15, 15, 15, 15, 15, 16, 16, 16, 16, 16, 16, 16, 16, 15,
-	15, 14, 13, 13.1, 12.5, 12.2, 12, 12, 12, 12, 12, 12, 11.9, 11.6, 11,
-	10.2, 9.2, 8.2, 7.1, 6.2, 5.6, 5.4, 5.3, 5.4, 5.6, 5.9, 6.2, 6.5, 6.8,
-	7.1, 7.3, 7.5, 7.6, 7.7, 7.3, 6.2, 5.2, 2.7, 1.4, -1.2, -2.8, -3.8,
-	-4.8, -5.5, -5.3, -5.6, -5.7, -5.9, -6, -6.3, -6.5, -6.2, -4.7, -2.8,
-	-0.1, 2.6, 5.3, 7.7, 10.4, 13.3, 16, 18.2, 20.2, 21.1, 22.4, 23.5,
-	23.8, 24.3, 24, 23.9, 23.9, 23.7, 24, 24.3, 25.3, 26.2, 27.3, 28.2,
-	29.1, 30, 30.7, 31.4, 32.2, 33.1, 34, 35, 36.5, 38.3, 40.2, 42.2, 44.5,
-	46.5, 48.5, 50.5, 52.2, 53.8, 54.9, 55.8, 56.9, 58.3, 60, 61.6, 63, 65,
-	66.6 
-];
+/* 
+ * The table of observed Delta T values at the beginning of
+ * years from 1620 through 2014 as found in astro.json is taken from
+ * http://www.staff.science.uu.nl/~gent0113/deltat/deltat.htm
+ * and
+ * ftp://maia.usno.navy.mil/ser7/deltat.data
+ */
 
 /**  
  * Determine the difference, in seconds, between dynamical time and universal time.
@@ -11946,10 +12116,10 @@ ilib.Date._deltaTtab = [
 ilib.Date._deltat = function (year) {
 	var dt, f, i, t;
 
-	if ((year >= 1620) && (year <= 2000)) {
-		i = Math.floor((year - 1620) / 2);
-		f = ((year - 1620) / 2) - i; /* Fractional part of year */
-		dt = ilib.Date._deltaTtab[i] + ((ilib.Date._deltaTtab[i + 1] - ilib.Date._deltaTtab[i]) * f);
+	if ((year >= 1620) && (year <= 2014)) {
+		i = Math.floor(year - 1620);
+		f = (year - 1620) - i; /* Fractional part of year */
+		dt = ilib.data.astro._deltaTtab[i] + ((ilib.data.astro._deltaTtab[i + 1] - ilib.data.astro._deltaTtab[i]) * f);
 	} else {
 		t = (year - 2000) / 100;
 		if (year < 948) {
@@ -11963,11 +12133,6 @@ ilib.Date._deltat = function (year) {
 	}
 	return dt;
 };
-
-ilib.Date._oterms = [
-	-4680.93, -1.55, 1999.25, -51.38, -249.67, 
-	-39.05, 7.12, 27.87, 5.79, 2.45 
-];
 
 /**
  * Calculate the obliquity of the ecliptic for a given
@@ -11994,7 +12159,7 @@ ilib.Date._obliqeq = function (jd) {
 
  	if (Math.abs(u) < 1.0) {
  		for (i = 0; i < 10; i++) {
- 			eps += (ilib.Date._oterms[i] / 3600.0) * v;
+ 			eps += (ilib.data.astro._oterms[i] / 3600.0) * v;
  			v *= u;
  		}
  	}
@@ -12005,36 +12170,34 @@ ilib.Date._obliqeq = function (jd) {
  * Return the position of the sun.  We return
  * intermediate values because they are useful in a
  * variety of other contexts.
+ * @static
  * @param {number} jd find the position of sun on this Julian Day
  * @return {Object} the position of the sun and many intermediate
- * values   
+ * values
  */
 ilib.Date._sunpos = function(jd) {
 	var ret = {}, 
-		T, T2, Omega, epsilon, epsilon0;
+		T, T2, T3, Omega, epsilon, epsilon0;
 
 	T = (jd - 2451545.0) / 36525.0;
 	//document.debug.log.value += "Sunpos.  T = " + T + "\n";
 	T2 = T * T;
-	ret.meanLongitude = 280.46646 + (36000.76983 * T) + (0.0003032 * T2);
+	T3 = T * T2;
+	ret.meanLongitude = ilib.Date._fixangle(280.46646 + 36000.76983 * T + 0.0003032 * T2);
 	//document.debug.log.value += "ret.meanLongitude = " + ret.meanLongitude + "\n";
-	ret.meanLongitude = ilib.Date._fixangle(ret.meanLongitude);
-	//document.debug.log.value += "ret.meanLongitude = " + ret.meanLongitude + "\n";
-	ret.meanAnomaly = 357.52911 + (35999.05029 * T) + (-0.0001537 * T2);
+	ret.meanAnomaly = ilib.Date._fixangle(357.52911 + (35999.05029 * T) - 0.0001537 * T2 - 0.00000048 * T3);
 	//document.debug.log.value += "ret.meanAnomaly = " + ret.meanAnomaly + "\n";
-	ret.meanAnomaly = ilib.Date._fixangle(ret.meanAnomaly);
-	//document.debug.log.value += "ret.meanAnomaly = " + ret.meanAnomaly + "\n";
-	ret.eccentricity = 0.016708634 + (-0.000042037 * T) + (-0.0000001267 * T2);
+	ret.eccentricity = 0.016708634 - 0.000042037 * T - 0.0000001267 * T2;
 	//document.debug.log.value += "e = " + e + "\n";
-	ret.equationOfCenter = ((1.914602 + (-0.004817 * T) + (-0.000014 * T2)) * ilib.Date._dsin(ret.meanAnomaly))
-			+ ((0.019993 - (0.000101 * T)) * ilib.Date._dsin(2 * ret.meanAnomaly))
+	ret.equationOfCenter = ((1.914602 - 0.004817 * T - 0.000014 * T2) * ilib.Date._dsin(ret.meanAnomaly))
+			+ ((0.019993 - 0.000101 * T) * ilib.Date._dsin(2 * ret.meanAnomaly))
 			+ (0.000289 * ilib.Date._dsin(3 * ret.meanAnomaly));
 	//document.debug.log.value += "ret.equationOfCenter = " + ret.equationOfCenter + "\n";
 	ret.sunLongitude = ret.meanLongitude + ret.equationOfCenter;
 	//document.debug.log.value += "ret.sunLongitude = " + ret.sunLongitude + "\n";
-	ret.sunAnomaly = ret.meanAnomaly + ret.equationOfCenter;
+	//ret.sunAnomaly = ret.meanAnomaly + ret.equationOfCenter;
 	//document.debug.log.value += "ret.sunAnomaly = " + ret.sunAnomaly + "\n";
-	ret.sunRadius = (1.000001018 * (1 - (ret.eccentricity * ret.eccentricity))) / (1 + (ret.eccentricity * ilib.Date._dcos(ret.sunAnomaly)));
+	// ret.sunRadius = (1.000001018 * (1 - (ret.eccentricity * ret.eccentricity))) / (1 + (ret.eccentricity * ilib.Date._dcos(ret.sunAnomaly)));
 	//document.debug.log.value += "ret.sunRadius = " + ret.sunRadius + "\n";
 	Omega = 125.04 - (1934.136 * T);
 	//document.debug.log.value += "Omega = " + Omega + "\n";
@@ -12044,123 +12207,19 @@ ilib.Date._sunpos = function(jd) {
 	//document.debug.log.value += "epsilon0 = " + epsilon0 + "\n";
 	epsilon = epsilon0 + (0.00256 * ilib.Date._dcos(Omega));
 	//document.debug.log.value += "epsilon = " + epsilon + "\n";
-	ret.rightAscension = ilib.Date._rtd(Math.atan2(ilib.Date._dcos(epsilon0) * ilib.Date._dsin(ret.sunLongitude), ilib.Date._dcos(ret.sunLongitude)));
+	//ret.rightAscension = ilib.Date._fixangle(ilib.Date._rtd(Math.atan2(ilib.Date._dcos(epsilon0) * ilib.Date._dsin(ret.sunLongitude), ilib.Date._dcos(ret.sunLongitude))));
 	//document.debug.log.value += "ret.rightAscension = " + ret.rightAscension + "\n";
-	ret.rightAscension = ilib.Date._fixangle(ret.rightAscension);
-	////document.debug.log.value += "ret.rightAscension = " + ret.rightAscension + "\n";
-	ret.decliation = ilib.Date._rtd(Math.asin(ilib.Date._dsin(epsilon0) * ilib.Date._dsin(ret.sunLongitude)));
-	////document.debug.log.value += "ret.decliation = " + ret.decliation + "\n";
-	ret.apparentRightAscension = ilib.Date._rtd(Math.atan2(ilib.Date._dcos(epsilon) * ilib.Date._dsin(ret.apparentLong), ilib.Date._dcos(ret.apparentLong)));
+	// ret.declination = ilib.Date._rtd(Math.asin(ilib.Date._dsin(epsilon0) * ilib.Date._dsin(ret.sunLongitude)));
+	////document.debug.log.value += "ret.declination = " + ret.declination + "\n";
+	ret.inclination = ilib.Date._fixangle(23.4392911 - 0.013004167 * T - 0.00000016389 * T2 + 0.0000005036 * T3);
+	ret.apparentRightAscension = ilib.Date._fixangle(ilib.Date._rtd(Math.atan2(ilib.Date._dcos(epsilon) * ilib.Date._dsin(ret.apparentLong), ilib.Date._dcos(ret.apparentLong))));
 	//document.debug.log.value += "ret.apparentRightAscension = " + ret.apparentRightAscension + "\n";
-	ret.apparentRightAscension = ilib.Date._fixangle(ret.apparentRightAscension);
-	//document.debug.log.value += "ret.apparentRightAscension = " + ret.apparentRightAscension + "\n";
-	ret.apparentDecliation = ilib.Date._rtd(Math.asin(ilib.Date._dsin(epsilon) * ilib.Date._dsin(ret.apparentLong)));
+	//ret.apparentDeclination = ilib.Date._rtd(Math.asin(ilib.Date._dsin(epsilon) * ilib.Date._dsin(ret.apparentLong)));
 	//document.debug.log.value += "ret.apparentDecliation = " + ret.apparentDecliation + "\n";
 
 	// Angular quantities are expressed in decimal degrees
 	return ret;
-	
-	/*
-	return {
-		meanLongitude: L0, //  [0] Geometric mean longitude of the Sun
-		meanAnomaly: M, //  [1] Mean anomaly of the Sun
-		eccentricity: e, //  [2] Eccentricity of the Earth's orbit
-		equationOfCenter: C, //  [3] Sun's equation of the Centre
-		sunLongitude: sunLong, //  [4] Sun's true longitude
-		sunAnomaly: sunAnomaly, //  [5] Sun's true anomaly
-		sunRadius: sunR, //  [6] Sun's radius vector in AU
-		apparentLong: Lambda, //  [7] Sun's apparent longitude at true equinox of the date
-		rightAscension: Alpha, //  [8] Sun's true right ascension
-		declination: Delta, //  [9] Sun's true declination
-		apparentRightAscension: AlphaApp, // [10] Sun's apparent right ascension
-		apparentDecliation: DeltaApp // [11] Sun's apparent declination
-	};
-	*/
 };
-
-ilib.Date._nutArgMult = [ 
-    0, 0, 0, 0, 1, -2, 0, 0, 2, 2, 0, 0, 0, 2, 2, 0, 0,
-	0, 0, 2, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, -2, 1, 0, 2, 2, 0, 0, 0, 2, 1,
-	0, 0, 1, 2, 2, -2, -1, 0, 2, 2, -2, 0, 1, 0, 0, -2, 0, 0, 2, 1, 0, 0,
-	-1, 2, 2, 2, 0, 0, 0, 0, 0, 0, 1, 0, 1, 2, 0, -1, 2, 2, 0, 0, -1, 0, 1,
-	0, 0, 1, 2, 1, -2, 0, 2, 0, 0, 0, 0, -2, 2, 1, 2, 0, 0, 2, 2, 0, 0, 2,
-	2, 2, 0, 0, 2, 0, 0, -2, 0, 1, 2, 2, 0, 0, 0, 2, 0, -2, 0, 0, 2, 0, 0,
-	0, -1, 2, 1, 0, 2, 0, 0, 0, 2, 0, -1, 0, 1, -2, 2, 0, 2, 2, 0, 1, 0, 0,
-	1, -2, 0, 1, 0, 1, 0, -1, 0, 0, 1, 0, 0, 2, -2, 0, 2, 0, -1, 2, 1, 2,
-	0, 1, 2, 2, 0, 1, 0, 2, 2, -2, 1, 1, 0, 0, 0, -1, 0, 2, 2, 2, 0, 0, 2,
-	1, 2, 0, 1, 0, 0, -2, 0, 2, 2, 2, -2, 0, 1, 2, 1, 2, 0, -2, 0, 1, 2, 0,
-	0, 0, 1, 0, -1, 1, 0, 0, -2, -1, 0, 2, 1, -2, 0, 0, 0, 1, 0, 0, 2, 2,
-	1, -2, 0, 2, 0, 1, -2, 1, 0, 2, 1, 0, 0, 1, -2, 0, -1, 0, 1, 0, 0, -2,
-	1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 2, 0, -1, -1, 1, 0, 0, 0, 1, 1, 0,
-	0, 0, -1, 1, 2, 2, 2, -1, -1, 2, 2, 0, 0, -2, 2, 2, 0, 0, 3, 2, 2, 2,
-	-1, 0, 2, 2 
-];
-
-ilib.Date._nutArgCoeff = [ 
-	-171996, -1742, 92095, 89, /*  0,  0,  0,  0,  1 */
-	-13187, -16, 5736, -31, /* -2,  0,  0,  2,  2 */
-	-2274, -2, 977, -5, /*  0,  0,  0,  2,  2 */
-	2062, 2, -895, 5, /*  0,  0,  0,  0,  2 */
-	1426, -34, 54, -1, /*  0,  1,  0,  0,  0 */
-	712, 1, -7, 0, /*  0,  0,  1,  0,  0 */
-	-517, 12, 224, -6, /* -2,  1,  0,  2,  2 */
-	-386, -4, 200, 0, /*  0,  0,  0,  2,  1 */
-	-301, 0, 129, -1, /*  0,  0,  1,  2,  2 */
-	217, -5, -95, 3, /* -2, -1,  0,  2,  2 */
-	-158, 0, 0, 0, /* -2,  0,  1,  0,  0 */
-	129, 1, -70, 0, /* -2,  0,  0,  2,  1 */
-	123, 0, -53, 0, /*  0,  0, -1,  2,  2 */
-	63, 0, 0, 0, /*  2,  0,  0,  0,  0 */
-	63, 1, -33, 0, /*  0,  0,  1,  0,  1 */
-	-59, 0, 26, 0, /*  2,  0, -1,  2,  2 */
-	-58, -1, 32, 0, /*  0,  0, -1,  0,  1 */
-	-51, 0, 27, 0, /*  0,  0,  1,  2,  1 */
-	48, 0, 0, 0, /* -2,  0,  2,  0,  0 */
-	46, 0, -24, 0, /*  0,  0, -2,  2,  1 */
-	-38, 0, 16, 0, /*  2,  0,  0,  2,  2 */
-	-31, 0, 13, 0, /*  0,  0,  2,  2,  2 */
-	29, 0, 0, 0, /*  0,  0,  2,  0,  0 */
-	29, 0, -12, 0, /* -2,  0,  1,  2,  2 */
-	26, 0, 0, 0, /*  0,  0,  0,  2,  0 */
-	-22, 0, 0, 0, /* -2,  0,  0,  2,  0 */
-	21, 0, -10, 0, /*  0,  0, -1,  2,  1 */
-	17, -1, 0, 0, /*  0,  2,  0,  0,  0 */
-	16, 0, -8, 0, /*  2,  0, -1,  0,  1 */
-	-16, 1, 7, 0, /* -2,  2,  0,  2,  2 */
-	-15, 0, 9, 0, /*  0,  1,  0,  0,  1 */
-	-13, 0, 7, 0, /* -2,  0,  1,  0,  1 */
-	-12, 0, 6, 0, /*  0, -1,  0,  0,  1 */
-	11, 0, 0, 0, /*  0,  0,  2, -2,  0 */
-	-10, 0, 5, 0, /*  2,  0, -1,  2,  1 */
-	-8, 0, 3, 0, /*  2,  0,  1,  2,  2 */
-	7, 0, -3, 0, /*  0,  1,  0,  2,  2 */
-	-7, 0, 0, 0, /* -2,  1,  1,  0,  0 */
-	-7, 0, 3, 0, /*  0, -1,  0,  2,  2 */
-	-7, 0, 3, 0, /*  2,  0,  0,  2,  1 */
-	6, 0, 0, 0, /*  2,  0,  1,  0,  0 */
-	6, 0, -3, 0, /* -2,  0,  2,  2,  2 */
-	6, 0, -3, 0, /* -2,  0,  1,  2,  1 */
-	-6, 0, 3, 0, /*  2,  0, -2,  0,  1 */
-	-6, 0, 3, 0, /*  2,  0,  0,  0,  1 */
-	5, 0, 0, 0, /*  0, -1,  1,  0,  0 */
-	-5, 0, 3, 0, /* -2, -1,  0,  2,  1 */
-	-5, 0, 3, 0, /* -2,  0,  0,  0,  1 */
-	-5, 0, 3, 0, /*  0,  0,  2,  2,  1 */
-	4, 0, 0, 0, /* -2,  0,  2,  0,  1 */
-	4, 0, 0, 0, /* -2,  1,  0,  2,  1 */
-	4, 0, 0, 0, /*  0,  0,  1, -2,  0 */
-	-4, 0, 0, 0, /* -1,  0,  1,  0,  0 */
-	-4, 0, 0, 0, /* -2,  1,  0,  0,  0 */
-	-4, 0, 0, 0, /*  1,  0,  0,  0,  0 */
-	3, 0, 0, 0, /*  0,  0,  1,  2,  0 */
-	-3, 0, 0, 0, /* -1, -1,  1,  0,  0 */
-	-3, 0, 0, 0, /*  0,  1,  1,  0,  0 */
-	-3, 0, 0, 0, /*  0, -1,  1,  2,  2 */
-	-3, 0, 0, 0, /*  2, -1, -1,  2,  2 */
-	-3, 0, 0, 0, /*  0,  0, -2,  2,  2 */
-	-3, 0, 0, 0, /*  0,  0,  3,  2,  2 */
-	-3, 0, 0, 0 /*  2, -1,  0,  2,  2 */
-];
 
 /**
  * Calculate the nutation in longitude, deltaPsi, and obliquity, 
@@ -12210,12 +12269,12 @@ ilib.Date._nutation = function(jd) {
 	for (i = 0; i < 63; i++) {
 		ang = 0;
 		for (j = 0; j < 5; j++) {
-			if (ilib.Date._nutArgMult[(i * 5) + j] != 0) {
-				ang += ilib.Date._nutArgMult[(i * 5) + j] * ta[j];
+			if (ilib.data.astro._nutArgMult[(i * 5) + j] != 0) {
+				ang += ilib.data.astro._nutArgMult[(i * 5) + j] * ta[j];
 			}
 		}
-		dp += (ilib.Date._nutArgCoeff[(i * 4) + 0] + ilib.Date._nutArgCoeff[(i * 4) + 1] * to10) * Math.sin(ang);
-		de += (ilib.Date._nutArgCoeff[(i * 4) + 2] + ilib.Date._nutArgCoeff[(i * 4) + 3] * to10) * Math.cos(ang);
+		dp += (ilib.data.astro._nutArgCoeff[(i * 4) + 0] + ilib.data.astro._nutArgCoeff[(i * 4) + 1] * to10) * Math.sin(ang);
+		de += (ilib.data.astro._nutArgCoeff[(i * 4) + 2] + ilib.data.astro._nutArgCoeff[(i * 4) + 3] * to10) * Math.cos(ang);
 	}
 
 	/*
@@ -12242,30 +12301,358 @@ ilib.Date._equationOfTime = function(jd) {
 	// 2451545.0 is the Julian day of J2000 epoch
 	// 365250.0 is the number of days in a Julian millenium
 	tau = (jd - 2451545.0) / 365250.0;
-	//document.debug.log.value += "equationOfTime.  tau = " + tau + "\n";
+	//console.log("equationOfTime.  tau = " + tau);
 	L0 = 280.4664567 + (360007.6982779 * tau) + (0.03032028 * tau * tau)
 			+ ((tau * tau * tau) / 49931)
 			+ (-((tau * tau * tau * tau) / 15300))
 			+ (-((tau * tau * tau * tau * tau) / 2000000));
-	//document.debug.log.value += "L0 = " + L0 + "\n";
+	//console.log("L0 = " + L0);
 	L0 = ilib.Date._fixangle(L0);
-	//document.debug.log.value += "L0 = " + L0 + "\n";
+	//console.log("L0 = " + L0);
 	pos = ilib.Date._sunpos(jd);
 	alpha = pos.apparentRightAscension;
-	//document.debug.log.value += "alpha = " + alpha + "\n";
+	//console.log("alpha = " + alpha);
 	var nut = ilib.Date._nutation(jd);
 	deltaPsi = nut.deltaPsi;
-	//document.debug.log.value += "deltaPsi = " + deltaPsi + "\n";
+	//console.log("deltaPsi = " + deltaPsi);
 	epsilon = ilib.Date._obliqeq(jd) + nut.deltaEpsilon;
-	//document.debug.log.value += "epsilon = " + epsilon + "\n";
-	E = L0 + (-0.0057183) + (-alpha) + (deltaPsi * ilib.Date._dcos(epsilon));
-	//document.debug.log.value += "E = " + E + "\n";
-	E = E - 20.0 * (Math.floor(E / 20.0));
-	//document.debug.log.value += "Efixed = " + E + "\n";
+	//console.log("epsilon = " + epsilon);
+	//console.log("L0 - 0.0057183 = " + (L0 - 0.0057183));
+	//console.log("L0 - 0.0057183 - alpha = " + (L0 - 0.0057183 - alpha));
+	//console.log("deltaPsi * cos(epsilon) = " + deltaPsi * ilib.Date._dcos(epsilon));
+	
+	E = L0 - 0.0057183 - alpha + deltaPsi * ilib.Date._dcos(epsilon);
+	// if alpha and L0 are in different quadrants, then renormalize
+	// so that the difference between them is in the right range
+	if (E > 180) {
+		E -= 360;
+	}
+	//console.log("E = " + E);
+	// E = E - 20.0 * (Math.floor(E / 20.0));
+	E = E * 4;
+	//console.log("Efixed = " + E);
 	E = E / (24 * 60);
-	//document.debug.log.value += "Eday = " + E + "\n";
+	//console.log("Eday = " + E);
 
 	return E;
+};
+
+/**
+ * @private
+ * @static
+ */
+ilib.Date._poly = function(x, coefficients) {
+	var result = coefficients[0];
+	var xpow = x;
+	for (var i = 1; i < coefficients.length; i++) {
+		result += coefficients[i] * xpow;
+		xpow *= x;
+	}
+	return result;
+};
+
+/**
+ * Calculate the UTC RD from the local RD given "zone" number of minutes
+ * worth of offset.
+ * 
+ * @static
+ * @param {number} local RD of the locale time, given in any calendar
+ * @param {number} zone number of minutes of offset from UTC for the time zone 
+ * @return {number} the UTC equivalent of the local RD
+ */
+ilib.Date._universalFromLocal = function(local, zone) {
+	return local - zone / 1440;
+};
+
+/**
+ * Calculate the local RD from the UTC RD given "zone" number of minutes
+ * worth of offset.
+ * 
+ * @static
+ * @param {number} local RD of the locale time, given in any calendar
+ * @param {number} zone number of minutes of offset from UTC for the time zone 
+ * @return {number} the UTC equivalent of the local RD
+ */
+ilib.Date._localFromUniversal = function(local, zone) {
+	return local + zone / 1440;
+};
+
+/**
+ * @private
+ * @static
+ * @param {number} c julian centuries of the date to calculate
+ * @return {number} the aberration
+ */
+ilib.Date._aberration = function(c) {
+	return 9.74e-05 * ilib.Date._dcos(177.63 + 35999.01847999999 * c) - 0.005575;
+};
+
+/**
+ * @private
+ *
+ilib.data.astro._nutCoeffA = [124.90, -1934.134, 0.002063];
+ilib.data.astro._nutCoeffB = [201.11, 72001.5377, 0.00057];
+*/
+
+/**
+ * @private
+ * @static
+ * @param {number} c julian centuries of the date to calculate
+ * @return {number} the nutation for the given julian century in radians
+ */
+ilib.Date._nutation2 = function(c) {
+	var a = ilib.Date._poly(c, ilib.data.astro._nutCoeffA);
+	var b = ilib.Date._poly(c, ilib.data.astro._nutCoeffB);
+	// return -0.0000834 * ilib.Date._dsin(a) - 0.0000064 * ilib.Date._dsin(b);
+	return -0.004778 * ilib.Date._dsin(a) - 0.0003667 * ilib.Date._dsin(b);
+};
+
+
+/**
+ * @static
+ * @private
+ */
+ilib.Date._ephemerisCorrection = function(jd) {
+	var year = ilib.Date.GregDate._calcYear(jd - 1721424.5);
+	
+	if (1988 <= year && year <= 2019) {
+		return (year - 1933) / 86400;
+	}
+	
+	if (1800 <= year && year <= 1987) {
+		var jul1 = new ilib.Date.GregRataDie({
+			year: year,
+			month: 7,
+			day: 1,
+			hour: 0,
+			minute: 0,
+			second: 0
+		});
+		// 693596 is the rd of Jan 1, 1900
+		var theta = (jul1.getRataDie() - 693596) / 36525;
+		return ilib.Date._poly(theta, (1900 <= year) ? ilib.data.astro._coeff19th : ilib.data.astro._coeff18th);
+	}
+	
+	if (1620 <= year && year <= 1799) {
+		year -= 1600;
+		return (196.58333 - 4.0675 * year + 0.0219167 * year * year) / 86400;
+	}
+	
+	// 660724 is the rd of Jan 1, 1810
+	var jan1 = new ilib.Date.GregRataDie({
+		year: year,
+		month: 1,
+		day: 1,
+		hour: 0,
+		minute: 0,
+		second: 0
+	});
+	// var x = 0.5 + (jan1.getRataDie() - 660724);
+	var x = 0.5 + (jan1.getRataDie() - 660724);
+	
+	return ((x * x / 41048480) - 15) / 86400;
+};
+
+/**
+ * @static
+ * @private
+ */
+ilib.Date._ephemerisFromUniversal = function(jd) {
+	return jd + ilib.Date._ephemerisCorrection(jd);
+};
+
+/**
+ * @static
+ * @private
+ */
+ilib.Date._universalFromEphemeris = function(jd) {
+	return jd - ilib.Date._ephemerisCorrection(jd);
+};
+
+/**
+ * @static
+ * @private
+ */
+ilib.Date._julianCenturies = function(jd) {
+	// 2451545.0 is the Julian day of J2000 epoch
+	// 730119.5 is the Gregorian RD of J2000 epoch
+	// 36525.0 is the number of days in a Julian century
+	return (ilib.Date._ephemerisFromUniversal(jd) - 2451545.0) / 36525.0;
+};
+
+/**
+ * Calculate the solar longitude
+ * 
+ * @static
+ * @param {number} jd julian day of the date to calculate the longitude for 
+ * @return {number} the solar longitude in degrees
+ */
+ilib.Date._solarLongitude = function(jd) {
+	var c = ilib.Date._julianCenturies(jd),
+		longitude = 0,
+		len = ilib.data.astro._solarLongCoeff.length,
+		row;
+	
+	for (var i = 0; i < len; i++) {
+		longitude += ilib.data.astro._solarLongCoeff[i] * 
+			ilib.Date._dsin(ilib.data.astro._solarLongAddends[i] + ilib.data.astro._solarLongMultipliers[i] * c);
+	}
+	longitude *= 5.729577951308232e-06;
+	longitude += 282.77718340000001 + 36000.769537439999 * c;
+	longitude += ilib.Date._aberration(c) + ilib.Date._nutation2(c);
+	return ilib.Date._fixangle(longitude);
+};
+
+/**
+ * @static
+ * @protected
+ * @param {number} jd
+ * @return {number}
+ */
+ilib.Date._lunarLongitude = function (jd) {
+	var c = ilib.Date._julianCenturies(jd),
+	    meanMoon = ilib.Date._fixangle(ilib.Date._poly(c, ilib.data.astro._meanMoonCoeff)),
+	    elongation = ilib.Date._fixangle(ilib.Date._poly(c, ilib.data.astro._elongationCoeff)),
+	    solarAnomaly = ilib.Date._fixangle(ilib.Date._poly(c, ilib.data.astro._solarAnomalyCoeff)),
+	    lunarAnomaly = ilib.Date._fixangle(ilib.Date._poly(c, ilib.data.astro._lunarAnomalyCoeff)),
+	    moonNode = ilib.Date._fixangle(ilib.Date._poly(c, ilib.data.astro._moonFromNodeCoeff)),
+	    e = ilib.Date._poly(c, ilib.data.astro._eCoeff);
+	
+	var sum = 0;
+	for (var i = 0; i < ilib.data.astro._lunarElongationLongCoeff.length; i++) {
+		var x = ilib.data.astro._solarAnomalyLongCoeff[i];
+
+		sum += ilib.data.astro._sineCoeff[i] * Math.pow(e, Math.abs(x)) * 
+			ilib.Date._dsin(ilib.data.astro._lunarElongationLongCoeff[i] * elongation + x * solarAnomaly + 
+				ilib.data.astro._lunarAnomalyLongCoeff[i] * lunarAnomaly + 
+				ilib.data.astro._moonFromNodeLongCoeff[i] * moonNode);
+	}
+	var longitude = sum / 1000000;
+	var venus = 3958.0 / 1000000 * ilib.Date._dsin(119.75 + c * 131.84899999999999);
+	var jupiter = 318.0 / 1000000 * ilib.Date._dsin(53.090000000000003 + c * 479264.28999999998);
+	var flatEarth = 1962.0 / 1000000 * ilib.Date._dsin(meanMoon - moonNode);
+	
+	return ilib.Date._fixangle(meanMoon + longitude + venus + jupiter + flatEarth + ilib.Date._nutation2(c));
+};
+
+/**
+ * @static
+ * @param {number} n
+ * @return {number} julian day of the n'th new moon
+ */
+ilib.Date._newMoonTime = function(n) {
+	var k = n - 24724;
+	var c = k / 1236.8499999999999;
+	var approx = ilib.Date._poly(c, ilib.data.astro._nmApproxCoeff);
+	var capE = ilib.Date._poly(c, ilib.data.astro._nmCapECoeff);
+	var solarAnomaly = ilib.Date._poly(c, ilib.data.astro._nmSolarAnomalyCoeff);
+	var lunarAnomaly = ilib.Date._poly(c, ilib.data.astro._nmLunarAnomalyCoeff);
+	var moonArgument = ilib.Date._poly(c, ilib.data.astro._nmMoonArgumentCoeff);
+	var capOmega = ilib.Date._poly(c, ilib.data.astro._nmCapOmegaCoeff);
+	var correction = -0.00017 * ilib.Date._dsin(capOmega);
+	for (var i = 0; i < ilib.data.astro._nmSineCoeff.length; i++) {
+		correction = correction + ilib.data.astro._nmSineCoeff[i] * Math.pow(capE, ilib.data.astro._nmEFactor[i]) * 
+		ilib.Date._dsin(ilib.data.astro._nmSolarCoeff[i] * solarAnomaly + 
+				ilib.data.astro._nmLunarCoeff[i] * lunarAnomaly + 
+				ilib.data.astro._nmMoonCoeff[i] * moonArgument);
+	}
+	var additional = 0;
+	for (var i = 0; i < ilib.data.astro._nmAddConst.length; i++) {
+		additional = additional + ilib.data.astro._nmAddFactor[i] * 
+		ilib.Date._dsin(ilib.data.astro._nmAddConst[i] + ilib.data.astro._nmAddCoeff[i] * k);
+	}
+	var extra = 0.000325 * ilib.Date._dsin(ilib.Date._poly(c, ilib.data.astro._nmExtra));
+	return ilib.Date._universalFromEphemeris(approx + correction + extra + additional + ilib.Date.RataDie.gregorianEpoch);
+};
+
+/**
+ * @static
+ * @param {number} jd
+ * @return {number}
+ */
+ilib.Date._lunarSolarAngle = function(jd) {
+	var lunar = ilib.Date._lunarLongitude(jd);
+	var solar = ilib.Date._solarLongitude(jd)
+	return ilib.Date._fixangle(lunar - solar);
+};
+
+/**
+ * @static
+ * @param {number} jd
+ * @return {number}
+ */
+ilib.Date._newMoonBefore = function (jd) {
+	var phase = ilib.Date._lunarSolarAngle(jd);
+	// 11.450086114414322 is the julian day of the 0th full moon
+	// 29.530588853000001 is the average length of a month
+	var guess = Math.round((jd - 11.450086114414322 - ilib.Date.RataDie.gregorianEpoch) / 29.530588853000001 - phase / 360) - 1;
+	var current, last;
+	current = last = ilib.Date._newMoonTime(guess);
+	while (current < jd) {
+		guess++;
+		last = current;
+		current = ilib.Date._newMoonTime(guess);
+	}
+	return last;
+};
+
+/**
+ * @static
+ * @param {number} jd
+ * @return {number}
+ */
+ilib.Date._newMoonAtOrAfter = function (jd) {
+	var phase = ilib.Date._lunarSolarAngle(jd);
+	// 11.450086114414322 is the julian day of the 0th full moon
+	// 29.530588853000001 is the average length of a month
+	var guess = Math.round((jd - 11.450086114414322 - ilib.Date.RataDie.gregorianEpoch) / 29.530588853000001 - phase / 360);
+	var current;
+	while ((current = ilib.Date._newMoonTime(guess)) < jd) {
+		guess++;
+	}
+	return current;
+};
+
+/**
+ * @static
+ * @param {number} jd JD to calculate from
+ * @param {number} longitude longitude to seek 
+ * @returns {number} the JD of the next time that the solar longitude 
+ * is a multiple of the given longitude
+ */
+ilib.Date._nextSolarLongitude = function(jd, longitude) {
+	var rate = 365.242189 / 360.0;
+	var tau = jd + rate * ilib.Date._fixangle(longitude - ilib.Date._solarLongitude(jd));
+	var start = Math.max(jd, tau - 5.0);
+	var end = tau + 5.0;
+	
+	return ilib.bisectionSearch(0, start, end, 1e-6, function (l) {
+		return 180 - ilib.Date._fixangle(ilib.Date._solarLongitude(l) - longitude);
+	});
+};
+
+/**
+ * Floor the julian day to midnight of the current julian day.
+ * 
+ * @static
+ * @protected
+ * @param {number} jd the julian to round
+ * @return {number} the jd floored to the midnight of the julian day
+ */
+ilib.Date._floorToJD = function(jd) {
+	return Math.floor(jd - 0.5) + 0.5;
+};
+
+/**
+ * Floor the julian day to midnight of the current julian day.
+ * 
+ * @static
+ * @protected
+ * @param {number} jd the julian to round
+ * @return {number} the jd floored to the midnight of the julian day
+ */
+ilib.Date._ceilToJD = function(jd) {
+	return Math.ceil(jd + 0.5) - 0.5;
 };
 
 /*
@@ -12290,6 +12677,7 @@ ilib.Date._equationOfTime = function(jd) {
 /* !depends 
 date.js
 util/utils.js
+util/math.js
 calendar/ratadie.js
 calendar/astro.js
 calendar/gregoriandate.js
@@ -12346,7 +12734,16 @@ calendar/gregoriandate.js
  */
 ilib.Date.PersAstroRataDie = function(params) {
 	this.rd = undefined;
-	ilib.Date.RataDie.call(this, params);
+	ilib.Date.initAstro(
+		params && typeof(params.sync) === 'boolean' ? params.sync : true,
+		params && params.loadParams,
+		ilib.bind(this, function (x) {
+			ilib.Date.RataDie.call(this, params);
+			if (params && typeof(params.callback) === 'function') {
+				params.callback(this);
+			}
+		})
+	);
 };
 
 ilib.Date.PersAstroRataDie.prototype = new ilib.Date.RataDie();
@@ -12365,7 +12762,7 @@ ilib.Date.PersAstroRataDie.prototype.epoch = 1948319.5;
  * @protected 
  */
 ilib.Date.PersAstroRataDie.prototype._tehranEquinox = function(year) {
-    var equJED, equJD, equAPP, equTehran, dtTehran;
+    var equJED, equJD, equAPP, equTehran, dtTehran, eot;
 
     //  March equinox in dynamical time
     equJED = ilib.Date._equinox(year, 0);
@@ -12374,7 +12771,9 @@ ilib.Date.PersAstroRataDie.prototype._tehranEquinox = function(year) {
     equJD = equJED - (ilib.Date._deltat(year) / (24 * 60 * 60));
 
     //  Apply the equation of time to yield the apparent time at Greenwich
-    equAPP = equJD + ilib.Date._equationOfTime(equJED);
+    eot = ilib.Date._equationOfTime(equJED) * 360;
+    eot = (eot - 20 * Math.floor(eot/20)) / 360;
+    equAPP = equJD + eot;
 
     /*  
      * Finally, we must correct for the constant difference between
@@ -12647,10 +13046,13 @@ date.js
 calendar/persratadie.js
 calendar/persianastro.js 
 util/utils.js
-util/search.js 
+util/search.js
+util/math.js
 localeinfo.js 
 julianday.js 
 */
+
+// !data astro
 
 /**
  * @class
@@ -12731,84 +13133,94 @@ ilib.Date.PersDate = function(params) {
 		if (params.timezone) {
 			this.timezone = params.timezone;
 		}
-		
-		if (params.year || params.month || params.day || params.hour ||
-				params.minute || params.second || params.millisecond ) {
-			/**
-			 * Year in the Persian calendar.
-			 * @type number
-			 */
-			this.year = parseInt(params.year, 10) || 0;
-
-			/**
-			 * The month number, ranging from 1 to 12
-			 * @type number
-			 */
-			this.month = parseInt(params.month, 10) || 1;
-
-			/**
-			 * The day of the month. This ranges from 1 to 31.
-			 * @type number
-			 */
-			this.day = parseInt(params.day, 10) || 1;
-			
-			/**
-			 * The hour of the day. This can be a number from 0 to 23, as times are
-			 * stored unambiguously in the 24-hour clock.
-			 * @type number
-			 */
-			this.hour = parseInt(params.hour, 10) || 0;
-
-			/**
-			 * The minute of the hours. Ranges from 0 to 59.
-			 * @type number
-			 */
-			this.minute = parseInt(params.minute, 10) || 0;
-
-			/**
-			 * The second of the minute. Ranges from 0 to 59.
-			 * @type number
-			 */
-			this.second = parseInt(params.second, 10) || 0;
-
-			/**
-			 * The millisecond of the second. Ranges from 0 to 999.
-			 * @type number
-			 */
-			this.millisecond = parseInt(params.millisecond, 10) || 0;
-			
-			/**
-			 * The day of the year. Ranges from 1 to 366.
-			 * @type number
-			 */
-			this.dayOfYear = parseInt(params.dayOfYear, 10);
-
-			if (typeof(params.dst) === 'boolean') {
-				this.dst = params.dst;
-			}
-			
-			this.rd = this.newRd(this);
-			
-			// add the time zone offset to the rd to convert to UTC
-			if (!this.tz) {
-				this.tz = new ilib.TimeZone({id: this.timezone});
-			}
-			// getOffsetMillis requires that this.year, this.rd, and this.dst 
-			// are set in order to figure out which time zone rules apply and 
-			// what the offset is at that point in the year
-			this.offset = this.tz._getOffsetMillisWallTime(this) / 86400000;
-			if (this.offset !== 0) {
-				this.rd = this.newRd({
-					rd: this.rd.getRataDie() - this.offset
-				});
-			}
-		}
 	}
+	
+	ilib.Date.initAstro(
+		params && typeof(params.sync) === 'boolean' ? params.sync : true,
+		params && params.loadParams,
+		ilib.bind(this, function (x) {
+			if (params && (params.year || params.month || params.day || params.hour ||
+					params.minute || params.second || params.millisecond)) {
+				/**
+				 * Year in the Persian calendar.
+				 * @type number
+				 */
+				this.year = parseInt(params.year, 10) || 0;
 
-	if (!this.rd) {
-		this.rd = this.newRd(params);
-		this._calcDateComponents();
-	}
+				/**
+				 * The month number, ranging from 1 to 12
+				 * @type number
+				 */
+				this.month = parseInt(params.month, 10) || 1;
+
+				/**
+				 * The day of the month. This ranges from 1 to 31.
+				 * @type number
+				 */
+				this.day = parseInt(params.day, 10) || 1;
+				
+				/**
+				 * The hour of the day. This can be a number from 0 to 23, as times are
+				 * stored unambiguously in the 24-hour clock.
+				 * @type number
+				 */
+				this.hour = parseInt(params.hour, 10) || 0;
+
+				/**
+				 * The minute of the hours. Ranges from 0 to 59.
+				 * @type number
+				 */
+				this.minute = parseInt(params.minute, 10) || 0;
+
+				/**
+				 * The second of the minute. Ranges from 0 to 59.
+				 * @type number
+				 */
+				this.second = parseInt(params.second, 10) || 0;
+
+				/**
+				 * The millisecond of the second. Ranges from 0 to 999.
+				 * @type number
+				 */
+				this.millisecond = parseInt(params.millisecond, 10) || 0;
+				
+				/**
+				 * The day of the year. Ranges from 1 to 366.
+				 * @type number
+				 */
+				this.dayOfYear = parseInt(params.dayOfYear, 10);
+
+				if (typeof(params.dst) === 'boolean') {
+					this.dst = params.dst;
+				}
+				
+				this.rd = this.newRd(this);
+				
+				// add the time zone offset to the rd to convert to UTC
+				if (!this.tz) {
+					this.tz = new ilib.TimeZone({id: this.timezone});
+				}
+				// getOffsetMillis requires that this.year, this.rd, and this.dst 
+				// are set in order to figure out which time zone rules apply and 
+				// what the offset is at that point in the year
+				this.offset = this.tz._getOffsetMillisWallTime(this) / 86400000;
+				if (this.offset !== 0) {
+					this.rd = this.newRd({
+						rd: this.rd.getRataDie() - this.offset
+					});
+				}
+			}
+			
+			if (!this.rd) {
+				this.rd = this.newRd(params);
+				this._calcDateComponents();
+			}
+			
+			if (params && typeof(params.onLoad) === 'function') {
+				params.onLoad(this);
+			}
+		})
+	);
 };
 
 ilib.Date.PersDate.prototype = new ilib.Date({noinstance: true});
@@ -12969,6 +13381,996 @@ ilib.Date.PersDate.prototype.getCalendar = function() {
 
 // register with the factory method
 ilib.Date._constructors["persian"] = ilib.Date.PersDate;
+/*
+ * han.js - Represent a Han Chinese Lunar calendar object.
+ * 
+ * Copyright © 2014, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* !depends calendar.js locale.js date.js julianday.js util/utils.js util/math.js calendar/astro.js */
+
+/**
+ * @class
+ * Construct a new Han algorithmic calendar object. This class encodes information about
+ * a Han algorithmic calendar.<p>
+ * 
+ * Depends directive: !depends han.js
+ * 
+ * @constructor
+ * @param {Object=} params optional parameters to load the calendrical data
+ * @implements ilib.Cal
+ */
+ilib.Cal.Han = function(params) {
+	this.type = "han";
+	var sync = params && typeof(params.sync) === 'boolean' ? params.sync : true;
+	
+	ilib.Date.initAstro(sync, params && params.loadParams, /** @type {function ((Object|null)=): ?} */ ilib.bind(this, function (x) {
+		if (params && typeof(params.callback) === 'function') {
+			params.callback(this);
+		}
+	}));
+};
+
+/**
+ * @protected
+ * @static
+ * @param {number} year
+ * @param {number=} cycle
+ * @return {number}
+ */
+ilib.Cal.Han._getElapsedYear = function(year, cycle) {
+	var elapsedYear = year || 0;
+	if (typeof(year) !== 'undefined' && year < 61 && typeof(cycle) !== 'undefined') {
+		elapsedYear = 60 * cycle + year;
+	}
+	return elapsedYear;
+};
+
+/**
+ * @protected
+ * @static
+ * @param {number} jd julian day to calculate from
+ * @param {number} longitude longitude to seek 
+ * @returns {number} the julian day of the next time that the solar longitude 
+ * is a multiple of the given longitude
+ */
+ilib.Cal.Han._hanNextSolarLongitude = function(jd, longitude) {
+	var tz = ilib.Cal.Han._chineseTZ(jd);
+	var uni = ilib.Date._universalFromLocal(jd, tz);
+	var sol = ilib.Date._nextSolarLongitude(uni, longitude);
+	return ilib.Date._localFromUniversal(sol, tz);
+};
+
+/**
+ * @protected
+ * @static
+ * @param {number} jd julian day to calculate from 
+ * @returns {number} the major solar term for the julian day
+ */
+ilib.Cal.Han._majorSTOnOrAfter = function(jd) {
+	var tz = ilib.Cal.Han._chineseTZ(jd);
+	var uni = ilib.Date._universalFromLocal(jd, tz);
+	var next = ilib.Date._fixangle(30 * Math.ceil(ilib.Date._solarLongitude(uni)/30));
+	return ilib.Cal.Han._hanNextSolarLongitude(jd, next);
+};
+
+/**
+ * @protected
+ * @static
+ * @param {number} year the year for which the leap year information is being sought
+ * @param {number=} cycle if the given year < 60, this can specify the cycle. If the
+ * cycle is not given, then the year should be given as elapsed years since the beginning
+ * of the epoch
+ */
+ilib.Cal.Han._solsticeBefore = function (year, cycle) {
+	var elapsedYear = ilib.Cal.Han._getElapsedYear(year, cycle);
+	var gregyear = elapsedYear - 2697;
+	var rd = new ilib.Date.GregRataDie({
+		year: gregyear-1, 
+		month: 12, 
+		day: 15, 
+		hour: 0, 
+		minute: 0, 
+		second: 0, 
+		millisecond: 0
+	});
+	return ilib.Cal.Han._majorSTOnOrAfter(rd.getRataDie() + ilib.Date.RataDie.gregorianEpoch);
+};
+
+/**
+ * @protected
+ * @static
+ * @param {number} jd julian day to calculate from
+ * @returns {number} the current major solar term
+ */
+ilib.Cal.Han._chineseTZ = function(jd) {
+	var year = ilib.Date.GregDate._calcYear(jd - ilib.Date.RataDie.gregorianEpoch);
+	return year < 1929 ? 465.6666666666666666 : 480;
+};
+
+/**
+ * @protected
+ * @static
+ * @param {number} jd julian day to calculate from 
+ * @returns {number} the julian day of next new moon on or after the given julian day date
+ */
+ilib.Cal.Han._newMoonOnOrAfter = function(jd) {
+	var tz = ilib.Cal.Han._chineseTZ(jd);
+	var uni = ilib.Date._universalFromLocal(jd, tz);
+	var moon = ilib.Date._newMoonAtOrAfter(uni);
+	// floor to the start of the julian day
+	return ilib.Date._floorToJD(ilib.Date._localFromUniversal(moon, tz)); 
+};
+
+/**
+ * @protected
+ * @static
+ * @param {number} jd julian day to calculate from 
+ * @returns {number} the julian day of previous new moon before the given julian day date
+ */
+ilib.Cal.Han._newMoonBefore = function(jd) {
+	var tz = ilib.Cal.Han._chineseTZ(jd);
+	var uni = ilib.Date._universalFromLocal(jd, tz);
+	var moon = ilib.Date._newMoonBefore(uni);
+	// floor to the start of the julian day
+	return ilib.Date._floorToJD(ilib.Date._localFromUniversal(moon, tz));
+};
+
+/**
+ * @static
+ * @protected
+ * @param {number} year the year for which the leap year information is being sought
+ * @param {number=} cycle if the given year < 60, this can specify the cycle. If the
+ * cycle is not given, then the year should be given as elapsed years since the beginning
+ * of the epoch
+ */
+ilib.Cal.Han._leapYearCalc = function(year, cycle) {
+	var ret = {
+		elapsedYear: ilib.Cal.Han._getElapsedYear(year, cycle)
+	};
+	ret.solstice1 = ilib.Cal.Han._solsticeBefore(ret.elapsedYear);
+	ret.solstice2 = ilib.Cal.Han._solsticeBefore(ret.elapsedYear+1);
+	// ceil to the end of the julian day
+	ret.m1 = ilib.Cal.Han._newMoonOnOrAfter(ilib.Date._ceilToJD(ret.solstice1));
+	ret.m2 = ilib.Cal.Han._newMoonBefore(ilib.Date._ceilToJD(ret.solstice2));
+	
+	return ret;
+};
+
+/**
+ * @protected
+ * @static
+ * @param {number} jd julian day to calculate from
+ * @returns {number} the current major solar term
+ */
+ilib.Cal.Han._currentMajorST = function(jd) {
+	var s = ilib.Date._solarLongitude(ilib.Date._universalFromLocal(jd, ilib.Cal.Han._chineseTZ(jd)));
+	return ilib.amod(2 + Math.floor(s/30), 12);
+};
+
+/**
+ * @protected
+ * @static
+ * @param {number} jd julian day to calculate from
+ * @returns {boolean} true if there is no major solar term in the same year
+ */
+ilib.Cal.Han._noMajorST = function(jd) {
+	return ilib.Cal.Han._currentMajorST(jd) === ilib.Cal.Han._currentMajorST(ilib.Cal.Han._newMoonOnOrAfter(jd+1));
+};
+
+/**
+ * Return the number of months in the given year. The number of months in a year varies
+ * for some luni-solar calendars because in some years, an extra month is needed to extend the 
+ * days in a year to an entire solar year. The month is represented as a 1-based number
+ * where 1=first month, 2=second month, etc.
+ * 
+ * @param {number} year a year for which the number of months is sought
+ * @param {number=} cycle if the given year < 60, this can specify the cycle. If the
+ * cycle is not given, then the year should be given as elapsed years since the beginning
+ * of the epoch
+ * @return {number} The number of months in the given year
+ */
+ilib.Cal.Han.prototype.getNumMonths = function(year, cycle) {
+	return this.isLeapYear(year, cycle) ? 13 : 12;
+};
+
+/**
+ * Return the number of days in a particular month in a particular year. This function
+ * can return a different number for a month depending on the year because of things
+ * like leap years.
+ * 
+ * @param {number} month the elapsed month for which the length is sought
+ * @param {number} year the elapsed year within which that month can be found
+ * @return {number} the number of days within the given month in the given year
+ */
+ilib.Cal.Han.prototype.getMonLength = function(month, year) {
+	// distance between two new moons in Nanjing China
+	var calc = ilib.Cal.Han._leapYearCalc(year);
+	var priorNewMoon = ilib.Cal.Han._newMoonOnOrAfter(calc.m1 + month * 29);
+	var postNewMoon = ilib.Cal.Han._newMoonOnOrAfter(priorNewMoon + 1);
+	return postNewMoon - priorNewMoon;
+};
+
+/**
+ * Return the equivalent year in the 2820 year cycle that begins on 
+ * Far 1, 474. This particular cycle obeys the cycle-of-years formula 
+ * whereas the others do not specifically. This cycle can be used as
+ * a proxy for other years outside of the cycle by shifting them into 
+ * the cycle.   
+ * @param {number} year year to find the equivalent cycle year for
+ * @returns {number} the equivalent cycle year
+ */
+ilib.Cal.Han.prototype.equivalentCycleYear = function(year) {
+	var y = year - (year >= 0 ? 474 : 473);
+	return ilib.mod(y, 2820) + 474;
+};
+
+/**
+ * Return true if the given year is a leap year in the Han calendar.
+ * If the year is given as a year/cycle combination, then the year should be in the 
+ * range [1,60] and the given cycle is the cycle in which the year is located. If 
+ * the year is greater than 60, then
+ * it represents the total number of years elapsed in the proleptic calendar since
+ * the beginning of the Chinese epoch in on 15 Feb, -2636 (Gregorian). In this 
+ * case, the cycle parameter is ignored.
+ * 
+ * @param {number} year the year for which the leap year information is being sought
+ * @param {number=} cycle if the given year < 60, this can specify the cycle. If the
+ * cycle is not given, then the year should be given as elapsed years since the beginning
+ * of the epoch
+ * @return {boolean} true if the given year is a leap year
+ */
+ilib.Cal.Han.prototype.isLeapYear = function(year, cycle) {
+	var calc = ilib.Cal.Han._leapYearCalc(year, cycle);
+	return Math.round((calc.m2 - calc.m1) / 29.530588853000001) === 12;
+};
+
+/**
+ * Return the month of the year that is the leap month. If the given year is
+ * not a leap year, then this method will return -1.
+ * 
+ * @param {number} year the year for which the leap year information is being sought
+ * @param {number=} cycle if the given year < 60, this can specify the cycle. If the
+ * cycle is not given, then the year should be given as elapsed years since the beginning
+ * of the epoch
+ * @return {number} the number of the month that is doubled in this leap year, or -1
+ * if this is not a leap year
+ */
+ilib.Cal.Han.prototype.getLeapMonth = function(year, cycle) {
+	var calc = ilib.Cal.Han._leapYearCalc(year, cycle);
+	
+	if (Math.round((calc.m2 - calc.m1) / 29.530588853000001) != 12) {
+		return -1; // no leap month
+	}
+	
+	// search between rd1 and rd2 for the first month with no major solar term. That is our leap month.
+	var month = 0;
+	var m = ilib.Cal.Han._newMoonOnOrAfter(calc.m1+1);
+	while (!ilib.Cal.Han._noMajorST(m)) {
+		month++;
+		m = ilib.Cal.Han._newMoonOnOrAfter(m+1);
+	}
+	
+	// return the number of the month that is doubled
+	return month; 
+};
+
+/**
+ * Return the date of Chinese New Years in the given calendar year.
+ * 
+ * @param {number} year the Chinese year for which the new year information is being sought
+ * @param {number=} cycle if the given year < 60, this can specify the cycle. If the
+ * cycle is not given, then the year should be given as elapsed years since the beginning
+ * of the epoch
+ * @return {number} the julian day of the beginning of the given year 
+ */
+ilib.Cal.Han.prototype.newYears = function(year, cycle) {
+	var calc = ilib.Cal.Han._leapYearCalc(year, cycle);
+	var m2 = ilib.Cal.Han._newMoonOnOrAfter(calc.m1+1);
+	if (Math.round((calc.m2 - calc.m1) / 29.530588853000001) === 12 &&
+			(ilib.Cal.Han._noMajorST(calc.m1) || ilib.Cal.Han._noMajorST(m2)) ) {
+		return ilib.Cal.Han._newMoonOnOrAfter(m2+1);
+	}
+	return m2;
+};
+
+/**
+ * Return the type of this calendar.
+ * 
+ * @return {string} the name of the type of this calendar 
+ */
+ilib.Cal.Han.prototype.getType = function() {
+	return this.type;
+};
+
+/**
+ * Return a date instance for this calendar type using the given
+ * options.
+ * @param {Object} options options controlling the construction of 
+ * the date instance
+ * @return {ilib.Date} a date appropriate for this calendar type
+ */
+ilib.Cal.Han.prototype.newDateInstance = function (options) {
+	return new ilib.Date.HanDate(options);
+};
+
+/* register this calendar for the factory method */
+ilib.Cal._constructors["han"] = ilib.Cal.Han;
+
+/*
+ * handate.js - Represent a date in the Han algorithmic calendar
+ * 
+ * Copyright © 2014, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* !depends 
+date.js
+calendar/gregratadie.js 
+calendar/gregoriandate.js 
+calendar/han.js
+calendar/astro.js 
+util/utils.js
+util/search.js
+util/math.js
+localeinfo.js 
+julianday.js 
+*/
+
+/**
+ * Construct a new Han RD date number object. The constructor parameters can 
+ * contain any of the following properties:
+ * 
+ * <ul>
+ * <li><i>unixtime<i> - sets the time of this instance according to the given 
+ * unix time. Unix time is the number of milliseconds since midnight on Jan 1, 1970, Gregorian
+ * 
+ * <li><i>julianday</i> - sets the time of this instance according to the given
+ * Julian Day instance or the Julian Day given as a float
+ * 
+ * <li><i>cycle</i> - any integer giving the number of 60-year cycle in which the date is located.
+ * If the cycle is not given but the year is, it is assumed that the year parameter is a fictitious 
+ * linear count of years since the beginning of the epoch, much like other calendars. This linear
+ * count is never used. If both the cycle and year are given, the year is wrapped to the range 0 
+ * to 60 and treated as if it were a year in the regular 60-year cycle.
+ * 
+ * <li><i>year</i> - any integer, including 0
+ * 
+ * <li><i>month</i> - 1 to 12, where 1 means Farvardin, 2 means Ordibehesht, etc.
+ * 
+ * <li><i>day</i> - 1 to 31
+ * 
+ * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation 
+ * is always done with an unambiguous 24 hour representation
+ * 
+ * <li><i>minute</i> - 0 to 59
+ * 
+ * <li><i>second</i> - 0 to 59
+ * 
+ * <li><i>millisecond</i> - 0 to 999
+ * 
+ * <li><i>date</i> - use the given intrinsic Javascript date to initialize this one.
+ * </ul>
+ *
+ * If the constructor is called with another Han date instance instead of
+ * a parameter block, the other instance acts as a parameter block and its
+ * settings are copied into the current instance.<p>
+ * 
+ * If the constructor is called with no arguments at all or if none of the 
+ * properties listed above are present, then the RD is calculate based on 
+ * the current date at the time of instantiation. <p>
+ * 
+ * If any of the properties from <i>year</i> through <i>millisecond</i> are not
+ * specified in the params, it is assumed that they have the smallest possible
+ * value in the range for the property (zero or one).<p>
+ * 
+ * Depends directive: !depends handate.js
+ * 
+ * @private
+ * @class
+ * @constructor
+ * @extends ilib.Date.RataDie
+ * @param {Object=} params parameters that govern the settings and behaviour of this Han RD date
+ */
+ilib.Date.HanRataDie = function(params) {
+	this.rd = undefined;
+	if (params && params.cal) {
+		this.cal = params.cal;
+		ilib.Date.RataDie.call(this, params);
+		if (params && typeof(params.callback) === 'function') {
+			params.callback(this);
+		}
+	} else {
+		new ilib.Cal.Han({
+			sync: params && params.sync,
+			loadParams: params && params.loadParams,
+			callback: ilib.bind(this, function(c) {
+				this.cal = c;
+				ilib.Date.RataDie.call(this, params);
+				if (params && typeof(params.callback) === 'function') {
+					params.callback(this);
+				}
+			})
+		});
+	}
+};
+
+ilib.Date.HanRataDie.prototype = new ilib.Date.RataDie();
+ilib.Date.HanRataDie.prototype.parent = ilib.Date.RataDie;
+ilib.Date.HanRataDie.prototype.constructor = ilib.Date.HanRataDie;
+
+/**
+ * The difference between a zero Julian day and the first Han date
+ * which is February 15, -2636 (Gregorian).
+ * @private
+ * @const
+ * @type number
+ */
+ilib.Date.HanRataDie.epoch = 758325.5;
+
+/**
+ * Calculate the Rata Die (fixed day) number of the given date from the
+ * date components.
+ *
+ * @protected
+ * @param {Object} date the date components to calculate the RD from
+ */
+ilib.Date.HanRataDie.prototype._setDateComponents = function(date) {
+	var calc = ilib.Cal.Han._leapYearCalc(date.year, date.cycle);
+	var m2 = ilib.Cal.Han._newMoonOnOrAfter(calc.m1+1);
+	var newYears;
+	this.leapYear = (Math.round((calc.m2 - calc.m1) / 29.530588853000001) === 12);
+	if (this.leapYear && (ilib.Cal.Han._noMajorST(calc.m1) || ilib.Cal.Han._noMajorST(m2)) ) {
+		newYears = ilib.Cal.Han._newMoonOnOrAfter(m2+1);
+	} else {
+		newYears = m2;
+	}
+
+	var priorNewMoon = ilib.Cal.Han._newMoonOnOrAfter(calc.m1 + date.month * 29); // this is a julian day
+	this.priorLeapMonth = ilib.Date.HanDate._priorLeapMonth(newYears, ilib.Cal.Han._newMoonBefore(priorNewMoon));
+	this.leapMonth = (this.leapYear && ilib.Cal.Han._noMajorST(priorNewMoon) && !this.priorLeapMonth);
+
+	var rdtime = (date.hour * 3600000 +
+		date.minute * 60000 +
+		date.second * 1000 +
+		date.millisecond) /
+		86400000;
+	
+	/*
+	console.log("getRataDie: converting " +  JSON.stringify(date) + " to an RD");
+	console.log("getRataDie: year is " +  date.year + " plus cycle " + date.cycle);
+	console.log("getRataDie: isLeapYear is " +  this.leapYear);
+	console.log("getRataDie: priorNewMoon is " +  priorNewMoon);
+	console.log("getRataDie: day in month is " +  date.day);
+	console.log("getRataDie: rdtime is " +  rdtime);
+	console.log("getRataDie: rd is " +  (priorNewMoon + date.day - 1 + rdtime));
+	*/
+	
+	this.rd = priorNewMoon + date.day - 1 + rdtime - ilib.Date.RataDie.gregorianEpoch;
+};
+
+/**
+ * Return the rd number of the particular day of the week on or before the 
+ * given rd. eg. The Sunday on or before the given rd.
+ * @private
+ * @param {number} rd the rata die date of the reference date
+ * @param {number} dayOfWeek the day of the week that is being sought relative 
+ * to the current date
+ * @return {number} the rd of the day of the week
+ */
+ilib.Date.HanRataDie.prototype._onOrBefore = function(rd, dayOfWeek) {
+	return rd - ilib.mod(Math.floor(rd) - dayOfWeek, 7);
+};
+
+/**
+ * @class
+ * 
+ * Construct a new Han date object. The constructor parameters can 
+ * contain any of the following properties:
+ * 
+ * <ul>
+ * <li><i>unixtime<i> - sets the time of this instance according to the given 
+ * unix time. Unix time is the number of milliseconds since midnight on Jan 1, 1970, Gregorian
+ * 
+ * <li><i>julianday</i> - sets the time of this instance according to the given
+ * Julian Day instance or the Julian Day given as a float
+ * 
+ * <li><i>cycle</i> - any integer giving the number of 60-year cycle in which the date is located.
+ * If the cycle is not given but the year is, it is assumed that the year parameter is a fictitious 
+ * linear count of years since the beginning of the epoch, much like other calendars. This linear
+ * count is never used. If both the cycle and year are given, the year is wrapped to the range 0 
+ * to 60 and treated as if it were a year in the regular 60-year cycle.
+ * 
+ * <li><i>year</i> - any integer, including 0
+ * 
+ * <li><i>month</i> - 1 to 12, where 1 means Farvardin, 2 means Ordibehesht, etc.
+ * 
+ * <li><i>day</i> - 1 to 31
+ * 
+ * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation 
+ * is always done with an unambiguous 24 hour representation
+ * 
+ * <li><i>minute</i> - 0 to 59
+ * 
+ * <li><i>second</i> - 0 to 59
+ * 
+ * <li><i>millisecond</i> - 0 to 999
+ * 
+ * <li><i>timezone</i> - the ilib.TimeZone instance or time zone name as a string 
+ * of this han date. The date/time is kept in the local time. The time zone
+ * is used later if this date is formatted according to a different time zone and
+ * the difference has to be calculated, or when the date format has a time zone
+ * component in it.
+ * 
+ * <li><i>locale</i> - locale for this han date. If the time zone is not 
+ * given, it can be inferred from this locale. For locales that span multiple
+ * time zones, the one with the largest population is chosen as the one that 
+ * represents the locale.
+ * 
+ * <li><i>date</i> - use the given intrinsic Javascript date to initialize this one.
+ * </ul>
+ *
+ * If the constructor is called with another Han date instance instead of
+ * a parameter block, the other instance acts as a parameter block and its
+ * settings are copied into the current instance.<p>
+ * 
+ * If the constructor is called with no arguments at all or if none of the 
+ * properties listed above 
+ * from <i>unixtime</i> through <i>millisecond</i> are present, then the date 
+ * components are 
+ * filled in with the current date at the time of instantiation. Note that if
+ * you do not give the time zone when defaulting to the current time and the 
+ * time zone for all of ilib was not set with <i>ilib.setTimeZone()</i>, then the
+ * time zone will default to UTC ("Universal Time, Coordinated" or "Greenwich 
+ * Mean Time").<p>
+ * 
+ * If any of the properties from <i>year</i> through <i>millisecond</i> are not
+ * specified in the params, it is assumed that they have the smallest possible
+ * value in the range for the property (zero or one).<p>
+ * 
+ * Depends directive: !depends handate.js
+ * 
+ * @constructor
+ * @extends ilib.Date
+ * @param {Object=} params parameters that govern the settings and behaviour of this Han date
+ */
+ilib.Date.HanDate = function(params) {
+	this.timezone = "local";
+	if (params) {
+		if (params.locale) {
+			this.locale = (typeof(params.locale) === 'string') ? new ilib.Locale(params.locale) : params.locale;
+			var li = new ilib.LocaleInfo(this.locale);
+			this.timezone = li.getTimeZone(); 
+		}
+		if (params.timezone) {
+			this.timezone = params.timezone;
+		}
+	}
+	
+	new ilib.Cal.Han({
+		sync: params && typeof(params) === 'boolean' ? params.sync : true,
+		loadParams: params && params.loadParams,
+		callback: ilib.bind(this, function (cal) {
+			this.cal = cal;
+	
+			if (params && (params.year || params.month || params.day || params.hour ||
+				params.minute || params.second || params.millisecond || params.cycle || params.cycleYear)) {
+				if (typeof(params.cycle) !== 'undefined') {
+					/**
+					 * Cycle number in the Han calendar.
+					 * @type number
+					 */
+					this.cycle = parseInt(params.cycle, 10) || 0;
+					
+					var year = (typeof(params.year) !== 'undefined' ? parseInt(params.year, 10) : parseInt(params.cycleYear, 10)) || 0;
+					
+					/**
+					 * Year in the Han calendar.
+					 * @type number
+					 */
+					this.year = ilib.Cal.Han._getElapsedYear(year, this.cycle);
+				} else {
+					if (typeof(params.year) !== 'undefined') {
+						this.year = parseInt(params.year, 10) || 0;
+						this.cycle = Math.floor((this.year - 1) / 60);
+					} else {
+						this.year = this.cycle = 0;
+					}
+				}	
+				
+				/**
+				 * The month number, ranging from 1 to 13
+				 * @type number
+				 */
+				this.month = parseInt(params.month, 10) || 1;
+	
+				/**
+				 * The day of the month. This ranges from 1 to 30.
+				 * @type number
+				 */
+				this.day = parseInt(params.day, 10) || 1;
+				
+				/**
+				 * The hour of the day. This can be a number from 0 to 23, as times are
+				 * stored unambiguously in the 24-hour clock.
+				 * @type number
+				 */
+				this.hour = parseInt(params.hour, 10) || 0;
+	
+				/**
+				 * The minute of the hours. Ranges from 0 to 59.
+				 * @type number
+				 */
+				this.minute = parseInt(params.minute, 10) || 0;
+	
+				/**
+				 * The second of the minute. Ranges from 0 to 59.
+				 * @type number
+				 */
+				this.second = parseInt(params.second, 10) || 0;
+	
+				/**
+				 * The millisecond of the second. Ranges from 0 to 999.
+				 * @type number
+				 */
+				this.millisecond = parseInt(params.millisecond, 10) || 0;
+			
+				// derived properties
+				
+				/**
+				 * Year in the cycle of the Han calendar
+				 * @type number
+				 */
+				this.cycleYear = ilib.amod(this.year, 60); 
+
+				/**
+				 * The day of the year. Ranges from 1 to 384.
+				 * @type number
+				 */
+				this.dayOfYear = parseInt(params.dayOfYear, 10);
+	
+				if (typeof(params.dst) === 'boolean') {
+					this.dst = params.dst;
+				}
+				
+				this.newRd({
+					cal: this.cal,
+					cycle: this.cycle,
+					year: this.year,
+					month: this.month,
+					day: this.day,
+					hour: this.hour,
+					minute: this.minute,
+					second: this.second,
+					millisecond: this.millisecond,
+					sync: params && typeof(params.sync) === 'boolean' ? params.sync : true,
+					loadParams: params && params.loadParams,
+					callback: ilib.bind(this, function (rd) {
+						if (rd) {
+							this.rd = rd;
+							
+							// add the time zone offset to the rd to convert to UTC
+							if (!this.tz) {
+								this.tz = new ilib.TimeZone({id: this.timezone});
+							}
+							// getOffsetMillis requires that this.year, this.rd, and this.dst 
+							// are set in order to figure out which time zone rules apply and 
+							// what the offset is at that point in the year
+							this.offset = this.tz._getOffsetMillisWallTime(this) / 86400000;
+							if (this.offset !== 0) {
+								this.rd = this.newRd({
+									cal: this.cal,
+									rd: this.rd.getRataDie() - this.offset
+								});
+								this._calcLeap();
+							} else {
+								// re-use the derived properties from the RD calculations
+								this.leapMonth = this.rd.leapMonth;
+								this.priorLeapMonth = this.rd.priorLeapMonth;
+								this.leapYear = this.rd.leapYear;
+							}
+						}
+						
+						if (!this.rd) {
+							this.rd = this.newRd(ilib.merge(params || {}, {
+								cal: this.cal
+							}));
+							this._calcDateComponents();
+						}
+						
+						if (params && typeof(params.onLoad) === 'function') {
+							params.onLoad(this);
+						}
+					})
+				});
+			} else {
+				if (!this.rd) {
+					this.rd = this.newRd(ilib.merge(params || {}, {
+						cal: this.cal
+					}));
+					this._calcDateComponents();
+				}
+				
+				if (params && typeof(params.onLoad) === 'function') {
+					params.onLoad(this);
+				}
+			}
+		})
+	});
+
+};
+
+ilib.Date.HanDate.prototype = new ilib.Date({noinstance: true});
+ilib.Date.HanDate.prototype.parent = ilib.Date;
+ilib.Date.HanDate.prototype.constructor = ilib.Date.HanDate;
+
+/**
+ * Return a new RD for this date type using the given params.
+ * @protected
+ * @param {Object=} params the parameters used to create this rata die instance
+ * @returns {ilib.Date.RataDie} the new RD instance for the given params
+ */
+ilib.Date.HanDate.prototype.newRd = function (params) {
+	return new ilib.Date.HanRataDie(params);
+};
+
+/**
+ * @protected
+ * @static
+ * @param {number} jd1 first julian day
+ * @param {number} jd2 second julian day
+ * @returns {boolean} true if there is a leap month earlier in the same year 
+ * as the given months 
+ */
+ilib.Date.HanDate._priorLeapMonth = function(jd1, jd2) {
+	return jd2 >= jd1 &&
+		(ilib.Date.HanDate._priorLeapMonth(jd1, ilib.Cal.Han._newMoonBefore(jd2)) ||
+				ilib.Cal.Han._noMajorST(jd2));
+};
+
+/**
+ * Return the year for the given RD
+ * @protected
+ * @param {number} rd RD to calculate from 
+ * @returns {number} the year for the RD
+ */
+ilib.Date.HanDate.prototype._calcYear = function(rd) {
+	var gregdate = new ilib.Date.GregDate({
+		rd: rd,
+		timezone: this.timezone
+	});
+	var hanyear = gregdate.year + 2697;
+	var newYears = this.cal.newYears(hanyear);
+	return hanyear - ((rd + ilib.Date.RataDie.gregorianEpoch < newYears) ? 1 : 0);
+};
+
+/** 
+ * @private 
+ * Calculate the leap year and months from the RD.
+ */
+ilib.Date.HanDate.prototype._calcLeap = function() {
+	var jd = this.rd.getRataDie() + ilib.Date.RataDie.gregorianEpoch;
+	
+	var calc = ilib.Cal.Han._leapYearCalc(this.year);
+	var m2 = ilib.Cal.Han._newMoonOnOrAfter(calc.m1+1);
+	this.leapYear = Math.round((calc.m2 - calc.m1) / 29.530588853000001) === 12;
+	
+	var newYears = (this.leapYear &&
+		(ilib.Cal.Han._noMajorST(calc.m1) || ilib.Cal.Han._noMajorST(m2))) ?
+				ilib.Cal.Han._newMoonOnOrAfter(m2+1) : m2;
+	
+	var m = ilib.Cal.Han._newMoonBefore(jd + 1);
+	this.priorLeapMonth = ilib.Date.HanDate._priorLeapMonth(newYears, ilib.Cal.Han._newMoonBefore(m));
+	this.leapMonth = (this.leapYear && ilib.Cal.Han._noMajorST(m) && !this.priorLeapMonth);
+};
+
+/**
+ * @private
+ * Calculate date components for the given RD date.
+ */
+ilib.Date.HanDate.prototype._calcDateComponents = function () {
+	var remainder,
+		jd = this.rd.getRataDie() + ilib.Date.RataDie.gregorianEpoch;
+
+	// console.log("HanDate._calcDateComponents: calculating for jd " + jd);
+
+	if (typeof(this.offset) === "undefined") {
+		// now offset the jd by the time zone, then recalculate in case we were 
+		// near the year boundary
+		if (!this.tz) {
+			this.tz = new ilib.TimeZone({id: this.timezone});
+		}
+		this.offset = this.tz.getOffsetMillis(this) / 86400000;
+	}
+	
+	if (this.offset !== 0) {
+		jd += this.offset;
+	}
+
+	// use the Gregorian calendar objects as a convenient way to short-cut some
+	// of the date calculations
+	
+	var gregyear = ilib.Date.GregDate._calcYear(this.rd.getRataDie());
+	this.year = gregyear + 2697;
+	var calc = ilib.Cal.Han._leapYearCalc(this.year);
+	var m2 = ilib.Cal.Han._newMoonOnOrAfter(calc.m1+1);
+	this.leapYear = Math.round((calc.m2 - calc.m1) / 29.530588853000001) === 12;
+	var newYears = (this.leapYear &&
+		(ilib.Cal.Han._noMajorST(calc.m1) || ilib.Cal.Han._noMajorST(m2))) ?
+				ilib.Cal.Han._newMoonOnOrAfter(m2+1) : m2;
+	
+	// See if it's between Jan 1 and the Chinese new years of that Gregorian year. If
+	// so, then the Han year is actually the previous one
+	if (jd < newYears) {
+		this.year--;
+		calc = ilib.Cal.Han._leapYearCalc(this.year);
+		m2 = ilib.Cal.Han._newMoonOnOrAfter(calc.m1+1);
+		this.leapYear = Math.round((calc.m2 - calc.m1) / 29.530588853000001) === 12;
+		newYears = (this.leapYear &&
+			(ilib.Cal.Han._noMajorST(calc.m1) || ilib.Cal.Han._noMajorST(m2))) ?
+					ilib.Cal.Han._newMoonOnOrAfter(m2+1) : m2;
+	}
+	// month is elapsed month, not the month number + leap month boolean
+	var m = ilib.Cal.Han._newMoonBefore(jd + 1);
+	this.month = Math.round((m - calc.m1) / 29.530588853000001);
+	
+	this.priorLeapMonth = ilib.Date.HanDate._priorLeapMonth(newYears, ilib.Cal.Han._newMoonBefore(m));
+	this.leapMonth = (this.leapYear && ilib.Cal.Han._noMajorST(m) && !this.priorLeapMonth);
+	
+	this.cycle = Math.floor((this.year - 1) / 60);
+	this.cycleYear = ilib.amod(this.year, 60);
+	this.day = ilib.Date._floorToJD(jd) - m + 1;
+
+	/*
+	console.log("HanDate._calcDateComponents: year is " + this.year);
+	console.log("HanDate._calcDateComponents: isLeapYear is " + this.leapYear);
+	console.log("HanDate._calcDateComponents: cycle is " + this.cycle);
+	console.log("HanDate._calcDateComponents: cycleYear is " + this.cycleYear);
+	console.log("HanDate._calcDateComponents: month is " + this.month);
+	console.log("HanDate._calcDateComponents: isLeapMonth is " + this.leapMonth);
+	console.log("HanDate._calcDateComponents: day is " + this.day);
+	*/
+
+	// floor to the start of the julian day
+	remainder = jd - ilib.Date._floorToJD(jd);
+	
+	// console.log("HanDate._calcDateComponents: time remainder is " + remainder);
+	
+	// now convert to milliseconds for the rest of the calculation
+	remainder = Math.round(remainder * 86400000);
+	
+	this.hour = Math.floor(remainder/3600000);
+	remainder -= this.hour * 3600000;
+	
+	this.minute = Math.floor(remainder/60000);
+	remainder -= this.minute * 60000;
+	
+	this.second = Math.floor(remainder/1000);
+	remainder -= this.second * 1000;
+	
+	this.millisecond = remainder;
+};
+
+/**
+ * Return the year within the Chinese cycle of this date. Cycles are 60 
+ * years long, and the value returned from this method is the number of the year 
+ * within this cycle. The year returned from getYear() is the total elapsed 
+ * years since the beginning of the Chinese epoch and does not include 
+ * the cycles. 
+ * 
+ * @return {number} the year within the current Chinese cycle
+ */
+ilib.Date.HanDate.prototype.getCycleYears = function() {
+	return this.cycleYear;
+};
+
+/**
+ * Return the Chinese cycle number of this date. Cycles are 60 years long,
+ * and the value returned from getCycleYear() is the number of the year 
+ * within this cycle. The year returned from getYear() is the total elapsed 
+ * years since the beginning of the Chinese epoch and does not include 
+ * the cycles. 
+ * 
+ * @return {number} the current Chinese cycle
+ */
+ilib.Date.HanDate.prototype.getCycles = function() {
+	return this.cycle;
+};
+
+/**
+ * Return whether the year of this date is a leap year in the Chinese Han 
+ * calendar. 
+ * 
+ * @return {boolean} true if the year of this date is a leap year in the 
+ * Chinese Han calendar. 
+ */
+ilib.Date.HanDate.prototype.isLeapYear = function() {
+	return this.leapYear;
+};
+
+/**
+ * Return whether the month of this date is a leap month in the Chinese Han 
+ * calendar.
+ * 
+ * @return {boolean} true if the month of this date is a leap month in the 
+ * Chinese Han calendar.
+ */
+ilib.Date.HanDate.prototype.isLeapMonth = function() {
+	return this.leapMonth;
+};
+
+/**
+ * Return the day of the week of this date. The day of the week is encoded
+ * as number from 0 to 6, with 0=Sunday, 1=Monday, etc., until 6=Saturday.
+ * 
+ * @return {number} the day of the week
+ */
+ilib.Date.HanDate.prototype.getDayOfWeek = function() {
+	var rd = Math.floor(this.rd.getRataDie() + (this.offset || 0));
+	return ilib.mod(rd, 7);
+};
+
+/**
+ * Return the ordinal day of the year. Days are counted from 1 and proceed linearly up to 
+ * 365, regardless of months or weeks, etc. That is, Farvardin 1st is day 1, and 
+ * December 31st is 365 in regular years, or 366 in leap years.
+ * @return {number} the ordinal day of the year
+ */
+ilib.Date.HanDate.prototype.getDayOfYear = function() {
+	var newYears = this.cal.newYears(this.year);
+	var priorNewMoon = ilib.Cal.Han._newMoonOnOrAfter(newYears + (this.month -1) * 29);
+	return priorNewMoon - newYears + this.day;
+};
+
+/**
+ * Return the era for this date as a number. The value for the era for Han 
+ * calendars is -1 for "before the han era" (BP) and 1 for "the han era" (anno 
+ * persico or AP). 
+ * BP dates are any date before Farvardin 1, 1 AP. In the proleptic Han calendar, 
+ * there is a year 0, so any years that are negative or zero are BP.
+ * @return {number} 1 if this date is in the common era, -1 if it is before the 
+ * common era 
+ */
+ilib.Date.HanDate.prototype.getEra = function() {
+	return (this.year < 1) ? -1 : 1;
+};
+
+/**
+ * Return the name of the calendar that governs this date.
+ * 
+ * @return {string} a string giving the name of the calendar
+ */
+ilib.Date.HanDate.prototype.getCalendar = function() {
+	return "han";
+};
+
+// register with the factory method
+ilib.Date._constructors["han"] = ilib.Date.HanDate;
 /*
  * ctype.js - Character type definitions
  * 
@@ -16035,45 +17437,6 @@ ilib.Name = function (name, options) {
     if (!name || name.length === 0) {
     	return;
     }
-    if (typeof (name) === 'object') {
-        // copy constructor
-        /**
-         * The prefixes for this name
-         * @type {string|Array.<string>}
-         */
-        this.prefix = name.prefix;
-        /**
-         * The given (personal) name in this name.
-         * @type {string|Array.<string>}
-         */
-        this.givenName = name.givenName;
-        /**
-         * The middle names used in this name. If there are multiple middle names, they all
-         * appear in this field separated by spaces.
-         * @type {string|Array.<string>}
-         */
-        this.middleName = name.middleName;
-        /**
-         * The family names in this name. If there are multiple family names, they all
-         * appear in this field separated by spaces.
-         * @type {string|Array.<string>}
-         */
-        this.familyName = name.familyName;
-        /**
-         * The suffixes for this name. If there are multiple suffixes, they all
-         * appear in this field separated by spaces.
-         * @type {string|Array.<string>}
-         */
-        this.suffix = name.suffix;
-
-        // private properties
-        this.locale = name.locale;
-        this.style = name.style;
-        this.order = name.order;
-        this.useSpaces = name.useSpaces;
-        this.isAsianName = name.isAsianName;
-        return;
-    }
 
     this.loadParams = {};
 
@@ -16121,6 +17484,45 @@ ilib.Name = function (name, options) {
 								var spec = this.locale.getSpec().replace(/-/g, "_");
 								ilib.Name.cache[spec] = info;
 							}
+                            if (typeof (name) === 'object') {
+    							// copy constructor
+							    /**
+							     * The prefixes for this name
+							     * @type {string|Array.<string>}
+							     */
+							    this.prefix = name.prefix;
+							    /**
+							     * The given (personal) name in this name.
+							     * @type {string|Array.<string>}
+							     */
+							    this.givenName = name.givenName;
+							    /**
+							     * The middle names used in this name. If there are multiple middle names, they all
+							     * appear in this field separated by spaces.
+							     * @type {string|Array.<string>}
+							     */
+							    this.middleName = name.middleName;
+							    /**
+							     * The family names in this name. If there are multiple family names, they all
+							     * appear in this field separated by spaces.
+							     * @type {string|Array.<string>}
+							     */
+							    this.familyName = name.familyName;
+							    /**
+							     * The suffixes for this name. If there are multiple suffixes, they all
+							     * appear in this field separated by spaces.
+							     * @type {string|Array.<string>}
+							     */
+							    this.suffix = name.suffix;
+
+							    // private properties
+							    this.locale = name.locale;
+							    this.style = name.style;
+							    this.order = name.order;
+							    this.useSpaces = name.useSpaces;
+							    this.isAsianName = name.isAsianName;
+					    	    return;
+						    }
 							/** 
 							 * @type {{
 							 *   nameStyle:string,
@@ -19313,7 +20715,7 @@ ilib.NormString.prototype.charIterator = function() {
  * limitations under the License.
  */
 
-// !depends locale.js ilibglobal.js numprs.js ctype.ispunct.js normstring.js
+// !depends locale.js ilibglobal.js numprs.js ctype.ispunct.js normstring.js util/math.js
 
 // !data collation
 
@@ -19508,7 +20910,12 @@ ilib.ElementIterator.prototype.next = function () {
  *   
  * <li><i>upperFirst</i> - boolean. When collating case-sensitively in a script that
  * has the concept of case, put upper-case
- * characters first, otherwise lower-case will come first. Default: true
+ * characters first, otherwise lower-case will come first. Warning: some browsers do
+ * not implement this feature or at least do not implement it properly, so if you are 
+ * using the native collator with this option, you may get different results in different
+ * browsers. To guarantee the same results, set useNative to false to use the ilib 
+ * collator implementation. This of course will be somewhat slower, but more 
+ * predictable. Default: true
  * 
  * <li><i>reverse</i> - boolean. Return the list sorted in reverse order. When the
  * upperFirst option is also set to true, upper-case characters would then come at 
@@ -20352,7 +21759,7 @@ ilib.LocaleMatcher.prototype = {
 /*
  * casemapper.js - define upper- and lower-case mapper
  * 
- * Copyright © 2014, JEDLSoft
+ * Copyright © 2014-2015, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20404,32 +21811,6 @@ ilib.CaseMapper = function (options) {
 		this.up = (!options.direction || options.direction === "toupper");
 	}
 
-	this.charMapper = function(string) {
-		var input;
-		if (!string) {
-			return string;
-		}
-		if (typeof(string) === 'string') {
-			input = new ilib.String(string);
-		} else {
-			input = string.toString();
-		}
-		var ret = "";
-		var it = input.charIterator();
-		var c;
-		
-		while (it.hasNext()) {
-			c = it.next();
-			if (this.mapData[c]) {
-				ret += this.mapData[c];
-			} else {
-				ret += this.up ? c.toUpperCase() : c.toLowerCase();
-			}
-		}
-		
-		return ret;
-	};
-	
 	switch (this.locale.getLanguage()) {
 		case "az":
 		case "tr":
@@ -20444,7 +21825,15 @@ ilib.CaseMapper = function (options) {
 				"İ": "i",
 				"I": "ı"
 			};
-			this.mapper = this.charMapper;
+			this.mapper = this._charMapper;
+			break;
+		case "de":
+			if (this.up) {
+				this.mapper = this._charMapper;
+				this.mapData = {
+					"ß": "SS"
+				};
+			}
 			break;
 		case "fr":
 			if (this.up && this.locale.getRegion() !== "CA") {
@@ -20473,26 +21862,24 @@ ilib.CaseMapper = function (options) {
 					'û': 'U',
 					'ü': 'U'
 				};
-				this.mapper = this.charMapper;
+				this.mapper = this._charMapper;
 			}
 			break;
 		case "el":
-			if (this.up) {
-				this.mapData = {
-					'ΐ': 'Ι',
-					'ά': 'Α',
-					'έ': 'Ε',
-					'ή': 'Η',
-					'ί': 'Ι',
-					'ΰ': 'Υ',
-					'ϊ': 'Ι',
-					'ϋ': 'Υ',
-					'ό': 'Ο',
-					'ύ': 'Υ',
-					'ώ': 'Ω'	
-				};
-				this.mapper = this.charMapper;
-			}
+			this.mapData = this.up ? {
+				'ΐ': 'Ι',
+				'ά': 'Α',
+				'έ': 'Ε',
+				'ή': 'Η',
+				'ί': 'Ι',
+				'ΰ': 'Υ',
+				'ϊ': 'Ι',
+				'ϋ': 'Υ',
+				'ό': 'Ο',
+				'ύ': 'Υ',
+				'ώ': 'Ω'	
+			} : {};
+			this.mapper = this._charMapper;
 			break;
 		case "abq":
 		case "ady":
@@ -20509,7 +21896,7 @@ ilib.CaseMapper = function (options) {
 				this.mapData = {
 					'Ӏ': 'Ӏ'	
 				};
-				this.mapper = this.charMapper;
+				this.mapper = this._charMapper;
 			}
 			break;
 	}
@@ -20522,6 +21909,49 @@ ilib.CaseMapper = function (options) {
 };
 
 ilib.CaseMapper.prototype = {
+	/** 
+	 * @private 
+	 */
+	_charMapper: function(string) {
+		var input;
+		if (!string) {
+			return string;
+		}
+		if (typeof(string) === 'string') {
+			input = new ilib.String(string);
+		} else {
+			input = string.toString();
+		}
+		var ret = "";
+		var it = input.charIterator();
+		var c;
+		
+		while (it.hasNext()) {
+			c = it.next();
+			if (!this.up && c === 'Σ') {
+				if (it.hasNext()) {
+					c = it.next();
+					var code = c.charCodeAt(0);
+					// if the next char is not a greek letter, this is the end of the word so use the
+					// final form of sigma. Otherwise, use the mid-word form.
+					ret += ((code < 0x0388 && code !== 0x0386) || code > 0x03CE) ? 'ς' : 'σ';
+					ret += c.toLowerCase();
+				} else {
+					// no next char means this is the end of the word, so use the final form of sigma
+					ret += 'ς';
+				}
+			} else {
+				if (this.mapData[c]) {
+					ret += this.mapData[c];
+				} else {
+					ret += this.up ? c.toUpperCase() : c.toLowerCase();
+				}
+			}
+		}
+		
+		return ret;
+	},
+
 	/**
 	 * Return the locale that this mapper was constructed with. 
 	 * @returns {ilib.Locale} the locale that this mapper was constructed with
@@ -28279,6 +29709,8 @@ calendar/persian.js
 calendar/persiandate.js
 calendar/persianastro.js
 calendar/persianastrodate.js
+calendar/han.js
+calendar/handate.js
 numprs.js
 numfmt.js
 julianday.js
