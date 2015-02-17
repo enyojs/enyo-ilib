@@ -115,6 +115,40 @@ ilib._getPlatform = function () {
 };
 
 /**
+ * If this ilib is running in a browser, return the name of that browser.
+ * @private
+ * @static
+ * @return {string|undefined} the name of the browser that this is running in ("firefox", "chrome", "ie", 
+ * "safari", or "opera"), or undefined if this is not running in a browser or if
+ * the browser name could not be determined 
+ */
+ilib._getBrowser = function () {
+	var browser = undefined;
+	if (ilib._getPlatform() === "browser") {
+		if (navigator && navigator.userAgent) {
+			if (navigator.userAgent.indexOf("Firefox") > -1) {
+				browser = "firefox";
+			}
+			if (navigator.userAgent.indexOf("Opera") > -1) {
+				browser = "opera";
+			}
+			if (navigator.userAgent.indexOf("Chrome") > -1) {
+				browser = "chrome";
+			}
+			if (navigator.userAgent.indexOf(" .NET") > -1) {
+				browser = "ie";
+			}
+			if (navigator.userAgent.indexOf("Safari") > -1) {
+				// chrome also has the string Safari in its userAgen, but the chrome case is 
+				// already taken care of above
+				browser = "safari";
+			}
+		}
+	}
+	return browser;
+};
+
+/**
  * Return true if the global variable is defined on this platform.
  * @private
  * @static
@@ -173,7 +207,7 @@ ilib.getLocale = function () {
     if (typeof(ilib.locale) !== 'string') {
         if (typeof(navigator) !== 'undefined' && typeof(navigator.language) !== 'undefined') {
             // running in a browser
-            ilib.locale = navigator.language;  // FF/Opera/Chrome/Webkit
+            ilib.locale = navigator.language.substring(0,3) + navigator.language.substring(3,5).toUpperCase();  // FF/Opera/Chrome/Webkit
             if (!ilib.locale) {
                 // IE on Windows
                 var lang = typeof(navigator.browserLanguage) !== 'undefined' ? 
@@ -3391,6 +3425,8 @@ ilib.LocaleInfo = function(locale, options) {
 		clock:string,
 		currency:string,
 		firstDayOfWeek:number,
+		weekendStart:number,
+		weekendEnd:number,
 		unitfmt: {long:string,short:string},
 		numfmt:Object.<{
 			currencyFormats:Object.<{common:string,commonNegative:string,iso:string,isoNegative:string}>,
@@ -3466,6 +3502,8 @@ ilib.LocaleInfo.defaultInfo = /** @type {{
 	clock:string,
 	currency:string,
 	firstDayOfWeek:number,
+	weekendStart:number,
+	weekendEnd:number,
 	unitfmt: {long:string,short:string},
 	numfmt:Object.<{
 		currencyFormats:Object.<{
@@ -3589,6 +3627,26 @@ ilib.LocaleInfo.prototype = {
 		return this.info.firstDayOfWeek;
 	},
 	
+	/**
+	 * Return the day of week that starts weekend in the current locale. Days are still
+	 * numbered the standard way with 0 for Sunday through 6 for Saturday.
+	 * 
+	 * @returns {number} the day of the week that starts weeks in the current locale.
+	 */
+	getWeekEndStart: function () {
+		return this.info.weekendStart;
+	},
+
+	/**
+	 * Return the day of week that starts weekend in the current locale. Days are still
+	 * numbered the standard way with 0 for Sunday through 6 for Saturday.
+	 * 
+	 * @returns {number} the day of the week that starts weeks in the current locale.
+	 */
+	getWeekEndEnd: function () {
+		return this.info.weekendEnd;
+	},
+
 	/**
 	 * Return the default time zone for this locale. Many locales span across multiple
 	 * time zones. In this case, the time zone with the largest population is chosen
