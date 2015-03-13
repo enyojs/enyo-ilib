@@ -115,6 +115,40 @@ ilib._getPlatform = function () {
 };
 
 /**
+ * If this ilib is running in a browser, return the name of that browser.
+ * @private
+ * @static
+ * @return {string|undefined} the name of the browser that this is running in ("firefox", "chrome", "ie", 
+ * "safari", or "opera"), or undefined if this is not running in a browser or if
+ * the browser name could not be determined 
+ */
+ilib._getBrowser = function () {
+	var browser = undefined;
+	if (ilib._getPlatform() === "browser") {
+		if (navigator && navigator.userAgent) {
+			if (navigator.userAgent.indexOf("Firefox") > -1) {
+				browser = "firefox";
+			}
+			if (navigator.userAgent.indexOf("Opera") > -1) {
+				browser = "opera";
+			}
+			if (navigator.userAgent.indexOf("Chrome") > -1) {
+				browser = "chrome";
+			}
+			if (navigator.userAgent.indexOf(" .NET") > -1) {
+				browser = "ie";
+			}
+			if (navigator.userAgent.indexOf("Safari") > -1) {
+				// chrome also has the string Safari in its userAgen, but the chrome case is 
+				// already taken care of above
+				browser = "safari";
+			}
+		}
+	}
+	return browser;
+};
+
+/**
  * Return true if the global variable is defined on this platform.
  * @private
  * @static
@@ -173,7 +207,7 @@ ilib.getLocale = function () {
     if (typeof(ilib.locale) !== 'string') {
         if (typeof(navigator) !== 'undefined' && typeof(navigator.language) !== 'undefined') {
             // running in a browser
-            ilib.locale = navigator.language;  // FF/Opera/Chrome/Webkit
+            ilib.locale = navigator.language.substring(0,3) + navigator.language.substring(3,5).toUpperCase();  // FF/Opera/Chrome/Webkit
             if (!ilib.locale) {
                 // IE on Windows
                 var lang = typeof(navigator.browserLanguage) !== 'undefined' ? 
@@ -1379,6 +1413,8 @@ ilib.LocaleInfo = function(locale, options) {
 		clock:string,
 		currency:string,
 		firstDayOfWeek:number,
+		weekendStart:number,
+		weekendEnd:number,
 		unitfmt: {long:string,short:string},
 		numfmt:Object.<{
 			currencyFormats:Object.<{common:string,commonNegative:string,iso:string,isoNegative:string}>,
@@ -1454,6 +1490,8 @@ ilib.LocaleInfo.defaultInfo = /** @type {{
 	clock:string,
 	currency:string,
 	firstDayOfWeek:number,
+	weekendStart:number,
+	weekendEnd:number,
 	unitfmt: {long:string,short:string},
 	numfmt:Object.<{
 		currencyFormats:Object.<{
@@ -1577,6 +1615,26 @@ ilib.LocaleInfo.prototype = {
 		return this.info.firstDayOfWeek;
 	},
 	
+	/**
+	 * Return the day of week that starts weekend in the current locale. Days are still
+	 * numbered the standard way with 0 for Sunday through 6 for Saturday.
+	 * 
+	 * @returns {number} the day of the week that starts weeks in the current locale.
+	 */
+	getWeekEndStart: function () {
+		return this.info.weekendStart;
+	},
+
+	/**
+	 * Return the day of week that starts weekend in the current locale. Days are still
+	 * numbered the standard way with 0 for Sunday through 6 for Saturday.
+	 * 
+	 * @returns {number} the day of the week that starts weeks in the current locale.
+	 */
+	getWeekEndEnd: function () {
+		return this.info.weekendEnd;
+	},
+
 	/**
 	 * Return the default time zone for this locale. Many locales span across multiple
 	 * time zones. In this case, the time zone with the largest population is chosen
@@ -7420,7 +7478,7 @@ ilib.DateFmt.prototype = {
 	 * @return {string|undefined} the requested format
 	 */
 	_getFormat: function getFormat(obj, components, length) {
-		if (typeof(components) !== 'undefined' && obj[components]) {
+		if (typeof(components) !== 'undefined' && obj && obj[components]) {
 			return this._getLengthFormat(obj[components], length);
 		}
 		return undefined;
@@ -8978,7 +9036,7 @@ ilib.Date.HebrewDate = function(params) {
 	}
 };
 
-ilib.Date.HebrewDate.prototype = new ilib.Date();
+ilib.Date.HebrewDate.prototype = new ilib.Date({noinstance: true});
 ilib.Date.HebrewDate.prototype.parent = ilib.Date;
 ilib.Date.HebrewDate.prototype.constructor = ilib.Date.HebrewDate;
 
@@ -9878,7 +9936,7 @@ ilib.Date.IslamicDate = function(params) {
 	}
 };
 
-ilib.Date.IslamicDate.prototype = new ilib.Date();
+ilib.Date.IslamicDate.prototype = new ilib.Date({noinstance: true});
 ilib.Date.IslamicDate.prototype.parent = ilib.Date;
 ilib.Date.IslamicDate.prototype.constructor = ilib.Date.IslamicDate;
 
@@ -10433,7 +10491,7 @@ ilib.Date.JulDate = function(params) {
 	}
 };
 
-ilib.Date.JulDate.prototype = new ilib.Date();
+ilib.Date.JulDate.prototype = new ilib.Date({noinstance: true});
 ilib.Date.JulDate.prototype.parent = ilib.Date;
 ilib.Date.JulDate.prototype.constructor = ilib.Date.JulDate;
 
@@ -11150,7 +11208,7 @@ ilib.Date.ThaiSolarDate = function(params) {
 	}
 };
 
-ilib.Date.ThaiSolarDate.prototype = new ilib.Date.GregDate();
+ilib.Date.ThaiSolarDate.prototype = new ilib.Date.GregDate({noinstance: true});
 ilib.Date.ThaiSolarDate.prototype.parent = ilib.Date.GregDate.prototype;
 ilib.Date.ThaiSolarDate.prototype.constructor = ilib.Date.ThaiSolarDate;
 
@@ -15507,6 +15565,13 @@ ilib.NumFmt = function (options) {
 			 * @type {number|undefined} 
 			 */
 			this.minFractionDigits = this._toPrimitive(options.minFractionDigits);
+			// enforce the limits to avoid JS exceptions
+			if (this.minFractionDigits < 0) {
+				this.minFractionDigits = 0;
+			}
+			if (this.minFractionDigits > 20) {
+				this.minFractionDigits = 20;
+			}
 		}
 		if (options.style) {
 			/** 
@@ -15728,26 +15793,39 @@ ilib.NumFmt.prototype = {
 	_formatScientific: function (num) {
 		var n = new Number(num);
 		var formatted;
-		if (typeof (this.maxFractionDigits) !== 'undefined') {
-			// if there is fraction digits, round it to the right length first
-			// divide or multiply by 10 by manipulating the exponent so as to
-			// avoid the rounding errors of floating point numbers
-			var e,
-				factor,
-				str = n.toExponential(),
-				parts = str.split("e"),
-				significant = parts[0];
+		
+		var factor,
+			str = n.toExponential(),
+			parts = str.split("e"),
+			significant = parts[0],
+			exponent = parts[1],
+			numparts,
+			integral,
+			fraction;
 
-			e = parts[1];
+		if (this.maxFractionDigits > 0) {
+			// if there is a max fraction digits setting, round the fraction to 
+			// the right length first by dividing or multiplying by powers of 10. 
+			// manipulate the fraction digits so as to
+			// avoid the rounding errors of floating point numbers
 			factor = Math.pow(10, this.maxFractionDigits);
 			significant = this.round(significant * factor) / factor;
-			formatted = "" + significant + this.exponentSymbol + e;
-		} else {
-			formatted = n.toExponential(this.minFractionDigits);
-			if (this.exponentSymbol !== 'e') {
-				formatted = formatted.replace(/e/, this.exponentSymbol);
-			}
 		}
+		numparts = ("" + significant).split(".");
+		integral = numparts[0];
+		fraction = numparts[1];
+		
+		if (typeof(this.maxFractionDigits) !== 'undefined') {
+			fraction = fraction.substring(0, this.maxFractionDigits);
+		}
+		if (typeof(this.minFractionDigits) !== 'undefined') {
+			fraction = this._pad(fraction || "", this.minFractionDigits, false);
+		}
+		formatted = integral;
+		if (fraction.length) {
+			formatted += this.decimalSeparator + fraction;	
+		} 
+		formatted += this.exponentSymbol + exponent;
 		return formatted;
 	},
 
@@ -18051,12 +18129,15 @@ ilib.Name.prototype = {
      */
     _parseAsianName: function (parts, language) {
         var familyNameArray = this._findPrefix(parts, this.info.knownFamilyNames, true, this.info.noCompoundFamilyNames);
+        var tempFullName = parts.join('');
 
         if (familyNameArray && familyNameArray.length > 0) {
             this.familyName = familyNameArray.join('');
             this.givenName = parts.slice(this.familyName.length).join('');
-            if (language === "ko" && this.givenName.search(/\s*[/\s]/) > -1) {
-                this._parseKoreanName(parts);
+            
+            //Overide parsing rules if spaces are found in korean
+            if (language === "ko" && tempFullName.search(/\s*[/\s]/) > -1 && !this.suffix) {
+                this._parseKoreanName(tempFullName);
             }
         } else if (this.locale.getLanguage() === "ja") {
             this._parseJapaneseName(parts);
@@ -18070,13 +18151,23 @@ ilib.Name.prototype = {
     /**
      * @protected
      */
-    _parseKoreanName: function (parts) {
-        var index = this.givenName.indexOf(" ");
-        var temp = this.givenName.substr(0, index);
-        if (!this.suffix) {
-            this.suffix = this.givenName.substr(index + 1);     
+    _parseKoreanName: function (name) {
+        var tempName = name;
+
+        var spaceSplit = tempName.split(" ");
+        var spceCount = spaceSplit.length;
+        var fistSpaceIndex = tempName.indexOf(" ");
+        var lastSpaceIndex = tempName.lastIndexOf(" ");
+
+        if (spceCount === 2) {
+            this.familyName = spaceSplit[0];
+            this.givenName = tempName.slice(fistSpaceIndex, tempName.length);
+        } else {
+            this.familyName = spaceSplit[0];
+            this.middleName = tempName.slice(fistSpaceIndex, lastSpaceIndex);
+            this.givenName = tempName.slice(lastSpaceIndex, tempName.length);
         }
-        this.givenName = temp;
+        
     },
 
     /**
@@ -18633,6 +18724,8 @@ ctype.ispunct.js
  *     <li><i>short</i> - Format a short name with just the given and family names.
  *     <li><i>medium</i> - Format a medium-length name with the given, middle, and family names.
  *     <li><i>long</i> - Format a long name with all names available in the given name object, including
+ *     prefixes.
+ *     <li><i>full</i> - Format a long name with all names available in the given name object, including
  *     prefixes and suffixes.
  *   </ul>
  * <li><i>components</i> - Format the name with the given components in the correct
@@ -18931,7 +19024,7 @@ ilib.NameFmt.prototype = {
 		} else {
 			isAsianName = true;
 			modified = name;
-			if (currentLanguage === "ko" && this.info.honorifics.indexOf(name.suffix) == -1) {
+			if (modified.suffix && currentLanguage === "ko" && this.info.honorifics.indexOf(name.suffix) == -1) {
 				modified.suffix = ' ' + modified.suffix; 
 			}
 		}
@@ -21811,6 +21904,25 @@ ilib.CaseMapper = function (options) {
 		this.up = (!options.direction || options.direction === "toupper");
 	}
 
+	this.mapData = this.up ? {
+		"ß": "SS",		// German
+		'ΐ': 'Ι',		// Greek
+		'ά': 'Α',
+		'έ': 'Ε',
+		'ή': 'Η',
+		'ί': 'Ι',
+		'ΰ': 'Υ',
+		'ϊ': 'Ι',
+		'ϋ': 'Υ',
+		'ό': 'Ο',
+		'ύ': 'Υ',
+		'ώ': 'Ω',
+		'Ӏ': 'Ӏ',		// Russian and slavic languages
+		'ӏ': 'Ӏ'
+	} : {
+		'Ӏ': 'Ӏ'		// Russian and slavic languages
+	};
+
 	switch (this.locale.getLanguage()) {
 		case "az":
 		case "tr":
@@ -21818,93 +21930,25 @@ ilib.CaseMapper = function (options) {
 		case "kk":
 		case "krc":
 		case "tt":
-			this.mapData = this.up ?  {
-				"i": "İ",
-				"ı": "I"
-			} : {
-				"İ": "i",
-				"I": "ı"
-			};
-			this.mapper = this._charMapper;
-			break;
-		case "de":
-			if (this.up) {
-				this.mapper = this._charMapper;
-				this.mapData = {
-					"ß": "SS"
-				};
-			}
+			var lower = "iı";
+			var upper = "İI";
+			this._setUpMap(lower, upper);
 			break;
 		case "fr":
 			if (this.up && this.locale.getRegion() !== "CA") {
-				this.mapData = {
-					'à': 'A',
-					'á': 'A',
-					'â': 'A',
-					'ã': 'A',
-					'ä': 'A',
-					'ç': 'C',
-					'è': 'E',
-					'é': 'E',
-					'ê': 'E',
-					'ë': 'E',
-					'ì': 'I',
-					'í': 'I',
-					'î': 'I',
-					'ï': 'I',
-					'ñ': 'N',
-					'ò': 'O',
-					'ó': 'O',
-					'ô': 'O',
-					'ö': 'O',
-					'ù': 'U',
-					'ú': 'U',
-					'û': 'U',
-					'ü': 'U'
-				};
-				this.mapper = this._charMapper;
-			}
-			break;
-		case "el":
-			this.mapData = this.up ? {
-				'ΐ': 'Ι',
-				'ά': 'Α',
-				'έ': 'Ε',
-				'ή': 'Η',
-				'ί': 'Ι',
-				'ΰ': 'Υ',
-				'ϊ': 'Ι',
-				'ϋ': 'Υ',
-				'ό': 'Ο',
-				'ύ': 'Υ',
-				'ώ': 'Ω'	
-			} : {};
-			this.mapper = this._charMapper;
-			break;
-		case "abq":
-		case "ady":
-		case "av":
-		case "ce":
-		case "dar":
-		case "inh":
-		case "kbd":
-		case "lbe":
-		case "lez":
-		case "tab":
-		case "ru":
-			if (!this.up) {
-				this.mapData = {
-					'Ӏ': 'Ӏ'	
-				};
-				this.mapper = this._charMapper;
+				this._setUpMap("àáâãäçèéêëìíîïñòóôöùúûü", "AAAAACEEEEIIIINOOOOUUUU");
 			}
 			break;
 	}
 	
-	if (!this.mapper) {
-		this.mapper = function(string) {
-			return this.up ? string.toUpperCase() : string.toLowerCase();
-		};
+	if (ilib._getBrowser() === "ie") {
+		// IE is missing these mappings for some reason
+		if (this.up) {
+			this.mapData['ς'] = 'Σ';
+		}
+		this._setUpMap("ⲁⲃⲅⲇⲉⲋⲍⲏⲑⲓⲕⲗⲙⲛⲝⲟⲡⲣⲥⲧⲩⲫⲭⲯⲱⳁⳉⳋ", "ⲀⲂⲄⲆⲈⲊⲌⲎⲐⲒⲔⲖⲘⲚⲜⲞⲠⲢⲤⲦⲨⲪⲬⲮⲰⳀⳈⳊ"); // Coptic
+		// Georgian Nuskhuri <-> Asomtavruli
+		this._setUpMap("ⴀⴁⴂⴃⴄⴅⴆⴇⴈⴉⴊⴋⴌⴍⴎⴏⴐⴑⴒⴓⴔⴕⴖⴗⴘⴙⴚⴛⴜⴝⴞⴟⴠⴡⴢⴣⴤⴥ", "ႠႡႢႣႤႥႦႧႨႩႪႫႬႭႮႯႰႱႲႳႴႵႶႷႸႹႺႻႼႽႾႿჀჁჂჃჄჅ");	
 	}
 };
 
@@ -21913,15 +21957,10 @@ ilib.CaseMapper.prototype = {
 	 * @private 
 	 */
 	_charMapper: function(string) {
-		var input;
 		if (!string) {
 			return string;
 		}
-		if (typeof(string) === 'string') {
-			input = new ilib.String(string);
-		} else {
-			input = string.toString();
-		}
+		var input = (typeof(string) === 'string') ? new ilib.String(string) : string.toString();
 		var ret = "";
 		var it = input.charIterator();
 		var c;
@@ -21952,6 +21991,21 @@ ilib.CaseMapper.prototype = {
 		return ret;
 	},
 
+	/** @private */
+	_setUpMap: function(lower, upper) {
+		var from, to;
+		if (this.up) {
+			from = lower;
+			to = upper;
+		} else {
+			from = upper;
+			to = lower;
+		}
+		for (var i = 0; i < upper.length; i++) {
+			this.mapData[from[i]] = to[i];
+		}
+	},
+
 	/**
 	 * Return the locale that this mapper was constructed with. 
 	 * @returns {ilib.Locale} the locale that this mapper was constructed with
@@ -21967,7 +22021,7 @@ ilib.CaseMapper.prototype = {
 	 * @return {string|undefined}
 	 */
 	map: function (string) {
-		return this.mapper(string);
+		return this._charMapper(string);
 	}
 };
 /*
