@@ -417,8 +417,8 @@ enyo.toUpperCase = function(inString) {
 	enyo.updateLocale = function(inLocale) {
 		// blow away the cache to force it to reload the manifest files for the new app
 		if (ilib._load) ilib._load.manifest = undefined;
-		ilib.setLocale(inLocale || navigator.language);
-		$L.setLocale(inLocale || navigator.language);
+		ilib.setLocale(inLocale || ilib.getLocale());
+		$L.setLocale(inLocale || ilib.getLocale());
 		enyo.updateI18NClasses();
 		originalUpdateLocale();
 	};
