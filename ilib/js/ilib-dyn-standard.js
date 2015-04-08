@@ -139,7 +139,7 @@ ilib._getBrowser = function () {
 				browser = "ie";
 			}
 			if (navigator.userAgent.indexOf("Safari") > -1) {
-				// chrome also has the string Safari in its userAgen, but the chrome case is 
+				// chrome also has the string Safari in its userAgent, but the chrome case is 
 				// already taken care of above
 				browser = "safari";
 			}
@@ -311,6 +311,7 @@ ilib.getTimeZone = function() {
 };
 
 /**
+ * @class
  * Defines the interface for the loader class for ilib. The main method of the
  * loader object is loadFiles(), which loads a set of requested locale data files
  * from where-ever it is stored.
@@ -430,10 +431,10 @@ ilib.Loader.prototype.loadFiles = function (paths, sync, params, callback) {};
  *      "/usr/share/javascript/ilib/locale": [
  *          "dateformats.json",
  *          "aa/dateformats.json",
- *            "af/dateformats.json",
- *            "agq/dateformats.json",
- *            "ak/dateformats.json",
- *            ...
+ *          "af/dateformats.json",
+ *          "agq/dateformats.json",
+ *          "ak/dateformats.json",
+ *          ...
  *          "zxx/dateformats.json"
  *      ]
  *  }
@@ -1415,6 +1416,7 @@ ilib.LocaleInfo = function(locale, options) {
 		firstDayOfWeek:number,
 		weekendStart:number,
 		weekendEnd:number,
+		meridiems:string,
 		unitfmt: {long:string,short:string},
 		numfmt:Object.<{
 			currencyFormats:Object.<{common:string,commonNegative:string,iso:string,isoNegative:string}>,
@@ -1492,6 +1494,7 @@ ilib.LocaleInfo.defaultInfo = /** @type {{
 	firstDayOfWeek:number,
 	weekendStart:number,
 	weekendEnd:number,
+	meridiems:string,
 	unitfmt: {long:string,short:string},
 	numfmt:Object.<{
 		currencyFormats:Object.<{
@@ -1522,6 +1525,7 @@ ilib.LocaleInfo.defaultInfo = ilib.LocaleInfo.defaultInfo || {
     "clock": "24",
     "currency": "USD",
     "firstDayOfWeek": 1,
+    "meridiems": "gregorian",
     "numfmt": {
         "currencyFormats": {
             "common": "{s}{n}",
@@ -1885,7 +1889,22 @@ ilib.LocaleInfo.prototype = {
 	 */
 	getAllScripts: function() {
 		return this.info.scripts || ["Latn"];
-	}
+	},
+	
+	/**
+	 * Return the default style of meridiems used in this locale. Meridiems are 
+	 * times of day like AM/PM. In a few locales with some calendars, for example
+	 * Amharic/Ethiopia using the Ethiopic calendar, the times of day may be
+	 * split into different segments than simple AM/PM as in the Gregorian 
+	 * calendar. Only a few locales are like that. For most locales, formatting 
+	 * a Gregorian date will use the regular Gregorian AM/PM meridiems.
+	 *  
+	 * @returns {string} the default meridiems style used in this locale. Possible
+	 * values are "gregorian", "chinese", and "ethiopic"
+	 */
+	getMeridiemsStyle: function () {
+		return this.info.meridiems || "gregorian";
+	}	
 };
 
 /*
@@ -5655,7 +5674,7 @@ ilib.TimeZone.prototype.getOffsetMillis = function (date) {
 	// check if the dst property is defined -- the intrinsic JS Date object doesn't work so
 	// well if we are in the overlap time at the end of DST
 	if (this.isLocal && typeof(date.dst) === 'undefined') {
-		var d = (!date) ? new Date() : new Date(date.getTime());
+		var d = (!date) ? new Date() : new Date(date.getTimeExtended());
 		return -d.getTimezoneOffset() * 60000;
 	} 
 	
@@ -6577,6 +6596,22 @@ ilib.ResBundle.prototype = {
 	},
 	
 	/**
+	 * Return a localized string as a Javascript object. This does the same thing as
+	 * the getString() method, but it returns a regular Javascript string instead of
+	 * and ilib.String instance. This means it cannot be formatted with the format()
+	 * method without being wrapped in an ilib.String instance first.
+	 * 
+	 * @param {?string=} source the source string to translate
+	 * @param {?string=} key optional name of the key, if any
+	 * @param {?string=} escapeMode escape mode, if any
+	 * @return {string|undefined} the translation of the given source/key or undefined 
+	 * if the translation is not found and the source is undefined
+	 */
+	getStringJS: function(source, key, escapeMode) {
+		return this.getString(source, key, escapeMode).toString();
+	},
+	
+	/**
 	 * Return true if the current bundle contains a translation for the given key and
 	 * source. The
 	 * getString method will always return a string for any given key and source 
@@ -6975,8 +7010,8 @@ util/jsutils.js
  * <li><i>w</i> - week number in year
  * <li><i>ww</i> - week number in year, 0 padded to 2 digits
  * <li><i>W</i> - week in month
- * <li><i>h</i> - hour (1 to 12)
- * <li><i>hh</i> - hour (1 to 12), 0 padded to 2 digits
+ * <li><i>h</i> - hour (12 followed by 1 to 11)
+ * <li><i>hh</i> - hour (12, followed by 1 to 11), 0 padded to 2 digits
  * <li><i>k</i> - hour (1 to 24)
  * <li><i>kk</i> - hour (1 to 24), 0 padded to 2 digits
  * <li><i>H</i> - hour (0 to 23)
@@ -6997,9 +7032,13 @@ util/jsutils.js
  * for formatting the numbers.
  *
  * <li><i>meridiems</i> - string that specifies what style of meridiems to use with this 
- * format. The choices are "default" and "chinese". The "default" style is the simple AM/PM,
- * and the "chinese" style uses 7 different meridiems corresponding to the various parts of 
- * the day. The default if not specified is "default", even for the Chinese locales. 
+ * format. The choices are "default", "gregorian", "ethiopic", and "chinese". The "default" 
+ * style is often the simple Gregorian AM/PM, but the actual style is chosen by the locale. 
+ * (For almost all locales, the Gregorian AM/PM style is most frequently used.)
+ * The "ethiopic" style uses 5 different meridiems for "morning", "noon", "afternoon", 
+ * "evening", and "night". The "chinese" style uses 7 different meridiems corresponding 
+ * to the various parts of the day. N.B. Even for the Chinese locales, the default is "gregorian"
+ * when formatting dates in the Gregorian calendar.
  *
  * <li><i>onLoad</i> - a callback function to call when the date format object is fully 
  * loaded. When the onLoad option is given, the DateFmt object will attempt to
@@ -7158,7 +7197,10 @@ ilib.DateFmt = function(options) {
 			this.useNative = options.useNative;
 		}
 		
-		if (typeof(options.meridiems) !== 'undefined' && options.meridiems === "chinese") {
+		if (typeof(options.meridiems) !== 'undefined' && 
+				(options.meridiems === "chinese" || 
+				 options.meridiems === "gregorian" || 
+				 options.meridiems === "ethiopic")) {
 			this.meridiems = options.meridiems;
 		}
 		
@@ -7187,6 +7229,10 @@ ilib.DateFmt = function(options) {
 			});
 			if (!this.cal) {
 				this.cal = new ilib.Cal.Gregorian();
+			}
+			
+			if (this.meridiems === "default") {
+				this.meridiems = li.getMeridiemsStyle();
 			}
 
 			/*
@@ -7739,7 +7785,6 @@ ilib.DateFmt.prototype = {
 				case 'MM':
 					str += this._pad(date.month || "1", 2);
 					break;
-
 				case 'h':
 					temp = (date.hour || 0) % 12;
 					if (temp == 0) {
@@ -7754,6 +7799,16 @@ ilib.DateFmt.prototype = {
 					}
 					str += this._pad(temp, 2);
 					break;
+				/*
+				case 'j':
+					temp = (date.hour || 0) % 12 + 1;
+					str += temp; 
+					break;
+				case 'jj':
+					temp = (date.hour || 0) % 12 + 1;
+					str += this._pad(temp, 2);
+					break;
+				*/
 				case 'K':
 					temp = (date.hour || 0) % 12;
 					str += temp; 
@@ -7814,7 +7869,8 @@ ilib.DateFmt.prototype = {
 					break;
 					
 				case 'a':
-					if (this.meridiems === "chinese") {
+					switch (this.meridiems) {
+					case "chinese":
 						if (date.hour < 6) {
 							key = "azh0";	// before dawn
 						} else if (date.hour < 9) {
@@ -7830,8 +7886,23 @@ ilib.DateFmt.prototype = {
 						} else {
 							key = "azh6";	// night time
 						}
-					} else {
+						break;
+					case "ethiopic":
+						if (date.hour < 6) {
+							key = "a0-ethiopic";	// morning
+						} else if (date.hour === 6 && date.minute === 0) {
+							key = "a1-ethiopic";	// noon
+						} else if (date.hour >= 6 && date.hour < 12) {
+							key = "a2-ethiopic";	// afternoon
+						} else if (date.hour >= 12 && date.hour < 18) {
+							key = "a3-ethiopic";	// evening
+						} else if (date.hour >= 18) {
+							key = "a4-ethiopic";	// night
+						}
+						break;
+					default:
 						key = date.hour < 12 ? "a0" : "a1";
+						break;
 					}
 					//console.log("finding " + key + " in the resources");
 					str += (this.sysres.getString(undefined, key + "-" + this.calName) || this.sysres.getString(undefined, key));
@@ -8717,6 +8788,10 @@ ilib.Date.GregDate = function(params) {
 	this.timezone = "local";
 
 	if (params) {
+		if (typeof(params.noinstance) === 'boolean' && params.noinstance) {
+			// for doing inheritance, so don't need to fill in the data. The inheriting class only wants the methods.
+			return;
+		}
 		if (params.locale) {
 			this.locale = (typeof(params.locale) === 'string') ? new ilib.Locale(params.locale) : params.locale;
 			var li = new ilib.LocaleInfo(this.locale);
@@ -8827,11 +8902,11 @@ ilib.Date.GregDate.prototype._calcYear = function(rd) {
  * @private
  */
 ilib.Date.GregDate.prototype._calcDateComponents = function () {
-	if (this.timezone === "local" && this.rd.getRataDie() >= 719163 && this.rd.getRataDie() <= 744018.134803241) {
+	if (this.timezone === "local" && this.rd.getRataDie() >= -99280837 && this.rd.getRataDie() <= 100719163) {
 		// console.log("using js Date to calculate offset");
 		// use the intrinsic JS Date object to do the tz conversion for us, which 
 		// guarantees that it follows the system tz database settings 
-		var d = new Date(this.rd.getTime());
+		var d = new Date(this.rd.getTimeExtended());
 	
 		/**
 		 * Year in the Gregorian calendar.
@@ -12610,6 +12685,7 @@ ilib.DurFmt = function(options) {
 			if (this.style === 'clock') {
 				new ilib.DateFmt({
 					locale: this.locale,
+					calendar: "gregorian",
 					type: "time",
 					time: "ms",
 					sync: sync,
@@ -12619,6 +12695,7 @@ ilib.DurFmt = function(options) {
 						this.timeFmtMS = fmtMS;
 						new ilib.DateFmt({
 							locale: this.locale,
+							calendar: "gregorian",
 							type: "time",
 							time: "hm",
 							sync: sync,
@@ -12628,6 +12705,7 @@ ilib.DurFmt = function(options) {
 								this.timeFmtHM = fmtHM;		
 								new ilib.DateFmt({
 									locale: this.locale,
+									calendar: "gregorian",
 									type: "time",
 									time: "hms",
 									sync: sync,
