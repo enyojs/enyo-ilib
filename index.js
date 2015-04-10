@@ -1,5 +1,8 @@
 var
-	glue = require('./glue');
+	glue = require('./lib/glue'),
+	ilib = require('./ilib/js/ilib-dyn-standard').ilib;
 
-module.exports = glue;
-module.exports.version = '2.6.0-pre.5.dev';
+ilib.enyo = glue(ilib);
+ilib.enyo.version = '2.6.0-pre.5-dev';
+
+module.exports = ilib;
