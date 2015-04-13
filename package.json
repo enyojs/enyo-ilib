@@ -1,7 +1,7 @@
 {
 	"name": "enyo-ilib",
-	"version": "6.0-003",
-	"main": "./nodeglue.js",
+	"version": "11.0.001",
+	"main": "ilib/js/ilib-node.js",
 	"description": "iLib plugin for enyo. iLib is a cross-engine library of internationalization (i18n) classes written in pure JS",
 	"keywords": [
 		"internationalization",
@@ -20,7 +20,6 @@
 	"files": [
 		"packedbuffer.js",
 		"zoneinfo.js",
-		"nodeglue.js",
 		"ilib/js",
 		"ilib/locale",
 		"README.md"

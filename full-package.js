@@ -1,6 +1,6 @@
 enyo.depends(
 	"version.js",
-	"ilib/js/ilib-dyn-full.js",
+	"ilib/js/ilib-enyo.js",
 	"packedbuffer.js",
 	"zoneinfo.js",
 	"glue.js"
