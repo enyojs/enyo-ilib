@@ -115,6 +115,40 @@ ilib._getPlatform = function () {
 };
 
 /**
+ * If this ilib is running in a browser, return the name of that browser.
+ * @private
+ * @static
+ * @return {string|undefined} the name of the browser that this is running in ("firefox", "chrome", "ie", 
+ * "safari", or "opera"), or undefined if this is not running in a browser or if
+ * the browser name could not be determined 
+ */
+ilib._getBrowser = function () {
+	var browser = undefined;
+	if (ilib._getPlatform() === "browser") {
+		if (navigator && navigator.userAgent) {
+			if (navigator.userAgent.indexOf("Firefox") > -1) {
+				browser = "firefox";
+			}
+			if (navigator.userAgent.indexOf("Opera") > -1) {
+				browser = "opera";
+			}
+			if (navigator.userAgent.indexOf("Chrome") > -1) {
+				browser = "chrome";
+			}
+			if (navigator.userAgent.indexOf(" .NET") > -1) {
+				browser = "ie";
+			}
+			if (navigator.userAgent.indexOf("Safari") > -1) {
+				// chrome also has the string Safari in its userAgent, but the chrome case is 
+				// already taken care of above
+				browser = "safari";
+			}
+		}
+	}
+	return browser;
+};
+
+/**
  * Return true if the global variable is defined on this platform.
  * @private
  * @static
@@ -173,7 +207,7 @@ ilib.getLocale = function () {
     if (typeof(ilib.locale) !== 'string') {
         if (typeof(navigator) !== 'undefined' && typeof(navigator.language) !== 'undefined') {
             // running in a browser
-            ilib.locale = navigator.language;  // FF/Opera/Chrome/Webkit
+            ilib.locale = navigator.language.substring(0,3) + navigator.language.substring(3,5).toUpperCase();  // FF/Opera/Chrome/Webkit
             if (!ilib.locale) {
                 // IE on Windows
                 var lang = typeof(navigator.browserLanguage) !== 'undefined' ? 
@@ -277,6 +311,7 @@ ilib.getTimeZone = function() {
 };
 
 /**
+ * @class
  * Defines the interface for the loader class for ilib. The main method of the
  * loader object is loadFiles(), which loads a set of requested locale data files
  * from where-ever it is stored.
@@ -396,10 +431,10 @@ ilib.Loader.prototype.loadFiles = function (paths, sync, params, callback) {};
  *      "/usr/share/javascript/ilib/locale": [
  *          "dateformats.json",
  *          "aa/dateformats.json",
- *            "af/dateformats.json",
- *            "agq/dateformats.json",
- *            "ak/dateformats.json",
- *            ...
+ *          "af/dateformats.json",
+ *          "agq/dateformats.json",
+ *          "ak/dateformats.json",
+ *          ...
  *          "zxx/dateformats.json"
  *      ]
  *  }
@@ -3391,6 +3426,9 @@ ilib.LocaleInfo = function(locale, options) {
 		clock:string,
 		currency:string,
 		firstDayOfWeek:number,
+		weekendStart:number,
+		weekendEnd:number,
+		meridiems:string,
 		unitfmt: {long:string,short:string},
 		numfmt:Object.<{
 			currencyFormats:Object.<{common:string,commonNegative:string,iso:string,isoNegative:string}>,
@@ -3466,6 +3504,9 @@ ilib.LocaleInfo.defaultInfo = /** @type {{
 	clock:string,
 	currency:string,
 	firstDayOfWeek:number,
+	weekendStart:number,
+	weekendEnd:number,
+	meridiems:string,
 	unitfmt: {long:string,short:string},
 	numfmt:Object.<{
 		currencyFormats:Object.<{
@@ -3496,6 +3537,7 @@ ilib.LocaleInfo.defaultInfo = ilib.LocaleInfo.defaultInfo || {
     "clock": "24",
     "currency": "USD",
     "firstDayOfWeek": 1,
+    "meridiems": "gregorian",
     "numfmt": {
         "currencyFormats": {
             "common": "{s}{n}",
@@ -3589,6 +3631,26 @@ ilib.LocaleInfo.prototype = {
 		return this.info.firstDayOfWeek;
 	},
 	
+	/**
+	 * Return the day of week that starts weekend in the current locale. Days are still
+	 * numbered the standard way with 0 for Sunday through 6 for Saturday.
+	 * 
+	 * @returns {number} the day of the week that starts weeks in the current locale.
+	 */
+	getWeekEndStart: function () {
+		return this.info.weekendStart;
+	},
+
+	/**
+	 * Return the day of week that starts weekend in the current locale. Days are still
+	 * numbered the standard way with 0 for Sunday through 6 for Saturday.
+	 * 
+	 * @returns {number} the day of the week that starts weeks in the current locale.
+	 */
+	getWeekEndEnd: function () {
+		return this.info.weekendEnd;
+	},
+
 	/**
 	 * Return the default time zone for this locale. Many locales span across multiple
 	 * time zones. In this case, the time zone with the largest population is chosen
@@ -3839,7 +3901,22 @@ ilib.LocaleInfo.prototype = {
 	 */
 	getAllScripts: function() {
 		return this.info.scripts || ["Latn"];
-	}
+	},
+	
+	/**
+	 * Return the default style of meridiems used in this locale. Meridiems are 
+	 * times of day like AM/PM. In a few locales with some calendars, for example
+	 * Amharic/Ethiopia using the Ethiopic calendar, the times of day may be
+	 * split into different segments than simple AM/PM as in the Gregorian 
+	 * calendar. Only a few locales are like that. For most locales, formatting 
+	 * a Gregorian date will use the regular Gregorian AM/PM meridiems.
+	 *  
+	 * @returns {string} the default meridiems style used in this locale. Possible
+	 * values are "gregorian", "chinese", and "ethiopic"
+	 */
+	getMeridiemsStyle: function () {
+		return this.info.meridiems || "gregorian";
+	}	
 };
 
 /*
@@ -4391,6 +4468,22 @@ ilib.ResBundle.prototype = {
 			ret.setLocale(this.locale.getSpec(), true, this.loadParams); // no callback
 			return ret;
 		}
+	},
+	
+	/**
+	 * Return a localized string as a Javascript object. This does the same thing as
+	 * the getString() method, but it returns a regular Javascript string instead of
+	 * and ilib.String instance. This means it cannot be formatted with the format()
+	 * method without being wrapped in an ilib.String instance first.
+	 * 
+	 * @param {?string=} source the source string to translate
+	 * @param {?string=} key optional name of the key, if any
+	 * @param {?string=} escapeMode escape mode, if any
+	 * @return {string|undefined} the translation of the given source/key or undefined 
+	 * if the translation is not found and the source is undefined
+	 */
+	getStringJS: function(source, key, escapeMode) {
+		return this.getString(source, key, escapeMode).toString();
 	},
 	
 	/**
