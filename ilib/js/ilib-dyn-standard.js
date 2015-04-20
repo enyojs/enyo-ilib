@@ -115,6 +115,40 @@ ilib._getPlatform = function () {
 };
 
 /**
+ * If this ilib is running in a browser, return the name of that browser.
+ * @private
+ * @static
+ * @return {string|undefined} the name of the browser that this is running in ("firefox", "chrome", "ie", 
+ * "safari", or "opera"), or undefined if this is not running in a browser or if
+ * the browser name could not be determined 
+ */
+ilib._getBrowser = function () {
+	var browser = undefined;
+	if (ilib._getPlatform() === "browser") {
+		if (navigator && navigator.userAgent) {
+			if (navigator.userAgent.indexOf("Firefox") > -1) {
+				browser = "firefox";
+			}
+			if (navigator.userAgent.indexOf("Opera") > -1) {
+				browser = "opera";
+			}
+			if (navigator.userAgent.indexOf("Chrome") > -1) {
+				browser = "chrome";
+			}
+			if (navigator.userAgent.indexOf(" .NET") > -1) {
+				browser = "ie";
+			}
+			if (navigator.userAgent.indexOf("Safari") > -1) {
+				// chrome also has the string Safari in its userAgent, but the chrome case is 
+				// already taken care of above
+				browser = "safari";
+			}
+		}
+	}
+	return browser;
+};
+
+/**
  * Return true if the global variable is defined on this platform.
  * @private
  * @static
@@ -173,7 +207,7 @@ ilib.getLocale = function () {
     if (typeof(ilib.locale) !== 'string') {
         if (typeof(navigator) !== 'undefined' && typeof(navigator.language) !== 'undefined') {
             // running in a browser
-            ilib.locale = navigator.language;  // FF/Opera/Chrome/Webkit
+            ilib.locale = navigator.language.substring(0,3) + navigator.language.substring(3,5).toUpperCase();  // FF/Opera/Chrome/Webkit
             if (!ilib.locale) {
                 // IE on Windows
                 var lang = typeof(navigator.browserLanguage) !== 'undefined' ? 
@@ -277,6 +311,7 @@ ilib.getTimeZone = function() {
 };
 
 /**
+ * @class
  * Defines the interface for the loader class for ilib. The main method of the
  * loader object is loadFiles(), which loads a set of requested locale data files
  * from where-ever it is stored.
@@ -396,10 +431,10 @@ ilib.Loader.prototype.loadFiles = function (paths, sync, params, callback) {};
  *      "/usr/share/javascript/ilib/locale": [
  *          "dateformats.json",
  *          "aa/dateformats.json",
- *            "af/dateformats.json",
- *            "agq/dateformats.json",
- *            "ak/dateformats.json",
- *            ...
+ *          "af/dateformats.json",
+ *          "agq/dateformats.json",
+ *          "ak/dateformats.json",
+ *          ...
  *          "zxx/dateformats.json"
  *      ]
  *  }
@@ -1379,6 +1414,9 @@ ilib.LocaleInfo = function(locale, options) {
 		clock:string,
 		currency:string,
 		firstDayOfWeek:number,
+		weekendStart:number,
+		weekendEnd:number,
+		meridiems:string,
 		unitfmt: {long:string,short:string},
 		numfmt:Object.<{
 			currencyFormats:Object.<{common:string,commonNegative:string,iso:string,isoNegative:string}>,
@@ -1454,6 +1492,9 @@ ilib.LocaleInfo.defaultInfo = /** @type {{
 	clock:string,
 	currency:string,
 	firstDayOfWeek:number,
+	weekendStart:number,
+	weekendEnd:number,
+	meridiems:string,
 	unitfmt: {long:string,short:string},
 	numfmt:Object.<{
 		currencyFormats:Object.<{
@@ -1484,6 +1525,7 @@ ilib.LocaleInfo.defaultInfo = ilib.LocaleInfo.defaultInfo || {
     "clock": "24",
     "currency": "USD",
     "firstDayOfWeek": 1,
+    "meridiems": "gregorian",
     "numfmt": {
         "currencyFormats": {
             "common": "{s}{n}",
@@ -1577,6 +1619,26 @@ ilib.LocaleInfo.prototype = {
 		return this.info.firstDayOfWeek;
 	},
 	
+	/**
+	 * Return the day of week that starts weekend in the current locale. Days are still
+	 * numbered the standard way with 0 for Sunday through 6 for Saturday.
+	 * 
+	 * @returns {number} the day of the week that starts weeks in the current locale.
+	 */
+	getWeekEndStart: function () {
+		return this.info.weekendStart;
+	},
+
+	/**
+	 * Return the day of week that starts weekend in the current locale. Days are still
+	 * numbered the standard way with 0 for Sunday through 6 for Saturday.
+	 * 
+	 * @returns {number} the day of the week that starts weeks in the current locale.
+	 */
+	getWeekEndEnd: function () {
+		return this.info.weekendEnd;
+	},
+
 	/**
 	 * Return the default time zone for this locale. Many locales span across multiple
 	 * time zones. In this case, the time zone with the largest population is chosen
@@ -1827,7 +1889,22 @@ ilib.LocaleInfo.prototype = {
 	 */
 	getAllScripts: function() {
 		return this.info.scripts || ["Latn"];
-	}
+	},
+	
+	/**
+	 * Return the default style of meridiems used in this locale. Meridiems are 
+	 * times of day like AM/PM. In a few locales with some calendars, for example
+	 * Amharic/Ethiopia using the Ethiopic calendar, the times of day may be
+	 * split into different segments than simple AM/PM as in the Gregorian 
+	 * calendar. Only a few locales are like that. For most locales, formatting 
+	 * a Gregorian date will use the regular Gregorian AM/PM meridiems.
+	 *  
+	 * @returns {string} the default meridiems style used in this locale. Possible
+	 * values are "gregorian", "chinese", and "ethiopic"
+	 */
+	getMeridiemsStyle: function () {
+		return this.info.meridiems || "gregorian";
+	}	
 };
 
 /*
@@ -5597,7 +5674,7 @@ ilib.TimeZone.prototype.getOffsetMillis = function (date) {
 	// check if the dst property is defined -- the intrinsic JS Date object doesn't work so
 	// well if we are in the overlap time at the end of DST
 	if (this.isLocal && typeof(date.dst) === 'undefined') {
-		var d = (!date) ? new Date() : new Date(date.getTime());
+		var d = (!date) ? new Date() : new Date(date.getTimeExtended());
 		return -d.getTimezoneOffset() * 60000;
 	} 
 	
@@ -6519,6 +6596,22 @@ ilib.ResBundle.prototype = {
 	},
 	
 	/**
+	 * Return a localized string as a Javascript object. This does the same thing as
+	 * the getString() method, but it returns a regular Javascript string instead of
+	 * and ilib.String instance. This means it cannot be formatted with the format()
+	 * method without being wrapped in an ilib.String instance first.
+	 * 
+	 * @param {?string=} source the source string to translate
+	 * @param {?string=} key optional name of the key, if any
+	 * @param {?string=} escapeMode escape mode, if any
+	 * @return {string|undefined} the translation of the given source/key or undefined 
+	 * if the translation is not found and the source is undefined
+	 */
+	getStringJS: function(source, key, escapeMode) {
+		return this.getString(source, key, escapeMode).toString();
+	},
+	
+	/**
 	 * Return true if the current bundle contains a translation for the given key and
 	 * source. The
 	 * getString method will always return a string for any given key and source 
@@ -6917,8 +7010,8 @@ util/jsutils.js
  * <li><i>w</i> - week number in year
  * <li><i>ww</i> - week number in year, 0 padded to 2 digits
  * <li><i>W</i> - week in month
- * <li><i>h</i> - hour (1 to 12)
- * <li><i>hh</i> - hour (1 to 12), 0 padded to 2 digits
+ * <li><i>h</i> - hour (12 followed by 1 to 11)
+ * <li><i>hh</i> - hour (12, followed by 1 to 11), 0 padded to 2 digits
  * <li><i>k</i> - hour (1 to 24)
  * <li><i>kk</i> - hour (1 to 24), 0 padded to 2 digits
  * <li><i>H</i> - hour (0 to 23)
@@ -6939,9 +7032,13 @@ util/jsutils.js
  * for formatting the numbers.
  *
  * <li><i>meridiems</i> - string that specifies what style of meridiems to use with this 
- * format. The choices are "default" and "chinese". The "default" style is the simple AM/PM,
- * and the "chinese" style uses 7 different meridiems corresponding to the various parts of 
- * the day. The default if not specified is "default", even for the Chinese locales. 
+ * format. The choices are "default", "gregorian", "ethiopic", and "chinese". The "default" 
+ * style is often the simple Gregorian AM/PM, but the actual style is chosen by the locale. 
+ * (For almost all locales, the Gregorian AM/PM style is most frequently used.)
+ * The "ethiopic" style uses 5 different meridiems for "morning", "noon", "afternoon", 
+ * "evening", and "night". The "chinese" style uses 7 different meridiems corresponding 
+ * to the various parts of the day. N.B. Even for the Chinese locales, the default is "gregorian"
+ * when formatting dates in the Gregorian calendar.
  *
  * <li><i>onLoad</i> - a callback function to call when the date format object is fully 
  * loaded. When the onLoad option is given, the DateFmt object will attempt to
@@ -7100,7 +7197,10 @@ ilib.DateFmt = function(options) {
 			this.useNative = options.useNative;
 		}
 		
-		if (typeof(options.meridiems) !== 'undefined' && options.meridiems === "chinese") {
+		if (typeof(options.meridiems) !== 'undefined' && 
+				(options.meridiems === "chinese" || 
+				 options.meridiems === "gregorian" || 
+				 options.meridiems === "ethiopic")) {
 			this.meridiems = options.meridiems;
 		}
 		
@@ -7129,6 +7229,10 @@ ilib.DateFmt = function(options) {
 			});
 			if (!this.cal) {
 				this.cal = new ilib.Cal.Gregorian();
+			}
+			
+			if (this.meridiems === "default") {
+				this.meridiems = li.getMeridiemsStyle();
 			}
 
 			/*
@@ -7420,7 +7524,7 @@ ilib.DateFmt.prototype = {
 	 * @return {string|undefined} the requested format
 	 */
 	_getFormat: function getFormat(obj, components, length) {
-		if (typeof(components) !== 'undefined' && obj[components]) {
+		if (typeof(components) !== 'undefined' && obj && obj[components]) {
 			return this._getLengthFormat(obj[components], length);
 		}
 		return undefined;
@@ -7681,7 +7785,6 @@ ilib.DateFmt.prototype = {
 				case 'MM':
 					str += this._pad(date.month || "1", 2);
 					break;
-
 				case 'h':
 					temp = (date.hour || 0) % 12;
 					if (temp == 0) {
@@ -7696,6 +7799,16 @@ ilib.DateFmt.prototype = {
 					}
 					str += this._pad(temp, 2);
 					break;
+				/*
+				case 'j':
+					temp = (date.hour || 0) % 12 + 1;
+					str += temp; 
+					break;
+				case 'jj':
+					temp = (date.hour || 0) % 12 + 1;
+					str += this._pad(temp, 2);
+					break;
+				*/
 				case 'K':
 					temp = (date.hour || 0) % 12;
 					str += temp; 
@@ -7756,7 +7869,8 @@ ilib.DateFmt.prototype = {
 					break;
 					
 				case 'a':
-					if (this.meridiems === "chinese") {
+					switch (this.meridiems) {
+					case "chinese":
 						if (date.hour < 6) {
 							key = "azh0";	// before dawn
 						} else if (date.hour < 9) {
@@ -7772,8 +7886,23 @@ ilib.DateFmt.prototype = {
 						} else {
 							key = "azh6";	// night time
 						}
-					} else {
+						break;
+					case "ethiopic":
+						if (date.hour < 6) {
+							key = "a0-ethiopic";	// morning
+						} else if (date.hour === 6 && date.minute === 0) {
+							key = "a1-ethiopic";	// noon
+						} else if (date.hour >= 6 && date.hour < 12) {
+							key = "a2-ethiopic";	// afternoon
+						} else if (date.hour >= 12 && date.hour < 18) {
+							key = "a3-ethiopic";	// evening
+						} else if (date.hour >= 18) {
+							key = "a4-ethiopic";	// night
+						}
+						break;
+					default:
 						key = date.hour < 12 ? "a0" : "a1";
+						break;
 					}
 					//console.log("finding " + key + " in the resources");
 					str += (this.sysres.getString(undefined, key + "-" + this.calName) || this.sysres.getString(undefined, key));
@@ -8659,6 +8788,10 @@ ilib.Date.GregDate = function(params) {
 	this.timezone = "local";
 
 	if (params) {
+		if (typeof(params.noinstance) === 'boolean' && params.noinstance) {
+			// for doing inheritance, so don't need to fill in the data. The inheriting class only wants the methods.
+			return;
+		}
 		if (params.locale) {
 			this.locale = (typeof(params.locale) === 'string') ? new ilib.Locale(params.locale) : params.locale;
 			var li = new ilib.LocaleInfo(this.locale);
@@ -8769,11 +8902,11 @@ ilib.Date.GregDate.prototype._calcYear = function(rd) {
  * @private
  */
 ilib.Date.GregDate.prototype._calcDateComponents = function () {
-	if (this.timezone === "local" && this.rd.getRataDie() >= 719163 && this.rd.getRataDie() <= 744018.134803241) {
+	if (this.timezone === "local" && this.rd.getRataDie() >= -99280837 && this.rd.getRataDie() <= 100719163) {
 		// console.log("using js Date to calculate offset");
 		// use the intrinsic JS Date object to do the tz conversion for us, which 
 		// guarantees that it follows the system tz database settings 
-		var d = new Date(this.rd.getTime());
+		var d = new Date(this.rd.getTimeExtended());
 	
 		/**
 		 * Year in the Gregorian calendar.
@@ -9107,7 +9240,7 @@ ilib.Date.ThaiSolarDate = function(params) {
 	}
 };
 
-ilib.Date.ThaiSolarDate.prototype = new ilib.Date.GregDate();
+ilib.Date.ThaiSolarDate.prototype = new ilib.Date.GregDate({noinstance: true});
 ilib.Date.ThaiSolarDate.prototype.parent = ilib.Date.GregDate.prototype;
 ilib.Date.ThaiSolarDate.prototype.constructor = ilib.Date.ThaiSolarDate;
 
@@ -11878,6 +12011,13 @@ ilib.NumFmt = function (options) {
 			 * @type {number|undefined} 
 			 */
 			this.minFractionDigits = this._toPrimitive(options.minFractionDigits);
+			// enforce the limits to avoid JS exceptions
+			if (this.minFractionDigits < 0) {
+				this.minFractionDigits = 0;
+			}
+			if (this.minFractionDigits > 20) {
+				this.minFractionDigits = 20;
+			}
 		}
 		if (options.style) {
 			/** 
@@ -12099,26 +12239,39 @@ ilib.NumFmt.prototype = {
 	_formatScientific: function (num) {
 		var n = new Number(num);
 		var formatted;
-		if (typeof (this.maxFractionDigits) !== 'undefined') {
-			// if there is fraction digits, round it to the right length first
-			// divide or multiply by 10 by manipulating the exponent so as to
-			// avoid the rounding errors of floating point numbers
-			var e,
-				factor,
-				str = n.toExponential(),
-				parts = str.split("e"),
-				significant = parts[0];
+		
+		var factor,
+			str = n.toExponential(),
+			parts = str.split("e"),
+			significant = parts[0],
+			exponent = parts[1],
+			numparts,
+			integral,
+			fraction;
 
-			e = parts[1];
+		if (this.maxFractionDigits > 0) {
+			// if there is a max fraction digits setting, round the fraction to 
+			// the right length first by dividing or multiplying by powers of 10. 
+			// manipulate the fraction digits so as to
+			// avoid the rounding errors of floating point numbers
 			factor = Math.pow(10, this.maxFractionDigits);
 			significant = this.round(significant * factor) / factor;
-			formatted = "" + significant + this.exponentSymbol + e;
-		} else {
-			formatted = n.toExponential(this.minFractionDigits);
-			if (this.exponentSymbol !== 'e') {
-				formatted = formatted.replace(/e/, this.exponentSymbol);
-			}
 		}
+		numparts = ("" + significant).split(".");
+		integral = numparts[0];
+		fraction = numparts[1];
+		
+		if (typeof(this.maxFractionDigits) !== 'undefined') {
+			fraction = fraction.substring(0, this.maxFractionDigits);
+		}
+		if (typeof(this.minFractionDigits) !== 'undefined') {
+			fraction = this._pad(fraction || "", this.minFractionDigits, false);
+		}
+		formatted = integral;
+		if (fraction.length) {
+			formatted += this.decimalSeparator + fraction;	
+		} 
+		formatted += this.exponentSymbol + exponent;
 		return formatted;
 	},
 
@@ -12532,6 +12685,7 @@ ilib.DurFmt = function(options) {
 			if (this.style === 'clock') {
 				new ilib.DateFmt({
 					locale: this.locale,
+					calendar: "gregorian",
 					type: "time",
 					time: "ms",
 					sync: sync,
@@ -12541,6 +12695,7 @@ ilib.DurFmt = function(options) {
 						this.timeFmtMS = fmtMS;
 						new ilib.DateFmt({
 							locale: this.locale,
+							calendar: "gregorian",
 							type: "time",
 							time: "hm",
 							sync: sync,
@@ -12550,6 +12705,7 @@ ilib.DurFmt = function(options) {
 								this.timeFmtHM = fmtHM;		
 								new ilib.DateFmt({
 									locale: this.locale,
+									calendar: "gregorian",
 									type: "time",
 									time: "hms",
 									sync: sync,
@@ -12974,6 +13130,25 @@ ilib.CaseMapper = function (options) {
 		this.up = (!options.direction || options.direction === "toupper");
 	}
 
+	this.mapData = this.up ? {
+		"ß": "SS",		// German
+		'ΐ': 'Ι',		// Greek
+		'ά': 'Α',
+		'έ': 'Ε',
+		'ή': 'Η',
+		'ί': 'Ι',
+		'ΰ': 'Υ',
+		'ϊ': 'Ι',
+		'ϋ': 'Υ',
+		'ό': 'Ο',
+		'ύ': 'Υ',
+		'ώ': 'Ω',
+		'Ӏ': 'Ӏ',		// Russian and slavic languages
+		'ӏ': 'Ӏ'
+	} : {
+		'Ӏ': 'Ӏ'		// Russian and slavic languages
+	};
+
 	switch (this.locale.getLanguage()) {
 		case "az":
 		case "tr":
@@ -12981,93 +13156,25 @@ ilib.CaseMapper = function (options) {
 		case "kk":
 		case "krc":
 		case "tt":
-			this.mapData = this.up ?  {
-				"i": "İ",
-				"ı": "I"
-			} : {
-				"İ": "i",
-				"I": "ı"
-			};
-			this.mapper = this._charMapper;
-			break;
-		case "de":
-			if (this.up) {
-				this.mapper = this._charMapper;
-				this.mapData = {
-					"ß": "SS"
-				};
-			}
+			var lower = "iı";
+			var upper = "İI";
+			this._setUpMap(lower, upper);
 			break;
 		case "fr":
 			if (this.up && this.locale.getRegion() !== "CA") {
-				this.mapData = {
-					'à': 'A',
-					'á': 'A',
-					'â': 'A',
-					'ã': 'A',
-					'ä': 'A',
-					'ç': 'C',
-					'è': 'E',
-					'é': 'E',
-					'ê': 'E',
-					'ë': 'E',
-					'ì': 'I',
-					'í': 'I',
-					'î': 'I',
-					'ï': 'I',
-					'ñ': 'N',
-					'ò': 'O',
-					'ó': 'O',
-					'ô': 'O',
-					'ö': 'O',
-					'ù': 'U',
-					'ú': 'U',
-					'û': 'U',
-					'ü': 'U'
-				};
-				this.mapper = this._charMapper;
-			}
-			break;
-		case "el":
-			this.mapData = this.up ? {
-				'ΐ': 'Ι',
-				'ά': 'Α',
-				'έ': 'Ε',
-				'ή': 'Η',
-				'ί': 'Ι',
-				'ΰ': 'Υ',
-				'ϊ': 'Ι',
-				'ϋ': 'Υ',
-				'ό': 'Ο',
-				'ύ': 'Υ',
-				'ώ': 'Ω'	
-			} : {};
-			this.mapper = this._charMapper;
-			break;
-		case "abq":
-		case "ady":
-		case "av":
-		case "ce":
-		case "dar":
-		case "inh":
-		case "kbd":
-		case "lbe":
-		case "lez":
-		case "tab":
-		case "ru":
-			if (!this.up) {
-				this.mapData = {
-					'Ӏ': 'Ӏ'	
-				};
-				this.mapper = this._charMapper;
+				this._setUpMap("àáâãäçèéêëìíîïñòóôöùúûü", "AAAAACEEEEIIIINOOOOUUUU");
 			}
 			break;
 	}
 	
-	if (!this.mapper) {
-		this.mapper = function(string) {
-			return this.up ? string.toUpperCase() : string.toLowerCase();
-		};
+	if (ilib._getBrowser() === "ie") {
+		// IE is missing these mappings for some reason
+		if (this.up) {
+			this.mapData['ς'] = 'Σ';
+		}
+		this._setUpMap("ⲁⲃⲅⲇⲉⲋⲍⲏⲑⲓⲕⲗⲙⲛⲝⲟⲡⲣⲥⲧⲩⲫⲭⲯⲱⳁⳉⳋ", "ⲀⲂⲄⲆⲈⲊⲌⲎⲐⲒⲔⲖⲘⲚⲜⲞⲠⲢⲤⲦⲨⲪⲬⲮⲰⳀⳈⳊ"); // Coptic
+		// Georgian Nuskhuri <-> Asomtavruli
+		this._setUpMap("ⴀⴁⴂⴃⴄⴅⴆⴇⴈⴉⴊⴋⴌⴍⴎⴏⴐⴑⴒⴓⴔⴕⴖⴗⴘⴙⴚⴛⴜⴝⴞⴟⴠⴡⴢⴣⴤⴥ", "ႠႡႢႣႤႥႦႧႨႩႪႫႬႭႮႯႰႱႲႳႴႵႶႷႸႹႺႻႼႽႾႿჀჁჂჃჄჅ");	
 	}
 };
 
@@ -13076,15 +13183,10 @@ ilib.CaseMapper.prototype = {
 	 * @private 
 	 */
 	_charMapper: function(string) {
-		var input;
 		if (!string) {
 			return string;
 		}
-		if (typeof(string) === 'string') {
-			input = new ilib.String(string);
-		} else {
-			input = string.toString();
-		}
+		var input = (typeof(string) === 'string') ? new ilib.String(string) : string.toString();
 		var ret = "";
 		var it = input.charIterator();
 		var c;
@@ -13115,6 +13217,21 @@ ilib.CaseMapper.prototype = {
 		return ret;
 	},
 
+	/** @private */
+	_setUpMap: function(lower, upper) {
+		var from, to;
+		if (this.up) {
+			from = lower;
+			to = upper;
+		} else {
+			from = upper;
+			to = lower;
+		}
+		for (var i = 0; i < upper.length; i++) {
+			this.mapData[from[i]] = to[i];
+		}
+	},
+
 	/**
 	 * Return the locale that this mapper was constructed with. 
 	 * @returns {ilib.Locale} the locale that this mapper was constructed with
@@ -13130,7 +13247,7 @@ ilib.CaseMapper.prototype = {
 	 * @return {string|undefined}
 	 */
 	map: function (string) {
-		return this.mapper(string);
+		return this._charMapper(string);
 	}
 };
 /**
