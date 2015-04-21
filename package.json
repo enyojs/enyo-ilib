@@ -25,7 +25,7 @@
 		"ilib/locale",
 		"README.md"
 	],
-	"assets": [
+	"devAssets": [
 		"ilib/locale/**/*.json"
 	]
 }
