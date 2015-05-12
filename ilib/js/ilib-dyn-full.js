@@ -175,7 +175,8 @@ ilib._isGlobal = function(name) {
  * when no explicit locale is passed to any ilib class. If the default
  * locale is not set, ilib will attempt to use the locale of the
  * environment it is running in, if it can find that. If not, it will
- * default to the locale "en-US".<p>
+ * default to the locale "en-US". If a type of parameter is string, 
+ * ilib will take only well-formed BCP-47 tag  <p>
  * 
  * Depends directive: !depends ilibglobal.js
  * 
@@ -547,8 +548,11 @@ ilib.setLoaderCallback = function(loader) {
 ilib.Locale = function(language, region, variant, script) {
 	if (typeof(region) === 'undefined') {
 		var spec = language || ilib.getLocale();
+
 		if (typeof(spec) === 'string') {
 			var parts = spec.split('-');
+
+
 	        for ( var i = 0; i < parts.length; i++ ) {
 	        	if (ilib.Locale._isLanguageCode(parts[i])) {
 	    			/** 
@@ -7363,6 +7367,52 @@ ilib.DateFmt.weekDayLenMap = {
 	"full":   "EEEE"
 };
 
+/**
+	 * @protected
+	 * @param {Object.<string, (string|{s:string,m:string,l:string,f:string})>} obj Object to search
+	 * @param {string} components Format components to search
+	 * @param {string} length Length of the requested format
+	 * @return {string|undefined} the requested format
+	 */
+
+/**
+* @static
+* @public
+* The options may contain any of the following properties:
+*
+* <ul>
+* <li><i>locale</i> - locale to use when formatting the date/time. If the locale is
+* not specified, then the default locale of the app or web page will be used.
+* 
+* <li><i>meridiems</i> - string that specifies what style of meridiems to use with this 
+* format. The choices are "default", "gregorian", "ethiopic", and "chinese". The "default" 
+* style is often the simple Gregorian AM/PM, but the actual style is chosen by the locale. 
+* (For almost all locales, the Gregorian AM/PM style is most frequently used.)
+* The "ethiopic" style uses 5 different meridiems for "morning", "noon", "afternoon", 
+* "evening", and "night". The "chinese" style uses 7 different meridiems corresponding 
+* to the various parts of the day. N.B. Even for the Chinese locales, the default is "gregorian"
+* when formatting dates in the Gregorian calendar.
+* </ul>
+*
+* @param {Object} options options governing the way this date formatter instance works for getting meridiems range
+* @return {Array.<{name:string,start:string,end:string}>}
+*/
+ilib.DateFmt.getMeridiemsRange = function (options) {
+	options = options || {};
+	var args = {};
+	if (options.locale) {
+		args.locale = options.locale;
+	}
+
+	if (options.meridiems) {
+		args.meridiems = options.meridiems;
+	}
+
+	var fmt = new ilib.DateFmt(args);
+
+	return fmt.getMeridiemsRange();
+};
+
 ilib.DateFmt.prototype = {
 	/**
 	 * @protected
@@ -7646,6 +7696,103 @@ ilib.DateFmt.prototype = {
 	 */
 	getClock: function () {
 		return this.clock || this.locinfo.getClock();
+	},
+	/**
+	 * Return the meridiems range in current locale. 
+	 * @return {Array.<{name:string,start:string,end:string}>}
+	 */
+	getMeridiemsRange: function () {
+		var result;
+		var _getSysString = function (key) {
+			return (this.sysres.getString(undefined, key + "-" + this.calName) || this.sysres.getString(undefined, key)).toString();
+		};
+
+		switch (this.meridiems) {
+		case "chinese":
+			result = [
+				{
+					name: _getSysString.call(this, "azh0"),
+					start: "00:00",
+					end: "05:59"
+				},
+				{
+					name: _getSysString.call(this, "azh1"),
+					start: "06:00",
+					end: "08:59"
+				},
+				{
+					name: _getSysString.call(this, "azh2"),
+					start: "09:00",
+					end: "11:59"
+				},
+				{
+					name: _getSysString.call(this, "azh3"),
+					start: "12:00",
+					end: "12:59"
+				},
+				{
+					name: _getSysString.call(this, "azh4"),
+					start: "13:00",
+					end: "17:59"
+				},
+				{
+					name: _getSysString.call(this, "azh5"),
+					start: "18:00",
+					end: "20:59"
+				},
+				{
+					name: _getSysString.call(this, "azh6"),
+					start: "21:00",
+					end: "23:59"
+				}
+			];
+			break;
+		case "ethiopic":
+			result = [
+				{
+					name: _getSysString.call(this, "a0-ethiopic"),
+					start: "00:00",
+					end: "05:59"
+				},
+				{
+					name: _getSysString.call(this, "a1-ethiopic"),
+					start: "06:00",
+					end: "06:00"
+				},
+				{
+					name: _getSysString.call(this, "a2-ethiopic"),
+					start: "06:01",
+					end: "11:59"
+				},
+				{
+					name: _getSysString.call(this, "a3-ethiopic"),
+					start: "12:00",
+					end: "17:59"
+				},
+				{
+					name: _getSysString.call(this, "a4-ethiopic"),
+					start: "18:00",
+					end: "23:59"
+				}
+			];
+			break;
+		default:
+			result = [
+				{
+					name: _getSysString.call(this, "a0"),
+					start: "00:00",
+					end: "11:59"
+				},
+				{
+					name: _getSysString.call(this, "a1"),
+					start: "12:00",
+					end: "23:59"
+				}
+			];
+			break;
+		}
+
+		return result;
 	},
 	
 	/**
@@ -14557,12 +14704,23 @@ ilib.Cal.Ethiopic.prototype.getNumMonths = function(year) {
  * can return a different number for a month depending on the year because of things
  * like leap years.
  * 
- * @param {number} month the month for which the length is sought
+ * @param {number|string} month the month for which the length is sought
  * @param {number} year the year within which that month can be found
  * @return {number} the number of days within the given month in the given year
  */
 ilib.Cal.Ethiopic.prototype.getMonLength = function(month, year) {
-	if (month < 13) {
+	var m = month;
+	switch (typeof(m)) {
+        case "string": 
+            m = parseInt(m, 10); 
+            break;
+        case "function":
+        case "object":
+        case "undefined":
+            return 30;
+            break;
+    }    
+	if (m < 13) {
 		return 30;
 	} else {
 		return this.isLeapYear(year) ? 6 : 5;
@@ -14572,11 +14730,26 @@ ilib.Cal.Ethiopic.prototype.getMonLength = function(month, year) {
 /**
  * Return true if the given year is a leap year in the Ethiopic calendar.
  * The year parameter may be given as a number, or as a JulDate object.
- * @param {number|ilib.Date.JulDate} year the year for which the leap year information is being sought
+ * @param {number|ilib.Date.JulDate|string} year the year for which the leap year information is being sought
  * @return {boolean} true if the given year is a leap year
  */
 ilib.Cal.Ethiopic.prototype.isLeapYear = function(year) {
-	var y = (typeof(year) === 'number' ? year : year.year);
+	var y = year;
+	 switch (typeof(y)) {
+        case "string":
+            y = parseInt(y, 10);
+            break;
+        case "object":
+            if (typeof(y.year) !== "number") { // in case it is an ilib.Date object
+                return false;
+            }
+            y = y.year;
+            break;
+        case "function":
+        case "undefined":
+            return false;
+            break;
+    }
 	return ilib.mod(y, 4) === 3;
 };
 

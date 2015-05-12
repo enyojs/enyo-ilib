@@ -175,7 +175,8 @@ ilib._isGlobal = function(name) {
  * when no explicit locale is passed to any ilib class. If the default
  * locale is not set, ilib will attempt to use the locale of the
  * environment it is running in, if it can find that. If not, it will
- * default to the locale "en-US".<p>
+ * default to the locale "en-US". If a type of parameter is string, 
+ * ilib will take only well-formed BCP-47 tag  <p>
  * 
  * Depends directive: !depends ilibglobal.js
  * 
@@ -1314,8 +1315,11 @@ ilib.loadData = function(params) {
 ilib.Locale = function(language, region, variant, script) {
 	if (typeof(region) === 'undefined') {
 		var spec = language || ilib.getLocale();
+
 		if (typeof(spec) === 'string') {
 			var parts = spec.split('-');
+
+
 	        for ( var i = 0; i < parts.length; i++ ) {
 	        	if (ilib.Locale._isLanguageCode(parts[i])) {
 	    			/** 
