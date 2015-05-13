@@ -1,7 +1,8 @@
 {
 	"name": "enyo-ilib",
-	"version": "6.0-003",
+	"version": "11.0-003",
 	"main": "./index.js",
+	"moduleDir": "ilib/lib",
 	"description": "iLib plugin for enyo. iLib is a cross-engine library of internationalization (i18n) classes written in pure JS",
 	"keywords": [
 		"internationalization",
@@ -17,14 +18,6 @@
 		"translation"
 	],
 	"license": "apache2",
-	"files": [
-		"packedbuffer.js",
-		"zoneinfo.js",
-		"nodeglue.js",
-		"ilib/js",
-		"ilib/locale",
-		"README.md"
-	],
 	"assets": [
 		"ilib/locale/**/*.json"
 	]
