@@ -42,6 +42,11 @@ To use this under nodejs, check out this module under your nodejs app/service. T
 
 Now the ilib namespace is available to use as normal.
 
+## Samples
+
+All samples reside in a consolidated sample app for Enyo and its libraries:
+[enyo-strawman](https://github.com/enyojs/enyo-strawman)
+
 ## Copyright and License Information
 
 Unless otherwise specified, all content, including all source code files and

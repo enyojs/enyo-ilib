@@ -1,6 +1,6 @@
 /*
  * ilibglobal.js - define the ilib name space
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,7 @@ var ilib = ilib || {};
 
 /**
  * Return the current version of ilib.
- * 
+ *
  * @static
  * @return {string} a version string for this instance of ilib
  */
@@ -74,10 +74,10 @@ ilib.pseudoLocales = ["zxx-XX"];
  * internationalization aspects of software. Instead of translating the text of the software
  * into a foreign language, as in the process of localization, the textual elements of an application
  * are replaced with an altered version of the original language.These specific alterations make
- * the original words appear readable, but include the most problematic characteristics of 
+ * the original words appear readable, but include the most problematic characteristics of
  * the world's languages: varying length of text or characters, language direction, and so on.
  * Regular Latin pseudo locale: eu-ES and RTL pseudo locale: ps-AF
- * 
+ *
  * @param {string|undefined|null} localename the locale specifier for the pseudo locale
  */
 ilib.setAsPseudoLocale = function (localename) {
@@ -110,7 +110,7 @@ ilib._getPlatform = function () {
         } else {
             ilib._platform = "unknown";
         }
-    }    
+    }
     return ilib._platform;
 };
 
@@ -118,9 +118,9 @@ ilib._getPlatform = function () {
  * If this ilib is running in a browser, return the name of that browser.
  * @private
  * @static
- * @return {string|undefined} the name of the browser that this is running in ("firefox", "chrome", "ie", 
+ * @return {string|undefined} the name of the browser that this is running in ("firefox", "chrome", "ie",
  * "safari", or "opera"), or undefined if this is not running in a browser or if
- * the browser name could not be determined 
+ * the browser name could not be determined
  */
 ilib._getBrowser = function () {
 	var browser = undefined;
@@ -139,7 +139,7 @@ ilib._getBrowser = function () {
 				browser = "ie";
 			}
 			if (navigator.userAgent.indexOf("Safari") > -1) {
-				// chrome also has the string Safari in its userAgen, but the chrome case is 
+				// chrome also has the string Safari in its userAgent, but the chrome case is
 				// already taken care of above
 				browser = "safari";
 			}
@@ -164,7 +164,7 @@ ilib._isGlobal = function(name) {
         case "nodejs":
             var root = typeof(global) !== 'undefined' ? global : this;
             return root && typeof(root[name]) !== undefined;
-            
+
         default:
             return typeof(window[name]) !== undefined;
     }
@@ -176,9 +176,9 @@ ilib._isGlobal = function(name) {
  * locale is not set, ilib will attempt to use the locale of the
  * environment it is running in, if it can find that. If not, it will
  * default to the locale "en-US".<p>
- * 
+ *
  * Depends directive: !depends ilibglobal.js
- * 
+ *
  * @static
  * @param {string|undefined|null} spec the locale specifier for the default locale
  */
@@ -191,15 +191,15 @@ ilib.setLocale = function (spec) {
 };
 
 /**
- * Return the default locale for all of ilib if one has been set. This 
- * locale will be used when no explicit locale is passed to any ilib 
+ * Return the default locale for all of ilib if one has been set. This
+ * locale will be used when no explicit locale is passed to any ilib
  * class. If the default
  * locale is not set, ilib will attempt to use the locale of the
  * environment it is running in, if it can find that. If not, it will
  * default to the locale "en-US".<p>
- * 
- * Depends directive: !depends ilibglobal.js 
- * 
+ *
+ * Depends directive: !depends ilibglobal.js
+ *
  * @static
  * @return {string} the locale specifier for the default locale
  */
@@ -210,10 +210,10 @@ ilib.getLocale = function () {
             ilib.locale = navigator.language.substring(0,3) + navigator.language.substring(3,5).toUpperCase();  // FF/Opera/Chrome/Webkit
             if (!ilib.locale) {
                 // IE on Windows
-                var lang = typeof(navigator.browserLanguage) !== 'undefined' ? 
-                    navigator.browserLanguage : 
-                    (typeof(navigator.userLanguage) !== 'undefined' ? 
-                        navigator.userLanguage : 
+                var lang = typeof(navigator.browserLanguage) !== 'undefined' ?
+                    navigator.browserLanguage :
+                    (typeof(navigator.userLanguage) !== 'undefined' ?
+                        navigator.userLanguage :
                         (typeof(navigator.systemLanguage) !== 'undefined' ?
                             navigator.systemLanguage :
                             undefined));
@@ -245,7 +245,7 @@ ilib.getLocale = function () {
                 ilib.locale = lang.substring(0,2).toLowerCase() + '-' + lang.substring(3,5).toUpperCase();
             }
         }
-             
+
         ilib.locale = typeof(ilib.locale) === 'string' ? ilib.locale : 'en-US';
     }
     return ilib.locale;
@@ -257,9 +257,9 @@ ilib.getLocale = function () {
  * is not set, ilib will attempt to use the time zone of the
  * environment it is running in, if it can find that. If not, it will
  * default to the the UTC zone "Etc/UTC".<p>
- * 
+ *
  * Depends directive: !depends ilibglobal.js
- * 
+ *
  * @static
  * @param {string} tz the name of the time zone to set as the default time zone
  */
@@ -268,15 +268,15 @@ ilib.setTimeZone = function (tz) {
 };
 
 /**
- * Return the default time zone for all of ilib if one has been set. This 
- * time zone will be used when no explicit time zone is passed to any ilib 
+ * Return the default time zone for all of ilib if one has been set. This
+ * time zone will be used when no explicit time zone is passed to any ilib
  * class. If the default time zone
  * is not set, ilib will attempt to use the locale of the
  * environment it is running in, if it can find that. If not, it will
  * default to the the zone "local".<p>
- * 
+ *
  * Depends directive: !depends ilibglobal.js
- * 
+ *
  * @static
  * @return {string} the default time zone for ilib
  */
@@ -303,14 +303,15 @@ ilib.getTimeZone = function() {
                 ilib.tz = process.env.TZ;
             }
         }
-        
-        ilib.tz = ilib.tz || "local"; 
+
+        ilib.tz = ilib.tz || "local";
     }
 
     return ilib.tz;
 };
 
 /**
+ * @class
  * Defines the interface for the loader class for ilib. The main method of the
  * loader object is loadFiles(), which loads a set of requested locale data files
  * from where-ever it is stored.
@@ -320,23 +321,23 @@ ilib.Loader = function() {};
 
 /**
  * Load a set of files from where-ever it is stored.<p>
- * 
- * This is the main function define a callback function for loading missing locale 
+ *
+ * This is the main function define a callback function for loading missing locale
  * data or resources.
  * If this copy of ilib is assembled without including the required locale data
- * or resources, then that data can be lazy loaded dynamically when it is 
+ * or resources, then that data can be lazy loaded dynamically when it is
  * needed by calling this method. Each ilib class will first
- * check for the existence of data under ilib.data, and if it is not there, 
+ * check for the existence of data under ilib.data, and if it is not there,
  * it will attempt to load it by calling this method of the laoder, and then place
  * it there.<p>
- * 
- * Suggested implementations of this method might load files 
- * directly from disk under nodejs or rhino, or within web pages, to load 
+ *
+ * Suggested implementations of this method might load files
+ * directly from disk under nodejs or rhino, or within web pages, to load
  * files from the server with XHR calls.<p>
- * 
- * The first parameter to this method, paths, is an array of relative paths within 
- * the ilib dir structure for the 
- * requested data. These paths will already have the locale spec integrated 
+ *
+ * The first parameter to this method, paths, is an array of relative paths within
+ * the ilib dir structure for the
+ * requested data. These paths will already have the locale spec integrated
  * into them, so no further tweaking needs to happen to load the data. Simply
  * load the named files. The second
  * parameter tells the loader whether to load the files synchronously or asynchronously.
@@ -344,28 +345,28 @@ ilib.Loader = function() {};
  * The third parameter gives extra parameters to the loader passed from the calling
  * code. This may contain any property/value pairs.  The last parameter, callback,
  * is a callback function to call when all of the data is finishing loading. Make
- * sure to call the callback with the context of "this" so that the caller has their 
+ * sure to call the callback with the context of "this" so that the caller has their
  * context back again.<p>
- * 
- * The loader function must be able to operate either synchronously or asychronously. 
+ *
+ * The loader function must be able to operate either synchronously or asychronously.
  * If the loader function is called with an undefined callback function, it is
  * expected to load the data synchronously, convert it to javascript
- * objects, and return the array of json objects as the return value of the 
- * function. If the loader 
- * function is called with a callback function, it may load the data 
+ * objects, and return the array of json objects as the return value of the
+ * function. If the loader
+ * function is called with a callback function, it may load the data
  * synchronously or asynchronously (doesn't matter which) as long as it calls
  * the callback function with the data converted to a javascript objects
- * when it becomes available. If a particular file could not be loaded, the 
+ * when it becomes available. If a particular file could not be loaded, the
  * loader function should put undefined into the corresponding entry in the
- * results array. 
+ * results array.
  * Note that it is important that all the data is loaded before the callback
  * is called.<p>
- * 
+ *
  * An example implementation for nodejs might be:
- * 
+ *
  * <pre>
  * var fs = require("fs");
- * 
+ *
  * var myLoader = function() {};
  * myLoader.prototype = new ilib.Loader();
  * myLoader.prototype.constructor = myLoader;
@@ -377,7 +378,7 @@ ilib.Loader = function() {};
  *            var json = fs.readFileSync(path, "utf-8");
  *            ret.push(json ? JSON.parse(json) : undefined);
  *        });
- *        
+ *
  *        return ret;
  *    }
  *    this.callback = callback;
@@ -401,18 +402,18 @@ ilib.Loader = function() {};
  *        });
  *     }
  * }
- * 
+ *
  * // bind to "this" so that "this" is relative to your own instance
  * ilib.setLoaderCallback(new myLoader());
  * </pre>
 
- * @param {Array.<string>} paths An array of paths to load from wherever the files are stored 
+ * @param {Array.<string>} paths An array of paths to load from wherever the files are stored
  * @param {Boolean} sync if true, load the files synchronously, and false means asynchronously
- * @param {Object} params an object with any extra parameters for the loader. These can be 
+ * @param {Object} params an object with any extra parameters for the loader. These can be
  * anything. The caller of the ilib class passes these parameters in. Presumably, the code that
- * calls ilib and the code that provides the loader are together and can have a private 
+ * calls ilib and the code that provides the loader are together and can have a private
  * agreement between them about what the parameters should contain.
- * @param {function(Object)} callback function to call when the files are all loaded. The 
+ * @param {function(Object)} callback function to call when the files are all loaded. The
  * parameter of the callback function is the contents of the files.
  */
 ilib.Loader.prototype.loadFiles = function (paths, sync, params, callback) {};
@@ -423,23 +424,23 @@ ilib.Loader.prototype.loadFiles = function (paths, sync, params, callback) {};
  * directories where files are loaded from and the values are an array
  * of strings containing the relative paths under the directory of each
  * file that can be loaded.<p>
- * 
+ *
  * Example:
  *  <pre>
  *  {
  *      "/usr/share/javascript/ilib/locale": [
  *          "dateformats.json",
  *          "aa/dateformats.json",
- *            "af/dateformats.json",
- *            "agq/dateformats.json",
- *            "ak/dateformats.json",
- *            ...
+ *          "af/dateformats.json",
+ *          "agq/dateformats.json",
+ *          "ak/dateformats.json",
+ *          ...
  *          "zxx/dateformats.json"
  *      ]
  *  }
  *  </pre>
  * @returns {Object} a hash containing directory names and
- * paths to file that can be loaded by this loader 
+ * paths to file that can be loaded by this loader
  */
 ilib.Loader.prototype.listAvailableFiles = function() {};
 
@@ -455,10 +456,10 @@ ilib.Loader.prototype.listAvailableFiles = function() {};
 ilib.Loader.prototype.isAvailable = function(path) {};
 
 /**
- * Set the custom loader used to load ilib's locale data in your environment. 
+ * Set the custom loader used to load ilib's locale data in your environment.
  * The instance passed in must implement the ilib.Loader interface. See the
- * ilib.Loader class documentation for more information about loaders. 
- * 
+ * ilib.Loader class documentation for more information about loaders.
+ *
  * @static
  * @param {ilib.Loader} loader class to call to access the requested data.
  * @return {boolean} true if the loader was installed correctly, or false
@@ -466,7 +467,7 @@ ilib.Loader.prototype.isAvailable = function(path) {};
  */
 ilib.setLoaderCallback = function(loader) {
     // only a basic check
-    if ((typeof(loader) === 'object' && loader instanceof ilib.Loader) || 
+    if ((typeof(loader) === 'object' && loader instanceof ilib.Loader) ||
             typeof(loader) === 'function' || typeof(loader) === 'undefined') {
         // console.log("setting callback loader to " + (loader ? loader.name : "undefined"));
         ilib._load = loader;
@@ -477,7 +478,7 @@ ilib.setLoaderCallback = function(loader) {
 
 /*
  * util/jsutils.js - Misc utilities to work around Javascript engine differences
- * 
+ *
  * Copyright © 2013-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -497,12 +498,12 @@ ilib.setLoaderCallback = function(loader) {
 // !depends ilibglobal.js
 
 /**
- * Perform a shallow copy of the source object to the target object. This only 
- * copies the assignments of the source properties to the target properties, 
+ * Perform a shallow copy of the source object to the target object. This only
+ * copies the assignments of the source properties to the target properties,
  * but not recursively from there.<p>
- * 
+ *
  * Depends directive: !depends utils.js
- * 
+ *
  * @static
  * @param {Object} source the source object to copy properties from
  * @param {Object} target the target object to copy properties into
@@ -519,7 +520,7 @@ ilib.shallowCopy = function (source, target) {
 };
 
 /** [Need Comment]
- * 
+ *
  */
 ilib.deepCopy = function(from, to) {
 	var prop;
@@ -541,7 +542,7 @@ ilib.deepCopy = function(from, to) {
  * Map a string to the given set of alternate characters. If the target set
  * does not contain a particular character in the input string, then that
  * character will be copied to the output unmapped.
- * 
+ *
  * @static
  * @param {string} str a string to map to an alternate set of characters
  * @param {Array.<string>|Object} map a mapping to alternate characters
@@ -552,7 +553,7 @@ ilib.mapString = function (str, map) {
 	if (map && str) {
 		for (var i = 0; i < str.length; i++) {
 			var c = str.charAt(i); // TODO use a char iterator?
-			mapped += map[c] || c; 
+			mapped += map[c] || c;
 		}
 	} else {
 		mapped = str;
@@ -565,7 +566,7 @@ ilib.mapString = function (str, map) {
  * support indexOf, it is used directly. Otherwise, this function implements it
  * itself. The idea is to make sure that you can use the quick indexOf if it is
  * available, but use a slower implementation in older engines as well.
- * 
+ *
  * @static
  * @param {Array.<Object>} array array to search
  * @param {Object} obj object being sought. This should be of the same type as the
@@ -593,17 +594,17 @@ ilib.indexOf = function(array, obj) {
  * @static
  * Convert a string into the hexadecimal representation
  * of the Unicode characters in that string.
- * 
+ *
  * @param {string} string The string to convert
  * @param {number=} limit the number of digits to use to represent the character (1 to 8)
  * @return {string} a hexadecimal representation of the
  * Unicode characters in the input string
  */
 ilib.toHexString = function(string, limit) {
-	var i, 
-		result = "", 
+	var i,
+		result = "",
 		lim = (limit && limit < 9) ? limit : 4;
-	
+
 	if (!string) {
 		return "";
 	}
@@ -616,7 +617,7 @@ ilib.toHexString = function(string, limit) {
 
 /*
  * util/utils.js - Core utility routines
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -639,10 +640,10 @@ ilib.toHexString = function(string, limit) {
  * If Function.prototype.bind does not exist in this JS engine, this
  * function reimplements it in terms of older JS functions.
  * bind() doesn't exist in many older browsers.
- * 
+ *
  * @param {Object} scope object that the method should operate on
  * @param {function(...)} method method to call
- * @return {function(...)|undefined} function that calls the given method 
+ * @return {function(...)|undefined} function that calls the given method
  * in the given scope with all of its arguments properly attached, or
  * undefined if there was a problem with the arguments
  */
@@ -650,8 +651,8 @@ ilib.bind = function(scope, method/*, bound arguments*/){
 	if (!scope || !method) {
 		return undefined;
 	}
-	
-	/** @protected 
+
+	/** @protected
 	 * @param {Arguments} inArrayLike
 	 * @param {number=} inOffset
 	 */
@@ -681,15 +682,15 @@ ilib.bind = function(scope, method/*, bound arguments*/){
 
 /**
  * Merge the properties of object2 into object1 in a deep manner and return a merged
- * object. If the property exists in both objects, the value in object2 will overwrite 
+ * object. If the property exists in both objects, the value in object2 will overwrite
  * the value in object1. If a property exists in object1, but not in object2, its value
- * will not be touched. If a property exists in object2, but not in object1, it will be 
+ * will not be touched. If a property exists in object2, but not in object1, it will be
  * added to the merged result.<p>
- * 
+ *
  * Name1 and name2 are for creating debug output only. They are not necessary.<p>
- * 
+ *
  * Depends directive: !depends utils.js
- * 
+ *
  * @param {*} object1 the object to merge into
  * @param {*} object2 the object to merge
  * @param {boolean=} replace if true, replace the array elements in object1 with those in object2.
@@ -732,9 +733,9 @@ ilib.merge = function (object1, object2, replace, name1, name2) {
 
 /**
  * Find and merge all the locale data for a particular prefix in the given locale
- * and return it as a single javascript object. This merges the data in the 
+ * and return it as a single javascript object. This merges the data in the
  * correct order:
- * 
+ *
  * <ol>
  * <li>shared data (usually English)
  * <li>data for language
@@ -742,12 +743,12 @@ ilib.merge = function (object1, object2, replace, name1, name2) {
  * <li>data for language + region + script
  * <li>data for language + region + script + variant
  * </ol>
- * 
- * It is okay for any of the above to be missing. This function will just skip the 
- * missing data. However, if everything except the shared data is missing, this 
+ *
+ * It is okay for any of the above to be missing. This function will just skip the
+ * missing data. However, if everything except the shared data is missing, this
  * function returns undefined, allowing the caller to go and dynamically load the
  * data instead.
- *  
+ *
  * @param {string} prefix prefix under ilib.data of the data to merge
  * @param {ilib.Locale} locale locale of the data being sought
  * @param {boolean=} replaceArrays if true, replace the array elements in object1 with those in object2.
@@ -775,7 +776,7 @@ ilib.mergeLocData = function (prefix, locale, replaceArrays, returnOne) {
 			mostSpecific = ilib.data[property];
 		}
 	}
-	
+
 	if (loc.getRegion()) {
 		property = prefix + '_' + loc.getRegion();
 		if (ilib.data[property]) {
@@ -784,10 +785,10 @@ ilib.mergeLocData = function (prefix, locale, replaceArrays, returnOne) {
 			mostSpecific = ilib.data[property];
 		}
 	}
-	
+
 	if (loc.getLanguage()) {
 		property = prefix + '_' + loc.getLanguage();
-		
+
 		if (loc.getScript()) {
 			property = prefix + '_' + loc.getLanguage() + '_' + loc.getScript();
 			if (ilib.data[property]) {
@@ -796,7 +797,7 @@ ilib.mergeLocData = function (prefix, locale, replaceArrays, returnOne) {
 				mostSpecific = ilib.data[property];
 			}
 		}
-		
+
 		if (loc.getRegion()) {
 			property = prefix + '_' + loc.getLanguage() + '_' + loc.getRegion();
 			if (ilib.data[property]) {
@@ -804,9 +805,9 @@ ilib.mergeLocData = function (prefix, locale, replaceArrays, returnOne) {
 				data = ilib.merge(data, ilib.data[property], replaceArrays);
 				mostSpecific = ilib.data[property];
 			}
-		}		
+		}
 	}
-	
+
 	if (loc.getRegion() && loc.getVariant()) {
 		property = prefix + '_' + loc.getLanguage() + '_' + loc.getVariant();
 		if (ilib.data[property]) {
@@ -842,60 +843,60 @@ ilib.mergeLocData = function (prefix, locale, replaceArrays, returnOne) {
 			mostSpecific = ilib.data[property];
 		}
 	}
-	
+
 	return foundLocaleData ? (returnOne ? mostSpecific : data) : undefined;
 };
 
 /**
  * Return an array of relative path names for the
  * files that represent the data for the given locale.<p>
- * 
+ *
  * Note that to prevent the situation where a directory for
  * a language exists next to the directory for a region where
- * the language code and region code differ only by case, the 
- * plain region directories are located under the special 
+ * the language code and region code differ only by case, the
+ * plain region directories are located under the special
  * "undefined" language directory which has the ISO code "und".
- * The reason is that some platforms have case-insensitive 
- * file systems, and you cannot have 2 directories with the 
+ * The reason is that some platforms have case-insensitive
+ * file systems, and you cannot have 2 directories with the
  * same name which only differ by case. For example, "es" is
  * the ISO 639 code for the language "Spanish" and "ES" is
  * the ISO 3166 code for the region "Spain", so both the
  * directories cannot exist underneath "locale". The region
- * therefore will be loaded from "und/ES" instead.<p>  
- * 
+ * therefore will be loaded from "und/ES" instead.<p>
+ *
  * <h4>Variations</h4>
- * 
+ *
  * With only language and region specified, the following
  * sequence of paths will be generated:<p>
- * 
+ *
  * <pre>
  * language
  * und/region
  * language/region
  * </pre>
- * 
+ *
  * With only language and script specified:<p>
- * 
+ *
  * <pre>
  * language
  * language/script
  * </pre>
- * 
+ *
  * With only script and region specified:<p>
- * 
+ *
  * <pre>
- * und/region  
+ * und/region
  * </pre>
- * 
+ *
  * With only region and variant specified:<p>
- * 
+ *
  * <pre>
  * und/region
  * region/variant
  * </pre>
- * 
+ *
  * With only language, script, and region specified:<p>
- * 
+ *
  * <pre>
  * language
  * und/region
@@ -903,9 +904,9 @@ ilib.mergeLocData = function (prefix, locale, replaceArrays, returnOne) {
  * language/region
  * language/script/region
  * </pre>
- * 
+ *
  * With only language, region, and variant specified:<p>
- * 
+ *
  * <pre>
  * language
  * und/region
@@ -913,9 +914,9 @@ ilib.mergeLocData = function (prefix, locale, replaceArrays, returnOne) {
  * region/variant
  * language/region/variant
  * </pre>
- * 
+ *
  * With all parts specified:<p>
- * 
+ *
  * <pre>
  * language
  * und/region
@@ -926,7 +927,7 @@ ilib.mergeLocData = function (prefix, locale, replaceArrays, returnOne) {
  * language/region/variant
  * language/script/region/variant
  * </pre>
- * 
+ *
  * @param {ilib.Locale} locale load the files for this locale
  * @param {string?} name the file name of each file to load without
  * any path
@@ -938,24 +939,24 @@ ilib.getLocFiles = function(locale, name) {
 	var files = [];
 	var filename = name || "resources.json";
 	var loc = locale || new ilib.Locale();
-	
+
 	var language = loc.getLanguage();
 	var region = loc.getRegion();
 	var script = loc.getScript();
 	var variant = loc.getVariant();
-	
+
 	files.push(filename); // generic shared file
-	
+
 	if (language) {
 		dir = language + "/";
 		files.push(dir + filename);
 	}
-	
+
 	if (region) {
 		dir = "und/" + region + "/";
 		files.push(dir + filename);
 	}
-	
+
 	if (language) {
 		if (script) {
 			dir = language + "/" + script + "/";
@@ -966,7 +967,7 @@ ilib.getLocFiles = function(locale, name) {
 			files.push(dir + filename);
 		}
 	}
-	
+
 	if (region && variant) {
 		dir = "und/" + region + "/" + variant + "/";
 		files.push(dir + filename);
@@ -986,25 +987,25 @@ ilib.getLocFiles = function(locale, name) {
 		dir = language + "/" + script + "/" + region + "/" + variant + "/";
 		files.push(dir + filename);
 	}
-	
+
 	return files;
 };
 
 /**
  * Return true if the given object has no properties.<p>
- * 
+ *
  * Depends directive: !depends utils.js
- * 
+ *
  * @param {Object} obj the object to check
  * @return {boolean} true if the given object has no properties, false otherwise
  */
 ilib.isEmpty = function (obj) {
 	var prop = undefined;
-	
+
 	if (!obj) {
 		return true;
 	}
-	
+
 	for (prop in obj) {
 		if (prop && typeof(obj[prop]) !== 'undefined') {
 			return false;
@@ -1019,15 +1020,15 @@ ilib.isEmpty = function (obj) {
  */
 ilib.hashCode = function(obj) {
 	var hash = 0;
-	
+
 	function addHash(hash, newValue) {
 		// co-prime numbers creates a nicely distributed hash
 		hash *= 65543;
 		hash += newValue;
-		hash %= 2147483647; 
+		hash %= 2147483647;
 		return hash;
 	}
-	
+
 	function stringHash(str) {
 		var hash = 0;
 		for (var i = 0; i < str.length; i++) {
@@ -1035,7 +1036,7 @@ ilib.hashCode = function(obj) {
 		}
 		return hash;
 	}
-	
+
 	switch (typeof(obj)) {
 		case 'undefined':
 			hash = 0;
@@ -1066,7 +1067,7 @@ ilib.hashCode = function(obj) {
 			}
 			break;
 	}
-	
+
 	return hash;
 };
 
@@ -1084,7 +1085,7 @@ ilib._callLoadData = function (files, sync, params, callback) {
 		// console.log("ilib._callLoadData: calling as an object");
 		return ilib._load.loadFiles(files, sync, params, callback);
 	}
-	
+
 	// console.log("ilib._callLoadData: not calling. Type is " + typeof(ilib._load) + " and instanceof says " + (ilib._load instanceof ilib.Loader));
 	return undefined;
 };
@@ -1094,40 +1095,40 @@ ilib._callLoadData = function (files, sync, params, callback) {
  * find the data in ilib.data. If the data is not preassembled but there is a loader function,
  * this function will call it to load the data. Otherwise, the callback will be called with
  * undefined as the data. This function will create a cache under the given class object.
- * If data was successfully loaded, it will be set into the cache so that future access to 
+ * If data was successfully loaded, it will be set into the cache so that future access to
  * the same data for the same locale is much quicker.<p>
- * 
+ *
  * The parameters can specify any of the following properties:<p>
- * 
+ *
  * <ul>
  * <li><i>name</i> - String. The name of the file being loaded. Default: resources.json
  * <li><i>object</i> - Object. The class attempting to load data. The cache is stored inside of here.
  * <li><i>locale</i> - ilib.Locale. The locale for which data is loaded. Default is the current locale.
  * <li><i>nonlocale</i> - boolean. If true, the data being loaded is not locale-specific.
- * <li><i>type</i> - String. Type of file to load. This can be "json" or "other" type. Default: "json" 
+ * <li><i>type</i> - String. Type of file to load. This can be "json" or "other" type. Default: "json"
  * <li><i>replace</i> - boolean. When merging json objects, this parameter controls whether to merge arrays
- * or have arrays replace each other. If true, arrays in child objects replace the arrays in parent 
- * objects. When false, the arrays in child objects are concatenated with the arrays in parent objects.  
+ * or have arrays replace each other. If true, arrays in child objects replace the arrays in parent
+ * objects. When false, the arrays in child objects are concatenated with the arrays in parent objects.
  * <li><i>loadParams</i> - Object. An object with parameters to pass to the loader function
  * <li><i>sync</i> - boolean. Whether or not to load the data synchronously
  * <li><i>callback</i> - function(?)=. callback Call back function to call when the data is available.
  * Data is not returned from this method, so a callback function is mandatory.
  * </ul>
- * 
+ *
  * @param {Object} params Parameters configuring how to load the files (see above)
  */
 ilib.loadData = function(params) {
 	var name = "resources.json",
-		object = undefined, 
-		locale = new ilib.Locale(ilib.getLocale()), 
-		sync = false, 
+		object = undefined,
+		locale = new ilib.Locale(ilib.getLocale()),
+		sync = false,
 		type = undefined,
 		loadParams = {},
 		callback = undefined,
 		nonlocale = false,
 		replace = false,
 		basename;
-	
+
 	if (!params || typeof(params.callback) !== 'function') {
 		return;
 	}
@@ -1140,7 +1141,7 @@ ilib.loadData = function(params) {
 	}
 	if (params.locale) {
 		locale = (typeof(params.locale) === 'string') ? new ilib.Locale(params.locale) : params.locale;
-	}			
+	}
 	if (params.type) {
 		type = params.type;
 	}
@@ -1156,13 +1157,13 @@ ilib.loadData = function(params) {
 	if (typeof(params.replace) === 'boolean') {
 		replace = params.replace;
 	}
-	
+
 	callback = params.callback;
-	
+
 	if (object && !object.cache) {
 		object.cache = {};
 	}
-	
+
 	if (!type) {
 		var dot = name.lastIndexOf(".");
 		type = (dot !== -1) ? name.substring(dot+1) : "text";
@@ -1171,7 +1172,7 @@ ilib.loadData = function(params) {
 	var spec = ((!nonlocale && locale.getSpec().replace(/-/g, '_')) || "root") + "," + name + "," + String(ilib.hashCode(loadParams));
 	if (!object || typeof(object.cache[spec]) === 'undefined') {
 		var data, returnOne = (loadParams && loadParams.returnOne);
-		
+
 		if (type === "json") {
 			// console.log("type is json");
 			basename = name.substring(0, name.lastIndexOf("."));
@@ -1190,7 +1191,7 @@ ilib.loadData = function(params) {
 				return;
 			}
 		}
-		
+
 		// console.log("ilib._load is " + typeof(ilib._load));
 		if (typeof(ilib._load) !== 'undefined') {
 			// the data is not preassembled, so attempt to load it dynamically
@@ -1198,7 +1199,7 @@ ilib.loadData = function(params) {
 			if (type !== "json") {
 				loadParams.returnOne = true;
 			}
-			
+
 			ilib._callLoadData(files, sync, loadParams, ilib.bind(this, function(arr) {
 				if (type === "json") {
 					data = ilib.data[basename] || {};
@@ -1207,13 +1208,13 @@ ilib.loadData = function(params) {
 							data = loadParams.returnOne ? arr[i] : ilib.merge(data, arr[i], replace);
 						}
 					}
-					
+
 					if (object) {
 						object.cache[spec] = data;
 					}
 					callback(data);
 				} else {
-					var i = arr.length-1; 
+					var i = arr.length-1;
 					while (i > -1 && !arr[i]) {
 						i--;
 					}
@@ -1244,7 +1245,7 @@ ilib.loadData = function(params) {
 
 /*
  * locale.js - Locale specifier definition
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -1265,46 +1266,46 @@ ilib.loadData = function(params) {
 
 /**
  * @class
- * Create a new locale instance. Locales are specified either with a specifier string 
- * that follows the BCP-47 convention (roughly: "language-region-script-variant") or 
+ * Create a new locale instance. Locales are specified either with a specifier string
+ * that follows the BCP-47 convention (roughly: "language-region-script-variant") or
  * with 4 parameters that specify the language, region, variant, and script individually.<p>
- * 
+ *
  * The language is given as an ISO 639-1 two-letter, lower-case language code. You
- * can find a full list of these codes at 
+ * can find a full list of these codes at
  * <a href="http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes">http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes</a><p>
- * 
+ *
  * The region is given as an ISO 3166-1 two-letter, upper-case region code. You can
- * find a full list of these codes at 
+ * find a full list of these codes at
  * <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2</a>.<p>
- * 
+ *
  * The variant is any string that does not contain a dash which further differentiates
  * locales from each other.<p>
- * 
+ *
  * The script is given as the ISO 15924 four-letter script code. In some locales,
  * text may be validly written in more than one script. For example, Serbian is often
  * written in both Latin and Cyrillic, though not usually mixed together. You can find a
- * full list of these codes at 
+ * full list of these codes at
  * <a href="http://en.wikipedia.org/wiki/ISO_15924#List_of_codes">http://en.wikipedia.org/wiki/ISO_15924#List_of_codes</a>.<p>
- * 
- * As an example in ilib, the script can be used in the date formatter. Dates formatted 
+ *
+ * As an example in ilib, the script can be used in the date formatter. Dates formatted
  * in Serbian could have day-of-week names or month names written in the Latin
  * or Cyrillic script. Often one script is default such that sr-SR-Latn is the same
- * as sr-SR so the script code "Latn" can be left off of the locale spec.<p> 
- * 
- * Each part is optional, and an empty string in the specifier before or after a 
+ * as sr-SR so the script code "Latn" can be left off of the locale spec.<p>
+ *
+ * Each part is optional, and an empty string in the specifier before or after a
  * dash or as a parameter to the constructor denotes an unspecified value. In this
  * case, many of the ilib functions will treat the locale as generic. For example
  * the locale "en-" is equivalent to "en" and to "en--" and denotes a locale
  * of "English" with an unspecified region and variant, which typically matches
  * any region or variant.<p>
- * 
+ *
  * Without any arguments to the constructor, this function returns the locale of
  * the host Javascript engine.<p>
- * 
+ *
  * Depends directive: !depends locale.js
- * 
+ *
  * @constructor
- * @param {?string|ilib.Locale=} language the ISO 639 2-letter code for the language, or a full 
+ * @param {?string|ilib.Locale=} language the ISO 639 2-letter code for the language, or a full
  * locale spec in BCP-47 format, or another ilib.Locale instance to copy from
  * @param {string=} region the ISO 3166 2-letter code for the region
  * @param {string=} variant the name of the variant of this locale, if any
@@ -1317,25 +1318,25 @@ ilib.Locale = function(language, region, variant, script) {
 			var parts = spec.split('-');
 	        for ( var i = 0; i < parts.length; i++ ) {
 	        	if (ilib.Locale._isLanguageCode(parts[i])) {
-	    			/** 
+	    			/**
 	    			 * @private
 	    			 * @type {string|undefined}
 	    			 */
 	        		this.language = parts[i];
 	        	} else if (ilib.Locale._isRegionCode(parts[i])) {
-	    			/** 
+	    			/**
 	    			 * @private
 	    			 * @type {string|undefined}
 	    			 */
 	        		this.region = parts[i];
 	        	} else if (ilib.Locale._isScriptCode(parts[i])) {
-	    			/** 
+	    			/**
 	    			 * @private
 	    			 * @type {string|undefined}
 	    			 */
 	        		this.script = parts[i];
 	        	} else {
-	    			/** 
+	    			/**
 	    			 * @private
 	    			 * @type {string|undefined}
 	    			 */
@@ -1860,9 +1861,9 @@ ilib.Locale._notDigit = function(str) {
 };
 
 /**
- * Tell whether or not the given string has the correct syntax to be 
+ * Tell whether or not the given string has the correct syntax to be
  * an ISO 639 language code.
- * 
+ *
  * @private
  * @param {string} str the string to parse
  * @return {boolean} true if the string could syntactically be a language code.
@@ -1877,14 +1878,14 @@ ilib.Locale._isLanguageCode = function(str) {
 			return false;
 		}
 	}
-	
+
 	return true;
 };
 
 /**
- * Tell whether or not the given string has the correct syntax to be 
+ * Tell whether or not the given string has the correct syntax to be
  * an ISO 3166 2-letter region code or M.49 3-digit region code.
- * 
+ *
  * @private
  * @param {string} str the string to parse
  * @return {boolean} true if the string could syntactically be a language code.
@@ -1893,7 +1894,7 @@ ilib.Locale._isRegionCode = function (str) {
 	if (typeof(str) === 'undefined' || str.length < 2 || str.length > 3) {
 		return false;
 	}
-	
+
 	if (str.length === 2) {
 		for (var i = 0; i < str.length; i++) {
 			if (ilib.Locale._notUpper(str.charAt(i))) {
@@ -1907,14 +1908,14 @@ ilib.Locale._isRegionCode = function (str) {
 			}
 		}
 	}
-	
+
 	return true;
 };
 
 /**
- * Tell whether or not the given string has the correct syntax to be 
+ * Tell whether or not the given string has the correct syntax to be
  * an ISO 639 language code.
- * 
+ *
  * @private
  * @param {string} str the string to parse
  * @return {boolean} true if the string could syntactically be a language code.
@@ -1924,13 +1925,13 @@ ilib.Locale._isScriptCode = function(str)
 	if (typeof(str) === 'undefined' || str.length !== 4 || ilib.Locale._notUpper(str.charAt(0))) {
 		return false;
 	}
-	
+
 	for (var i = 1; i < 4; i++) {
 		if (ilib.Locale._notLower(str.charAt(i))) {
 			return false;
 		}
 	}
-	
+
 	return true;
 };
 
@@ -1966,21 +1967,21 @@ ilib.Locale.prototype = {
 	 */
 	_genSpec: function () {
 		this.spec = this.language || "";
-		
+
 		if (this.script) {
 			if (this.spec.length > 0) {
 				this.spec += "-";
 			}
 			this.spec += this.script;
 		}
-		
+
 		if (this.region) {
 			if (this.spec.length > 0) {
 				this.spec += "-";
 			}
 			this.spec += this.region;
 		}
-		
+
 		if (this.variant) {
 			if (this.spec.length > 0) {
 				this.spec += "-";
@@ -1990,13 +1991,13 @@ ilib.Locale.prototype = {
 	},
 
 	/**
-	 * Return the ISO 639 language code for this locale. 
-	 * @return {string|undefined} the language code for this locale 
+	 * Return the ISO 639 language code for this locale.
+	 * @return {string|undefined} the language code for this locale
 	 */
 	getLanguage: function() {
 		return this.language;
 	},
-	
+
 	/**
 	 * Return the language of this locale as an ISO-639-alpha3 language code
 	 * @return {string|undefined} the alpha3 language code of this locale
@@ -2004,7 +2005,7 @@ ilib.Locale.prototype = {
 	getLanguageAlpha3: function() {
 		return ilib.Locale.languageAlpha1ToAlpha3(this.language);
 	},
-	
+
 	/**
 	 * Return the ISO 3166 region code for this locale.
 	 * @return {string|undefined} the region code of this locale
@@ -2012,7 +2013,7 @@ ilib.Locale.prototype = {
 	getRegion: function() {
 		return this.region;
 	},
-	
+
 	/**
 	 * Return the region of this locale as an ISO-3166-alpha3 region code
 	 * @return {string|undefined} the alpha3 region code of this locale
@@ -2020,7 +2021,7 @@ ilib.Locale.prototype = {
 	getRegionAlpha3: function() {
 		return ilib.Locale.regionAlpha2ToAlpha3(this.region);
 	},
-	
+
 	/**
 	 * Return the ISO 15924 script code for this locale
 	 * @return {string|undefined} the script code of this locale
@@ -2028,7 +2029,7 @@ ilib.Locale.prototype = {
 	getScript: function () {
 		return this.script;
 	},
-	
+
 	/**
 	 * Return the variant code for this locale
 	 * @return {string|undefined} the variant code of this locale, if any
@@ -2036,7 +2037,7 @@ ilib.Locale.prototype = {
 	getVariant: function() {
 		return this.variant;
 	},
-	
+
 	/**
 	 * Return the whole locale specifier as a string.
 	 * @return {string} the locale specifier
@@ -2044,20 +2045,20 @@ ilib.Locale.prototype = {
 	getSpec: function() {
 		return this.spec;
 	},
-	
+
 	/**
 	 * Express this locale object as a string. Currently, this simply calls the getSpec
 	 * function to represent the locale as its specifier.
-	 * 
+	 *
 	 * @return {string} the locale specifier
 	 */
 	toString: function() {
 		return this.getSpec();
 	},
-	
+
 	/**
 	 * Return true if the the other locale is exactly equal to the current one.
-	 * @return {boolean} whether or not the other locale is equal to the current one 
+	 * @return {boolean} whether or not the other locale is equal to the current one
 	 */
 	equals: function(other) {
 		return this.language === other.language &&
@@ -2081,7 +2082,7 @@ ilib.Locale.prototype = {
  * @private
  */
 ilib.Locale.locales = [
-	
+
 ];
 
 /**
@@ -2089,8 +2090,8 @@ ilib.Locale.locales = [
  * with. The list that this file was assembled with may be much smaller
  * than the list of all available locales in the iLib repository. The
  * assembly tool will automatically fill in the list.
- * 
- * @return {Array.<string>} this is an array of locale specs for which 
+ *
+ * @return {Array.<string>} this is an array of locale specs for which
  * this iLib file has locale data for
  */
 ilib.Locale.getAvailableLocales = function () {
@@ -2099,7 +2100,7 @@ ilib.Locale.getAvailableLocales = function () {
 
 /*
  * util/math.js - Misc math utility routines
- * 
+ *
  * Copyright © 2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -2149,7 +2150,7 @@ ilib._roundFnc = {
 	floor: function (num) {
 		return Math.floor(num);
 	},
-	
+
 	/**
 	 * @static
 	 * @protected
@@ -2159,7 +2160,7 @@ ilib._roundFnc = {
 	ceiling: function (num) {
 		return Math.ceil(num);
 	},
-	
+
 	/**
 	 * @static
 	 * @protected
@@ -2169,7 +2170,7 @@ ilib._roundFnc = {
 	down: function (num) {
 		return (num < 0) ? Math.ceil(num) : Math.floor(num);
 	},
-	
+
 	/**
 	 * @static
 	 * @protected
@@ -2179,7 +2180,7 @@ ilib._roundFnc = {
 	up: function (num) {
 		return (num < 0) ? Math.floor(num) : Math.ceil(num);
 	},
-	
+
 	/**
 	 * @static
 	 * @protected
@@ -2189,7 +2190,7 @@ ilib._roundFnc = {
 	halfup: function (num) {
 		return (num < 0) ? Math.ceil(num - 0.5) : Math.floor(num + 0.5);
 	},
-	
+
 	/**
 	 * @static
 	 * @protected
@@ -2199,7 +2200,7 @@ ilib._roundFnc = {
 	halfdown: function (num) {
 		return (num < 0) ? Math.floor(num + 0.5) : Math.ceil(num - 0.5);
 	},
-	
+
 	/**
 	 * @static
 	 * @protected
@@ -2209,7 +2210,7 @@ ilib._roundFnc = {
 	halfeven: function (num) {
 		return (Math.floor(num) % 2 === 0) ? Math.ceil(num - 0.5) : Math.floor(num + 0.5);
 	},
-	
+
 	/**
 	 * @static
 	 * @protected
@@ -2226,12 +2227,12 @@ ilib._roundFnc = {
  * division algorithm, but for calendrical calculations, we need the Euclidean
  * division algorithm where the remainder of any division, whether the dividend
  * is negative or not, is always a positive number in the range [0, modulus).<p>
- * 
+ *
  * Depends directive: !depends utils.js
- * 
+ *
  * @param {number} dividend the number being divided
  * @param {number} modulus the number dividing the dividend. This should always be a positive number.
- * @return the remainder of dividing the dividend by the modulus.  
+ * @return the remainder of dividing the dividend by the modulus.
  */
 ilib.mod = function (dividend, modulus) {
 	if (modulus == 0) {
@@ -2248,12 +2249,12 @@ ilib.mod = function (dividend, modulus) {
  * is negative or not, is always a positive number in the range (0, modulus]. The adjusted
  * modulo function differs from the regular modulo function in that when the remainder is
  * zero, the modulus should be returned instead.<p>
- * 
+ *
  * Depends directive: !depends utils.js
- * 
+ *
  * @param {number} dividend the number being divided
  * @param {number} modulus the number dividing the dividend. This should always be a positive number.
- * @return the remainder of dividing the dividend by the modulus.  
+ * @return the remainder of dividing the dividend by the modulus.
  */
 ilib.amod = function (dividend, modulus) {
 	if (modulus == 0) {
@@ -2265,7 +2266,7 @@ ilib.amod = function (dividend, modulus) {
 
 /*
  * strings.js - ilib string subclass definition
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -2293,16 +2294,16 @@ ilib.amod = function (dividend, modulus) {
  * used anywhere that a normal Javascript string is used. The formatting
  * methods are of course most useful when localizing strings in an app
  * or web site in combination with the ilib.ResBundle class.<p>
- * 
+ *
  * Depends directive: !depends strings.js
- * 
+ *
  * @constructor
- * @param {string|ilib.String=} string initialize this instance with this string 
+ * @param {string|ilib.String=} string initialize this instance with this string
  */
 ilib.String = function (string) {
 	if (typeof(string) === 'object') {
 		if (string instanceof ilib.String) {
-			this.str = string.str;	
+			this.str = string.str;
 		} else {
 			this.str = string.toString();
 		}
@@ -2319,7 +2320,7 @@ ilib.String = function (string) {
 /**
  * Return true if the given character is a Unicode surrogate character,
  * either high or low.
- * 
+ *
  * @private
  * @static
  * @param {string} ch character to check
@@ -2331,23 +2332,23 @@ ilib.String._isSurrogate = function (ch) {
 };
 
 /**
- * Convert a UCS-4 code point to a Javascript string. The codepoint can be any valid 
+ * Convert a UCS-4 code point to a Javascript string. The codepoint can be any valid
  * UCS-4 Unicode character, including supplementary characters. Standard Javascript
- * only supports supplementary characters using the UTF-16 encoding, which has 
+ * only supports supplementary characters using the UTF-16 encoding, which has
  * values in the range 0x0000-0xFFFF. String.fromCharCode() will only
- * give you a string containing 16-bit characters, and will not properly convert 
- * the code point for a supplementary character (which has a value > 0xFFFF) into 
+ * give you a string containing 16-bit characters, and will not properly convert
+ * the code point for a supplementary character (which has a value > 0xFFFF) into
  * two UTF-16 surrogate characters. Instead, it will just just give you whatever
  * single character happens to be the same as your code point modulo 0x10000, which
- * is almost never what you want.<p> 
- * 
+ * is almost never what you want.<p>
+ *
  * Similarly, that means if you use String.charCodeAt()
  * you will only retrieve a 16-bit value, which may possibly be a single
  * surrogate character that is part of a surrogate pair representing a character
- * in the supplementary plane. It will not give you a code point. Use 
- * ilib.String.codePointAt() to access code points in a string, or use 
- * an iterator to walk through the code points in a string. 
- * 
+ * in the supplementary plane. It will not give you a code point. Use
+ * ilib.String.codePointAt() to access code points in a string, or use
+ * an iterator to walk through the code points in a string.
+ *
  * @static
  * @param {number} codepoint UCS-4 code point to convert to a character
  * @return {string} a string containing the character represented by the codepoint
@@ -2358,7 +2359,7 @@ ilib.String.fromCodePoint = function (codepoint) {
 	} else {
 		var high = Math.floor(codepoint / 0x10000) - 1;
 		var low = codepoint & 0xFFFF;
-		
+
 		return String.fromCharCode(0xD800 | ((high & 0x000F) << 6) |  ((low & 0xFC00) >> 10)) +
 			String.fromCharCode(0xDC00 | (low & 0x3FF));
 	}
@@ -2366,9 +2367,9 @@ ilib.String.fromCodePoint = function (codepoint) {
 
 /**
  * Convert the character or the surrogate pair at the given
- * index into the intrinsic Javascript string to a Unicode 
+ * index into the intrinsic Javascript string to a Unicode
  * UCS-4 code point.
- * 
+ *
  * @param {string} str string to get the code point from
  * @param {number} index index into the string
  * @return {number} code point of the character at the
@@ -2390,7 +2391,7 @@ ilib.String.toCodePoint = function(str, index) {
 	} else {
 		code = high;
 	}
-	
+
 	return code;
 };
 
@@ -2451,7 +2452,7 @@ ilib.String._fncs = {
 		}
 		return undefined; // should never get here
 	},
-	
+
 	/**
 	 * @private
 	 * @param {Object} obj
@@ -2468,7 +2469,7 @@ ilib.String._fncs = {
 			return obj;
 		}
 	},
-	
+
 	/**
 	 * @private
 	 * @param {number} n
@@ -2505,7 +2506,7 @@ ilib.String._fncs = {
 		}
 		return ilib.String._fncs.matchRangeContinuous(n, range);
 	},
-	
+
 	/**
 	 * @private
 	 * @param {Object} rule
@@ -2518,7 +2519,7 @@ ilib.String._fncs = {
 		return left == right;
 		// return ilib.String._fncs.getValue(rule[0]) == ilib.String._fncs.getValue(rule[1]);
 	},
-	
+
 	/**
 	 * @private
 	 * @param {Object} rule
@@ -2528,7 +2529,7 @@ ilib.String._fncs = {
 	isnot: function(rule, n) {
 		return ilib.String._fncs.getValue(rule[0], n) != ilib.String._fncs.getValue(rule[1], n);
 	},
-	
+
 	/**
 	 * @private
 	 * @param {Object} rule
@@ -2538,7 +2539,7 @@ ilib.String._fncs = {
 	inrange: function(rule, n) {
 		return ilib.String._fncs.matchRange(ilib.String._fncs.getValue(rule[0], n), rule[1]);
 	},
-	
+
 	/**
 	 * @private
 	 * @param {Object} rule
@@ -2548,7 +2549,7 @@ ilib.String._fncs = {
 	notin: function(rule, n) {
 		return !ilib.String._fncs.matchRange(ilib.String._fncs.getValue(rule[0], n), rule[1]);
 	},
-	
+
 	/**
 	 * @private
 	 * @param {Object} rule
@@ -2556,9 +2557,9 @@ ilib.String._fncs = {
 	 * @return {boolean}
 	 */
 	within: function(rule, n) {
-		return ilib.String._fncs.matchRangeContinuous(ilib.String._fncs.getValue(rule[0], n), rule[1]);		
+		return ilib.String._fncs.matchRangeContinuous(ilib.String._fncs.getValue(rule[0], n), rule[1]);
 	},
-	
+
 	/**
 	 * @private
 	 * @param {Object} rule
@@ -2568,7 +2569,7 @@ ilib.String._fncs = {
 	mod: function(rule, n) {
 		return ilib.mod(ilib.String._fncs.getValue(rule[0], n), ilib.String._fncs.getValue(rule[1], n));
 	},
-	
+
 	/**
 	 * @private
 	 * @param {Object} rule
@@ -2578,7 +2579,7 @@ ilib.String._fncs = {
 	n: function(rule, n) {
 		return n;
 	},
-	
+
 	/**
 	 * @private
 	 * @param {Object} rule
@@ -2588,7 +2589,7 @@ ilib.String._fncs = {
 	or: function(rule, n) {
 		return ilib.String._fncs.getValue(rule[0], n) || ilib.String._fncs.getValue(rule[1], n);
 	},
-	
+
 	/**
 	 * @private
 	 * @param {Object} rule
@@ -2604,11 +2605,11 @@ ilib.String.prototype = {
 	/**
 	 * Return the length of this string in characters. This function defers to the regular
 	 * Javascript string class in order to perform the length function. Please note that this
-	 * method is a real method, whereas the length property of Javascript strings is 
+	 * method is a real method, whereas the length property of Javascript strings is
 	 * implemented by native code and appears as a property.<p>
-	 * 
+	 *
 	 * Example:
-	 * 
+	 *
 	 * <pre>
 	 * var str = new ilib.String("this is a string");
 	 * console.log("String is " + str._length() + " characters long.");
@@ -2618,61 +2619,61 @@ ilib.String.prototype = {
 	_length: function () {
 		return this.str.length;
 	},
-	
+
 	/**
-	 * Format this string instance as a message, replacing the parameters with 
+	 * Format this string instance as a message, replacing the parameters with
 	 * the given values.<p>
-	 * 
+	 *
 	 * The string can contain any text that a regular Javascript string can
 	 * contain. Replacement parameters have the syntax:
-	 * 
+	 *
 	 * <pre>
 	 * {name}
 	 * </pre>
-	 * 
-	 * Where "name" can be any string surrounded by curly brackets. The value of 
+	 *
+	 * Where "name" can be any string surrounded by curly brackets. The value of
 	 * "name" is taken from the parameters argument.<p>
-	 * 
+	 *
 	 * Example:
-	 * 
+	 *
 	 * <pre>
 	 * var str = new ilib.String("There are {num} objects.");
 	 * console.log(str.format({
 	 *   num: 12
 	 * });
 	 * </pre>
-	 * 
+	 *
 	 * Would give the output:
-	 * 
+	 *
 	 * <pre>
 	 * There are 12 objects.
 	 * </pre>
-	 * 
+	 *
 	 * If a property is missing from the parameter block, the replacement
 	 * parameter substring is left untouched in the string, and a different
 	 * set of parameters may be applied a second time. This way, different
 	 * parts of the code may format different parts of the message that they
 	 * happen to know about.<p>
-	 * 
+	 *
 	 * Example:
-	 * 
+	 *
 	 * <pre>
 	 * var str = new ilib.String("There are {num} objects in the {container}.");
 	 * console.log(str.format({
 	 *   num: 12
 	 * });
 	 * </pre>
-	 * 
+	 *
 	 * Would give the output:<p>
-	 * 
+	 *
 	 * <pre>
 	 * There are 12 objects in the {container}.
 	 * </pre>
-	 * 
+	 *
 	 * The result can then be formatted again with a different parameter block that
 	 * specifies a value for the container property.
-	 * 
-	 * @param params a Javascript object containing values for the replacement 
+	 *
+	 * @param params a Javascript object containing values for the replacement
 	 * parameters in the current string
 	 * @return a new ilib.String instance with as many replacement parameters filled
 	 * out as possible with real values.
@@ -2690,18 +2691,18 @@ ilib.String.prototype = {
 		}
 		return formatted.toString();
 	},
-	
+
 	/**
 	 * Format a string as one of a choice of strings dependent on the value of
 	 * a particular argument index.<p>
-	 * 
+	 *
 	 * The syntax of the choice string is as follows. The string contains a
 	 * series of choices separated by a vertical bar character "|". Each choice
 	 * has a value or range of values to match followed by a hash character "#"
 	 * followed by the string to use if the variable matches the criteria.<p>
-	 * 
+	 *
 	 * Example string:
-	 * 
+	 *
 	 * <pre>
 	 * var num = 2;
 	 * var str = new ilib.String("0#There are no objects.|1#There is one object.|2#There are {number} objects.");
@@ -2709,22 +2710,22 @@ ilib.String.prototype = {
 	 *   number: num
 	 * }));
 	 * </pre>
-	 * 
+	 *
 	 * Gives the output:
-	 * 
+	 *
 	 * <pre>
 	 * "There are 2 objects."
 	 * </pre>
-	 * 
+	 *
 	 * The strings to format may contain replacement variables that will be formatted
 	 * using the format() method above and the params argument as a source of values
 	 * to use while formatting those variables.<p>
-	 * 
+	 *
 	 * If the criterion for a particular choice is empty, that choice will be used
 	 * as the default one for use when none of the other choice's criteria match.<p>
-	 * 
+	 *
 	 * Example string:
-	 * 
+	 *
 	 * <pre>
 	 * var num = 22;
 	 * var str = new ilib.String("0#There are no objects.|1#There is one object.|#There are {number} objects.");
@@ -2732,29 +2733,29 @@ ilib.String.prototype = {
 	 *   number: num
 	 * }));
 	 * </pre>
-	 * 
+	 *
 	 * Gives the output:
-	 * 
+	 *
 	 * <pre>
 	 * "There are 22 objects."
 	 * </pre>
-	 * 
-	 * If multiple choice patterns can match a given argument index, the first one 
-	 * encountered in the string will be used. If no choice patterns match the 
+	 *
+	 * If multiple choice patterns can match a given argument index, the first one
+	 * encountered in the string will be used. If no choice patterns match the
 	 * argument index, then the default choice will be used. If there is no default
 	 * choice defined, then this method will return an empty string.<p>
-	 * 
+	 *
 	 * <b>Special Syntax</b><p>
-	 * 
+	 *
 	 * For any choice format string, all of the patterns in the string should be
-	 * of a single type: numeric, boolean, or string/regexp. The type of the 
+	 * of a single type: numeric, boolean, or string/regexp. The type of the
 	 * patterns is determined by the type of the argument index parameter.<p>
-	 * 
-	 * If the argument index is numeric, then some special syntax can be used 
+	 *
+	 * If the argument index is numeric, then some special syntax can be used
 	 * in the patterns to match numeric ranges.<p>
-	 * 
+	 *
 	 * <ul>
-	 * <li><i>&gt;x</i> - match any number that is greater than x 
+	 * <li><i>&gt;x</i> - match any number that is greater than x
 	 * <li><i>&gt;=x</i> - match any number that is greater than or equal to x
 	 * <li><i>&lt;x</i> - match any number that is less than x
 	 * <li><i>&lt;=x</i> - match any number that is less than or equal to x
@@ -2766,29 +2767,29 @@ ilib.String.prototype = {
 	 * <li><i>few</i> - match any number in the class "few"
 	 * <li><i>many</i> - match any number in the class "many"
 	 * </ul>
-	 * 
+	 *
 	 * A number class defines a set of numbers that receive a particular syntax
 	 * in the strings. For example, in Slovenian, integers ending in the digit
 	 * "1" are in the "one" class, including 1, 21, 31, ... 101, 111, etc.
-	 * Similarly, integers ending in the digit "2" are in the "two" class. 
+	 * Similarly, integers ending in the digit "2" are in the "two" class.
 	 * Integers ending in the digits "3" or "4" are in the "few" class, and
 	 * every other integer is handled by the default string.<p>
-	 * 
+	 *
 	 * The definition of what numbers are included in a class is locale-dependent.
 	 * They are defined in the data file plurals.json. If your string is in a
 	 * different locale than the default for ilib, you should call the setLocale()
-	 * method of the string instance before calling this method.<p> 
-	 * 
+	 * method of the string instance before calling this method.<p>
+	 *
 	 * <b>Other Pattern Types</b><p>
-	 * 
-	 * If the argument index is a boolean, the string values "true" and "false" 
+	 *
+	 * If the argument index is a boolean, the string values "true" and "false"
 	 * may appear as the choice patterns.<p>
-	 * 
+	 *
 	 * If the argument index is of type string, then the choice patterns may contain
 	 * regular expressions, or static strings as degenerate regexps.
-	 * 
+	 *
 	 * @param {*} argIndex The index into the choice array of the current parameter
-	 * @param {Object} params The hash of parameter values that replace the replacement 
+	 * @param {Object} params The hash of parameter values that replace the replacement
 	 * variables in the string
 	 * @throws "syntax error in choice format pattern: " if there is a syntax error
 	 * @return {string} the formatted string
@@ -2804,18 +2805,18 @@ ilib.String.prototype = {
 		var arg;
 		var result = undefined;
 		var defaultCase = "";
-	
+
 		if (this.str.length === 0) {
 			// nothing to do
 			return "";
 		}
-		
+
 		// first parse all the choices
-		for (i = 0; i < choices.length; i++) {		
-			parts = choices[i].split("#");		
+		for (i = 0; i < choices.length; i++) {
+			parts = choices[i].split("#");
 			if (parts.length > 2) {
 				limits[i] = parts[0];
-				parts = parts.shift();			
+				parts = parts.shift();
 				strings[i] = parts.join("#");
 			} else if (parts.length === 2) {
 				limits[i] = parts[0];
@@ -2823,38 +2824,38 @@ ilib.String.prototype = {
 			} else {
 				// syntax error
 				throw "syntax error in choice format pattern: " + choices[i];
-			}		
+			}
 		}
-		
+
 		// then apply the argument index
 		for (i = 0; i < limits.length; i++) {
 			if (limits[i].length === 0) {
 				// this is default case
-				defaultCase = new ilib.String(strings[i]);			
+				defaultCase = new ilib.String(strings[i]);
 			} else {
 				switch (type) {
 					case 'number':
 						arg = parseInt(argIndex, 10);
-											
-						if (limits[i].substring(0,2) === "<=") {						
+
+						if (limits[i].substring(0,2) === "<=") {
 							limit = parseFloat(limits[i].substring(2));
 							if (arg <= limit) {
 								result = new ilib.String(strings[i]);
 								i = limits.length;
 							}
-						} else if (limits[i].substring(0,2) === ">=") {						
+						} else if (limits[i].substring(0,2) === ">=") {
 							limit = parseFloat(limits[i].substring(2));
 							if (arg >= limit) {
 								result = new ilib.String(strings[i]);
 								i = limits.length;
 							}
-						} else if (limits[i].charAt(0) === "<") {						
+						} else if (limits[i].charAt(0) === "<") {
 							limit = parseFloat(limits[i].substring(1));
 							if (arg < limit) {
 								result = new ilib.String(strings[i]);
 								i = limits.length;
 							}
-						} else if (limits[i].charAt(0) === ">") {						
+						} else if (limits[i].charAt(0) === ">") {
 							limit = parseFloat(limits[i].substring(1));
 							if (arg > limit) {
 								result = new ilib.String(strings[i]);
@@ -2880,15 +2881,15 @@ ilib.String.prototype = {
 									break;
 								default:
 									var dash = limits[i].indexOf("-");
-									if (dash !== -1) {							
+									if (dash !== -1) {
 										// range
 										var start = limits[i].substring(0, dash);
-										var end = limits[i].substring(dash+1);							
-										if (arg >= parseInt(start, 10) && arg <= parseInt(end, 10)) {								
+										var end = limits[i].substring(dash+1);
+										if (arg >= parseInt(start, 10) && arg <= parseInt(end, 10)) {
 											result = new ilib.String(strings[i]);
 											i = limits.length;
 										}
-									} else if (arg === parseInt(limits[i], 10)) {							
+									} else if (arg === parseInt(limits[i], 10)) {
 										// exact amount
 										result = new ilib.String(strings[i]);
 										i = limits.length;
@@ -2897,16 +2898,16 @@ ilib.String.prototype = {
 							}
 						}
 						break;
-					case 'boolean':					
-						if (limits[i] === "true" && argIndex === true) {						
+					case 'boolean':
+						if (limits[i] === "true" && argIndex === true) {
 							result = new ilib.String(strings[i]);
 							i = limits.length;
-						} else if (limits[i] === "false" && argIndex === false) {						
+						} else if (limits[i] === "false" && argIndex === false) {
 							result = new ilib.String(strings[i]);
 							i = limits.length;
 						}
 						break;
-					case 'string':					
+					case 'string':
 						var regexp = new RegExp(limits[i], "i");
 						if (regexp.test(argIndex)) {
 							result = new ilib.String(strings[i]);
@@ -2918,16 +2919,16 @@ ilib.String.prototype = {
 				}
 			}
 		}
-		
-		if (!result) {		
+
+		if (!result) {
 			result = defaultCase || new ilib.String("");
 		}
-		
+
 		result = result.format(params);
-		
+
 		return result.toString();
 	},
-	
+
 	// delegates
 	/**
 	 * Same as String.toString()
@@ -2936,7 +2937,7 @@ ilib.String.prototype = {
 	toString: function () {
 		return this.str.toString();
 	},
-	
+
 	/**
 	 * Same as String.valueOf()
 	 * @return {string} this instance as a regular Javascript string
@@ -2944,7 +2945,7 @@ ilib.String.prototype = {
 	valueOf: function () {
 		return this.str.valueOf();
 	},
-	
+
 	/**
 	 * Same as String.charAt()
 	 * @param {number} index the index of the character being sought
@@ -2953,21 +2954,21 @@ ilib.String.prototype = {
 	charAt: function(index) {
 		return new ilib.String(this.str.charAt(index));
 	},
-	
+
 	/**
-	 * Same as String.charCodeAt(). This only reports on 
+	 * Same as String.charCodeAt(). This only reports on
 	 * 2-byte UCS-2 Unicode values, and does not take into
 	 * account supplementary characters encoded in UTF-16.
 	 * If you would like to take account of those characters,
 	 * use codePointAt() instead.
 	 * @param {number} index the index of the character being sought
-	 * @return {number} the character code of the character at the 
-	 * given index in the string 
+	 * @return {number} the character code of the character at the
+	 * given index in the string
 	 */
 	charCodeAt: function(index) {
 		return this.str.charCodeAt(index);
 	},
-	
+
 	/**
 	 * Same as String.concat()
 	 * @param {string} strings strings to concatenate to the current one
@@ -2976,31 +2977,31 @@ ilib.String.prototype = {
 	concat: function(strings) {
 		return new ilib.String(this.str.concat(strings));
 	},
-	
+
 	/**
 	 * Same as String.indexOf()
 	 * @param {string} searchValue string to search for
 	 * @param {number} start index into the string to start searching, or
 	 * undefined to search the entire string
 	 * @return {number} index into the string of the string being sought,
-	 * or -1 if the string is not found 
+	 * or -1 if the string is not found
 	 */
 	indexOf: function(searchValue, start) {
 		return this.str.indexOf(searchValue, start);
 	},
-	
+
 	/**
 	 * Same as String.lastIndexOf()
 	 * @param {string} searchValue string to search for
 	 * @param {number} start index into the string to start searching, or
 	 * undefined to search the entire string
 	 * @return {number} index into the string of the string being sought,
-	 * or -1 if the string is not found 
+	 * or -1 if the string is not found
 	 */
 	lastIndexOf: function(searchValue, start) {
 		return this.str.lastIndexOf(searchValue, start);
 	},
-	
+
 	/**
 	 * Same as String.match()
 	 * @param {string} regexp the regular expression to match
@@ -3009,7 +3010,7 @@ ilib.String.prototype = {
 	match: function(regexp) {
 		return this.str.match(regexp);
 	},
-	
+
 	/**
 	 * Same as String.replace()
 	 * @param {string} searchValue a regular expression to search for
@@ -3020,7 +3021,7 @@ ilib.String.prototype = {
 	replace: function(searchValue, newValue) {
 		return new ilib.String(this.str.replace(searchValue, newValue));
 	},
-	
+
 	/**
 	 * Same as String.search()
 	 * @param {string} regexp the regular expression to search for
@@ -3029,7 +3030,7 @@ ilib.String.prototype = {
 	search: function(regexp) {
 		return this.str.search(regexp);
 	},
-	
+
 	/**
 	 * Same as String.slice()
 	 * @param {number} start first character to include in the string
@@ -3040,65 +3041,65 @@ ilib.String.prototype = {
 	slice: function(start, end) {
 		return new ilib.String(this.str.slice(start, end));
 	},
-	
+
 	/**
 	 * Same as String.split()
 	 * @param {string} separator regular expression to match to find
 	 * separations between the parts of the text
-	 * @param {number} limit maximum number of items in the final 
+	 * @param {number} limit maximum number of items in the final
 	 * output array. Any items beyond that limit will be ignored.
-	 * @return {Array.<string>} the parts of the current string split 
+	 * @return {Array.<string>} the parts of the current string split
 	 * by the separator
 	 */
 	split: function(separator, limit) {
 		return this.str.split(separator, limit);
 	},
-	
+
 	/**
 	 * Same as String.substr()
-	 * @param {number} start the index of the character that should 
+	 * @param {number} start the index of the character that should
 	 * begin the returned substring
 	 * @param {number} length the number of characters to return after
 	 * the start character.
-	 * @return {ilib.String} the requested substring 
+	 * @return {ilib.String} the requested substring
 	 */
 	substr: function(start, length) {
 		return new ilib.String(this.str.substr(start, length));
 	},
-	
+
 	/**
 	 * Same as String.substring()
-	 * @param {number} from the index of the character that should 
+	 * @param {number} from the index of the character that should
 	 * begin the returned substring
 	 * @param {number} to the index where to stop the extraction. If
 	 * omitted, extracts the rest of the string
-	 * @return {ilib.String} the requested substring 
+	 * @return {ilib.String} the requested substring
 	 */
 	substring: function(from, to) {
 		return this.str.substring(from, to);
 	},
-	
+
 	/**
 	 * Same as String.toLowerCase(). Note that this method is
-	 * not locale-sensitive. 
+	 * not locale-sensitive.
 	 * @return {ilib.String} a string with the first character
 	 * lower-cased
 	 */
 	toLowerCase: function() {
 		return this.str.toLowerCase();
 	},
-	
+
 	/**
 	 * Same as String.toUpperCase(). Note that this method is
 	 * not locale-sensitive. Use toLocaleUpperCase() instead
-	 * to get locale-sensitive behaviour. 
+	 * to get locale-sensitive behaviour.
 	 * @return {ilib.String} a string with the first character
 	 * upper-cased
 	 */
 	toUpperCase: function() {
 		return this.str.toUpperCase();
 	},
-	
+
 	/**
 	 * Convert the character or the surrogate pair at the given
 	 * index into the string to a Unicode UCS-4 code point.
@@ -3110,25 +3111,25 @@ ilib.String.prototype = {
 	_toCodePoint: function (index) {
 		return ilib.String.toCodePoint(this.str, index);
 	},
-	
+
 	/**
-	 * Call the callback with each character in the string one at 
-	 * a time, taking care to step through the surrogate pairs in 
+	 * Call the callback with each character in the string one at
+	 * a time, taking care to step through the surrogate pairs in
 	 * the UTF-16 encoding properly.<p>
-	 * 
+	 *
 	 * The standard Javascript String's charAt() method only
-	 * returns a particular 16-bit character in the 
+	 * returns a particular 16-bit character in the
 	 * UTF-16 encoding scheme.
-	 * If the index to charAt() is pointing to a low- or 
+	 * If the index to charAt() is pointing to a low- or
 	 * high-surrogate character,
-	 * it will return the surrogate character rather 
-	 * than the the character 
-	 * in the supplementary planes that the two surrogates together 
+	 * it will return the surrogate character rather
+	 * than the the character
+	 * in the supplementary planes that the two surrogates together
 	 * encode. This function will call the callback with the full
-	 * character, making sure to join two  
+	 * character, making sure to join two
 	 * surrogates into one character in the supplementary planes
 	 * where necessary.<p>
-	 * 
+	 *
 	 * @param {function(string)} callback a callback function to call with each
 	 * full character in the current string
 	 */
@@ -3142,22 +3143,22 @@ ilib.String.prototype = {
 	},
 
 	/**
-	 * Call the callback with each numeric code point in the string one at 
-	 * a time, taking care to step through the surrogate pairs in 
+	 * Call the callback with each numeric code point in the string one at
+	 * a time, taking care to step through the surrogate pairs in
 	 * the UTF-16 encoding properly.<p>
-	 * 
+	 *
 	 * The standard Javascript String's charCodeAt() method only
-	 * returns information about a particular 16-bit character in the 
+	 * returns information about a particular 16-bit character in the
 	 * UTF-16 encoding scheme.
-	 * If the index to charCodeAt() is pointing to a low- or 
+	 * If the index to charCodeAt() is pointing to a low- or
 	 * high-surrogate character,
-	 * it will return the code point of the surrogate character rather 
-	 * than the code point of the character 
-	 * in the supplementary planes that the two surrogates together 
+	 * it will return the code point of the surrogate character rather
+	 * than the code point of the character
+	 * in the supplementary planes that the two surrogates together
 	 * encode. This function will call the callback with the full
-	 * code point of each character, making sure to join two  
+	 * code point of each character, making sure to join two
 	 * surrogates into one code point in the supplementary planes.<p>
-	 * 
+	 *
 	 * @param {function(string)} callback a callback function to call with each
 	 * code point in the current string
 	 */
@@ -3172,24 +3173,24 @@ ilib.String.prototype = {
 
 	/**
 	 * Return an iterator that will step through all of the characters
-	 * in the string one at a time and return their code points, taking 
-	 * care to step through the surrogate pairs in UTF-16 encoding 
+	 * in the string one at a time and return their code points, taking
+	 * care to step through the surrogate pairs in UTF-16 encoding
 	 * properly.<p>
-	 * 
+	 *
 	 * The standard Javascript String's charCodeAt() method only
-	 * returns information about a particular 16-bit character in the 
+	 * returns information about a particular 16-bit character in the
 	 * UTF-16 encoding scheme.
 	 * If the index is pointing to a low- or high-surrogate character,
-	 * it will return a code point of the surrogate character rather 
-	 * than the code point of the character 
-	 * in the supplementary planes that the two surrogates together 
+	 * it will return a code point of the surrogate character rather
+	 * than the code point of the character
+	 * in the supplementary planes that the two surrogates together
 	 * encode.<p>
-	 * 
+	 *
 	 * The iterator instance returned has two methods, hasNext() which
 	 * returns true if the iterator has more code points to iterate through,
 	 * and next() which returns the next code point as a number.<p>
-	 * 
-	 * @return {Object} an iterator 
+	 *
+	 * @return {Object} an iterator
 	 * that iterates through all the code points in the string
 	 */
 	iterator: function() {
@@ -3216,23 +3217,23 @@ ilib.String.prototype = {
 
 	/**
 	 * Return an iterator that will step through all of the characters
-	 * in the string one at a time, taking 
-	 * care to step through the surrogate pairs in UTF-16 encoding 
+	 * in the string one at a time, taking
+	 * care to step through the surrogate pairs in UTF-16 encoding
 	 * properly.<p>
-	 * 
+	 *
 	 * The standard Javascript String's charAt() method only
-	 * returns information about a particular 16-bit character in the 
+	 * returns information about a particular 16-bit character in the
 	 * UTF-16 encoding scheme.
 	 * If the index is pointing to a low- or high-surrogate character,
-	 * it will return that surrogate character rather 
-	 * than the surrogate pair which represents a character 
+	 * it will return that surrogate character rather
+	 * than the surrogate pair which represents a character
 	 * in the supplementary planes.<p>
-	 * 
+	 *
 	 * The iterator instance returned has two methods, hasNext() which
 	 * returns true if the iterator has more characters to iterate through,
 	 * and next() which returns the next character.<p>
-	 * 
-	 * @return {Object} an iterator 
+	 *
+	 * @return {Object} an iterator
 	 * that iterates through all the characters in the string
 	 */
 	charIterator: function() {
@@ -3248,8 +3249,8 @@ ilib.String.prototype = {
 				var ch;
 				if (this.index < istring.str.length) {
 					ch = istring.str.charAt(this.index);
-					if (ilib.String._isSurrogate(ch) && 
-							this.index+1 < istring.str.length && 
+					if (ilib.String._isSurrogate(ch) &&
+							this.index+1 < istring.str.length &&
 							ilib.String._isSurrogate(istring.str.charAt(this.index+1))) {
 						this.index++;
 						ch += istring.str.charAt(this.index);
@@ -3261,12 +3262,12 @@ ilib.String.prototype = {
 		};
 		return new _chiterator(this);
 	},
-	
+
 	/**
-	 * Return the code point at the given index when the string is viewed 
+	 * Return the code point at the given index when the string is viewed
 	 * as an array of code points. If the index is beyond the end of the
 	 * array of code points or if the index is negative, -1 is returned.
-	 * @param {number} index index of the code point 
+	 * @param {number} index index of the code point
 	 * @return {number} code point of the character at the given index into
 	 * the string
 	 */
@@ -3282,7 +3283,7 @@ ilib.String.prototype = {
 		}
 		return (count < 0) ? ch : -1;
 	},
-	
+
 	/**
 	 * Set the locale to use when processing choice formats. The locale
 	 * affects how number classes are interpretted. In some cultures,
@@ -3291,7 +3292,7 @@ ilib.String.prototype = {
 	 * 3 or 4".
 	 * @param {ilib.Locale|string} locale locale to use when processing choice
 	 * formats with this string
-	 * @param {boolean=} sync [optional] whether to load the locale data synchronously 
+	 * @param {boolean=} sync [optional] whether to load the locale data synchronously
 	 * or not
 	 * @param {Object=} loadParams [optional] parameters to pass to the loader function
 	 * @param {function(*)=} onLoad [optional] function to call when the loading is done
@@ -3303,7 +3304,7 @@ ilib.String.prototype = {
 			this.localeSpec = locale;
 			this.locale = new ilib.Locale(locale);
 		}
-		
+
 		ilib.String.loadPlurals(typeof(sync) !== 'undefined' ? sync : true, this.locale, loadParams, onLoad);
 	},
 
@@ -3323,8 +3324,8 @@ ilib.String.prototype = {
 	/**
 	 * Return the number of code points in this string. This may be different
 	 * than the number of characters, as the UTF-16 encoding that Javascript
-	 * uses for its basis returns surrogate pairs separately. Two 2-byte 
-	 * surrogate characters together make up one character/code point in 
+	 * uses for its basis returns surrogate pairs separately. Two 2-byte
+	 * surrogate characters together make up one character/code point in
 	 * the supplementary character planes. If your string contains no
 	 * characters in the supplementary planes, this method will return the
 	 * same thing as the length() method.
@@ -3334,17 +3335,17 @@ ilib.String.prototype = {
 		if (this.cpLength === -1) {
 			var it = this.iterator();
 			this.cpLength = 0;
-			while (it.hasNext()) { 
+			while (it.hasNext()) {
 				this.cpLength++;
 				it.next();
 			};
 		}
-		return this.cpLength;	
+		return this.cpLength;
 	}
 };
 /*
  * localeinfo.js - Encode locale-specific defaults
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -3371,38 +3372,38 @@ ilib.String.prototype = {
  * the default settings for a particular locale. These settings may be overridden
  * by various parts of the code, and should be used as a fall-back setting of last
  * resort. <p>
- * 
+ *
  * The optional options object holds extra parameters if they are necessary. The
  * current list of supported options are:
- * 
+ *
  * <ul>
- * <li><i>onLoad</i> - a callback function to call when the locale info object is fully 
+ * <li><i>onLoad</i> - a callback function to call when the locale info object is fully
  * loaded. When the onLoad option is given, the localeinfo object will attempt to
  * load any missing locale data using the ilib loader callback.
- * When the constructor is done (even if the data is already preassembled), the 
+ * When the constructor is done (even if the data is already preassembled), the
  * onLoad function is called with the current instance as a parameter, so this
  * callback can be used with preassembled or dynamic loading or a mix of the two.
- * 
- * <li><i>sync</i> - tell whether to load any missing locale data synchronously or 
+ *
+ * <li><i>sync</i> - tell whether to load any missing locale data synchronously or
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
- * not be usable for a while. 
+ * not be usable for a while.
  *
- * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ * <li><i>loadParams</i> - an object containing parameters to pass to the
  * loader callback function when locale data is missing. The parameters are not
- * interpretted or modified in any way. They are simply passed along. The object 
+ * interpretted or modified in any way. They are simply passed along. The object
  * may contain any property/value pairs as long as the calling code is in
  * agreement with the loader callback function as to what those parameters mean.
  * </ul>
- * 
- * If this copy of ilib is pre-assembled and all the data is already available, 
+ *
+ * If this copy of ilib is pre-assembled and all the data is already available,
  * or if the data was already previously loaded, then this constructor will call
- * the onLoad callback immediately when the initialization is done. 
+ * the onLoad callback immediately when the initialization is done.
  * If the onLoad option is not given, this class will only attempt to load any
  * missing locale data synchronously.
- * 
+ *
  * Depends directive: !depends localeinfo.js
- * 
+ *
  * @constructor
  * @see {ilib.setLoaderCallback} for information about registering a loader callback
  * function
@@ -3413,10 +3414,10 @@ ilib.String.prototype = {
 ilib.LocaleInfo = function(locale, options) {
 	var sync = true,
 	    loadParams = undefined;
-	
+
 	/* these are all the defaults. Essentially, en-US */
 	/**
-	  @private 
+	  @private
 	  @type {{
 		scripts:Array.<string>,
 		timezone:string,
@@ -3427,6 +3428,7 @@ ilib.LocaleInfo = function(locale, options) {
 		firstDayOfWeek:number,
 		weekendStart:number,
 		weekendEnd:number,
+		meridiems:string,
 		unitfmt: {long:string,short:string},
 		numfmt:Object.<{
 			currencyFormats:Object.<{common:string,commonNegative:string,iso:string,isoNegative:string}>,
@@ -3446,7 +3448,7 @@ ilib.LocaleInfo = function(locale, options) {
 	  }}
 	*/
 	this.info = ilib.LocaleInfo.defaultInfo;
-	
+
 	switch (typeof(locale)) {
 		case "string":
 			this.locale = new ilib.Locale(locale);
@@ -3459,12 +3461,12 @@ ilib.LocaleInfo = function(locale, options) {
 			this.locale = locale;
 			break;
 	}
-	
+
 	if (options) {
 		if (typeof(options.sync) !== 'undefined') {
 			sync = (options.sync == true);
 		}
-		
+
 		if (typeof(options.loadParams) !== 'undefined') {
 			loadParams = options.loadParams;
 		}
@@ -3475,11 +3477,11 @@ ilib.LocaleInfo = function(locale, options) {
 	}
 
 	ilib.loadData({
-		object: ilib.LocaleInfo, 
-		locale: this.locale, 
-		name: "localeinfo.json", 
-		sync: sync, 
-		loadParams: loadParams, 
+		object: ilib.LocaleInfo,
+		locale: this.locale,
+		name: "localeinfo.json",
+		sync: sync,
+		loadParams: loadParams,
 		callback: ilib.bind(this, function (info) {
 			if (!info) {
 				info = ilib.LocaleInfo.defaultInfo;
@@ -3504,6 +3506,7 @@ ilib.LocaleInfo.defaultInfo = /** @type {{
 	firstDayOfWeek:number,
 	weekendStart:number,
 	weekendEnd:number,
+	meridiems:string,
 	unitfmt: {long:string,short:string},
 	numfmt:Object.<{
 		currencyFormats:Object.<{
@@ -3534,6 +3537,7 @@ ilib.LocaleInfo.defaultInfo = ilib.LocaleInfo.defaultInfo || {
     "clock": "24",
     "currency": "USD",
     "firstDayOfWeek": 1,
+    "meridiems": "gregorian",
     "numfmt": {
         "currencyFormats": {
             "common": "{s}{n}",
@@ -3561,24 +3565,24 @@ ilib.LocaleInfo.prototype = {
      * @returns {string} the name of the locale's language in English
      */
     getLanguageName: function () {
-    	return this.info["language.name"];	
+    	return this.info["language.name"];
     },
-    
+
     /**
      * Return the name of the locale's region in English. If the locale
      * has no region, this returns undefined.
-     * 
+     *
      * @returns {string|undefined} the name of the locale's region in English
      */
     getRegionName: function () {
-    	return this.info["region.name"];	
+    	return this.info["region.name"];
     },
 
     /**
 	 * Return whether this locale commonly uses the 12- or the 24-hour clock.
-	 *  
+	 *
 	 * @returns {string} "12" if the locale commonly uses a 12-hour clock, or "24"
-	 * if the locale commonly uses a 24-hour clock. 
+	 * if the locale commonly uses a 24-hour clock.
 	 */
 	getClock: function() {
 		return this.info.clock;
@@ -3591,46 +3595,46 @@ ilib.LocaleInfo.prototype = {
 	getLocale: function () {
 		return this.locale;
 	},
-	
+
 	/**
 	 * Return the name of the measuring system that is commonly used in the given locale.
 	 * Valid values are "uscustomary", "imperial", and "metric".
-	 * 
+	 *
 	 * @returns {string} The name of the measuring system commonly used in the locale
 	 */
 	getUnits: function () {
 		return this.info.units;
 	},
-        
+
         getUnitFormat: function () {
                 return this.info.unitfmt;
         },
-	
+
 	/**
 	 * Return the name of the calendar that is commonly used in the given locale.
-	 * 
+	 *
 	 * @returns {string} The name of the calendar commonly used in the locale
 	 */
 	getCalendar: function () {
 		return this.info.calendar;
 	},
-	
+
 	/**
 	 * Return the day of week that starts weeks in the current locale. Days are still
-	 * numbered the standard way with 0 for Sunday through 6 for Saturday, but calendars 
-	 * should be displayed and weeks calculated with the day of week returned from this 
+	 * numbered the standard way with 0 for Sunday through 6 for Saturday, but calendars
+	 * should be displayed and weeks calculated with the day of week returned from this
 	 * function as the first day of the week.
-	 * 
+	 *
 	 * @returns {number} the day of the week that starts weeks in the current locale.
 	 */
 	getFirstDayOfWeek: function () {
 		return this.info.firstDayOfWeek;
 	},
-	
+
 	/**
 	 * Return the day of week that starts weekend in the current locale. Days are still
 	 * numbered the standard way with 0 for Sunday through 6 for Saturday.
-	 * 
+	 *
 	 * @returns {number} the day of the week that starts weeks in the current locale.
 	 */
 	getWeekEndStart: function () {
@@ -3640,7 +3644,7 @@ ilib.LocaleInfo.prototype = {
 	/**
 	 * Return the day of week that starts weekend in the current locale. Days are still
 	 * numbered the standard way with 0 for Sunday through 6 for Saturday.
-	 * 
+	 *
 	 * @returns {number} the day of the week that starts weeks in the current locale.
 	 */
 	getWeekEndEnd: function () {
@@ -3657,7 +3661,7 @@ ilib.LocaleInfo.prototype = {
 	getTimeZone: function () {
 		return this.info.timezone;
 	},
-	
+
 	/**
 	 * Return the decimal separator for formatted numbers in this locale.
 	 * @returns {string} the decimal separator char
@@ -3665,7 +3669,7 @@ ilib.LocaleInfo.prototype = {
 	getDecimalSeparator: function () {
 		return this.info.numfmt.decimalChar;
 	},
-	
+
 	/**
 	 * Return the decimal separator for formatted numbers in this locale for native script.
 	 * @returns {string} the decimal separator char
@@ -3673,9 +3677,9 @@ ilib.LocaleInfo.prototype = {
 	getNativeDecimalSeparator: function () {
 		return (this.info.native_numfmt && this.info.native_numfmt.decimalChar) || this.info.numfmt.decimalChar;
 	},
-	
+
 	/**
-	 * Return the separator character used to separate groups of digits on the 
+	 * Return the separator character used to separate groups of digits on the
 	 * integer side of the decimal character.
 	 * @returns {string} the grouping separator char
 	 */
@@ -3684,19 +3688,19 @@ ilib.LocaleInfo.prototype = {
 	},
 
 	/**
-	 * Return the separator character used to separate groups of digits on the 
+	 * Return the separator character used to separate groups of digits on the
 	 * integer side of the decimal character for the native script if present other than the default script.
 	 * @returns {string} the grouping separator char
 	 */
 	getNativeGroupingSeparator: function () {
 		return (this.info.native_numfmt && this.info.native_numfmt.groupChar) || this.info.numfmt.groupChar;
 	},
-	
+
 	/**
-	 * Return the minimum number of digits grouped together on the integer side 
-	 * for the first (primary) group. 
+	 * Return the minimum number of digits grouped together on the integer side
+	 * for the first (primary) group.
 	 * In western European cultures, groupings are in 1000s, so the number of digits
-	 * is 3. 
+	 * is 3.
 	 * @returns {number} the number of digits in a primary grouping, or 0 for no grouping
 	 */
 	getPrimaryGroupingDigits: function () {
@@ -3706,17 +3710,17 @@ ilib.LocaleInfo.prototype = {
 	/**
 	 * Return the minimum number of digits grouped together on the integer side
 	 * for the second or more (secondary) group.<p>
-	 *   
+	 *
 	 * In western European cultures, all groupings are by 1000s, so the secondary
-	 * size should be 0 because there is no secondary size. In general, if this 
-	 * method returns 0, then all groupings are of the primary size.<p> 
-	 * 
+	 * size should be 0 because there is no secondary size. In general, if this
+	 * method returns 0, then all groupings are of the primary size.<p>
+	 *
 	 * For some other cultures, the first grouping (primary)
 	 * is 3 and any subsequent groupings (secondary) are two. So, 100000 would be
 	 * written as: "1,00,000".
-	 * 
-	 * @returns {number} the number of digits in a secondary grouping, or 0 for no 
-	 * secondary grouping. 
+	 *
+	 * @returns {number} the number of digits in a secondary grouping, or 0 for no
+	 * secondary grouping.
 	 */
 	getSecondaryGroupingDigits: function () {
 		return this.info.numfmt.secgroupSize || 0;
@@ -3769,16 +3773,16 @@ ilib.LocaleInfo.prototype = {
 	 */
 	getNativePercentageSymbol: function () {
 		return (this.info.native_numfmt && this.info.native_numfmt.pctChar) || this.info.numfmt.pctChar || "%";
-	
+
 	},
 	/**
 	 * Return the format template used to format negative numbers in this locale.
 	 * @returns {string} the format template for formatting negative numbers
 	 */
-	getNegativeNumberFormat: function () { 
+	getNegativeNumberFormat: function () {
 		return this.info.numfmt.negativenumFmt;
 	},
-	
+
 	/**
 	 * Return an object containing the format templates for formatting currencies
 	 * in this locale. The object has a number of properties in it that each are
@@ -3789,16 +3793,16 @@ ilib.LocaleInfo.prototype = {
 	getCurrencyFormats: function () {
 		return this.info.numfmt.currencyFormats;
 	},
-	
+
 	/**
-	 * Return the currency that is legal in the locale, or which is most commonly 
+	 * Return the currency that is legal in the locale, or which is most commonly
 	 * used in regular commerce.
 	 * @returns {string} the ISO 4217 code for the currency of this locale
 	 */
 	getCurrency: function () {
 		return this.info.currency;
 	},
-	
+
 	/**
 	 * Return a string that describes the style of digits used by this locale.
 	 * Possible return values are:
@@ -3821,31 +3825,31 @@ ilib.LocaleInfo.prototype = {
 		}
 		return "western";
 	},
-	
+
 	/**
 	 * Return the digits of the default script if they are defined.
 	 * If not defined, the default should be the regular "Arabic numerals"
 	 * used in the Latin script. (0-9)
-	 * @returns {string|undefined} the digits used in the default script 
+	 * @returns {string|undefined} the digits used in the default script
 	 */
 	getDigits: function () {
 		return this.info.numfmt.digits;
 	},
-	
+
 	/**
-	 * Return the digits of the native script if they are defined. 
-	 * @returns {string|undefined} the digits used in the default script 
+	 * Return the digits of the native script if they are defined.
+	 * @returns {string|undefined} the digits used in the default script
 	 */
 	getNativeDigits: function () {
 		return (this.info.numfmt.useNative && this.info.numfmt.digits) || (this.info.native_numfmt && this.info.native_numfmt.digits);
 	},
-	
+
 	/**
 	 * If this locale typically uses a different type of rounding for numeric
-	 * formatting other than halfdown, especially for currency, then it can be 
-	 * specified in the localeinfo. If the locale uses the default, then this 
-	 * method returns undefined. The locale's rounding method overrides the 
-	 * rounding method for the currency itself, which can sometimes shared 
+	 * formatting other than halfdown, especially for currency, then it can be
+	 * specified in the localeinfo. If the locale uses the default, then this
+	 * method returns undefined. The locale's rounding method overrides the
+	 * rounding method for the currency itself, which can sometimes shared
 	 * between various locales so it is less specific.
 	 * @returns {string} the name of the rounding mode typically used in this
 	 * locale, or "halfdown" if the locale does not override the default
@@ -3853,56 +3857,71 @@ ilib.LocaleInfo.prototype = {
 	getRoundingMode: function () {
 		return this.info.numfmt.roundingMode;
 	},
-	
+
 	/**
-	 * Return the default script used to write text in the language of this 
+	 * Return the default script used to write text in the language of this
 	 * locale. Text for most languages is written in only one script, but there
 	 * are some languages where the text can be written in a number of scripts,
-	 * depending on a variety of things such as the region, ethnicity, religion, 
+	 * depending on a variety of things such as the region, ethnicity, religion,
 	 * etc. of the author. This method returns the default script for the
-	 * locale, in which the language is most commonly written.<p> 
-	 * 
+	 * locale, in which the language is most commonly written.<p>
+	 *
 	 * The script is returned as an ISO 15924 4-letter code.
-	 * 
+	 *
 	 * @returns {string} the ISO 15924 code for the default script used to write
-	 * text in this locale 
+	 * text in this locale
 	 */
 	getDefaultScript: function() {
 		return (this.info.scripts) ? this.info.scripts[0] : "Latn";
 	},
-	
+
 	/**
 	 * Return the script used for the current locale. If the current locale
-	 * explicitly defines a script, then this script is returned. If not, then 
+	 * explicitly defines a script, then this script is returned. If not, then
 	 * the default script for the locale is returned.
-	 * 
+	 *
 	 * @see ilib.LocaleInfo.getDefaultScript
 	 * @returns {string} the ISO 15924 code for the script used to write
 	 * text in this locale
 	 */
 	getScript: function() {
-		return this.locale.getScript() || this.getDefaultScript(); 
+		return this.locale.getScript() || this.getDefaultScript();
 	},
-	
+
 	/**
 	 * Return an array of script codes which are used to write text in the current
 	 * language. Text for most languages is written in only one script, but there
 	 * are some languages where the text can be written in a number of scripts,
-	 * depending on a variety of things such as the region, ethnicity, religion, 
-	 * etc. of the author. This method returns an array of script codes in which 
+	 * depending on a variety of things such as the region, ethnicity, religion,
+	 * etc. of the author. This method returns an array of script codes in which
 	 * the language is commonly written.
-	 * 
-	 * @returns {Array.<string>} an array of ISO 15924 codes for the scripts used 
+	 *
+	 * @returns {Array.<string>} an array of ISO 15924 codes for the scripts used
 	 * to write text in this language
 	 */
 	getAllScripts: function() {
 		return this.info.scripts || ["Latn"];
+	},
+
+	/**
+	 * Return the default style of meridiems used in this locale. Meridiems are
+	 * times of day like AM/PM. In a few locales with some calendars, for example
+	 * Amharic/Ethiopia using the Ethiopic calendar, the times of day may be
+	 * split into different segments than simple AM/PM as in the Gregorian
+	 * calendar. Only a few locales are like that. For most locales, formatting
+	 * a Gregorian date will use the regular Gregorian AM/PM meridiems.
+	 *
+	 * @returns {string} the default meridiems style used in this locale. Possible
+	 * values are "gregorian", "chinese", and "ethiopic"
+	 */
+	getMeridiemsStyle: function () {
+		return this.info.meridiems || "gregorian";
 	}
 };
 
 /*
  * resources.js - Resource bundle definition
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -3926,84 +3945,84 @@ ilib.LocaleInfo.prototype = {
 /**
  * @class
  * Create a new resource bundle instance. The resource bundle loads strings
- * appropriate for a particular locale and provides them via the getString 
+ * appropriate for a particular locale and provides them via the getString
  * method.<p>
- * 
+ *
  * The options object may contain any (or none) of the following properties:
- * 
+ *
  * <ul>
  * <li><i>locale</i> - The locale of the strings to load. If not specified, the default
- * locale is the the default for the web page or app in which the bundle is 
+ * locale is the the default for the web page or app in which the bundle is
  * being loaded.
- * 
+ *
  * <li><i>name</i> - Base name of the resource bundle to load. If not specified the default
  * base name is "resources".
- * 
- * <li><i>type</i> - Name the type of strings this bundle contains. Valid values are 
+ *
+ * <li><i>type</i> - Name the type of strings this bundle contains. Valid values are
  * "xml", "html", "text", or "raw". The default is "text". If the type is "xml" or "html",
- * then XML/HTML entities and tags are not pseudo-translated. During a real translation, 
+ * then XML/HTML entities and tags are not pseudo-translated. During a real translation,
  * HTML character entities are translated to their corresponding characters in a source
  * string before looking that string up in the translations. Also, the characters "<", ">",
  * and "&" are converted to entities again in the output, but characters are left as they
  * are. If the type is "xml", "html", or "text" types, then the replacement parameter names
- * are not pseudo-translated as well so that the output can be used for formatting with 
- * the ilib.String class. If the type is raw, all characters are pseudo-translated, 
+ * are not pseudo-translated as well so that the output can be used for formatting with
+ * the ilib.String class. If the type is raw, all characters are pseudo-translated,
  * including replacement parameters as well as XML/HTML tags and entities.
- * 
- * <li><i>lengthen</i> - when pseudo-translating the string, tell whether or not to 
+ *
+ * <li><i>lengthen</i> - when pseudo-translating the string, tell whether or not to
  * automatically lengthen the string to simulate "long" languages such as German
  * or French. This is a boolean value. Default is false.
- * 
+ *
  * <li><i>missing</i> - what to do when a resource is missing. The choices are:
  * <ul>
  *   <li><i>source</i> - return the source string unchanged
  *   <li><i>pseudo</i> - return the pseudo-translated source string, translated to the
- *   script of the locale if the mapping is available, or just the default Latin 
+ *   script of the locale if the mapping is available, or just the default Latin
  *   pseudo-translation if not
- *   <li><i>empty</i> - return the empty string 
+ *   <li><i>empty</i> - return the empty string
  * </ul>
  * The default behaviour is the same as before, which is to return the source string
  * unchanged.
- * 
- * <li><i>onLoad</i> - a callback function to call when the resources are fully 
+ *
+ * <li><i>onLoad</i> - a callback function to call when the resources are fully
  * loaded. When the onLoad option is given, this class will attempt to
  * load any missing locale data using the ilib loader callback.
- * When the constructor is done (even if the data is already preassembled), the 
+ * When the constructor is done (even if the data is already preassembled), the
  * onLoad function is called with the current instance as a parameter, so this
- * callback can be used with preassembled or dynamic loading or a mix of the two. 
- * 
- * <li>sync - tell whether to load any missing locale data synchronously or 
+ * callback can be used with preassembled or dynamic loading or a mix of the two.
+ *
+ * <li>sync - tell whether to load any missing locale data synchronously or
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
- * not be usable for a while. 
+ * not be usable for a while.
  *
- * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ * <li><i>loadParams</i> - an object containing parameters to pass to the
  * loader callback function when locale data is missing. The parameters are not
- * interpretted or modified in any way. They are simply passed along. The object 
+ * interpretted or modified in any way. They are simply passed along. The object
  * may contain any property/value pairs as long as the calling code is in
  * agreement with the loader callback function as to what those parameters mean.
  * </ul>
- * 
- * The locale option may be given as a locale spec string or as an 
+ *
+ * The locale option may be given as a locale spec string or as an
  * ilib.Locale object. If the locale option is not specified, then strings for
- * the default locale will be loaded.<p> 
- * 
+ * the default locale will be loaded.<p>
+ *
  * The name option can be used to put groups of strings together in a
  * single bundle. The strings will then appear together in a JS object in
  * a JS file that can be included before the ilib.<p>
- * 
+ *
  * A resource bundle with a particular name is actually a set of bundles
- * that are each specific to a language, a language plus a region, etc. 
+ * that are each specific to a language, a language plus a region, etc.
  * All bundles with the same base name should
- * contain the same set of source strings, but with different translations for 
- * the given locale. The user of the bundle does not need to be aware of 
- * the locale of the bundle, as long as it contains values for the strings 
+ * contain the same set of source strings, but with different translations for
+ * the given locale. The user of the bundle does not need to be aware of
+ * the locale of the bundle, as long as it contains values for the strings
  * it needs.<p>
- * 
+ *
  * Strings in bundles for a particular locale are inherited from parent bundles
- * that are more generic. In general, the hierarchy is as follows (from 
+ * that are more generic. In general, the hierarchy is as follows (from
  * least locale-specific to most locale-specific):
- * 
+ *
  * <ol>
  * <li> language
  * <li> region
@@ -4014,65 +4033,65 @@ ilib.LocaleInfo.prototype = {
  * <li> language_region_variant
  * <li> language_script_region_variant
  * </ol>
- * 
+ *
  * That is, if the translation for a string does not exist in the current
  * locale, the more-generic parent locale is searched for the string. In the
- * worst case scenario, the string is not found in the base locale's strings. 
+ * worst case scenario, the string is not found in the base locale's strings.
  * In this case, the missing option guides this class on what to do. If
- * the missing option is "source", then the original source is returned as 
+ * the missing option is "source", then the original source is returned as
  * the translation. If it is "empty", the empty string is returned. If it
  * is "pseudo", then the pseudo-translated string that is appropriate for
- * the default script of the locale is returned.<p> 
- * 
+ * the default script of the locale is returned.<p>
+ *
  * This allows developers to create code with new or changed strings in it and check in that
  * code without waiting for the translations to be done first. The translated
- * version of the app or web site will still function properly, but will show 
- * a spurious untranslated string here and there until the translations are 
- * done and also checked in.<p>   
- *  
+ * version of the app or web site will still function properly, but will show
+ * a spurious untranslated string here and there until the translations are
+ * done and also checked in.<p>
+ *
  * The base is whatever language your developers use to code in. For
- * a German web site, strings in the source code may be written in German 
+ * a German web site, strings in the source code may be written in German
  * for example. Often this base is English, as many web sites are coded in
  * English, but that is not required.<p>
- * 
+ *
  * The strings can be extracted with the ilib localization tool (which will be
  * shipped at some future time.) Once the strings
  * have been translated, the set of translated files can be generated with the
  * same tool. The output from the tool can be used as input to the ResBundle
  * object. It is up to the web page or app to make sure the JS file that defines
  * the bundle is included before creating the ResBundle instance.<p>
- * 
+ *
  * A special locale "zxx-XX" is used as the pseudo-translation locale because
- * zxx means "no linguistic information" in the ISO 639 standard, and the region 
- * code XX is defined to be user-defined in the ISO 3166 standard. 
+ * zxx means "no linguistic information" in the ISO 639 standard, and the region
+ * code XX is defined to be user-defined in the ISO 3166 standard.
  * Pseudo-translation is a locale where the translations are generated on
- * the fly based on the contents of the source string. Characters in the source 
- * string are replaced with other characters and returned. 
- * 
+ * the fly based on the contents of the source string. Characters in the source
+ * string are replaced with other characters and returned.
+ *
  * Example. If the source string is:
- * 
+ *
  * <pre>
  * "This is a string"
  * </pre>
- * 
- * then the pseudo-translated version might look something like this: 
- * 
+ *
+ * then the pseudo-translated version might look something like this:
+ *
  * <pre>
  * "Ţħïş ïş á şţřïñĝ"
  * </pre>
  * <p>
- * 
+ *
  * Pseudo-translation can be used to test that your app or web site is translatable
- * before an actual translation has happened. These bugs can then be fixed 
+ * before an actual translation has happened. These bugs can then be fixed
  * before the translation starts, avoiding an explosion of bugs later when
- * each language's tester registers the same bug complaining that the same 
+ * each language's tester registers the same bug complaining that the same
  * string is not translated. When pseudo-localizing with
- * the Latin script, this allows the strings to be readable in the UI in the 
- * source language (if somewhat funky-looking), 
- * so that a tester can easily verify that the string is properly externalized 
+ * the Latin script, this allows the strings to be readable in the UI in the
+ * source language (if somewhat funky-looking),
+ * so that a tester can easily verify that the string is properly externalized
  * and loaded from a resource bundle without the need to be able to read a
- * foreign language.<p> 
- * 
+ * foreign language.<p>
+ *
  * If one of a list of script tags is given in the pseudo-locale specifier, then the
  * pseudo-localization can map characters to very rough transliterations of
  * characters in the given script. For example, zxx-Hebr-XX maps strings to
@@ -4083,45 +4102,45 @@ ilib.LocaleInfo.prototype = {
  * specified in the locale spec, or if the script is not supported,
  * then the default mapping maps Latin base characters to accented versions of
  * those Latin characters as in the example above.
- *  
- * When the "lengthen" property is set to true in the options, the 
+ *
+ * When the "lengthen" property is set to true in the options, the
  * pseudotranslation code will add digits to the end of the string to simulate
- * the lengthening that occurs when translating to other languages. The above 
+ * the lengthening that occurs when translating to other languages. The above
  * example will come out like this:
- * 
+ *
  * <pre>
  * "Ţħïş ïş á şţřïñĝ76543210"
  * </pre>
- * 
+ *
  * The string is lengthened according to the length of the source string. If
- * the source string is less than 20 characters long, the string is lengthened 
- * by 50%. If the source string is 20-40 
+ * the source string is less than 20 characters long, the string is lengthened
+ * by 50%. If the source string is 20-40
  * characters long, the string is lengthened by 33%. If te string is greater
  * than 40 characters long, the string is lengthened by 20%.<p>
- * 
+ *
  * The pseudotranslation always ends a string with the digit "0". If you do
  * not see the digit "0" in the UI for your app, you know that truncation
- * has occurred, and the number you see at the end of the string tells you 
+ * has occurred, and the number you see at the end of the string tells you
  * how many characters were truncated.<p>
- * 
+ *
  * Depends directive: !depends resources.js
- * 
+ *
  * @constructor
  * @param {?Object} options Options controlling how the bundle is created
  */
 ilib.ResBundle = function (options) {
 	var lookupLocale, spec;
-	
+
 	this.locale = new ilib.Locale();	// use the default locale
 	this.baseName = "strings";
 	this.type = "text";
 	this.loadParams = {};
 	this.missing = "source";
 	this.sync = true;
-	
+
 	if (options) {
 		if (options.locale) {
-			this.locale = (typeof(options.locale) === 'string') ? 
+			this.locale = (typeof(options.locale) === 'string') ?
 					new ilib.Locale(options.locale) :
 					options.locale;
 		}
@@ -4132,11 +4151,11 @@ ilib.ResBundle = function (options) {
 			this.type = options.type;
 		}
 		this.lengthen = options.lengthen || false;
-		
+
 		if (typeof(options.sync) !== 'undefined') {
 			this.sync = (options.sync == true);
 		}
-		
+
 		if (typeof(options.loadParams) !== 'undefined') {
 			this.loadParams = options.loadParams;
 		}
@@ -4146,7 +4165,7 @@ ilib.ResBundle = function (options) {
 			}
 		}
 	}
-	
+
 	this.map = {};
 
 	if (!ilib.ResBundle[this.baseName]) {
@@ -4156,11 +4175,11 @@ ilib.ResBundle = function (options) {
 	lookupLocale = this.locale.isPseudo() ? new ilib.Locale("en-US") : this.locale;
 
 	ilib.loadData({
-		object: ilib.ResBundle[this.baseName], 
-		locale: lookupLocale, 
-		name: this.baseName + ".json", 
-		sync: this.sync, 
-		loadParams: this.loadParams, 
+		object: ilib.ResBundle[this.baseName],
+		locale: lookupLocale,
+		name: this.baseName + ".json",
+		sync: this.sync,
+		loadParams: this.loadParams,
 		callback: ilib.bind(this, function (map) {
 			if (!map) {
 				map = ilib.data[this.baseName] || {};
@@ -4172,13 +4191,13 @@ ilib.ResBundle = function (options) {
 				if (!ilib.ResBundle.pseudomap) {
 					ilib.ResBundle.pseudomap = {};
 				}
-	
+
 				this._loadPseudo(this.locale, options.onLoad);
 			} else if (this.missing === "pseudo") {
 				if (!ilib.ResBundle.pseudomap) {
 					ilib.ResBundle.pseudomap = {};
 				}
-	
+
 				new ilib.LocaleInfo(this.locale, {
 					sync: this.sync,
 					loadParams: this.loadParams,
@@ -4222,11 +4241,11 @@ ilib.ResBundle.prototype = {
      */
     _loadPseudo: function (pseudoLocale, onLoad) {
 		ilib.loadData({
-			object: ilib.ResBundle.pseudomap, 
-			locale: pseudoLocale, 
-			name: "pseudomap.json", 
-			sync: this.sync, 
-			loadParams: this.loadParams, 
+			object: ilib.ResBundle.pseudomap,
+			locale: pseudoLocale,
+			name: "pseudomap.json",
+			sync: this.sync,
+			loadParams: this.loadParams,
 			callback: ilib.bind(this, function (map) {
 				if (!map || ilib.isEmpty(map)) {
 					map = ilib.ResBundle.defaultPseudo;
@@ -4236,19 +4255,19 @@ ilib.ResBundle.prototype = {
 				this.pseudomap = map;
 				if (typeof(onLoad) === 'function') {
 					onLoad(this);
-				}	
+				}
 			})
 		});
     },
-    
+
 	/**
 	 * Return the locale of this resource bundle.
-	 * @return {ilib.Locale} the locale of this resource bundle object 
+	 * @return {ilib.Locale} the locale of this resource bundle object
 	 */
 	getLocale: function () {
 		return this.locale;
 	},
-	
+
 	/**
 	 * Return the name of this resource bundle. This corresponds to the name option
 	 * given to the constructor.
@@ -4257,7 +4276,7 @@ ilib.ResBundle.prototype = {
 	getName: function () {
 		return this.baseName;
 	},
-	
+
 	/**
 	 * Return the type of this resource bundle. This corresponds to the type option
 	 * given to the constructor.
@@ -4297,7 +4316,7 @@ ilib.ResBundle.prototype = {
 						}
 					}
 				}
-				if (i < str.length) { 
+				if (i < str.length) {
 					if (str.charAt(i) === '{') {
 						ret += str.charAt(i++);
 						while (i < str.length && str.charAt(i) !== '}') {
@@ -4336,7 +4355,7 @@ ilib.ResBundle.prototype = {
 		}
 		return ret;
 	},
-	
+
 	/*
 	 * @private
 	 * Escape html characters in the output.
@@ -4358,10 +4377,10 @@ ilib.ResBundle.prototype = {
 		str = str.replace(/&gt;/g, '>');
 		return str;
 	},
-	
+
 	/*
 	 * @private
-	 * Create a key name out of a source string. All this does so far is 
+	 * Create a key name out of a source string. All this does so far is
 	 * compress sequences of white space into a single space on the assumption
 	 * that this doesn't really change the meaning of the string, and therefore
 	 * all such strings that compress to the same thing should share the same
@@ -4372,45 +4391,45 @@ ilib.ResBundle.prototype = {
 		var key = source.replace(/\s+/gm, ' ');
 		return (this.type === "xml" || this.type === "html") ? this.unescapeXml(key) : key;
 	},
-	
+
 	/**
 	 * Return a localized string. If the string is not found in the loaded set of
 	 * resources, the original source string is returned. If the key is not given,
-	 * then the source string itself is used as the key. In the case where the 
+	 * then the source string itself is used as the key. In the case where the
 	 * source string is used as the key, the whitespace is compressed down to 1 space
 	 * each, and the whitespace at the beginning and end of the string is trimmed.<p>
-	 * 
+	 *
 	 * The escape mode specifies what type of output you are escaping the returned
-	 * string for. Modes are similar to the types: 
-	 * 
+	 * string for. Modes are similar to the types:
+	 *
 	 * <ul>
 	 * <li>"html" -- prevents HTML injection by escaping the characters &lt &gt; and &amp;
 	 * <li>"xml" -- currently same as "html" mode
-	 * <li>"js" -- prevents breaking Javascript syntax by backslash escaping all quote and 
+	 * <li>"js" -- prevents breaking Javascript syntax by backslash escaping all quote and
 	 * double-quote characters
 	 * <li>"attribute" -- meant for HTML attribute values. Currently this is the same as
 	 * "js" escape mode.
 	 * <li>"default" -- use the type parameter from the constructor as the escape mode as well
 	 * <li>"none" or undefined -- no escaping at all.
 	 * </ul>
-	 * 
+	 *
 	 * The type parameter of the constructor specifies what type of strings this bundle
 	 * is operating upon. This allows pseudo-translation and automatic key generation
-	 * to happen properly by telling this class how to parse the string. The escape mode 
-	 * for this method is different in that it specifies how this string will be used in 
-	 * the calling code and therefore how to escape it properly.<p> 
-	 * 
-	 * For example, a section of Javascript code may be constructing an HTML snippet in a 
+	 * to happen properly by telling this class how to parse the string. The escape mode
+	 * for this method is different in that it specifies how this string will be used in
+	 * the calling code and therefore how to escape it properly.<p>
+	 *
+	 * For example, a section of Javascript code may be constructing an HTML snippet in a
 	 * string to add to the web page. In this case, the type parameter in the constructor should
 	 * be "html" so that the source string can be parsed properly, but the escape mode should
 	 * be "js" so that the output string can be used in Javascript without causing syntax
 	 * errors.
-	 * 
+	 *
 	 * @param {?string=} source the source string to translate
 	 * @param {?string=} key optional name of the key, if any
 	 * @param {?string=} escapeMode escape mode, if any
-	 * @return {ilib.String|undefined} the translation of the given source/key or undefined 
-	 * if the translation is not found and the source is undefined 
+	 * @return {ilib.String|undefined} the translation of the given source/key or undefined
+	 * if the translation is not found and the source is undefined
 	 */
 	getString: function (source, key, escapeMode) {
 		if (!source && !key) return new ilib.String("");
@@ -4450,40 +4469,56 @@ ilib.ResBundle.prototype = {
 			return ret;
 		}
 	},
-	
+
+	/**
+	 * Return a localized string as a Javascript object. This does the same thing as
+	 * the getString() method, but it returns a regular Javascript string instead of
+	 * and ilib.String instance. This means it cannot be formatted with the format()
+	 * method without being wrapped in an ilib.String instance first.
+	 *
+	 * @param {?string=} source the source string to translate
+	 * @param {?string=} key optional name of the key, if any
+	 * @param {?string=} escapeMode escape mode, if any
+	 * @return {string|undefined} the translation of the given source/key or undefined
+	 * if the translation is not found and the source is undefined
+	 */
+	getStringJS: function(source, key, escapeMode) {
+		return this.getString(source, key, escapeMode).toString();
+	},
+
 	/**
 	 * Return true if the current bundle contains a translation for the given key and
 	 * source. The
-	 * getString method will always return a string for any given key and source 
+	 * getString method will always return a string for any given key and source
 	 * combination, so it cannot be used to tell if a translation exists. Either one
 	 * or both of the source and key must be specified. If both are not specified,
 	 * this method will return false.
-	 * 
+	 *
 	 * @param {?string=} source source string to look up
 	 * @param {?string=} key key to look up
-	 * @return {boolean} true if this bundle contains a translation for the key, and 
+	 * @return {boolean} true if this bundle contains a translation for the key, and
 	 * false otherwise
 	 */
 	containsKey: function(source, key) {
 		if (typeof(source) === 'undefined' && typeof(key) === 'undefined') {
 			return false;
 		}
-		
+
 		var keyName = key || this.makeKey(source);
 		return typeof(this.map[keyName]) !== 'undefined';
 	},
-	
+
 	/**
 	 * Return the merged resources as an entire object. When loading resources for a
-	 * locale that are not just a set of translated strings, but instead an entire 
+	 * locale that are not just a set of translated strings, but instead an entire
 	 * structured javascript object, you can gain access to that object via this call. This method
 	 * will ensure that all the of the parts of the object are correct for the locale.<p>
-	 * 
-	 * For pre-assembled data, it starts by loading <i>ilib.data[name]</i>, where 
-	 * <i>name</i> is the base name for this set of resources. Then, it successively 
-	 * merges objects in the base data using progressively more locale-specific data. 
+	 *
+	 * For pre-assembled data, it starts by loading <i>ilib.data[name]</i>, where
+	 * <i>name</i> is the base name for this set of resources. Then, it successively
+	 * merges objects in the base data using progressively more locale-specific data.
 	 * It loads it in this order from <i>ilib.data</i>:
-	 * 
+	 *
 	 * <ol>
 	 * <li> language
 	 * <li> region
@@ -4494,15 +4529,15 @@ ilib.ResBundle.prototype = {
 	 * <li> language_region_variant
 	 * <li> language_script_region_variant
 	 * </ol>
-	 * 
+	 *
 	 * For dynamically loaded data, the code attempts to load the same sequence as
 	 * above, but with slash path separators instead of underscores.<p>
-	 *  
+	 *
 	 * Loading the resources this way allows the program to share resources between all
-	 * locales that share a common language, region, or script. As a 
+	 * locales that share a common language, region, or script. As a
 	 * general rule-of-thumb, resources should be as generic as possible in order to
 	 * cover as many locales as possible.
-	 * 
+	 *
 	 * @return {Object} returns the object that is the basis for this resources instance
 	 */
 	getResObj: function () {
@@ -4512,7 +4547,7 @@ ilib.ResBundle.prototype = {
 
 /*
  * scriptinfo.js - information about scripts
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -4537,46 +4572,46 @@ ilib.ResBundle.prototype = {
  * @class
  * Create a new script info instance. This class encodes information about
  * scripts, which are sets of characters used in a writing system.<p>
- * 
+ *
  * The options object may contain any of the following properties:
- * 
+ *
  * <ul>
- * <li><i>onLoad</i> - a callback function to call when the script info object is fully 
+ * <li><i>onLoad</i> - a callback function to call when the script info object is fully
  * loaded. When the onLoad option is given, the script info object will attempt to
  * load any missing locale data using the ilib loader callback.
- * When the constructor is done (even if the data is already preassembled), the 
+ * When the constructor is done (even if the data is already preassembled), the
  * onLoad function is called with the current instance as a parameter, so this
  * callback can be used with preassembled or dynamic loading or a mix of the two.
- * 
- * <li><i>sync</i> - tell whether to load any missing locale data synchronously or 
+ *
+ * <li><i>sync</i> - tell whether to load any missing locale data synchronously or
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
- * not be usable for a while. 
+ * not be usable for a while.
  *
- * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ * <li><i>loadParams</i> - an object containing parameters to pass to the
  * loader callback function when locale data is missing. The parameters are not
- * interpretted or modified in any way. They are simply passed along. The object 
+ * interpretted or modified in any way. They are simply passed along. The object
  * may contain any property/value pairs as long as the calling code is in
  * agreement with the loader callback function as to what those parameters mean.
  * </ul>
- * 
+ *
  * Depends directive: !depends scriptinfo.js
- * 
+ *
  * @constructor
  * @param {string} script The ISO 15924 4-letter identifier for the script
- * @param {Object} options parameters to initialize this matcher 
+ * @param {Object} options parameters to initialize this matcher
  */
 ilib.ScriptInfo = function(script, options) {
 	var sync = true,
 	    loadParams = undefined;
-	
+
 	this.script = script;
-	
+
 	if (options) {
 		if (typeof(options.sync) !== 'undefined') {
 			sync = (options.sync == true);
 		}
-		
+
 		if (typeof(options.loadParams) !== 'undefined') {
 			loadParams = options.loadParams;
 		}
@@ -4588,11 +4623,11 @@ ilib.ScriptInfo = function(script, options) {
 
 	if (!ilib.data.scripts) {
 		ilib.loadData({
-			object: ilib.ScriptInfo, 
-			locale: "-", 
-			name: "scripts.json", 
-			sync: sync, 
-			loadParams: loadParams, 
+			object: ilib.ScriptInfo,
+			locale: "-",
+			name: "scripts.json",
+			sync: sync,
+			loadParams: loadParams,
 			callback: ilib.bind(this, function (info) {
 				if (!info) {
 					info = {"Latn":{"nb":215,"nm":"Latin","lid":"Latin","rtl":false,"ime":false,"casing":true}};
@@ -4623,13 +4658,13 @@ ilib.ScriptInfo.getAllScripts = function() {
 	var ret = [],
 		script = undefined,
 		scripts = ilib.data.scripts;
-	
+
 	for (script in scripts) {
 		if (script && scripts[script]) {
 			ret.push(script);
 		}
 	}
-	
+
 	return ret;
 };
 
@@ -4642,60 +4677,60 @@ ilib.ScriptInfo.prototype = {
 	getCode: function () {
 		return this.info && this.script;
 	},
-	
+
 	/**
 	 * Get the ISO 15924 code number associated with this
 	 * script.
-	 * 
+	 *
 	 * @return {number} the ISO 15924 code number
 	 */
 	getCodeNumber: function () {
 		return this.info && this.info.nb || 0;
 	},
-	
+
 	/**
 	 * Get the name of this script in English.
-	 * 
+	 *
 	 * @return {string} the name of this script in English
 	 */
 	getName: function () {
 		return this.info && this.info.nm;
 	},
-	
+
 	/**
 	 * Get the long identifier assciated with this script.
-	 * 
+	 *
 	 * @return {string} the long identifier of this script
 	 */
 	getLongCode: function () {
 		return this.info && this.info.lid;
 	},
-	
+
 	/**
 	 * Return the usual direction that text in this script is written
 	 * in. Possible return values are "rtl" for right-to-left,
 	 * "ltr" for left-to-right, and "ttb" for top-to-bottom.
-	 * 
+	 *
 	 * @return {string} the usual direction that text in this script is
 	 * written in
 	 */
 	getScriptDirection: function() {
 		return (this.info && typeof(this.info.rtl) !== 'undefined' && this.info.rtl) ? "rtl" : "ltr";
 	},
-	
+
 	/**
 	 * Return true if this script typically requires an input method engine
 	 * to enter its characters.
-	 * 
+	 *
 	 * @return {boolean} true if this script typically requires an IME
 	 */
 	getNeedsIME: function () {
 		return this.info && this.info.ime ? true : false; // converts undefined to false
 	},
-	
+
 	/**
 	 * Return true if this script uses lower- and upper-case characters.
-	 * 
+	 *
 	 * @return {boolean} true if this script uses letter case
 	 */
 	getCasing: function () {
