@@ -175,7 +175,8 @@ ilib._isGlobal = function(name) {
  * when no explicit locale is passed to any ilib class. If the default
  * locale is not set, ilib will attempt to use the locale of the
  * environment it is running in, if it can find that. If not, it will
- * default to the locale "en-US".<p>
+ * default to the locale "en-US". If a type of parameter is string,
+ * ilib will take only well-formed BCP-47 tag  <p>
  *
  * Depends directive: !depends ilibglobal.js
  *
@@ -547,8 +548,11 @@ ilib.setLoaderCallback = function(loader) {
 ilib.Locale = function(language, region, variant, script) {
 	if (typeof(region) === 'undefined') {
 		var spec = language || ilib.getLocale();
+
 		if (typeof(spec) === 'string') {
 			var parts = spec.split('-');
+
+
 	        for ( var i = 0; i < parts.length; i++ ) {
 	        	if (ilib.Locale._isLanguageCode(parts[i])) {
 	    			/**
@@ -7363,6 +7367,52 @@ ilib.DateFmt.weekDayLenMap = {
 	"full":   "EEEE"
 };
 
+/**
+	 * @protected
+	 * @param {Object.<string, (string|{s:string,m:string,l:string,f:string})>} obj Object to search
+	 * @param {string} components Format components to search
+	 * @param {string} length Length of the requested format
+	 * @return {string|undefined} the requested format
+	 */
+
+/**
+* @static
+* @public
+* The options may contain any of the following properties:
+*
+* <ul>
+* <li><i>locale</i> - locale to use when formatting the date/time. If the locale is
+* not specified, then the default locale of the app or web page will be used.
+*
+* <li><i>meridiems</i> - string that specifies what style of meridiems to use with this
+* format. The choices are "default", "gregorian", "ethiopic", and "chinese". The "default"
+* style is often the simple Gregorian AM/PM, but the actual style is chosen by the locale.
+* (For almost all locales, the Gregorian AM/PM style is most frequently used.)
+* The "ethiopic" style uses 5 different meridiems for "morning", "noon", "afternoon",
+* "evening", and "night". The "chinese" style uses 7 different meridiems corresponding
+* to the various parts of the day. N.B. Even for the Chinese locales, the default is "gregorian"
+* when formatting dates in the Gregorian calendar.
+* </ul>
+*
+* @param {Object} options options governing the way this date formatter instance works for getting meridiems range
+* @return {Array.<{name:string,start:string,end:string}>}
+*/
+ilib.DateFmt.getMeridiemsRange = function (options) {
+	options = options || {};
+	var args = {};
+	if (options.locale) {
+		args.locale = options.locale;
+	}
+
+	if (options.meridiems) {
+		args.meridiems = options.meridiems;
+	}
+
+	var fmt = new ilib.DateFmt(args);
+
+	return fmt.getMeridiemsRange();
+};
+
 ilib.DateFmt.prototype = {
 	/**
 	 * @protected
@@ -7646,6 +7696,103 @@ ilib.DateFmt.prototype = {
 	 */
 	getClock: function () {
 		return this.clock || this.locinfo.getClock();
+	},
+	/**
+	 * Return the meridiems range in current locale.
+	 * @return {Array.<{name:string,start:string,end:string}>}
+	 */
+	getMeridiemsRange: function () {
+		var result;
+		var _getSysString = function (key) {
+			return (this.sysres.getString(undefined, key + "-" + this.calName) || this.sysres.getString(undefined, key)).toString();
+		};
+
+		switch (this.meridiems) {
+		case "chinese":
+			result = [
+				{
+					name: _getSysString.call(this, "azh0"),
+					start: "00:00",
+					end: "05:59"
+				},
+				{
+					name: _getSysString.call(this, "azh1"),
+					start: "06:00",
+					end: "08:59"
+				},
+				{
+					name: _getSysString.call(this, "azh2"),
+					start: "09:00",
+					end: "11:59"
+				},
+				{
+					name: _getSysString.call(this, "azh3"),
+					start: "12:00",
+					end: "12:59"
+				},
+				{
+					name: _getSysString.call(this, "azh4"),
+					start: "13:00",
+					end: "17:59"
+				},
+				{
+					name: _getSysString.call(this, "azh5"),
+					start: "18:00",
+					end: "20:59"
+				},
+				{
+					name: _getSysString.call(this, "azh6"),
+					start: "21:00",
+					end: "23:59"
+				}
+			];
+			break;
+		case "ethiopic":
+			result = [
+				{
+					name: _getSysString.call(this, "a0-ethiopic"),
+					start: "00:00",
+					end: "05:59"
+				},
+				{
+					name: _getSysString.call(this, "a1-ethiopic"),
+					start: "06:00",
+					end: "06:00"
+				},
+				{
+					name: _getSysString.call(this, "a2-ethiopic"),
+					start: "06:01",
+					end: "11:59"
+				},
+				{
+					name: _getSysString.call(this, "a3-ethiopic"),
+					start: "12:00",
+					end: "17:59"
+				},
+				{
+					name: _getSysString.call(this, "a4-ethiopic"),
+					start: "18:00",
+					end: "23:59"
+				}
+			];
+			break;
+		default:
+			result = [
+				{
+					name: _getSysString.call(this, "a0"),
+					start: "00:00",
+					end: "11:59"
+				},
+				{
+					name: _getSysString.call(this, "a1"),
+					start: "12:00",
+					end: "23:59"
+				}
+			];
+			break;
+		}
+
+		return result;
 	},
 
 	/**
@@ -10876,6 +11023,503 @@ ilib.Date.PersDate.prototype.getCalendar = function() {
 // register with the factory method
 ilib.Date._constructors["persian"] = ilib.Date.PersDate;
 /*
+ * ethiopic.js - Represent a Ethiopic calendar object.
+ *
+ * Copyright © 2015, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+/* !depends calendar.js locale.js date.js julianday.js util/utils.js util/math.js */
+
+/**
+ * @class
+ * Construct a new Ethiopic calendar object. This class encodes information about
+ * a Ethiopic calendar.<p>
+ *
+ * Depends directive: !depends ethiopic.js
+ *
+ * @constructor
+ * @implements ilib.Cal
+ */
+ilib.Cal.Ethiopic = function() {
+	this.type = "ethiopic";
+};
+
+/**
+ * Return the number of months in the given year. The number of months in a year varies
+ * for lunar calendars because in some years, an extra month is needed to extend the
+ * days in a year to an entire solar year. The month is represented as a 1-based number
+ * where 1=Maskaram, 2=Teqemt, etc. until 13=Paguemen.
+ *
+ * @param {number} year a year for which the number of months is sought
+ */
+ilib.Cal.Ethiopic.prototype.getNumMonths = function(year) {
+	return 13;
+};
+
+/**
+ * Return the number of days in a particular month in a particular year. This function
+ * can return a different number for a month depending on the year because of things
+ * like leap years.
+ *
+ * @param {number|string} month the month for which the length is sought
+ * @param {number} year the year within which that month can be found
+ * @return {number} the number of days within the given month in the given year
+ */
+ilib.Cal.Ethiopic.prototype.getMonLength = function(month, year) {
+	var m = month;
+	switch (typeof(m)) {
+        case "string":
+            m = parseInt(m, 10);
+            break;
+        case "function":
+        case "object":
+        case "undefined":
+            return 30;
+            break;
+    }
+	if (m < 13) {
+		return 30;
+	} else {
+		return this.isLeapYear(year) ? 6 : 5;
+	}
+};
+
+/**
+ * Return true if the given year is a leap year in the Ethiopic calendar.
+ * The year parameter may be given as a number, or as a JulDate object.
+ * @param {number|ilib.Date.JulDate|string} year the year for which the leap year information is being sought
+ * @return {boolean} true if the given year is a leap year
+ */
+ilib.Cal.Ethiopic.prototype.isLeapYear = function(year) {
+	var y = year;
+	 switch (typeof(y)) {
+        case "string":
+            y = parseInt(y, 10);
+            break;
+        case "object":
+            if (typeof(y.year) !== "number") { // in case it is an ilib.Date object
+                return false;
+            }
+            y = y.year;
+            break;
+        case "function":
+        case "undefined":
+            return false;
+            break;
+    }
+	return ilib.mod(y, 4) === 3;
+};
+
+/**
+ * Return the type of this calendar.
+ *
+ * @return {string} the name of the type of this calendar
+ */
+ilib.Cal.Ethiopic.prototype.getType = function() {
+	return this.type;
+};
+
+/**
+ * Return a date instance for this calendar type using the given
+ * options.
+ * @param {Object} options options controlling the construction of
+ * the date instance
+ * @return {ilib.Date} a date appropriate for this calendar type
+ */
+ilib.Cal.Ethiopic.prototype.newDateInstance = function (options) {
+	return new ilib.Date.EthiopicDate(options);
+};
+
+/* register this calendar for the factory method */
+ilib.Cal._constructors["ethiopic"] = ilib.Cal.Ethiopic;
+/*
+ * ethiopicdate.js - Represent a date in the Ethiopic calendar
+ *
+ * Copyright © 2015, JEDLSoft
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* !depends
+date.js
+calendar/ethiopic.js
+util/utils.js
+util/search.js
+util/math.js
+localeinfo.js
+julianday.js
+*/
+
+/**
+ * @class
+ * Construct a new Ethiopic RD date number object. The constructor parameters can
+ * contain any of the following properties:
+ *
+ * <ul>
+ * <li><i>unixtime<i> - sets the time of this instance according to the given
+ * unix time. Unix time is the number of milliseconds since midnight on Jan 1, 1970.
+ *
+ * <li><i>julianday</i> - sets the time of this instance according to the given
+ * Julian Day instance or the Julian Day given as a float
+ *
+ * <li><i>year</i> - any integer, including 0
+ *
+ * <li><i>month</i> - 1 to 12, where 1 means Maskaram, 2 means Teqemt, etc., and 13 means Paguemen
+ *
+ * <li><i>day</i> - 1 to 30
+ *
+ * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation
+ * is always done with an unambiguous 24 hour representation
+ *
+ * <li><i>minute</i> - 0 to 59
+ *
+ * <li><i>second</i> - 0 to 59
+ *
+ * <li><i>millisecond</i> - 0 to 999
+ *
+ * <li><i>date</i> - use the given intrinsic Javascript date to initialize this one.
+ * </ul>
+ *
+ * If the constructor is called with another Ethiopic date instance instead of
+ * a parameter block, the other instance acts as a parameter block and its
+ * settings are copied into the current instance.<p>
+ *
+ * If the constructor is called with no arguments at all or if none of the
+ * properties listed above are present, then the RD is calculate based on
+ * the current date at the time of instantiation. <p>
+ *
+ * If any of the properties from <i>year</i> through <i>millisecond</i> are not
+ * specified in the params, it is assumed that they have the smallest possible
+ * value in the range for the property (zero or one).<p>
+ *
+ * Depends directive: !depends ethiopicdate.js
+ *
+ * @private
+ * @constructor
+ * @extends ilib.Date.RataDie
+ * @param {Object=} params parameters that govern the settings and behaviour of this Ethiopic RD date
+ */
+ilib.Date.EthiopicRataDie = function(params) {
+	this.cal = params && params.cal || new ilib.Cal.Ethiopic();
+	this.rd = undefined;
+	ilib.Date.RataDie.call(this, params);
+};
+
+ilib.Date.EthiopicRataDie.prototype = new ilib.Date.RataDie();
+ilib.Date.EthiopicRataDie.prototype.parent = ilib.Date.RataDie;
+ilib.Date.EthiopicRataDie.prototype.constructor = ilib.Date.EthiopicRataDie;
+
+/**
+ * The difference between the zero Julian day and the first Ethiopic date
+ * of Friday, August 29, 8 CE Julian at 6:00am UTC.<p>
+ *
+ * See <a href="http://us.wow.com/wiki/Time_in_Ethiopia?s_chn=90&s_pt=aolsem&v_t=aolsem"
+ * Time in Ethiopia</a> for information about how time is handled in Ethiopia.
+ *
+ * @protected
+ * @type number
+ */
+ilib.Date.EthiopicRataDie.prototype.epoch = 1724219.75;
+
+/**
+ * Calculate the Rata Die (fixed day) number of the given date from the
+ * date components.
+ *
+ * @protected
+ * @param {Object} date the date components to calculate the RD from
+ */
+ilib.Date.EthiopicRataDie.prototype._setDateComponents = function(date) {
+	var year = date.year;
+	var years = 365 * (year - 1) + Math.floor(year/4);
+	var dayInYear = (date.month-1) * 30 + date.day;
+	var rdtime = (date.hour * 3600000 +
+		date.minute * 60000 +
+		date.second * 1000 +
+		date.millisecond) /
+		86400000;
+
+	/*
+	console.log("calcRataDie: converting " +  JSON.stringify(parts));
+	console.log("getRataDie: year is " +  years);
+	console.log("getRataDie: day in year is " +  dayInYear);
+	console.log("getRataDie: rdtime is " +  rdtime);
+	console.log("getRataDie: rd is " +  (years + dayInYear + rdtime));
+	*/
+
+	this.rd = years + dayInYear + rdtime;
+};
+
+/**
+ * @class
+ * Construct a new date object for the Ethiopic Calendar. The constructor can be called
+ * with a parameter object that contains any of the following properties:
+ *
+ * <ul>
+ * <li><i>unixtime<i> - sets the time of this instance according to the given
+ * unix time. Unix time is the number of milliseconds since midnight on Jan 1, 1970 (Gregorian).
+ * <li><i>julianday</i> - the Julian Day to set into this date
+ * <li><i>year</i> - any integer
+ * <li><i>month</i> - 1 to 13, where 1 means Maskaram, 2 means Teqemt, etc., and 13 means Paguemen
+ * <li><i>day</i> - 1 to 30
+ * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation
+ * is always done with an unambiguous 24 hour representation
+ * <li><i>minute</i> - 0 to 59
+ * <li><i>second</i> - 0 to 59
+ * <li><i>millisecond<i> - 0 to 999
+ * <li><i>locale</i> - the ilib.TimeZone instance or time zone name as a string
+ * of this ethiopic date. The date/time is kept in the local time. The time zone
+ * is used later if this date is formatted according to a different time zone and
+ * the difference has to be calculated, or when the date format has a time zone
+ * component in it.
+ * <li><i>timezone</i> - the time zone of this instance. If the time zone is not
+ * given, it can be inferred from this locale. For locales that span multiple
+ * time zones, the one with the largest population is chosen as the one that
+ * represents the locale.
+ *
+ * <li><i>date</i> - use the given intrinsic Javascript date to initialize this one.
+ * </ul>
+ *
+ * If called with another Ethiopic date argument, the date components of the given
+ * date are copied into the current one.<p>
+ *
+ * If the constructor is called with no arguments at all or if none of the
+ * properties listed above
+ * from <i>unixtime</i> through <i>millisecond</i> are present, then the date
+ * components are
+ * filled in with the current date at the time of instantiation. Note that if
+ * you do not give the time zone when defaulting to the current time and the
+ * time zone for all of ilib was not set with <i>ilib.setTimeZone()</i>, then the
+ * time zone will default to UTC ("Universal Time, Coordinated" or "Greenwich
+ * Mean Time").<p>
+ *
+ * Depends directive: !depends ethiopicdate.js
+ *
+ * @constructor
+ * @extends ilib.Date
+ * @param {Object=} params parameters that govern the settings and behaviour of this Ethiopic date
+ */
+ilib.Date.EthiopicDate = function(params) {
+	this.cal = new ilib.Cal.Ethiopic();
+
+	if (params) {
+		if (typeof(params.noinstance) === 'boolean' && params.noinstance) {
+			// for doing inheritance, so don't need to fill in the data. The inheriting class only wants the methods.
+			return;
+		}
+		if (params.locale) {
+			this.locale = (typeof(params.locale) === 'string') ? new ilib.Locale(params.locale) : params.locale;
+			var li = new ilib.LocaleInfo(this.locale);
+			this.timezone = li.getTimeZone();
+		}
+		if (params.timezone) {
+			this.timezone = params.timezone;
+		}
+
+		if (params.year || params.month || params.day || params.hour ||
+				params.minute || params.second || params.millisecond ) {
+			/**
+			 * Year in the Ethiopic calendar.
+			 * @type number
+			 */
+			this.year = parseInt(params.year, 10) || 0;
+			/**
+			 * The month number, ranging from 1 (Maskaram) to 13 (Paguemen).
+			 * @type number
+			 */
+			this.month = parseInt(params.month, 10) || 1;
+			/**
+			 * The day of the month. This ranges from 1 to 30.
+			 * @type number
+			 */
+			this.day = parseInt(params.day, 10) || 1;
+			/**
+			 * The hour of the day. This can be a number from 0 to 23, as times are
+			 * stored unambiguously in the 24-hour clock.
+			 * @type number
+			 */
+			this.hour = parseInt(params.hour, 10) || 0;
+			/**
+			 * The minute of the hours. Ranges from 0 to 59.
+			 * @type number
+			 */
+			this.minute = parseInt(params.minute, 10) || 0;
+			/**
+			 * The second of the minute. Ranges from 0 to 59.
+			 * @type number
+			 */
+			this.second = parseInt(params.second, 10) || 0;
+			/**
+			 * The millisecond of the second. Ranges from 0 to 999.
+			 * @type number
+			 */
+			this.millisecond = parseInt(params.millisecond, 10) || 0;
+
+			/**
+			 * The day of the year. Ranges from 1 to 366.
+			 * @type number
+			 */
+			this.dayOfYear = parseInt(params.dayOfYear, 10);
+
+			if (typeof(params.dst) === 'boolean') {
+				this.dst = params.dst;
+			}
+
+			this.rd = this.newRd(this);
+
+			// add the time zone offset to the rd to convert to UTC
+			if (!this.tz) {
+				this.tz = new ilib.TimeZone({id: this.timezone});
+			}
+			// getOffsetMillis requires that this.year, this.rd, and this.dst
+			// are set in order to figure out which time zone rules apply and
+			// what the offset is at that point in the year
+			this.offset = this.tz._getOffsetMillisWallTime(this) / 86400000;
+			if (this.offset !== 0) {
+				this.rd = this.newRd({
+					rd: this.rd.getRataDie() - this.offset
+				});
+			}
+		}
+	}
+
+	if (!this.rd) {
+		this.rd = this.newRd(params);
+		this._calcDateComponents();
+	}
+};
+
+ilib.Date.EthiopicDate.prototype = new ilib.Date({ noinstance: true });
+ilib.Date.EthiopicDate.prototype.parent = ilib.Date;
+ilib.Date.EthiopicDate.prototype.constructor = ilib.Date.EthiopicDate;
+
+/**
+ * Return a new RD for this date type using the given params.
+ * @protected
+ * @param {Object=} params the parameters used to create this rata die instance
+ * @returns {ilib.Date.RataDie} the new RD instance for the given params
+ */
+ilib.Date.EthiopicDate.prototype.newRd = function (params) {
+	return new ilib.Date.EthiopicRataDie(params);
+};
+
+/**
+ * Return the year for the given RD
+ * @protected
+ * @param {number} rd RD to calculate from
+ * @returns {number} the year for the RD
+ */
+ilib.Date.EthiopicDate.prototype._calcYear = function(rd) {
+	var year = Math.floor((4*(Math.floor(rd)-1) + 1463)/1461);
+
+	return year;
+};
+
+/**
+ * Calculate date components for the given RD date.
+ * @protected
+ */
+ilib.Date.EthiopicDate.prototype._calcDateComponents = function () {
+	var remainder,
+		cumulative,
+		rd = this.rd.getRataDie();
+
+	this.year = this._calcYear(rd);
+
+	if (typeof(this.offset) === "undefined") {
+		this.year = this._calcYear(rd);
+
+		// now offset the RD by the time zone, then recalculate in case we were
+		// near the year boundary
+		if (!this.tz) {
+			this.tz = new ilib.TimeZone({id: this.timezone});
+		}
+		this.offset = this.tz.getOffsetMillis(this) / 86400000;
+	}
+
+	if (this.offset !== 0) {
+		rd += this.offset;
+		this.year = this._calcYear(rd);
+	}
+
+	var jan1 = this.newRd({
+		year: this.year,
+		month: 1,
+		day: 1,
+		hour: 0,
+		minute: 0,
+		second: 0,
+		millisecond: 0
+	});
+	remainder = rd + 1 - jan1.getRataDie();
+
+	this.month = Math.floor((remainder-1)/30) + 1;
+	remainder = remainder - (this.month-1) * 30;
+
+	this.day = Math.floor(remainder);
+	remainder -= this.day;
+	// now convert to milliseconds for the rest of the calculation
+	remainder = Math.round(remainder * 86400000);
+
+	this.hour = Math.floor(remainder/3600000);
+	remainder -= this.hour * 3600000;
+
+	this.minute = Math.floor(remainder/60000);
+	remainder -= this.minute * 60000;
+
+	this.second = Math.floor(remainder/1000);
+	remainder -= this.second * 1000;
+
+	this.millisecond = remainder;
+};
+
+/**
+ * Return the day of the week of this date. The day of the week is encoded
+ * as number from 0 to 6, with 0=Sunday, 1=Monday, etc., until 6=Saturday.
+ *
+ * @return {number} the day of the week
+ */
+ilib.Date.EthiopicDate.prototype.getDayOfWeek = function() {
+	var rd = Math.floor(this.rd.getRataDie() + (this.offset || 0));
+	return ilib.mod(rd-4, 7);
+};
+
+/**
+ * Return the name of the calendar that governs this date.
+ *
+ * @return {string} a string giving the name of the calendar
+ */
+ilib.Date.EthiopicDate.prototype.getCalendar = function() {
+	return "ethiopic";
+};
+
+//register with the factory method
+ilib.Date._constructors["ethiopic"] = ilib.Date.EthiopicDate;
+/*
  * ctype.js - Character type definitions
  *
  * Copyright © 2012-2014, JEDLSoft
@@ -13282,6 +13926,8 @@ calendar/thaisolar.js
 calendar/thaisolardate.js
 calendar/persianastro.js
 calendar/persianastrodate.js
+calendar/ethiopic.js
+calendar/ethiopicdate.js
 numprs.js
 numfmt.js
 julianday.js
