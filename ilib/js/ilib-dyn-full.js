@@ -1,6 +1,6 @@
 /*
  * ilibglobal.js - define the ilib name space
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,7 @@ var ilib = ilib || {};
 
 /**
  * Return the current version of ilib.
- * 
+ *
  * @static
  * @return {string} a version string for this instance of ilib
  */
@@ -74,10 +74,10 @@ ilib.pseudoLocales = ["zxx-XX"];
  * internationalization aspects of software. Instead of translating the text of the software
  * into a foreign language, as in the process of localization, the textual elements of an application
  * are replaced with an altered version of the original language.These specific alterations make
- * the original words appear readable, but include the most problematic characteristics of 
+ * the original words appear readable, but include the most problematic characteristics of
  * the world's languages: varying length of text or characters, language direction, and so on.
  * Regular Latin pseudo locale: eu-ES and RTL pseudo locale: ps-AF
- * 
+ *
  * @param {string|undefined|null} localename the locale specifier for the pseudo locale
  */
 ilib.setAsPseudoLocale = function (localename) {
@@ -110,7 +110,7 @@ ilib._getPlatform = function () {
         } else {
             ilib._platform = "unknown";
         }
-    }    
+    }
     return ilib._platform;
 };
 
@@ -118,9 +118,9 @@ ilib._getPlatform = function () {
  * If this ilib is running in a browser, return the name of that browser.
  * @private
  * @static
- * @return {string|undefined} the name of the browser that this is running in ("firefox", "chrome", "ie", 
+ * @return {string|undefined} the name of the browser that this is running in ("firefox", "chrome", "ie",
  * "safari", or "opera"), or undefined if this is not running in a browser or if
- * the browser name could not be determined 
+ * the browser name could not be determined
  */
 ilib._getBrowser = function () {
 	var browser = undefined;
@@ -139,7 +139,7 @@ ilib._getBrowser = function () {
 				browser = "ie";
 			}
 			if (navigator.userAgent.indexOf("Safari") > -1) {
-				// chrome also has the string Safari in its userAgent, but the chrome case is 
+				// chrome also has the string Safari in its userAgent, but the chrome case is
 				// already taken care of above
 				browser = "safari";
 			}
@@ -164,7 +164,7 @@ ilib._isGlobal = function(name) {
         case "nodejs":
             var root = typeof(global) !== 'undefined' ? global : this;
             return root && typeof(root[name]) !== undefined;
-            
+
         default:
             return typeof(window[name]) !== undefined;
     }
@@ -176,9 +176,9 @@ ilib._isGlobal = function(name) {
  * locale is not set, ilib will attempt to use the locale of the
  * environment it is running in, if it can find that. If not, it will
  * default to the locale "en-US".<p>
- * 
+ *
  * Depends directive: !depends ilibglobal.js
- * 
+ *
  * @static
  * @param {string|undefined|null} spec the locale specifier for the default locale
  */
@@ -191,15 +191,15 @@ ilib.setLocale = function (spec) {
 };
 
 /**
- * Return the default locale for all of ilib if one has been set. This 
- * locale will be used when no explicit locale is passed to any ilib 
+ * Return the default locale for all of ilib if one has been set. This
+ * locale will be used when no explicit locale is passed to any ilib
  * class. If the default
  * locale is not set, ilib will attempt to use the locale of the
  * environment it is running in, if it can find that. If not, it will
  * default to the locale "en-US".<p>
- * 
- * Depends directive: !depends ilibglobal.js 
- * 
+ *
+ * Depends directive: !depends ilibglobal.js
+ *
  * @static
  * @return {string} the locale specifier for the default locale
  */
@@ -210,10 +210,10 @@ ilib.getLocale = function () {
             ilib.locale = navigator.language.substring(0,3) + navigator.language.substring(3,5).toUpperCase();  // FF/Opera/Chrome/Webkit
             if (!ilib.locale) {
                 // IE on Windows
-                var lang = typeof(navigator.browserLanguage) !== 'undefined' ? 
-                    navigator.browserLanguage : 
-                    (typeof(navigator.userLanguage) !== 'undefined' ? 
-                        navigator.userLanguage : 
+                var lang = typeof(navigator.browserLanguage) !== 'undefined' ?
+                    navigator.browserLanguage :
+                    (typeof(navigator.userLanguage) !== 'undefined' ?
+                        navigator.userLanguage :
                         (typeof(navigator.systemLanguage) !== 'undefined' ?
                             navigator.systemLanguage :
                             undefined));
@@ -245,7 +245,7 @@ ilib.getLocale = function () {
                 ilib.locale = lang.substring(0,2).toLowerCase() + '-' + lang.substring(3,5).toUpperCase();
             }
         }
-             
+
         ilib.locale = typeof(ilib.locale) === 'string' ? ilib.locale : 'en-US';
     }
     return ilib.locale;
@@ -257,9 +257,9 @@ ilib.getLocale = function () {
  * is not set, ilib will attempt to use the time zone of the
  * environment it is running in, if it can find that. If not, it will
  * default to the the UTC zone "Etc/UTC".<p>
- * 
+ *
  * Depends directive: !depends ilibglobal.js
- * 
+ *
  * @static
  * @param {string} tz the name of the time zone to set as the default time zone
  */
@@ -268,15 +268,15 @@ ilib.setTimeZone = function (tz) {
 };
 
 /**
- * Return the default time zone for all of ilib if one has been set. This 
- * time zone will be used when no explicit time zone is passed to any ilib 
+ * Return the default time zone for all of ilib if one has been set. This
+ * time zone will be used when no explicit time zone is passed to any ilib
  * class. If the default time zone
  * is not set, ilib will attempt to use the locale of the
  * environment it is running in, if it can find that. If not, it will
  * default to the the zone "local".<p>
- * 
+ *
  * Depends directive: !depends ilibglobal.js
- * 
+ *
  * @static
  * @return {string} the default time zone for ilib
  */
@@ -303,8 +303,8 @@ ilib.getTimeZone = function() {
                 ilib.tz = process.env.TZ;
             }
         }
-        
-        ilib.tz = ilib.tz || "local"; 
+
+        ilib.tz = ilib.tz || "local";
     }
 
     return ilib.tz;
@@ -321,23 +321,23 @@ ilib.Loader = function() {};
 
 /**
  * Load a set of files from where-ever it is stored.<p>
- * 
- * This is the main function define a callback function for loading missing locale 
+ *
+ * This is the main function define a callback function for loading missing locale
  * data or resources.
  * If this copy of ilib is assembled without including the required locale data
- * or resources, then that data can be lazy loaded dynamically when it is 
+ * or resources, then that data can be lazy loaded dynamically when it is
  * needed by calling this method. Each ilib class will first
- * check for the existence of data under ilib.data, and if it is not there, 
+ * check for the existence of data under ilib.data, and if it is not there,
  * it will attempt to load it by calling this method of the laoder, and then place
  * it there.<p>
- * 
- * Suggested implementations of this method might load files 
- * directly from disk under nodejs or rhino, or within web pages, to load 
+ *
+ * Suggested implementations of this method might load files
+ * directly from disk under nodejs or rhino, or within web pages, to load
  * files from the server with XHR calls.<p>
- * 
- * The first parameter to this method, paths, is an array of relative paths within 
- * the ilib dir structure for the 
- * requested data. These paths will already have the locale spec integrated 
+ *
+ * The first parameter to this method, paths, is an array of relative paths within
+ * the ilib dir structure for the
+ * requested data. These paths will already have the locale spec integrated
  * into them, so no further tweaking needs to happen to load the data. Simply
  * load the named files. The second
  * parameter tells the loader whether to load the files synchronously or asynchronously.
@@ -345,28 +345,28 @@ ilib.Loader = function() {};
  * The third parameter gives extra parameters to the loader passed from the calling
  * code. This may contain any property/value pairs.  The last parameter, callback,
  * is a callback function to call when all of the data is finishing loading. Make
- * sure to call the callback with the context of "this" so that the caller has their 
+ * sure to call the callback with the context of "this" so that the caller has their
  * context back again.<p>
- * 
- * The loader function must be able to operate either synchronously or asychronously. 
+ *
+ * The loader function must be able to operate either synchronously or asychronously.
  * If the loader function is called with an undefined callback function, it is
  * expected to load the data synchronously, convert it to javascript
- * objects, and return the array of json objects as the return value of the 
- * function. If the loader 
- * function is called with a callback function, it may load the data 
+ * objects, and return the array of json objects as the return value of the
+ * function. If the loader
+ * function is called with a callback function, it may load the data
  * synchronously or asynchronously (doesn't matter which) as long as it calls
  * the callback function with the data converted to a javascript objects
- * when it becomes available. If a particular file could not be loaded, the 
+ * when it becomes available. If a particular file could not be loaded, the
  * loader function should put undefined into the corresponding entry in the
- * results array. 
+ * results array.
  * Note that it is important that all the data is loaded before the callback
  * is called.<p>
- * 
+ *
  * An example implementation for nodejs might be:
- * 
+ *
  * <pre>
  * var fs = require("fs");
- * 
+ *
  * var myLoader = function() {};
  * myLoader.prototype = new ilib.Loader();
  * myLoader.prototype.constructor = myLoader;
@@ -378,7 +378,7 @@ ilib.Loader = function() {};
  *            var json = fs.readFileSync(path, "utf-8");
  *            ret.push(json ? JSON.parse(json) : undefined);
  *        });
- *        
+ *
  *        return ret;
  *    }
  *    this.callback = callback;
@@ -402,18 +402,18 @@ ilib.Loader = function() {};
  *        });
  *     }
  * }
- * 
+ *
  * // bind to "this" so that "this" is relative to your own instance
  * ilib.setLoaderCallback(new myLoader());
  * </pre>
 
- * @param {Array.<string>} paths An array of paths to load from wherever the files are stored 
+ * @param {Array.<string>} paths An array of paths to load from wherever the files are stored
  * @param {Boolean} sync if true, load the files synchronously, and false means asynchronously
- * @param {Object} params an object with any extra parameters for the loader. These can be 
+ * @param {Object} params an object with any extra parameters for the loader. These can be
  * anything. The caller of the ilib class passes these parameters in. Presumably, the code that
- * calls ilib and the code that provides the loader are together and can have a private 
+ * calls ilib and the code that provides the loader are together and can have a private
  * agreement between them about what the parameters should contain.
- * @param {function(Object)} callback function to call when the files are all loaded. The 
+ * @param {function(Object)} callback function to call when the files are all loaded. The
  * parameter of the callback function is the contents of the files.
  */
 ilib.Loader.prototype.loadFiles = function (paths, sync, params, callback) {};
@@ -424,7 +424,7 @@ ilib.Loader.prototype.loadFiles = function (paths, sync, params, callback) {};
  * directories where files are loaded from and the values are an array
  * of strings containing the relative paths under the directory of each
  * file that can be loaded.<p>
- * 
+ *
  * Example:
  *  <pre>
  *  {
@@ -440,7 +440,7 @@ ilib.Loader.prototype.loadFiles = function (paths, sync, params, callback) {};
  *  }
  *  </pre>
  * @returns {Object} a hash containing directory names and
- * paths to file that can be loaded by this loader 
+ * paths to file that can be loaded by this loader
  */
 ilib.Loader.prototype.listAvailableFiles = function() {};
 
@@ -456,10 +456,10 @@ ilib.Loader.prototype.listAvailableFiles = function() {};
 ilib.Loader.prototype.isAvailable = function(path) {};
 
 /**
- * Set the custom loader used to load ilib's locale data in your environment. 
+ * Set the custom loader used to load ilib's locale data in your environment.
  * The instance passed in must implement the ilib.Loader interface. See the
- * ilib.Loader class documentation for more information about loaders. 
- * 
+ * ilib.Loader class documentation for more information about loaders.
+ *
  * @static
  * @param {ilib.Loader} loader class to call to access the requested data.
  * @return {boolean} true if the loader was installed correctly, or false
@@ -467,7 +467,7 @@ ilib.Loader.prototype.isAvailable = function(path) {};
  */
 ilib.setLoaderCallback = function(loader) {
     // only a basic check
-    if ((typeof(loader) === 'object' && loader instanceof ilib.Loader) || 
+    if ((typeof(loader) === 'object' && loader instanceof ilib.Loader) ||
             typeof(loader) === 'function' || typeof(loader) === 'undefined') {
         // console.log("setting callback loader to " + (loader ? loader.name : "undefined"));
         ilib._load = loader;
@@ -478,7 +478,7 @@ ilib.setLoaderCallback = function(loader) {
 
 /*
  * locale.js - Locale specifier definition
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -499,46 +499,46 @@ ilib.setLoaderCallback = function(loader) {
 
 /**
  * @class
- * Create a new locale instance. Locales are specified either with a specifier string 
- * that follows the BCP-47 convention (roughly: "language-region-script-variant") or 
+ * Create a new locale instance. Locales are specified either with a specifier string
+ * that follows the BCP-47 convention (roughly: "language-region-script-variant") or
  * with 4 parameters that specify the language, region, variant, and script individually.<p>
- * 
+ *
  * The language is given as an ISO 639-1 two-letter, lower-case language code. You
- * can find a full list of these codes at 
+ * can find a full list of these codes at
  * <a href="http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes">http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes</a><p>
- * 
+ *
  * The region is given as an ISO 3166-1 two-letter, upper-case region code. You can
- * find a full list of these codes at 
+ * find a full list of these codes at
  * <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2</a>.<p>
- * 
+ *
  * The variant is any string that does not contain a dash which further differentiates
  * locales from each other.<p>
- * 
+ *
  * The script is given as the ISO 15924 four-letter script code. In some locales,
  * text may be validly written in more than one script. For example, Serbian is often
  * written in both Latin and Cyrillic, though not usually mixed together. You can find a
- * full list of these codes at 
+ * full list of these codes at
  * <a href="http://en.wikipedia.org/wiki/ISO_15924#List_of_codes">http://en.wikipedia.org/wiki/ISO_15924#List_of_codes</a>.<p>
- * 
- * As an example in ilib, the script can be used in the date formatter. Dates formatted 
+ *
+ * As an example in ilib, the script can be used in the date formatter. Dates formatted
  * in Serbian could have day-of-week names or month names written in the Latin
  * or Cyrillic script. Often one script is default such that sr-SR-Latn is the same
- * as sr-SR so the script code "Latn" can be left off of the locale spec.<p> 
- * 
- * Each part is optional, and an empty string in the specifier before or after a 
+ * as sr-SR so the script code "Latn" can be left off of the locale spec.<p>
+ *
+ * Each part is optional, and an empty string in the specifier before or after a
  * dash or as a parameter to the constructor denotes an unspecified value. In this
  * case, many of the ilib functions will treat the locale as generic. For example
  * the locale "en-" is equivalent to "en" and to "en--" and denotes a locale
  * of "English" with an unspecified region and variant, which typically matches
  * any region or variant.<p>
- * 
+ *
  * Without any arguments to the constructor, this function returns the locale of
  * the host Javascript engine.<p>
- * 
+ *
  * Depends directive: !depends locale.js
- * 
+ *
  * @constructor
- * @param {?string|ilib.Locale=} language the ISO 639 2-letter code for the language, or a full 
+ * @param {?string|ilib.Locale=} language the ISO 639 2-letter code for the language, or a full
  * locale spec in BCP-47 format, or another ilib.Locale instance to copy from
  * @param {string=} region the ISO 3166 2-letter code for the region
  * @param {string=} variant the name of the variant of this locale, if any
@@ -551,25 +551,25 @@ ilib.Locale = function(language, region, variant, script) {
 			var parts = spec.split('-');
 	        for ( var i = 0; i < parts.length; i++ ) {
 	        	if (ilib.Locale._isLanguageCode(parts[i])) {
-	    			/** 
+	    			/**
 	    			 * @private
 	    			 * @type {string|undefined}
 	    			 */
 	        		this.language = parts[i];
 	        	} else if (ilib.Locale._isRegionCode(parts[i])) {
-	    			/** 
+	    			/**
 	    			 * @private
 	    			 * @type {string|undefined}
 	    			 */
 	        		this.region = parts[i];
 	        	} else if (ilib.Locale._isScriptCode(parts[i])) {
-	    			/** 
+	    			/**
 	    			 * @private
 	    			 * @type {string|undefined}
 	    			 */
 	        		this.script = parts[i];
 	        	} else {
-	    			/** 
+	    			/**
 	    			 * @private
 	    			 * @type {string|undefined}
 	    			 */
@@ -1094,9 +1094,9 @@ ilib.Locale._notDigit = function(str) {
 };
 
 /**
- * Tell whether or not the given string has the correct syntax to be 
+ * Tell whether or not the given string has the correct syntax to be
  * an ISO 639 language code.
- * 
+ *
  * @private
  * @param {string} str the string to parse
  * @return {boolean} true if the string could syntactically be a language code.
@@ -1111,14 +1111,14 @@ ilib.Locale._isLanguageCode = function(str) {
 			return false;
 		}
 	}
-	
+
 	return true;
 };
 
 /**
- * Tell whether or not the given string has the correct syntax to be 
+ * Tell whether or not the given string has the correct syntax to be
  * an ISO 3166 2-letter region code or M.49 3-digit region code.
- * 
+ *
  * @private
  * @param {string} str the string to parse
  * @return {boolean} true if the string could syntactically be a language code.
@@ -1127,7 +1127,7 @@ ilib.Locale._isRegionCode = function (str) {
 	if (typeof(str) === 'undefined' || str.length < 2 || str.length > 3) {
 		return false;
 	}
-	
+
 	if (str.length === 2) {
 		for (var i = 0; i < str.length; i++) {
 			if (ilib.Locale._notUpper(str.charAt(i))) {
@@ -1141,14 +1141,14 @@ ilib.Locale._isRegionCode = function (str) {
 			}
 		}
 	}
-	
+
 	return true;
 };
 
 /**
- * Tell whether or not the given string has the correct syntax to be 
+ * Tell whether or not the given string has the correct syntax to be
  * an ISO 639 language code.
- * 
+ *
  * @private
  * @param {string} str the string to parse
  * @return {boolean} true if the string could syntactically be a language code.
@@ -1158,13 +1158,13 @@ ilib.Locale._isScriptCode = function(str)
 	if (typeof(str) === 'undefined' || str.length !== 4 || ilib.Locale._notUpper(str.charAt(0))) {
 		return false;
 	}
-	
+
 	for (var i = 1; i < 4; i++) {
 		if (ilib.Locale._notLower(str.charAt(i))) {
 			return false;
 		}
 	}
-	
+
 	return true;
 };
 
@@ -1200,21 +1200,21 @@ ilib.Locale.prototype = {
 	 */
 	_genSpec: function () {
 		this.spec = this.language || "";
-		
+
 		if (this.script) {
 			if (this.spec.length > 0) {
 				this.spec += "-";
 			}
 			this.spec += this.script;
 		}
-		
+
 		if (this.region) {
 			if (this.spec.length > 0) {
 				this.spec += "-";
 			}
 			this.spec += this.region;
 		}
-		
+
 		if (this.variant) {
 			if (this.spec.length > 0) {
 				this.spec += "-";
@@ -1224,13 +1224,13 @@ ilib.Locale.prototype = {
 	},
 
 	/**
-	 * Return the ISO 639 language code for this locale. 
-	 * @return {string|undefined} the language code for this locale 
+	 * Return the ISO 639 language code for this locale.
+	 * @return {string|undefined} the language code for this locale
 	 */
 	getLanguage: function() {
 		return this.language;
 	},
-	
+
 	/**
 	 * Return the language of this locale as an ISO-639-alpha3 language code
 	 * @return {string|undefined} the alpha3 language code of this locale
@@ -1238,7 +1238,7 @@ ilib.Locale.prototype = {
 	getLanguageAlpha3: function() {
 		return ilib.Locale.languageAlpha1ToAlpha3(this.language);
 	},
-	
+
 	/**
 	 * Return the ISO 3166 region code for this locale.
 	 * @return {string|undefined} the region code of this locale
@@ -1246,7 +1246,7 @@ ilib.Locale.prototype = {
 	getRegion: function() {
 		return this.region;
 	},
-	
+
 	/**
 	 * Return the region of this locale as an ISO-3166-alpha3 region code
 	 * @return {string|undefined} the alpha3 region code of this locale
@@ -1254,7 +1254,7 @@ ilib.Locale.prototype = {
 	getRegionAlpha3: function() {
 		return ilib.Locale.regionAlpha2ToAlpha3(this.region);
 	},
-	
+
 	/**
 	 * Return the ISO 15924 script code for this locale
 	 * @return {string|undefined} the script code of this locale
@@ -1262,7 +1262,7 @@ ilib.Locale.prototype = {
 	getScript: function () {
 		return this.script;
 	},
-	
+
 	/**
 	 * Return the variant code for this locale
 	 * @return {string|undefined} the variant code of this locale, if any
@@ -1270,7 +1270,7 @@ ilib.Locale.prototype = {
 	getVariant: function() {
 		return this.variant;
 	},
-	
+
 	/**
 	 * Return the whole locale specifier as a string.
 	 * @return {string} the locale specifier
@@ -1278,20 +1278,20 @@ ilib.Locale.prototype = {
 	getSpec: function() {
 		return this.spec;
 	},
-	
+
 	/**
 	 * Express this locale object as a string. Currently, this simply calls the getSpec
 	 * function to represent the locale as its specifier.
-	 * 
+	 *
 	 * @return {string} the locale specifier
 	 */
 	toString: function() {
 		return this.getSpec();
 	},
-	
+
 	/**
 	 * Return true if the the other locale is exactly equal to the current one.
-	 * @return {boolean} whether or not the other locale is equal to the current one 
+	 * @return {boolean} whether or not the other locale is equal to the current one
 	 */
 	equals: function(other) {
 		return this.language === other.language &&
@@ -1315,7 +1315,7 @@ ilib.Locale.prototype = {
  * @private
  */
 ilib.Locale.locales = [
-	
+
 ];
 
 /**
@@ -1323,8 +1323,8 @@ ilib.Locale.locales = [
  * with. The list that this file was assembled with may be much smaller
  * than the list of all available locales in the iLib repository. The
  * assembly tool will automatically fill in the list.
- * 
- * @return {Array.<string>} this is an array of locale specs for which 
+ *
+ * @return {Array.<string>} this is an array of locale specs for which
  * this iLib file has locale data for
  */
 ilib.Locale.getAvailableLocales = function () {
@@ -1333,7 +1333,7 @@ ilib.Locale.getAvailableLocales = function () {
 
 /*
  * localeinfo.js - Encode locale-specific defaults
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -1360,38 +1360,38 @@ ilib.Locale.getAvailableLocales = function () {
  * the default settings for a particular locale. These settings may be overridden
  * by various parts of the code, and should be used as a fall-back setting of last
  * resort. <p>
- * 
+ *
  * The optional options object holds extra parameters if they are necessary. The
  * current list of supported options are:
- * 
+ *
  * <ul>
- * <li><i>onLoad</i> - a callback function to call when the locale info object is fully 
+ * <li><i>onLoad</i> - a callback function to call when the locale info object is fully
  * loaded. When the onLoad option is given, the localeinfo object will attempt to
  * load any missing locale data using the ilib loader callback.
- * When the constructor is done (even if the data is already preassembled), the 
+ * When the constructor is done (even if the data is already preassembled), the
  * onLoad function is called with the current instance as a parameter, so this
  * callback can be used with preassembled or dynamic loading or a mix of the two.
- * 
- * <li><i>sync</i> - tell whether to load any missing locale data synchronously or 
+ *
+ * <li><i>sync</i> - tell whether to load any missing locale data synchronously or
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
- * not be usable for a while. 
+ * not be usable for a while.
  *
- * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ * <li><i>loadParams</i> - an object containing parameters to pass to the
  * loader callback function when locale data is missing. The parameters are not
- * interpretted or modified in any way. They are simply passed along. The object 
+ * interpretted or modified in any way. They are simply passed along. The object
  * may contain any property/value pairs as long as the calling code is in
  * agreement with the loader callback function as to what those parameters mean.
  * </ul>
- * 
- * If this copy of ilib is pre-assembled and all the data is already available, 
+ *
+ * If this copy of ilib is pre-assembled and all the data is already available,
  * or if the data was already previously loaded, then this constructor will call
- * the onLoad callback immediately when the initialization is done. 
+ * the onLoad callback immediately when the initialization is done.
  * If the onLoad option is not given, this class will only attempt to load any
  * missing locale data synchronously.
- * 
+ *
  * Depends directive: !depends localeinfo.js
- * 
+ *
  * @constructor
  * @see {ilib.setLoaderCallback} for information about registering a loader callback
  * function
@@ -1402,10 +1402,10 @@ ilib.Locale.getAvailableLocales = function () {
 ilib.LocaleInfo = function(locale, options) {
 	var sync = true,
 	    loadParams = undefined;
-	
+
 	/* these are all the defaults. Essentially, en-US */
 	/**
-	  @private 
+	  @private
 	  @type {{
 		scripts:Array.<string>,
 		timezone:string,
@@ -1436,7 +1436,7 @@ ilib.LocaleInfo = function(locale, options) {
 	  }}
 	*/
 	this.info = ilib.LocaleInfo.defaultInfo;
-	
+
 	switch (typeof(locale)) {
 		case "string":
 			this.locale = new ilib.Locale(locale);
@@ -1449,12 +1449,12 @@ ilib.LocaleInfo = function(locale, options) {
 			this.locale = locale;
 			break;
 	}
-	
+
 	if (options) {
 		if (typeof(options.sync) !== 'undefined') {
 			sync = (options.sync == true);
 		}
-		
+
 		if (typeof(options.loadParams) !== 'undefined') {
 			loadParams = options.loadParams;
 		}
@@ -1465,11 +1465,11 @@ ilib.LocaleInfo = function(locale, options) {
 	}
 
 	ilib.loadData({
-		object: ilib.LocaleInfo, 
-		locale: this.locale, 
-		name: "localeinfo.json", 
-		sync: sync, 
-		loadParams: loadParams, 
+		object: ilib.LocaleInfo,
+		locale: this.locale,
+		name: "localeinfo.json",
+		sync: sync,
+		loadParams: loadParams,
 		callback: ilib.bind(this, function (info) {
 			if (!info) {
 				info = ilib.LocaleInfo.defaultInfo;
@@ -1553,24 +1553,24 @@ ilib.LocaleInfo.prototype = {
      * @returns {string} the name of the locale's language in English
      */
     getLanguageName: function () {
-    	return this.info["language.name"];	
+    	return this.info["language.name"];
     },
-    
+
     /**
      * Return the name of the locale's region in English. If the locale
      * has no region, this returns undefined.
-     * 
+     *
      * @returns {string|undefined} the name of the locale's region in English
      */
     getRegionName: function () {
-    	return this.info["region.name"];	
+    	return this.info["region.name"];
     },
 
     /**
 	 * Return whether this locale commonly uses the 12- or the 24-hour clock.
-	 *  
+	 *
 	 * @returns {string} "12" if the locale commonly uses a 12-hour clock, or "24"
-	 * if the locale commonly uses a 24-hour clock. 
+	 * if the locale commonly uses a 24-hour clock.
 	 */
 	getClock: function() {
 		return this.info.clock;
@@ -1583,46 +1583,46 @@ ilib.LocaleInfo.prototype = {
 	getLocale: function () {
 		return this.locale;
 	},
-	
+
 	/**
 	 * Return the name of the measuring system that is commonly used in the given locale.
 	 * Valid values are "uscustomary", "imperial", and "metric".
-	 * 
+	 *
 	 * @returns {string} The name of the measuring system commonly used in the locale
 	 */
 	getUnits: function () {
 		return this.info.units;
 	},
-        
+
         getUnitFormat: function () {
                 return this.info.unitfmt;
         },
-	
+
 	/**
 	 * Return the name of the calendar that is commonly used in the given locale.
-	 * 
+	 *
 	 * @returns {string} The name of the calendar commonly used in the locale
 	 */
 	getCalendar: function () {
 		return this.info.calendar;
 	},
-	
+
 	/**
 	 * Return the day of week that starts weeks in the current locale. Days are still
-	 * numbered the standard way with 0 for Sunday through 6 for Saturday, but calendars 
-	 * should be displayed and weeks calculated with the day of week returned from this 
+	 * numbered the standard way with 0 for Sunday through 6 for Saturday, but calendars
+	 * should be displayed and weeks calculated with the day of week returned from this
 	 * function as the first day of the week.
-	 * 
+	 *
 	 * @returns {number} the day of the week that starts weeks in the current locale.
 	 */
 	getFirstDayOfWeek: function () {
 		return this.info.firstDayOfWeek;
 	},
-	
+
 	/**
 	 * Return the day of week that starts weekend in the current locale. Days are still
 	 * numbered the standard way with 0 for Sunday through 6 for Saturday.
-	 * 
+	 *
 	 * @returns {number} the day of the week that starts weeks in the current locale.
 	 */
 	getWeekEndStart: function () {
@@ -1632,7 +1632,7 @@ ilib.LocaleInfo.prototype = {
 	/**
 	 * Return the day of week that starts weekend in the current locale. Days are still
 	 * numbered the standard way with 0 for Sunday through 6 for Saturday.
-	 * 
+	 *
 	 * @returns {number} the day of the week that starts weeks in the current locale.
 	 */
 	getWeekEndEnd: function () {
@@ -1649,7 +1649,7 @@ ilib.LocaleInfo.prototype = {
 	getTimeZone: function () {
 		return this.info.timezone;
 	},
-	
+
 	/**
 	 * Return the decimal separator for formatted numbers in this locale.
 	 * @returns {string} the decimal separator char
@@ -1657,7 +1657,7 @@ ilib.LocaleInfo.prototype = {
 	getDecimalSeparator: function () {
 		return this.info.numfmt.decimalChar;
 	},
-	
+
 	/**
 	 * Return the decimal separator for formatted numbers in this locale for native script.
 	 * @returns {string} the decimal separator char
@@ -1665,9 +1665,9 @@ ilib.LocaleInfo.prototype = {
 	getNativeDecimalSeparator: function () {
 		return (this.info.native_numfmt && this.info.native_numfmt.decimalChar) || this.info.numfmt.decimalChar;
 	},
-	
+
 	/**
-	 * Return the separator character used to separate groups of digits on the 
+	 * Return the separator character used to separate groups of digits on the
 	 * integer side of the decimal character.
 	 * @returns {string} the grouping separator char
 	 */
@@ -1676,19 +1676,19 @@ ilib.LocaleInfo.prototype = {
 	},
 
 	/**
-	 * Return the separator character used to separate groups of digits on the 
+	 * Return the separator character used to separate groups of digits on the
 	 * integer side of the decimal character for the native script if present other than the default script.
 	 * @returns {string} the grouping separator char
 	 */
 	getNativeGroupingSeparator: function () {
 		return (this.info.native_numfmt && this.info.native_numfmt.groupChar) || this.info.numfmt.groupChar;
 	},
-	
+
 	/**
-	 * Return the minimum number of digits grouped together on the integer side 
-	 * for the first (primary) group. 
+	 * Return the minimum number of digits grouped together on the integer side
+	 * for the first (primary) group.
 	 * In western European cultures, groupings are in 1000s, so the number of digits
-	 * is 3. 
+	 * is 3.
 	 * @returns {number} the number of digits in a primary grouping, or 0 for no grouping
 	 */
 	getPrimaryGroupingDigits: function () {
@@ -1698,17 +1698,17 @@ ilib.LocaleInfo.prototype = {
 	/**
 	 * Return the minimum number of digits grouped together on the integer side
 	 * for the second or more (secondary) group.<p>
-	 *   
+	 *
 	 * In western European cultures, all groupings are by 1000s, so the secondary
-	 * size should be 0 because there is no secondary size. In general, if this 
-	 * method returns 0, then all groupings are of the primary size.<p> 
-	 * 
+	 * size should be 0 because there is no secondary size. In general, if this
+	 * method returns 0, then all groupings are of the primary size.<p>
+	 *
 	 * For some other cultures, the first grouping (primary)
 	 * is 3 and any subsequent groupings (secondary) are two. So, 100000 would be
 	 * written as: "1,00,000".
-	 * 
-	 * @returns {number} the number of digits in a secondary grouping, or 0 for no 
-	 * secondary grouping. 
+	 *
+	 * @returns {number} the number of digits in a secondary grouping, or 0 for no
+	 * secondary grouping.
 	 */
 	getSecondaryGroupingDigits: function () {
 		return this.info.numfmt.secgroupSize || 0;
@@ -1761,16 +1761,16 @@ ilib.LocaleInfo.prototype = {
 	 */
 	getNativePercentageSymbol: function () {
 		return (this.info.native_numfmt && this.info.native_numfmt.pctChar) || this.info.numfmt.pctChar || "%";
-	
+
 	},
 	/**
 	 * Return the format template used to format negative numbers in this locale.
 	 * @returns {string} the format template for formatting negative numbers
 	 */
-	getNegativeNumberFormat: function () { 
+	getNegativeNumberFormat: function () {
 		return this.info.numfmt.negativenumFmt;
 	},
-	
+
 	/**
 	 * Return an object containing the format templates for formatting currencies
 	 * in this locale. The object has a number of properties in it that each are
@@ -1781,16 +1781,16 @@ ilib.LocaleInfo.prototype = {
 	getCurrencyFormats: function () {
 		return this.info.numfmt.currencyFormats;
 	},
-	
+
 	/**
-	 * Return the currency that is legal in the locale, or which is most commonly 
+	 * Return the currency that is legal in the locale, or which is most commonly
 	 * used in regular commerce.
 	 * @returns {string} the ISO 4217 code for the currency of this locale
 	 */
 	getCurrency: function () {
 		return this.info.currency;
 	},
-	
+
 	/**
 	 * Return a string that describes the style of digits used by this locale.
 	 * Possible return values are:
@@ -1813,31 +1813,31 @@ ilib.LocaleInfo.prototype = {
 		}
 		return "western";
 	},
-	
+
 	/**
 	 * Return the digits of the default script if they are defined.
 	 * If not defined, the default should be the regular "Arabic numerals"
 	 * used in the Latin script. (0-9)
-	 * @returns {string|undefined} the digits used in the default script 
+	 * @returns {string|undefined} the digits used in the default script
 	 */
 	getDigits: function () {
 		return this.info.numfmt.digits;
 	},
-	
+
 	/**
-	 * Return the digits of the native script if they are defined. 
-	 * @returns {string|undefined} the digits used in the default script 
+	 * Return the digits of the native script if they are defined.
+	 * @returns {string|undefined} the digits used in the default script
 	 */
 	getNativeDigits: function () {
 		return (this.info.numfmt.useNative && this.info.numfmt.digits) || (this.info.native_numfmt && this.info.native_numfmt.digits);
 	},
-	
+
 	/**
 	 * If this locale typically uses a different type of rounding for numeric
-	 * formatting other than halfdown, especially for currency, then it can be 
-	 * specified in the localeinfo. If the locale uses the default, then this 
-	 * method returns undefined. The locale's rounding method overrides the 
-	 * rounding method for the currency itself, which can sometimes shared 
+	 * formatting other than halfdown, especially for currency, then it can be
+	 * specified in the localeinfo. If the locale uses the default, then this
+	 * method returns undefined. The locale's rounding method overrides the
+	 * rounding method for the currency itself, which can sometimes shared
 	 * between various locales so it is less specific.
 	 * @returns {string} the name of the rounding mode typically used in this
 	 * locale, or "halfdown" if the locale does not override the default
@@ -1845,71 +1845,71 @@ ilib.LocaleInfo.prototype = {
 	getRoundingMode: function () {
 		return this.info.numfmt.roundingMode;
 	},
-	
+
 	/**
-	 * Return the default script used to write text in the language of this 
+	 * Return the default script used to write text in the language of this
 	 * locale. Text for most languages is written in only one script, but there
 	 * are some languages where the text can be written in a number of scripts,
-	 * depending on a variety of things such as the region, ethnicity, religion, 
+	 * depending on a variety of things such as the region, ethnicity, religion,
 	 * etc. of the author. This method returns the default script for the
-	 * locale, in which the language is most commonly written.<p> 
-	 * 
+	 * locale, in which the language is most commonly written.<p>
+	 *
 	 * The script is returned as an ISO 15924 4-letter code.
-	 * 
+	 *
 	 * @returns {string} the ISO 15924 code for the default script used to write
-	 * text in this locale 
+	 * text in this locale
 	 */
 	getDefaultScript: function() {
 		return (this.info.scripts) ? this.info.scripts[0] : "Latn";
 	},
-	
+
 	/**
 	 * Return the script used for the current locale. If the current locale
-	 * explicitly defines a script, then this script is returned. If not, then 
+	 * explicitly defines a script, then this script is returned. If not, then
 	 * the default script for the locale is returned.
-	 * 
+	 *
 	 * @see ilib.LocaleInfo.getDefaultScript
 	 * @returns {string} the ISO 15924 code for the script used to write
 	 * text in this locale
 	 */
 	getScript: function() {
-		return this.locale.getScript() || this.getDefaultScript(); 
+		return this.locale.getScript() || this.getDefaultScript();
 	},
-	
+
 	/**
 	 * Return an array of script codes which are used to write text in the current
 	 * language. Text for most languages is written in only one script, but there
 	 * are some languages where the text can be written in a number of scripts,
-	 * depending on a variety of things such as the region, ethnicity, religion, 
-	 * etc. of the author. This method returns an array of script codes in which 
+	 * depending on a variety of things such as the region, ethnicity, religion,
+	 * etc. of the author. This method returns an array of script codes in which
 	 * the language is commonly written.
-	 * 
-	 * @returns {Array.<string>} an array of ISO 15924 codes for the scripts used 
+	 *
+	 * @returns {Array.<string>} an array of ISO 15924 codes for the scripts used
 	 * to write text in this language
 	 */
 	getAllScripts: function() {
 		return this.info.scripts || ["Latn"];
 	},
-	
+
 	/**
-	 * Return the default style of meridiems used in this locale. Meridiems are 
+	 * Return the default style of meridiems used in this locale. Meridiems are
 	 * times of day like AM/PM. In a few locales with some calendars, for example
 	 * Amharic/Ethiopia using the Ethiopic calendar, the times of day may be
-	 * split into different segments than simple AM/PM as in the Gregorian 
-	 * calendar. Only a few locales are like that. For most locales, formatting 
+	 * split into different segments than simple AM/PM as in the Gregorian
+	 * calendar. Only a few locales are like that. For most locales, formatting
 	 * a Gregorian date will use the regular Gregorian AM/PM meridiems.
-	 *  
+	 *
 	 * @returns {string} the default meridiems style used in this locale. Possible
 	 * values are "gregorian", "chinese", and "ethiopic"
 	 */
 	getMeridiemsStyle: function () {
 		return this.info.meridiems || "gregorian";
-	}	
+	}
 };
 
 /*
  * date.js - Represent a date in any calendar. This class is subclassed for each calendar.
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -1930,16 +1930,16 @@ ilib.LocaleInfo.prototype = {
 
 /**
  * @class
- * Construct a new date object. Each parameter is a numeric value, but its 
+ * Construct a new date object. Each parameter is a numeric value, but its
  * accepted range can vary depending on the subclass of this date. For example,
  * Gregorian months can be from 1 to 12, whereas months in the Hebrew calendar
  * can be from 1 to 13.<p>
- * 
- * Note that this really calls the newInstance factory method underneath in 
+ *
+ * Note that this really calls the newInstance factory method underneath in
  * order to instantiate the correct subclass of ilib.Date.
- * 
+ *
  * Depends directive: !depends date.js
- * 
+ *
  * @constructor
  * @param {Object=} options The date components to initialize this date with
  */
@@ -1951,54 +1951,54 @@ ilib.Date = function(options) {
 
 /**
  * Factory method to create a new instance of a date subclass.<p>
- * 
+ *
  * The options parameter can be an object that contains the following
  * properties:
- * 
+ *
  * <ul>
  * <li><i>type</i> - specify the type/calendar of the date desired. The
- * list of valid values changes depending on which calendars are 
- * defined. When assembling your iliball.js, include those date type 
- * you wish to use in your program or web page, and they will register 
+ * list of valid values changes depending on which calendars are
+ * defined. When assembling your iliball.js, include those date type
+ * you wish to use in your program or web page, and they will register
  * themselves with this factory method. The "gregorian",
  * and "julian" calendars are all included by default, as they are the
  * standard calendars for much of the world. If not specified, the type
  * of the date returned is the one that is appropriate for the locale.
  * This property may also be given as "calendar" instead of "type".
  * </ul>
- * 
- * The options object is also passed down to the date constructor, and 
+ *
+ * The options object is also passed down to the date constructor, and
  * thus can contain the the properties as the date object being instantiated.
  * See the documentation for {@link ilib.Date.GregDate}, and other
  * subclasses for more details on other parameter that may be passed in.<p>
- * 
+ *
  * Please note that if you do not give the type parameter, this factory
  * method will create a date object that is appropriate for the calendar
- * that is most commonly used in the specified or current ilib locale. 
- * For example, in Thailand, the most common calendar is the Thai solar 
- * calendar. If the current locale is "th-TH" (Thai for Thailand) and you 
+ * that is most commonly used in the specified or current ilib locale.
+ * For example, in Thailand, the most common calendar is the Thai solar
+ * calendar. If the current locale is "th-TH" (Thai for Thailand) and you
  * use this factory method to construct a new date without specifying the
- * type, it will automatically give you back an instance of 
- * {@link ilib.Date.ThaiSolarDate}. This is convenient because you do not 
- * need to know which locales use which types of dates. In fact, you 
+ * type, it will automatically give you back an instance of
+ * {@link ilib.Date.ThaiSolarDate}. This is convenient because you do not
+ * need to know which locales use which types of dates. In fact, you
  * should always use this factory method to make new date instances unless
  * you know that you specifically need a date in a particular calendar.<p>
- * 
+ *
  * Also note that when you pass in the date components such as year, month,
  * day, etc., these components should be appropriate for the given date
  * being instantiated. That is, in our Thai example in the previous
  * paragraph, the year and such should be given as a Thai solar year, not
  * the Gregorian year that you get from the Javascript Date class. In
  * order to initialize a date instance when you don't know what subclass
- * will be instantiated for the locale, use a parameter such as "unixtime" 
+ * will be instantiated for the locale, use a parameter such as "unixtime"
  * or "julianday" which are unambiguous and based on UTC time, instead of
- * the year/month/date date components. The date components for that UTC 
- * time will be calculated and the time zone offset will be automatically 
+ * the year/month/date date components. The date components for that UTC
+ * time will be calculated and the time zone offset will be automatically
  * factored in.
- *  
+ *
  * @param {Object=} options options controlling the construction of this instance, or
  * undefined to use the default options
- * @return {ilib.Date} an instance of a calendar object of the appropriate type 
+ * @return {ilib.Date} an instance of a calendar object of the appropriate type
  */
 ilib.Date.newInstance = function(options) {
 	var locale = options && options.locale,
@@ -2008,14 +2008,14 @@ ilib.Date.newInstance = function(options) {
 	if (!locale) {
 		locale = new ilib.Locale();	// default locale
 	}
-	
+
 	if (!type) {
 		var info = new ilib.LocaleInfo(locale);
 		type = info.getCalendar();
 	}
 
 	cons = ilib.Date._constructors[type];
-	
+
 	// pass the same options through to the constructor so the subclass
 	// has the ability to do something with if it needs to
 	return cons && new cons(options);
@@ -2026,10 +2026,10 @@ ilib.Date.newInstance = function(options) {
  * string or number that can be translated by the JavaScript Date class,
  * (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse)
  * any JavaScript Date classed object, any ilib.Date subclass, an ilib.JulianDay object, an object
- * containing the normal options to initialize an ilib.Date instance, or null (will 
- * return null or undefined if input is null or undefined). Normal output is 
+ * containing the normal options to initialize an ilib.Date instance, or null (will
+ * return null or undefined if input is null or undefined). Normal output is
  * a standard native subclass of the ilib Date object as appropriate for the locale.
- * 
+ *
  * @static
  * @private
  * @param  {ilib.Date|Object|ilib.JulianDay|Date|string|number=} inDate The input date object, string or Number.
@@ -2074,7 +2074,7 @@ ilib.Date._dateToIlib = function(inDate, timezone) {
 };
 
 /* place for the subclasses to put their constructors so that the factory method
- * can find them. Do this to add your date after it's defined: 
+ * can find them. Do this to add your date after it's defined:
  * ilib.Date._constructors["mytype"] = ilib.Date.MyTypeConstructor;
  */
 ilib.Date._constructors = {};
@@ -2083,36 +2083,36 @@ ilib.Date.prototype = {
 	getType: function() {
 		return "ilib.Date";
 	},
-	
+
 	/**
 	 * Return the unix time equivalent to this date instance. Unix time is
-	 * the number of milliseconds since midnight on Jan 1, 1970 UTC (Gregorian). This 
-	 * method only returns a valid number for dates between midnight, 
-	 * Jan 1, 1970 UTC (Gregorian) and Jan 19, 2038 at 3:14:07am UTC (Gregorian) when 
-	 * the unix time runs out. If this instance encodes a date outside of that range, 
-	 * this method will return -1. For date types that are not Gregorian, the point 
+	 * the number of milliseconds since midnight on Jan 1, 1970 UTC (Gregorian). This
+	 * method only returns a valid number for dates between midnight,
+	 * Jan 1, 1970 UTC (Gregorian) and Jan 19, 2038 at 3:14:07am UTC (Gregorian) when
+	 * the unix time runs out. If this instance encodes a date outside of that range,
+	 * this method will return -1. For date types that are not Gregorian, the point
 	 * in time represented by this date object will only give a return value if it
 	 * is in the correct range in the Gregorian calendar as given previously.
-	 * 
+	 *
 	 * @return {number} a number giving the unix time, or -1 if the date is outside the
 	 * valid unix time range
 	 */
 	getTime: function() {
-		return this.rd.getTime(); 
+		return this.rd.getTime();
 	},
-	
+
 	/**
 	 * Return the extended unix time equivalent to this Gregorian date instance. Unix time is
 	 * the number of milliseconds since midnight on Jan 1, 1970 UTC. Traditionally unix time
-	 * (or the type "time_t" in C/C++) is only encoded with an unsigned 32 bit integer, and thus 
-	 * runs out on Jan 19, 2038. However, most Javascript engines encode numbers well above 
-	 * 32 bits and the Date object allows you to encode up to 100 million days worth of time 
+	 * (or the type "time_t" in C/C++) is only encoded with an unsigned 32 bit integer, and thus
+	 * runs out on Jan 19, 2038. However, most Javascript engines encode numbers well above
+	 * 32 bits and the Date object allows you to encode up to 100 million days worth of time
 	 * after Jan 1, 1970, and even more interestingly, 100 million days worth of time before
-	 * Jan 1, 1970 as well. This method returns the number of milliseconds in that extended 
+	 * Jan 1, 1970 as well. This method returns the number of milliseconds in that extended
 	 * range. If this instance encodes a date outside of that range, this method will return
 	 * NaN.
-	 * 
-	 * @return {number} a number giving the extended unix time, or Nan if the date is outside 
+	 *
+	 * @return {number} a number giving the extended unix time, or Nan if the date is outside
 	 * the valid extended unix time range
 	 */
 	getTimeExtended: function() {
@@ -2122,8 +2122,8 @@ ilib.Date.prototype = {
 	/**
 	 * Set the time of this instance according to the given unix time. Unix time is
 	 * the number of milliseconds since midnight on Jan 1, 1970.
-	 * 
-	 * @param {number} millis the unix time to set this date to in milliseconds 
+	 *
+	 * @param {number} millis the unix time to set this date to in milliseconds
 	 */
 	setTime: function(millis) {
 		this.rd = this.newRd({
@@ -2132,7 +2132,7 @@ ilib.Date.prototype = {
 		});
 		this._calcDateComponents();
 	},
-	
+
 	getDays: function() {
 		return this.day;
 	},
@@ -2167,7 +2167,7 @@ ilib.Date.prototype = {
 		this.year = parseInt(year, 10) || 0;
 		this.rd._setDateComponents(this);
 	},
-	
+
 	setHours: function(hour) {
 		this.hour = parseInt(hour, 10) || 0;
 		this.rd._setDateComponents(this);
@@ -2184,12 +2184,12 @@ ilib.Date.prototype = {
 		this.millisecond = parseInt(milli, 10) || 0;
 		this.rd._setDateComponents(this);
 	},
-	
+
 	/**
-	 * Return a new date instance in the current calendar that represents the first instance 
+	 * Return a new date instance in the current calendar that represents the first instance
 	 * of the given day of the week before the current date. The day of the week is encoded
 	 * as a number where 0 = Sunday, 1 = Monday, etc.
-	 * 
+	 *
 	 * @param {number} dow the day of the week before the current date that is being sought
 	 * @return {ilib.Date} the date being sought
 	 */
@@ -2199,12 +2199,12 @@ ilib.Date.prototype = {
 			timezone: this.timezone
 		});
 	},
-	
+
 	/**
-	 * Return a new date instance in the current calendar that represents the first instance 
+	 * Return a new date instance in the current calendar that represents the first instance
 	 * of the given day of the week after the current date. The day of the week is encoded
 	 * as a number where 0 = Sunday, 1 = Monday, etc.
-	 * 
+	 *
 	 * @param {number} dow the day of the week after the current date that is being sought
 	 * @return {ilib.Date} the date being sought
 	 */
@@ -2216,10 +2216,10 @@ ilib.Date.prototype = {
 	},
 
 	/**
-	 * Return a new Gregorian date instance that represents the first instance of the 
+	 * Return a new Gregorian date instance that represents the first instance of the
 	 * given day of the week on or before the current date. The day of the week is encoded
 	 * as a number where 0 = Sunday, 1 = Monday, etc.
-	 * 
+	 *
 	 * @param {number} dow the day of the week on or before the current date that is being sought
 	 * @return {ilib.Date} the date being sought
 	 */
@@ -2231,10 +2231,10 @@ ilib.Date.prototype = {
 	},
 
 	/**
-	 * Return a new Gregorian date instance that represents the first instance of the 
+	 * Return a new Gregorian date instance that represents the first instance of the
 	 * given day of the week on or after the current date. The day of the week is encoded
 	 * as a number where 0 = Sunday, 1 = Monday, etc.
-	 * 
+	 *
 	 * @param {number} dow the day of the week on or after the current date that is being sought
 	 * @return {ilib.Date} the date being sought
 	 */
@@ -2244,28 +2244,28 @@ ilib.Date.prototype = {
 			timezone: this.timezone
 		});
 	},
-	
+
 	/**
 	 * Return a Javascript Date object that is equivalent to this date
 	 * object.
-	 * 
+	 *
 	 * @return {Date|undefined} a javascript Date object
 	 */
 	getJSDate: function() {
 		var unix = this.rd.getTimeExtended();
-		return isNaN(unix) ? undefined : new Date(unix); 
+		return isNaN(unix) ? undefined : new Date(unix);
 	},
-	
+
 	/**
 	 * Return the Rata Die (fixed day) number of this date.
-	 * 
+	 *
 	 * @protected
 	 * @return {number} the rd date as a number
 	 */
 	getRataDie: function() {
 		return this.rd.getRataDie();
 	},
-	
+
 	/**
 	 * Set the date components of this instance based on the given rd.
 	 * @protected
@@ -2278,16 +2278,16 @@ ilib.Date.prototype = {
 		});
 		this._calcDateComponents();
 	},
-	
+
 	/**
 	 * Return the Julian Day equivalent to this calendar date as a number.
-	 * 
+	 *
 	 * @return {number} the julian date equivalent of this date
 	 */
 	getJulianDay: function() {
 		return this.rd.getJulianDay();
 	},
-	
+
 	/**
 	 * Set the date of this instance using a Julian Day.
 	 * @param {number|ilib.JulianDay} date the Julian Day to use to set this date
@@ -2301,19 +2301,19 @@ ilib.Date.prototype = {
 	},
 
 	/**
-	 * Return the time zone associated with this date, or 
+	 * Return the time zone associated with this date, or
 	 * undefined if none was specified in the constructor.
-	 * 
+	 *
 	 * @return {string|undefined} the name of the time zone for this date instance
 	 */
 	getTimeZone: function() {
 		return this.timezone || "local";
 	},
-	
+
 	/**
 	 * Set the time zone associated with this date.
 	 * @param {string=} tzName the name of the time zone to set into this date instance,
-	 * or "undefined" to unset the time zone 
+	 * or "undefined" to unset the time zone
 	 */
 	setTimeZone: function (tzName) {
 		if (!tzName || tzName === "") {
@@ -2323,12 +2323,12 @@ ilib.Date.prototype = {
 		} else if (typeof(tzName) === 'string') {
 			this.timezone = tzName;
 			this.tz = undefined;
-			// assuming the same UTC time, but a new time zone, now we have to 
+			// assuming the same UTC time, but a new time zone, now we have to
 			// recalculate what the date components are
 			this._calcDateComponents();
 		}
 	},
-	
+
 	/**
 	 * Return the rd number of the first Sunday of the given ISO year.
 	 * @protected
@@ -2352,12 +2352,12 @@ ilib.Date.prototype = {
 		});
 		return firstThu.before(0);
 	},
-	
+
 	/**
 	 * Return the ISO 8601 week number in the current year for the current date. The week
 	 * number ranges from 0 to 55, as some years have 55 weeks assigned to them in some
 	 * calendars.
-	 * 
+	 *
 	 * @return {number} the week number for the current date
 	 */
 	getWeekOfYear: function() {
@@ -2365,7 +2365,7 @@ ilib.Date.prototype = {
 		var year = this._calcYear(rd + this.offset);
 		var yearStart = this.firstSunday(year);
 		var nextYear;
-		
+
 		// if we have a January date, it may be in this ISO year or the previous year
 		if (rd < yearStart) {
 			yearStart = this.firstSunday(year-1);
@@ -2376,27 +2376,27 @@ ilib.Date.prototype = {
 				yearStart = nextYear;
 			}
 		}
-		
+
 		return Math.floor((rd-yearStart)/7) + 1;
 	},
-	
+
 	/**
 	 * Return the ordinal number of the week within the month. The first week of a month is
 	 * the first one that contains 4 or more days in that month. If any days precede this
 	 * first week, they are marked as being in week 0. This function returns values from 0
 	 * through 6.<p>
-	 * 
-	 * The locale is a required parameter because different locales that use the same 
+	 *
+	 * The locale is a required parameter because different locales that use the same
 	 * Gregorian calendar consider different days of the week to be the beginning of
 	 * the week. This can affect the week of the month in which some days are located.
-	 * 
-	 * @param {ilib.Locale|string} locale the locale or locale spec to use when figuring out 
+	 *
+	 * @param {ilib.Locale|string} locale the locale or locale spec to use when figuring out
 	 * the first day of the week
 	 * @return {number} the ordinal number of the week within the current month
 	 */
 	getWeekOfMonth: function(locale) {
 		var li = new ilib.LocaleInfo(locale);
-		
+
 		var first = this.newRd({
 			year: this._calcYear(this.rd.getRataDie()+this.offset),
 			month: this.getMonths(),
@@ -2408,7 +2408,7 @@ ilib.Date.prototype = {
 			cal: this.cal
 		});
 		var weekStart = first.onOrAfter(li.getFirstDayOfWeek());
-		
+
 		if (weekStart - first.getRataDie() > 3) {
 			// if the first week has 4 or more days in it of the current month, then consider
 			// that week 1. Otherwise, it is week 0. To make it week 1, move the week start
@@ -2421,7 +2421,7 @@ ilib.Date.prototype = {
 
 /*
  * util/utils.js - Core utility routines
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -2444,10 +2444,10 @@ ilib.Date.prototype = {
  * If Function.prototype.bind does not exist in this JS engine, this
  * function reimplements it in terms of older JS functions.
  * bind() doesn't exist in many older browsers.
- * 
+ *
  * @param {Object} scope object that the method should operate on
  * @param {function(...)} method method to call
- * @return {function(...)|undefined} function that calls the given method 
+ * @return {function(...)|undefined} function that calls the given method
  * in the given scope with all of its arguments properly attached, or
  * undefined if there was a problem with the arguments
  */
@@ -2455,8 +2455,8 @@ ilib.bind = function(scope, method/*, bound arguments*/){
 	if (!scope || !method) {
 		return undefined;
 	}
-	
-	/** @protected 
+
+	/** @protected
 	 * @param {Arguments} inArrayLike
 	 * @param {number=} inOffset
 	 */
@@ -2486,15 +2486,15 @@ ilib.bind = function(scope, method/*, bound arguments*/){
 
 /**
  * Merge the properties of object2 into object1 in a deep manner and return a merged
- * object. If the property exists in both objects, the value in object2 will overwrite 
+ * object. If the property exists in both objects, the value in object2 will overwrite
  * the value in object1. If a property exists in object1, but not in object2, its value
- * will not be touched. If a property exists in object2, but not in object1, it will be 
+ * will not be touched. If a property exists in object2, but not in object1, it will be
  * added to the merged result.<p>
- * 
+ *
  * Name1 and name2 are for creating debug output only. They are not necessary.<p>
- * 
+ *
  * Depends directive: !depends utils.js
- * 
+ *
  * @param {*} object1 the object to merge into
  * @param {*} object2 the object to merge
  * @param {boolean=} replace if true, replace the array elements in object1 with those in object2.
@@ -2537,9 +2537,9 @@ ilib.merge = function (object1, object2, replace, name1, name2) {
 
 /**
  * Find and merge all the locale data for a particular prefix in the given locale
- * and return it as a single javascript object. This merges the data in the 
+ * and return it as a single javascript object. This merges the data in the
  * correct order:
- * 
+ *
  * <ol>
  * <li>shared data (usually English)
  * <li>data for language
@@ -2547,12 +2547,12 @@ ilib.merge = function (object1, object2, replace, name1, name2) {
  * <li>data for language + region + script
  * <li>data for language + region + script + variant
  * </ol>
- * 
- * It is okay for any of the above to be missing. This function will just skip the 
- * missing data. However, if everything except the shared data is missing, this 
+ *
+ * It is okay for any of the above to be missing. This function will just skip the
+ * missing data. However, if everything except the shared data is missing, this
  * function returns undefined, allowing the caller to go and dynamically load the
  * data instead.
- *  
+ *
  * @param {string} prefix prefix under ilib.data of the data to merge
  * @param {ilib.Locale} locale locale of the data being sought
  * @param {boolean=} replaceArrays if true, replace the array elements in object1 with those in object2.
@@ -2580,7 +2580,7 @@ ilib.mergeLocData = function (prefix, locale, replaceArrays, returnOne) {
 			mostSpecific = ilib.data[property];
 		}
 	}
-	
+
 	if (loc.getRegion()) {
 		property = prefix + '_' + loc.getRegion();
 		if (ilib.data[property]) {
@@ -2589,10 +2589,10 @@ ilib.mergeLocData = function (prefix, locale, replaceArrays, returnOne) {
 			mostSpecific = ilib.data[property];
 		}
 	}
-	
+
 	if (loc.getLanguage()) {
 		property = prefix + '_' + loc.getLanguage();
-		
+
 		if (loc.getScript()) {
 			property = prefix + '_' + loc.getLanguage() + '_' + loc.getScript();
 			if (ilib.data[property]) {
@@ -2601,7 +2601,7 @@ ilib.mergeLocData = function (prefix, locale, replaceArrays, returnOne) {
 				mostSpecific = ilib.data[property];
 			}
 		}
-		
+
 		if (loc.getRegion()) {
 			property = prefix + '_' + loc.getLanguage() + '_' + loc.getRegion();
 			if (ilib.data[property]) {
@@ -2609,9 +2609,9 @@ ilib.mergeLocData = function (prefix, locale, replaceArrays, returnOne) {
 				data = ilib.merge(data, ilib.data[property], replaceArrays);
 				mostSpecific = ilib.data[property];
 			}
-		}		
+		}
 	}
-	
+
 	if (loc.getRegion() && loc.getVariant()) {
 		property = prefix + '_' + loc.getLanguage() + '_' + loc.getVariant();
 		if (ilib.data[property]) {
@@ -2647,60 +2647,60 @@ ilib.mergeLocData = function (prefix, locale, replaceArrays, returnOne) {
 			mostSpecific = ilib.data[property];
 		}
 	}
-	
+
 	return foundLocaleData ? (returnOne ? mostSpecific : data) : undefined;
 };
 
 /**
  * Return an array of relative path names for the
  * files that represent the data for the given locale.<p>
- * 
+ *
  * Note that to prevent the situation where a directory for
  * a language exists next to the directory for a region where
- * the language code and region code differ only by case, the 
- * plain region directories are located under the special 
+ * the language code and region code differ only by case, the
+ * plain region directories are located under the special
  * "undefined" language directory which has the ISO code "und".
- * The reason is that some platforms have case-insensitive 
- * file systems, and you cannot have 2 directories with the 
+ * The reason is that some platforms have case-insensitive
+ * file systems, and you cannot have 2 directories with the
  * same name which only differ by case. For example, "es" is
  * the ISO 639 code for the language "Spanish" and "ES" is
  * the ISO 3166 code for the region "Spain", so both the
  * directories cannot exist underneath "locale". The region
- * therefore will be loaded from "und/ES" instead.<p>  
- * 
+ * therefore will be loaded from "und/ES" instead.<p>
+ *
  * <h4>Variations</h4>
- * 
+ *
  * With only language and region specified, the following
  * sequence of paths will be generated:<p>
- * 
+ *
  * <pre>
  * language
  * und/region
  * language/region
  * </pre>
- * 
+ *
  * With only language and script specified:<p>
- * 
+ *
  * <pre>
  * language
  * language/script
  * </pre>
- * 
+ *
  * With only script and region specified:<p>
- * 
+ *
  * <pre>
- * und/region  
+ * und/region
  * </pre>
- * 
+ *
  * With only region and variant specified:<p>
- * 
+ *
  * <pre>
  * und/region
  * region/variant
  * </pre>
- * 
+ *
  * With only language, script, and region specified:<p>
- * 
+ *
  * <pre>
  * language
  * und/region
@@ -2708,9 +2708,9 @@ ilib.mergeLocData = function (prefix, locale, replaceArrays, returnOne) {
  * language/region
  * language/script/region
  * </pre>
- * 
+ *
  * With only language, region, and variant specified:<p>
- * 
+ *
  * <pre>
  * language
  * und/region
@@ -2718,9 +2718,9 @@ ilib.mergeLocData = function (prefix, locale, replaceArrays, returnOne) {
  * region/variant
  * language/region/variant
  * </pre>
- * 
+ *
  * With all parts specified:<p>
- * 
+ *
  * <pre>
  * language
  * und/region
@@ -2731,7 +2731,7 @@ ilib.mergeLocData = function (prefix, locale, replaceArrays, returnOne) {
  * language/region/variant
  * language/script/region/variant
  * </pre>
- * 
+ *
  * @param {ilib.Locale} locale load the files for this locale
  * @param {string?} name the file name of each file to load without
  * any path
@@ -2743,24 +2743,24 @@ ilib.getLocFiles = function(locale, name) {
 	var files = [];
 	var filename = name || "resources.json";
 	var loc = locale || new ilib.Locale();
-	
+
 	var language = loc.getLanguage();
 	var region = loc.getRegion();
 	var script = loc.getScript();
 	var variant = loc.getVariant();
-	
+
 	files.push(filename); // generic shared file
-	
+
 	if (language) {
 		dir = language + "/";
 		files.push(dir + filename);
 	}
-	
+
 	if (region) {
 		dir = "und/" + region + "/";
 		files.push(dir + filename);
 	}
-	
+
 	if (language) {
 		if (script) {
 			dir = language + "/" + script + "/";
@@ -2771,7 +2771,7 @@ ilib.getLocFiles = function(locale, name) {
 			files.push(dir + filename);
 		}
 	}
-	
+
 	if (region && variant) {
 		dir = "und/" + region + "/" + variant + "/";
 		files.push(dir + filename);
@@ -2791,25 +2791,25 @@ ilib.getLocFiles = function(locale, name) {
 		dir = language + "/" + script + "/" + region + "/" + variant + "/";
 		files.push(dir + filename);
 	}
-	
+
 	return files;
 };
 
 /**
  * Return true if the given object has no properties.<p>
- * 
+ *
  * Depends directive: !depends utils.js
- * 
+ *
  * @param {Object} obj the object to check
  * @return {boolean} true if the given object has no properties, false otherwise
  */
 ilib.isEmpty = function (obj) {
 	var prop = undefined;
-	
+
 	if (!obj) {
 		return true;
 	}
-	
+
 	for (prop in obj) {
 		if (prop && typeof(obj[prop]) !== 'undefined') {
 			return false;
@@ -2824,15 +2824,15 @@ ilib.isEmpty = function (obj) {
  */
 ilib.hashCode = function(obj) {
 	var hash = 0;
-	
+
 	function addHash(hash, newValue) {
 		// co-prime numbers creates a nicely distributed hash
 		hash *= 65543;
 		hash += newValue;
-		hash %= 2147483647; 
+		hash %= 2147483647;
 		return hash;
 	}
-	
+
 	function stringHash(str) {
 		var hash = 0;
 		for (var i = 0; i < str.length; i++) {
@@ -2840,7 +2840,7 @@ ilib.hashCode = function(obj) {
 		}
 		return hash;
 	}
-	
+
 	switch (typeof(obj)) {
 		case 'undefined':
 			hash = 0;
@@ -2871,7 +2871,7 @@ ilib.hashCode = function(obj) {
 			}
 			break;
 	}
-	
+
 	return hash;
 };
 
@@ -2889,7 +2889,7 @@ ilib._callLoadData = function (files, sync, params, callback) {
 		// console.log("ilib._callLoadData: calling as an object");
 		return ilib._load.loadFiles(files, sync, params, callback);
 	}
-	
+
 	// console.log("ilib._callLoadData: not calling. Type is " + typeof(ilib._load) + " and instanceof says " + (ilib._load instanceof ilib.Loader));
 	return undefined;
 };
@@ -2899,40 +2899,40 @@ ilib._callLoadData = function (files, sync, params, callback) {
  * find the data in ilib.data. If the data is not preassembled but there is a loader function,
  * this function will call it to load the data. Otherwise, the callback will be called with
  * undefined as the data. This function will create a cache under the given class object.
- * If data was successfully loaded, it will be set into the cache so that future access to 
+ * If data was successfully loaded, it will be set into the cache so that future access to
  * the same data for the same locale is much quicker.<p>
- * 
+ *
  * The parameters can specify any of the following properties:<p>
- * 
+ *
  * <ul>
  * <li><i>name</i> - String. The name of the file being loaded. Default: resources.json
  * <li><i>object</i> - Object. The class attempting to load data. The cache is stored inside of here.
  * <li><i>locale</i> - ilib.Locale. The locale for which data is loaded. Default is the current locale.
  * <li><i>nonlocale</i> - boolean. If true, the data being loaded is not locale-specific.
- * <li><i>type</i> - String. Type of file to load. This can be "json" or "other" type. Default: "json" 
+ * <li><i>type</i> - String. Type of file to load. This can be "json" or "other" type. Default: "json"
  * <li><i>replace</i> - boolean. When merging json objects, this parameter controls whether to merge arrays
- * or have arrays replace each other. If true, arrays in child objects replace the arrays in parent 
- * objects. When false, the arrays in child objects are concatenated with the arrays in parent objects.  
+ * or have arrays replace each other. If true, arrays in child objects replace the arrays in parent
+ * objects. When false, the arrays in child objects are concatenated with the arrays in parent objects.
  * <li><i>loadParams</i> - Object. An object with parameters to pass to the loader function
  * <li><i>sync</i> - boolean. Whether or not to load the data synchronously
  * <li><i>callback</i> - function(?)=. callback Call back function to call when the data is available.
  * Data is not returned from this method, so a callback function is mandatory.
  * </ul>
- * 
+ *
  * @param {Object} params Parameters configuring how to load the files (see above)
  */
 ilib.loadData = function(params) {
 	var name = "resources.json",
-		object = undefined, 
-		locale = new ilib.Locale(ilib.getLocale()), 
-		sync = false, 
+		object = undefined,
+		locale = new ilib.Locale(ilib.getLocale()),
+		sync = false,
 		type = undefined,
 		loadParams = {},
 		callback = undefined,
 		nonlocale = false,
 		replace = false,
 		basename;
-	
+
 	if (!params || typeof(params.callback) !== 'function') {
 		return;
 	}
@@ -2945,7 +2945,7 @@ ilib.loadData = function(params) {
 	}
 	if (params.locale) {
 		locale = (typeof(params.locale) === 'string') ? new ilib.Locale(params.locale) : params.locale;
-	}			
+	}
 	if (params.type) {
 		type = params.type;
 	}
@@ -2961,13 +2961,13 @@ ilib.loadData = function(params) {
 	if (typeof(params.replace) === 'boolean') {
 		replace = params.replace;
 	}
-	
+
 	callback = params.callback;
-	
+
 	if (object && !object.cache) {
 		object.cache = {};
 	}
-	
+
 	if (!type) {
 		var dot = name.lastIndexOf(".");
 		type = (dot !== -1) ? name.substring(dot+1) : "text";
@@ -2976,7 +2976,7 @@ ilib.loadData = function(params) {
 	var spec = ((!nonlocale && locale.getSpec().replace(/-/g, '_')) || "root") + "," + name + "," + String(ilib.hashCode(loadParams));
 	if (!object || typeof(object.cache[spec]) === 'undefined') {
 		var data, returnOne = (loadParams && loadParams.returnOne);
-		
+
 		if (type === "json") {
 			// console.log("type is json");
 			basename = name.substring(0, name.lastIndexOf("."));
@@ -2995,7 +2995,7 @@ ilib.loadData = function(params) {
 				return;
 			}
 		}
-		
+
 		// console.log("ilib._load is " + typeof(ilib._load));
 		if (typeof(ilib._load) !== 'undefined') {
 			// the data is not preassembled, so attempt to load it dynamically
@@ -3003,7 +3003,7 @@ ilib.loadData = function(params) {
 			if (type !== "json") {
 				loadParams.returnOne = true;
 			}
-			
+
 			ilib._callLoadData(files, sync, loadParams, ilib.bind(this, function(arr) {
 				if (type === "json") {
 					data = ilib.data[basename] || {};
@@ -3012,13 +3012,13 @@ ilib.loadData = function(params) {
 							data = loadParams.returnOne ? arr[i] : ilib.merge(data, arr[i], replace);
 						}
 					}
-					
+
 					if (object) {
 						object.cache[spec] = data;
 					}
 					callback(data);
 				} else {
-					var i = arr.length-1; 
+					var i = arr.length-1;
 					while (i > -1 && !arr[i]) {
 						i--;
 					}
@@ -3049,7 +3049,7 @@ ilib.loadData = function(params) {
 
 /*
  * util/math.js - Misc math utility routines
- * 
+ *
  * Copyright © 2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -3099,7 +3099,7 @@ ilib._roundFnc = {
 	floor: function (num) {
 		return Math.floor(num);
 	},
-	
+
 	/**
 	 * @static
 	 * @protected
@@ -3109,7 +3109,7 @@ ilib._roundFnc = {
 	ceiling: function (num) {
 		return Math.ceil(num);
 	},
-	
+
 	/**
 	 * @static
 	 * @protected
@@ -3119,7 +3119,7 @@ ilib._roundFnc = {
 	down: function (num) {
 		return (num < 0) ? Math.ceil(num) : Math.floor(num);
 	},
-	
+
 	/**
 	 * @static
 	 * @protected
@@ -3129,7 +3129,7 @@ ilib._roundFnc = {
 	up: function (num) {
 		return (num < 0) ? Math.floor(num) : Math.ceil(num);
 	},
-	
+
 	/**
 	 * @static
 	 * @protected
@@ -3139,7 +3139,7 @@ ilib._roundFnc = {
 	halfup: function (num) {
 		return (num < 0) ? Math.ceil(num - 0.5) : Math.floor(num + 0.5);
 	},
-	
+
 	/**
 	 * @static
 	 * @protected
@@ -3149,7 +3149,7 @@ ilib._roundFnc = {
 	halfdown: function (num) {
 		return (num < 0) ? Math.floor(num + 0.5) : Math.ceil(num - 0.5);
 	},
-	
+
 	/**
 	 * @static
 	 * @protected
@@ -3159,7 +3159,7 @@ ilib._roundFnc = {
 	halfeven: function (num) {
 		return (Math.floor(num) % 2 === 0) ? Math.ceil(num - 0.5) : Math.floor(num + 0.5);
 	},
-	
+
 	/**
 	 * @static
 	 * @protected
@@ -3176,12 +3176,12 @@ ilib._roundFnc = {
  * division algorithm, but for calendrical calculations, we need the Euclidean
  * division algorithm where the remainder of any division, whether the dividend
  * is negative or not, is always a positive number in the range [0, modulus).<p>
- * 
+ *
  * Depends directive: !depends utils.js
- * 
+ *
  * @param {number} dividend the number being divided
  * @param {number} modulus the number dividing the dividend. This should always be a positive number.
- * @return the remainder of dividing the dividend by the modulus.  
+ * @return the remainder of dividing the dividend by the modulus.
  */
 ilib.mod = function (dividend, modulus) {
 	if (modulus == 0) {
@@ -3198,12 +3198,12 @@ ilib.mod = function (dividend, modulus) {
  * is negative or not, is always a positive number in the range (0, modulus]. The adjusted
  * modulo function differs from the regular modulo function in that when the remainder is
  * zero, the modulus should be returned instead.<p>
- * 
+ *
  * Depends directive: !depends utils.js
- * 
+ *
  * @param {number} dividend the number being divided
  * @param {number} modulus the number dividing the dividend. This should always be a positive number.
- * @return the remainder of dividing the dividend by the modulus.  
+ * @return the remainder of dividing the dividend by the modulus.
  */
 ilib.amod = function (dividend, modulus) {
 	if (modulus == 0) {
@@ -3215,7 +3215,7 @@ ilib.amod = function (dividend, modulus) {
 
 /*
  * strings.js - ilib string subclass definition
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -3243,16 +3243,16 @@ ilib.amod = function (dividend, modulus) {
  * used anywhere that a normal Javascript string is used. The formatting
  * methods are of course most useful when localizing strings in an app
  * or web site in combination with the ilib.ResBundle class.<p>
- * 
+ *
  * Depends directive: !depends strings.js
- * 
+ *
  * @constructor
- * @param {string|ilib.String=} string initialize this instance with this string 
+ * @param {string|ilib.String=} string initialize this instance with this string
  */
 ilib.String = function (string) {
 	if (typeof(string) === 'object') {
 		if (string instanceof ilib.String) {
-			this.str = string.str;	
+			this.str = string.str;
 		} else {
 			this.str = string.toString();
 		}
@@ -3269,7 +3269,7 @@ ilib.String = function (string) {
 /**
  * Return true if the given character is a Unicode surrogate character,
  * either high or low.
- * 
+ *
  * @private
  * @static
  * @param {string} ch character to check
@@ -3281,23 +3281,23 @@ ilib.String._isSurrogate = function (ch) {
 };
 
 /**
- * Convert a UCS-4 code point to a Javascript string. The codepoint can be any valid 
+ * Convert a UCS-4 code point to a Javascript string. The codepoint can be any valid
  * UCS-4 Unicode character, including supplementary characters. Standard Javascript
- * only supports supplementary characters using the UTF-16 encoding, which has 
+ * only supports supplementary characters using the UTF-16 encoding, which has
  * values in the range 0x0000-0xFFFF. String.fromCharCode() will only
- * give you a string containing 16-bit characters, and will not properly convert 
- * the code point for a supplementary character (which has a value > 0xFFFF) into 
+ * give you a string containing 16-bit characters, and will not properly convert
+ * the code point for a supplementary character (which has a value > 0xFFFF) into
  * two UTF-16 surrogate characters. Instead, it will just just give you whatever
  * single character happens to be the same as your code point modulo 0x10000, which
- * is almost never what you want.<p> 
- * 
+ * is almost never what you want.<p>
+ *
  * Similarly, that means if you use String.charCodeAt()
  * you will only retrieve a 16-bit value, which may possibly be a single
  * surrogate character that is part of a surrogate pair representing a character
- * in the supplementary plane. It will not give you a code point. Use 
- * ilib.String.codePointAt() to access code points in a string, or use 
- * an iterator to walk through the code points in a string. 
- * 
+ * in the supplementary plane. It will not give you a code point. Use
+ * ilib.String.codePointAt() to access code points in a string, or use
+ * an iterator to walk through the code points in a string.
+ *
  * @static
  * @param {number} codepoint UCS-4 code point to convert to a character
  * @return {string} a string containing the character represented by the codepoint
@@ -3308,7 +3308,7 @@ ilib.String.fromCodePoint = function (codepoint) {
 	} else {
 		var high = Math.floor(codepoint / 0x10000) - 1;
 		var low = codepoint & 0xFFFF;
-		
+
 		return String.fromCharCode(0xD800 | ((high & 0x000F) << 6) |  ((low & 0xFC00) >> 10)) +
 			String.fromCharCode(0xDC00 | (low & 0x3FF));
 	}
@@ -3316,9 +3316,9 @@ ilib.String.fromCodePoint = function (codepoint) {
 
 /**
  * Convert the character or the surrogate pair at the given
- * index into the intrinsic Javascript string to a Unicode 
+ * index into the intrinsic Javascript string to a Unicode
  * UCS-4 code point.
- * 
+ *
  * @param {string} str string to get the code point from
  * @param {number} index index into the string
  * @return {number} code point of the character at the
@@ -3340,7 +3340,7 @@ ilib.String.toCodePoint = function(str, index) {
 	} else {
 		code = high;
 	}
-	
+
 	return code;
 };
 
@@ -3401,7 +3401,7 @@ ilib.String._fncs = {
 		}
 		return undefined; // should never get here
 	},
-	
+
 	/**
 	 * @private
 	 * @param {Object} obj
@@ -3418,7 +3418,7 @@ ilib.String._fncs = {
 			return obj;
 		}
 	},
-	
+
 	/**
 	 * @private
 	 * @param {number} n
@@ -3455,7 +3455,7 @@ ilib.String._fncs = {
 		}
 		return ilib.String._fncs.matchRangeContinuous(n, range);
 	},
-	
+
 	/**
 	 * @private
 	 * @param {Object} rule
@@ -3468,7 +3468,7 @@ ilib.String._fncs = {
 		return left == right;
 		// return ilib.String._fncs.getValue(rule[0]) == ilib.String._fncs.getValue(rule[1]);
 	},
-	
+
 	/**
 	 * @private
 	 * @param {Object} rule
@@ -3478,7 +3478,7 @@ ilib.String._fncs = {
 	isnot: function(rule, n) {
 		return ilib.String._fncs.getValue(rule[0], n) != ilib.String._fncs.getValue(rule[1], n);
 	},
-	
+
 	/**
 	 * @private
 	 * @param {Object} rule
@@ -3488,7 +3488,7 @@ ilib.String._fncs = {
 	inrange: function(rule, n) {
 		return ilib.String._fncs.matchRange(ilib.String._fncs.getValue(rule[0], n), rule[1]);
 	},
-	
+
 	/**
 	 * @private
 	 * @param {Object} rule
@@ -3498,7 +3498,7 @@ ilib.String._fncs = {
 	notin: function(rule, n) {
 		return !ilib.String._fncs.matchRange(ilib.String._fncs.getValue(rule[0], n), rule[1]);
 	},
-	
+
 	/**
 	 * @private
 	 * @param {Object} rule
@@ -3506,9 +3506,9 @@ ilib.String._fncs = {
 	 * @return {boolean}
 	 */
 	within: function(rule, n) {
-		return ilib.String._fncs.matchRangeContinuous(ilib.String._fncs.getValue(rule[0], n), rule[1]);		
+		return ilib.String._fncs.matchRangeContinuous(ilib.String._fncs.getValue(rule[0], n), rule[1]);
 	},
-	
+
 	/**
 	 * @private
 	 * @param {Object} rule
@@ -3518,7 +3518,7 @@ ilib.String._fncs = {
 	mod: function(rule, n) {
 		return ilib.mod(ilib.String._fncs.getValue(rule[0], n), ilib.String._fncs.getValue(rule[1], n));
 	},
-	
+
 	/**
 	 * @private
 	 * @param {Object} rule
@@ -3528,7 +3528,7 @@ ilib.String._fncs = {
 	n: function(rule, n) {
 		return n;
 	},
-	
+
 	/**
 	 * @private
 	 * @param {Object} rule
@@ -3538,7 +3538,7 @@ ilib.String._fncs = {
 	or: function(rule, n) {
 		return ilib.String._fncs.getValue(rule[0], n) || ilib.String._fncs.getValue(rule[1], n);
 	},
-	
+
 	/**
 	 * @private
 	 * @param {Object} rule
@@ -3554,11 +3554,11 @@ ilib.String.prototype = {
 	/**
 	 * Return the length of this string in characters. This function defers to the regular
 	 * Javascript string class in order to perform the length function. Please note that this
-	 * method is a real method, whereas the length property of Javascript strings is 
+	 * method is a real method, whereas the length property of Javascript strings is
 	 * implemented by native code and appears as a property.<p>
-	 * 
+	 *
 	 * Example:
-	 * 
+	 *
 	 * <pre>
 	 * var str = new ilib.String("this is a string");
 	 * console.log("String is " + str._length() + " characters long.");
@@ -3568,61 +3568,61 @@ ilib.String.prototype = {
 	_length: function () {
 		return this.str.length;
 	},
-	
+
 	/**
-	 * Format this string instance as a message, replacing the parameters with 
+	 * Format this string instance as a message, replacing the parameters with
 	 * the given values.<p>
-	 * 
+	 *
 	 * The string can contain any text that a regular Javascript string can
 	 * contain. Replacement parameters have the syntax:
-	 * 
+	 *
 	 * <pre>
 	 * {name}
 	 * </pre>
-	 * 
-	 * Where "name" can be any string surrounded by curly brackets. The value of 
+	 *
+	 * Where "name" can be any string surrounded by curly brackets. The value of
 	 * "name" is taken from the parameters argument.<p>
-	 * 
+	 *
 	 * Example:
-	 * 
+	 *
 	 * <pre>
 	 * var str = new ilib.String("There are {num} objects.");
 	 * console.log(str.format({
 	 *   num: 12
 	 * });
 	 * </pre>
-	 * 
+	 *
 	 * Would give the output:
-	 * 
+	 *
 	 * <pre>
 	 * There are 12 objects.
 	 * </pre>
-	 * 
+	 *
 	 * If a property is missing from the parameter block, the replacement
 	 * parameter substring is left untouched in the string, and a different
 	 * set of parameters may be applied a second time. This way, different
 	 * parts of the code may format different parts of the message that they
 	 * happen to know about.<p>
-	 * 
+	 *
 	 * Example:
-	 * 
+	 *
 	 * <pre>
 	 * var str = new ilib.String("There are {num} objects in the {container}.");
 	 * console.log(str.format({
 	 *   num: 12
 	 * });
 	 * </pre>
-	 * 
+	 *
 	 * Would give the output:<p>
-	 * 
+	 *
 	 * <pre>
 	 * There are 12 objects in the {container}.
 	 * </pre>
-	 * 
+	 *
 	 * The result can then be formatted again with a different parameter block that
 	 * specifies a value for the container property.
-	 * 
-	 * @param params a Javascript object containing values for the replacement 
+	 *
+	 * @param params a Javascript object containing values for the replacement
 	 * parameters in the current string
 	 * @return a new ilib.String instance with as many replacement parameters filled
 	 * out as possible with real values.
@@ -3640,18 +3640,18 @@ ilib.String.prototype = {
 		}
 		return formatted.toString();
 	},
-	
+
 	/**
 	 * Format a string as one of a choice of strings dependent on the value of
 	 * a particular argument index.<p>
-	 * 
+	 *
 	 * The syntax of the choice string is as follows. The string contains a
 	 * series of choices separated by a vertical bar character "|". Each choice
 	 * has a value or range of values to match followed by a hash character "#"
 	 * followed by the string to use if the variable matches the criteria.<p>
-	 * 
+	 *
 	 * Example string:
-	 * 
+	 *
 	 * <pre>
 	 * var num = 2;
 	 * var str = new ilib.String("0#There are no objects.|1#There is one object.|2#There are {number} objects.");
@@ -3659,22 +3659,22 @@ ilib.String.prototype = {
 	 *   number: num
 	 * }));
 	 * </pre>
-	 * 
+	 *
 	 * Gives the output:
-	 * 
+	 *
 	 * <pre>
 	 * "There are 2 objects."
 	 * </pre>
-	 * 
+	 *
 	 * The strings to format may contain replacement variables that will be formatted
 	 * using the format() method above and the params argument as a source of values
 	 * to use while formatting those variables.<p>
-	 * 
+	 *
 	 * If the criterion for a particular choice is empty, that choice will be used
 	 * as the default one for use when none of the other choice's criteria match.<p>
-	 * 
+	 *
 	 * Example string:
-	 * 
+	 *
 	 * <pre>
 	 * var num = 22;
 	 * var str = new ilib.String("0#There are no objects.|1#There is one object.|#There are {number} objects.");
@@ -3682,29 +3682,29 @@ ilib.String.prototype = {
 	 *   number: num
 	 * }));
 	 * </pre>
-	 * 
+	 *
 	 * Gives the output:
-	 * 
+	 *
 	 * <pre>
 	 * "There are 22 objects."
 	 * </pre>
-	 * 
-	 * If multiple choice patterns can match a given argument index, the first one 
-	 * encountered in the string will be used. If no choice patterns match the 
+	 *
+	 * If multiple choice patterns can match a given argument index, the first one
+	 * encountered in the string will be used. If no choice patterns match the
 	 * argument index, then the default choice will be used. If there is no default
 	 * choice defined, then this method will return an empty string.<p>
-	 * 
+	 *
 	 * <b>Special Syntax</b><p>
-	 * 
+	 *
 	 * For any choice format string, all of the patterns in the string should be
-	 * of a single type: numeric, boolean, or string/regexp. The type of the 
+	 * of a single type: numeric, boolean, or string/regexp. The type of the
 	 * patterns is determined by the type of the argument index parameter.<p>
-	 * 
-	 * If the argument index is numeric, then some special syntax can be used 
+	 *
+	 * If the argument index is numeric, then some special syntax can be used
 	 * in the patterns to match numeric ranges.<p>
-	 * 
+	 *
 	 * <ul>
-	 * <li><i>&gt;x</i> - match any number that is greater than x 
+	 * <li><i>&gt;x</i> - match any number that is greater than x
 	 * <li><i>&gt;=x</i> - match any number that is greater than or equal to x
 	 * <li><i>&lt;x</i> - match any number that is less than x
 	 * <li><i>&lt;=x</i> - match any number that is less than or equal to x
@@ -3716,29 +3716,29 @@ ilib.String.prototype = {
 	 * <li><i>few</i> - match any number in the class "few"
 	 * <li><i>many</i> - match any number in the class "many"
 	 * </ul>
-	 * 
+	 *
 	 * A number class defines a set of numbers that receive a particular syntax
 	 * in the strings. For example, in Slovenian, integers ending in the digit
 	 * "1" are in the "one" class, including 1, 21, 31, ... 101, 111, etc.
-	 * Similarly, integers ending in the digit "2" are in the "two" class. 
+	 * Similarly, integers ending in the digit "2" are in the "two" class.
 	 * Integers ending in the digits "3" or "4" are in the "few" class, and
 	 * every other integer is handled by the default string.<p>
-	 * 
+	 *
 	 * The definition of what numbers are included in a class is locale-dependent.
 	 * They are defined in the data file plurals.json. If your string is in a
 	 * different locale than the default for ilib, you should call the setLocale()
-	 * method of the string instance before calling this method.<p> 
-	 * 
+	 * method of the string instance before calling this method.<p>
+	 *
 	 * <b>Other Pattern Types</b><p>
-	 * 
-	 * If the argument index is a boolean, the string values "true" and "false" 
+	 *
+	 * If the argument index is a boolean, the string values "true" and "false"
 	 * may appear as the choice patterns.<p>
-	 * 
+	 *
 	 * If the argument index is of type string, then the choice patterns may contain
 	 * regular expressions, or static strings as degenerate regexps.
-	 * 
+	 *
 	 * @param {*} argIndex The index into the choice array of the current parameter
-	 * @param {Object} params The hash of parameter values that replace the replacement 
+	 * @param {Object} params The hash of parameter values that replace the replacement
 	 * variables in the string
 	 * @throws "syntax error in choice format pattern: " if there is a syntax error
 	 * @return {string} the formatted string
@@ -3754,18 +3754,18 @@ ilib.String.prototype = {
 		var arg;
 		var result = undefined;
 		var defaultCase = "";
-	
+
 		if (this.str.length === 0) {
 			// nothing to do
 			return "";
 		}
-		
+
 		// first parse all the choices
-		for (i = 0; i < choices.length; i++) {		
-			parts = choices[i].split("#");		
+		for (i = 0; i < choices.length; i++) {
+			parts = choices[i].split("#");
 			if (parts.length > 2) {
 				limits[i] = parts[0];
-				parts = parts.shift();			
+				parts = parts.shift();
 				strings[i] = parts.join("#");
 			} else if (parts.length === 2) {
 				limits[i] = parts[0];
@@ -3773,38 +3773,38 @@ ilib.String.prototype = {
 			} else {
 				// syntax error
 				throw "syntax error in choice format pattern: " + choices[i];
-			}		
+			}
 		}
-		
+
 		// then apply the argument index
 		for (i = 0; i < limits.length; i++) {
 			if (limits[i].length === 0) {
 				// this is default case
-				defaultCase = new ilib.String(strings[i]);			
+				defaultCase = new ilib.String(strings[i]);
 			} else {
 				switch (type) {
 					case 'number':
 						arg = parseInt(argIndex, 10);
-											
-						if (limits[i].substring(0,2) === "<=") {						
+
+						if (limits[i].substring(0,2) === "<=") {
 							limit = parseFloat(limits[i].substring(2));
 							if (arg <= limit) {
 								result = new ilib.String(strings[i]);
 								i = limits.length;
 							}
-						} else if (limits[i].substring(0,2) === ">=") {						
+						} else if (limits[i].substring(0,2) === ">=") {
 							limit = parseFloat(limits[i].substring(2));
 							if (arg >= limit) {
 								result = new ilib.String(strings[i]);
 								i = limits.length;
 							}
-						} else if (limits[i].charAt(0) === "<") {						
+						} else if (limits[i].charAt(0) === "<") {
 							limit = parseFloat(limits[i].substring(1));
 							if (arg < limit) {
 								result = new ilib.String(strings[i]);
 								i = limits.length;
 							}
-						} else if (limits[i].charAt(0) === ">") {						
+						} else if (limits[i].charAt(0) === ">") {
 							limit = parseFloat(limits[i].substring(1));
 							if (arg > limit) {
 								result = new ilib.String(strings[i]);
@@ -3830,15 +3830,15 @@ ilib.String.prototype = {
 									break;
 								default:
 									var dash = limits[i].indexOf("-");
-									if (dash !== -1) {							
+									if (dash !== -1) {
 										// range
 										var start = limits[i].substring(0, dash);
-										var end = limits[i].substring(dash+1);							
-										if (arg >= parseInt(start, 10) && arg <= parseInt(end, 10)) {								
+										var end = limits[i].substring(dash+1);
+										if (arg >= parseInt(start, 10) && arg <= parseInt(end, 10)) {
 											result = new ilib.String(strings[i]);
 											i = limits.length;
 										}
-									} else if (arg === parseInt(limits[i], 10)) {							
+									} else if (arg === parseInt(limits[i], 10)) {
 										// exact amount
 										result = new ilib.String(strings[i]);
 										i = limits.length;
@@ -3847,16 +3847,16 @@ ilib.String.prototype = {
 							}
 						}
 						break;
-					case 'boolean':					
-						if (limits[i] === "true" && argIndex === true) {						
+					case 'boolean':
+						if (limits[i] === "true" && argIndex === true) {
 							result = new ilib.String(strings[i]);
 							i = limits.length;
-						} else if (limits[i] === "false" && argIndex === false) {						
+						} else if (limits[i] === "false" && argIndex === false) {
 							result = new ilib.String(strings[i]);
 							i = limits.length;
 						}
 						break;
-					case 'string':					
+					case 'string':
 						var regexp = new RegExp(limits[i], "i");
 						if (regexp.test(argIndex)) {
 							result = new ilib.String(strings[i]);
@@ -3868,16 +3868,16 @@ ilib.String.prototype = {
 				}
 			}
 		}
-		
-		if (!result) {		
+
+		if (!result) {
 			result = defaultCase || new ilib.String("");
 		}
-		
+
 		result = result.format(params);
-		
+
 		return result.toString();
 	},
-	
+
 	// delegates
 	/**
 	 * Same as String.toString()
@@ -3886,7 +3886,7 @@ ilib.String.prototype = {
 	toString: function () {
 		return this.str.toString();
 	},
-	
+
 	/**
 	 * Same as String.valueOf()
 	 * @return {string} this instance as a regular Javascript string
@@ -3894,7 +3894,7 @@ ilib.String.prototype = {
 	valueOf: function () {
 		return this.str.valueOf();
 	},
-	
+
 	/**
 	 * Same as String.charAt()
 	 * @param {number} index the index of the character being sought
@@ -3903,21 +3903,21 @@ ilib.String.prototype = {
 	charAt: function(index) {
 		return new ilib.String(this.str.charAt(index));
 	},
-	
+
 	/**
-	 * Same as String.charCodeAt(). This only reports on 
+	 * Same as String.charCodeAt(). This only reports on
 	 * 2-byte UCS-2 Unicode values, and does not take into
 	 * account supplementary characters encoded in UTF-16.
 	 * If you would like to take account of those characters,
 	 * use codePointAt() instead.
 	 * @param {number} index the index of the character being sought
-	 * @return {number} the character code of the character at the 
-	 * given index in the string 
+	 * @return {number} the character code of the character at the
+	 * given index in the string
 	 */
 	charCodeAt: function(index) {
 		return this.str.charCodeAt(index);
 	},
-	
+
 	/**
 	 * Same as String.concat()
 	 * @param {string} strings strings to concatenate to the current one
@@ -3926,31 +3926,31 @@ ilib.String.prototype = {
 	concat: function(strings) {
 		return new ilib.String(this.str.concat(strings));
 	},
-	
+
 	/**
 	 * Same as String.indexOf()
 	 * @param {string} searchValue string to search for
 	 * @param {number} start index into the string to start searching, or
 	 * undefined to search the entire string
 	 * @return {number} index into the string of the string being sought,
-	 * or -1 if the string is not found 
+	 * or -1 if the string is not found
 	 */
 	indexOf: function(searchValue, start) {
 		return this.str.indexOf(searchValue, start);
 	},
-	
+
 	/**
 	 * Same as String.lastIndexOf()
 	 * @param {string} searchValue string to search for
 	 * @param {number} start index into the string to start searching, or
 	 * undefined to search the entire string
 	 * @return {number} index into the string of the string being sought,
-	 * or -1 if the string is not found 
+	 * or -1 if the string is not found
 	 */
 	lastIndexOf: function(searchValue, start) {
 		return this.str.lastIndexOf(searchValue, start);
 	},
-	
+
 	/**
 	 * Same as String.match()
 	 * @param {string} regexp the regular expression to match
@@ -3959,7 +3959,7 @@ ilib.String.prototype = {
 	match: function(regexp) {
 		return this.str.match(regexp);
 	},
-	
+
 	/**
 	 * Same as String.replace()
 	 * @param {string} searchValue a regular expression to search for
@@ -3970,7 +3970,7 @@ ilib.String.prototype = {
 	replace: function(searchValue, newValue) {
 		return new ilib.String(this.str.replace(searchValue, newValue));
 	},
-	
+
 	/**
 	 * Same as String.search()
 	 * @param {string} regexp the regular expression to search for
@@ -3979,7 +3979,7 @@ ilib.String.prototype = {
 	search: function(regexp) {
 		return this.str.search(regexp);
 	},
-	
+
 	/**
 	 * Same as String.slice()
 	 * @param {number} start first character to include in the string
@@ -3990,65 +3990,65 @@ ilib.String.prototype = {
 	slice: function(start, end) {
 		return new ilib.String(this.str.slice(start, end));
 	},
-	
+
 	/**
 	 * Same as String.split()
 	 * @param {string} separator regular expression to match to find
 	 * separations between the parts of the text
-	 * @param {number} limit maximum number of items in the final 
+	 * @param {number} limit maximum number of items in the final
 	 * output array. Any items beyond that limit will be ignored.
-	 * @return {Array.<string>} the parts of the current string split 
+	 * @return {Array.<string>} the parts of the current string split
 	 * by the separator
 	 */
 	split: function(separator, limit) {
 		return this.str.split(separator, limit);
 	},
-	
+
 	/**
 	 * Same as String.substr()
-	 * @param {number} start the index of the character that should 
+	 * @param {number} start the index of the character that should
 	 * begin the returned substring
 	 * @param {number} length the number of characters to return after
 	 * the start character.
-	 * @return {ilib.String} the requested substring 
+	 * @return {ilib.String} the requested substring
 	 */
 	substr: function(start, length) {
 		return new ilib.String(this.str.substr(start, length));
 	},
-	
+
 	/**
 	 * Same as String.substring()
-	 * @param {number} from the index of the character that should 
+	 * @param {number} from the index of the character that should
 	 * begin the returned substring
 	 * @param {number} to the index where to stop the extraction. If
 	 * omitted, extracts the rest of the string
-	 * @return {ilib.String} the requested substring 
+	 * @return {ilib.String} the requested substring
 	 */
 	substring: function(from, to) {
 		return this.str.substring(from, to);
 	},
-	
+
 	/**
 	 * Same as String.toLowerCase(). Note that this method is
-	 * not locale-sensitive. 
+	 * not locale-sensitive.
 	 * @return {ilib.String} a string with the first character
 	 * lower-cased
 	 */
 	toLowerCase: function() {
 		return this.str.toLowerCase();
 	},
-	
+
 	/**
 	 * Same as String.toUpperCase(). Note that this method is
 	 * not locale-sensitive. Use toLocaleUpperCase() instead
-	 * to get locale-sensitive behaviour. 
+	 * to get locale-sensitive behaviour.
 	 * @return {ilib.String} a string with the first character
 	 * upper-cased
 	 */
 	toUpperCase: function() {
 		return this.str.toUpperCase();
 	},
-	
+
 	/**
 	 * Convert the character or the surrogate pair at the given
 	 * index into the string to a Unicode UCS-4 code point.
@@ -4060,25 +4060,25 @@ ilib.String.prototype = {
 	_toCodePoint: function (index) {
 		return ilib.String.toCodePoint(this.str, index);
 	},
-	
+
 	/**
-	 * Call the callback with each character in the string one at 
-	 * a time, taking care to step through the surrogate pairs in 
+	 * Call the callback with each character in the string one at
+	 * a time, taking care to step through the surrogate pairs in
 	 * the UTF-16 encoding properly.<p>
-	 * 
+	 *
 	 * The standard Javascript String's charAt() method only
-	 * returns a particular 16-bit character in the 
+	 * returns a particular 16-bit character in the
 	 * UTF-16 encoding scheme.
-	 * If the index to charAt() is pointing to a low- or 
+	 * If the index to charAt() is pointing to a low- or
 	 * high-surrogate character,
-	 * it will return the surrogate character rather 
-	 * than the the character 
-	 * in the supplementary planes that the two surrogates together 
+	 * it will return the surrogate character rather
+	 * than the the character
+	 * in the supplementary planes that the two surrogates together
 	 * encode. This function will call the callback with the full
-	 * character, making sure to join two  
+	 * character, making sure to join two
 	 * surrogates into one character in the supplementary planes
 	 * where necessary.<p>
-	 * 
+	 *
 	 * @param {function(string)} callback a callback function to call with each
 	 * full character in the current string
 	 */
@@ -4092,22 +4092,22 @@ ilib.String.prototype = {
 	},
 
 	/**
-	 * Call the callback with each numeric code point in the string one at 
-	 * a time, taking care to step through the surrogate pairs in 
+	 * Call the callback with each numeric code point in the string one at
+	 * a time, taking care to step through the surrogate pairs in
 	 * the UTF-16 encoding properly.<p>
-	 * 
+	 *
 	 * The standard Javascript String's charCodeAt() method only
-	 * returns information about a particular 16-bit character in the 
+	 * returns information about a particular 16-bit character in the
 	 * UTF-16 encoding scheme.
-	 * If the index to charCodeAt() is pointing to a low- or 
+	 * If the index to charCodeAt() is pointing to a low- or
 	 * high-surrogate character,
-	 * it will return the code point of the surrogate character rather 
-	 * than the code point of the character 
-	 * in the supplementary planes that the two surrogates together 
+	 * it will return the code point of the surrogate character rather
+	 * than the code point of the character
+	 * in the supplementary planes that the two surrogates together
 	 * encode. This function will call the callback with the full
-	 * code point of each character, making sure to join two  
+	 * code point of each character, making sure to join two
 	 * surrogates into one code point in the supplementary planes.<p>
-	 * 
+	 *
 	 * @param {function(string)} callback a callback function to call with each
 	 * code point in the current string
 	 */
@@ -4122,24 +4122,24 @@ ilib.String.prototype = {
 
 	/**
 	 * Return an iterator that will step through all of the characters
-	 * in the string one at a time and return their code points, taking 
-	 * care to step through the surrogate pairs in UTF-16 encoding 
+	 * in the string one at a time and return their code points, taking
+	 * care to step through the surrogate pairs in UTF-16 encoding
 	 * properly.<p>
-	 * 
+	 *
 	 * The standard Javascript String's charCodeAt() method only
-	 * returns information about a particular 16-bit character in the 
+	 * returns information about a particular 16-bit character in the
 	 * UTF-16 encoding scheme.
 	 * If the index is pointing to a low- or high-surrogate character,
-	 * it will return a code point of the surrogate character rather 
-	 * than the code point of the character 
-	 * in the supplementary planes that the two surrogates together 
+	 * it will return a code point of the surrogate character rather
+	 * than the code point of the character
+	 * in the supplementary planes that the two surrogates together
 	 * encode.<p>
-	 * 
+	 *
 	 * The iterator instance returned has two methods, hasNext() which
 	 * returns true if the iterator has more code points to iterate through,
 	 * and next() which returns the next code point as a number.<p>
-	 * 
-	 * @return {Object} an iterator 
+	 *
+	 * @return {Object} an iterator
 	 * that iterates through all the code points in the string
 	 */
 	iterator: function() {
@@ -4166,23 +4166,23 @@ ilib.String.prototype = {
 
 	/**
 	 * Return an iterator that will step through all of the characters
-	 * in the string one at a time, taking 
-	 * care to step through the surrogate pairs in UTF-16 encoding 
+	 * in the string one at a time, taking
+	 * care to step through the surrogate pairs in UTF-16 encoding
 	 * properly.<p>
-	 * 
+	 *
 	 * The standard Javascript String's charAt() method only
-	 * returns information about a particular 16-bit character in the 
+	 * returns information about a particular 16-bit character in the
 	 * UTF-16 encoding scheme.
 	 * If the index is pointing to a low- or high-surrogate character,
-	 * it will return that surrogate character rather 
-	 * than the surrogate pair which represents a character 
+	 * it will return that surrogate character rather
+	 * than the surrogate pair which represents a character
 	 * in the supplementary planes.<p>
-	 * 
+	 *
 	 * The iterator instance returned has two methods, hasNext() which
 	 * returns true if the iterator has more characters to iterate through,
 	 * and next() which returns the next character.<p>
-	 * 
-	 * @return {Object} an iterator 
+	 *
+	 * @return {Object} an iterator
 	 * that iterates through all the characters in the string
 	 */
 	charIterator: function() {
@@ -4198,8 +4198,8 @@ ilib.String.prototype = {
 				var ch;
 				if (this.index < istring.str.length) {
 					ch = istring.str.charAt(this.index);
-					if (ilib.String._isSurrogate(ch) && 
-							this.index+1 < istring.str.length && 
+					if (ilib.String._isSurrogate(ch) &&
+							this.index+1 < istring.str.length &&
 							ilib.String._isSurrogate(istring.str.charAt(this.index+1))) {
 						this.index++;
 						ch += istring.str.charAt(this.index);
@@ -4211,12 +4211,12 @@ ilib.String.prototype = {
 		};
 		return new _chiterator(this);
 	},
-	
+
 	/**
-	 * Return the code point at the given index when the string is viewed 
+	 * Return the code point at the given index when the string is viewed
 	 * as an array of code points. If the index is beyond the end of the
 	 * array of code points or if the index is negative, -1 is returned.
-	 * @param {number} index index of the code point 
+	 * @param {number} index index of the code point
 	 * @return {number} code point of the character at the given index into
 	 * the string
 	 */
@@ -4232,7 +4232,7 @@ ilib.String.prototype = {
 		}
 		return (count < 0) ? ch : -1;
 	},
-	
+
 	/**
 	 * Set the locale to use when processing choice formats. The locale
 	 * affects how number classes are interpretted. In some cultures,
@@ -4241,7 +4241,7 @@ ilib.String.prototype = {
 	 * 3 or 4".
 	 * @param {ilib.Locale|string} locale locale to use when processing choice
 	 * formats with this string
-	 * @param {boolean=} sync [optional] whether to load the locale data synchronously 
+	 * @param {boolean=} sync [optional] whether to load the locale data synchronously
 	 * or not
 	 * @param {Object=} loadParams [optional] parameters to pass to the loader function
 	 * @param {function(*)=} onLoad [optional] function to call when the loading is done
@@ -4253,7 +4253,7 @@ ilib.String.prototype = {
 			this.localeSpec = locale;
 			this.locale = new ilib.Locale(locale);
 		}
-		
+
 		ilib.String.loadPlurals(typeof(sync) !== 'undefined' ? sync : true, this.locale, loadParams, onLoad);
 	},
 
@@ -4273,8 +4273,8 @@ ilib.String.prototype = {
 	/**
 	 * Return the number of code points in this string. This may be different
 	 * than the number of characters, as the UTF-16 encoding that Javascript
-	 * uses for its basis returns surrogate pairs separately. Two 2-byte 
-	 * surrogate characters together make up one character/code point in 
+	 * uses for its basis returns surrogate pairs separately. Two 2-byte
+	 * surrogate characters together make up one character/code point in
 	 * the supplementary character planes. If your string contains no
 	 * characters in the supplementary planes, this method will return the
 	 * same thing as the length() method.
@@ -4284,17 +4284,17 @@ ilib.String.prototype = {
 		if (this.cpLength === -1) {
 			var it = this.iterator();
 			this.cpLength = 0;
-			while (it.hasNext()) { 
+			while (it.hasNext()) {
 				this.cpLength++;
 				it.next();
 			};
 		}
-		return this.cpLength;	
+		return this.cpLength;
 	}
 };
 /*
  * calendar.js - Represent a calendar object.
- * 
+ *
  * Copyright © 2012, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -4319,9 +4319,9 @@ localeinfo.js
 
 /**
  * Interface that all calendars must implement.
- * 
+ *
  * Depends directive: !depends calendar.js
- * 
+ *
  * @interface
  * @protected
  */
@@ -4330,15 +4330,15 @@ ilib.Cal = function() {
 
 /**
  * Factory method to create a new instance of a calendar subclass.<p>
- * 
+ *
  * The options parameter can be an object that contains the following
  * properties:
- * 
+ *
  * <ul>
  * <li><i>type</i> - specify the type of the calendar desired. The
- * list of valid values changes depending on which calendars are 
- * defined. When assembling your iliball.js, include those calendars 
- * you wish to use in your program or web page, and they will register 
+ * list of valid values changes depending on which calendars are
+ * defined. When assembling your iliball.js, include those calendars
+ * you wish to use in your program or web page, and they will register
  * themselves with this factory method. The "official", "gregorian",
  * and "julian" calendars are all included by default, as they are the
  * standard calendars for much of the world.
@@ -4346,14 +4346,14 @@ ilib.Cal = function() {
  * For example, the "official" calendar transitions from a Julian-style
  * calendar to a Gregorian-style calendar on a different date for
  * each country, as the governments of those countries decided to
- * adopt the Gregorian calendar at different times. 
+ * adopt the Gregorian calendar at different times.
  * </ul>
- * 
+ *
  * If a locale is specified, but no type, then the calendar that is default for
  * the locale will be instantiated and returned. If neither the type nor
  * the locale are specified, then the calendar for the default locale will
- * be used. 
- * 
+ * be used.
+ *
  * @param {Object=} options options controlling the construction of this instance, or
  * undefined to use the default options
  * @return {ilib.Cal} an instance of a calendar object of the appropriate type
@@ -4366,71 +4366,71 @@ ilib.Cal.newInstance = function (options) {
 	if (!locale) {
 		locale = new ilib.Locale();	// default locale
 	}
-	
+
 	if (!type) {
 		var info = new ilib.LocaleInfo(locale);
 		type = info.getCalendar();
 	}
-	
+
 	cons = ilib.Cal._constructors[type];
-	
+
 	// pass the same options through to the constructor so the subclass
 	// has the ability to do something with if it needs to
 	return cons && new cons(options);
 };
 
 /* place for the subclasses to put their constructors so that the factory method
- * can find them. Do this to add your calendar after it's defined: 
+ * can find them. Do this to add your calendar after it's defined:
  * ilib.Cal._constructors["mytype"] = ilib.Cal.MyTypeConstructor;
  */
 ilib.Cal._constructors = {};
 
 /**
  * Return an array of known calendar types that the factory method can instantiate.
- * 
+ *
  * @return {Array.<string>} an array of calendar types
  */
 ilib.Cal.getCalendars = function () {
 	var arr = [],
 		c;
-	
+
 	for (c in ilib.Cal._constructors) {
 		if (c && ilib.Cal._constructors[c]) {
 			arr.push(c); // code like a pirate
 		}
 	}
-	
+
 	return arr;
 };
 
 ilib.Cal.prototype = {
 	/**
 	 * Return the type of this calendar.
-	 * 
-	 * @return {string} the name of the type of this calendar 
+	 *
+	 * @return {string} the name of the type of this calendar
 	 */
 	getType: function() {
 		throw "Cannot call methods of abstract class ilib.Cal";
 	},
-	
+
 	/**
 	 * Return the number of months in the given year. The number of months in a year varies
-	 * for some luni-solar calendars because in some years, an extra month is needed to extend the 
+	 * for some luni-solar calendars because in some years, an extra month is needed to extend the
 	 * days in a year to an entire solar year. The month is represented as a 1-based number
 	 * where 1=first month, 2=second month, etc.
-	 * 
+	 *
 	 * @param {number} year a year for which the number of months is sought
 	 * @return {number} The number of months in the given year
 	 */
 	getNumMonths: function(year) {
 		throw "Cannot call methods of abstract class ilib.Cal";
 	},
-	
+
 	/**
 	 * Return the number of days in a particular month in a particular year. This function
 	 * can return a different number for a month depending on the year because of things
 	 * like leap years.
-	 * 
+	 *
 	 * @param {number} month the month for which the length is sought
 	 * @param {number} year the year within which that month can be found
 	 * @return {number} the number of days within the given month in the given year
@@ -4438,11 +4438,11 @@ ilib.Cal.prototype = {
 	getMonLength: function(month, year) {
 		throw "Cannot call methods of abstract class ilib.Cal";
 	},
-	
+
 	/**
 	 * Return true if the given year is a leap year in this calendar.
 	 * The year parameter may be given as a number.
-	 * 
+	 *
 	 * @param {number} year the year for which the leap year information is being sought
 	 * @return {boolean} true if the given year is a leap year
 	 */
@@ -4453,7 +4453,7 @@ ilib.Cal.prototype = {
 
 /*
  * julianday.js - A Julian date object.
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -4475,14 +4475,14 @@ ilib.Cal.prototype = {
 /**
  * @class
  * A Julian Day class. A Julian Day is a date based on the Julian Day count
- * of time invented by Joseph Scaliger in 1583 for use with astronomical calculations. 
+ * of time invented by Joseph Scaliger in 1583 for use with astronomical calculations.
  * Do not confuse it with a date in the Julian calendar, which it has very
  * little in common with. The naming is unfortunately close, and comes from history.<p>
- * 
+ *
  * Depends directive: !depends julianday.js
- * 
+ *
  * @constructor
- * @param {number} num the Julian Day expressed as a floating point number 
+ * @param {number} num the Julian Day expressed as a floating point number
  */
 ilib.JulianDay = function(num) {
 	this.jd = num;
@@ -4494,37 +4494,37 @@ ilib.JulianDay.prototype = {
 	/**
 	 * Return the integral portion of this Julian Day instance. This corresponds to
 	 * the number of days since the beginning of the epoch.
-	 * 
+	 *
 	 * @return {number} the integral portion of this Julian Day
 	 */
 	getDays: function() {
 		return this.days;
 	},
-	
+
 	/**
 	 * Set the date of this Julian Day instance.
-	 * 
+	 *
 	 * @param {number} days the julian date expressed as a floating point number
 	 */
 	setDays: function(days) {
 		this.days = Math.floor(days);
 		this.jd = this.days + this.frac;
 	},
-	
+
 	/**
-	 * Return the fractional portion of this Julian Day instance. This portion 
+	 * Return the fractional portion of this Julian Day instance. This portion
 	 * corresponds to the time of day for the instance.
 	 */
 	getDayFraction: function() {
 		return this.frac;
 	},
-	
+
 	/**
 	 * Set the fractional part of the Julian Day. The fractional part represents
 	 * the portion of a fully day. Julian dates start at noon, and proceed until
 	 * noon of the next day. That would mean midnight is represented as a fractional
 	 * part of 0.5.
-	 * 
+	 *
 	 * @param {number} fraction The fractional part of the Julian date
 	 */
 	setDayFraction: function(fraction) {
@@ -4532,29 +4532,29 @@ ilib.JulianDay.prototype = {
 		this.frac = fraction - t;
 		this.jd = this.days + this.frac;
 	},
-	
-	/** 
+
+	/**
 	 * Return the Julian Day expressed as a floating point number.
 	 * @return {number} the Julian Day as a number
 	 */
 	getDate: function () {
 		return this.jd;
 	},
-	
+
 	/**
 	 * Set the date of this Julian Day instance.
-	 * 
+	 *
 	 * @param {number} num the numeric Julian Day to set into this instance
 	 */
 	setDate: function (num) {
 		this.jd = num;
 	},
-	
+
 	/**
 	 * Add an offset to the current date instance. The offset should be expressed in
 	 * terms of Julian days. That is, each integral unit represents one day of time, and
 	 * fractional part represents a fraction of a regular 24-hour day.
-	 * 
+	 *
 	 * @param {number} offset an amount to add (or subtract) to the current result instance.
 	 */
 	addDate: function(offset) {
@@ -4568,7 +4568,7 @@ ilib.JulianDay.prototype = {
 
 /*
  * gregorian.js - Represent a Gregorian calendar object.
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -4592,9 +4592,9 @@ ilib.JulianDay.prototype = {
  * @class
  * Construct a new Gregorian calendar object. This class encodes information about
  * a Gregorian calendar.<p>
- * 
+ *
  * Depends directive: !depends gregorian.js
- * 
+ *
  * @constructor
  * @implements ilib.Cal
  */
@@ -4603,10 +4603,10 @@ ilib.Cal.Gregorian = function() {
 };
 
 /**
- * the lengths of each month 
+ * the lengths of each month
  * @private
  * @const
- * @type Array.<number> 
+ * @type Array.<number>
  */
 ilib.Cal.Gregorian.monthLengths = [
 	31,  /* Jan */
@@ -4625,10 +4625,10 @@ ilib.Cal.Gregorian.monthLengths = [
 
 /**
  * Return the number of months in the given year. The number of months in a year varies
- * for some luni-solar calendars because in some years, an extra month is needed to extend the 
+ * for some luni-solar calendars because in some years, an extra month is needed to extend the
  * days in a year to an entire solar year. The month is represented as a 1-based number
  * where 1=first month, 2=second month, etc.
- * 
+ *
  * @param {number} year a year for which the number of months is sought
  * @return {number} The number of months in the given year
  */
@@ -4640,7 +4640,7 @@ ilib.Cal.Gregorian.prototype.getNumMonths = function(year) {
  * Return the number of days in a particular month in a particular year. This function
  * can return a different number for a month depending on the year because of things
  * like leap years.
- * 
+ *
  * @param {number} month the month for which the length is sought
  * @param {number} year the year within which that month can be found
  * @return {number} the number of days within the given month in the given year
@@ -4667,8 +4667,8 @@ ilib.Cal.Gregorian.prototype.isLeapYear = function(year) {
 
 /**
  * Return the type of this calendar.
- * 
- * @return {string} the name of the type of this calendar 
+ *
+ * @return {string} the name of the type of this calendar
  */
 ilib.Cal.Gregorian.prototype.getType = function() {
 	return this.type;
@@ -4677,7 +4677,7 @@ ilib.Cal.Gregorian.prototype.getType = function() {
 /**
  * Return a date instance for this calendar type using the given
  * options.
- * @param {Object} options options controlling the construction of 
+ * @param {Object} options options controlling the construction of
  * the date instance
  * @return {ilib.Date} a date appropriate for this calendar type
  */
@@ -4690,7 +4690,7 @@ ilib.Cal._constructors["gregorian"] = ilib.Cal.Gregorian;
 
 /*
  * ratadie.js - Represent the RD date number in the calendar
- * 
+ *
  * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -4707,68 +4707,68 @@ ilib.Cal._constructors["gregorian"] = ilib.Cal.Gregorian;
  * limitations under the License.
  */
 
-/* !depends 
+/* !depends
 util/utils.js
 util/math.js
-julianday.js 
+julianday.js
 */
 
 /**
  * @class
- * Construct a new RD date number object. The constructor parameters can 
+ * Construct a new RD date number object. The constructor parameters can
  * contain any of the following properties:
- * 
+ *
  * <ul>
- * <li><i>unixtime<i> - sets the time of this instance according to the given 
+ * <li><i>unixtime<i> - sets the time of this instance according to the given
  * unix time. Unix time is the number of milliseconds since midnight on Jan 1, 1970.
- * 
+ *
  * <li><i>julianday</i> - sets the time of this instance according to the given
  * Julian Day instance or the Julian Day given as a float
- * 
+ *
  * <li><i>cycle</i> - any integer giving the number of 60-year cycle in which the date is located.
- * If the cycle is not given but the year is, it is assumed that the year parameter is a fictitious 
+ * If the cycle is not given but the year is, it is assumed that the year parameter is a fictitious
  * linear count of years since the beginning of the epoch, much like other calendars. This linear
- * count is never used. If both the cycle and year are given, the year is wrapped to the range 0 
+ * count is never used. If both the cycle and year are given, the year is wrapped to the range 0
  * to 60 and treated as if it were a year in the regular 60-year cycle.
- * 
+ *
  * <li><i>year</i> - any integer, including 0
- * 
+ *
  * <li><i>month</i> - 1 to 12, where 1 means January, 2 means February, etc.
- * 
+ *
  * <li><i>day</i> - 1 to 31
- * 
- * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation 
+ *
+ * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation
  * is always done with an unambiguous 24 hour representation
- * 
+ *
  * <li><i>minute</i> - 0 to 59
- * 
+ *
  * <li><i>second</i> - 0 to 59
- * 
+ *
  * <li><i>millisecond</i> - 0 to 999
- * 
- * <li><i>parts</i> - 0 to 1079. Specify the halaqim parts of an hour. Either specify 
+ *
+ * <li><i>parts</i> - 0 to 1079. Specify the halaqim parts of an hour. Either specify
  * the parts or specify the minutes, seconds, and milliseconds, but not both. This is only used
- * in the Hebrew calendar. 
- * 
+ * in the Hebrew calendar.
+ *
  * <li><i>minute</i> - 0 to 59
- * 
+ *
  * <li><i>date</i> - use the given intrinsic Javascript date to initialize this one.
  * </ul>
  *
  * If the constructor is called with another date instance instead of
  * a parameter block, the other instance acts as a parameter block and its
  * settings are copied into the current instance.<p>
- * 
- * If the constructor is called with no arguments at all or if none of the 
- * properties listed above are present, then the RD is calculate based on 
+ *
+ * If the constructor is called with no arguments at all or if none of the
+ * properties listed above are present, then the RD is calculate based on
  * the current date at the time of instantiation. <p>
- * 
+ *
  * If any of the properties from <i>year</i> through <i>millisecond</i> are not
  * specified in the params, it is assumed that they have the smallest possible
  * value in the range for the property (zero or one).<p>
- * 
+ *
  * Depends directive: !depends ratadie.js
- * 
+ *
  * @private
  * @constructor
  * @param {Object=} params parameters that govern the settings and behaviour of this RD date
@@ -4794,7 +4794,7 @@ ilib.Date.RataDie = function(params) {
 			this.rd = (typeof(params.rd) === 'object' && params.rd instanceof ilib.Date.RataDie) ? params.rd.rd : params.rd;
 		}
 	}
-	
+
 	/**
 	 * @type {number} the Rata Die number of this date for this calendar type
 	 */
@@ -4816,16 +4816,16 @@ ilib.Date.RataDie.prototype = {
 	 * @protected
 	 * @const
 	 * @type {number}
-	 * the difference between a zero Julian day and the zero Gregorian date. 
+	 * the difference between a zero Julian day and the zero Gregorian date.
 	 */
 	epoch: ilib.Date.RataDie.gregorianEpoch,
-	
+
 	/**
 	 * Set the RD of this instance according to the given unix time. Unix time is
 	 * the number of milliseconds since midnight on Jan 1, 1970.
 	 *
 	 * @protected
-	 * @param {number} millis the unix time to set this date to in milliseconds 
+	 * @param {number} millis the unix time to set this date to in milliseconds
 	 */
 	_setTime: function(millis) {
 		// 2440587.5 is the julian day of midnight Jan 1, 1970, UTC (Gregorian)
@@ -4844,26 +4844,26 @@ ilib.Date.RataDie.prototype = {
 	},
 
 	/**
-	 * Return the rd number of the particular day of the week on or before the 
+	 * Return the rd number of the particular day of the week on or before the
 	 * given rd. eg. The Sunday on or before the given rd.
 	 * @protected
 	 * @param {number} rd the rata die date of the reference date
-	 * @param {number} dayOfWeek the day of the week that is being sought relative 
+	 * @param {number} dayOfWeek the day of the week that is being sought relative
 	 * to the current date
 	 * @return {number} the rd of the day of the week
 	 */
 	_onOrBefore: function(rd, dayOfWeek) {
 		return rd - ilib.mod(Math.floor(rd) - dayOfWeek - 2, 7);
 	},
-	
+
 	/**
 	 * Return the rd number of the particular day of the week on or before the current rd.
 	 * eg. The Sunday on or before the current rd. If the offset is given, the calculation
-	 * happens in wall time instead of UTC. UTC time may be a day before or day behind 
+	 * happens in wall time instead of UTC. UTC time may be a day before or day behind
 	 * wall time, so it it would give the wrong day of the week if this calculation was
 	 * done in UTC time when the caller really wanted wall time. Even though the calculation
 	 * may be done in wall time, the return value is nonetheless always given in UTC.
-	 * @param {number} dayOfWeek the day of the week that is being sought relative 
+	 * @param {number} dayOfWeek the day of the week that is being sought relative
 	 * to the current date
 	 * @param {number=} offset RD offset for the time zone. Zero is assumed if this param is
 	 * not given
@@ -4873,15 +4873,15 @@ ilib.Date.RataDie.prototype = {
 		offset = offset || 0;
 		return this._onOrBefore(this.rd + offset, dayOfWeek) - offset;
 	},
-	
+
 	/**
 	 * Return the rd number of the particular day of the week on or before the current rd.
 	 * eg. The Sunday on or before the current rd. If the offset is given, the calculation
-	 * happens in wall time instead of UTC. UTC time may be a day before or day behind 
+	 * happens in wall time instead of UTC. UTC time may be a day before or day behind
 	 * wall time, so it it would give the wrong day of the week if this calculation was
 	 * done in UTC time when the caller really wanted wall time. Even though the calculation
 	 * may be done in wall time, the return value is nonetheless always given in UTC.
-	 * @param {number} dayOfWeek the day of the week that is being sought relative 
+	 * @param {number} dayOfWeek the day of the week that is being sought relative
 	 * to the reference date
 	 * @param {number=} offset RD offset for the time zone. Zero is assumed if this param is
 	 * not given
@@ -4891,15 +4891,15 @@ ilib.Date.RataDie.prototype = {
 		offset = offset || 0;
 		return this._onOrBefore(this.rd+6+offset, dayOfWeek) - offset;
 	},
-	
+
 	/**
 	 * Return the rd number of the particular day of the week before the current rd.
 	 * eg. The Sunday before the current rd. If the offset is given, the calculation
-	 * happens in wall time instead of UTC. UTC time may be a day before or day behind 
+	 * happens in wall time instead of UTC. UTC time may be a day before or day behind
 	 * wall time, so it it would give the wrong day of the week if this calculation was
 	 * done in UTC time when the caller really wanted wall time. Even though the calculation
 	 * may be done in wall time, the return value is nonetheless always given in UTC.
-	 * @param {number} dayOfWeek the day of the week that is being sought relative 
+	 * @param {number} dayOfWeek the day of the week that is being sought relative
 	 * to the reference date
 	 * @param {number=} offset RD offset for the time zone. Zero is assumed if this param is
 	 * not given
@@ -4909,15 +4909,15 @@ ilib.Date.RataDie.prototype = {
 		offset = offset || 0;
 		return this._onOrBefore(this.rd-1+offset, dayOfWeek) - offset;
 	},
-	
+
 	/**
 	 * Return the rd number of the particular day of the week after the current rd.
 	 * eg. The Sunday after the current rd. If the offset is given, the calculation
-	 * happens in wall time instead of UTC. UTC time may be a day before or day behind 
+	 * happens in wall time instead of UTC. UTC time may be a day before or day behind
 	 * wall time, so it it would give the wrong day of the week if this calculation was
 	 * done in UTC time when the caller really wanted wall time. Even though the calculation
 	 * may be done in wall time, the return value is nonetheless always given in UTC.
-	 * @param {number} dayOfWeek the day of the week that is being sought relative 
+	 * @param {number} dayOfWeek the day of the week that is being sought relative
 	 * to the reference date
 	 * @param {number=} offset RD offset for the time zone. Zero is assumed if this param is
 	 * not given
@@ -4931,10 +4931,10 @@ ilib.Date.RataDie.prototype = {
 	/**
 	 * Return the unix time equivalent to this Gregorian date instance. Unix time is
 	 * the number of milliseconds since midnight on Jan 1, 1970 UTC. This method only
-	 * returns a valid number for dates between midnight, Jan 1, 1970 and  
-	 * Jan 19, 2038 at 3:14:07am when the unix time runs out. If this instance 
+	 * returns a valid number for dates between midnight, Jan 1, 1970 and
+	 * Jan 19, 2038 at 3:14:07am when the unix time runs out. If this instance
 	 * encodes a date outside of that range, this method will return -1.
-	 * 
+	 *
 	 * @return {number} a number giving the unix time, or -1 if the date is outside the
 	 * valid unix time range
 	 */
@@ -4942,10 +4942,10 @@ ilib.Date.RataDie.prototype = {
 		// earlier than Jan 1, 1970
 		// or later than Jan 19, 2038 at 3:14:07am
 		var jd = this.getJulianDay();
-		if (jd < 2440587.5 || jd > 2465442.634803241) { 
+		if (jd < 2440587.5 || jd > 2465442.634803241) {
 			return -1;
 		}
-	
+
 		// avoid the rounding errors in the floating point math by only using
 		// the whole days from the rd, and then calculating the milliseconds directly
 		return Math.round((jd - 2440587.5) * 86400000);
@@ -4954,26 +4954,26 @@ ilib.Date.RataDie.prototype = {
 	/**
 	 * Return the extended unix time equivalent to this Gregorian date instance. Unix time is
 	 * the number of milliseconds since midnight on Jan 1, 1970 UTC. Traditionally unix time
-	 * (or the type "time_t" in C/C++) is only encoded with a unsigned 32 bit integer, and thus 
-	 * runs out on Jan 19, 2038. However, most Javascript engines encode numbers well above 
-	 * 32 bits and the Date object allows you to encode up to 100 million days worth of time 
+	 * (or the type "time_t" in C/C++) is only encoded with a unsigned 32 bit integer, and thus
+	 * runs out on Jan 19, 2038. However, most Javascript engines encode numbers well above
+	 * 32 bits and the Date object allows you to encode up to 100 million days worth of time
 	 * after Jan 1, 1970, and even more interestingly 100 million days worth of time before
-	 * Jan 1, 1970 as well. This method returns the number of milliseconds in that extended 
+	 * Jan 1, 1970 as well. This method returns the number of milliseconds in that extended
 	 * range. If this instance encodes a date outside of that range, this method will return
 	 * NaN.
-	 * 
-	 * @return {number} a number giving the extended unix time, or NaN if the date is outside 
+	 *
+	 * @return {number} a number giving the extended unix time, or NaN if the date is outside
 	 * the valid extended unix time range
 	 */
 	getTimeExtended: function() {
 		var jd = this.getJulianDay();
-		
+
 		// test if earlier than Jan 1, 1970 - 100 million days
 		// or later than Jan 1, 1970 + 100 million days
-		if (jd < -97559412.5 || jd > 102440587.5) { 
+		if (jd < -97559412.5 || jd > 102440587.5) {
 			return NaN;
 		}
-	
+
 		// avoid the rounding errors in the floating point math by only using
 		// the whole days from the rd, and then calculating the milliseconds directly
 		return Math.round((jd - 2440587.5) * 86400000);
@@ -4982,7 +4982,7 @@ ilib.Date.RataDie.prototype = {
 	/**
 	 * Return the Julian Day equivalent to this calendar date as a number.
 	 * This returns the julian day in UTC.
-	 * 
+	 *
 	 * @return {number} the julian date equivalent of this date
 	 */
 	getJulianDay: function() {
@@ -4991,7 +4991,7 @@ ilib.Date.RataDie.prototype = {
 
 	/**
 	 * Return the Rata Die (fixed day) number of this RD date.
-	 * 
+	 *
 	 * @return {number} the rd date as a number
 	 */
 	getRataDie: function() {
@@ -5001,7 +5001,7 @@ ilib.Date.RataDie.prototype = {
 
 /*
  * gregratadie.js - Represent the RD date number in the Gregorian calendar
- * 
+ *
  * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -5018,59 +5018,59 @@ ilib.Date.RataDie.prototype = {
  * limitations under the License.
  */
 
-/* !depends 
+/* !depends
 date.js
 calendar/gregorian.js
 calendar/ratadie.js
 util/utils.js
 util/math.js
-julianday.js 
+julianday.js
 */
 
 /**
  * @class
- * Construct a new Gregorian RD date number object. The constructor parameters can 
+ * Construct a new Gregorian RD date number object. The constructor parameters can
  * contain any of the following properties:
- * 
+ *
  * <ul>
- * <li><i>unixtime<i> - sets the time of this instance according to the given 
+ * <li><i>unixtime<i> - sets the time of this instance according to the given
  * unix time. Unix time is the number of milliseconds since midnight on Jan 1, 1970.
- * 
+ *
  * <li><i>julianday</i> - sets the time of this instance according to the given
  * Julian Day instance or the Julian Day given as a float
- * 
+ *
  * <li><i>year</i> - any integer, including 0
- * 
+ *
  * <li><i>month</i> - 1 to 12, where 1 means January, 2 means February, etc.
- * 
+ *
  * <li><i>day</i> - 1 to 31
- * 
- * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation 
+ *
+ * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation
  * is always done with an unambiguous 24 hour representation
- * 
+ *
  * <li><i>minute</i> - 0 to 59
- * 
+ *
  * <li><i>second</i> - 0 to 59
- * 
+ *
  * <li><i>millisecond</i> - 0 to 999
- * 
+ *
  * <li><i>date</i> - use the given intrinsic Javascript date to initialize this one.
  * </ul>
  *
  * If the constructor is called with another Gregorian date instance instead of
  * a parameter block, the other instance acts as a parameter block and its
  * settings are copied into the current instance.<p>
- * 
- * If the constructor is called with no arguments at all or if none of the 
- * properties listed above are present, then the RD is calculate based on 
+ *
+ * If the constructor is called with no arguments at all or if none of the
+ * properties listed above are present, then the RD is calculate based on
  * the current date at the time of instantiation. <p>
- * 
+ *
  * If any of the properties from <i>year</i> through <i>millisecond</i> are not
  * specified in the params, it is assumed that they have the smallest possible
  * value in the range for the property (zero or one).<p>
- * 
+ *
  * Depends directive: !depends gregratadie.js
- * 
+ *
  * @private
  * @constructor
  * @extends ilib.Date.RataDie
@@ -5088,7 +5088,7 @@ ilib.Date.GregRataDie.prototype.parent = ilib.Date.RataDie;
 ilib.Date.GregRataDie.prototype.constructor = ilib.Date.GregRataDie;
 
 /**
- * the cumulative lengths of each month, for a non-leap year 
+ * the cumulative lengths of each month, for a non-leap year
  * @private
  * @const
  * @type Array.<number>
@@ -5110,7 +5110,7 @@ ilib.Date.GregRataDie.cumMonthLengths = [
 ];
 
 /**
- * the cumulative lengths of each month, for a leap year 
+ * the cumulative lengths of each month, for a leap year
  * @private
  * @const
  * @type Array.<number>
@@ -5133,7 +5133,7 @@ ilib.Date.GregRataDie.cumMonthLengthsLeap = [
 
 /**
  * Calculate the Rata Die (fixed day) number of the given date.
- * 
+ *
  * @private
  * @param {Object} date the date components to calculate the RD from
  */
@@ -5150,15 +5150,15 @@ ilib.Date.GregRataDie.prototype._setDateComponents = function(date) {
 		Math.floor((year-1)/4) -
 		Math.floor((year-1)/100) +
 		Math.floor((year-1)/400);
-	
+
 	var dayInYear = (month > 1 ? ilib.Date.GregRataDie.cumMonthLengths[month-1] : 0) +
 		day +
 		(ilib.Cal.Gregorian.prototype.isLeapYear.call(this.cal, year) && month > 2 ? 1 : 0);
 	var rdtime = (hour * 3600000 +
 		minute * 60000 +
 		second * 1000 +
-		millisecond) / 
-		86400000; 
+		millisecond) /
+		86400000;
 	/*
 	debug("getRataDie: converting " +  JSON.stringify(this));
 	debug("getRataDie: year is " +  years);
@@ -5166,7 +5166,7 @@ ilib.Date.GregRataDie.prototype._setDateComponents = function(date) {
 	debug("getRataDie: rdtime is " +  rdtime);
 	debug("getRataDie: rd is " +  (years + dayInYear + rdtime));
 	*/
-	
+
 	/**
 	 * @type {number|undefined} the RD number of this Gregorian date
 	 */
@@ -5174,11 +5174,11 @@ ilib.Date.GregRataDie.prototype._setDateComponents = function(date) {
 };
 
 /**
- * Return the rd number of the particular day of the week on or before the 
+ * Return the rd number of the particular day of the week on or before the
  * given rd. eg. The Sunday on or before the given rd.
  * @private
  * @param {number} rd the rata die date of the reference date
- * @param {number} dayOfWeek the day of the week that is being sought relative 
+ * @param {number} dayOfWeek the day of the week that is being sought relative
  * to the current date
  * @return {number} the rd of the day of the week
  */
@@ -5188,7 +5188,7 @@ ilib.Date.GregRataDie.prototype._onOrBefore = function(rd, dayOfWeek) {
 
 /*
  * timezone.js - Definition of a time zone class
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -5206,8 +5206,8 @@ ilib.Date.GregRataDie.prototype._onOrBefore = function(rd, dayOfWeek) {
  */
 
 /*
-!depends 
-ilibglobal.js 
+!depends
+ilibglobal.js
 locale.js
 localeinfo.js
 util/utils.js
@@ -5219,94 +5219,94 @@ calendar/gregratadie.js
 
 /**
  * @class
- * Create a time zone instance. 
- * 
+ * Create a time zone instance.
+ *
  * This class reports and transforms
  * information about particular time zones.<p>
- * 
+ *
  * The options parameter may contain any of the following properties:
- * 
+ *
  * <ul>
- * <li><i>id</i> - The id of the requested time zone such as "Europe/London" or 
+ * <li><i>id</i> - The id of the requested time zone such as "Europe/London" or
  * "America/Los_Angeles". These are taken from the IANA time zone database. (See
  * http://www.iana.org/time-zones for more information.) <p>
- * 
- * There is one special 
+ *
+ * There is one special
  * time zone that is not taken from the IANA database called simply "local". In
  * this case, this class will attempt to discover the current time zone and
- * daylight savings time settings by calling standard Javascript classes to 
- * determine the offsets from UTC. 
- * 
+ * daylight savings time settings by calling standard Javascript classes to
+ * determine the offsets from UTC.
+ *
  * <li><i>locale</i> - The locale for this time zone.
- * 
+ *
  * <li><i>offset</i> - Choose the time zone based on the offset from UTC given in
  * number of minutes (negative is west, positive is east).
- * 
- * <li><i>onLoad</i> - a callback function to call when the data is fully 
+ *
+ * <li><i>onLoad</i> - a callback function to call when the data is fully
  * loaded. When the onLoad option is given, this class will attempt to
  * load any missing locale data using the ilib loader callback.
- * When the data is loaded, the onLoad function is called with the current 
- * instance as a parameter. 
- * 
- * <li><i>sync</i> - tell whether to load any missing locale data synchronously or 
+ * When the data is loaded, the onLoad function is called with the current
+ * instance as a parameter.
+ *
+ * <li><i>sync</i> - tell whether to load any missing locale data synchronously or
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
  * not be usable for a while.
- *  
- * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ *
+ * <li><i>loadParams</i> - an object containing parameters to pass to the
  * loader callback function when locale data is missing. The parameters are not
- * interpretted or modified in any way. They are simply passed along. The object 
+ * interpretted or modified in any way. They are simply passed along. The object
  * may contain any property/value pairs as long as the calling code is in
  * agreement with the loader callback function as to what those parameters mean.
  * </ul>
- * 
+ *
  * There is currently no way in the ECMAscript
  * standard to tell which exact time zone is currently in use. Choosing the
- * id "locale" or specifying an explicit offset will not give a specific time zone, 
- * as it is impossible to tell with certainty which zone the offsets 
+ * id "locale" or specifying an explicit offset will not give a specific time zone,
+ * as it is impossible to tell with certainty which zone the offsets
  * match.<p>
- * 
+ *
  * When the id "local" is given or the offset option is specified, this class will
  * have the following behaviours:
  * <ul>
  * <li>The display name will always be given as the RFC822 style, no matter what
  * style is requested
  * <li>The id will also be returned as the RFC822 style display name
- * <li>When the offset is explicitly given, this class will assume the time zone 
- * does not support daylight savings time, and the offsets will be calculated 
+ * <li>When the offset is explicitly given, this class will assume the time zone
+ * does not support daylight savings time, and the offsets will be calculated
  * the same way year round.
- * <li>When the offset is explicitly given, the inDaylightSavings() method will 
+ * <li>When the offset is explicitly given, the inDaylightSavings() method will
  * always return false.
- * <li>When the id "local" is given, this class will attempt to determine the 
+ * <li>When the id "local" is given, this class will attempt to determine the
  * daylight savings time settings by examining the offset from UTC on Jan 1
  * and June 1 of the current year. If they are different, this class assumes
  * that the local time zone uses DST. When the offset for a particular date is
- * requested, it will use the built-in Javascript support to determine the 
+ * requested, it will use the built-in Javascript support to determine the
  * offset for that date.
- * </ul> 
- * 
- * If a more specific time zone is 
- * needed with display names and known start/stop times for DST, use the "id" 
+ * </ul>
+ *
+ * If a more specific time zone is
+ * needed with display names and known start/stop times for DST, use the "id"
  * property instead to specify the time zone exactly. You can perhaps ask the
  * user which time zone they prefer so that your app does not need to guess.<p>
- * 
- * If the id and the offset are both not given, the default time zone for the 
+ *
+ * If the id and the offset are both not given, the default time zone for the
  * locale is retrieved from
  * the locale info. If the locale is not specified, the default locale for the
  * library is used.<p>
- * 
+ *
  * Because this class was designed for use in web sites, and the vast majority
  * of dates and times being formatted are recent date/times, this class is simplified
- * by not implementing historical time zones. That is, when governments change the 
- * time zone rules for a particular zone, only the latest such rule is implemented 
- * in this class. That means that determining the offset for a date that is prior 
+ * by not implementing historical time zones. That is, when governments change the
+ * time zone rules for a particular zone, only the latest such rule is implemented
+ * in this class. That means that determining the offset for a date that is prior
  * to the last change may give the wrong result. Historical time zone calculations
  * may be implemented in a later version of iLib if there is enough demand for it,
  * but it would entail a much larger set of time zone data that would have to be
- * loaded.  
- * 
+ * loaded.
+ *
  * Depends directive: !depends timezone.js
- * 
+ *
  * @constructor
  * @param {Object} options Options guiding the construction of this time zone instance
  */
@@ -5314,28 +5314,28 @@ ilib.TimeZone = function(options) {
 	this.sync = true;
 	this.locale = new ilib.Locale();
 	this.isLocal = false;
-	
+
 	if (options) {
 		if (options.locale) {
 			this.locale = (typeof(options.locale) === 'string') ? new ilib.Locale(options.locale) : options.locale;
 		}
-		
+
 		if (options.id) {
 			var id = options.id.toString();
 			if (id === 'local') {
 				this.isLocal = true;
-				
+
 				// use standard Javascript Date to figure out the time zone offsets
-				var now = new Date(), 
+				var now = new Date(),
 					jan1 = new Date(now.getFullYear(), 0, 1),  // months in std JS Date object are 0-based
 					jun1 = new Date(now.getFullYear(), 5, 1);
-				
+
 				// Javascript's method returns the offset backwards, so we have to
 				// take the negative to get the correct offset
 				this.offsetJan1 = -jan1.getTimezoneOffset();
 				this.offsetJun1 = -jun1.getTimezoneOffset();
-				// the offset of the standard time for the time zone is always the one that is closest 
-				// to negative infinity of the two, no matter whether you are in the northern or southern 
+				// the offset of the standard time for the time zone is always the one that is closest
+				// to negative infinity of the two, no matter whether you are in the northern or southern
 				// hemisphere, east or west
 				this.offset = Math.min(this.offsetJan1, this.offsetJun1);
 			}
@@ -5344,17 +5344,17 @@ ilib.TimeZone = function(options) {
 			this.offset = (typeof(options.offset) === 'string') ? parseInt(options.offset, 10) : options.offset;
 			this.id = this.getDisplayName(undefined, undefined);
 		}
-		
+
 		if (typeof(options.sync) !== 'undefined') {
 			this.sync = !!options.sync;
 		}
-		
+
 		this.loadParams = options.loadParams;
 		this.onLoad = options.onLoad;
 	}
 
 	//console.log("timezone: locale is " + this.locale);
-	
+
 	if (!this.id) {
 		new ilib.LocaleInfo(this.locale, {
 			sync: this.sync,
@@ -5375,19 +5375,19 @@ ilib.TimeZone = function(options) {
  * Explanation of the compressed time zone info properties.
  * {
  *     "o": "8:0",      // offset from UTC
- *     "f": "W{c}T",    // standard abbreviation. For time zones that observe DST, the {c} replacement is replaced with the 
- *                      // letter in the e.c or s.c properties below 
+ *     "f": "W{c}T",    // standard abbreviation. For time zones that observe DST, the {c} replacement is replaced with the
+ *                      // letter in the e.c or s.c properties below
  *     "e": {           // info about the end of DST
- *         "j": 78322.5 // Julian day when the transition happens. Either specify the "j" property or all of the "m", "r", and 
+ *         "j": 78322.5 // Julian day when the transition happens. Either specify the "j" property or all of the "m", "r", and
  *                      // "t" properties, but not both sets.
  *         "m": 3,      // month that it ends
- *         "r": "l0",   // rule for the day it ends "l" = "last", numbers are Sun=0 through Sat=6. Other syntax is "0>7". 
+ *         "r": "l0",   // rule for the day it ends "l" = "last", numbers are Sun=0 through Sat=6. Other syntax is "0>7".
  *                      // This means the 0-day (Sun) after the 7th of the month. Other possible operators are <, >, <=, >=
  *         "t": "2:0",  // time of day that the DST turns off, hours:minutes
- *         "c": "S"     // character to replace into the abbreviation for standard time 
+ *         "c": "S"     // character to replace into the abbreviation for standard time
  *     },
  *     "s": {           // info about the start of DST
- *         "j": 78189.5 // Julian day when the transition happens. Either specify the "j" property or all of the "m", "r", and 
+ *         "j": 78189.5 // Julian day when the transition happens. Either specify the "j" property or all of the "m", "r", and
  *                      // "t" properties, but not both sets.
  *         "m": 10,     // month that it starts
  *         "r": "l0",   // rule for the day it starts "l" = "last", numbers are Sun=0 through Sat=6. Other syntax is "0>7".
@@ -5406,11 +5406,11 @@ ilib.TimeZone.prototype._loadtzdata = function () {
 	// console.log("zoneinfo is: " + JSON.stringify(ilib.data.zoneinfo[this.id]));
 	if (!ilib.data.zoneinfo[this.id] && typeof(this.offset) === 'undefined') {
 		ilib.loadData({
-			object: ilib.TimeZone, 
-			nonlocale: true,	// locale independent 
-			name: "zoneinfo/" + this.id + ".json", 
-			sync: this.sync, 
-			loadParams: this.loadParams, 
+			object: ilib.TimeZone,
+			nonlocale: true,	// locale independent
+			name: "zoneinfo/" + this.id + ".json",
+			sync: this.sync,
+			loadParams: this.loadParams,
 			callback: ilib.bind(this, function (tzdata) {
 				if (tzdata && !ilib.isEmpty(tzdata)) {
 					ilib.data.zoneinfo[this.id] = tzdata;
@@ -5424,18 +5424,18 @@ ilib.TimeZone.prototype._loadtzdata = function () {
 };
 
 ilib.TimeZone.prototype._initZone = function() {
-	/** 
+	/**
 	 * @private
-	 * @type {{o:string,f:string,e:Object.<{m:number,r:string,t:string,z:string}>,s:Object.<{m:number,r:string,t:string,z:string,v:string,c:string}>,c:string,n:string}} 
+	 * @type {{o:string,f:string,e:Object.<{m:number,r:string,t:string,z:string}>,s:Object.<{m:number,r:string,t:string,z:string,v:string,c:string}>,c:string,n:string}}
 	 */
 	this.zone = ilib.data.zoneinfo[this.id];
 	if (!this.zone && typeof(this.offset) === 'undefined') {
 		this.id = "Etc/UTC";
 		this.zone = ilib.data.zoneinfo[this.id];
 	}
-	
+
 	this._calcDSTSavings();
-	
+
 	if (typeof(this.offset) === 'undefined' && this.zone.o) {
 		var offsetParts = this._offsetStringToObj(this.zone.o);
 		/**
@@ -5444,7 +5444,7 @@ ilib.TimeZone.prototype._initZone = function() {
 		 */
 		this.offset = (Math.abs(offsetParts.h || 0) * 60 + (offsetParts.m || 0)) * ilib.signum(offsetParts.h || 0);
 	}
-	
+
 	if (this.onLoad && typeof(this.onLoad) === 'function') {
 		this.onLoad(this);
 	}
@@ -5457,13 +5457,13 @@ ilib.data.timezone = {};
  * The country parameter is optional. If it is not given, all time zones will
  * be returned. If it specifies a country code, then only time zones for that
  * country will be returned.
- * 
+ *
  * @param {string} country country code for which time zones are being sought
  * @return {Array.<string>} an array of zone id strings
  */
 ilib.TimeZone.getAvailableIds = function (country) {
 	var tz, ids = [];
-	
+
 	if (!ilib.data.timezone.list) {
 		ilib.data.timezone.list = [];
 		if (ilib._load instanceof ilib.Loader) {
@@ -5486,7 +5486,7 @@ ilib.TimeZone.getAvailableIds = function (country) {
 			}
 		}
 	}
-	
+
 	if (!country) {
 		// special zone meaning "the local time zone according to the JS engine we are running upon"
 		ids.push("local");
@@ -5498,10 +5498,10 @@ ilib.TimeZone.getAvailableIds = function (country) {
 	} else {
 		if (!ilib.data.zoneinfo.zonetab) {
 			ilib.loadData({
-				object: ilib.TimeZone, 
-				nonlocale: true,	// locale independent 
-				name: "zoneinfo/zonetab.json", 
-				sync: true, 
+				object: ilib.TimeZone,
+				nonlocale: true,	// locale independent
+				name: "zoneinfo/zonetab.json",
+				sync: true,
 				callback: ilib.bind(this, function (tzdata) {
 					if (tzdata) {
 						ilib.data.zoneinfo.zonetab = tzdata;
@@ -5511,7 +5511,7 @@ ilib.TimeZone.getAvailableIds = function (country) {
 		}
 		ids = ilib.data.zoneinfo.zonetab[country];
 	}
-	
+
 	return ids;
 };
 
@@ -5527,20 +5527,20 @@ ilib.TimeZone.prototype.getId = function () {
  * Return the abbreviation that is used for the current time zone on the given date.
  * The date may be in DST or during standard time, and many zone names have different
  * abbreviations depending on whether or not the date is falls within DST.<p>
- * 
+ *
  * There are two styles that are supported:
- * 
+ *
  * <ol>
- * <li>standard - returns the 3 to 5 letter abbreviation of the time zone name such 
+ * <li>standard - returns the 3 to 5 letter abbreviation of the time zone name such
  * as "CET" for "Central European Time" or "PDT" for "Pacific Daylight Time"
  * <li>rfc822 - returns an RFC 822 style time zone specifier, which specifies more
  * explicitly what the offset is from UTC
  * <li>long - returns the long name of the zone in English
  * </ol>
- *  
+ *
  * @param {ilib.Date=} date a date to determine if it is in daylight time or standard time
  * @param {string=} style one of "standard" or "rfc822". Default if not specified is "standard"
- * @return {string} the name of the time zone, abbreviated according to the style 
+ * @return {string} the name of the time zone, abbreviated according to the style
  */
 ilib.TimeZone.prototype.getDisplayName = function (date, style) {
 	style = (this.isLocal || typeof(this.zone) === 'undefined') ? "rfc822" : (style || "standard");
@@ -5550,12 +5550,12 @@ ilib.TimeZone.prototype.getDisplayName = function (date, style) {
 			if (this.zone.f && this.zone.f !== "zzz") {
 				if (this.zone.f.indexOf("{c}") !== -1) {
 					var letter = "";
-					letter = this.inDaylightTime(date) ? this.zone.s && this.zone.s.c : this.zone.e && this.zone.e.c; 
+					letter = this.inDaylightTime(date) ? this.zone.s && this.zone.s.c : this.zone.e && this.zone.e.c;
 					var temp = new ilib.String(this.zone.f);
 					return temp.format({c: letter || ""});
 				}
 				return this.zone.f;
-			} 
+			}
 			var temp = "GMT" + this.zone.o;
 			if (this.inDaylightTime(date)) {
 				temp += "+" + this.zone.s.v;
@@ -5567,7 +5567,7 @@ ilib.TimeZone.prototype.getDisplayName = function (date, style) {
 				ret = "UTC",
 				hour = offset.h || 0,
 				minute = offset.m || 0;
-			
+
 			if (hour !== 0) {
 				ret += (hour > 0) ? "+" : "-";
 				if (Math.abs(hour) < 10) {
@@ -5579,11 +5579,11 @@ ilib.TimeZone.prototype.getDisplayName = function (date, style) {
 				}
 				ret += minute;
 			}
-			return ret; 
+			return ret;
 		case 'long':
 			if (this.zone.n) {
 				if (this.zone.n.indexOf("{c}") !== -1) {
-					var str = this.inDaylightTime(date) ? "Daylight" : "Standard"; 
+					var str = this.inDaylightTime(date) ? "Daylight" : "Standard";
 					var temp = new ilib.String(this.zone.n);
 					return temp.format({c: str || ""});
 				}
@@ -5601,17 +5601,17 @@ ilib.TimeZone.prototype.getDisplayName = function (date, style) {
 /**
  * Convert the offset string to an object with an h, m, and possibly s property
  * to indicate the hours, minutes, and seconds.
- * 
+ *
  * @private
  * @param {string} str the offset string to convert to an object
- * @return {Object.<{h:number,m:number,s:number}>} an object giving the offset for the zone at 
+ * @return {Object.<{h:number,m:number,s:number}>} an object giving the offset for the zone at
  * the given date/time, in hours, minutes, and seconds
  */
 ilib.TimeZone.prototype._offsetStringToObj = function (str) {
 	var offsetParts = (typeof(str) === 'string') ? str.split(":") : [],
 		ret = {h:0},
 		temp;
-	
+
 	if (offsetParts.length > 0) {
 		ret.h = parseInt(offsetParts[0], 10);
 		if (offsetParts.length > 1) {
@@ -5632,19 +5632,19 @@ ilib.TimeZone.prototype._offsetStringToObj = function (str) {
 };
 
 /**
- * Returns the offset of this time zone from UTC at the given date/time. If daylight saving 
- * time is in effect at the given date/time, this method will return the offset value 
+ * Returns the offset of this time zone from UTC at the given date/time. If daylight saving
+ * time is in effect at the given date/time, this method will return the offset value
  * adjusted by the amount of daylight saving.
  * @param {ilib.Date=} date the date for which the offset is needed
- * @return {Object.<{h:number,m:number}>} an object giving the offset for the zone at 
- * the given date/time, in hours, minutes, and seconds  
+ * @return {Object.<{h:number,m:number}>} an object giving the offset for the zone at
+ * the given date/time, in hours, minutes, and seconds
  */
 ilib.TimeZone.prototype.getOffset = function (date) {
 	if (!date) {
 		return this.getRawOffset();
 	}
 	var offset = this.getOffsetMillis(date)/60000;
-	
+
 	var hours = ilib._roundFnc.down(offset/60),
 		minutes = Math.abs(offset) - Math.abs(hours)*60;
 
@@ -5658,32 +5658,32 @@ ilib.TimeZone.prototype.getOffset = function (date) {
 };
 
 /**
- * Returns the offset of this time zone from UTC at the given date/time expressed in 
- * milliseconds. If daylight saving 
- * time is in effect at the given date/time, this method will return the offset value 
+ * Returns the offset of this time zone from UTC at the given date/time expressed in
+ * milliseconds. If daylight saving
+ * time is in effect at the given date/time, this method will return the offset value
  * adjusted by the amount of daylight saving. Negative numbers indicate offsets west
  * of UTC and conversely, positive numbers indicate offset east of UTC.
- *  
+ *
  * @param {ilib.Date=} date the date for which the offset is needed, or null for the
  * present date
  * @return {number} the number of milliseconds of offset from UTC that the given date is
  */
 ilib.TimeZone.prototype.getOffsetMillis = function (date) {
 	var ret;
-	
+
 	// check if the dst property is defined -- the intrinsic JS Date object doesn't work so
 	// well if we are in the overlap time at the end of DST
 	if (this.isLocal && typeof(date.dst) === 'undefined') {
 		var d = (!date) ? new Date() : new Date(date.getTimeExtended());
 		return -d.getTimezoneOffset() * 60000;
-	} 
-	
+	}
+
 	ret = this.offset;
-	
+
 	if (date && this.inDaylightTime(date)) {
 		ret += this.dstSavings;
 	}
-	
+
 	return ret * 60000;
 };
 
@@ -5696,28 +5696,28 @@ ilib.TimeZone.prototype.getOffsetMillis = function (date) {
  */
 ilib.TimeZone.prototype._getOffsetMillisWallTime = function (date) {
 	var ret;
-	
+
 	ret = this.offset;
-	
+
 	if (date && this.inDaylightTime(date, true)) {
 		ret += this.dstSavings;
 	}
-	
+
 	return ret * 60000;
 };
 
 /**
- * Returns the offset of this time zone from UTC at the given date/time. If daylight saving 
- * time is in effect at the given date/time, this method will return the offset value 
+ * Returns the offset of this time zone from UTC at the given date/time. If daylight saving
+ * time is in effect at the given date/time, this method will return the offset value
  * adjusted by the amount of daylight saving.
  * @param {ilib.Date=} date the date for which the offset is needed
- * @return {string} the offset for the zone at the given date/time as a string in the 
- * format "h:m:s" 
+ * @return {string} the offset for the zone at the given date/time as a string in the
+ * format "h:m:s"
  */
 ilib.TimeZone.prototype.getOffsetStr = function (date) {
 	var offset = this.getOffset(date),
 		ret;
-	
+
 	ret = offset.h;
 	if (typeof(offset.m) !== 'undefined') {
 		ret += ":" + offset.m;
@@ -5727,19 +5727,19 @@ ilib.TimeZone.prototype.getOffsetStr = function (date) {
 	} else {
 		ret += ":0";
 	}
-	
+
 	return ret;
 };
 
 /**
  * Gets the offset from UTC for this time zone.
- * @return {Object.<{h:number,m:number,s:number}>} an object giving the offset from 
- * UTC for this time zone, in hours, minutes, and seconds 
+ * @return {Object.<{h:number,m:number,s:number}>} an object giving the offset from
+ * UTC for this time zone, in hours, minutes, and seconds
  */
 ilib.TimeZone.prototype.getRawOffset = function () {
 	var hours = ilib._roundFnc.down(this.offset/60),
 		minutes = Math.abs(this.offset) - Math.abs(hours)*60;
-	
+
 	var ret = {
 		h: hours
 	};
@@ -5752,9 +5752,9 @@ ilib.TimeZone.prototype.getRawOffset = function () {
 /**
  * Gets the offset from UTC for this time zone expressed in milliseconds. Negative numbers
  * indicate zones west of UTC, and positive numbers indicate zones east of UTC.
- * 
- * @return {number} an number giving the offset from 
- * UTC for this time zone in milliseconds 
+ *
+ * @return {number} an number giving the offset from
+ * UTC for this time zone in milliseconds
  */
 ilib.TimeZone.prototype.getRawOffsetMillis = function () {
 	return this.offset * 60000;
@@ -5762,7 +5762,7 @@ ilib.TimeZone.prototype.getRawOffsetMillis = function () {
 
 /**
  * Gets the offset from UTC for this time zone without DST savings.
- * @return {string} the offset from UTC for this time zone, in the format "h:m:s" 
+ * @return {string} the offset from UTC for this time zone, in the format "h:m:s"
  */
 ilib.TimeZone.prototype.getRawOffsetStr = function () {
 	var off = this.getRawOffset();
@@ -5772,8 +5772,8 @@ ilib.TimeZone.prototype.getRawOffsetStr = function () {
 /**
  * Return the amount of time in hours:minutes that the clock is advanced during
  * daylight savings time.
- * @return {Object.<{h:number,m:number,s:number}>} the amount of time that the 
- * clock advances for DST in hours, minutes, and seconds 
+ * @return {Object.<{h:number,m:number,s:number}>} the amount of time that the
+ * clock advances for DST in hours, minutes, and seconds
  */
 ilib.TimeZone.prototype.getDSTSavings = function () {
 	if (this.isLocal) {
@@ -5816,17 +5816,17 @@ ilib.TimeZone.prototype.getDSTSavingsStr = function () {
  * @return {number} the rd of the start of DST for the year
  */
 ilib.TimeZone.prototype._calcRuleStart = function (rule, year) {
-	var type = "=", 
-		weekday = 0, 
-		day, 
-		refDay, 
-		cal, 
-		hour = 0, 
-		minute = 0, 
+	var type = "=",
+		weekday = 0,
+		day,
+		refDay,
+		cal,
+		hour = 0,
+		minute = 0,
 		second = 0,
 		time,
 		i;
-	
+
 	if (typeof(rule.j) !== 'undefined') {
 		refDay = new ilib.Date.GregRataDie({
 			julianday: rule.j
@@ -5837,27 +5837,27 @@ ilib.TimeZone.prototype._calcRuleStart = function (rule, year) {
 			type = rule.r.charAt(0);
 			weekday = parseInt(rule.r.substring(1), 10);
 			day = (type === 'l') ? cal.getMonLength(rule.m, year) : 1;
-			//console.log("_calcRuleStart: Calculating the " + 
-			//		(rule.r.charAt(0) == 'f' ? "first " : "last ") + weekday + 
+			//console.log("_calcRuleStart: Calculating the " +
+			//		(rule.r.charAt(0) == 'f' ? "first " : "last ") + weekday +
 			//		" of month " + rule.m);
 		} else {
 			i = rule.r.indexOf('<');
 			if (i == -1) {
 				i = rule.r.indexOf('>');
 			}
-			
+
 			if (i != -1) {
 				type = rule.r.charAt(i);
 				weekday = parseInt(rule.r.substring(0, i), 10);
-				day = parseInt(rule.r.substring(i+1), 10); 
-				//console.log("_calcRuleStart: Calculating the " + weekday + 
+				day = parseInt(rule.r.substring(i+1), 10);
+				//console.log("_calcRuleStart: Calculating the " + weekday +
 				//		type + day + " of month " + rule.m);
 			} else {
 				day = parseInt(rule.r, 10);
 				//console.log("_calcRuleStart: Calculating the " + day + " of month " + rule.m);
 			}
 		}
-	
+
 		if (rule.t) {
 			time = rule.t.split(":");
 			hour = parseInt(time[0], 10);
@@ -5870,27 +5870,27 @@ ilib.TimeZone.prototype._calcRuleStart = function (rule, year) {
 		}
 		//console.log("calculating rd of " + year + "/" + rule.m + "/" + day);
 		refDay = new ilib.Date.GregRataDie({
-			year: year, 
-			month: rule.m, 
-			day: day, 
-			hour: hour, 
-			minute: minute, 
+			year: year,
+			month: rule.m,
+			day: day,
+			hour: hour,
+			minute: minute,
 			second: second
 		});
 	}
 	//console.log("refDay is " + JSON.stringify(refDay));
 	var d = refDay.getRataDie();
-	
+
 	switch (type) {
 		case 'l':
 		case '<':
 			//console.log("returning " + refDay.onOrBefore(rd, weekday));
-			d = refDay.onOrBefore(weekday); 
+			d = refDay.onOrBefore(weekday);
 			break;
 		case 'f':
 		case '>':
 			//console.log("returning " + refDay.onOrAfterRd(rd, weekday));
-			d = refDay.onOrAfter(weekday); 
+			d = refDay.onOrAfter(weekday);
 			break;
 	}
 	return d;
@@ -5901,10 +5901,10 @@ ilib.TimeZone.prototype._calcRuleStart = function (rule, year) {
  */
 ilib.TimeZone.prototype._calcDSTSavings = function () {
 	var saveParts = this.getDSTSavings();
-	
+
 	/**
 	 * @private
-	 * @type {number} savings in minutes when DST is in effect 
+	 * @type {number} savings in minutes when DST is in effect
 	 */
 	this.dstSavings = (Math.abs(saveParts.h || 0) * 60 + (saveParts.m || 0)) * ilib.signum(saveParts.h || 0);
 };
@@ -5932,7 +5932,7 @@ ilib.TimeZone.prototype._getDSTEndRule = function (year) {
  * runs from the end of the year through New Years into the first few months of the
  * next year. This method will correctly calculate the start and end of DST for any
  * location.
- * 
+ *
  * @param {ilib.Date=} date a date for which the info about daylight time is being sought,
  * or undefined to tell whether we are currently in daylight savings time
  * @param {boolean=} wallTime if true, then the given date is in wall time. If false or
@@ -5951,14 +5951,14 @@ ilib.TimeZone.prototype.inDaylightTime = function (date, wallTime) {
 		if (typeof(date.dst) !== 'undefined' && !date.dst) {
 			offset = this.dstSavings * 60000;
 		}
-		
+
 		var d = new Date(date ? date.getTimeExtended() + offset: undefined);
-		// the DST offset is always the one that is closest to positive infinity, no matter 
+		// the DST offset is always the one that is closest to positive infinity, no matter
 		// if you are in the northern or southern hemisphere, east or west
 		var dst = Math.max(this.offsetJan1, this.offsetJun1);
 		return (-d.getTimezoneOffset() === dst);
 	}
-	
+
 	if (!date) {
 		date = new ilib.Date.GregDate(); // right now
 	} else if (!(date instanceof ilib.Date.GregDate)) {
@@ -5968,45 +5968,45 @@ ilib.TimeZone.prototype.inDaylightTime = function (date, wallTime) {
 			timezone: date.getTimeZone()
 		});
 	}
-	
-	// if we aren't using daylight time in this zone for the given year, then we are 
+
+	// if we aren't using daylight time in this zone for the given year, then we are
 	// not in daylight time
 	if (!this.useDaylightTime(date.year)) {
 		return false;
 	}
-	
+
 	// this should be a Gregorian RD number now, in UTC
 	rd = date.rd.getRataDie();
-	
+
 	// these calculate the start/end in local wall time
 	var startrule = this._getDSTStartRule(date.year);
 	var endrule = this._getDSTEndRule(date.year);
 	startRd = this._calcRuleStart(startrule, date.year);
 	endRd = this._calcRuleStart(endrule, date.year);
-	
+
 	if (wallTime) {
 		// rd is in wall time, so we have to make sure to skip the missing time
 		// at the start of DST when standard time ends and daylight time begins
 		startRd += this.dstSavings/1440;
 	} else {
-		// rd is in UTC, so we have to convert the start/end to UTC time so 
+		// rd is in UTC, so we have to convert the start/end to UTC time so
 		// that they can be compared directly to the UTC rd number of the date
-		
+
 		// when DST starts, time is standard time already, so we only have
 		// to subtract the offset to get to UTC and not worry about the DST savings
-		startRd -= this.offset/1440;  
-		
+		startRd -= this.offset/1440;
+
 		// when DST ends, time is in daylight time already, so we have to
 		// subtract the DST savings to get back to standard time, then the
 		// offset to get to UTC
 		endRd -= (this.offset + this.dstSavings)/1440;
 	}
-	
-	// In the northern hemisphere, the start comes first some time in spring (Feb-Apr), 
+
+	// In the northern hemisphere, the start comes first some time in spring (Feb-Apr),
 	// then the end some time in the fall (Sept-Nov). In the southern
 	// hemisphere, it is the other way around because the seasons are reversed. Standard
-	// time is still in the winter, but the winter months are May-Aug, and daylight 
-	// savings time usually starts Aug-Oct of one year and runs through Mar-May of the 
+	// time is still in the winter, but the winter months are May-Aug, and daylight
+	// savings time usually starts Aug-Oct of one year and runs through Mar-May of the
 	// next year.
 	if (rd < endRd && endRd - rd <= this.dstSavings/1440 && typeof(date.dst) === 'boolean') {
 		// take care of the magic overlap time at the end of DST
@@ -6015,7 +6015,7 @@ ilib.TimeZone.prototype.inDaylightTime = function (date, wallTime) {
 	if (startRd < endRd) {
 		// northern hemisphere
 		return (rd >= startRd && rd < endRd) ? true : false;
-	} 
+	}
 	// southern hemisphere
 	return (rd >= startRd || rd < endRd) ? true : false;
 };
@@ -6028,12 +6028,12 @@ ilib.TimeZone.prototype.inDaylightTime = function (date, wallTime) {
  * @return {boolean} true if the time zone uses daylight savings time
  */
 ilib.TimeZone.prototype.useDaylightTime = function (year) {
-	
+
 	// this zone uses daylight savings time iff there is a rule defining when to start
 	// and when to stop the DST
 	return (this.isLocal && this.offsetJan1 !== this.offsetJun1) ||
-		(typeof(this.zone) !== 'undefined' && 
-		typeof(this.zone.s) !== 'undefined' && 
+		(typeof(this.zone) !== 'undefined' &&
+		typeof(this.zone.s) !== 'undefined' &&
 		typeof(this.zone.e) !== 'undefined');
 };
 
@@ -6046,7 +6046,7 @@ ilib.TimeZone.prototype.getCountry = function () {
 };
 /*
  * resources.js - Resource bundle definition
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -6070,84 +6070,84 @@ ilib.TimeZone.prototype.getCountry = function () {
 /**
  * @class
  * Create a new resource bundle instance. The resource bundle loads strings
- * appropriate for a particular locale and provides them via the getString 
+ * appropriate for a particular locale and provides them via the getString
  * method.<p>
- * 
+ *
  * The options object may contain any (or none) of the following properties:
- * 
+ *
  * <ul>
  * <li><i>locale</i> - The locale of the strings to load. If not specified, the default
- * locale is the the default for the web page or app in which the bundle is 
+ * locale is the the default for the web page or app in which the bundle is
  * being loaded.
- * 
+ *
  * <li><i>name</i> - Base name of the resource bundle to load. If not specified the default
  * base name is "resources".
- * 
- * <li><i>type</i> - Name the type of strings this bundle contains. Valid values are 
+ *
+ * <li><i>type</i> - Name the type of strings this bundle contains. Valid values are
  * "xml", "html", "text", or "raw". The default is "text". If the type is "xml" or "html",
- * then XML/HTML entities and tags are not pseudo-translated. During a real translation, 
+ * then XML/HTML entities and tags are not pseudo-translated. During a real translation,
  * HTML character entities are translated to their corresponding characters in a source
  * string before looking that string up in the translations. Also, the characters "<", ">",
  * and "&" are converted to entities again in the output, but characters are left as they
  * are. If the type is "xml", "html", or "text" types, then the replacement parameter names
- * are not pseudo-translated as well so that the output can be used for formatting with 
- * the ilib.String class. If the type is raw, all characters are pseudo-translated, 
+ * are not pseudo-translated as well so that the output can be used for formatting with
+ * the ilib.String class. If the type is raw, all characters are pseudo-translated,
  * including replacement parameters as well as XML/HTML tags and entities.
- * 
- * <li><i>lengthen</i> - when pseudo-translating the string, tell whether or not to 
+ *
+ * <li><i>lengthen</i> - when pseudo-translating the string, tell whether or not to
  * automatically lengthen the string to simulate "long" languages such as German
  * or French. This is a boolean value. Default is false.
- * 
+ *
  * <li><i>missing</i> - what to do when a resource is missing. The choices are:
  * <ul>
  *   <li><i>source</i> - return the source string unchanged
  *   <li><i>pseudo</i> - return the pseudo-translated source string, translated to the
- *   script of the locale if the mapping is available, or just the default Latin 
+ *   script of the locale if the mapping is available, or just the default Latin
  *   pseudo-translation if not
- *   <li><i>empty</i> - return the empty string 
+ *   <li><i>empty</i> - return the empty string
  * </ul>
  * The default behaviour is the same as before, which is to return the source string
  * unchanged.
- * 
- * <li><i>onLoad</i> - a callback function to call when the resources are fully 
+ *
+ * <li><i>onLoad</i> - a callback function to call when the resources are fully
  * loaded. When the onLoad option is given, this class will attempt to
  * load any missing locale data using the ilib loader callback.
- * When the constructor is done (even if the data is already preassembled), the 
+ * When the constructor is done (even if the data is already preassembled), the
  * onLoad function is called with the current instance as a parameter, so this
- * callback can be used with preassembled or dynamic loading or a mix of the two. 
- * 
- * <li>sync - tell whether to load any missing locale data synchronously or 
+ * callback can be used with preassembled or dynamic loading or a mix of the two.
+ *
+ * <li>sync - tell whether to load any missing locale data synchronously or
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
- * not be usable for a while. 
+ * not be usable for a while.
  *
- * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ * <li><i>loadParams</i> - an object containing parameters to pass to the
  * loader callback function when locale data is missing. The parameters are not
- * interpretted or modified in any way. They are simply passed along. The object 
+ * interpretted or modified in any way. They are simply passed along. The object
  * may contain any property/value pairs as long as the calling code is in
  * agreement with the loader callback function as to what those parameters mean.
  * </ul>
- * 
- * The locale option may be given as a locale spec string or as an 
+ *
+ * The locale option may be given as a locale spec string or as an
  * ilib.Locale object. If the locale option is not specified, then strings for
- * the default locale will be loaded.<p> 
- * 
+ * the default locale will be loaded.<p>
+ *
  * The name option can be used to put groups of strings together in a
  * single bundle. The strings will then appear together in a JS object in
  * a JS file that can be included before the ilib.<p>
- * 
+ *
  * A resource bundle with a particular name is actually a set of bundles
- * that are each specific to a language, a language plus a region, etc. 
+ * that are each specific to a language, a language plus a region, etc.
  * All bundles with the same base name should
- * contain the same set of source strings, but with different translations for 
- * the given locale. The user of the bundle does not need to be aware of 
- * the locale of the bundle, as long as it contains values for the strings 
+ * contain the same set of source strings, but with different translations for
+ * the given locale. The user of the bundle does not need to be aware of
+ * the locale of the bundle, as long as it contains values for the strings
  * it needs.<p>
- * 
+ *
  * Strings in bundles for a particular locale are inherited from parent bundles
- * that are more generic. In general, the hierarchy is as follows (from 
+ * that are more generic. In general, the hierarchy is as follows (from
  * least locale-specific to most locale-specific):
- * 
+ *
  * <ol>
  * <li> language
  * <li> region
@@ -6158,65 +6158,65 @@ ilib.TimeZone.prototype.getCountry = function () {
  * <li> language_region_variant
  * <li> language_script_region_variant
  * </ol>
- * 
+ *
  * That is, if the translation for a string does not exist in the current
  * locale, the more-generic parent locale is searched for the string. In the
- * worst case scenario, the string is not found in the base locale's strings. 
+ * worst case scenario, the string is not found in the base locale's strings.
  * In this case, the missing option guides this class on what to do. If
- * the missing option is "source", then the original source is returned as 
+ * the missing option is "source", then the original source is returned as
  * the translation. If it is "empty", the empty string is returned. If it
  * is "pseudo", then the pseudo-translated string that is appropriate for
- * the default script of the locale is returned.<p> 
- * 
+ * the default script of the locale is returned.<p>
+ *
  * This allows developers to create code with new or changed strings in it and check in that
  * code without waiting for the translations to be done first. The translated
- * version of the app or web site will still function properly, but will show 
- * a spurious untranslated string here and there until the translations are 
- * done and also checked in.<p>   
- *  
+ * version of the app or web site will still function properly, but will show
+ * a spurious untranslated string here and there until the translations are
+ * done and also checked in.<p>
+ *
  * The base is whatever language your developers use to code in. For
- * a German web site, strings in the source code may be written in German 
+ * a German web site, strings in the source code may be written in German
  * for example. Often this base is English, as many web sites are coded in
  * English, but that is not required.<p>
- * 
+ *
  * The strings can be extracted with the ilib localization tool (which will be
  * shipped at some future time.) Once the strings
  * have been translated, the set of translated files can be generated with the
  * same tool. The output from the tool can be used as input to the ResBundle
  * object. It is up to the web page or app to make sure the JS file that defines
  * the bundle is included before creating the ResBundle instance.<p>
- * 
+ *
  * A special locale "zxx-XX" is used as the pseudo-translation locale because
- * zxx means "no linguistic information" in the ISO 639 standard, and the region 
- * code XX is defined to be user-defined in the ISO 3166 standard. 
+ * zxx means "no linguistic information" in the ISO 639 standard, and the region
+ * code XX is defined to be user-defined in the ISO 3166 standard.
  * Pseudo-translation is a locale where the translations are generated on
- * the fly based on the contents of the source string. Characters in the source 
- * string are replaced with other characters and returned. 
- * 
+ * the fly based on the contents of the source string. Characters in the source
+ * string are replaced with other characters and returned.
+ *
  * Example. If the source string is:
- * 
+ *
  * <pre>
  * "This is a string"
  * </pre>
- * 
- * then the pseudo-translated version might look something like this: 
- * 
+ *
+ * then the pseudo-translated version might look something like this:
+ *
  * <pre>
  * "Ţħïş ïş á şţřïñĝ"
  * </pre>
  * <p>
- * 
+ *
  * Pseudo-translation can be used to test that your app or web site is translatable
- * before an actual translation has happened. These bugs can then be fixed 
+ * before an actual translation has happened. These bugs can then be fixed
  * before the translation starts, avoiding an explosion of bugs later when
- * each language's tester registers the same bug complaining that the same 
+ * each language's tester registers the same bug complaining that the same
  * string is not translated. When pseudo-localizing with
- * the Latin script, this allows the strings to be readable in the UI in the 
- * source language (if somewhat funky-looking), 
- * so that a tester can easily verify that the string is properly externalized 
+ * the Latin script, this allows the strings to be readable in the UI in the
+ * source language (if somewhat funky-looking),
+ * so that a tester can easily verify that the string is properly externalized
  * and loaded from a resource bundle without the need to be able to read a
- * foreign language.<p> 
- * 
+ * foreign language.<p>
+ *
  * If one of a list of script tags is given in the pseudo-locale specifier, then the
  * pseudo-localization can map characters to very rough transliterations of
  * characters in the given script. For example, zxx-Hebr-XX maps strings to
@@ -6227,45 +6227,45 @@ ilib.TimeZone.prototype.getCountry = function () {
  * specified in the locale spec, or if the script is not supported,
  * then the default mapping maps Latin base characters to accented versions of
  * those Latin characters as in the example above.
- *  
- * When the "lengthen" property is set to true in the options, the 
+ *
+ * When the "lengthen" property is set to true in the options, the
  * pseudotranslation code will add digits to the end of the string to simulate
- * the lengthening that occurs when translating to other languages. The above 
+ * the lengthening that occurs when translating to other languages. The above
  * example will come out like this:
- * 
+ *
  * <pre>
  * "Ţħïş ïş á şţřïñĝ76543210"
  * </pre>
- * 
+ *
  * The string is lengthened according to the length of the source string. If
- * the source string is less than 20 characters long, the string is lengthened 
- * by 50%. If the source string is 20-40 
+ * the source string is less than 20 characters long, the string is lengthened
+ * by 50%. If the source string is 20-40
  * characters long, the string is lengthened by 33%. If te string is greater
  * than 40 characters long, the string is lengthened by 20%.<p>
- * 
+ *
  * The pseudotranslation always ends a string with the digit "0". If you do
  * not see the digit "0" in the UI for your app, you know that truncation
- * has occurred, and the number you see at the end of the string tells you 
+ * has occurred, and the number you see at the end of the string tells you
  * how many characters were truncated.<p>
- * 
+ *
  * Depends directive: !depends resources.js
- * 
+ *
  * @constructor
  * @param {?Object} options Options controlling how the bundle is created
  */
 ilib.ResBundle = function (options) {
 	var lookupLocale, spec;
-	
+
 	this.locale = new ilib.Locale();	// use the default locale
 	this.baseName = "strings";
 	this.type = "text";
 	this.loadParams = {};
 	this.missing = "source";
 	this.sync = true;
-	
+
 	if (options) {
 		if (options.locale) {
-			this.locale = (typeof(options.locale) === 'string') ? 
+			this.locale = (typeof(options.locale) === 'string') ?
 					new ilib.Locale(options.locale) :
 					options.locale;
 		}
@@ -6276,11 +6276,11 @@ ilib.ResBundle = function (options) {
 			this.type = options.type;
 		}
 		this.lengthen = options.lengthen || false;
-		
+
 		if (typeof(options.sync) !== 'undefined') {
 			this.sync = (options.sync == true);
 		}
-		
+
 		if (typeof(options.loadParams) !== 'undefined') {
 			this.loadParams = options.loadParams;
 		}
@@ -6290,7 +6290,7 @@ ilib.ResBundle = function (options) {
 			}
 		}
 	}
-	
+
 	this.map = {};
 
 	if (!ilib.ResBundle[this.baseName]) {
@@ -6300,11 +6300,11 @@ ilib.ResBundle = function (options) {
 	lookupLocale = this.locale.isPseudo() ? new ilib.Locale("en-US") : this.locale;
 
 	ilib.loadData({
-		object: ilib.ResBundle[this.baseName], 
-		locale: lookupLocale, 
-		name: this.baseName + ".json", 
-		sync: this.sync, 
-		loadParams: this.loadParams, 
+		object: ilib.ResBundle[this.baseName],
+		locale: lookupLocale,
+		name: this.baseName + ".json",
+		sync: this.sync,
+		loadParams: this.loadParams,
 		callback: ilib.bind(this, function (map) {
 			if (!map) {
 				map = ilib.data[this.baseName] || {};
@@ -6316,13 +6316,13 @@ ilib.ResBundle = function (options) {
 				if (!ilib.ResBundle.pseudomap) {
 					ilib.ResBundle.pseudomap = {};
 				}
-	
+
 				this._loadPseudo(this.locale, options.onLoad);
 			} else if (this.missing === "pseudo") {
 				if (!ilib.ResBundle.pseudomap) {
 					ilib.ResBundle.pseudomap = {};
 				}
-	
+
 				new ilib.LocaleInfo(this.locale, {
 					sync: this.sync,
 					loadParams: this.loadParams,
@@ -6366,11 +6366,11 @@ ilib.ResBundle.prototype = {
      */
     _loadPseudo: function (pseudoLocale, onLoad) {
 		ilib.loadData({
-			object: ilib.ResBundle.pseudomap, 
-			locale: pseudoLocale, 
-			name: "pseudomap.json", 
-			sync: this.sync, 
-			loadParams: this.loadParams, 
+			object: ilib.ResBundle.pseudomap,
+			locale: pseudoLocale,
+			name: "pseudomap.json",
+			sync: this.sync,
+			loadParams: this.loadParams,
 			callback: ilib.bind(this, function (map) {
 				if (!map || ilib.isEmpty(map)) {
 					map = ilib.ResBundle.defaultPseudo;
@@ -6380,19 +6380,19 @@ ilib.ResBundle.prototype = {
 				this.pseudomap = map;
 				if (typeof(onLoad) === 'function') {
 					onLoad(this);
-				}	
+				}
 			})
 		});
     },
-    
+
 	/**
 	 * Return the locale of this resource bundle.
-	 * @return {ilib.Locale} the locale of this resource bundle object 
+	 * @return {ilib.Locale} the locale of this resource bundle object
 	 */
 	getLocale: function () {
 		return this.locale;
 	},
-	
+
 	/**
 	 * Return the name of this resource bundle. This corresponds to the name option
 	 * given to the constructor.
@@ -6401,7 +6401,7 @@ ilib.ResBundle.prototype = {
 	getName: function () {
 		return this.baseName;
 	},
-	
+
 	/**
 	 * Return the type of this resource bundle. This corresponds to the type option
 	 * given to the constructor.
@@ -6441,7 +6441,7 @@ ilib.ResBundle.prototype = {
 						}
 					}
 				}
-				if (i < str.length) { 
+				if (i < str.length) {
 					if (str.charAt(i) === '{') {
 						ret += str.charAt(i++);
 						while (i < str.length && str.charAt(i) !== '}') {
@@ -6480,7 +6480,7 @@ ilib.ResBundle.prototype = {
 		}
 		return ret;
 	},
-	
+
 	/*
 	 * @private
 	 * Escape html characters in the output.
@@ -6502,10 +6502,10 @@ ilib.ResBundle.prototype = {
 		str = str.replace(/&gt;/g, '>');
 		return str;
 	},
-	
+
 	/*
 	 * @private
-	 * Create a key name out of a source string. All this does so far is 
+	 * Create a key name out of a source string. All this does so far is
 	 * compress sequences of white space into a single space on the assumption
 	 * that this doesn't really change the meaning of the string, and therefore
 	 * all such strings that compress to the same thing should share the same
@@ -6516,45 +6516,45 @@ ilib.ResBundle.prototype = {
 		var key = source.replace(/\s+/gm, ' ');
 		return (this.type === "xml" || this.type === "html") ? this.unescapeXml(key) : key;
 	},
-	
+
 	/**
 	 * Return a localized string. If the string is not found in the loaded set of
 	 * resources, the original source string is returned. If the key is not given,
-	 * then the source string itself is used as the key. In the case where the 
+	 * then the source string itself is used as the key. In the case where the
 	 * source string is used as the key, the whitespace is compressed down to 1 space
 	 * each, and the whitespace at the beginning and end of the string is trimmed.<p>
-	 * 
+	 *
 	 * The escape mode specifies what type of output you are escaping the returned
-	 * string for. Modes are similar to the types: 
-	 * 
+	 * string for. Modes are similar to the types:
+	 *
 	 * <ul>
 	 * <li>"html" -- prevents HTML injection by escaping the characters &lt &gt; and &amp;
 	 * <li>"xml" -- currently same as "html" mode
-	 * <li>"js" -- prevents breaking Javascript syntax by backslash escaping all quote and 
+	 * <li>"js" -- prevents breaking Javascript syntax by backslash escaping all quote and
 	 * double-quote characters
 	 * <li>"attribute" -- meant for HTML attribute values. Currently this is the same as
 	 * "js" escape mode.
 	 * <li>"default" -- use the type parameter from the constructor as the escape mode as well
 	 * <li>"none" or undefined -- no escaping at all.
 	 * </ul>
-	 * 
+	 *
 	 * The type parameter of the constructor specifies what type of strings this bundle
 	 * is operating upon. This allows pseudo-translation and automatic key generation
-	 * to happen properly by telling this class how to parse the string. The escape mode 
-	 * for this method is different in that it specifies how this string will be used in 
-	 * the calling code and therefore how to escape it properly.<p> 
-	 * 
-	 * For example, a section of Javascript code may be constructing an HTML snippet in a 
+	 * to happen properly by telling this class how to parse the string. The escape mode
+	 * for this method is different in that it specifies how this string will be used in
+	 * the calling code and therefore how to escape it properly.<p>
+	 *
+	 * For example, a section of Javascript code may be constructing an HTML snippet in a
 	 * string to add to the web page. In this case, the type parameter in the constructor should
 	 * be "html" so that the source string can be parsed properly, but the escape mode should
 	 * be "js" so that the output string can be used in Javascript without causing syntax
 	 * errors.
-	 * 
+	 *
 	 * @param {?string=} source the source string to translate
 	 * @param {?string=} key optional name of the key, if any
 	 * @param {?string=} escapeMode escape mode, if any
-	 * @return {ilib.String|undefined} the translation of the given source/key or undefined 
-	 * if the translation is not found and the source is undefined 
+	 * @return {ilib.String|undefined} the translation of the given source/key or undefined
+	 * if the translation is not found and the source is undefined
 	 */
 	getString: function (source, key, escapeMode) {
 		if (!source && !key) return new ilib.String("");
@@ -6594,56 +6594,56 @@ ilib.ResBundle.prototype = {
 			return ret;
 		}
 	},
-	
+
 	/**
 	 * Return a localized string as a Javascript object. This does the same thing as
 	 * the getString() method, but it returns a regular Javascript string instead of
 	 * and ilib.String instance. This means it cannot be formatted with the format()
 	 * method without being wrapped in an ilib.String instance first.
-	 * 
+	 *
 	 * @param {?string=} source the source string to translate
 	 * @param {?string=} key optional name of the key, if any
 	 * @param {?string=} escapeMode escape mode, if any
-	 * @return {string|undefined} the translation of the given source/key or undefined 
+	 * @return {string|undefined} the translation of the given source/key or undefined
 	 * if the translation is not found and the source is undefined
 	 */
 	getStringJS: function(source, key, escapeMode) {
 		return this.getString(source, key, escapeMode).toString();
 	},
-	
+
 	/**
 	 * Return true if the current bundle contains a translation for the given key and
 	 * source. The
-	 * getString method will always return a string for any given key and source 
+	 * getString method will always return a string for any given key and source
 	 * combination, so it cannot be used to tell if a translation exists. Either one
 	 * or both of the source and key must be specified. If both are not specified,
 	 * this method will return false.
-	 * 
+	 *
 	 * @param {?string=} source source string to look up
 	 * @param {?string=} key key to look up
-	 * @return {boolean} true if this bundle contains a translation for the key, and 
+	 * @return {boolean} true if this bundle contains a translation for the key, and
 	 * false otherwise
 	 */
 	containsKey: function(source, key) {
 		if (typeof(source) === 'undefined' && typeof(key) === 'undefined') {
 			return false;
 		}
-		
+
 		var keyName = key || this.makeKey(source);
 		return typeof(this.map[keyName]) !== 'undefined';
 	},
-	
+
 	/**
 	 * Return the merged resources as an entire object. When loading resources for a
-	 * locale that are not just a set of translated strings, but instead an entire 
+	 * locale that are not just a set of translated strings, but instead an entire
 	 * structured javascript object, you can gain access to that object via this call. This method
 	 * will ensure that all the of the parts of the object are correct for the locale.<p>
-	 * 
-	 * For pre-assembled data, it starts by loading <i>ilib.data[name]</i>, where 
-	 * <i>name</i> is the base name for this set of resources. Then, it successively 
-	 * merges objects in the base data using progressively more locale-specific data. 
+	 *
+	 * For pre-assembled data, it starts by loading <i>ilib.data[name]</i>, where
+	 * <i>name</i> is the base name for this set of resources. Then, it successively
+	 * merges objects in the base data using progressively more locale-specific data.
 	 * It loads it in this order from <i>ilib.data</i>:
-	 * 
+	 *
 	 * <ol>
 	 * <li> language
 	 * <li> region
@@ -6654,15 +6654,15 @@ ilib.ResBundle.prototype = {
 	 * <li> language_region_variant
 	 * <li> language_script_region_variant
 	 * </ol>
-	 * 
+	 *
 	 * For dynamically loaded data, the code attempts to load the same sequence as
 	 * above, but with slash path separators instead of underscores.<p>
-	 *  
+	 *
 	 * Loading the resources this way allows the program to share resources between all
-	 * locales that share a common language, region, or script. As a 
+	 * locales that share a common language, region, or script. As a
 	 * general rule-of-thumb, resources should be as generic as possible in order to
 	 * cover as many locales as possible.
-	 * 
+	 *
 	 * @return {Object} returns the object that is the basis for this resources instance
 	 */
 	getResObj: function () {
@@ -6672,7 +6672,7 @@ ilib.ResBundle.prototype = {
 
 /*
  * util/jsutils.js - Misc utilities to work around Javascript engine differences
- * 
+ *
  * Copyright © 2013-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -6692,12 +6692,12 @@ ilib.ResBundle.prototype = {
 // !depends ilibglobal.js
 
 /**
- * Perform a shallow copy of the source object to the target object. This only 
- * copies the assignments of the source properties to the target properties, 
+ * Perform a shallow copy of the source object to the target object. This only
+ * copies the assignments of the source properties to the target properties,
  * but not recursively from there.<p>
- * 
+ *
  * Depends directive: !depends utils.js
- * 
+ *
  * @static
  * @param {Object} source the source object to copy properties from
  * @param {Object} target the target object to copy properties into
@@ -6714,7 +6714,7 @@ ilib.shallowCopy = function (source, target) {
 };
 
 /** [Need Comment]
- * 
+ *
  */
 ilib.deepCopy = function(from, to) {
 	var prop;
@@ -6736,7 +6736,7 @@ ilib.deepCopy = function(from, to) {
  * Map a string to the given set of alternate characters. If the target set
  * does not contain a particular character in the input string, then that
  * character will be copied to the output unmapped.
- * 
+ *
  * @static
  * @param {string} str a string to map to an alternate set of characters
  * @param {Array.<string>|Object} map a mapping to alternate characters
@@ -6747,7 +6747,7 @@ ilib.mapString = function (str, map) {
 	if (map && str) {
 		for (var i = 0; i < str.length; i++) {
 			var c = str.charAt(i); // TODO use a char iterator?
-			mapped += map[c] || c; 
+			mapped += map[c] || c;
 		}
 	} else {
 		mapped = str;
@@ -6760,7 +6760,7 @@ ilib.mapString = function (str, map) {
  * support indexOf, it is used directly. Otherwise, this function implements it
  * itself. The idea is to make sure that you can use the quick indexOf if it is
  * available, but use a slower implementation in older engines as well.
- * 
+ *
  * @static
  * @param {Array.<Object>} array array to search
  * @param {Object} obj object being sought. This should be of the same type as the
@@ -6788,17 +6788,17 @@ ilib.indexOf = function(array, obj) {
  * @static
  * Convert a string into the hexadecimal representation
  * of the Unicode characters in that string.
- * 
+ *
  * @param {string} string The string to convert
  * @param {number=} limit the number of digits to use to represent the character (1 to 8)
  * @return {string} a hexadecimal representation of the
  * Unicode characters in the input string
  */
 ilib.toHexString = function(string, limit) {
-	var i, 
-		result = "", 
+	var i,
+		result = "",
 		lim = (limit && limit < 9) ? limit : 4;
-	
+
 	if (!string) {
 		return "";
 	}
@@ -6811,7 +6811,7 @@ ilib.toHexString = function(string, limit) {
 
 /*
  * datefmt.js - Date formatter definition
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -6829,12 +6829,12 @@ ilib.toHexString = function(string, limit) {
  */
 
 /*
-!depends 
-ilibglobal.js 
-locale.js 
-date.js 
-strings.js 
-resources.js 
+!depends
+ilibglobal.js
+locale.js
+date.js
+strings.js
+resources.js
 calendar.js
 localeinfo.js
 timezone.js
@@ -6851,77 +6851,77 @@ util/jsutils.js
  * options. Create different date formatter instances for different purposes
  * and then keep them cached for use later if you have more than one date to
  * format.<p>
- * 
+ *
  * The options may contain any of the following properties:
- * 
+ *
  * <ul>
  * <li><i>locale</i> - locale to use when formatting the date/time. If the locale is
  * not specified, then the default locale of the app or web page will be used.
- * 
+ *
  * <li><i>calendar</i> - the type of calendar to use for this format. The value should
  * be a sting containing the name of the calendar. Currently, the supported
  * types are "gregorian", "julian", "arabic", "hebrew", or "chinese". If the
  * calendar is not specified, then the default calendar for the locale is used. When the
  * calendar type is specified, then the format method must be called with an instance of
- * the appropriate date type. (eg. Gregorian calendar means that the format method must 
+ * the appropriate date type. (eg. Gregorian calendar means that the format method must
  * be called with a GregDate instance.)
- *  
+ *
  * <li><i>timezone</i> - time zone to use when formatting times. This may be a time zone
- * instance or a time zone specifier from the IANA list of time zone database names 
- * (eg. "America/Los_Angeles"), 
+ * instance or a time zone specifier from the IANA list of time zone database names
+ * (eg. "America/Los_Angeles"),
  * the string "local", or a string specifying the offset in RFC 822 format. The IANA
- * list of time zone names can be viewed at 
+ * list of time zone names can be viewed at
  * <a href="http://en.wikipedia.org/wiki/List_of_tz_database_time_zones">this page</a>.
  * If the time zone is given as "local", the offset from UTC as given by
  * the Javascript system is used. If the offset is given as an RFC 822 style offset
  * specifier, it will parse that string and use the resulting offset. If the time zone
  * is not specified, the
  * default time zone for the locale is used. If both the date object and this formatter
- * instance contain time zones and those time zones are different from each other, the 
- * formatter will calculate the offset between the time zones and subtract it from the 
+ * instance contain time zones and those time zones are different from each other, the
+ * formatter will calculate the offset between the time zones and subtract it from the
  * date before formatting the result for the current time zone. The theory is that a date
  * object that contains a time zone specifies a specific instant in time that is valid
  * around the world, whereas a date object without one is a local time and can only be
  * used for doing things in the local time zone of the user.
- * 
+ *
  * <li><i>type</i> - Specify whether this formatter should format times only, dates only, or
  * both times and dates together. Valid values are "time", "date", and "datetime". Note that
- * in some locales, the standard format uses the order "time followed by date" and in others, 
- * the order is exactly opposite, so it is better to create a single "datetime" formatter 
- * than it is to create a time formatter and a date formatter separately and concatenate the 
+ * in some locales, the standard format uses the order "time followed by date" and in others,
+ * the order is exactly opposite, so it is better to create a single "datetime" formatter
+ * than it is to create a time formatter and a date formatter separately and concatenate the
  * results. A "datetime" formatter will get the order correct for the locale.<p>
- * 
+ *
  * The default type if none is specified in with the type option is "date".
- * 
- * <li><i>length</i> - Specify the length of the format to use. The length is the approximate size of the 
+ *
+ * <li><i>length</i> - Specify the length of the format to use. The length is the approximate size of the
  * formatted string.
- * 
+ *
  * <ul>
  * <li><i>short</i> - use a short representation of the time. This is the most compact format possible for the locale.
  * <li><i>medium</i> - use a medium length representation of the time. This is a slightly longer format.
- * <li><i>long</i> - use a long representation of the time. This is a fully specified format, but some of the textual 
+ * <li><i>long</i> - use a long representation of the time. This is a fully specified format, but some of the textual
  * components may still be abbreviated
- * <li><i>full</i> - use a full representation of the time. This is a fully specified format where all the textual 
+ * <li><i>full</i> - use a full representation of the time. This is a fully specified format where all the textual
  * components are spelled out completely
  * </ul>
- * 
+ *
  * eg. The "short" format for an en_US date may be "MM/dd/yy", whereas the long format might be "d MMM, yyyy". In the long
- * format, the month name is textual instead of numeric and is longer, the year is 4 digits instead of 2, and the format 
+ * format, the month name is textual instead of numeric and is longer, the year is 4 digits instead of 2, and the format
  * contains slightly more spaces and formatting characters.<p>
- * 
+ *
  * Note that the length parameter does not specify which components are to be formatted. Use the "date" and the "time"
  * properties to specify the components. Also, very few of the components of a time format differ according to the length,
  * so this property has little to no affect on time formatting.
- * 
+ *
  * <li><i>date</i> - This property tells
  * which components of a date format to use. For example,
  * sometimes you may wish to format a date that only contains the month and date
  * without the year, such as when displaying a person's yearly birthday. The value
  * of this property allows you to specify only those components you want to see in the
  * final output, ordered correctly for the locale. <p>
- * 
+ *
  * Valid values are:
- * 
+ *
  * <ul>
  * <li><i>dmwy</i> - format all components, weekday, date, month, and year
  * <li><i>dmy</i> - format only date, month, and year
@@ -6930,21 +6930,21 @@ util/jsutils.js
  * <li><i>my</i> - format only month and year
  * <li><i>dw</i> - format only the weekday and date
  * <li><i>d</i> - format only the date
- * <li><i>m</i> - format only the month, in numbers for shorter lengths, and letters for 
+ * <li><i>m</i> - format only the month, in numbers for shorter lengths, and letters for
  * longer lengths
  * <li><i>n</i> - format only the month, in letters only for all lengths
  * <li><i>y</i> - format only the year
  * </ul>
  * Default components, if this property is not specified, is "dmy". This property may be specified
  * but has no affect if the current formatter is for times only.
- * 
- * <li><i>time</i> - This property gives which components of a time format to use. The time will be formatted 
- * correctly for the locale with only the time components requested. For example, a clock might only display 
- * the hour and minute and not need the seconds or the am/pm component. In this case, the time property should be set 
+ *
+ * <li><i>time</i> - This property gives which components of a time format to use. The time will be formatted
+ * correctly for the locale with only the time components requested. For example, a clock might only display
+ * the hour and minute and not need the seconds or the am/pm component. In this case, the time property should be set
  * to "hm". <p>
- * 
+ *
  * Valid values for this property are:
- * 
+ *
  * <ul>
  * <li><i>ahmsz</i> - format the hours, minutes, seconds, am/pm (if using a 12 hour clock), and the time zone
  * <li><i>ahms</i> - format the hours, minutes, seconds, and am/pm (if using a 12 hour clock)
@@ -6960,32 +6960,32 @@ util/jsutils.js
  * <li><i>m</i> - format only the minutes
  * <li><i>s</i> - format only the seconds
  * </ul>
- * 
+ *
  * If you want to format a length of time instead of a particular instant
  * in time, use the duration formatter object (ilib.DurFmt) instead because this
- * formatter is geared towards instants. A date formatter will make sure that each component of the 
+ * formatter is geared towards instants. A date formatter will make sure that each component of the
  * time is within the normal range
  * for that component. That is, the minutes will always be between 0 and 59, no matter
  * what is specified in the date to format. A duration format will allow the number
  * of minutes to exceed 59 if, for example, you were displaying the length of
  * a movie of 198 minutes.<p>
- * 
+ *
  * Default value if this property is not specified is "hma".
- * 
- * <li><i>clock</i> - specify that the time formatter should use a 12 or 24 hour clock. 
+ *
+ * <li><i>clock</i> - specify that the time formatter should use a 12 or 24 hour clock.
  * Valid values are "12" and "24".<p>
- * 
+ *
  * In some locales, both clocks are used. For example, in en_US, the general populace uses
- * a 12 hour clock with am/pm, but in the US military or in nautical or aeronautical or 
+ * a 12 hour clock with am/pm, but in the US military or in nautical or aeronautical or
  * scientific writing, it is more common to use a 24 hour clock. This property allows you to
  * construct a formatter that overrides the default for the locale.<p>
- * 
+ *
  * If this property is not specified, the default is to use the most widely used convention
  * for the locale.
- *  
- * <li><i>template</i> - use the given template string as a fixed format when formatting 
+ *
+ * <li><i>template</i> - use the given template string as a fixed format when formatting
  * the date/time. Valid codes to use in a template string are as follows:
- * 
+ *
  * <ul>
  * <li><i>a</i> - am/pm marker
  * <li><i>d</i> - 1 or 2 digit date of month, not padded
@@ -7005,7 +7005,7 @@ util/jsutils.js
  * <li><i>E</i> - day-of-week name, abbreviated to a single character
  * <li><i>EE</i> - day-of-week name, abbreviated to a max of 2 characters
  * <li><i>EEE</i> - day-of-week name, abbreviated to a max of 3 characters
- * <li><i>EEEE</i> - day-of-week name fully spelled out 
+ * <li><i>EEEE</i> - day-of-week name fully spelled out
  * <li><i>G</i> - era designator
  * <li><i>w</i> - week number in year
  * <li><i>ww</i> - week number in year, 0 padded to 2 digits
@@ -7027,97 +7027,97 @@ util/jsutils.js
  * <li><i>z</i> - general time zone
  * <li><i>Z</i> - RFC 822 time zone
  * </ul>
- * 
- * <li><i>useNative</i> - the flag used to determine whether to use the native script settings 
+ *
+ * <li><i>useNative</i> - the flag used to determine whether to use the native script settings
  * for formatting the numbers.
  *
- * <li><i>meridiems</i> - string that specifies what style of meridiems to use with this 
- * format. The choices are "default", "gregorian", "ethiopic", and "chinese". The "default" 
- * style is often the simple Gregorian AM/PM, but the actual style is chosen by the locale. 
+ * <li><i>meridiems</i> - string that specifies what style of meridiems to use with this
+ * format. The choices are "default", "gregorian", "ethiopic", and "chinese". The "default"
+ * style is often the simple Gregorian AM/PM, but the actual style is chosen by the locale.
  * (For almost all locales, the Gregorian AM/PM style is most frequently used.)
- * The "ethiopic" style uses 5 different meridiems for "morning", "noon", "afternoon", 
- * "evening", and "night". The "chinese" style uses 7 different meridiems corresponding 
+ * The "ethiopic" style uses 5 different meridiems for "morning", "noon", "afternoon",
+ * "evening", and "night". The "chinese" style uses 7 different meridiems corresponding
  * to the various parts of the day. N.B. Even for the Chinese locales, the default is "gregorian"
  * when formatting dates in the Gregorian calendar.
  *
- * <li><i>onLoad</i> - a callback function to call when the date format object is fully 
+ * <li><i>onLoad</i> - a callback function to call when the date format object is fully
  * loaded. When the onLoad option is given, the DateFmt object will attempt to
  * load any missing locale data using the ilib loader callback.
- * When the constructor is done (even if the data is already preassembled), the 
+ * When the constructor is done (even if the data is already preassembled), the
  * onLoad function is called with the current instance as a parameter, so this
  * callback can be used with preassembled or dynamic loading or a mix of the two.
- * 
- * <li><i>sync</i> - tell whether to load any missing locale data synchronously or 
+ *
+ * <li><i>sync</i> - tell whether to load any missing locale data synchronously or
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
  * not be usable for a while.
- *  
- * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ *
+ * <li><i>loadParams</i> - an object containing parameters to pass to the
  * loader callback function when locale data is missing. The parameters are not
- * interpretted or modified in any way. They are simply passed along. The object 
+ * interpretted or modified in any way. They are simply passed along. The object
  * may contain any property/value pairs as long as the calling code is in
  * agreement with the loader callback function as to what those parameters mean.
  * </ul>
- * 
- * Any substring containing letters within single or double quotes will be used 
+ *
+ * Any substring containing letters within single or double quotes will be used
  * as-is in the final output and will not be interpretted for codes as above.<p>
- * 
+ *
  * Example: a date format in Spanish might be given as: "'El' d. 'de' MMMM", where
- * the 'El' and the 'de' are left as-is in the output because they are quoted. Typical 
+ * the 'El' and the 'de' are left as-is in the output because they are quoted. Typical
  * output for this example template might be, "El 5. de Mayo".
- * 
+ *
  * The following options will be used when formatting a date/time with an explicit
  * template:
- * 
+ *
  * <ul>
- * <li>locale - the locale is only used for 
+ * <li>locale - the locale is only used for
  * translations of things like month names or day-of-week names.
- * <li>calendar - used to translate a date instance into date/time component values 
+ * <li>calendar - used to translate a date instance into date/time component values
  * that can be formatted into the template
  * <li>timezone - used to figure out the offset to add or subtract from the time to
  * get the final time component values
  * <li>clock - used to figure out whether to format times with a 12 or 24 hour clock.
  * If this option is specified, it will override the hours portion of a time format.
- * That is, "hh" is switched with "HH" and "kk" is switched with "KK" as appropriate. 
- * If this option is not specified, the 12/24 code in the template will dictate whether 
+ * That is, "hh" is switched with "HH" and "kk" is switched with "KK" as appropriate.
+ * If this option is not specified, the 12/24 code in the template will dictate whether
  * to use the 12 or 24 clock, and the 12/24 default in the locale will be ignored.
  * </ul>
- * 
+ *
  * All other options will be ignored and their corresponding getter methods will
  * return the empty string.<p>
- * 
+ *
  * Depends directive: !depends datefmt.js
- * 
+ *
  * @constructor
  * @param {Object} options options governing the way this date formatter instance works
  */
 ilib.DateFmt = function(options) {
-	var arr, i, bad, 
-		sync = true, 
+	var arr, i, bad,
+		sync = true,
 		loadParams = undefined;
-	
+
 	this.locale = new ilib.Locale();
 	this.type = "date";
 	this.length = "s";
 	this.dateComponents = "dmy";
 	this.timeComponents = "ahm";
 	this.meridiems = "default";
-	
+
 	if (options) {
 		if (options.locale) {
 			this.locale = (typeof(options.locale) === 'string') ? new ilib.Locale(options.locale) : options.locale;
 		}
-		
+
 		if (options.type) {
 			if (options.type === 'date' || options.type === 'time' || options.type === 'datetime') {
 				this.type = options.type;
 			}
 		}
-		
+
 		if (options.calendar) {
 			this.calName = options.calendar;
 		}
-		
+
 		if (options.length) {
 			if (options.length === 'short' ||
 				options.length === 'medium' ||
@@ -7127,7 +7127,7 @@ ilib.DateFmt = function(options) {
 				this.length = options.length.charAt(0);
 			}
 		}
-		
+
 		if (options.date) {
 			arr = options.date.split("");
 			arr.sort(function (left, right) {
@@ -7161,11 +7161,11 @@ ilib.DateFmt = function(options) {
 				this.timeComponents = arr.join("");
 			}
 		}
-		
+
 		if (options.clock && (options.clock === '12' || options.clock === '24')) {
 			this.clock = options.clock;
 		}
-		
+
 		if (options.template) {
 			// many options are not useful when specifying the template directly, so zero
 			// them out.
@@ -7173,16 +7173,16 @@ ilib.DateFmt = function(options) {
 			this.length = "";
 			this.dateComponents = "";
 			this.timeComponents = "";
-			
+
 			this.template = options.template;
 		}
-		
+
 		if (options.timezone) {
 			if (options.timezone instanceof ilib.TimeZone) {
 				this.tz = options.timezone;
 			} else {
 				this.tz = new ilib.TimeZone({
-					locale: this.locale, 
+					locale: this.locale,
 					id: options.timezone
 				});
 			}
@@ -7192,22 +7192,22 @@ ilib.DateFmt = function(options) {
 				locale: this.locale
 			});
 		} // else just assume time zone "local"
-		
+
 		if (typeof(options.useNative) === 'boolean') {
 			this.useNative = options.useNative;
 		}
-		
-		if (typeof(options.meridiems) !== 'undefined' && 
-				(options.meridiems === "chinese" || 
-				 options.meridiems === "gregorian" || 
+
+		if (typeof(options.meridiems) !== 'undefined' &&
+				(options.meridiems === "chinese" ||
+				 options.meridiems === "gregorian" ||
 				 options.meridiems === "ethiopic")) {
 			this.meridiems = options.meridiems;
 		}
-		
+
 		if (typeof(options.sync) !== 'undefined') {
 			sync = (options.sync === true);
 		}
-		
+
 		loadParams = options.loadParams;
 	}
 
@@ -7217,10 +7217,10 @@ ilib.DateFmt = function(options) {
 
 	new ilib.LocaleInfo(this.locale, {
 		sync: sync,
-		loadParams: loadParams, 
+		loadParams: loadParams,
 		onLoad: ilib.bind(this, function (li) {
 			this.locinfo = li;
-			
+
 			// get the default calendar name from the locale, and if the locale doesn't define
 			// one, use the hard-coded gregorian as the last resort
 			this.calName = this.calName || this.locinfo.getCalendar() || "gregorian";
@@ -7230,14 +7230,14 @@ ilib.DateFmt = function(options) {
 			if (!this.cal) {
 				this.cal = new ilib.Cal.Gregorian();
 			}
-			
+
 			if (this.meridiems === "default") {
 				this.meridiems = li.getMeridiemsStyle();
 			}
 
 			/*
 			if (this.timeComponents &&
-					(this.clock === '24' || 
+					(this.clock === '24' ||
 					(!this.clock && this.locinfo.getClock() === "24"))) {
 				// make sure we don't have am/pm in 24 hour mode unless the user specifically
 				// requested it in the time component option
@@ -7250,17 +7250,17 @@ ilib.DateFmt = function(options) {
 				locale: this.locale,
 				name: "sysres",
 				sync: sync,
-				loadParams: loadParams, 
+				loadParams: loadParams,
 				onLoad: ilib.bind(this, function (rb) {
 					this.sysres = rb;
-					
+
 					if (!this.template) {
 						ilib.loadData({
-							object: ilib.DateFmt, 
-							locale: this.locale, 
-							name: "dateformats.json", 
-							sync: sync, 
-							loadParams: loadParams, 
+							object: ilib.DateFmt,
+							locale: this.locale,
+							name: "dateformats.json",
+							sync: sync,
+							loadParams: loadParams,
 							callback: ilib.bind(this, function (formats) {
 								if (!formats) {
 									formats = ilib.data.dateformats || ilib.DateFmt.defaultFmt;
@@ -7285,7 +7285,7 @@ ilib.DateFmt = function(options) {
 						}
 					}
 				})
-			});	
+			});
 		})
 	});
 };
@@ -7369,7 +7369,7 @@ ilib.DateFmt.prototype = {
 	 */
 	_initTemplate: function (formats) {
 		if (formats[this.calName]) {
-			/** 
+			/**
 			 * @private
 			 * @type {{order:(string|{s:string,m:string,l:string,f:string}),date:Object.<string, (string|{s:string,m:string,l:string,f:string})>,time:Object.<string,(string|{s:string,m:string,l:string,f:string})>,range:Object.<string, (string|{s:string,m:string,l:string,f:string})>}}
 			 */
@@ -7378,9 +7378,9 @@ ilib.DateFmt.prototype = {
 				// alias to another calendar type
 				this.formats = formats[this.formats];
 			}
-			
+
 			this.template = "";
-			
+
 			switch (this.type) {
 				case "datetime":
 					this.template = (this.formats && this._getLengthFormat(this.formats.order, this.length)) || "{date} {time}";
@@ -7398,13 +7398,13 @@ ilib.DateFmt.prototype = {
 			throw "No formats available for calendar " + this.calName + " in locale " + this.locale.toString();
 		}
 	},
-	
+
 	/**
 	 * @protected
 	 */
 	_massageTemplate: function () {
 		var i;
-		
+
 		if (this.clock && this.template) {
 			// explicitly set the hours to the requested type
 			var temp = "";
@@ -7451,7 +7451,7 @@ ilib.DateFmt.prototype = {
 					break;
 			}
 		}
-		
+
 		// tokenize it now for easy formatting
 		this.templateArr = this._tokenize(this.template);
 
@@ -7472,7 +7472,7 @@ ilib.DateFmt.prototype = {
 			}
 		}
 	},
-    
+
 	/**
 	 * Convert the template into an array of date components separated by formatting chars.
 	 * @protected
@@ -7481,7 +7481,7 @@ ilib.DateFmt.prototype = {
 	 */
 	_tokenize: function (template) {
 		var i = 0, start, ch, letter, arr = [];
-		
+
 		// console.log("_tokenize: tokenizing template " + template);
 		if (template) {
 			while (i < template.length) {
@@ -7515,7 +7515,7 @@ ilib.DateFmt.prototype = {
 		}
 		return arr;
 	},
-                          
+
 	/**
 	 * @protected
 	 * @param {Object.<string, (string|{s:string,m:string,l:string,f:string})>} obj Object to search
@@ -7552,20 +7552,20 @@ ilib.DateFmt.prototype = {
 	getLocale: function() {
 		return this.locale;
 	},
-	
+
 	/**
 	 * Return the template string that is used to format date/times for this
-	 * formatter instance. This will work, even when the template property is not explicitly 
-	 * given in the options to the constructor. Without the template option, the constructor 
+	 * formatter instance. This will work, even when the template property is not explicitly
+	 * given in the options to the constructor. Without the template option, the constructor
 	 * will build the appropriate template according to the options and use that template
-	 * in the format method. 
-	 * 
+	 * in the format method.
+	 *
 	 * @return {string} the format template for this formatter
 	 */
 	getTemplate: function() {
 		return this.template;
 	},
-	
+
 	/**
 	 * Return the type of this formatter. The type is a string that has one of the following
 	 * values: "time", "date", "datetime".
@@ -7574,7 +7574,7 @@ ilib.DateFmt.prototype = {
 	getType: function() {
 		return this.type;
 	},
-	
+
 	/**
 	 * Return the name of the calendar used to format date/times for this
 	 * formatter instance.
@@ -7583,25 +7583,25 @@ ilib.DateFmt.prototype = {
 	getCalendar: function () {
 		return this.cal.getType();
 	},
-	
+
 	/**
 	 * Return the length used to format date/times in this formatter. This is either the
 	 * value of the length option to the constructor, or the default value.
-	 * 
+	 *
 	 * @return {string} the length of formats this formatter returns
 	 */
 	getLength: function () {
 		return ilib.DateFmt.lenmap[this.length] || "";
 	},
-	
+
 	/**
-	 * Return the date components that this formatter formats. This is either the 
+	 * Return the date components that this formatter formats. This is either the
 	 * value of the date option to the constructor, or the default value. If this
-	 * formatter is a time-only formatter, this method will return the empty 
-	 * string. The date component letters may be specified in any order in the 
-	 * constructor, but this method will reorder the given components to a standard 
+	 * formatter is a time-only formatter, this method will return the empty
+	 * string. The date component letters may be specified in any order in the
+	 * constructor, but this method will reorder the given components to a standard
 	 * order.
-	 * 
+	 *
 	 * @return {string} the date components that this formatter formats
 	 */
 	getDateComponents: function () {
@@ -7609,13 +7609,13 @@ ilib.DateFmt.prototype = {
 	},
 
 	/**
-	 * Return the time components that this formatter formats. This is either the 
+	 * Return the time components that this formatter formats. This is either the
 	 * value of the time option to the constructor, or the default value. If this
-	 * formatter is a date-only formatter, this method will return the empty 
-	 * string. The time component letters may be specified in any order in the 
-	 * constructor, but this method will reorder the given components to a standard 
+	 * formatter is a date-only formatter, this method will return the empty
+	 * string. The time component letters may be specified in any order in the
+	 * constructor, but this method will reorder the given components to a standard
 	 * order.
-	 * 
+	 *
 	 * @return {string} the time components that this formatter formats
 	 */
 	getTimeComponents: function () {
@@ -7628,8 +7628,8 @@ ilib.DateFmt.prototype = {
 	 * @return a string naming the time zone
 	 */
 	getTimeZone: function () {
-		// Lazy load the time zone. If it wasn't explicitly set up before, set 
-		// it up now, but use the 
+		// Lazy load the time zone. If it wasn't explicitly set up before, set
+		// it up now, but use the
 		// default TZ for the locale. This way, if the caller never uses the
 		// time zone in their format, we never have to load up a TimeZone
 		// instance into this formatter.
@@ -7647,7 +7647,7 @@ ilib.DateFmt.prototype = {
 	getClock: function () {
 		return this.clock || this.locinfo.getClock();
 	},
-	
+
 	/**
 	 * @private
 	 */
@@ -7663,7 +7663,7 @@ ilib.DateFmt.prototype = {
 	 * i.e. ...getMonthsOfYear() OR ...getMonthsOfYear({length: "short"})
 	 * <p>
 	 * The options parameter may contain any of the following properties:
-	 * 
+	 *
 	 * <ul>
 	 * <li><i>length</i> - length of the names of the months being sought. This may be one of
 	 * "short", "medium", "long", or "full"
@@ -7671,7 +7671,7 @@ ilib.DateFmt.prototype = {
 	 * <li><i>year</i> - retrieve the names of the months in the given year. In some calendars,
 	 * the months have different names depending if that year is a leap year or not.
 	 * </ul>
-	 * 
+	 *
 	 * @param  {Object=} options an object-literal that contains any of the above properties
 	 * @return {Array} an array of the names of all of the months of the year in the current calendar
 	 */
@@ -7681,17 +7681,17 @@ ilib.DateFmt.prototype = {
 			months = [undefined],
 			date,
 			monthCount;
-		
+
 		if (options) {
 			if (options.date) {
-				date = ilib.Date._dateToIlib(options.date); 	
+				date = ilib.Date._dateToIlib(options.date);
 			}
-			
+
 			if (options.year) {
 				date = ilib.Date.newInstance({year: options.year, month: 1, day: 1, type: this.cal.getType()});
 			}
 		}
-		
+
 		if (!date) {
 			date = this.cal.newDateInstance();
 		}
@@ -7708,12 +7708,12 @@ ilib.DateFmt.prototype = {
 	 * i.e. ...getDaysOfWeek() OR ...getDaysOfWeek({length: "short"})
 	 * <p>
 	 * The options parameter may contain any of the following properties:
-	 * 
+	 *
 	 * <ul>
 	 * <li><i>length</i> - length of the names of the months being sought. This may be one of
 	 * "short", "medium", "long", or "full"
 	 * </ul>
-	 * @param  {Object=} options an object-literal that contains one key 
+	 * @param  {Object=} options an object-literal that contains one key
 	 *                   "length" with the standard length strings
 	 * @return {Array} an array of all of the names of the days of the week
 	 */
@@ -7727,22 +7727,22 @@ ilib.DateFmt.prototype = {
 		return days;
 	},
 
-	
+
 	/**
 	 * Convert this formatter to a string representation by returning the
 	 * format template. This method delegates to getTemplate.
-	 * 
+	 *
 	 * @return {string} the format template
 	 */
 	toString: function() {
 		return this.getTemplate();
 	},
-	
+
 	/*
 	 * @private
 	 * Left pad the str to the given length of digits with zeros
 	 * @param {string} str the string to pad
-	 * @param {number} length the desired total length of the output string, padded 
+	 * @param {number} length the desired total length of the output string, padded
 	 */
 	_pad: function (str, length) {
 		if (typeof(str) !== 'string') {
@@ -7754,10 +7754,10 @@ ilib.DateFmt.prototype = {
 		}
 		return (str.length >= length+start) ? str : str.substring(0, start) + ilib.DateFmt.zeros.substring(0,length-str.length+start) + str.substring(start);
 	},
-	
+
 	/*
 	 * @private
-	 * Format a date according to a sequence of components. 
+	 * Format a date according to a sequence of components.
 	 * @param {ilib.Date} date a date/time object to format
 	 * @param {Array.<string>} templateArr an array of components to format
 	 * @return {string} the formatted date
@@ -7790,7 +7790,7 @@ ilib.DateFmt.prototype = {
 					if (temp == 0) {
 						temp = "12";
 					}
-					str += temp; 
+					str += temp;
 					break;
 				case 'hh':
 					temp = (date.hour || 0) % 12;
@@ -7802,7 +7802,7 @@ ilib.DateFmt.prototype = {
 				/*
 				case 'j':
 					temp = (date.hour || 0) % 12 + 1;
-					str += temp; 
+					str += temp;
 					break;
 				case 'jj':
 					temp = (date.hour || 0) % 12 + 1;
@@ -7811,7 +7811,7 @@ ilib.DateFmt.prototype = {
 				*/
 				case 'K':
 					temp = (date.hour || 0) % 12;
-					str += temp; 
+					str += temp;
 					break;
 				case 'KK':
 					temp = (date.hour || 0) % 12;
@@ -7867,7 +7867,7 @@ ilib.DateFmt.prototype = {
 					//console.log("finding " + key + " in the resources");
 					str += (this.sysres.getString(undefined, key + "-" + this.calName) || this.sysres.getString(undefined, key));
 					break;
-					
+
 				case 'a':
 					switch (this.meridiems) {
 					case "chinese":
@@ -7907,7 +7907,7 @@ ilib.DateFmt.prototype = {
 					//console.log("finding " + key + " in the resources");
 					str += (this.sysres.getString(undefined, key + "-" + this.calName) || this.sysres.getString(undefined, key));
 					break;
-					
+
 				case 'w':
 					str += date.getWeekOfYear();
 					break;
@@ -7937,7 +7937,7 @@ ilib.DateFmt.prototype = {
 					temp = this.sysres.getString("1#1st|2#2nd|3#3rd|21#21st|22#22nd|23#23rd|31#31st|#{num}th", "ordinalChoice");
 					str += temp.formatChoice(date.day, {num: date.day});
 					break;
-					
+
 				case 'z': // general time zone
 					tz = this.getTimeZone(); // lazy-load the tz
 					str += tz.getDisplayName(date, "standard");
@@ -7958,14 +7958,14 @@ ilib.DateFmt.prototype = {
 		}
 		return str;
 	},
-	
+
 	/**
 	 * Format a particular date instance according to the settings of this
-	 * formatter object. The type of the date instance being formatted must 
-	 * correspond exactly to the calendar type with which this formatter was 
+	 * formatter object. The type of the date instance being formatted must
+	 * correspond exactly to the calendar type with which this formatter was
 	 * constructed. If the types are not compatible, this formatter will
 	 * produce bogus results.
-	 * 
+	 *
 	 * @param {Date|Number|String|ilib.Date|ilib.JulianDay|null|undefined} dateLike a date-like object to format
 	 * @return {string} the formatted version of the given date instance
 	 */
@@ -7973,13 +7973,13 @@ ilib.DateFmt.prototype = {
 		var thisZoneName = this.tz && this.tz.getId() || "local";
 
 		var date = ilib.Date._dateToIlib(dateLike, thisZoneName);
-		
+
 		if (!date.getCalendar || !(date instanceof ilib.Date)) {
 			throw "Wrong date type passed to ilib.DateFmt.format()";
 		}
-		
+
 		var dateZoneName = date.timezone || "local";
-		
+
 		// convert to the time zone of this formatter before formatting
 		if (dateZoneName !== thisZoneName || date.getCalendar() !== this.calName) {
 			// console.log("Differing time zones date: " + dateZoneName + " and fmt: " + thisZoneName + ". Converting...");
@@ -7990,25 +7990,25 @@ ilib.DateFmt.prototype = {
 				timezone: thisZoneName,
 				julianday: date.getJulianDay()
 			});
-			
+
 			date = newDate;
 		}
 		return this._formatTemplate(date, this.templateArr);
 	},
-	
+
 	/**
-	 * Return a string that describes a date relative to the given 
+	 * Return a string that describes a date relative to the given
 	 * reference date. The string returned is text that for the locale that
 	 * was specified when the formatter instance was constructed.<p>
-	 * 
+	 *
 	 * The date can be in the future relative to the reference date or in
 	 * the past, and the formatter will generate the appropriate string.<p>
-	 * 
+	 *
 	 * The text used to describe the relative reference depends on the length
 	 * of time between the date and the reference. If the time was in the
 	 * past, it will use the "ago" phrase, and in the future, it will use
 	 * the "in" phrase. Examples:<p>
-	 * 
+	 *
 	 * <ul>
 	 * <li>within a minute: either "X seconds ago" or "in X seconds"
 	 * <li>within an hour: either "X minutes ago" or "in X minutes"
@@ -8018,7 +8018,7 @@ ilib.DateFmt.prototype = {
 	 * <li>within two years: either "X months ago" or "in X months"
 	 * <li>longer than 2 years: "X years ago" or "in X years"
 	 * </ul>
-	 * 
+	 *
 	 * @param {Date|Number|String|ilib.Date|ilib.JulianDay|null|undefined} reference a date that the date parameter should be relative to
 	 * @param {Date|Number|String|ilib.Date|ilib.JulianDay|null|undefined} date a date being formatted
 	 * @throws "Wrong calendar type" when the start or end dates are not the same
@@ -8028,17 +8028,17 @@ ilib.DateFmt.prototype = {
 	formatRelative: function(reference, date) {
 		reference = ilib.Date._dateToIlib(reference);
 		date = ilib.Date._dateToIlib(date);
-		
+
 		var referenceRd, dateRd, fmt, time, diff, num;
-		
+
 		if (typeof(reference) !== 'object' || !reference.getCalendar || reference.getCalendar() !== this.calName ||
 			typeof(date) !== 'object' || !date.getCalendar || date.getCalendar() !== this.calName) {
 			throw "Wrong calendar type";
 		}
-		
+
 		referenceRd = reference.getRataDie();
 		dateRd = date.getRataDie();
-		
+
 		if (dateRd < referenceRd) {
 			diff = referenceRd - dateRd;
 			fmt = this.sysres.getString("{duration} ago");
@@ -8046,7 +8046,7 @@ ilib.DateFmt.prototype = {
 			diff = dateRd - referenceRd;
 			fmt = this.sysres.getString("in {duration}");
 		}
-		
+
 		if (diff < 0.000694444) {
 			num = Math.round(diff * 86400);
 			switch (this.length) {
@@ -8173,7 +8173,7 @@ ilib.DateFmt.prototype = {
 
 /*
  * datefmt.js - Date formatter definition
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -8191,11 +8191,11 @@ ilib.DateFmt.prototype = {
  */
 
 /*
-!depends 
-ilibglobal.js 
-locale.js 
-date.js 
-strings.js 
+!depends
+ilibglobal.js
+locale.js
+date.js
+strings.js
 calendar.js
 localeinfo.js
 timezone.js
@@ -8213,77 +8213,77 @@ util/jsutils.js
  * options. Create different date range formatter instances for different purposes
  * and then keep them cached for use later if you have more than one range to
  * format.<p>
- * 
+ *
  * The options may contain any of the following properties:
- * 
+ *
  * <ul>
- * <li><i>locale</i> - locale to use when formatting the date/times in the range. If the 
+ * <li><i>locale</i> - locale to use when formatting the date/times in the range. If the
  * locale is not specified, then the default locale of the app or web page will be used.
- * 
+ *
  * <li><i>calendar</i> - the type of calendar to use for this format. The value should
  * be a sting containing the name of the calendar. Currently, the supported
  * types are "gregorian", "julian", "arabic", "hebrew", or "chinese". If the
  * calendar is not specified, then the default calendar for the locale is used. When the
  * calendar type is specified, then the format method must be called with an instance of
- * the appropriate date type. (eg. Gregorian calendar means that the format method must 
+ * the appropriate date type. (eg. Gregorian calendar means that the format method must
  * be called with a GregDate instance.)
- *  
+ *
  * <li><i>timezone</i> - time zone to use when formatting times. This may be a time zone
  * instance or a time zone specifier string in RFC 822 format. If not specified, the
  * default time zone for the locale is used.
- * 
- * <li><i>length</i> - Specify the length of the format to use as a string. The length 
+ *
+ * <li><i>length</i> - Specify the length of the format to use as a string. The length
  * is the approximate size of the formatted string.
- * 
+ *
  * <ul>
  * <li><i>short</i> - use a short representation of the time. This is the most compact format possible for the locale.
  * <li><i>medium</i> - use a medium length representation of the time. This is a slightly longer format.
- * <li><i>long</i> - use a long representation of the time. This is a fully specified format, but some of the textual 
+ * <li><i>long</i> - use a long representation of the time. This is a fully specified format, but some of the textual
  * components may still be abbreviated. (eg. "Tue" instead of "Tuesday")
- * <li><i>full</i> - use a full representation of the time. This is a fully specified format where all the textual 
+ * <li><i>full</i> - use a full representation of the time. This is a fully specified format where all the textual
  * components are spelled out completely.
  * </ul>
- * 
- * eg. The "short" format for an en_US range may be "MM/yy - MM/yy", whereas the long format might be 
- * "MMM, yyyy - MMM, yyyy". In the long format, the month name is textual instead of numeric 
- * and is longer, the year is 4 digits instead of 2, and the format contains slightly more 
+ *
+ * eg. The "short" format for an en_US range may be "MM/yy - MM/yy", whereas the long format might be
+ * "MMM, yyyy - MMM, yyyy". In the long format, the month name is textual instead of numeric
+ * and is longer, the year is 4 digits instead of 2, and the format contains slightly more
  * spaces and formatting characters.<p>
- * 
+ *
  * Note that the length parameter does not specify which components are to be formatted. The
  * components that are formatted depend on the length of time in the range.
- * 
+ *
  * <li><i>clock</i> - specify that formatted times should use a 12 or 24 hour clock if the
  * format happens to include times. Valid values are "12" and "24".<p>
- * 
+ *
  * In some locales, both clocks are used. For example, in en_US, the general populace uses
- * a 12 hour clock with am/pm, but in the US military or in nautical or aeronautical or 
+ * a 12 hour clock with am/pm, but in the US military or in nautical or aeronautical or
  * scientific writing, it is more common to use a 24 hour clock. This property allows you to
  * construct a formatter that overrides the default for the locale.<p>
- * 
+ *
  * If this property is not specified, the default is to use the most widely used convention
  * for the locale.
- * <li>onLoad - a callback function to call when the date range format object is fully 
+ * <li>onLoad - a callback function to call when the date range format object is fully
  * loaded. When the onLoad option is given, the DateRngFmt object will attempt to
  * load any missing locale data using the ilib loader callback.
- * When the constructor is done (even if the data is already preassembled), the 
+ * When the constructor is done (even if the data is already preassembled), the
  * onLoad function is called with the current instance as a parameter, so this
- * callback can be used with preassembled or dynamic loading or a mix of the two. 
- * 
- * <li>sync - tell whether to load any missing locale data synchronously or 
+ * callback can be used with preassembled or dynamic loading or a mix of the two.
+ *
+ * <li>sync - tell whether to load any missing locale data synchronously or
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
  * not be usable for a while.
- *  
- * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ *
+ * <li><i>loadParams</i> - an object containing parameters to pass to the
  * loader callback function when locale data is missing. The parameters are not
- * interpretted or modified in any way. They are simply passed along. The object 
+ * interpretted or modified in any way. They are simply passed along. The object
  * may contain any property/value pairs as long as the calling code is in
  * agreement with the loader callback function as to what those parameters mean.
  * </ul>
  * <p>
- * 
+ *
  * Depends directive: !depends daterangefmt.js
- * 
+ *
  * @constructor
  * @param {Object} options options governing the way this date range formatter instance works
  */
@@ -8292,16 +8292,16 @@ ilib.DateRngFmt = function(options) {
 	var loadParams = undefined;
 	this.locale = new ilib.Locale();
 	this.length = "s";
-	
+
 	if (options) {
 		if (options.locale) {
 			this.locale = (typeof(options.locale) === 'string') ? new ilib.Locale(options.locale) : options.locale;
 		}
-		
+
 		if (options.calendar) {
 			this.calName = options.calendar;
 		}
-		
+
 		if (options.length) {
 			if (options.length === 'short' ||
 				options.length === 'medium' ||
@@ -8314,15 +8314,15 @@ ilib.DateRngFmt = function(options) {
 		if (typeof(options.sync) !== 'undefined') {
 			sync = (options.sync == true);
 		}
-		
+
 		loadParams = options.loadParams;
 	}
-	
+
 	var opts = {};
 	ilib.shallowCopy(options, opts);
 	opts.sync = sync;
 	opts.loadParams = loadParams;
-	
+
 	/**
 	 * @private
 	 */
@@ -8340,10 +8340,10 @@ ilib.DateRngFmt = function(options) {
 			if (!this.cal) {
 				this.cal = new ilib.Cal.Gregorian();
 			}
-			
+
 			this.timeTemplate = this.dateFmt._getFormat(this.dateFmt.formats.time[this.dateFmt.clock], this.dateFmt.timeComponents, this.length) || "hh:mm";
 			this.timeTemplateArr = this.dateFmt._tokenize(this.timeTemplate);
-			
+
 			if (options && typeof(options.onLoad) === 'function') {
 				options.onLoad(this);
 			}
@@ -8362,7 +8362,7 @@ ilib.DateRngFmt.prototype = {
 	getLocale: function() {
 		return this.locale;
 	},
-	
+
 	/**
 	 * Return the name of the calendar used to format date/times for this
 	 * formatter instance.
@@ -8371,17 +8371,17 @@ ilib.DateRngFmt.prototype = {
 	getCalendar: function () {
 		return this.dateFmt.getCalendar();
 	},
-	
+
 	/**
 	 * Return the length used to format date/times in this formatter. This is either the
 	 * value of the length option to the constructor, or the default value.
-	 * 
+	 *
 	 * @return {string} the length of formats this formatter returns
 	 */
 	getLength: function () {
 		return ilib.DateFmt.lenmap[this.length] || "";
 	},
-	
+
 	/**
 	 * Return the time zone used to format date/times for this formatter
 	 * instance.
@@ -8390,7 +8390,7 @@ ilib.DateRngFmt.prototype = {
 	getTimeZone: function () {
 		return this.dateFmt.getTimeZone();
 	},
-	
+
 	/**
 	 * Return the clock option set in the constructor. If the clock option was
 	 * not given, the default from the locale is returned instead.
@@ -8400,54 +8400,54 @@ ilib.DateRngFmt.prototype = {
 	getClock: function () {
 		return this.dateFmt.getClock();
 	},
-	
+
 	/**
 	 * Format a date/time range according to the settings of the current
 	 * formatter. The range is specified as being from the "start" date until
 	 * the "end" date. <p>
-	 * 
+	 *
 	 * The template that the date/time range uses depends on the
 	 * length of time between the dates, on the premise that a long date range
 	 * which is too specific is not useful. For example, when giving
-	 * the dates of the 100 Years War, in most situations it would be more 
-	 * appropriate to format the range as "1337 - 1453" than to format it as 
-	 * "10:37am November 9, 1337 - 4:37pm July 17, 1453", as the latter format 
+	 * the dates of the 100 Years War, in most situations it would be more
+	 * appropriate to format the range as "1337 - 1453" than to format it as
+	 * "10:37am November 9, 1337 - 4:37pm July 17, 1453", as the latter format
 	 * is much too specific given the length of time that the range represents.
-	 * If a very specific, but long, date range really is needed, the caller 
-	 * should format two specific dates separately and put them 
+	 * If a very specific, but long, date range really is needed, the caller
+	 * should format two specific dates separately and put them
 	 * together as you might with other normal strings.<p>
-	 * 
+	 *
 	 * The format used for a date range contains the following date components,
-	 * where the order of those components is rearranged and the component values 
+	 * where the order of those components is rearranged and the component values
 	 * are translated according to each locale:
-	 * 
+	 *
 	 * <ul>
 	 * <li>within 3 days: the times of day, dates, months, and years
 	 * <li>within 730 days (2 years): the dates, months, and years
 	 * <li>within 3650 days (10 years): the months and years
-	 * <li>longer than 10 years: the years only 
+	 * <li>longer than 10 years: the years only
 	 * </ul>
-	 * 
+	 *
 	 * In general, if any of the date components share a value between the
 	 * start and end date, that component is only given once. For example,
-	 * if the range is from November 15, 2011 to November 26, 2011, the 
-	 * start and end dates both share the same month and year. The 
+	 * if the range is from November 15, 2011 to November 26, 2011, the
+	 * start and end dates both share the same month and year. The
 	 * range would then be formatted as "November 15-26, 2011". <p>
-	 * 
+	 *
 	 * If you want to format a length of time instead of a particular range of
 	 * time (for example, the length of an event rather than the specific start time
-	 * and end time of that event), then use a duration formatter instance 
-	 * (ilib.DurFmt) instead. The formatRange method will make sure that each component 
-	 * of the date/time is within the normal range for that component. For example, 
-	 * the minutes will always be between 0 and 59, no matter what is specified in 
-	 * the date to format, because that is the normal range for minutes. A duration 
-	 * format will allow the number of minutes to exceed 59. For example, if you 
+	 * and end time of that event), then use a duration formatter instance
+	 * (ilib.DurFmt) instead. The formatRange method will make sure that each component
+	 * of the date/time is within the normal range for that component. For example,
+	 * the minutes will always be between 0 and 59, no matter what is specified in
+	 * the date to format, because that is the normal range for minutes. A duration
+	 * format will allow the number of minutes to exceed 59. For example, if you
 	 * were displaying the length of a movie that is 198 minutes long, the minutes
 	 * component of a duration could be 198.<p>
-	 * 
-	 * @param {ilib.Date} start the starting date/time of the range. This must be of 
-	 * the same calendar type as the formatter itself. 
-	 * @param {ilib.Date} end the ending date/time of the range. This must be of the 
+	 *
+	 * @param {ilib.Date} start the starting date/time of the range. This must be of
+	 * the same calendar type as the formatter itself.
+	 * @param {ilib.Date} end the ending date/time of the range. This must be of the
 	 * same calendar type as the formatter itself.
 	 * @throws "Wrong calendar type" when the start or end dates are not the same
 	 * calendar type as the formatter itself
@@ -8455,16 +8455,16 @@ ilib.DateRngFmt.prototype = {
 	 */
 	format: function (start, end) {
 		var startRd, endRd, fmt = "", yearTemplate, monthTemplate, dayTemplate;
-		
+
 		if (typeof(start) !== 'object' || !start.getCalendar || start.getCalendar() !== this.calName ||
 			typeof(end) !== 'object' || !end.getCalendar || end.getCalendar() !== this.calName) {
 			throw "Wrong calendar type";
 		}
-		
+
 		startRd = start.getRataDie();
 		endRd = end.getRataDie();
-		
-		// 
+
+		//
 		// legend:
 		// c00 - difference is less than 3 days. Year, month, and date are same, but time is different
 		// c01 - difference is less than 3 days. Year and month are same but date and time are different
@@ -8476,7 +8476,7 @@ ilib.DateRngFmt.prototype = {
 		// c20 - difference is less than 10 years. All fields are different.
 		// c30 - difference is more than 10 years. All fields are different.
 		//
-		
+
 		if (endRd - startRd < 3) {
 			if (start.year === end.year) {
 				if (start.month === end.month) {
@@ -8510,14 +8510,14 @@ ilib.DateRngFmt.prototype = {
 		yearTemplate = this.dateFmt._tokenize(this.dateFmt._getFormat(this.dateFmt.formats.date, "y", this.length) || "yyyy");
 		monthTemplate = this.dateFmt._tokenize(this.dateFmt._getFormat(this.dateFmt.formats.date, "m", this.length) || "MM");
 		dayTemplate = this.dateFmt._tokenize(this.dateFmt._getFormat(this.dateFmt.formats.date, "d", this.length) || "dd");
-		
+
 		/*
 		console.log("fmt is " + fmt.toString());
 		console.log("year template is " + yearTemplate);
 		console.log("month template is " + monthTemplate);
 		console.log("day template is " + dayTemplate);
 		*/
-		
+
 		return fmt.format({
 			sy: this.dateFmt._formatTemplate(start, yearTemplate),
 			sm: this.dateFmt._formatTemplate(start, monthTemplate),
@@ -8533,7 +8533,7 @@ ilib.DateRngFmt.prototype = {
 
 /*
  * hebrew.js - Represent a Hebrew calendar object.
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -8556,19 +8556,19 @@ ilib.DateRngFmt.prototype = {
 /**
  * @class
  * Construct a new Hebrew calendar object. This class encodes information about
- * the Hebrew (Jewish) calendar. The Hebrew calendar is a tabular hebrew 
- * calendar where the dates are calculated by arithmetic rules. This differs from 
- * the religious Hebrew calendar which is used to mark the beginning of particular 
- * holidays. The religious calendar depends on the first sighting of the new 
- * crescent moon to determine the first day of the new month. Because humans and 
- * weather are both involved, the actual time of sighting varies, so it is not 
- * really possible to precalculate the religious calendar. Certain groups, such 
+ * the Hebrew (Jewish) calendar. The Hebrew calendar is a tabular hebrew
+ * calendar where the dates are calculated by arithmetic rules. This differs from
+ * the religious Hebrew calendar which is used to mark the beginning of particular
+ * holidays. The religious calendar depends on the first sighting of the new
+ * crescent moon to determine the first day of the new month. Because humans and
+ * weather are both involved, the actual time of sighting varies, so it is not
+ * really possible to precalculate the religious calendar. Certain groups, such
  * as the Hebrew Society of North America, decreed in in 2007 that they will use
- * a calendar based on calculations rather than observations to determine the 
+ * a calendar based on calculations rather than observations to determine the
  * beginning of lunar months, and therefore the dates of holidays.<p>
- * 
+ *
  * Depends directive: !depends hebrew.js
- * 
+ *
  * @constructor
  * @implements ilib.Cal
  */
@@ -8588,20 +8588,20 @@ ilib.Cal.Hebrew = function() {
 ilib.Cal.Hebrew.elapsedDays = function(year) {
 	var months = Math.floor(((235*year) - 234)/19);
 	var parts = 204 + 793 * ilib.mod(months, 1080);
-	var hours = 11 + 12 * months + 793 * Math.floor(months/1080) + 
+	var hours = 11 + 12 * months + 793 * Math.floor(months/1080) +
 		Math.floor(parts/1080);
 	var days = 29 * months + Math.floor(hours/24);
 	return (ilib.mod(3 * (days + 1), 7) < 3) ? days + 1 : days;
 };
 
 /**
- * Return the number of days that the New Year's (Rosh HaShanah) in the Hebrew 
- * calendar will be corrected for the given year. Corrections are caused because New 
- * Year's is not allowed to start on certain days of the week. To deal with 
- * it, the start of the new year is corrected for the next year by adding a 
+ * Return the number of days that the New Year's (Rosh HaShanah) in the Hebrew
+ * calendar will be corrected for the given year. Corrections are caused because New
+ * Year's is not allowed to start on certain days of the week. To deal with
+ * it, the start of the new year is corrected for the next year by adding a
  * day to the 8th month (Heshvan) and/or the 9th month (Kislev) in the current
  * year to make them 30 days long instead of 29.
- * 
+ *
  * @private
  * @param {number} year the year for which the correction is sought
  * @param {number} elapsed number of days elapsed up to this year
@@ -8612,7 +8612,7 @@ ilib.Cal.Hebrew.newYearsCorrection = function(year, elapsed) {
 	var lastYear = ilib.Cal.Hebrew.elapsedDays(year-1),
 		thisYear = elapsed,
 		nextYear = ilib.Cal.Hebrew.elapsedDays(year+1);
-	
+
 	return (nextYear - thisYear) == 356 ? 2 : ((thisYear - lastYear) == 382 ? 1 : 0);
 };
 
@@ -8623,8 +8623,8 @@ ilib.Cal.Hebrew.newYearsCorrection = function(year, elapsed) {
  * @return {number} the rata die date of the new year
  */
 ilib.Cal.Hebrew.newYear = function(year) {
-	var elapsed = ilib.Cal.Hebrew.elapsedDays(year); 
-	
+	var elapsed = ilib.Cal.Hebrew.elapsedDays(year);
+
 	return elapsed + ilib.Cal.Hebrew.newYearsCorrection(year, elapsed);
 };
 
@@ -8634,7 +8634,7 @@ ilib.Cal.Hebrew.newYear = function(year) {
  * fall on particular days of the week. Days are added to the months of Heshvan
  * and/or Kislev in the previous year in order to prevent the current year's New
  * Year from being on Sunday, Wednesday, or Friday.
- * 
+ *
  * @param {number} year the year for which the length is sought
  * @return {number} number of days in the given year
  */
@@ -8645,7 +8645,7 @@ ilib.Cal.Hebrew.daysInYear = function(year) {
 /**
  * Return true if the given year contains a long month of Heshvan. That is,
  * it is 30 days instead of 29.
- * 
+ *
  * @private
  * @param {number} year the year in which that month is questioned
  * @return {boolean} true if the given year contains a long month of Heshvan
@@ -8657,7 +8657,7 @@ ilib.Cal.Hebrew.longHeshvan = function(year) {
 /**
  * Return true if the given year contains a long month of Kislev. That is,
  * it is 30 days instead of 29.
- * 
+ *
  * @private
  * @param {number} year the year in which that month is questioned
  * @return {boolean} true if the given year contains a short month of Kislev
@@ -8668,20 +8668,20 @@ ilib.Cal.Hebrew.longKislev = function(year) {
 
 /**
  * Return the date of the last day of the month for the given year. The date of
- * the last day of the month is variable because a number of months gain an extra 
- * day in leap years, and it is variable which months gain a day for each leap 
+ * the last day of the month is variable because a number of months gain an extra
+ * day in leap years, and it is variable which months gain a day for each leap
  * year and which do not.
- * 
+ *
  * @param {number} month the month for which the number of days is sought
  * @param {number} year the year in which that month is
  * @return {number} the number of days in the given month and year
  */
 ilib.Cal.Hebrew.prototype.lastDayOfMonth = function(month, year) {
 	switch (month) {
-		case 2: 
-		case 4: 
-		case 6: 
-		case 10: 
+		case 2:
+		case 4:
+		case 6:
+		case 10:
 			return 29;
 		case 13:
 			return this.isLeapYear(year) ? 29 : 0;
@@ -8703,10 +8703,10 @@ ilib.Cal.Hebrew.prototype.lastDayOfMonth = function(month, year) {
 
 /**
  * Return the number of months in the given year. The number of months in a year varies
- * for luni-solar calendars because in some years, an extra month is needed to extend the 
+ * for luni-solar calendars because in some years, an extra month is needed to extend the
  * days in a year to an entire solar year. The month is represented as a 1-based number
  * where 1=first month, 2=second month, etc.
- * 
+ *
  * @param {number} year a year for which the number of months is sought
  */
 ilib.Cal.Hebrew.prototype.getNumMonths = function(year) {
@@ -8742,8 +8742,8 @@ ilib.Cal.Hebrew.prototype.isLeapYear = function(year) {
 
 /**
  * Return the type of this calendar.
- * 
- * @returns {string} the name of the type of this calendar 
+ *
+ * @returns {string} the name of the type of this calendar
  */
 ilib.Cal.Hebrew.prototype.getType = function() {
 	return this.type;
@@ -8752,7 +8752,7 @@ ilib.Cal.Hebrew.prototype.getType = function() {
 /**
  * Return a date instance for this calendar type using the given
  * options.
- * @param {Object} options options controlling the construction of 
+ * @param {Object} options options controlling the construction of
  * the date instance
  * @returns {ilib.Date} a date appropriate for this calendar type
  */
@@ -8765,7 +8765,7 @@ ilib.Cal._constructors["hebrew"] = ilib.Cal.Hebrew;
 
 /*
  * hebrewdate.js - Represent a date in the Hebrew calendar
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -8782,62 +8782,62 @@ ilib.Cal._constructors["hebrew"] = ilib.Cal.Hebrew;
  * limitations under the License.
  */
 
-/* !depends 
-date.js 
+/* !depends
+date.js
 calendar/hebrew.js
 calendar/ratadie.js
 util/utils.js
 util/math.js
-julianday.js 
+julianday.js
 */
 
 /**
  * @class
- * Construct a new Hebrew RD date number object. The constructor parameters can 
+ * Construct a new Hebrew RD date number object. The constructor parameters can
  * contain any of the following properties:
- * 
+ *
  * <ul>
- * <li><i>unixtime<i> - sets the time of this instance according to the given 
+ * <li><i>unixtime<i> - sets the time of this instance according to the given
  * unix time. Unix time is the number of milliseconds since midnight on Jan 1, 1970.
- * 
+ *
  * <li><i>julianday</i> - sets the time of this instance according to the given
  * Julian Day instance or the Julian Day given as a float
- * 
+ *
  * <li><i>year</i> - any integer, including 0
- * 
+ *
  * <li><i>month</i> - 1 to 12, where 1 means January, 2 means February, etc.
- * 
+ *
  * <li><i>day</i> - 1 to 31
- * 
- * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation 
+ *
+ * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation
  * is always done with an unambiguous 24 hour representation
- * 
- * <li><i>parts</i> - 0 to 1079. Specify the halaqim parts of an hour. Either specify 
- * the parts or specify the minutes, seconds, and milliseconds, but not both. 
- * 
+ *
+ * <li><i>parts</i> - 0 to 1079. Specify the halaqim parts of an hour. Either specify
+ * the parts or specify the minutes, seconds, and milliseconds, but not both.
+ *
  * <li><i>minute</i> - 0 to 59
- * 
+ *
  * <li><i>second</i> - 0 to 59
- * 
+ *
  * <li><i>millisecond</i> - 0 to 999
- * 
+ *
  * <li><i>date</i> - use the given intrinsic Javascript date to initialize this one.
  * </ul>
  *
  * If the constructor is called with another Hebrew date instance instead of
  * a parameter block, the other instance acts as a parameter block and its
  * settings are copied into the current instance.<p>
- * 
- * If the constructor is called with no arguments at all or if none of the 
- * properties listed above are present, then the RD is calculate based on 
+ *
+ * If the constructor is called with no arguments at all or if none of the
+ * properties listed above are present, then the RD is calculate based on
  * the current date at the time of instantiation. <p>
- * 
+ *
  * If any of the properties from <i>year</i> through <i>millisecond</i> are not
  * specified in the params, it is assumed that they have the smallest possible
  * value in the range for the property (zero or one).<p>
- * 
+ *
  * Depends directive: !depends hebrewdate.js
- * 
+ *
  * @private
  * @constructor
  * @extends ilib.Date.RataDie
@@ -8854,7 +8854,7 @@ ilib.Date.HebrewRataDie.prototype.parent = ilib.Date.RataDie;
 ilib.Date.HebrewRataDie.prototype.constructor = ilib.Date.HebrewRataDie;
 
 /**
- * The difference between a zero Julian day and the first day of the Hebrew 
+ * The difference between a zero Julian day and the first day of the Hebrew
  * calendar: sunset on Monday, Tishri 1, 1 = September 7, 3760 BC Gregorian = JD 347997.25
  * @private
  * @const
@@ -8865,7 +8865,7 @@ ilib.Date.HebrewRataDie.prototype.epoch = 347997.25;
 /**
  * Calculate the Rata Die (fixed day) number of the given date from the
  * date components.
- * 
+ *
  * @private
  * @param {Object} date the date components to calculate the RD from
  */
@@ -8875,16 +8875,16 @@ ilib.Date.HebrewRataDie.prototype._setDateComponents = function(date) {
 		ilib.Cal.Hebrew.newYearsCorrection(date.year, elapsed) +
 		date.day - 1;
 	var sum = 0, table;
-	
+
 	//console.log("getRataDie: converting " +  JSON.stringify(date));
 	//console.log("getRataDie: days is " +  days);
 	//console.log("getRataDie: new years correction is " +  ilib.Cal.Hebrew.newYearsCorrection(date.year, elapsed));
-	
-	table = this.cal.isLeapYear(date.year) ? 
+
+	table = this.cal.isLeapYear(date.year) ?
 				ilib.Date.HebrewDate.cumMonthLengthsLeap :
 				ilib.Date.HebrewDate.cumMonthLengths;
 	sum = table[date.month-1];
-	
+
 	// gets cumulative without correction, so now add in the correction
 	if ((date.month < 7 || date.month > 8) && ilib.Cal.Hebrew.longHeshvan(date.year)) {
 		sum++;
@@ -8893,17 +8893,17 @@ ilib.Date.HebrewRataDie.prototype._setDateComponents = function(date) {
 		sum++;
 	}
 	// console.log("getRataDie: cum days is now " +  sum);
-	
+
 	days += sum;
-	
+
 	// the date starts at sunset, which we take as 18:00, so the hours from
 	// midnight to 18:00 are on the current Gregorian day, and the hours from
-	// 18:00 to midnight are on the previous Gregorian day. So to calculate the 
+	// 18:00 to midnight are on the previous Gregorian day. So to calculate the
 	// number of hours into the current day that this time represents, we have
 	// to count from 18:00 to midnight first, and add in 6 hours if the time is
 	// less than 18:00
 	var minute, second, millisecond;
-	
+
 	if (typeof(date.parts) !== 'undefined') {
 		// The parts (halaqim) of the hour. This can be a number from 0 to 1079.
 		var parts = parseInt(date.parts, 10);
@@ -8911,39 +8911,39 @@ ilib.Date.HebrewRataDie.prototype._setDateComponents = function(date) {
 		minute = Math.floor(seconds / 60);
 		seconds -= minute * 60;
 		second = Math.floor(seconds);
-		millisecond = (seconds - second);	
+		millisecond = (seconds - second);
 	} else {
 		minute = parseInt(date.minute, 10) || 0;
 		second = parseInt(date.second, 10) || 0;
 		millisecond = parseInt(date.millisecond, 10) || 0;
 	}
-		
+
 	var time;
 	if (date.hour >= 18) {
 		time = ((date.hour - 18 || 0) * 3600000 +
 			(minute || 0) * 60000 +
 			(second || 0) * 1000 +
-			(millisecond || 0)) / 
+			(millisecond || 0)) /
 			86400000;
 	} else {
 		time = 0.25 +	// 6 hours from 18:00 to midnight on the previous gregorian day
 				((date.hour || 0) * 3600000 +
 				(minute || 0) * 60000 +
 				(second || 0) * 1000 +
-				(millisecond || 0)) / 
+				(millisecond || 0)) /
 				86400000;
 	}
-	
+
 	//console.log("getRataDie: rd is " +  (days + time));
 	this.rd = days + time;
 };
-	
+
 /**
- * Return the rd number of the particular day of the week on or before the 
+ * Return the rd number of the particular day of the week on or before the
  * given rd. eg. The Sunday on or before the given rd.
  * @private
  * @param {number} rd the rata die date of the reference date
- * @param {number} dayOfWeek the day of the week that is being sought relative 
+ * @param {number} dayOfWeek the day of the week that is being sought relative
  * to the current date
  * @return {number} the rd of the day of the week
  */
@@ -8955,54 +8955,54 @@ ilib.Date.HebrewRataDie.prototype._onOrBefore = function(rd, dayOfWeek) {
  * @class
  * Construct a new civil Hebrew date object. The constructor can be called
  * with a params object that can contain the following properties:<p>
- * 
+ *
  * <ul>
  * <li><i>julianday</i> - the Julian Day to set into this date
  * <li><i>year</i> - any integer except 0. Years go from -1 (BCE) to 1 (CE), skipping the zero year
  * <li><i>month</i> - 1 to 12, where 1 means Nisan, 2 means Iyyar, etc.
  * <li><i>day</i> - 1 to 30
- * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation 
+ * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation
  * is always done with an unambiguous 24 hour representation
- * <li><i>parts</i> - 0 to 1079. Specify the halaqim parts of an hour. Either specify 
- * the parts or specify the minutes, seconds, and milliseconds, but not both. 
+ * <li><i>parts</i> - 0 to 1079. Specify the halaqim parts of an hour. Either specify
+ * the parts or specify the minutes, seconds, and milliseconds, but not both.
  * <li><i>minute</i> - 0 to 59
  * <li><i>second</i> - 0 to 59
  * <li><i>millisecond</i> - 0 to 999
- * <li><i>locale</i> - the ilib.TimeZone instance or time zone name as a string 
+ * <li><i>locale</i> - the ilib.TimeZone instance or time zone name as a string
  * of this julian date. The date/time is kept in the local time. The time zone
  * is used later if this date is formatted according to a different time zone and
  * the difference has to be calculated, or when the date format has a time zone
  * component in it.
- * <li><i>timezone</i> - the time zone of this instance. If the time zone is not 
+ * <li><i>timezone</i> - the time zone of this instance. If the time zone is not
  * given, it can be inferred from this locale. For locales that span multiple
- * time zones, the one with the largest population is chosen as the one that 
- * represents the locale. 
- * 
+ * time zones, the one with the largest population is chosen as the one that
+ * represents the locale.
+ *
  * <li><i>date</i> - use the given intrinsic Javascript date to initialize this one.
  * </ul>
- * 
+ *
  * If called with another Hebrew date argument, the date components of the given
  * date are copied into the current one.<p>
- * 
- * If the constructor is called with no arguments at all or if none of the 
- * properties listed above 
- * from <i>julianday</i> through <i>millisecond</i> are present, then the date 
- * components are 
+ *
+ * If the constructor is called with no arguments at all or if none of the
+ * properties listed above
+ * from <i>julianday</i> through <i>millisecond</i> are present, then the date
+ * components are
  * filled in with the current date at the time of instantiation. Note that if
- * you do not give the time zone when defaulting to the current time and the 
+ * you do not give the time zone when defaulting to the current time and the
  * time zone for all of ilib was not set with <i>ilib.setTimeZone()</i>, then the
- * time zone will default to UTC ("Universal Time, Coordinated" or "Greenwich 
+ * time zone will default to UTC ("Universal Time, Coordinated" or "Greenwich
  * Mean Time").<p>
- * 
+ *
  * Depends directive: !depends hebrewdate.js
- * 
+ *
  * @constructor
  * @extends ilib.Date
  * @param {Object=} params parameters that govern the settings and behaviour of this Hebrew date
  */
 ilib.Date.HebrewDate = function(params) {
 	this.cal = new ilib.Cal.Hebrew();
-	
+
 	if (params) {
 		if (params.timezone) {
 			this.timezone = params.timezone;
@@ -9011,7 +9011,7 @@ ilib.Date.HebrewDate = function(params) {
 			this.locale = (typeof(params.locale) === 'string') ? new ilib.Locale(params.locale) : params.locale;
 			if (!this.timezone) {
 				var li = new ilib.LocaleInfo(this.locale);
-				this.timezone = li.getTimeZone(); 
+				this.timezone = li.getTimeZone();
 			}
 		}
 
@@ -9034,7 +9034,7 @@ ilib.Date.HebrewDate = function(params) {
 			 * @type number
 			 */
 			this.day = parseInt(params.day, 10) || 1;
-			
+
 			/**
 			 * The hour of the day. This can be a number from 0 to 23, as times are
 			 * stored unambiguously in the 24-hour clock.
@@ -9052,45 +9052,45 @@ ilib.Date.HebrewDate = function(params) {
 				this.minute = Math.floor(seconds / 60);
 				seconds -= this.minute * 60;
 				this.second = Math.floor(seconds);
-				this.millisecond = (seconds - this.second);	
+				this.millisecond = (seconds - this.second);
 			} else {
 				/**
 				 * The minute of the hours. Ranges from 0 to 59.
 				 * @type number
 				 */
 				this.minute = parseInt(params.minute, 10) || 0;
-	
+
 				/**
 				 * The second of the minute. Ranges from 0 to 59.
 				 * @type number
 				 */
 				this.second = parseInt(params.second, 10) || 0;
-	
+
 				/**
 				 * The millisecond of the second. Ranges from 0 to 999.
 				 * @type number
 				 */
 				this.millisecond = parseInt(params.millisecond, 10) || 0;
 			}
-				
+
 			/**
 			 * The day of the year. Ranges from 1 to 383.
 			 * @type number
 			 */
 			this.dayOfYear = parseInt(params.dayOfYear, 10);
-			
+
 			if (typeof(params.dst) === 'boolean') {
 				this.dst = params.dst;
 			}
-			
+
 			this.rd = this.newRd(this);
-			
+
 			// add the time zone offset to the rd to convert to UTC
 			if (!this.tz) {
 				this.tz = new ilib.TimeZone({id: this.timezone});
 			}
-			// getOffsetMillis requires that this.year, this.rd, and this.dst 
-			// are set in order to figure out which time zone rules apply and 
+			// getOffsetMillis requires that this.year, this.rd, and this.dst
+			// are set in order to figure out which time zone rules apply and
 			// what the offset is at that point in the year
 			this.offset = this.tz._getOffsetMillisWallTime(this) / 86400000;
 			if (this.offset !== 0) {
@@ -9099,8 +9099,8 @@ ilib.Date.HebrewDate = function(params) {
 				});
 			}
 		}
-	} 
-	
+	}
+
 	if (!this.rd) {
 		this.rd = this.newRd(params);
 		this._calcDateComponents();
@@ -9140,7 +9140,7 @@ ilib.Date.HebrewDate.cumMonthLengths = [
  * @type Array.<number>
  */
 ilib.Date.HebrewDate.cumMonthLengthsReverse = [
-//  [days, monthnumber],                                                
+//  [days, monthnumber],
 	[0,   7],  /* Tishri - Jewish New Year (Rosh HaShanah) starts in month 7 */
 	[30,  8],  /* Heshvan */
 	[59,  9],  /* Kislev */
@@ -9157,7 +9157,7 @@ ilib.Date.HebrewDate.cumMonthLengthsReverse = [
 ];
 
 /**
- * the cumulative lengths of each month for a leap year, without new years corrections 
+ * the cumulative lengths of each month for a leap year, without new years corrections
  * @private
  * @const
  * @type Array.<number>
@@ -9180,14 +9180,14 @@ ilib.Date.HebrewDate.cumMonthLengthsLeap = [
 
 /**
  * the cumulative lengths of each month for a leap year, without new years corrections
- * that can be used in reverse to map days to months 
- * 
+ * that can be used in reverse to map days to months
+ *
  * @private
  * @const
  * @type Array.<number>
  */
 ilib.Date.HebrewDate.cumMonthLengthsLeapReverse = [
-//  [days, monthnumber],                                                
+//  [days, monthnumber],
 	[0,   7],  /* Tishri - Jewish New Year (Rosh HaShanah) starts in month 7 */
 	[30,  8],  /* Heshvan */
 	[59,  9],  /* Kislev */
@@ -9205,7 +9205,7 @@ ilib.Date.HebrewDate.cumMonthLengthsLeapReverse = [
 ];
 
 /**
- * Number of days difference between RD 0 of the Hebrew calendar 
+ * Number of days difference between RD 0 of the Hebrew calendar
  * (Jan 1, 1 Gregorian = JD 1721057.5) and RD 0 of the Hebrew calendar
  * (September 7, -3760 Gregorian = JD 347997.25)
  * @private
@@ -9227,18 +9227,18 @@ ilib.Date.HebrewDate.prototype.newRd = function (params) {
 /**
  * Return the year for the given RD
  * @protected
- * @param {number} rd RD to calculate from 
+ * @param {number} rd RD to calculate from
  * @returns {number} the year for the RD
  */
 ilib.Date.HebrewDate.prototype._calcYear = function(rd) {
 	var year, approximation, nextNewYear;
-	
+
 	// divide by the average number of days per year in the Hebrew calendar
 	// to approximate the year, then tweak it to get the real year
 	approximation = Math.floor(rd / 365.246822206) + 1;
-	
+
 	// console.log("HebrewDate._calcYear: approx is " + approximation);
-	
+
 	// search forward from approximation-1 for the year that actually contains this rd
 	year = approximation;
 	nextNewYear = ilib.Cal.Hebrew.newYear(year);
@@ -9259,13 +9259,13 @@ ilib.Date.HebrewDate.prototype._calcDateComponents = function () {
 		table,
 		target,
 		rd = this.rd.getRataDie();
-	
+
 	// console.log("HebrewDate.calcComponents: calculating for rd " + rd);
 
 	if (typeof(this.offset) === "undefined") {
 		this.year = this._calcYear(rd);
-		
-		// now offset the RD by the time zone, then recalculate in case we were 
+
+		// now offset the RD by the time zone, then recalculate in case we were
 		// near the year boundary
 		if (!this.tz) {
 			this.tz = new ilib.TimeZone({id: this.timezone});
@@ -9277,9 +9277,9 @@ ilib.Date.HebrewDate.prototype._calcDateComponents = function () {
 		rd += this.offset;
 		this.year = this._calcYear(rd);
 	}
-	
+
 	// console.log("HebrewDate.calcComponents: year is " + this.year + " with starting rd " + thisNewYear);
-	
+
 	remainder = rd - ilib.Cal.Hebrew.newYear(this.year);
 	// console.log("HebrewDate.calcComponents: remainder is " + remainder);
 
@@ -9294,37 +9294,37 @@ ilib.Date.HebrewDate.prototype._calcDateComponents = function () {
 			remainder--;
 		}
 	}
-	
+
 	// console.log("HebrewDate.calcComponents: after new years corrections, remainder is " + remainder);
-	
-	table = this.cal.isLeapYear(this.year) ? 
+
+	table = this.cal.isLeapYear(this.year) ?
 			ilib.Date.HebrewDate.cumMonthLengthsLeapReverse :
 			ilib.Date.HebrewDate.cumMonthLengthsReverse;
-	
+
 	i = 0;
 	target = Math.floor(remainder);
 	while (i+1 < table.length && target >= table[i+1][0]) {
 		i++;
 	}
-	
+
 	this.month = table[i][1];
 	// console.log("HebrewDate.calcComponents: remainder is " + remainder);
 	remainder -= table[i][0];
-	
+
 	// console.log("HebrewDate.calcComponents: month is " + this.month + " and remainder is " + remainder);
-	
+
 	this.day = Math.floor(remainder);
 	remainder -= this.day;
 	this.day++; // days are 1-based
-	
+
 	// console.log("HebrewDate.calcComponents: day is " + this.day + " and remainder is " + remainder);
 
 	// now convert to milliseconds for the rest of the calculation
 	remainder = Math.round(remainder * 86400000);
-	
+
 	this.hour = Math.floor(remainder/3600000);
 	remainder -= this.hour * 3600000;
-	
+
 	// the hours from 0 to 6 are actually 18:00 to midnight of the previous
 	// gregorian day, so we have to adjust for that
 	if (this.hour >= 6) {
@@ -9332,20 +9332,20 @@ ilib.Date.HebrewDate.prototype._calcDateComponents = function () {
 	} else {
 		this.hour += 18;
 	}
-		
+
 	this.minute = Math.floor(remainder/60000);
 	remainder -= this.minute * 60000;
-	
+
 	this.second = Math.floor(remainder/1000);
 	remainder -= this.second * 1000;
-	
+
 	this.millisecond = Math.floor(remainder);
 };
 
 /**
  * Return the day of the week of this date. The day of the week is encoded
  * as number from 0 to 6, with 0=Sunday, 1=Monday, etc., until 6=Saturday.
- * 
+ *
  * @return {number} the day of the week
  */
 ilib.Date.HebrewDate.prototype.getDayOfWeek = function() {
@@ -9357,7 +9357,7 @@ ilib.Date.HebrewDate.prototype.getDayOfWeek = function() {
  * Get the Halaqim (parts) of an hour. There are 1080 parts in an hour, which means
  * each part is 3.33333333 seconds long. This means the number returned may not
  * be an integer.
- * 
+ *
  * @return {number} the halaqim parts of the current hour
  */
 ilib.Date.HebrewDate.prototype.getHalaqim = function() {
@@ -9393,14 +9393,14 @@ ilib.Date.HebrewDate.prototype.firstSunday = function (year) {
 };
 
 /**
- * Return the ordinal day of the year. Days are counted from 1 and proceed linearly up to 
- * 385, regardless of months or weeks, etc. That is, Tishri 1st is day 1, and 
+ * Return the ordinal day of the year. Days are counted from 1 and proceed linearly up to
+ * 385, regardless of months or weeks, etc. That is, Tishri 1st is day 1, and
  * Elul 29 is 385 for a leap year with a long Heshvan and long Kislev.
  * @return {number} the ordinal day of the year
  */
 ilib.Date.HebrewDate.prototype.getDayOfYear = function() {
-	var table = this.cal.isLeapYear(this.year) ? 
-				ilib.Date.HebrewDate.cumMonthLengthsLeap : 
+	var table = this.cal.isLeapYear(this.year) ?
+				ilib.Date.HebrewDate.cumMonthLengthsLeap :
 				ilib.Date.HebrewDate.cumMonthLengths;
 	var days = table[this.month-1];
 	if ((this.month < 7 || this.month > 8) && ilib.Cal.Hebrew.longHeshvan(this.year)) {
@@ -9418,12 +9418,12 @@ ilib.Date.HebrewDate.prototype.getDayOfYear = function() {
  * the first one that contains 4 or more days in that month. If any days precede this
  * first week, they are marked as being in week 0. This function returns values from 0
  * through 6.<p>
- * 
- * The locale is a required parameter because different locales that use the same 
+ *
+ * The locale is a required parameter because different locales that use the same
  * Hebrew calendar consider different days of the week to be the beginning of
  * the week. This can affect the week of the month in which some days are located.
- * 
- * @param {ilib.Locale|string} locale the locale or locale spec to use when figuring out 
+ *
+ * @param {ilib.Locale|string} locale the locale or locale spec to use when figuring out
  * the first day of the week
  * @return {number} the ordinal number of the week within the current month
  */
@@ -9440,7 +9440,7 @@ ilib.Date.HebrewDate.prototype.getWeekOfMonth = function(locale) {
 		}),
 		rd = this.rd.getRataDie(),
 		weekStart = first.onOrAfter(li.getFirstDayOfWeek());
-	
+
 	if (weekStart - first.getRataDie() > 3) {
 		// if the first week has 4 or more days in it of the current month, then consider
 		// that week 1. Otherwise, it is week 0. To make it week 1, move the week start
@@ -9451,13 +9451,13 @@ ilib.Date.HebrewDate.prototype.getWeekOfMonth = function(locale) {
 };
 
 /**
- * Return the era for this date as a number. The value for the era for Hebrew 
- * calendars is -1 for "before the Hebrew era" and 1 for "the Hebrew era". 
+ * Return the era for this date as a number. The value for the era for Hebrew
+ * calendars is -1 for "before the Hebrew era" and 1 for "the Hebrew era".
  * Hebrew era dates are any date after Tishri 1, 1, which is the same as
- * September 7, 3760 BC in the Gregorian calendar. 
- * 
- * @return {number} 1 if this date is in the Hebrew era, -1 if it is before the 
- * Hebrew era 
+ * September 7, 3760 BC in the Gregorian calendar.
+ *
+ * @return {number} 1 if this date is in the Hebrew era, -1 if it is before the
+ * Hebrew era
  */
 ilib.Date.HebrewDate.prototype.getEra = function() {
 	return (this.year < 1) ? -1 : 1;
@@ -9465,7 +9465,7 @@ ilib.Date.HebrewDate.prototype.getEra = function() {
 
 /**
  * Return the name of the calendar that governs this date.
- * 
+ *
  * @return {string} a string giving the name of the calendar
  */
 ilib.Date.HebrewDate.prototype.getCalendar = function() {
@@ -9476,7 +9476,7 @@ ilib.Date.HebrewDate.prototype.getCalendar = function() {
 ilib.Date._constructors["hebrew"] = ilib.Date.HebrewDate;
 /*
  * islamic.js - Represent a Islamic calendar object.
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -9499,19 +9499,19 @@ ilib.Date._constructors["hebrew"] = ilib.Date.HebrewDate;
 /**
  * @class
  * Construct a new Islamic calendar object. This class encodes information about
- * the civil Islamic calendar. The civil Islamic calendar is a tabular islamic 
- * calendar where the dates are calculated by arithmetic rules. This differs from 
- * the religious Islamic calendar which is used to mark the beginning of particular 
- * holidays. The religious calendar depends on the first sighting of the new 
- * crescent moon to determine the first day of the new month. Because humans and 
- * weather are both involved, the actual time of sighting varies, so it is not 
- * really possible to precalculate the religious calendar. Certain groups, such 
+ * the civil Islamic calendar. The civil Islamic calendar is a tabular islamic
+ * calendar where the dates are calculated by arithmetic rules. This differs from
+ * the religious Islamic calendar which is used to mark the beginning of particular
+ * holidays. The religious calendar depends on the first sighting of the new
+ * crescent moon to determine the first day of the new month. Because humans and
+ * weather are both involved, the actual time of sighting varies, so it is not
+ * really possible to precalculate the religious calendar. Certain groups, such
  * as the Islamic Society of North America, decreed in in 2007 that they will use
- * a calendar based on calculations rather than observations to determine the 
+ * a calendar based on calculations rather than observations to determine the
  * beginning of lunar months, and therefore the dates of holidays.<p>
- * 
+ *
  * Depends directive: !depends islamic.js
- * 
+ *
  * @constructor
  * @implements ilib.Cal
  */
@@ -9520,7 +9520,7 @@ ilib.Cal.Islamic = function() {
 };
 
 /**
- * the lengths of each month 
+ * the lengths of each month
  * @private
  * @const
  * @type Array.<number>
@@ -9543,10 +9543,10 @@ ilib.Cal.Islamic.monthLengths = [
 
 /**
  * Return the number of months in the given year. The number of months in a year varies
- * for luni-solar calendars because in some years, an extra month is needed to extend the 
+ * for luni-solar calendars because in some years, an extra month is needed to extend the
  * days in a year to an entire solar year. The month is represented as a 1-based number
  * where 1=first month, 2=second month, etc.
- * 
+ *
  * @param {number} year a year for which the number of months is sought
  */
 ilib.Cal.Islamic.prototype.getNumMonths = function(year) {
@@ -9582,8 +9582,8 @@ ilib.Cal.Islamic.prototype.isLeapYear = function(year) {
 
 /**
  * Return the type of this calendar.
- * 
- * @return {string} the name of the type of this calendar 
+ *
+ * @return {string} the name of the type of this calendar
  */
 ilib.Cal.Islamic.prototype.getType = function() {
 	return this.type;
@@ -9592,7 +9592,7 @@ ilib.Cal.Islamic.prototype.getType = function() {
 /**
  * Return a date instance for this calendar type using the given
  * options.
- * @param {Object} options options controlling the construction of 
+ * @param {Object} options options controlling the construction of
  * the date instance
  * @return {ilib.Date} a date appropriate for this calendar type
  */
@@ -9605,7 +9605,7 @@ ilib.Cal._constructors["islamic"] = ilib.Cal.Islamic;
 
 /*
  * util/search.js - Misc search utility routines
- * 
+ *
  * Copyright © 2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -9626,42 +9626,42 @@ ilib.Cal._constructors["islamic"] = ilib.Cal.Islamic;
 
 /**
  * Binary search a sorted array for a particular target value.
- * If the exact value is not found, it returns the index of the smallest 
- * entry that is greater than the given target value.<p> 
- * 
+ * If the exact value is not found, it returns the index of the smallest
+ * entry that is greater than the given target value.<p>
+ *
  * The comparator
- * parameter is a function that knows how to compare elements of the 
+ * parameter is a function that knows how to compare elements of the
  * array and the target. The function should return a value greater than 0
  * if the array element is greater than the target, a value less than 0 if
- * the array element is less than the target, and 0 if the array element 
+ * the array element is less than the target, and 0 if the array element
  * and the target are equivalent.<p>
- * 
+ *
  * If the comparator function is not specified, this function assumes
- * the array and the target are numeric values and should be compared 
+ * the array and the target are numeric values and should be compared
  * as such.<p>
- * 
+ *
  * Depends directive: !depends utils.js
- * 
+ *
  * @static
- * @param {*} target element being sought 
+ * @param {*} target element being sought
  * @param {Array} arr the array being searched
  * @param {?function(*,*)=} comparator a comparator that is appropriate for comparing two entries
- * in the array  
- * @return the index of the array into which the value would fit if 
- * inserted, or -1 if given array is not an array or the target is not 
+ * in the array
+ * @return the index of the array into which the value would fit if
+ * inserted, or -1 if given array is not an array or the target is not
  * a number
  */
 ilib.bsearch = function(target, arr, comparator) {
 	if (typeof(arr) === 'undefined' || !arr || typeof(target) === 'undefined') {
 		return -1;
 	}
-	
+
 	var high = arr.length - 1,
 		low = 0,
 		mid = 0,
 		value,
 		cmp = comparator || ilib.bsearch.numbers;
-	
+
 	while (low <= high) {
 		mid = Math.floor((high+low)/2);
 		value = cmp(arr[mid], target);
@@ -9673,14 +9673,14 @@ ilib.bsearch = function(target, arr, comparator) {
 			return mid;
 		}
 	}
-	
+
 	return low;
 };
 
 /**
  * Returns whether or not the given element is greater than, less than,
  * or equal to the given target.<p>
- * 
+ *
  * @private
  * @static
  * @param {number} element the element being tested
@@ -9691,46 +9691,46 @@ ilib.bsearch.numbers = function(element, target) {
 };
 
 /**
- * Do a bisection search of a function for a particular target value.<p> 
- * 
- * The function to search is a function that takes a numeric parameter, 
- * does calculations, and returns gives a numeric result. The 
- * function should should be smooth and not have any discontinuities 
+ * Do a bisection search of a function for a particular target value.<p>
+ *
+ * The function to search is a function that takes a numeric parameter,
+ * does calculations, and returns gives a numeric result. The
+ * function should should be smooth and not have any discontinuities
  * between the low and high values of the parameter.
- *  
+ *
  * Depends directive: !depends utils.js
- * 
+ *
  * @static
  * @param {number} target value being sought
  * @param {number} low the lower bounds to start searching
  * @param {number} high the upper bounds to start searching
  * @param {number} precision minimum precision to support. Use 0 if you want to use the default.
- * @param {?function(number)=} func function to search 
+ * @param {?function(number)=} func function to search
  * @return an approximation of the input value to the function that gives the desired
- * target output value, correct to within the error range of Javascript floating point 
+ * target output value, correct to within the error range of Javascript floating point
  * arithmetic, or NaN if there was some error
  */
 ilib.bisectionSearch = function(target, low, high, precision, func) {
-	if (typeof(target) !== 'number' || 
-			typeof(low) !== 'number' || 
-			typeof(high) !== 'number' || 
+	if (typeof(target) !== 'number' ||
+			typeof(low) !== 'number' ||
+			typeof(high) !== 'number' ||
 			typeof(func) !== 'function') {
 		return NaN;
 	}
-	
+
 	var mid = 0,
 		value,
 		pre = precision > 0 ? precision : 1e-13;
-	
+
 	function compareSignificantDigits(a, b) {
 		var leftParts = a.toExponential().split('e');
 		var rightParts = b.toExponential().split('e');
 		var left = new Number(leftParts[0]);
 		var right = new Number(rightParts[0]);
-		
-		return leftParts[1] === rightParts[1] && Math.abs(left - right) < pre; 
+
+		return leftParts[1] === rightParts[1] && Math.abs(left - right) < pre;
 	}
-	
+
 	do {
 		mid = (high+low)/2;
 		value = func(mid);
@@ -9740,14 +9740,14 @@ ilib.bisectionSearch = function(target, low, high, precision, func) {
 			low = mid;
 		}
 	} while (high - low > pre);
-	
+
 	return mid;
 };
 
 
 /*
  * islamicdate.js - Represent a date in the Islamic calendar
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -9764,10 +9764,10 @@ ilib.bisectionSearch = function(target, low, high, precision, func) {
  * limitations under the License.
  */
 
-/* !depends 
-date.js 
-calendar/islamic.js 
-util/utils.js 
+/* !depends
+date.js
+calendar/islamic.js
+util/utils.js
 util/search.js
 util/math.js
 localeinfo.js
@@ -9776,48 +9776,48 @@ julianday.js
 
 /**
  * @class
- * Construct a new Islamic RD date number object. The constructor parameters can 
+ * Construct a new Islamic RD date number object. The constructor parameters can
  * contain any of the following properties:
- * 
+ *
  * <ul>
- * <li><i>unixtime<i> - sets the time of this instance according to the given 
+ * <li><i>unixtime<i> - sets the time of this instance according to the given
  * unix time. Unix time is the number of milliseconds since midnight on Jan 1, 1970.
- * 
+ *
  * <li><i>julianday</i> - sets the time of this instance according to the given
  * Julian Day instance or the Julian Day given as a float
- * 
+ *
  * <li><i>year</i> - any integer, including 0
- * 
+ *
  * <li><i>month</i> - 1 to 12, where 1 means January, 2 means February, etc.
- * 
+ *
  * <li><i>day</i> - 1 to 31
- * 
- * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation 
+ *
+ * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation
  * is always done with an unambiguous 24 hour representation
- * 
+ *
  * <li><i>minute</i> - 0 to 59
- * 
+ *
  * <li><i>second</i> - 0 to 59
- * 
+ *
  * <li><i>millisecond</i> - 0 to 999
- * 
+ *
  * <li><i>date</i> - use the given intrinsic Javascript date to initialize this one.
  * </ul>
  *
  * If the constructor is called with another Islamic date instance instead of
  * a parameter block, the other instance acts as a parameter block and its
  * settings are copied into the current instance.<p>
- * 
- * If the constructor is called with no arguments at all or if none of the 
- * properties listed above are present, then the RD is calculate based on 
+ *
+ * If the constructor is called with no arguments at all or if none of the
+ * properties listed above are present, then the RD is calculate based on
  * the current date at the time of instantiation. <p>
- * 
+ *
  * If any of the properties from <i>year</i> through <i>millisecond</i> are not
  * specified in the params, it is assumed that they have the smallest possible
  * value in the range for the property (zero or one).<p>
- * 
+ *
  * Depends directive: !depends islamicdate.js
- * 
+ *
  * @private
  * @constructor
  * @extends ilib.Date.RataDie
@@ -9835,7 +9835,7 @@ ilib.Date.IslamicRataDie.prototype.constructor = ilib.Date.IslamicRataDie;
 
 /**
  * The difference between a zero Julian day and the first Islamic date
- * of Friday, July 16, 622 CE Julian. 
+ * of Friday, July 16, 622 CE Julian.
  * @private
  * @const
  * @type number
@@ -9857,9 +9857,9 @@ ilib.Date.IslamicRataDie.prototype._setDateComponents = function(date) {
 	var time = (date.hour * 3600000 +
 		date.minute * 60000 +
 		date.second * 1000 +
-		date.millisecond) / 
-		86400000; 
-	
+		date.millisecond) /
+		86400000;
+
 	//console.log("getRataDie: converting " +  JSON.stringify(date));
 	//console.log("getRataDie: days is " +  days);
 	//console.log("getRataDie: time is " +  time);
@@ -9867,67 +9867,67 @@ ilib.Date.IslamicRataDie.prototype._setDateComponents = function(date) {
 
 	this.rd = days + time;
 };
-	
+
 /**
  * @class
  * Construct a new civil Islamic date object. The constructor can be called
  * with a params object that can contain the following properties:<p>
- * 
+ *
  * <ul>
  * <li><i>julianday</i> - the Julian Day to set into this date
  * <li><i>year</i> - any integer except 0. Years go from -1 (BCE) to 1 (CE), skipping the zero year
  * <li><i>month</i> - 1 to 12, where 1 means Muharram, 2 means Saffar, etc.
  * <li><i>day</i> - 1 to 30
- * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation 
+ * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation
  * is always done with an unambiguous 24 hour representation
  * <li><i>minute</i> - 0 to 59
  * <li><i>second</i> - 0 to 59
  * <li><i>millisecond</i> - 0 to 999
- * <li><i>locale</i> - the ilib.TimeZone instance or time zone name as a string 
+ * <li><i>locale</i> - the ilib.TimeZone instance or time zone name as a string
  * of this julian date. The date/time is kept in the local time. The time zone
  * is used later if this date is formatted according to a different time zone and
  * the difference has to be calculated, or when the date format has a time zone
  * component in it.
- * <li><i>timezone</i> - the time zone of this instance. If the time zone is not 
+ * <li><i>timezone</i> - the time zone of this instance. If the time zone is not
  * given, it can be inferred from this locale. For locales that span multiple
- * time zones, the one with the largest population is chosen as the one that 
- * represents the locale. 
- * 
+ * time zones, the one with the largest population is chosen as the one that
+ * represents the locale.
+ *
  * <li><i>date</i> - use the given intrinsic Javascript date to initialize this one.
  * </ul>
- * 
+ *
  * If called with another Islamic date argument, the date components of the given
  * date are copied into the current one.<p>
- * 
- * If the constructor is called with no arguments at all or if none of the 
- * properties listed above 
- * from <i>julianday</i> through <i>millisecond</i> are present, then the date 
- * components are 
+ *
+ * If the constructor is called with no arguments at all or if none of the
+ * properties listed above
+ * from <i>julianday</i> through <i>millisecond</i> are present, then the date
+ * components are
  * filled in with the current date at the time of instantiation. Note that if
- * you do not give the time zone when defaulting to the current time and the 
+ * you do not give the time zone when defaulting to the current time and the
  * time zone for all of ilib was not set with <i>ilib.setTimeZone()</i>, then the
- * time zone will default to UTC ("Universal Time, Coordinated" or "Greenwich 
+ * time zone will default to UTC ("Universal Time, Coordinated" or "Greenwich
  * Mean Time").<p>
- * 
+ *
  * Depends directive: !depends islamicdate.js
- * 
+ *
  * @constructor
  * @extends ilib.Date
  * @param {Object=} params parameters that govern the settings and behaviour of this Islamic date
  */
 ilib.Date.IslamicDate = function(params) {
 	this.cal = new ilib.Cal.Islamic();
-	
+
 	if (params) {
 		if (params.locale) {
 			this.locale = (typeof(params.locale) === 'string') ? new ilib.Locale(params.locale) : params.locale;
 			var li = new ilib.LocaleInfo(this.locale);
-			this.timezone = li.getTimeZone(); 
+			this.timezone = li.getTimeZone();
 		}
 		if (params.timezone) {
 			this.timezone = params.timezone;
 		}
-		
+
 		if (params.year || params.month || params.day || params.hour ||
 				params.minute || params.second || params.millisecond ) {
 			/**
@@ -9947,7 +9947,7 @@ ilib.Date.IslamicDate = function(params) {
 			 * @type number
 			 */
 			this.day = parseInt(params.day, 10) || 1;
-			
+
 			/**
 			 * The hour of the day. This can be a number from 0 to 23, as times are
 			 * stored unambiguously in the 24-hour clock.
@@ -9972,7 +9972,7 @@ ilib.Date.IslamicDate = function(params) {
 			 * @type number
 			 */
 			this.millisecond = parseInt(params.millisecond, 10) || 0;
-			
+
 			/**
 			 * The day of the year. Ranges from 1 to 355.
 			 * @type number
@@ -9982,15 +9982,15 @@ ilib.Date.IslamicDate = function(params) {
 			if (typeof(params.dst) === 'boolean') {
 				this.dst = params.dst;
 			}
-			
+
 			this.rd = this.newRd(this);
-			
+
 			// add the time zone offset to the rd to convert to UTC
 			if (!this.tz) {
 				this.tz = new ilib.TimeZone({id: this.timezone});
 			}
-			// getOffsetMillis requires that this.year, this.rd, and this.dst 
-			// are set in order to figure out which time zone rules apply and 
+			// getOffsetMillis requires that this.year, this.rd, and this.dst
+			// are set in order to figure out which time zone rules apply and
 			// what the offset is at that point in the year
 			this.offset = this.tz._getOffsetMillisWallTime(this) / 86400000;
 			if (this.offset !== 0) {
@@ -10012,7 +10012,7 @@ ilib.Date.IslamicDate.prototype.parent = ilib.Date;
 ilib.Date.IslamicDate.prototype.constructor = ilib.Date.IslamicDate;
 
 /**
- * the cumulative lengths of each month, for a non-leap year 
+ * the cumulative lengths of each month, for a non-leap year
  * @private
  * @const
  * @type Array.<number>
@@ -10035,7 +10035,7 @@ ilib.Date.IslamicDate.cumMonthLengths = [
 
 /**
  * Number of days difference between RD 0 of the Gregorian calendar and
- * RD 0 of the Islamic calendar. 
+ * RD 0 of the Islamic calendar.
  * @private
  * @const
  * @type number
@@ -10055,7 +10055,7 @@ ilib.Date.IslamicDate.prototype.newRd = function (params) {
 /**
  * Return the year for the given RD
  * @protected
- * @param {number} rd RD to calculate from 
+ * @param {number} rd RD to calculate from
  * @returns {number} the year for the RD
  */
 ilib.Date.IslamicDate.prototype._calcYear = function(rd) {
@@ -10069,13 +10069,13 @@ ilib.Date.IslamicDate.prototype._calcYear = function(rd) {
 ilib.Date.IslamicDate.prototype._calcDateComponents = function () {
 	var remainder,
 		rd = this.rd.getRataDie();
-	
+
 	this.year = this._calcYear(rd);
 
 	if (typeof(this.offset) === "undefined") {
 		this.year = this._calcYear(rd);
-		
-		// now offset the RD by the time zone, then recalculate in case we were 
+
+		// now offset the RD by the time zone, then recalculate in case we were
 		// near the year boundary
 		if (!this.tz) {
 			this.tz = new ilib.TimeZone({id: this.timezone});
@@ -10100,16 +10100,16 @@ ilib.Date.IslamicDate.prototype._calcDateComponents = function () {
 		millisecond: 0
 	});
 	remainder = rd - yearStart.getRataDie() + 1;
-	
+
 	this.dayOfYear = remainder;
-	
+
 	//console.log("IslamicDate.calcComponent: remainder is " + remainder);
-	
+
 	this.month = ilib.bsearch(remainder, ilib.Date.IslamicDate.cumMonthLengths);
 	remainder -= ilib.Date.IslamicDate.cumMonthLengths[this.month-1];
 
 	//console.log("IslamicDate.calcComponent: month is " + this.month + " and remainder is " + remainder);
-	
+
 	this.day = Math.floor(remainder);
 	remainder -= this.day;
 
@@ -10117,23 +10117,23 @@ ilib.Date.IslamicDate.prototype._calcDateComponents = function () {
 
 	// now convert to milliseconds for the rest of the calculation
 	remainder = Math.round(remainder * 86400000);
-	
+
 	this.hour = Math.floor(remainder/3600000);
 	remainder -= this.hour * 3600000;
-	
+
 	this.minute = Math.floor(remainder/60000);
 	remainder -= this.minute * 60000;
-	
+
 	this.second = Math.floor(remainder/1000);
 	remainder -= this.second * 1000;
-	
+
 	this.millisecond = remainder;
 };
 
 /**
  * Return the day of the week of this date. The day of the week is encoded
  * as number from 0 to 6, with 0=Sunday, 1=Monday, etc., until 6=Saturday.
- * 
+ *
  * @return {number} the day of the week
  */
 ilib.Date.IslamicDate.prototype.getDayOfWeek = function() {
@@ -10142,8 +10142,8 @@ ilib.Date.IslamicDate.prototype.getDayOfWeek = function() {
 };
 
 /**
- * Return the ordinal day of the year. Days are counted from 1 and proceed linearly up to 
- * 354 or 355, regardless of months or weeks, etc. That is, Muharran 1st is day 1, and 
+ * Return the ordinal day of the year. Days are counted from 1 and proceed linearly up to
+ * 354 or 355, regardless of months or weeks, etc. That is, Muharran 1st is day 1, and
  * Dhu al-Hijja 29 is 354.
  * @return {number} the ordinal day of the year
  */
@@ -10152,13 +10152,13 @@ ilib.Date.IslamicDate.prototype.getDayOfYear = function() {
 };
 
 /**
- * Return the era for this date as a number. The value for the era for Islamic 
- * calendars is -1 for "before the Islamic era" and 1 for "the Islamic era". 
+ * Return the era for this date as a number. The value for the era for Islamic
+ * calendars is -1 for "before the Islamic era" and 1 for "the Islamic era".
  * Islamic era dates are any date after Muharran 1, 1, which is the same as
- * July 16, 622 CE in the Gregorian calendar. 
- * 
- * @return {number} 1 if this date is in the common era, -1 if it is before the 
- * common era 
+ * July 16, 622 CE in the Gregorian calendar.
+ *
+ * @return {number} 1 if this date is in the common era, -1 if it is before the
+ * common era
  */
 ilib.Date.IslamicDate.prototype.getEra = function() {
 	return (this.year < 1) ? -1 : 1;
@@ -10166,7 +10166,7 @@ ilib.Date.IslamicDate.prototype.getEra = function() {
 
 /**
  * Return the name of the calendar that governs this date.
- * 
+ *
  * @return {string} a string giving the name of the calendar
  */
 ilib.Date.IslamicDate.prototype.getCalendar = function() {
@@ -10177,7 +10177,7 @@ ilib.Date.IslamicDate.prototype.getCalendar = function() {
 ilib.Date._constructors["islamic"] = ilib.Date.IslamicDate;
 /*
  * julian.js - Represent a Julian calendar object.
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -10201,9 +10201,9 @@ ilib.Date._constructors["islamic"] = ilib.Date.IslamicDate;
  * @class
  * Construct a new Julian calendar object. This class encodes information about
  * a Julian calendar.<p>
- * 
+ *
  * Depends directive: !depends julian.js
- * 
+ *
  * @constructor
  * @implements ilib.Cal
  */
@@ -10229,10 +10229,10 @@ ilib.Cal.Julian.monthLengths = [
 
 /**
  * Return the number of months in the given year. The number of months in a year varies
- * for lunar calendars because in some years, an extra month is needed to extend the 
+ * for lunar calendars because in some years, an extra month is needed to extend the
  * days in a year to an entire solar year. The month is represented as a 1-based number
  * where 1=Jaunary, 2=February, etc. until 12=December.
- * 
+ *
  * @param {number} year a year for which the number of months is sought
  */
 ilib.Cal.Julian.prototype.getNumMonths = function(year) {
@@ -10243,7 +10243,7 @@ ilib.Cal.Julian.prototype.getNumMonths = function(year) {
  * Return the number of days in a particular month in a particular year. This function
  * can return a different number for a month depending on the year because of things
  * like leap years.
- * 
+ *
  * @param {number} month the month for which the length is sought
  * @param {number} year the year within which that month can be found
  * @return {number} the number of days within the given month in the given year
@@ -10269,8 +10269,8 @@ ilib.Cal.Julian.prototype.isLeapYear = function(year) {
 
 /**
  * Return the type of this calendar.
- * 
- * @return {string} the name of the type of this calendar 
+ *
+ * @return {string} the name of the type of this calendar
  */
 ilib.Cal.Julian.prototype.getType = function() {
 	return this.type;
@@ -10279,7 +10279,7 @@ ilib.Cal.Julian.prototype.getType = function() {
 /**
  * Return a date instance for this calendar type using the given
  * options.
- * @param {Object} options options controlling the construction of 
+ * @param {Object} options options controlling the construction of
  * the date instance
  * @return {ilib.Date} a date appropriate for this calendar type
  */
@@ -10291,7 +10291,7 @@ ilib.Cal.Julian.prototype.newDateInstance = function (options) {
 ilib.Cal._constructors["julian"] = ilib.Cal.Julian;
 /*
  * juliandate.js - Represent a date in the Julian calendar
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -10308,60 +10308,60 @@ ilib.Cal._constructors["julian"] = ilib.Cal.Julian;
  * limitations under the License.
  */
 
-/* !depends 
-date.js 
-calendar/julian.js 
+/* !depends
+date.js
+calendar/julian.js
 util/utils.js
-util/search.js 
+util/search.js
 util/math.js
-localeinfo.js 
-julianday.js 
+localeinfo.js
+julianday.js
 */
 
 /**
  * @class
- * Construct a new Julian RD date number object. The constructor parameters can 
+ * Construct a new Julian RD date number object. The constructor parameters can
  * contain any of the following properties:
- * 
+ *
  * <ul>
- * <li><i>unixtime<i> - sets the time of this instance according to the given 
+ * <li><i>unixtime<i> - sets the time of this instance according to the given
  * unix time. Unix time is the number of milliseconds since midnight on Jan 1, 1970.
- * 
+ *
  * <li><i>julianday</i> - sets the time of this instance according to the given
  * Julian Day instance or the Julian Day given as a float
- * 
+ *
  * <li><i>year</i> - any integer, including 0
- * 
+ *
  * <li><i>month</i> - 1 to 12, where 1 means January, 2 means February, etc.
- * 
+ *
  * <li><i>day</i> - 1 to 31
- * 
- * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation 
+ *
+ * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation
  * is always done with an unambiguous 24 hour representation
- * 
+ *
  * <li><i>minute</i> - 0 to 59
- * 
+ *
  * <li><i>second</i> - 0 to 59
- * 
+ *
  * <li><i>millisecond</i> - 0 to 999
- * 
+ *
  * <li><i>date</i> - use the given intrinsic Javascript date to initialize this one.
  * </ul>
  *
  * If the constructor is called with another Julian date instance instead of
  * a parameter block, the other instance acts as a parameter block and its
  * settings are copied into the current instance.<p>
- * 
- * If the constructor is called with no arguments at all or if none of the 
- * properties listed above are present, then the RD is calculate based on 
+ *
+ * If the constructor is called with no arguments at all or if none of the
+ * properties listed above are present, then the RD is calculate based on
  * the current date at the time of instantiation. <p>
- * 
+ *
  * If any of the properties from <i>year</i> through <i>millisecond</i> are not
  * specified in the params, it is assumed that they have the smallest possible
  * value in the range for the property (zero or one).<p>
- * 
+ *
  * Depends directive: !depends juliandate.js
- * 
+ *
  * @private
  * @constructor
  * @extends ilib.Date.RataDie
@@ -10379,7 +10379,7 @@ ilib.Date.JulianRataDie.prototype.constructor = ilib.Date.JulianRataDie;
 
 /**
  * The difference between a zero Julian day and the first Julian date
- * of Friday, July 16, 622 CE Julian. 
+ * of Friday, July 16, 622 CE Julian.
  * @private
  * @const
  * @type number
@@ -10389,7 +10389,7 @@ ilib.Date.JulianRataDie.prototype.epoch = 1721422.5;
 /**
  * Calculate the Rata Die (fixed day) number of the given date from the
  * date components.
- * 
+ *
  * @protected
  * @param {Object} date the date components to calculate the RD from
  */
@@ -10402,9 +10402,9 @@ ilib.Date.JulianRataDie.prototype._setDateComponents = function(date) {
 	var rdtime = (date.hour * 3600000 +
 		date.minute * 60000 +
 		date.second * 1000 +
-		date.millisecond) / 
+		date.millisecond) /
 		86400000;
-	
+
 	/*
 	console.log("calcRataDie: converting " +  JSON.stringify(parts));
 	console.log("getRataDie: year is " +  years);
@@ -10412,7 +10412,7 @@ ilib.Date.JulianRataDie.prototype._setDateComponents = function(date) {
 	console.log("getRataDie: rdtime is " +  rdtime);
 	console.log("getRataDie: rd is " +  (years + dayInYear + rdtime));
 	*/
-	
+
 	this.rd = years + dayInYear + rdtime;
 };
 
@@ -10420,75 +10420,75 @@ ilib.Date.JulianRataDie.prototype._setDateComponents = function(date) {
  * @class
  * Construct a new date object for the Julian Calendar. The constructor can be called
  * with a parameter object that contains any of the following properties:
- * 
+ *
  * <ul>
- * <li><i>unixtime<i> - sets the time of this instance according to the given 
+ * <li><i>unixtime<i> - sets the time of this instance according to the given
  * unix time. Unix time is the number of milliseconds since midnight on Jan 1, 1970 (Gregorian).
  * <li><i>julianday</i> - the Julian Day to set into this date
- * <li><i>year</i> - any integer except 0. Years go from -1 (BCE) to 1 (CE), skipping the zero 
+ * <li><i>year</i> - any integer except 0. Years go from -1 (BCE) to 1 (CE), skipping the zero
  * year which doesn't exist in the Julian calendar
  * <li><i>month</i> - 1 to 12, where 1 means January, 2 means February, etc.
  * <li><i>day</i> - 1 to 31
- * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation 
+ * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation
  * is always done with an unambiguous 24 hour representation
  * <li><i>minute</i> - 0 to 59
  * <li><i>second</i> - 0 to 59
  * <li><i>millisecond<i> - 0 to 999
- * <li><i>locale</i> - the ilib.TimeZone instance or time zone name as a string 
+ * <li><i>locale</i> - the ilib.TimeZone instance or time zone name as a string
  * of this julian date. The date/time is kept in the local time. The time zone
  * is used later if this date is formatted according to a different time zone and
  * the difference has to be calculated, or when the date format has a time zone
  * component in it.
- * <li><i>timezone</i> - the time zone of this instance. If the time zone is not 
+ * <li><i>timezone</i> - the time zone of this instance. If the time zone is not
  * given, it can be inferred from this locale. For locales that span multiple
- * time zones, the one with the largest population is chosen as the one that 
- * represents the locale. 
- * 
+ * time zones, the one with the largest population is chosen as the one that
+ * represents the locale.
+ *
  * <li><i>date</i> - use the given intrinsic Javascript date to initialize this one.
  * </ul>
- * 
- * NB. The <a href="http://en.wikipedia.org/wiki/Julian_date">Julian Day</a> 
- * (ilib.JulianDay) object is a <i>different</i> object than a 
+ *
+ * NB. The <a href="http://en.wikipedia.org/wiki/Julian_date">Julian Day</a>
+ * (ilib.JulianDay) object is a <i>different</i> object than a
  * <a href="http://en.wikipedia.org/wiki/Julian_calendar">date in
- * the Julian calendar</a> and the two are not to be confused. The Julian Day 
- * object represents time as a number of whole and fractional days since the 
- * beginning of the epoch, whereas a date in the Julian 
+ * the Julian calendar</a> and the two are not to be confused. The Julian Day
+ * object represents time as a number of whole and fractional days since the
+ * beginning of the epoch, whereas a date in the Julian
  * calendar is a regular date that signifies year, month, day, etc. using the rules
  * of the Julian calendar. The naming of Julian Days and the Julian calendar are
  * unfortunately close, and come from history.<p>
- *  
+ *
  * If called with another Julian date argument, the date components of the given
  * date are copied into the current one.<p>
- * 
- * If the constructor is called with no arguments at all or if none of the 
- * properties listed above 
- * from <i>unixtime</i> through <i>millisecond</i> are present, then the date 
- * components are 
+ *
+ * If the constructor is called with no arguments at all or if none of the
+ * properties listed above
+ * from <i>unixtime</i> through <i>millisecond</i> are present, then the date
+ * components are
  * filled in with the current date at the time of instantiation. Note that if
- * you do not give the time zone when defaulting to the current time and the 
+ * you do not give the time zone when defaulting to the current time and the
  * time zone for all of ilib was not set with <i>ilib.setTimeZone()</i>, then the
- * time zone will default to UTC ("Universal Time, Coordinated" or "Greenwich 
+ * time zone will default to UTC ("Universal Time, Coordinated" or "Greenwich
  * Mean Time").<p>
- * 
+ *
  * Depends directive: !depends juliandate.js
- * 
+ *
  * @constructor
  * @extends ilib.Date
  * @param {Object=} params parameters that govern the settings and behaviour of this Julian date
  */
 ilib.Date.JulDate = function(params) {
 	this.cal = new ilib.Cal.Julian();
-	
+
 	if (params) {
 		if (params.locale) {
 			this.locale = (typeof(params.locale) === 'string') ? new ilib.Locale(params.locale) : params.locale;
 			var li = new ilib.LocaleInfo(this.locale);
-			this.timezone = li.getTimeZone(); 
+			this.timezone = li.getTimeZone();
 		}
 		if (params.timezone) {
 			this.timezone = params.timezone;
 		}
-		
+
 		if (params.year || params.month || params.day || params.hour ||
 				params.minute || params.second || params.millisecond ) {
 			/**
@@ -10527,25 +10527,25 @@ ilib.Date.JulDate = function(params) {
 			 * @type number
 			 */
 			this.millisecond = parseInt(params.millisecond, 10) || 0;
-			
+
 			/**
 			 * The day of the year. Ranges from 1 to 383.
 			 * @type number
 			 */
 			this.dayOfYear = parseInt(params.dayOfYear, 10);
-			
+
 			if (typeof(params.dst) === 'boolean') {
 				this.dst = params.dst;
 			}
-			
+
 			this.rd = this.newRd(this);
-			
+
 			// add the time zone offset to the rd to convert to UTC
 			if (!this.tz) {
 				this.tz = new ilib.TimeZone({id: this.timezone});
 			}
-			// getOffsetMillis requires that this.year, this.rd, and this.dst 
-			// are set in order to figure out which time zone rules apply and 
+			// getOffsetMillis requires that this.year, this.rd, and this.dst
+			// are set in order to figure out which time zone rules apply and
 			// what the offset is at that point in the year
 			this.offset = this.tz._getOffsetMillisWallTime(this) / 86400000;
 			if (this.offset !== 0) {
@@ -10555,7 +10555,7 @@ ilib.Date.JulDate = function(params) {
 			}
 		}
 	}
-	
+
 	if (!this.rd) {
 		this.rd = this.newRd(params);
 		this._calcDateComponents();
@@ -10567,7 +10567,7 @@ ilib.Date.JulDate.prototype.parent = ilib.Date;
 ilib.Date.JulDate.prototype.constructor = ilib.Date.JulDate;
 
 /**
- * the cumulative lengths of each month, for a non-leap year 
+ * the cumulative lengths of each month, for a non-leap year
  * @private
  * @const
  * @type Array.<number>
@@ -10589,7 +10589,7 @@ ilib.Date.JulDate.cumMonthLengths = [
 ];
 
 /**
- * the cumulative lengths of each month, for a leap year 
+ * the cumulative lengths of each month, for a leap year
  * @private
  * @const
  * @type Array.<number>
@@ -10623,12 +10623,12 @@ ilib.Date.JulDate.prototype.newRd = function (params) {
 /**
  * Return the year for the given RD
  * @protected
- * @param {number} rd RD to calculate from 
+ * @param {number} rd RD to calculate from
  * @returns {number} the year for the RD
  */
 ilib.Date.JulDate.prototype._calcYear = function(rd) {
 	var year = Math.floor((4*(Math.floor(rd)-1) + 1464)/1461);
-	
+
 	return (year <= 0) ? year - 1 : year;
 };
 
@@ -10640,13 +10640,13 @@ ilib.Date.JulDate.prototype._calcDateComponents = function () {
 	var remainder,
 		cumulative,
 		rd = this.rd.getRataDie();
-	
+
 	this.year = this._calcYear(rd);
 
 	if (typeof(this.offset) === "undefined") {
 		this.year = this._calcYear(rd);
-		
-		// now offset the RD by the time zone, then recalculate in case we were 
+
+		// now offset the RD by the time zone, then recalculate in case we were
 		// near the year boundary
 		if (!this.tz) {
 			this.tz = new ilib.TimeZone({id: this.timezone});
@@ -10658,7 +10658,7 @@ ilib.Date.JulDate.prototype._calcDateComponents = function () {
 		rd += this.offset;
 		this.year = this._calcYear(rd);
 	}
-	
+
 	var jan1 = this.newRd({
 		year: this.year,
 		month: 1,
@@ -10669,35 +10669,35 @@ ilib.Date.JulDate.prototype._calcDateComponents = function () {
 		millisecond: 0
 	});
 	remainder = rd + 1 - jan1.getRataDie();
-	
-	cumulative = this.cal.isLeapYear(this.year) ? 
-		ilib.Date.JulDate.cumMonthLengthsLeap : 
-		ilib.Date.JulDate.cumMonthLengths; 
-	
+
+	cumulative = this.cal.isLeapYear(this.year) ?
+		ilib.Date.JulDate.cumMonthLengthsLeap :
+		ilib.Date.JulDate.cumMonthLengths;
+
 	this.month = ilib.bsearch(Math.floor(remainder), cumulative);
 	remainder = remainder - cumulative[this.month-1];
-	
+
 	this.day = Math.floor(remainder);
 	remainder -= this.day;
 	// now convert to milliseconds for the rest of the calculation
 	remainder = Math.round(remainder * 86400000);
-	
+
 	this.hour = Math.floor(remainder/3600000);
 	remainder -= this.hour * 3600000;
-	
+
 	this.minute = Math.floor(remainder/60000);
 	remainder -= this.minute * 60000;
-	
+
 	this.second = Math.floor(remainder/1000);
 	remainder -= this.second * 1000;
-	
+
 	this.millisecond = remainder;
 };
 
 /**
  * Return the day of the week of this date. The day of the week is encoded
  * as number from 0 to 6, with 0=Sunday, 1=Monday, etc., until 6=Saturday.
- * 
+ *
  * @return {number} the day of the week
  */
 ilib.Date.JulDate.prototype.getDayOfWeek = function() {
@@ -10707,7 +10707,7 @@ ilib.Date.JulDate.prototype.getDayOfWeek = function() {
 
 /**
  * Return the name of the calendar that governs this date.
- * 
+ *
  * @return {string} a string giving the name of the calendar
  */
 ilib.Date.JulDate.prototype.getCalendar = function() {
@@ -10718,7 +10718,7 @@ ilib.Date.JulDate.prototype.getCalendar = function() {
 ilib.Date._constructors["julian"] = ilib.Date.JulDate;
 /*
  * gregoriandate.js - Represent a date in the Gregorian calendar
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -10735,13 +10735,13 @@ ilib.Date._constructors["julian"] = ilib.Date.JulDate;
  * limitations under the License.
  */
 
-/* !depends 
-date.js 
-calendar/gregorian.js 
+/* !depends
+date.js
+calendar/gregorian.js
 util/utils.js
 util/search.js
 util/math.js
-localeinfo.js 
+localeinfo.js
 julianday.js
 calendar/gregratadie.js
 timezone.js
@@ -10749,79 +10749,79 @@ timezone.js
 
 /**
  * @class
- * Construct a new Gregorian date object. The constructor parameters can 
+ * Construct a new Gregorian date object. The constructor parameters can
  * contain any of the following properties:
- * 
+ *
  * <ul>
- * <li><i>unixtime<i> - sets the time of this instance according to the given 
+ * <li><i>unixtime<i> - sets the time of this instance according to the given
  * unix time. Unix time is the number of milliseconds since midnight on Jan 1, 1970.
- * 
+ *
  * <li><i>julianday</i> - sets the time of this instance according to the given
  * Julian Day instance or the Julian Day given as a float
- * 
+ *
  * <li><i>year</i> - any integer, including 0
- * 
+ *
  * <li><i>month</i> - 1 to 12, where 1 means January, 2 means February, etc.
- * 
+ *
  * <li><i>day</i> - 1 to 31
- * 
- * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation 
+ *
+ * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation
  * is always done with an unambiguous 24 hour representation
- * 
+ *
  * <li><i>minute</i> - 0 to 59
- * 
+ *
  * <li><i>second</i> - 0 to 59
- * 
+ *
  * <li><i>millisecond</i> - 0 to 999
- * 
+ *
  * <li><i>dst</i> - boolean used to specify whether the given time components are
  * intended to be in daylight time or not. This is only used in the overlap
- * time when transitioning from DST to standard time, and the time components are 
+ * time when transitioning from DST to standard time, and the time components are
  * ambiguous. Otherwise at all other times of the year, this flag is ignored.
  * If you specify the date using unix time (UTC) or a julian day, then the time is
  * already unambiguous and this flag does not need to be specified.
  * <p>
- * For example, in the US, the transition out of daylight savings time 
- * in 2014 happens at Nov 2, 2014 2:00am Daylight Time, when the time falls 
- * back to Nov 2, 2014 1:00am Standard Time. If you give a date/time components as 
- * "Nov 2, 2014 1:30am", then there are two 1:30am times in that day, and you would 
- * have to give the standard flag to indicate which of those two you mean. 
- * (dst=true means daylight time, dst=false means standard time).   
- * 
- * <li><i>timezone</i> - the ilib.TimeZone instance or time zone name as a string 
+ * For example, in the US, the transition out of daylight savings time
+ * in 2014 happens at Nov 2, 2014 2:00am Daylight Time, when the time falls
+ * back to Nov 2, 2014 1:00am Standard Time. If you give a date/time components as
+ * "Nov 2, 2014 1:30am", then there are two 1:30am times in that day, and you would
+ * have to give the standard flag to indicate which of those two you mean.
+ * (dst=true means daylight time, dst=false means standard time).
+ *
+ * <li><i>timezone</i> - the ilib.TimeZone instance or time zone name as a string
  * of this gregorian date. The date/time is kept in the local time. The time zone
  * is used later if this date is formatted according to a different time zone and
  * the difference has to be calculated, or when the date format has a time zone
  * component in it.
- * 
- * <li><i>locale</i> - locale for this gregorian date. If the time zone is not 
+ *
+ * <li><i>locale</i> - locale for this gregorian date. If the time zone is not
  * given, it can be inferred from this locale. For locales that span multiple
- * time zones, the one with the largest population is chosen as the one that 
+ * time zones, the one with the largest population is chosen as the one that
  * represents the locale.
- * 
+ *
  * <li><i>date</i> - use the given intrinsic Javascript date to initialize this one.
  * </ul>
  *
  * If the constructor is called with another Gregorian date instance instead of
  * a parameter block, the other instance acts as a parameter block and its
  * settings are copied into the current instance.<p>
- * 
- * If the constructor is called with no arguments at all or if none of the 
- * properties listed above 
- * from <i>unixtime</i> through <i>millisecond</i> are present, then the date 
- * components are 
+ *
+ * If the constructor is called with no arguments at all or if none of the
+ * properties listed above
+ * from <i>unixtime</i> through <i>millisecond</i> are present, then the date
+ * components are
  * filled in with the current date at the time of instantiation. Note that if
- * you do not give the time zone when defaulting to the current time and the 
+ * you do not give the time zone when defaulting to the current time and the
  * time zone for all of ilib was not set with <i>ilib.setTimeZone()</i>, then the
- * time zone will default to UTC ("Universal Time, Coordinated" or "Greenwich 
+ * time zone will default to UTC ("Universal Time, Coordinated" or "Greenwich
  * Mean Time").<p>
- * 
+ *
  * If any of the properties from <i>year</i> through <i>millisecond</i> are not
  * specified in the params, it is assumed that they have the smallest possible
  * value in the range for the property (zero or one).<p>
- * 
+ *
  * Depends directive: !depends gregoriandate.js
- * 
+ *
  * @constructor
  * @extends ilib.Date
  * @param {Object=} params parameters that govern the settings and behaviour of this Gregorian date
@@ -10838,12 +10838,12 @@ ilib.Date.GregDate = function(params) {
 		if (params.locale) {
 			this.locale = (typeof(params.locale) === 'string') ? new ilib.Locale(params.locale) : params.locale;
 			var li = new ilib.LocaleInfo(this.locale);
-			this.timezone = li.getTimeZone(); 
+			this.timezone = li.getTimeZone();
 		}
 		if (params.timezone) {
 			this.timezone = params.timezone.toString();
 		}
-		
+
 		if (params.year || params.month || params.day || params.hour ||
 				params.minute || params.second || params.millisecond ) {
 			this.year = parseInt(params.year, 10) || 0;
@@ -10857,7 +10857,7 @@ ilib.Date.GregDate = function(params) {
 				this.dst = params.dst;
 			}
 			this.rd = this.newRd(params);
-			
+
 			// add the time zone offset to the rd to convert to UTC
 			this.offset = 0;
 			if (this.timezone === "local" && typeof(params.dst) === 'undefined') {
@@ -10870,8 +10870,8 @@ ilib.Date.GregDate = function(params) {
 				if (!this.tz) {
 					this.tz = new ilib.TimeZone({id: this.timezone});
 				}
-				// getOffsetMillis requires that this.year, this.rd, and this.dst 
-				// are set in order to figure out which time zone rules apply and 
+				// getOffsetMillis requires that this.year, this.rd, and this.dst
+				// are set in order to figure out which time zone rules apply and
 				// what the offset is at that point in the year
 				this.offset = this.tz._getOffsetMillisWallTime(this) / 86400000;
 			}
@@ -10881,7 +10881,7 @@ ilib.Date.GregDate = function(params) {
 				});
 			}
 		}
-	} 
+	}
 
 	if (!this.rd) {
 		this.rd = this.newRd(params);
@@ -10925,7 +10925,7 @@ ilib.Date.GregDate._calcYear = function(rd) {
 	years4 = Math.floor(days100 / 1461);
 	days4 = ilib.mod(days100, 1461);
 	years1 = Math.floor(days4 / 365);
-	
+
 	year = 400 * years400 + 100 * years100 + 4 * years4 + years1;
 	if (years100 !== 4 && years1 !== 4) {
 		year++;
@@ -10947,53 +10947,53 @@ ilib.Date.GregDate.prototype._calcYear = function(rd) {
 ilib.Date.GregDate.prototype._calcDateComponents = function () {
 	if (this.timezone === "local" && this.rd.getRataDie() >= -99280837 && this.rd.getRataDie() <= 100719163) {
 		// console.log("using js Date to calculate offset");
-		// use the intrinsic JS Date object to do the tz conversion for us, which 
-		// guarantees that it follows the system tz database settings 
+		// use the intrinsic JS Date object to do the tz conversion for us, which
+		// guarantees that it follows the system tz database settings
 		var d = new Date(this.rd.getTimeExtended());
-	
+
 		/**
 		 * Year in the Gregorian calendar.
 		 * @type number
 		 */
 		this.year = d.getFullYear();
-		
+
 		/**
 		 * The month number, ranging from 1 (January) to 12 (December).
 		 * @type number
 		 */
 		this.month = d.getMonth()+1;
-		
+
 		/**
 		 * The day of the month. This ranges from 1 to 31.
 		 * @type number
 		 */
 		this.day = d.getDate();
-		
+
 		/**
 		 * The hour of the day. This can be a number from 0 to 23, as times are
 		 * stored unambiguously in the 24-hour clock.
 		 * @type number
 		 */
 		this.hour = d.getHours();
-		
+
 		/**
 		 * The minute of the hours. Ranges from 0 to 59.
 		 * @type number
 		 */
 		this.minute = d.getMinutes();
-		
+
 		/**
 		 * The second of the minute. Ranges from 0 to 59.
 		 * @type number
 		 */
 		this.second = d.getSeconds();
-		
+
 		/**
 		 * The millisecond of the second. Ranges from 0 to 999.
 		 * @type number
 		 */
 		this.millisecond = d.getMilliseconds();
-		
+
 		this.offset = -d.getTimezoneOffset() / 1440;
 	} else {
 		// console.log("using ilib to calculate offset. tz is " + this.timezone);
@@ -11001,8 +11001,8 @@ ilib.Date.GregDate.prototype._calcDateComponents = function () {
 		if (typeof(this.offset) === "undefined") {
 			// console.log("calculating offset");
 			this.year = this._calcYear(this.rd.getRataDie());
-			
-			// now offset the RD by the time zone, then recalculate in case we were 
+
+			// now offset the RD by the time zone, then recalculate in case we were
 			// near the year boundary
 			if (!this.tz) {
 				this.tz = new ilib.TimeZone({id: this.timezone});
@@ -11018,38 +11018,38 @@ ilib.Date.GregDate.prototype._calcDateComponents = function () {
 			rd += this.offset;
 		}
 		this.year = this._calcYear(rd);
-		
+
 		var yearStartRd = this.newRd({
 			year: this.year,
 			month: 1,
 			day: 1,
 			cal: this.cal
 		});
-		
+
 		// remainder is days into the year
 		var remainder = rd - yearStartRd.getRataDie() + 1;
-		
-		var cumulative = ilib.Cal.Gregorian.prototype.isLeapYear.call(this.cal, this.year) ? 
-			ilib.Date.GregRataDie.cumMonthLengthsLeap : 
-			ilib.Date.GregRataDie.cumMonthLengths; 
-		
+
+		var cumulative = ilib.Cal.Gregorian.prototype.isLeapYear.call(this.cal, this.year) ?
+			ilib.Date.GregRataDie.cumMonthLengthsLeap :
+			ilib.Date.GregRataDie.cumMonthLengths;
+
 		this.month = ilib.bsearch(Math.floor(remainder), cumulative);
 		remainder = remainder - cumulative[this.month-1];
-		
+
 		this.day = Math.floor(remainder);
 		remainder -= this.day;
 		// now convert to milliseconds for the rest of the calculation
 		remainder = Math.round(remainder * 86400000);
-		
+
 		this.hour = Math.floor(remainder/3600000);
 		remainder -= this.hour * 3600000;
-		
+
 		this.minute = Math.floor(remainder/60000);
 		remainder -= this.minute * 60000;
-		
+
 		this.second = Math.floor(remainder/1000);
 		remainder -= this.second * 1000;
-		
+
 		this.millisecond = Math.floor(remainder);
 	}
 };
@@ -11057,7 +11057,7 @@ ilib.Date.GregDate.prototype._calcDateComponents = function () {
 /**
  * Return the day of the week of this date. The day of the week is encoded
  * as number from 0 to 6, with 0=Sunday, 1=Monday, etc., until 6=Saturday.
- * 
+ *
  * @return {number} the day of the week
  */
 ilib.Date.GregDate.prototype.getDayOfWeek = function() {
@@ -11066,28 +11066,28 @@ ilib.Date.GregDate.prototype.getDayOfWeek = function() {
 };
 
 /**
- * Return the ordinal day of the year. Days are counted from 1 and proceed linearly up to 
- * 365, regardless of months or weeks, etc. That is, January 1st is day 1, and 
+ * Return the ordinal day of the year. Days are counted from 1 and proceed linearly up to
+ * 365, regardless of months or weeks, etc. That is, January 1st is day 1, and
  * December 31st is 365 in regular years, or 366 in leap years.
  * @return {number} the ordinal day of the year
  */
 ilib.Date.GregDate.prototype.getDayOfYear = function() {
-	var cumulativeMap = this.cal.isLeapYear(this.year) ? 
-		ilib.Date.GregRataDie.cumMonthLengthsLeap : 
-		ilib.Date.GregRataDie.cumMonthLengths; 
-		
+	var cumulativeMap = this.cal.isLeapYear(this.year) ?
+		ilib.Date.GregRataDie.cumMonthLengthsLeap :
+		ilib.Date.GregRataDie.cumMonthLengths;
+
 	return cumulativeMap[this.month-1] + this.day;
 };
 
 /**
- * Return the era for this date as a number. The value for the era for Gregorian 
- * calendars is -1 for "before the common era" (BCE) and 1 for "the common era" (CE). 
- * BCE dates are any date before Jan 1, 1 CE. In the proleptic Gregorian calendar, 
+ * Return the era for this date as a number. The value for the era for Gregorian
+ * calendars is -1 for "before the common era" (BCE) and 1 for "the common era" (CE).
+ * BCE dates are any date before Jan 1, 1 CE. In the proleptic Gregorian calendar,
  * there is a year 0, so any years that are negative or zero are BCE. In the Julian
- * calendar, there is no year 0. Instead, the calendar goes straight from year -1 to 
+ * calendar, there is no year 0. Instead, the calendar goes straight from year -1 to
  * 1.
- * @return {number} 1 if this date is in the common era, -1 if it is before the 
- * common era 
+ * @return {number} 1 if this date is in the common era, -1 if it is before the
+ * common era
  */
 ilib.Date.GregDate.prototype.getEra = function() {
 	return (this.year < 1) ? -1 : 1;
@@ -11095,7 +11095,7 @@ ilib.Date.GregDate.prototype.getEra = function() {
 
 /**
  * Return the name of the calendar that governs this date.
- * 
+ *
  * @return {string} a string giving the name of the calendar
  */
 ilib.Date.GregDate.prototype.getCalendar = function() {
@@ -11106,7 +11106,7 @@ ilib.Date.GregDate.prototype.getCalendar = function() {
 ilib.Date._constructors["gregorian"] = ilib.Date.GregDate;
 /*
  * thaisolar.js - Represent a Thai solar calendar object.
- * 
+ *
  * Copyright © 2013-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -11130,9 +11130,9 @@ ilib.Date._constructors["gregorian"] = ilib.Date.GregDate;
  * @class
  * Construct a new Thai solar calendar object. This class encodes information about
  * a Thai solar calendar.<p>
- * 
+ *
  * Depends directive: !depends thaisolar.js
- * 
+ *
  * @constructor
  * @implements ilib.Cal
  */
@@ -11160,7 +11160,7 @@ ilib.Cal.ThaiSolar.prototype.isLeapYear = function(year) {
 /**
  * Return a date instance for this calendar type using the given
  * options.
- * @param {Object} options options controlling the construction of 
+ * @param {Object} options options controlling the construction of
  * the date instance
  * @return {ilib.Date} a date appropriate for this calendar type
  */
@@ -11172,7 +11172,7 @@ ilib.Cal.ThaiSolar.prototype.newDateInstance = function (options) {
 ilib.Cal._constructors["thaisolar"] = ilib.Cal.ThaiSolar;
 /*
  * thaisolardate.js - Represent a date in the ThaiSolar calendar
- * 
+ *
  * Copyright © 2013-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -11189,71 +11189,71 @@ ilib.Cal._constructors["thaisolar"] = ilib.Cal.ThaiSolar;
  * limitations under the License.
  */
 
-/* !depends 
-date.js 
-calendar/gregorian.js 
+/* !depends
+date.js
+calendar/gregorian.js
 util/jsutils.js
 */
 
 /**
  * @class
- * Construct a new Thai solar date object. The constructor parameters can 
+ * Construct a new Thai solar date object. The constructor parameters can
  * contain any of the following properties:
- * 
+ *
  * <ul>
- * <li><i>unixtime<i> - sets the time of this instance according to the given 
+ * <li><i>unixtime<i> - sets the time of this instance according to the given
  * unix time. Unix time is the number of milliseconds since midnight on Jan 1, 1970.
- * 
+ *
  * <li><i>julianday</i> - sets the time of this instance according to the given
  * Julian Day instance or the Julian Day given as a float
- * 
+ *
  * <li><i>year</i> - any integer, including 0
- * 
+ *
  * <li><i>month</i> - 1 to 12, where 1 means January, 2 means February, etc.
- * 
+ *
  * <li><i>day</i> - 1 to 31
- * 
- * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation 
+ *
+ * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation
  * is always done with an unambiguous 24 hour representation
- * 
+ *
  * <li><i>minute</i> - 0 to 59
- * 
+ *
  * <li><i>second</i> - 0 to 59
- * 
+ *
  * <li><i>millisecond</i> - 0 to 999
- * 
- * <li><i>timezone</i> - the ilib.TimeZone instance or time zone name as a string 
+ *
+ * <li><i>timezone</i> - the ilib.TimeZone instance or time zone name as a string
  * of this Thai solar date. The date/time is kept in the local time. The time zone
  * is used later if this date is formatted according to a different time zone and
  * the difference has to be calculated, or when the date format has a time zone
  * component in it.
- * 
- * <li><i>locale</i> - locale for this Thai solar date. If the time zone is not 
+ *
+ * <li><i>locale</i> - locale for this Thai solar date. If the time zone is not
  * given, it can be inferred from this locale. For locales that span multiple
- * time zones, the one with the largest population is chosen as the one that 
- * represents the locale. 
+ * time zones, the one with the largest population is chosen as the one that
+ * represents the locale.
  * </ul>
  *
  * If the constructor is called with another Thai solar date instance instead of
  * a parameter block, the other instance acts as a parameter block and its
  * settings are copied into the current instance.<p>
- * 
- * If the constructor is called with no arguments at all or if none of the 
- * properties listed above 
- * from <i>unixtime</i> through <i>millisecond</i> are present, then the date 
- * components are 
+ *
+ * If the constructor is called with no arguments at all or if none of the
+ * properties listed above
+ * from <i>unixtime</i> through <i>millisecond</i> are present, then the date
+ * components are
  * filled in with the current date at the time of instantiation. Note that if
- * you do not give the time zone when defaulting to the current time and the 
+ * you do not give the time zone when defaulting to the current time and the
  * time zone for all of ilib was not set with <i>ilib.setTimeZone()</i>, then the
- * time zone will default to UTC ("Universal Time, Coordinated" or "Greenwich 
+ * time zone will default to UTC ("Universal Time, Coordinated" or "Greenwich
  * Mean Time").<p>
- * 
+ *
  * If any of the properties from <i>year</i> through <i>millisecond</i> are not
  * specified in the params, it is assumed that they have the smallest possible
  * value in the range for the property (zero or one).<p>
- * 
+ *
  * Depends directive: !depends thaisolardate.js
- * 
+ *
  * @constructor
  * @extends ilib.Date.GregDate
  * @param {Object=} params parameters that govern the settings and behaviour of this Thai solar date
@@ -11261,12 +11261,12 @@ util/jsutils.js
 ilib.Date.ThaiSolarDate = function(params) {
 	var p = params;
 	if (params) {
-		// there is 198327 days difference between the Thai solar and 
+		// there is 198327 days difference between the Thai solar and
 		// Gregorian epochs which is equivalent to 543 years
 		p = {};
 		ilib.shallowCopy(params, p);
 		if (typeof(p.year) !== 'undefined') {
-			p.year -= 543;	
+			p.year -= 543;
 		}
 		if (typeof(p.rd) !== 'undefined') {
 			p.rd -= 198327;
@@ -11289,7 +11289,7 @@ ilib.Date.ThaiSolarDate.prototype.constructor = ilib.Date.ThaiSolarDate;
 
 /**
  * the difference between a zero Julian day and the zero Thai Solar date.
- * This is some 543 years before the start of the Gregorian epoch. 
+ * This is some 543 years before the start of the Gregorian epoch.
  * @private
  * @const
  * @type number
@@ -11301,7 +11301,7 @@ ilib.Date.ThaiSolarDate.epoch = 1523097.5;
  * @protected
  */
 ilib.Date.ThaiSolarDate.prototype._calcDateComponents = function () {
-	// there is 198327 days difference between the Thai solar and 
+	// there is 198327 days difference between the Thai solar and
 	// Gregorian epochs which is equivalent to 543 years
 	// console.log("ThaiSolarDate._calcDateComponents: date is " + JSON.stringify(this) + " parent is " + JSON.stringify(this.parent) + " and parent.parent is " + JSON.stringify(this.parent.parent));
 	this.parent._calcDateComponents.call(this);
@@ -11310,21 +11310,21 @@ ilib.Date.ThaiSolarDate.prototype._calcDateComponents = function () {
 
 /**
  * Return the Rata Die (fixed day) number of this date.
- * 
+ *
  * @protected
  * @return {number} the rd date as a number
  */
 ilib.Date.ThaiSolarDate.prototype.getRataDie = function() {
-	// there is 198327 days difference between the Thai solar and 
+	// there is 198327 days difference between the Thai solar and
 	// Gregorian epochs which is equivalent to 543 years
 	return this.rd.getRataDie() + 198327;
 };
 
 /**
- * Return a new Gregorian date instance that represents the first instance of the 
+ * Return a new Gregorian date instance that represents the first instance of the
  * given day of the week before the current date. The day of the week is encoded
  * as a number where 0 = Sunday, 1 = Monday, etc.
- * 
+ *
  * @param {number} dow the day of the week before the current date that is being sought
  * @return {ilib.Date} the date being sought
  */
@@ -11336,10 +11336,10 @@ ilib.Date.ThaiSolarDate.prototype.before = function (dow) {
 };
 
 /**
- * Return a new Gregorian date instance that represents the first instance of the 
+ * Return a new Gregorian date instance that represents the first instance of the
  * given day of the week after the current date. The day of the week is encoded
  * as a number where 0 = Sunday, 1 = Monday, etc.
- * 
+ *
  * @param {number} dow the day of the week after the current date that is being sought
  * @return {ilib.Date} the date being sought
  */
@@ -11351,10 +11351,10 @@ ilib.Date.ThaiSolarDate.prototype.after = function (dow) {
 };
 
 /**
- * Return a new Gregorian date instance that represents the first instance of the 
+ * Return a new Gregorian date instance that represents the first instance of the
  * given day of the week on or before the current date. The day of the week is encoded
  * as a number where 0 = Sunday, 1 = Monday, etc.
- * 
+ *
  * @param {number} dow the day of the week on or before the current date that is being sought
  * @return {ilib.Date} the date being sought
  */
@@ -11366,10 +11366,10 @@ ilib.Date.ThaiSolarDate.prototype.onOrBefore = function (dow) {
 };
 
 /**
- * Return a new Gregorian date instance that represents the first instance of the 
+ * Return a new Gregorian date instance that represents the first instance of the
  * given day of the week on or after the current date. The day of the week is encoded
  * as a number where 0 = Sunday, 1 = Monday, etc.
- * 
+ *
  * @param {number} dow the day of the week on or after the current date that is being sought
  * @return {ilib.Date} the date being sought
  */
@@ -11382,7 +11382,7 @@ ilib.Date.ThaiSolarDate.prototype.onOrAfter = function (dow) {
 
 /**
  * Return the name of the calendar that governs this date.
- * 
+ *
  * @return {string} a string giving the name of the calendar
  */
 ilib.Date.ThaiSolarDate.prototype.getCalendar = function() {
@@ -11395,7 +11395,7 @@ ilib.Date._constructors["thaisolar"] = ilib.Date.ThaiSolarDate;
 
 /*
  * persian.js - Represent a Persian algorithmic calendar object.
- * 
+ *
  * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -11419,9 +11419,9 @@ ilib.Date._constructors["thaisolar"] = ilib.Date.ThaiSolarDate;
  * @class
  * Construct a new Persian algorithmic calendar object. This class encodes information about
  * a Persian algorithmic calendar.<p>
- * 
+ *
  * Depends directive: !depends persian.js
- * 
+ *
  * @constructor
  * @implements ilib.Cal
  */
@@ -11432,8 +11432,8 @@ ilib.Cal.PersianAlgo = function() {
 /**
  * @private
  * @const
- * @type Array.<number> 
- * the lengths of each month 
+ * @type Array.<number>
+ * the lengths of each month
  */
 ilib.Cal.PersianAlgo.monthLengths = [
 	31,  // Farvardin
@@ -11452,10 +11452,10 @@ ilib.Cal.PersianAlgo.monthLengths = [
 
 /**
  * Return the number of months in the given year. The number of months in a year varies
- * for some luni-solar calendars because in some years, an extra month is needed to extend the 
+ * for some luni-solar calendars because in some years, an extra month is needed to extend the
  * days in a year to an entire solar year. The month is represented as a 1-based number
  * where 1=first month, 2=second month, etc.
- * 
+ *
  * @param {number} year a year for which the number of months is sought
  * @return {number} The number of months in the given year
  */
@@ -11467,7 +11467,7 @@ ilib.Cal.PersianAlgo.prototype.getNumMonths = function(year) {
  * Return the number of days in a particular month in a particular year. This function
  * can return a different number for a month depending on the year because of things
  * like leap years.
- * 
+ *
  * @param {number} month the month for which the length is sought
  * @param {number} year the year within which that month can be found
  * @return {number} the number of days within the given month in the given year
@@ -11482,11 +11482,11 @@ ilib.Cal.PersianAlgo.prototype.getMonLength = function(month, year) {
 };
 
 /**
- * Return the equivalent year in the 2820 year cycle that begins on 
- * Far 1, 474. This particular cycle obeys the cycle-of-years formula 
+ * Return the equivalent year in the 2820 year cycle that begins on
+ * Far 1, 474. This particular cycle obeys the cycle-of-years formula
  * whereas the others do not specifically. This cycle can be used as
- * a proxy for other years outside of the cycle by shifting them into 
- * the cycle.   
+ * a proxy for other years outside of the cycle by shifting them into
+ * the cycle.
  * @param {number} year year to find the equivalent cycle year for
  * @returns {number} the equivalent cycle year
  */
@@ -11507,8 +11507,8 @@ ilib.Cal.PersianAlgo.prototype.isLeapYear = function(year) {
 
 /**
  * Return the type of this calendar.
- * 
- * @return {string} the name of the type of this calendar 
+ *
+ * @return {string} the name of the type of this calendar
  */
 ilib.Cal.PersianAlgo.prototype.getType = function() {
 	return this.type;
@@ -11517,7 +11517,7 @@ ilib.Cal.PersianAlgo.prototype.getType = function() {
 /**
  * Return a date instance for this calendar type using the given
  * options.
- * @param {Object} options options controlling the construction of 
+ * @param {Object} options options controlling the construction of
  * the date instance
  * @return {ilib.Date} a date appropriate for this calendar type
  */
@@ -11530,7 +11530,7 @@ ilib.Cal._constructors["persian-algo"] = ilib.Cal.PersianAlgo;
 
 /*
  * persiandate.js - Represent a date in the Persian algorithmic calendar
- * 
+ *
  * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -11547,59 +11547,59 @@ ilib.Cal._constructors["persian-algo"] = ilib.Cal.PersianAlgo;
  * limitations under the License.
  */
 
-/* !depends 
-date.js 
-calendar/persian.js 
+/* !depends
+date.js
+calendar/persian.js
 util/utils.js
 util/search.js
 util/math.js
-localeinfo.js 
-julianday.js 
+localeinfo.js
+julianday.js
 */
 
 /**
- * Construct a new Persian RD date number object. The constructor parameters can 
+ * Construct a new Persian RD date number object. The constructor parameters can
  * contain any of the following properties:
- * 
+ *
  * <ul>
- * <li><i>unixtime<i> - sets the time of this instance according to the given 
+ * <li><i>unixtime<i> - sets the time of this instance according to the given
  * unix time. Unix time is the number of milliseconds since midnight on Jan 1, 1970, Gregorian
- * 
+ *
  * <li><i>julianday</i> - sets the time of this instance according to the given
  * Julian Day instance or the Julian Day given as a float
- * 
+ *
  * <li><i>year</i> - any integer, including 0
- * 
+ *
  * <li><i>month</i> - 1 to 12, where 1 means Farvardin, 2 means Ordibehesht, etc.
- * 
+ *
  * <li><i>day</i> - 1 to 31
- * 
- * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation 
+ *
+ * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation
  * is always done with an unambiguous 24 hour representation
- * 
+ *
  * <li><i>minute</i> - 0 to 59
- * 
+ *
  * <li><i>second</i> - 0 to 59
- * 
+ *
  * <li><i>millisecond</i> - 0 to 999
- * 
+ *
  * <li><i>date</i> - use the given intrinsic Javascript date to initialize this one.
  * </ul>
  *
  * If the constructor is called with another Persian date instance instead of
  * a parameter block, the other instance acts as a parameter block and its
  * settings are copied into the current instance.<p>
- * 
- * If the constructor is called with no arguments at all or if none of the 
- * properties listed above are present, then the RD is calculate based on 
+ *
+ * If the constructor is called with no arguments at all or if none of the
+ * properties listed above are present, then the RD is calculate based on
  * the current date at the time of instantiation. <p>
- * 
+ *
  * If any of the properties from <i>year</i> through <i>millisecond</i> are not
  * specified in the params, it is assumed that they have the smallest possible
  * value in the range for the property (zero or one).<p>
- * 
+ *
  * Depends directive: !depends persiandate.js
- * 
+ *
  * @private
  * @class
  * @constructor
@@ -11641,7 +11641,7 @@ ilib.Date.PersAlgoRataDie.prototype._setDateComponents = function(date) {
 		date.second * 1000 +
 		date.millisecond) /
 		86400000;
-	
+
 	/*
 	// console.log("getRataDie: converting " +  JSON.stringify(this));
 	console.log("getRataDie: year is " +  year);
@@ -11650,16 +11650,16 @@ ilib.Date.PersAlgoRataDie.prototype._setDateComponents = function(date) {
 	console.log("getRataDie: rdtime is " +  rdtime);
 	console.log("getRataDie: rd is " +  (rdOfYears + dayInYear + rdtime));
 	*/
-	
+
 	this.rd = rdOfYears + dayInYear + rdtime;
 };
 
 /**
- * Return the rd number of the particular day of the week on or before the 
+ * Return the rd number of the particular day of the week on or before the
  * given rd. eg. The Sunday on or before the given rd.
  * @private
  * @param {number} rd the rata die date of the reference date
- * @param {number} dayOfWeek the day of the week that is being sought relative 
+ * @param {number} dayOfWeek the day of the week that is being sought relative
  * to the current date
  * @return {number} the rd of the day of the week
  */
@@ -11670,66 +11670,66 @@ ilib.Date.PersAlgoRataDie.prototype._onOrBefore = function(rd, dayOfWeek) {
 
 /**
  * @class
- * 
- * Construct a new Persian date object. The constructor parameters can 
+ *
+ * Construct a new Persian date object. The constructor parameters can
  * contain any of the following properties:
- * 
+ *
  * <ul>
- * <li><i>unixtime<i> - sets the time of this instance according to the given 
+ * <li><i>unixtime<i> - sets the time of this instance according to the given
  * unix time. Unix time is the number of milliseconds since midnight on Jan 1, 1970, Gregorian
- * 
+ *
  * <li><i>julianday</i> - sets the time of this instance according to the given
  * Julian Day instance or the Julian Day given as a float
- * 
+ *
  * <li><i>year</i> - any integer, including 0
- * 
+ *
  * <li><i>month</i> - 1 to 12, where 1 means Farvardin, 2 means Ordibehesht, etc.
- * 
+ *
  * <li><i>day</i> - 1 to 31
- * 
- * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation 
+ *
+ * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation
  * is always done with an unambiguous 24 hour representation
- * 
+ *
  * <li><i>minute</i> - 0 to 59
- * 
+ *
  * <li><i>second</i> - 0 to 59
- * 
+ *
  * <li><i>millisecond</i> - 0 to 999
- * 
- * <li><i>timezone</i> - the ilib.TimeZone instance or time zone name as a string 
+ *
+ * <li><i>timezone</i> - the ilib.TimeZone instance or time zone name as a string
  * of this persian date. The date/time is kept in the local time. The time zone
  * is used later if this date is formatted according to a different time zone and
  * the difference has to be calculated, or when the date format has a time zone
  * component in it.
- * 
- * <li><i>locale</i> - locale for this persian date. If the time zone is not 
+ *
+ * <li><i>locale</i> - locale for this persian date. If the time zone is not
  * given, it can be inferred from this locale. For locales that span multiple
- * time zones, the one with the largest population is chosen as the one that 
+ * time zones, the one with the largest population is chosen as the one that
  * represents the locale.
- * 
+ *
  * <li><i>date</i> - use the given intrinsic Javascript date to initialize this one.
  * </ul>
  *
  * If the constructor is called with another Persian date instance instead of
  * a parameter block, the other instance acts as a parameter block and its
  * settings are copied into the current instance.<p>
- * 
- * If the constructor is called with no arguments at all or if none of the 
- * properties listed above 
- * from <i>unixtime</i> through <i>millisecond</i> are present, then the date 
- * components are 
+ *
+ * If the constructor is called with no arguments at all or if none of the
+ * properties listed above
+ * from <i>unixtime</i> through <i>millisecond</i> are present, then the date
+ * components are
  * filled in with the current date at the time of instantiation. Note that if
- * you do not give the time zone when defaulting to the current time and the 
+ * you do not give the time zone when defaulting to the current time and the
  * time zone for all of ilib was not set with <i>ilib.setTimeZone()</i>, then the
- * time zone will default to UTC ("Universal Time, Coordinated" or "Greenwich 
+ * time zone will default to UTC ("Universal Time, Coordinated" or "Greenwich
  * Mean Time").<p>
- * 
+ *
  * If any of the properties from <i>year</i> through <i>millisecond</i> are not
  * specified in the params, it is assumed that they have the smallest possible
  * value in the range for the property (zero or one).<p>
- * 
+ *
  * Depends directive: !depends persiandate.js
- * 
+ *
  * @constructor
  * @extends ilib.Date
  * @param {Object=} params parameters that govern the settings and behaviour of this Persian date
@@ -11737,17 +11737,17 @@ ilib.Date.PersAlgoRataDie.prototype._onOrBefore = function(rd, dayOfWeek) {
 ilib.Date.PersAlgoDate = function(params) {
 	this.cal = new ilib.Cal.PersianAlgo();
 	this.timezone = "local";
-	
+
 	if (params) {
 		if (params.locale) {
 			this.locale = (typeof(params.locale) === 'string') ? new ilib.Locale(params.locale) : params.locale;
 			var li = new ilib.LocaleInfo(this.locale);
-			this.timezone = li.getTimeZone(); 
+			this.timezone = li.getTimeZone();
 		}
 		if (params.timezone) {
 			this.timezone = params.timezone;
 		}
-		
+
 		if (params.year || params.month || params.day || params.hour ||
 				params.minute || params.second || params.millisecond ) {
 			/**
@@ -11767,7 +11767,7 @@ ilib.Date.PersAlgoDate = function(params) {
 			 * @type number
 			 */
 			this.day = parseInt(params.day, 10) || 1;
-			
+
 			/**
 			 * The hour of the day. This can be a number from 0 to 23, as times are
 			 * stored unambiguously in the 24-hour clock.
@@ -11792,7 +11792,7 @@ ilib.Date.PersAlgoDate = function(params) {
 			 * @type number
 			 */
 			this.millisecond = parseInt(params.millisecond, 10) || 0;
-			
+
 			/**
 			 * The day of the year. Ranges from 1 to 366.
 			 * @type number
@@ -11802,15 +11802,15 @@ ilib.Date.PersAlgoDate = function(params) {
 			if (typeof(params.dst) === 'boolean') {
 				this.dst = params.dst;
 			}
-			
+
 			this.rd = this.newRd(this);
-			
+
 			// add the time zone offset to the rd to convert to UTC
 			if (!this.tz) {
 				this.tz = new ilib.TimeZone({id: this.timezone});
 			}
-			// getOffsetMillis requires that this.year, this.rd, and this.dst 
-			// are set in order to figure out which time zone rules apply and 
+			// getOffsetMillis requires that this.year, this.rd, and this.dst
+			// are set in order to figure out which time zone rules apply and
 			// what the offset is at that point in the year
 			this.offset = this.tz._getOffsetMillisWallTime(this) / 86400000;
 			if (this.offset !== 0) {
@@ -11835,7 +11835,7 @@ ilib.Date.PersAlgoDate.prototype.constructor = ilib.Date.PersAlgoDate;
  * @private
  * @const
  * @type Array.<number>
- * the cumulative lengths of each month, for a non-leap year 
+ * the cumulative lengths of each month, for a non-leap year
  */
 ilib.Date.PersAlgoDate.cumMonthLengths = [
     0,    // Farvardin
@@ -11866,7 +11866,7 @@ ilib.Date.PersAlgoDate.prototype.newRd = function (params) {
 /**
  * Return the year for the given RD
  * @protected
- * @param {number} rd RD to calculate from 
+ * @param {number} rd RD to calculate from
  * @returns {number} the year for the RD
  */
 ilib.Date.PersAlgoDate.prototype._calcYear = function(rd) {
@@ -11885,23 +11885,23 @@ ilib.Date.PersAlgoDate.prototype._calcYear = function(rd) {
 ilib.Date.PersAlgoDate.prototype._calcDateComponents = function () {
 	var remainder,
 		rd = this.rd.getRataDie();
-	
+
 	this.year = this._calcYear(rd);
-	
+
 	if (typeof(this.offset) === "undefined") {
-		// now offset the RD by the time zone, then recalculate in case we were 
+		// now offset the RD by the time zone, then recalculate in case we were
 		// near the year boundary
 		if (!this.tz) {
 			this.tz = new ilib.TimeZone({id: this.timezone});
 		}
 		this.offset = this.tz.getOffsetMillis(this) / 86400000;
 	}
-	
+
 	if (this.offset !== 0) {
 		rd += this.offset;
 		this.year = this._calcYear(rd);
 	}
-	
+
 	//console.log("PersAlgoDate.calcComponent: calculating for rd " + rd);
 	//console.log("PersAlgoDate.calcComponent: year is " + ret.year);
 	var yearStart = this.newRd({
@@ -11914,40 +11914,40 @@ ilib.Date.PersAlgoDate.prototype._calcDateComponents = function () {
 		millisecond: 0
 	});
 	remainder = rd - yearStart.getRataDie() + 1;
-	
+
 	this.dayOfYear = remainder;
-	
+
 	//console.log("PersAlgoDate.calcComponent: remainder is " + remainder);
-	
+
 	this.month = ilib.bsearch(remainder, ilib.Date.PersAlgoDate.cumMonthLengths);
 	remainder -= ilib.Date.PersAlgoDate.cumMonthLengths[this.month-1];
-	
+
 	//console.log("PersAlgoDate.calcComponent: month is " + this.month + " and remainder is " + remainder);
-	
+
 	this.day = Math.floor(remainder);
 	remainder -= this.day;
-	
+
 	//console.log("PersAlgoDate.calcComponent: day is " + this.day + " and remainder is " + remainder);
-	
+
 	// now convert to milliseconds for the rest of the calculation
 	remainder = Math.round(remainder * 86400000);
-	
+
 	this.hour = Math.floor(remainder/3600000);
 	remainder -= this.hour * 3600000;
-	
+
 	this.minute = Math.floor(remainder/60000);
 	remainder -= this.minute * 60000;
-	
+
 	this.second = Math.floor(remainder/1000);
 	remainder -= this.second * 1000;
-	
+
 	this.millisecond = remainder;
 };
 
 /**
  * Return the day of the week of this date. The day of the week is encoded
  * as number from 0 to 6, with 0=Sunday, 1=Monday, etc., until 6=Saturday.
- * 
+ *
  * @return {number} the day of the week
  */
 ilib.Date.PersAlgoDate.prototype.getDayOfWeek = function() {
@@ -11956,8 +11956,8 @@ ilib.Date.PersAlgoDate.prototype.getDayOfWeek = function() {
 };
 
 /**
- * Return the ordinal day of the year. Days are counted from 1 and proceed linearly up to 
- * 365, regardless of months or weeks, etc. That is, Farvardin 1st is day 1, and 
+ * Return the ordinal day of the year. Days are counted from 1 and proceed linearly up to
+ * 365, regardless of months or weeks, etc. That is, Farvardin 1st is day 1, and
  * December 31st is 365 in regular years, or 366 in leap years.
  * @return {number} the ordinal day of the year
  */
@@ -11966,13 +11966,13 @@ ilib.Date.PersAlgoDate.prototype.getDayOfYear = function() {
 };
 
 /**
- * Return the era for this date as a number. The value for the era for Persian 
- * calendars is -1 for "before the persian era" (BP) and 1 for "the persian era" (anno 
- * persico or AP). 
- * BP dates are any date before Farvardin 1, 1 AP. In the proleptic Persian calendar, 
+ * Return the era for this date as a number. The value for the era for Persian
+ * calendars is -1 for "before the persian era" (BP) and 1 for "the persian era" (anno
+ * persico or AP).
+ * BP dates are any date before Farvardin 1, 1 AP. In the proleptic Persian calendar,
  * there is a year 0, so any years that are negative or zero are BP.
- * @return {number} 1 if this date is in the common era, -1 if it is before the 
- * common era 
+ * @return {number} 1 if this date is in the common era, -1 if it is before the
+ * common era
  */
 ilib.Date.PersAlgoDate.prototype.getEra = function() {
 	return (this.year < 1) ? -1 : 1;
@@ -11980,7 +11980,7 @@ ilib.Date.PersAlgoDate.prototype.getEra = function() {
 
 /**
  * Return the name of the calendar that governs this date.
- * 
+ *
  * @return {string} a string giving the name of the calendar
  */
 ilib.Date.PersAlgoDate.prototype.getCalendar = function() {
@@ -11991,7 +11991,7 @@ ilib.Date.PersAlgoDate.prototype.getCalendar = function() {
 ilib.Date._constructors["persian-algo"] = ilib.Date.PersAlgoDate;
 /*
  * astro.js - Static functions to support astronomical calculations
- * 
+ *
  * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12018,14 +12018,14 @@ calendar/gregratadie.js
 // !data astro
 
 /*
- * These routines were derived from a public domain set of JavaScript 
- * functions for positional astronomy by John Walker of Fourmilab, 
+ * These routines were derived from a public domain set of JavaScript
+ * functions for positional astronomy by John Walker of Fourmilab,
  * September 1999.
  */
 
 /**
  * Load in all the data needed for astrological calculations.
- * 
+ *
  * @param {boolean} sync
  * @param {*} loadParams
  * @param {function(*)|undefined} callback
@@ -12033,28 +12033,28 @@ calendar/gregratadie.js
 ilib.Date.initAstro = function(sync, loadParams, callback) {
 	if (!ilib.data.astro) {
 		ilib.loadData({
-			name: "astro.json", // countries in their own language 
-			locale: "-", // only need to load the root file 
+			name: "astro.json", // countries in their own language
+			locale: "-", // only need to load the root file
 			nonLocale: true,
-			sync: sync, 
-			loadParams: loadParams, 
+			sync: sync,
+			loadParams: loadParams,
 			callback: ilib.bind(this, /** @type function() */ function(astroData) {
-				/** 
+				/**
 				 * @type {{
-				 *  	_EquinoxpTerms:Array.<number>, 
-				 *  	_JDE0tab1000:Array.<number>, 
-				 *  	_JDE0tab2000:Array.<number>, 
+				 *  	_EquinoxpTerms:Array.<number>,
+				 *  	_JDE0tab1000:Array.<number>,
+				 *  	_JDE0tab2000:Array.<number>,
 				 *  	_deltaTtab:Array.<number>,
 				 *  	_oterms:Array.<number>,
-				 *  	_nutArgMult:Array.<number>, 
-				 *  	_nutArgCoeff:Array.<number>, 
+				 *  	_nutArgMult:Array.<number>,
+				 *  	_nutArgCoeff:Array.<number>,
 				 *  	_nutCoeffA:Array.<number>,
 				 *  	_nutCoeffB:Array.<number>,
 				 *  	_coeff19th:Array.<number>,
 				 *  	_coeff18th:Array.<number>,
-				 *  	_solarLongCoeff:Array.<number>, 
-				 *  	_solarLongMultipliers:Array.<number>, 
-				 *  	_solarLongAddends:Array.<number>, 
+				 *  	_solarLongCoeff:Array.<number>,
+				 *  	_solarLongMultipliers:Array.<number>,
+				 *  	_solarLongAddends:Array.<number>,
 				 *  	_meanMoonCoeff:Array.<number>,
 				 *  	_elongationCoeff:Array.<number>,
 				 *  	_solarAnomalyCoeff:Array.<number>,
@@ -12082,7 +12082,7 @@ ilib.Date.initAstro = function(sync, loadParams, callback) {
 				 *  	_nmAddFactor:Array.<number>,
 				 *  	_nmExtra:Array.<number>
 				 *  }}
-				 */ 	
+				 */
 			 	ilib.data.astro = astroData;
 				if (callback && typeof(callback) === 'function') {
 					callback(astroData);
@@ -12098,10 +12098,10 @@ ilib.Date.initAstro = function(sync, loadParams, callback) {
 
 /**
  * Convert degrees to radians.
- * 
+ *
  * @static
  * @param {number} d angle in degrees
- * @return {number} angle in radians 
+ * @return {number} angle in radians
  */
 ilib.Date._dtr = function(d) {
 	return (d * Math.PI) / 180.0;
@@ -12109,10 +12109,10 @@ ilib.Date._dtr = function(d) {
 
 /**
  * Convert radians to degrees.
- * 
+ *
  * @static
  * @param {number} r angle in radians
- * @return {number} angle in degrees 
+ * @return {number} angle in degrees
  */
 ilib.Date._rtd = function(r) {
 	return (r * 180.0) / Math.PI;
@@ -12123,7 +12123,7 @@ ilib.Date._rtd = function(r) {
  * @static
  * @param {number} d angle in degrees
  * @return {number} cosine of the angle.
- */  
+ */
 ilib.Date._dcos = function(d) {
 	return Math.cos(ilib.Date._dtr(d));
 };
@@ -12133,7 +12133,7 @@ ilib.Date._dcos = function(d) {
  * @static
  * @param {number} d angle in degrees
  * @return {number} sine of the angle.
- */  
+ */
 ilib.Date._dsin = function(d) {
 	return Math.sin(ilib.Date._dtr(d));
 };
@@ -12143,17 +12143,17 @@ ilib.Date._dsin = function(d) {
  * @static
  * @param {number} d angle in degrees
  * @return {number} tan of the angle.
- */  
+ */
 ilib.Date._dtan = function(d) {
 	return Math.tan(ilib.Date._dtr(d));
 };
 
 /**
  * Range reduce angle in degrees.
- * 
+ *
  * @static
  * @param {number} a angle to reduce
- * @return {number} the reduced angle  
+ * @return {number} the reduced angle
  */
 ilib.Date._fixangle = function(a) {
 	return a - 360.0 * (Math.floor(a / 360.0));
@@ -12161,26 +12161,26 @@ ilib.Date._fixangle = function(a) {
 
 /**
  * Range reduce angle in radians.
- * 
+ *
  * @static
  * @param {number} a angle to reduce
- * @return {number} the reduced angle  
+ * @return {number} the reduced angle
  */
 ilib.Date._fixangr = function(a) {
 	return a - (2 * Math.PI) * (Math.floor(a / (2 * Math.PI)));
 };
 
 /**
- * Determine the Julian Ephemeris Day of an equinox or solstice.  The "which" 
+ * Determine the Julian Ephemeris Day of an equinox or solstice.  The "which"
  * argument selects the item to be computed:
- * 
+ *
  * <ul>
  * <li>0   March equinox
  * <li>1   June solstice
  * <li>2   September equinox
  * <li>3   December solstice
  * </ul>
- * 
+ *
  * @static
  * @param {number} year Gregorian year to calculate for
  * @param {number} which Which equinox or solstice to calculate
@@ -12231,7 +12231,7 @@ ilib.Date._equinox = function(year, which) {
 	return JDE;
 };
 
-/* 
+/*
  * The table of observed Delta T values at the beginning of
  * years from 1620 through 2014 as found in astro.json is taken from
  * http://www.staff.science.uu.nl/~gent0113/deltat/deltat.htm
@@ -12239,12 +12239,12 @@ ilib.Date._equinox = function(year, which) {
  * ftp://maia.usno.navy.mil/ser7/deltat.data
  */
 
-/**  
+/**
  * Determine the difference, in seconds, between dynamical time and universal time.
- * 
+ *
  * @static
  * @param {number} year to calculate the difference for
- * @return {number} difference in seconds between dynamical time and universal time  
+ * @return {number} difference in seconds between dynamical time and universal time
  */
 ilib.Date._deltat = function (year) {
 	var dt, f, i, t;
@@ -12278,7 +12278,7 @@ ilib.Date._deltat = function (year) {
  * range in which this fit is valid (deep time) we
  * simply return the J2000 value of the obliquity, which
  * happens to be almost precisely the mean.
- * 
+ *
  * @static
  * @param {number} jd Julian Day to calculate the obliquity for
  * @return {number} the obliquity
@@ -12309,7 +12309,7 @@ ilib.Date._obliqeq = function (jd) {
  * values
  */
 ilib.Date._sunpos = function(jd) {
-	var ret = {}, 
+	var ret = {},
 		T, T2, T3, Omega, epsilon, epsilon0;
 
 	T = (jd - 2451545.0) / 36525.0;
@@ -12355,21 +12355,21 @@ ilib.Date._sunpos = function(jd) {
 };
 
 /**
- * Calculate the nutation in longitude, deltaPsi, and obliquity, 
+ * Calculate the nutation in longitude, deltaPsi, and obliquity,
  * deltaEpsilon for a given Julian date jd. Results are returned as an object
  * giving deltaPsi and deltaEpsilon in degrees.
- * 
+ *
  * @static
  * @param {number} jd calculate the nutation of this Julian Day
  * @return {Object} the deltaPsi and deltaEpsilon of the nutation
  */
 ilib.Date._nutation = function(jd) {
-	var i, j, 
-		t = (jd - 2451545.0) / 36525.0, 
-		t2, t3, to10, 
-		ta = [], 
-		dp = 0, 
-		de = 0, 
+	var i, j,
+		t = (jd - 2451545.0) / 36525.0,
+		t2, t3, to10,
+		ta = [],
+		dp = 0,
+		de = 0,
 		ang,
 		ret = {};
 
@@ -12378,9 +12378,9 @@ ilib.Date._nutation = function(jd) {
 	/*
 	 * Calculate angles. The correspondence between the elements of our array
 	 * and the terms cited in Meeus are:
-	 * 
+	 *
 	 * ta[0] = D ta[0] = M ta[2] = M' ta[3] = F ta[4] = \Omega
-	 * 
+	 *
 	 */
 
 	ta[0] = ilib.Date._dtr(297.850363 + 445267.11148 * t - 0.0019142 * t2 + t3 / 189474.0);
@@ -12423,10 +12423,10 @@ ilib.Date._nutation = function(jd) {
 
 /**
  * Returns the equation of time as a fraction of a day.
- * 
+ *
  * @static
  * @param {number} jd the Julian Day of the day to calculate for
- * @return {number} the equation of time for the given day  
+ * @return {number} the equation of time for the given day
  */
 ilib.Date._equationOfTime = function(jd) {
 	var alpha, deltaPsi, E, epsilon, L0, tau, pos;
@@ -12453,7 +12453,7 @@ ilib.Date._equationOfTime = function(jd) {
 	//console.log("L0 - 0.0057183 = " + (L0 - 0.0057183));
 	//console.log("L0 - 0.0057183 - alpha = " + (L0 - 0.0057183 - alpha));
 	//console.log("deltaPsi * cos(epsilon) = " + deltaPsi * ilib.Date._dcos(epsilon));
-	
+
 	E = L0 - 0.0057183 - alpha + deltaPsi * ilib.Date._dcos(epsilon);
 	// if alpha and L0 are in different quadrants, then renormalize
 	// so that the difference between them is in the right range
@@ -12487,10 +12487,10 @@ ilib.Date._poly = function(x, coefficients) {
 /**
  * Calculate the UTC RD from the local RD given "zone" number of minutes
  * worth of offset.
- * 
+ *
  * @static
  * @param {number} local RD of the locale time, given in any calendar
- * @param {number} zone number of minutes of offset from UTC for the time zone 
+ * @param {number} zone number of minutes of offset from UTC for the time zone
  * @return {number} the UTC equivalent of the local RD
  */
 ilib.Date._universalFromLocal = function(local, zone) {
@@ -12500,10 +12500,10 @@ ilib.Date._universalFromLocal = function(local, zone) {
 /**
  * Calculate the local RD from the UTC RD given "zone" number of minutes
  * worth of offset.
- * 
+ *
  * @static
  * @param {number} local RD of the locale time, given in any calendar
- * @param {number} zone number of minutes of offset from UTC for the time zone 
+ * @param {number} zone number of minutes of offset from UTC for the time zone
  * @return {number} the UTC equivalent of the local RD
  */
 ilib.Date._localFromUniversal = function(local, zone) {
@@ -12547,11 +12547,11 @@ ilib.Date._nutation2 = function(c) {
  */
 ilib.Date._ephemerisCorrection = function(jd) {
 	var year = ilib.Date.GregDate._calcYear(jd - 1721424.5);
-	
+
 	if (1988 <= year && year <= 2019) {
 		return (year - 1933) / 86400;
 	}
-	
+
 	if (1800 <= year && year <= 1987) {
 		var jul1 = new ilib.Date.GregRataDie({
 			year: year,
@@ -12565,12 +12565,12 @@ ilib.Date._ephemerisCorrection = function(jd) {
 		var theta = (jul1.getRataDie() - 693596) / 36525;
 		return ilib.Date._poly(theta, (1900 <= year) ? ilib.data.astro._coeff19th : ilib.data.astro._coeff18th);
 	}
-	
+
 	if (1620 <= year && year <= 1799) {
 		year -= 1600;
 		return (196.58333 - 4.0675 * year + 0.0219167 * year * year) / 86400;
 	}
-	
+
 	// 660724 is the rd of Jan 1, 1810
 	var jan1 = new ilib.Date.GregRataDie({
 		year: year,
@@ -12582,7 +12582,7 @@ ilib.Date._ephemerisCorrection = function(jd) {
 	});
 	// var x = 0.5 + (jan1.getRataDie() - 660724);
 	var x = 0.5 + (jan1.getRataDie() - 660724);
-	
+
 	return ((x * x / 41048480) - 15) / 86400;
 };
 
@@ -12615,9 +12615,9 @@ ilib.Date._julianCenturies = function(jd) {
 
 /**
  * Calculate the solar longitude
- * 
+ *
  * @static
- * @param {number} jd julian day of the date to calculate the longitude for 
+ * @param {number} jd julian day of the date to calculate the longitude for
  * @return {number} the solar longitude in degrees
  */
 ilib.Date._solarLongitude = function(jd) {
@@ -12625,9 +12625,9 @@ ilib.Date._solarLongitude = function(jd) {
 		longitude = 0,
 		len = ilib.data.astro._solarLongCoeff.length,
 		row;
-	
+
 	for (var i = 0; i < len; i++) {
-		longitude += ilib.data.astro._solarLongCoeff[i] * 
+		longitude += ilib.data.astro._solarLongCoeff[i] *
 			ilib.Date._dsin(ilib.data.astro._solarLongAddends[i] + ilib.data.astro._solarLongMultipliers[i] * c);
 	}
 	longitude *= 5.729577951308232e-06;
@@ -12650,21 +12650,21 @@ ilib.Date._lunarLongitude = function (jd) {
 	    lunarAnomaly = ilib.Date._fixangle(ilib.Date._poly(c, ilib.data.astro._lunarAnomalyCoeff)),
 	    moonNode = ilib.Date._fixangle(ilib.Date._poly(c, ilib.data.astro._moonFromNodeCoeff)),
 	    e = ilib.Date._poly(c, ilib.data.astro._eCoeff);
-	
+
 	var sum = 0;
 	for (var i = 0; i < ilib.data.astro._lunarElongationLongCoeff.length; i++) {
 		var x = ilib.data.astro._solarAnomalyLongCoeff[i];
 
-		sum += ilib.data.astro._sineCoeff[i] * Math.pow(e, Math.abs(x)) * 
-			ilib.Date._dsin(ilib.data.astro._lunarElongationLongCoeff[i] * elongation + x * solarAnomaly + 
-				ilib.data.astro._lunarAnomalyLongCoeff[i] * lunarAnomaly + 
+		sum += ilib.data.astro._sineCoeff[i] * Math.pow(e, Math.abs(x)) *
+			ilib.Date._dsin(ilib.data.astro._lunarElongationLongCoeff[i] * elongation + x * solarAnomaly +
+				ilib.data.astro._lunarAnomalyLongCoeff[i] * lunarAnomaly +
 				ilib.data.astro._moonFromNodeLongCoeff[i] * moonNode);
 	}
 	var longitude = sum / 1000000;
 	var venus = 3958.0 / 1000000 * ilib.Date._dsin(119.75 + c * 131.84899999999999);
 	var jupiter = 318.0 / 1000000 * ilib.Date._dsin(53.090000000000003 + c * 479264.28999999998);
 	var flatEarth = 1962.0 / 1000000 * ilib.Date._dsin(meanMoon - moonNode);
-	
+
 	return ilib.Date._fixangle(meanMoon + longitude + venus + jupiter + flatEarth + ilib.Date._nutation2(c));
 };
 
@@ -12684,14 +12684,14 @@ ilib.Date._newMoonTime = function(n) {
 	var capOmega = ilib.Date._poly(c, ilib.data.astro._nmCapOmegaCoeff);
 	var correction = -0.00017 * ilib.Date._dsin(capOmega);
 	for (var i = 0; i < ilib.data.astro._nmSineCoeff.length; i++) {
-		correction = correction + ilib.data.astro._nmSineCoeff[i] * Math.pow(capE, ilib.data.astro._nmEFactor[i]) * 
-		ilib.Date._dsin(ilib.data.astro._nmSolarCoeff[i] * solarAnomaly + 
-				ilib.data.astro._nmLunarCoeff[i] * lunarAnomaly + 
+		correction = correction + ilib.data.astro._nmSineCoeff[i] * Math.pow(capE, ilib.data.astro._nmEFactor[i]) *
+		ilib.Date._dsin(ilib.data.astro._nmSolarCoeff[i] * solarAnomaly +
+				ilib.data.astro._nmLunarCoeff[i] * lunarAnomaly +
 				ilib.data.astro._nmMoonCoeff[i] * moonArgument);
 	}
 	var additional = 0;
 	for (var i = 0; i < ilib.data.astro._nmAddConst.length; i++) {
-		additional = additional + ilib.data.astro._nmAddFactor[i] * 
+		additional = additional + ilib.data.astro._nmAddFactor[i] *
 		ilib.Date._dsin(ilib.data.astro._nmAddConst[i] + ilib.data.astro._nmAddCoeff[i] * k);
 	}
 	var extra = 0.000325 * ilib.Date._dsin(ilib.Date._poly(c, ilib.data.astro._nmExtra));
@@ -12749,8 +12749,8 @@ ilib.Date._newMoonAtOrAfter = function (jd) {
 /**
  * @static
  * @param {number} jd JD to calculate from
- * @param {number} longitude longitude to seek 
- * @returns {number} the JD of the next time that the solar longitude 
+ * @param {number} longitude longitude to seek
+ * @returns {number} the JD of the next time that the solar longitude
  * is a multiple of the given longitude
  */
 ilib.Date._nextSolarLongitude = function(jd, longitude) {
@@ -12758,7 +12758,7 @@ ilib.Date._nextSolarLongitude = function(jd, longitude) {
 	var tau = jd + rate * ilib.Date._fixangle(longitude - ilib.Date._solarLongitude(jd));
 	var start = Math.max(jd, tau - 5.0);
 	var end = tau + 5.0;
-	
+
 	return ilib.bisectionSearch(0, start, end, 1e-6, function (l) {
 		return 180 - ilib.Date._fixangle(ilib.Date._solarLongitude(l) - longitude);
 	});
@@ -12766,7 +12766,7 @@ ilib.Date._nextSolarLongitude = function(jd, longitude) {
 
 /**
  * Floor the julian day to midnight of the current julian day.
- * 
+ *
  * @static
  * @protected
  * @param {number} jd the julian to round
@@ -12778,7 +12778,7 @@ ilib.Date._floorToJD = function(jd) {
 
 /**
  * Floor the julian day to midnight of the current julian day.
- * 
+ *
  * @static
  * @protected
  * @param {number} jd the julian to round
@@ -12790,7 +12790,7 @@ ilib.Date._ceilToJD = function(jd) {
 
 /*
  * persratadie.js - Represent a rata die date in the Persian calendar
- * 
+ *
  * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12807,7 +12807,7 @@ ilib.Date._ceilToJD = function(jd) {
  * limitations under the License.
  */
 
-/* !depends 
+/* !depends
 date.js
 util/utils.js
 util/math.js
@@ -12817,48 +12817,48 @@ calendar/gregoriandate.js
 */
 
 /**
- * Construct a new Persian RD date number object. The constructor parameters can 
+ * Construct a new Persian RD date number object. The constructor parameters can
  * contain any of the following properties:
- * 
+ *
  * <ul>
- * <li><i>unixtime<i> - sets the time of this instance according to the given 
+ * <li><i>unixtime<i> - sets the time of this instance according to the given
  * unix time. Unix time is the number of milliseconds since midnight on Jan 1, 1970, Gregorian
- * 
+ *
  * <li><i>julianday</i> - sets the time of this instance according to the given
  * Julian Day instance or the Julian Day given as a float
- * 
+ *
  * <li><i>year</i> - any integer, including 0
- * 
+ *
  * <li><i>month</i> - 1 to 12, where 1 means Farvardin, 2 means Ordibehesht, etc.
- * 
+ *
  * <li><i>day</i> - 1 to 31
- * 
- * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation 
+ *
+ * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation
  * is always done with an unambiguous 24 hour representation
- * 
+ *
  * <li><i>minute</i> - 0 to 59
- * 
+ *
  * <li><i>second</i> - 0 to 59
- * 
+ *
  * <li><i>millisecond</i> - 0 to 999
- * 
+ *
  * <li><i>date</i> - use the given intrinsic Javascript date to initialize this one.
  * </ul>
  *
  * If the constructor is called with another Persian date instance instead of
  * a parameter block, the other instance acts as a parameter block and its
  * settings are copied into the current instance.<p>
- * 
- * If the constructor is called with no arguments at all or if none of the 
- * properties listed above are present, then the RD is calculate based on 
+ *
+ * If the constructor is called with no arguments at all or if none of the
+ * properties listed above are present, then the RD is calculate based on
  * the current date at the time of instantiation. <p>
- * 
+ *
  * If any of the properties from <i>year</i> through <i>millisecond</i> are not
  * specified in the params, it is assumed that they have the smallest possible
  * value in the range for the property (zero or one).<p>
- * 
+ *
  * Depends directive: !depends persiandate.js
- * 
+ *
  * @private
  * @class
  * @constructor
@@ -12892,7 +12892,7 @@ ilib.Date.PersAstroRataDie.prototype.constructor = ilib.Date.PersAstroRataDie;
 ilib.Date.PersAstroRataDie.prototype.epoch = 1948319.5;
 
 /**
- * @protected 
+ * @protected
  */
 ilib.Date.PersAstroRataDie.prototype._tehranEquinox = function(year) {
     var equJED, equJD, equAPP, equTehran, dtTehran, eot;
@@ -12908,9 +12908,9 @@ ilib.Date.PersAstroRataDie.prototype._tehranEquinox = function(year) {
     eot = (eot - 20 * Math.floor(eot/20)) / 360;
     equAPP = equJD + eot;
 
-    /*  
+    /*
      * Finally, we must correct for the constant difference between
-     * the Greenwich meridian and the time zone standard for Iran 
+     * the Greenwich meridian and the time zone standard for Iran
      * Standard time, 52 degrees 30 minutes to the East.
      */
 
@@ -12940,19 +12940,19 @@ ilib.Date.PersAstroRataDie.prototype._getYear = function(jd) {
 	    ret.equinox = this._tehranEquinox(guess);
 	}
 	nexteq = ret.equinox - 1;
-	// if the equinox falls after noon, then the day after that is the start of the 
-	// next year, so truncate the JD to get the noon of the day before the day with 
-	//the equinox on it, then add 0.5 to get the midnight of that day 
+	// if the equinox falls after noon, then the day after that is the start of the
+	// next year, so truncate the JD to get the noon of the day before the day with
+	//the equinox on it, then add 0.5 to get the midnight of that day
 	while (!(Math.floor(ret.equinox) + 0.5 <= jd && jd < Math.floor(nexteq) + 0.5)) {
 	    ret.equinox = nexteq;
 	    guess++;
 	    // nexteq = Math.floor(this._tehranEquinox(guess));
 	    nexteq = this._tehranEquinox(guess);
 	}
-	
+
 	// Mean solar tropical year is 365.24219878 days
 	ret.year = Math.round((ret.equinox - this.epoch - 1) / 365.24219878) + 1;
-	
+
 	return ret;
 };
 
@@ -12966,7 +12966,7 @@ ilib.Date.PersAstroRataDie.prototype._getYear = function(jd) {
 ilib.Date.PersAstroRataDie.prototype._setDateComponents = function(date) {
     var adr, guess, jd;
 
-    // Mean solar tropical year is 365.24219878 days 
+    // Mean solar tropical year is 365.24219878 days
     guess = this.epoch + 1 + 365.24219878 * (date.year - 2);
     adr = {year: date.year - 1, equinox: 0};
 
@@ -12981,7 +12981,7 @@ ilib.Date.PersAstroRataDie.prototype._setDateComponents = function(date) {
                 (((date.month - 1) * 30) + 6)
             ) +
     	    (date.day - 1 + 0.5); // add 0.5 so that we convert JDs, which start at noon to RDs which start at midnight
-    
+
 	jd += (date.hour * 3600000 +
 			date.minute * 60000 +
 			date.second * 1000 +
@@ -12992,11 +12992,11 @@ ilib.Date.PersAstroRataDie.prototype._setDateComponents = function(date) {
 };
 
 /**
- * Return the rd number of the particular day of the week on or before the 
+ * Return the rd number of the particular day of the week on or before the
  * given rd. eg. The Sunday on or before the given rd.
  * @private
  * @param {number} rd the rata die date of the reference date
- * @param {number} dayOfWeek the day of the week that is being sought relative 
+ * @param {number} dayOfWeek the day of the week that is being sought relative
  * to the current date
  * @return {number} the rd of the day of the week
  */
@@ -13006,7 +13006,7 @@ ilib.Date.PersAstroRataDie.prototype._onOrBefore = function(rd, dayOfWeek) {
 
 /*
  * persianastro.js - Represent a Persian astronomical (Hijjri) calendar object.
- * 
+ *
  * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13024,26 +13024,26 @@ ilib.Date.PersAstroRataDie.prototype._onOrBefore = function(rd, dayOfWeek) {
  */
 
 
-/* !depends 
-calendar/astro.js 
-calendar.js 
-locale.js 
-date.js 
-julianday.js 
+/* !depends
+calendar/astro.js
+calendar.js
+locale.js
+date.js
+julianday.js
 util/utils.js
-calendar/persratadie.js 
+calendar/persratadie.js
 */
 
 /**
  * @class
- * Construct a new Persian astronomical (Hijjri) calendar object. This class encodes 
- * information about a Persian calendar. This class differs from the 
+ * Construct a new Persian astronomical (Hijjri) calendar object. This class encodes
+ * information about a Persian calendar. This class differs from the
  * Persian calendar in that the leap years are calculated based on the
  * astronomical observations of the sun in Teheran, instead of calculating
  * the leap years based on a regular cyclical rhythm algorithm.<p>
- * 
+ *
  * Depends directive: !depends persianastro.js
- * 
+ *
  * @constructor
  * @implements ilib.Cal
  */
@@ -13054,8 +13054,8 @@ ilib.Cal.Persian = function() {
 /**
  * @private
  * @const
- * @type Array.<number> 
- * the lengths of each month 
+ * @type Array.<number>
+ * the lengths of each month
  */
 ilib.Cal.Persian.monthLengths = [
 	31,  // Farvardin
@@ -13074,10 +13074,10 @@ ilib.Cal.Persian.monthLengths = [
 
 /**
  * Return the number of months in the given year. The number of months in a year varies
- * for some luni-solar calendars because in some years, an extra month is needed to extend the 
+ * for some luni-solar calendars because in some years, an extra month is needed to extend the
  * days in a year to an entire solar year. The month is represented as a 1-based number
  * where 1=first month, 2=second month, etc.
- * 
+ *
  * @param {number} year a year for which the number of months is sought
  * @return {number} The number of months in the given year
  */
@@ -13089,7 +13089,7 @@ ilib.Cal.Persian.prototype.getNumMonths = function(year) {
  * Return the number of days in a particular month in a particular year. This function
  * can return a different number for a month depending on the year because of things
  * like leap years.
- * 
+ *
  * @param {number} month the month for which the length is sought
  * @param {number} year the year within which that month can be found
  * @return {number} the number of days within the given month in the given year
@@ -13128,14 +13128,14 @@ ilib.Cal.Persian.prototype.isLeapYear = function(year) {
 		minute: 0,
 		second: 0,
 		millisecond: 0
-	}); 
+	});
     return (rdNextYear.getRataDie() - rdThisYear.getRataDie()) > 365;
 };
 
 /**
  * Return the type of this calendar.
- * 
- * @return {string} the name of the type of this calendar 
+ *
+ * @return {string} the name of the type of this calendar
  */
 ilib.Cal.Persian.prototype.getType = function() {
 	return this.type;
@@ -13144,7 +13144,7 @@ ilib.Cal.Persian.prototype.getType = function() {
 /**
  * Return a date instance for this calendar type using the given
  * options.
- * @param {Object} options options controlling the construction of 
+ * @param {Object} options options controlling the construction of
  * the date instance
  * @return {ilib.Date} a date appropriate for this calendar type
  */
@@ -13157,7 +13157,7 @@ ilib.Cal._constructors["persian"] = ilib.Cal.Persian;
 
 /*
  * persianastrodate.js - Represent a date in the Persian astronomical (Hijjri) calendar
- * 
+ *
  * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13174,81 +13174,81 @@ ilib.Cal._constructors["persian"] = ilib.Cal.Persian;
  * limitations under the License.
  */
 
-/* !depends 
+/* !depends
 date.js
 calendar/persratadie.js
-calendar/persianastro.js 
+calendar/persianastro.js
 util/utils.js
 util/search.js
 util/math.js
-localeinfo.js 
-julianday.js 
+localeinfo.js
+julianday.js
 */
 
 // !data astro
 
 /**
  * @class
- * 
- * Construct a new Persian astronomical date object. The constructor parameters can 
+ *
+ * Construct a new Persian astronomical date object. The constructor parameters can
  * contain any of the following properties:
- * 
+ *
  * <ul>
- * <li><i>unixtime<i> - sets the time of this instance according to the given 
+ * <li><i>unixtime<i> - sets the time of this instance according to the given
  * unix time. Unix time is the number of milliseconds since midnight on Jan 1, 1970, Gregorian
- * 
+ *
  * <li><i>julianday</i> - sets the time of this instance according to the given
  * Julian Day instance or the Julian Day given as a float
- * 
+ *
  * <li><i>year</i> - any integer, including 0
- * 
+ *
  * <li><i>month</i> - 1 to 12, where 1 means Farvardin, 2 means Ordibehesht, etc.
- * 
+ *
  * <li><i>day</i> - 1 to 31
- * 
- * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation 
+ *
+ * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation
  * is always done with an unambiguous 24 hour representation
- * 
+ *
  * <li><i>minute</i> - 0 to 59
- * 
+ *
  * <li><i>second</i> - 0 to 59
- * 
+ *
  * <li><i>millisecond</i> - 0 to 999
- * 
- * <li><i>timezone</i> - the ilib.TimeZone instance or time zone name as a string 
+ *
+ * <li><i>timezone</i> - the ilib.TimeZone instance or time zone name as a string
  * of this persian date. The date/time is kept in the local time. The time zone
  * is used later if this date is formatted according to a different time zone and
  * the difference has to be calculated, or when the date format has a time zone
  * component in it.
- * 
- * <li><i>locale</i> - locale for this persian date. If the time zone is not 
+ *
+ * <li><i>locale</i> - locale for this persian date. If the time zone is not
  * given, it can be inferred from this locale. For locales that span multiple
- * time zones, the one with the largest population is chosen as the one that 
+ * time zones, the one with the largest population is chosen as the one that
  * represents the locale.
- * 
+ *
  * <li><i>date</i> - use the given intrinsic Javascript date to initialize this one.
  * </ul>
  *
  * If the constructor is called with another Persian date instance instead of
  * a parameter block, the other instance acts as a parameter block and its
  * settings are copied into the current instance.<p>
- * 
- * If the constructor is called with no arguments at all or if none of the 
- * properties listed above 
- * from <i>unixtime</i> through <i>millisecond</i> are present, then the date 
- * components are 
+ *
+ * If the constructor is called with no arguments at all or if none of the
+ * properties listed above
+ * from <i>unixtime</i> through <i>millisecond</i> are present, then the date
+ * components are
  * filled in with the current date at the time of instantiation. Note that if
- * you do not give the time zone when defaulting to the current time and the 
+ * you do not give the time zone when defaulting to the current time and the
  * time zone for all of ilib was not set with <i>ilib.setTimeZone()</i>, then the
- * time zone will default to UTC ("Universal Time, Coordinated" or "Greenwich 
+ * time zone will default to UTC ("Universal Time, Coordinated" or "Greenwich
  * Mean Time").<p>
- * 
+ *
  * If any of the properties from <i>year</i> through <i>millisecond</i> are not
  * specified in the params, it is assumed that they have the smallest possible
  * value in the range for the property (zero or one).<p>
- * 
+ *
  * Depends directive: !depends persiandate.js
- * 
+ *
  * @constructor
  * @extends ilib.Date
  * @param {Object=} params parameters that govern the settings and behaviour of this Persian date
@@ -13256,18 +13256,18 @@ julianday.js
 ilib.Date.PersDate = function(params) {
 	this.cal = new ilib.Cal.Persian();
 	this.timezone = "local";
-	
+
 	if (params) {
 		if (params.locale) {
 			this.locale = (typeof(params.locale) === 'string') ? new ilib.Locale(params.locale) : params.locale;
 			var li = new ilib.LocaleInfo(this.locale);
-			this.timezone = li.getTimeZone(); 
+			this.timezone = li.getTimeZone();
 		}
 		if (params.timezone) {
 			this.timezone = params.timezone;
 		}
 	}
-	
+
 	ilib.Date.initAstro(
 		params && typeof(params.sync) === 'boolean' ? params.sync : true,
 		params && params.loadParams,
@@ -13291,7 +13291,7 @@ ilib.Date.PersDate = function(params) {
 				 * @type number
 				 */
 				this.day = parseInt(params.day, 10) || 1;
-				
+
 				/**
 				 * The hour of the day. This can be a number from 0 to 23, as times are
 				 * stored unambiguously in the 24-hour clock.
@@ -13316,7 +13316,7 @@ ilib.Date.PersDate = function(params) {
 				 * @type number
 				 */
 				this.millisecond = parseInt(params.millisecond, 10) || 0;
-				
+
 				/**
 				 * The day of the year. Ranges from 1 to 366.
 				 * @type number
@@ -13326,15 +13326,15 @@ ilib.Date.PersDate = function(params) {
 				if (typeof(params.dst) === 'boolean') {
 					this.dst = params.dst;
 				}
-				
+
 				this.rd = this.newRd(this);
-				
+
 				// add the time zone offset to the rd to convert to UTC
 				if (!this.tz) {
 					this.tz = new ilib.TimeZone({id: this.timezone});
 				}
-				// getOffsetMillis requires that this.year, this.rd, and this.dst 
-				// are set in order to figure out which time zone rules apply and 
+				// getOffsetMillis requires that this.year, this.rd, and this.dst
+				// are set in order to figure out which time zone rules apply and
 				// what the offset is at that point in the year
 				this.offset = this.tz._getOffsetMillisWallTime(this) / 86400000;
 				if (this.offset !== 0) {
@@ -13343,12 +13343,12 @@ ilib.Date.PersDate = function(params) {
 					});
 				}
 			}
-			
+
 			if (!this.rd) {
 				this.rd = this.newRd(params);
 				this._calcDateComponents();
 			}
-			
+
 			if (params && typeof(params.onLoad) === 'function') {
 				params.onLoad(this);
 			}
@@ -13364,7 +13364,7 @@ ilib.Date.PersDate.prototype.constructor = ilib.Date.PersDate;
  * @private
  * @const
  * @type Array.<number>
- * the cumulative lengths of each month, for a non-leap year 
+ * the cumulative lengths of each month, for a non-leap year
  */
 ilib.Date.PersDate.cumMonthLengths = [
     0,    // Farvardin
@@ -13395,7 +13395,7 @@ ilib.Date.PersDate.prototype.newRd = function (params) {
 /**
  * Return the year for the given RD
  * @protected
- * @param {number} rd RD to calculate from 
+ * @param {number} rd RD to calculate from
  * @returns {number} the year for the RD
  */
 ilib.Date.PersDate.prototype._calcYear = function(rd) {
@@ -13410,23 +13410,23 @@ ilib.Date.PersDate.prototype._calcYear = function(rd) {
 ilib.Date.PersDate.prototype._calcDateComponents = function () {
 	var remainder,
 		rd = this.rd.getRataDie();
-	
+
 	this.year = this._calcYear(rd);
-	
+
 	if (typeof(this.offset) === "undefined") {
-		// now offset the RD by the time zone, then recalculate in case we were 
+		// now offset the RD by the time zone, then recalculate in case we were
 		// near the year boundary
 		if (!this.tz) {
 			this.tz = new ilib.TimeZone({id: this.timezone});
 		}
 		this.offset = this.tz.getOffsetMillis(this) / 86400000;
 	}
-	
+
 	if (this.offset !== 0) {
 		rd += this.offset;
 		this.year = this._calcYear(rd);
 	}
-	
+
 	//console.log("PersDate.calcComponent: calculating for rd " + rd);
 	//console.log("PersDate.calcComponent: year is " + ret.year);
 	var yearStart = this.newRd({
@@ -13439,40 +13439,40 @@ ilib.Date.PersDate.prototype._calcDateComponents = function () {
 		millisecond: 0
 	});
 	remainder = rd - yearStart.getRataDie() + 1;
-	
+
 	this.dayOfYear = remainder;
-	
+
 	//console.log("PersDate.calcComponent: remainder is " + remainder);
-	
+
 	this.month = ilib.bsearch(Math.floor(remainder), ilib.Date.PersDate.cumMonthLengths);
 	remainder -= ilib.Date.PersDate.cumMonthLengths[this.month-1];
-	
+
 	//console.log("PersDate.calcComponent: month is " + this.month + " and remainder is " + remainder);
-	
+
 	this.day = Math.floor(remainder);
 	remainder -= this.day;
-	
+
 	//console.log("PersDate.calcComponent: day is " + this.day + " and remainder is " + remainder);
-	
+
 	// now convert to milliseconds for the rest of the calculation
 	remainder = Math.round(remainder * 86400000);
-	
+
 	this.hour = Math.floor(remainder/3600000);
 	remainder -= this.hour * 3600000;
-	
+
 	this.minute = Math.floor(remainder/60000);
 	remainder -= this.minute * 60000;
-	
+
 	this.second = Math.floor(remainder/1000);
 	remainder -= this.second * 1000;
-	
+
 	this.millisecond = remainder;
 };
 
 /**
  * Return the day of the week of this date. The day of the week is encoded
  * as number from 0 to 6, with 0=Sunday, 1=Monday, etc., until 6=Saturday.
- * 
+ *
  * @return {number} the day of the week
  */
 ilib.Date.PersDate.prototype.getDayOfWeek = function() {
@@ -13481,8 +13481,8 @@ ilib.Date.PersDate.prototype.getDayOfWeek = function() {
 };
 
 /**
- * Return the ordinal day of the year. Days are counted from 1 and proceed linearly up to 
- * 365, regardless of months or weeks, etc. That is, Farvardin 1st is day 1, and 
+ * Return the ordinal day of the year. Days are counted from 1 and proceed linearly up to
+ * 365, regardless of months or weeks, etc. That is, Farvardin 1st is day 1, and
  * December 31st is 365 in regular years, or 366 in leap years.
  * @return {number} the ordinal day of the year
  */
@@ -13491,13 +13491,13 @@ ilib.Date.PersDate.prototype.getDayOfYear = function() {
 };
 
 /**
- * Return the era for this date as a number. The value for the era for Persian 
- * calendars is -1 for "before the persian era" (BP) and 1 for "the persian era" (anno 
- * persico or AP). 
- * BP dates are any date before Farvardin 1, 1 AP. In the proleptic Persian calendar, 
+ * Return the era for this date as a number. The value for the era for Persian
+ * calendars is -1 for "before the persian era" (BP) and 1 for "the persian era" (anno
+ * persico or AP).
+ * BP dates are any date before Farvardin 1, 1 AP. In the proleptic Persian calendar,
  * there is a year 0, so any years that are negative or zero are BP.
- * @return {number} 1 if this date is in the common era, -1 if it is before the 
- * common era 
+ * @return {number} 1 if this date is in the common era, -1 if it is before the
+ * common era
  */
 ilib.Date.PersDate.prototype.getEra = function() {
 	return (this.year < 1) ? -1 : 1;
@@ -13505,7 +13505,7 @@ ilib.Date.PersDate.prototype.getEra = function() {
 
 /**
  * Return the name of the calendar that governs this date.
- * 
+ *
  * @return {string} a string giving the name of the calendar
  */
 ilib.Date.PersDate.prototype.getCalendar = function() {
@@ -13516,7 +13516,7 @@ ilib.Date.PersDate.prototype.getCalendar = function() {
 ilib.Date._constructors["persian"] = ilib.Date.PersDate;
 /*
  * han.js - Represent a Han Chinese Lunar calendar object.
- * 
+ *
  * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13539,9 +13539,9 @@ ilib.Date._constructors["persian"] = ilib.Date.PersDate;
  * @class
  * Construct a new Han algorithmic calendar object. This class encodes information about
  * a Han algorithmic calendar.<p>
- * 
+ *
  * Depends directive: !depends han.js
- * 
+ *
  * @constructor
  * @param {Object=} params optional parameters to load the calendrical data
  * @implements ilib.Cal
@@ -13549,7 +13549,7 @@ ilib.Date._constructors["persian"] = ilib.Date.PersDate;
 ilib.Cal.Han = function(params) {
 	this.type = "han";
 	var sync = params && typeof(params.sync) === 'boolean' ? params.sync : true;
-	
+
 	ilib.Date.initAstro(sync, params && params.loadParams, /** @type {function ((Object|null)=): ?} */ ilib.bind(this, function (x) {
 		if (params && typeof(params.callback) === 'function') {
 			params.callback(this);
@@ -13576,8 +13576,8 @@ ilib.Cal.Han._getElapsedYear = function(year, cycle) {
  * @protected
  * @static
  * @param {number} jd julian day to calculate from
- * @param {number} longitude longitude to seek 
- * @returns {number} the julian day of the next time that the solar longitude 
+ * @param {number} longitude longitude to seek
+ * @returns {number} the julian day of the next time that the solar longitude
  * is a multiple of the given longitude
  */
 ilib.Cal.Han._hanNextSolarLongitude = function(jd, longitude) {
@@ -13590,7 +13590,7 @@ ilib.Cal.Han._hanNextSolarLongitude = function(jd, longitude) {
 /**
  * @protected
  * @static
- * @param {number} jd julian day to calculate from 
+ * @param {number} jd julian day to calculate from
  * @returns {number} the major solar term for the julian day
  */
 ilib.Cal.Han._majorSTOnOrAfter = function(jd) {
@@ -13612,12 +13612,12 @@ ilib.Cal.Han._solsticeBefore = function (year, cycle) {
 	var elapsedYear = ilib.Cal.Han._getElapsedYear(year, cycle);
 	var gregyear = elapsedYear - 2697;
 	var rd = new ilib.Date.GregRataDie({
-		year: gregyear-1, 
-		month: 12, 
-		day: 15, 
-		hour: 0, 
-		minute: 0, 
-		second: 0, 
+		year: gregyear-1,
+		month: 12,
+		day: 15,
+		hour: 0,
+		minute: 0,
+		second: 0,
 		millisecond: 0
 	});
 	return ilib.Cal.Han._majorSTOnOrAfter(rd.getRataDie() + ilib.Date.RataDie.gregorianEpoch);
@@ -13637,7 +13637,7 @@ ilib.Cal.Han._chineseTZ = function(jd) {
 /**
  * @protected
  * @static
- * @param {number} jd julian day to calculate from 
+ * @param {number} jd julian day to calculate from
  * @returns {number} the julian day of next new moon on or after the given julian day date
  */
 ilib.Cal.Han._newMoonOnOrAfter = function(jd) {
@@ -13645,13 +13645,13 @@ ilib.Cal.Han._newMoonOnOrAfter = function(jd) {
 	var uni = ilib.Date._universalFromLocal(jd, tz);
 	var moon = ilib.Date._newMoonAtOrAfter(uni);
 	// floor to the start of the julian day
-	return ilib.Date._floorToJD(ilib.Date._localFromUniversal(moon, tz)); 
+	return ilib.Date._floorToJD(ilib.Date._localFromUniversal(moon, tz));
 };
 
 /**
  * @protected
  * @static
- * @param {number} jd julian day to calculate from 
+ * @param {number} jd julian day to calculate from
  * @returns {number} the julian day of previous new moon before the given julian day date
  */
 ilib.Cal.Han._newMoonBefore = function(jd) {
@@ -13679,7 +13679,7 @@ ilib.Cal.Han._leapYearCalc = function(year, cycle) {
 	// ceil to the end of the julian day
 	ret.m1 = ilib.Cal.Han._newMoonOnOrAfter(ilib.Date._ceilToJD(ret.solstice1));
 	ret.m2 = ilib.Cal.Han._newMoonBefore(ilib.Date._ceilToJD(ret.solstice2));
-	
+
 	return ret;
 };
 
@@ -13706,10 +13706,10 @@ ilib.Cal.Han._noMajorST = function(jd) {
 
 /**
  * Return the number of months in the given year. The number of months in a year varies
- * for some luni-solar calendars because in some years, an extra month is needed to extend the 
+ * for some luni-solar calendars because in some years, an extra month is needed to extend the
  * days in a year to an entire solar year. The month is represented as a 1-based number
  * where 1=first month, 2=second month, etc.
- * 
+ *
  * @param {number} year a year for which the number of months is sought
  * @param {number=} cycle if the given year < 60, this can specify the cycle. If the
  * cycle is not given, then the year should be given as elapsed years since the beginning
@@ -13724,7 +13724,7 @@ ilib.Cal.Han.prototype.getNumMonths = function(year, cycle) {
  * Return the number of days in a particular month in a particular year. This function
  * can return a different number for a month depending on the year because of things
  * like leap years.
- * 
+ *
  * @param {number} month the elapsed month for which the length is sought
  * @param {number} year the elapsed year within which that month can be found
  * @return {number} the number of days within the given month in the given year
@@ -13738,11 +13738,11 @@ ilib.Cal.Han.prototype.getMonLength = function(month, year) {
 };
 
 /**
- * Return the equivalent year in the 2820 year cycle that begins on 
- * Far 1, 474. This particular cycle obeys the cycle-of-years formula 
+ * Return the equivalent year in the 2820 year cycle that begins on
+ * Far 1, 474. This particular cycle obeys the cycle-of-years formula
  * whereas the others do not specifically. This cycle can be used as
- * a proxy for other years outside of the cycle by shifting them into 
- * the cycle.   
+ * a proxy for other years outside of the cycle by shifting them into
+ * the cycle.
  * @param {number} year year to find the equivalent cycle year for
  * @returns {number} the equivalent cycle year
  */
@@ -13753,13 +13753,13 @@ ilib.Cal.Han.prototype.equivalentCycleYear = function(year) {
 
 /**
  * Return true if the given year is a leap year in the Han calendar.
- * If the year is given as a year/cycle combination, then the year should be in the 
- * range [1,60] and the given cycle is the cycle in which the year is located. If 
+ * If the year is given as a year/cycle combination, then the year should be in the
+ * range [1,60] and the given cycle is the cycle in which the year is located. If
  * the year is greater than 60, then
  * it represents the total number of years elapsed in the proleptic calendar since
- * the beginning of the Chinese epoch in on 15 Feb, -2636 (Gregorian). In this 
+ * the beginning of the Chinese epoch in on 15 Feb, -2636 (Gregorian). In this
  * case, the cycle parameter is ignored.
- * 
+ *
  * @param {number} year the year for which the leap year information is being sought
  * @param {number=} cycle if the given year < 60, this can specify the cycle. If the
  * cycle is not given, then the year should be given as elapsed years since the beginning
@@ -13774,7 +13774,7 @@ ilib.Cal.Han.prototype.isLeapYear = function(year, cycle) {
 /**
  * Return the month of the year that is the leap month. If the given year is
  * not a leap year, then this method will return -1.
- * 
+ *
  * @param {number} year the year for which the leap year information is being sought
  * @param {number=} cycle if the given year < 60, this can specify the cycle. If the
  * cycle is not given, then the year should be given as elapsed years since the beginning
@@ -13784,11 +13784,11 @@ ilib.Cal.Han.prototype.isLeapYear = function(year, cycle) {
  */
 ilib.Cal.Han.prototype.getLeapMonth = function(year, cycle) {
 	var calc = ilib.Cal.Han._leapYearCalc(year, cycle);
-	
+
 	if (Math.round((calc.m2 - calc.m1) / 29.530588853000001) != 12) {
 		return -1; // no leap month
 	}
-	
+
 	// search between rd1 and rd2 for the first month with no major solar term. That is our leap month.
 	var month = 0;
 	var m = ilib.Cal.Han._newMoonOnOrAfter(calc.m1+1);
@@ -13796,19 +13796,19 @@ ilib.Cal.Han.prototype.getLeapMonth = function(year, cycle) {
 		month++;
 		m = ilib.Cal.Han._newMoonOnOrAfter(m+1);
 	}
-	
+
 	// return the number of the month that is doubled
-	return month; 
+	return month;
 };
 
 /**
  * Return the date of Chinese New Years in the given calendar year.
- * 
+ *
  * @param {number} year the Chinese year for which the new year information is being sought
  * @param {number=} cycle if the given year < 60, this can specify the cycle. If the
  * cycle is not given, then the year should be given as elapsed years since the beginning
  * of the epoch
- * @return {number} the julian day of the beginning of the given year 
+ * @return {number} the julian day of the beginning of the given year
  */
 ilib.Cal.Han.prototype.newYears = function(year, cycle) {
 	var calc = ilib.Cal.Han._leapYearCalc(year, cycle);
@@ -13822,8 +13822,8 @@ ilib.Cal.Han.prototype.newYears = function(year, cycle) {
 
 /**
  * Return the type of this calendar.
- * 
- * @return {string} the name of the type of this calendar 
+ *
+ * @return {string} the name of the type of this calendar
  */
 ilib.Cal.Han.prototype.getType = function() {
 	return this.type;
@@ -13832,7 +13832,7 @@ ilib.Cal.Han.prototype.getType = function() {
 /**
  * Return a date instance for this calendar type using the given
  * options.
- * @param {Object} options options controlling the construction of 
+ * @param {Object} options options controlling the construction of
  * the date instance
  * @return {ilib.Date} a date appropriate for this calendar type
  */
@@ -13845,7 +13845,7 @@ ilib.Cal._constructors["han"] = ilib.Cal.Han;
 
 /*
  * handate.js - Represent a date in the Han algorithmic calendar
- * 
+ *
  * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13862,68 +13862,68 @@ ilib.Cal._constructors["han"] = ilib.Cal.Han;
  * limitations under the License.
  */
 
-/* !depends 
+/* !depends
 date.js
-calendar/gregratadie.js 
-calendar/gregoriandate.js 
+calendar/gregratadie.js
+calendar/gregoriandate.js
 calendar/han.js
-calendar/astro.js 
+calendar/astro.js
 util/utils.js
 util/search.js
 util/math.js
-localeinfo.js 
-julianday.js 
+localeinfo.js
+julianday.js
 */
 
 /**
- * Construct a new Han RD date number object. The constructor parameters can 
+ * Construct a new Han RD date number object. The constructor parameters can
  * contain any of the following properties:
- * 
+ *
  * <ul>
- * <li><i>unixtime<i> - sets the time of this instance according to the given 
+ * <li><i>unixtime<i> - sets the time of this instance according to the given
  * unix time. Unix time is the number of milliseconds since midnight on Jan 1, 1970, Gregorian
- * 
+ *
  * <li><i>julianday</i> - sets the time of this instance according to the given
  * Julian Day instance or the Julian Day given as a float
- * 
+ *
  * <li><i>cycle</i> - any integer giving the number of 60-year cycle in which the date is located.
- * If the cycle is not given but the year is, it is assumed that the year parameter is a fictitious 
+ * If the cycle is not given but the year is, it is assumed that the year parameter is a fictitious
  * linear count of years since the beginning of the epoch, much like other calendars. This linear
- * count is never used. If both the cycle and year are given, the year is wrapped to the range 0 
+ * count is never used. If both the cycle and year are given, the year is wrapped to the range 0
  * to 60 and treated as if it were a year in the regular 60-year cycle.
- * 
+ *
  * <li><i>year</i> - any integer, including 0
- * 
+ *
  * <li><i>month</i> - 1 to 12, where 1 means Farvardin, 2 means Ordibehesht, etc.
- * 
+ *
  * <li><i>day</i> - 1 to 31
- * 
- * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation 
+ *
+ * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation
  * is always done with an unambiguous 24 hour representation
- * 
+ *
  * <li><i>minute</i> - 0 to 59
- * 
+ *
  * <li><i>second</i> - 0 to 59
- * 
+ *
  * <li><i>millisecond</i> - 0 to 999
- * 
+ *
  * <li><i>date</i> - use the given intrinsic Javascript date to initialize this one.
  * </ul>
  *
  * If the constructor is called with another Han date instance instead of
  * a parameter block, the other instance acts as a parameter block and its
  * settings are copied into the current instance.<p>
- * 
- * If the constructor is called with no arguments at all or if none of the 
- * properties listed above are present, then the RD is calculate based on 
+ *
+ * If the constructor is called with no arguments at all or if none of the
+ * properties listed above are present, then the RD is calculate based on
  * the current date at the time of instantiation. <p>
- * 
+ *
  * If any of the properties from <i>year</i> through <i>millisecond</i> are not
  * specified in the params, it is assumed that they have the smallest possible
  * value in the range for the property (zero or one).<p>
- * 
+ *
  * Depends directive: !depends handate.js
- * 
+ *
  * @private
  * @class
  * @constructor
@@ -13993,7 +13993,7 @@ ilib.Date.HanRataDie.prototype._setDateComponents = function(date) {
 		date.second * 1000 +
 		date.millisecond) /
 		86400000;
-	
+
 	/*
 	console.log("getRataDie: converting " +  JSON.stringify(date) + " to an RD");
 	console.log("getRataDie: year is " +  date.year + " plus cycle " + date.cycle);
@@ -14003,16 +14003,16 @@ ilib.Date.HanRataDie.prototype._setDateComponents = function(date) {
 	console.log("getRataDie: rdtime is " +  rdtime);
 	console.log("getRataDie: rd is " +  (priorNewMoon + date.day - 1 + rdtime));
 	*/
-	
+
 	this.rd = priorNewMoon + date.day - 1 + rdtime - ilib.Date.RataDie.gregorianEpoch;
 };
 
 /**
- * Return the rd number of the particular day of the week on or before the 
+ * Return the rd number of the particular day of the week on or before the
  * given rd. eg. The Sunday on or before the given rd.
  * @private
  * @param {number} rd the rata die date of the reference date
- * @param {number} dayOfWeek the day of the week that is being sought relative 
+ * @param {number} dayOfWeek the day of the week that is being sought relative
  * to the current date
  * @return {number} the rd of the day of the week
  */
@@ -14022,72 +14022,72 @@ ilib.Date.HanRataDie.prototype._onOrBefore = function(rd, dayOfWeek) {
 
 /**
  * @class
- * 
- * Construct a new Han date object. The constructor parameters can 
+ *
+ * Construct a new Han date object. The constructor parameters can
  * contain any of the following properties:
- * 
+ *
  * <ul>
- * <li><i>unixtime<i> - sets the time of this instance according to the given 
+ * <li><i>unixtime<i> - sets the time of this instance according to the given
  * unix time. Unix time is the number of milliseconds since midnight on Jan 1, 1970, Gregorian
- * 
+ *
  * <li><i>julianday</i> - sets the time of this instance according to the given
  * Julian Day instance or the Julian Day given as a float
- * 
+ *
  * <li><i>cycle</i> - any integer giving the number of 60-year cycle in which the date is located.
- * If the cycle is not given but the year is, it is assumed that the year parameter is a fictitious 
+ * If the cycle is not given but the year is, it is assumed that the year parameter is a fictitious
  * linear count of years since the beginning of the epoch, much like other calendars. This linear
- * count is never used. If both the cycle and year are given, the year is wrapped to the range 0 
+ * count is never used. If both the cycle and year are given, the year is wrapped to the range 0
  * to 60 and treated as if it were a year in the regular 60-year cycle.
- * 
+ *
  * <li><i>year</i> - any integer, including 0
- * 
+ *
  * <li><i>month</i> - 1 to 12, where 1 means Farvardin, 2 means Ordibehesht, etc.
- * 
+ *
  * <li><i>day</i> - 1 to 31
- * 
- * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation 
+ *
+ * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation
  * is always done with an unambiguous 24 hour representation
- * 
+ *
  * <li><i>minute</i> - 0 to 59
- * 
+ *
  * <li><i>second</i> - 0 to 59
- * 
+ *
  * <li><i>millisecond</i> - 0 to 999
- * 
- * <li><i>timezone</i> - the ilib.TimeZone instance or time zone name as a string 
+ *
+ * <li><i>timezone</i> - the ilib.TimeZone instance or time zone name as a string
  * of this han date. The date/time is kept in the local time. The time zone
  * is used later if this date is formatted according to a different time zone and
  * the difference has to be calculated, or when the date format has a time zone
  * component in it.
- * 
- * <li><i>locale</i> - locale for this han date. If the time zone is not 
+ *
+ * <li><i>locale</i> - locale for this han date. If the time zone is not
  * given, it can be inferred from this locale. For locales that span multiple
- * time zones, the one with the largest population is chosen as the one that 
+ * time zones, the one with the largest population is chosen as the one that
  * represents the locale.
- * 
+ *
  * <li><i>date</i> - use the given intrinsic Javascript date to initialize this one.
  * </ul>
  *
  * If the constructor is called with another Han date instance instead of
  * a parameter block, the other instance acts as a parameter block and its
  * settings are copied into the current instance.<p>
- * 
- * If the constructor is called with no arguments at all or if none of the 
- * properties listed above 
- * from <i>unixtime</i> through <i>millisecond</i> are present, then the date 
- * components are 
+ *
+ * If the constructor is called with no arguments at all or if none of the
+ * properties listed above
+ * from <i>unixtime</i> through <i>millisecond</i> are present, then the date
+ * components are
  * filled in with the current date at the time of instantiation. Note that if
- * you do not give the time zone when defaulting to the current time and the 
+ * you do not give the time zone when defaulting to the current time and the
  * time zone for all of ilib was not set with <i>ilib.setTimeZone()</i>, then the
- * time zone will default to UTC ("Universal Time, Coordinated" or "Greenwich 
+ * time zone will default to UTC ("Universal Time, Coordinated" or "Greenwich
  * Mean Time").<p>
- * 
+ *
  * If any of the properties from <i>year</i> through <i>millisecond</i> are not
  * specified in the params, it is assumed that they have the smallest possible
  * value in the range for the property (zero or one).<p>
- * 
+ *
  * Depends directive: !depends handate.js
- * 
+ *
  * @constructor
  * @extends ilib.Date
  * @param {Object=} params parameters that govern the settings and behaviour of this Han date
@@ -14098,19 +14098,19 @@ ilib.Date.HanDate = function(params) {
 		if (params.locale) {
 			this.locale = (typeof(params.locale) === 'string') ? new ilib.Locale(params.locale) : params.locale;
 			var li = new ilib.LocaleInfo(this.locale);
-			this.timezone = li.getTimeZone(); 
+			this.timezone = li.getTimeZone();
 		}
 		if (params.timezone) {
 			this.timezone = params.timezone;
 		}
 	}
-	
+
 	new ilib.Cal.Han({
 		sync: params && typeof(params) === 'boolean' ? params.sync : true,
 		loadParams: params && params.loadParams,
 		callback: ilib.bind(this, function (cal) {
 			this.cal = cal;
-	
+
 			if (params && (params.year || params.month || params.day || params.hour ||
 				params.minute || params.second || params.millisecond || params.cycle || params.cycleYear)) {
 				if (typeof(params.cycle) !== 'undefined') {
@@ -14119,9 +14119,9 @@ ilib.Date.HanDate = function(params) {
 					 * @type number
 					 */
 					this.cycle = parseInt(params.cycle, 10) || 0;
-					
+
 					var year = (typeof(params.year) !== 'undefined' ? parseInt(params.year, 10) : parseInt(params.cycleYear, 10)) || 0;
-					
+
 					/**
 					 * Year in the Han calendar.
 					 * @type number
@@ -14134,63 +14134,63 @@ ilib.Date.HanDate = function(params) {
 					} else {
 						this.year = this.cycle = 0;
 					}
-				}	
-				
+				}
+
 				/**
 				 * The month number, ranging from 1 to 13
 				 * @type number
 				 */
 				this.month = parseInt(params.month, 10) || 1;
-	
+
 				/**
 				 * The day of the month. This ranges from 1 to 30.
 				 * @type number
 				 */
 				this.day = parseInt(params.day, 10) || 1;
-				
+
 				/**
 				 * The hour of the day. This can be a number from 0 to 23, as times are
 				 * stored unambiguously in the 24-hour clock.
 				 * @type number
 				 */
 				this.hour = parseInt(params.hour, 10) || 0;
-	
+
 				/**
 				 * The minute of the hours. Ranges from 0 to 59.
 				 * @type number
 				 */
 				this.minute = parseInt(params.minute, 10) || 0;
-	
+
 				/**
 				 * The second of the minute. Ranges from 0 to 59.
 				 * @type number
 				 */
 				this.second = parseInt(params.second, 10) || 0;
-	
+
 				/**
 				 * The millisecond of the second. Ranges from 0 to 999.
 				 * @type number
 				 */
 				this.millisecond = parseInt(params.millisecond, 10) || 0;
-			
+
 				// derived properties
-				
+
 				/**
 				 * Year in the cycle of the Han calendar
 				 * @type number
 				 */
-				this.cycleYear = ilib.amod(this.year, 60); 
+				this.cycleYear = ilib.amod(this.year, 60);
 
 				/**
 				 * The day of the year. Ranges from 1 to 384.
 				 * @type number
 				 */
 				this.dayOfYear = parseInt(params.dayOfYear, 10);
-	
+
 				if (typeof(params.dst) === 'boolean') {
 					this.dst = params.dst;
 				}
-				
+
 				this.newRd({
 					cal: this.cal,
 					cycle: this.cycle,
@@ -14206,13 +14206,13 @@ ilib.Date.HanDate = function(params) {
 					callback: ilib.bind(this, function (rd) {
 						if (rd) {
 							this.rd = rd;
-							
+
 							// add the time zone offset to the rd to convert to UTC
 							if (!this.tz) {
 								this.tz = new ilib.TimeZone({id: this.timezone});
 							}
-							// getOffsetMillis requires that this.year, this.rd, and this.dst 
-							// are set in order to figure out which time zone rules apply and 
+							// getOffsetMillis requires that this.year, this.rd, and this.dst
+							// are set in order to figure out which time zone rules apply and
 							// what the offset is at that point in the year
 							this.offset = this.tz._getOffsetMillisWallTime(this) / 86400000;
 							if (this.offset !== 0) {
@@ -14228,14 +14228,14 @@ ilib.Date.HanDate = function(params) {
 								this.leapYear = this.rd.leapYear;
 							}
 						}
-						
+
 						if (!this.rd) {
 							this.rd = this.newRd(ilib.merge(params || {}, {
 								cal: this.cal
 							}));
 							this._calcDateComponents();
 						}
-						
+
 						if (params && typeof(params.onLoad) === 'function') {
 							params.onLoad(this);
 						}
@@ -14248,7 +14248,7 @@ ilib.Date.HanDate = function(params) {
 					}));
 					this._calcDateComponents();
 				}
-				
+
 				if (params && typeof(params.onLoad) === 'function') {
 					params.onLoad(this);
 				}
@@ -14277,8 +14277,8 @@ ilib.Date.HanDate.prototype.newRd = function (params) {
  * @static
  * @param {number} jd1 first julian day
  * @param {number} jd2 second julian day
- * @returns {boolean} true if there is a leap month earlier in the same year 
- * as the given months 
+ * @returns {boolean} true if there is a leap month earlier in the same year
+ * as the given months
  */
 ilib.Date.HanDate._priorLeapMonth = function(jd1, jd2) {
 	return jd2 >= jd1 &&
@@ -14289,7 +14289,7 @@ ilib.Date.HanDate._priorLeapMonth = function(jd1, jd2) {
 /**
  * Return the year for the given RD
  * @protected
- * @param {number} rd RD to calculate from 
+ * @param {number} rd RD to calculate from
  * @returns {number} the year for the RD
  */
 ilib.Date.HanDate.prototype._calcYear = function(rd) {
@@ -14302,21 +14302,21 @@ ilib.Date.HanDate.prototype._calcYear = function(rd) {
 	return hanyear - ((rd + ilib.Date.RataDie.gregorianEpoch < newYears) ? 1 : 0);
 };
 
-/** 
- * @private 
+/**
+ * @private
  * Calculate the leap year and months from the RD.
  */
 ilib.Date.HanDate.prototype._calcLeap = function() {
 	var jd = this.rd.getRataDie() + ilib.Date.RataDie.gregorianEpoch;
-	
+
 	var calc = ilib.Cal.Han._leapYearCalc(this.year);
 	var m2 = ilib.Cal.Han._newMoonOnOrAfter(calc.m1+1);
 	this.leapYear = Math.round((calc.m2 - calc.m1) / 29.530588853000001) === 12;
-	
+
 	var newYears = (this.leapYear &&
 		(ilib.Cal.Han._noMajorST(calc.m1) || ilib.Cal.Han._noMajorST(m2))) ?
 				ilib.Cal.Han._newMoonOnOrAfter(m2+1) : m2;
-	
+
 	var m = ilib.Cal.Han._newMoonBefore(jd + 1);
 	this.priorLeapMonth = ilib.Date.HanDate._priorLeapMonth(newYears, ilib.Cal.Han._newMoonBefore(m));
 	this.leapMonth = (this.leapYear && ilib.Cal.Han._noMajorST(m) && !this.priorLeapMonth);
@@ -14333,21 +14333,21 @@ ilib.Date.HanDate.prototype._calcDateComponents = function () {
 	// console.log("HanDate._calcDateComponents: calculating for jd " + jd);
 
 	if (typeof(this.offset) === "undefined") {
-		// now offset the jd by the time zone, then recalculate in case we were 
+		// now offset the jd by the time zone, then recalculate in case we were
 		// near the year boundary
 		if (!this.tz) {
 			this.tz = new ilib.TimeZone({id: this.timezone});
 		}
 		this.offset = this.tz.getOffsetMillis(this) / 86400000;
 	}
-	
+
 	if (this.offset !== 0) {
 		jd += this.offset;
 	}
 
 	// use the Gregorian calendar objects as a convenient way to short-cut some
 	// of the date calculations
-	
+
 	var gregyear = ilib.Date.GregDate._calcYear(this.rd.getRataDie());
 	this.year = gregyear + 2697;
 	var calc = ilib.Cal.Han._leapYearCalc(this.year);
@@ -14356,7 +14356,7 @@ ilib.Date.HanDate.prototype._calcDateComponents = function () {
 	var newYears = (this.leapYear &&
 		(ilib.Cal.Han._noMajorST(calc.m1) || ilib.Cal.Han._noMajorST(m2))) ?
 				ilib.Cal.Han._newMoonOnOrAfter(m2+1) : m2;
-	
+
 	// See if it's between Jan 1 and the Chinese new years of that Gregorian year. If
 	// so, then the Han year is actually the previous one
 	if (jd < newYears) {
@@ -14371,10 +14371,10 @@ ilib.Date.HanDate.prototype._calcDateComponents = function () {
 	// month is elapsed month, not the month number + leap month boolean
 	var m = ilib.Cal.Han._newMoonBefore(jd + 1);
 	this.month = Math.round((m - calc.m1) / 29.530588853000001);
-	
+
 	this.priorLeapMonth = ilib.Date.HanDate._priorLeapMonth(newYears, ilib.Cal.Han._newMoonBefore(m));
 	this.leapMonth = (this.leapYear && ilib.Cal.Han._noMajorST(m) && !this.priorLeapMonth);
-	
+
 	this.cycle = Math.floor((this.year - 1) / 60);
 	this.cycleYear = ilib.amod(this.year, 60);
 	this.day = ilib.Date._floorToJD(jd) - m + 1;
@@ -14391,31 +14391,31 @@ ilib.Date.HanDate.prototype._calcDateComponents = function () {
 
 	// floor to the start of the julian day
 	remainder = jd - ilib.Date._floorToJD(jd);
-	
+
 	// console.log("HanDate._calcDateComponents: time remainder is " + remainder);
-	
+
 	// now convert to milliseconds for the rest of the calculation
 	remainder = Math.round(remainder * 86400000);
-	
+
 	this.hour = Math.floor(remainder/3600000);
 	remainder -= this.hour * 3600000;
-	
+
 	this.minute = Math.floor(remainder/60000);
 	remainder -= this.minute * 60000;
-	
+
 	this.second = Math.floor(remainder/1000);
 	remainder -= this.second * 1000;
-	
+
 	this.millisecond = remainder;
 };
 
 /**
- * Return the year within the Chinese cycle of this date. Cycles are 60 
- * years long, and the value returned from this method is the number of the year 
- * within this cycle. The year returned from getYear() is the total elapsed 
- * years since the beginning of the Chinese epoch and does not include 
- * the cycles. 
- * 
+ * Return the year within the Chinese cycle of this date. Cycles are 60
+ * years long, and the value returned from this method is the number of the year
+ * within this cycle. The year returned from getYear() is the total elapsed
+ * years since the beginning of the Chinese epoch and does not include
+ * the cycles.
+ *
  * @return {number} the year within the current Chinese cycle
  */
 ilib.Date.HanDate.prototype.getCycleYears = function() {
@@ -14424,11 +14424,11 @@ ilib.Date.HanDate.prototype.getCycleYears = function() {
 
 /**
  * Return the Chinese cycle number of this date. Cycles are 60 years long,
- * and the value returned from getCycleYear() is the number of the year 
- * within this cycle. The year returned from getYear() is the total elapsed 
- * years since the beginning of the Chinese epoch and does not include 
- * the cycles. 
- * 
+ * and the value returned from getCycleYear() is the number of the year
+ * within this cycle. The year returned from getYear() is the total elapsed
+ * years since the beginning of the Chinese epoch and does not include
+ * the cycles.
+ *
  * @return {number} the current Chinese cycle
  */
 ilib.Date.HanDate.prototype.getCycles = function() {
@@ -14436,21 +14436,21 @@ ilib.Date.HanDate.prototype.getCycles = function() {
 };
 
 /**
- * Return whether the year of this date is a leap year in the Chinese Han 
- * calendar. 
- * 
- * @return {boolean} true if the year of this date is a leap year in the 
- * Chinese Han calendar. 
+ * Return whether the year of this date is a leap year in the Chinese Han
+ * calendar.
+ *
+ * @return {boolean} true if the year of this date is a leap year in the
+ * Chinese Han calendar.
  */
 ilib.Date.HanDate.prototype.isLeapYear = function() {
 	return this.leapYear;
 };
 
 /**
- * Return whether the month of this date is a leap month in the Chinese Han 
+ * Return whether the month of this date is a leap month in the Chinese Han
  * calendar.
- * 
- * @return {boolean} true if the month of this date is a leap month in the 
+ *
+ * @return {boolean} true if the month of this date is a leap month in the
  * Chinese Han calendar.
  */
 ilib.Date.HanDate.prototype.isLeapMonth = function() {
@@ -14460,7 +14460,7 @@ ilib.Date.HanDate.prototype.isLeapMonth = function() {
 /**
  * Return the day of the week of this date. The day of the week is encoded
  * as number from 0 to 6, with 0=Sunday, 1=Monday, etc., until 6=Saturday.
- * 
+ *
  * @return {number} the day of the week
  */
 ilib.Date.HanDate.prototype.getDayOfWeek = function() {
@@ -14469,8 +14469,8 @@ ilib.Date.HanDate.prototype.getDayOfWeek = function() {
 };
 
 /**
- * Return the ordinal day of the year. Days are counted from 1 and proceed linearly up to 
- * 365, regardless of months or weeks, etc. That is, Farvardin 1st is day 1, and 
+ * Return the ordinal day of the year. Days are counted from 1 and proceed linearly up to
+ * 365, regardless of months or weeks, etc. That is, Farvardin 1st is day 1, and
  * December 31st is 365 in regular years, or 366 in leap years.
  * @return {number} the ordinal day of the year
  */
@@ -14481,13 +14481,13 @@ ilib.Date.HanDate.prototype.getDayOfYear = function() {
 };
 
 /**
- * Return the era for this date as a number. The value for the era for Han 
- * calendars is -1 for "before the han era" (BP) and 1 for "the han era" (anno 
- * persico or AP). 
- * BP dates are any date before Farvardin 1, 1 AP. In the proleptic Han calendar, 
+ * Return the era for this date as a number. The value for the era for Han
+ * calendars is -1 for "before the han era" (BP) and 1 for "the han era" (anno
+ * persico or AP).
+ * BP dates are any date before Farvardin 1, 1 AP. In the proleptic Han calendar,
  * there is a year 0, so any years that are negative or zero are BP.
- * @return {number} 1 if this date is in the common era, -1 if it is before the 
- * common era 
+ * @return {number} 1 if this date is in the common era, -1 if it is before the
+ * common era
  */
 ilib.Date.HanDate.prototype.getEra = function() {
 	return (this.year < 1) ? -1 : 1;
@@ -14495,7 +14495,7 @@ ilib.Date.HanDate.prototype.getEra = function() {
 
 /**
  * Return the name of the calendar that governs this date.
- * 
+ *
  * @return {string} a string giving the name of the calendar
  */
 ilib.Date.HanDate.prototype.getCalendar = function() {
@@ -14506,7 +14506,7 @@ ilib.Date.HanDate.prototype.getCalendar = function() {
 ilib.Date._constructors["han"] = ilib.Date.HanDate;
 /*
  * ethiopic.js - Represent a Ethiopic calendar object.
- * 
+ *
  * Copyright © 2015, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14530,9 +14530,9 @@ ilib.Date._constructors["han"] = ilib.Date.HanDate;
  * @class
  * Construct a new Ethiopic calendar object. This class encodes information about
  * a Ethiopic calendar.<p>
- * 
+ *
  * Depends directive: !depends ethiopic.js
- * 
+ *
  * @constructor
  * @implements ilib.Cal
  */
@@ -14542,10 +14542,10 @@ ilib.Cal.Ethiopic = function() {
 
 /**
  * Return the number of months in the given year. The number of months in a year varies
- * for lunar calendars because in some years, an extra month is needed to extend the 
+ * for lunar calendars because in some years, an extra month is needed to extend the
  * days in a year to an entire solar year. The month is represented as a 1-based number
  * where 1=Maskaram, 2=Teqemt, etc. until 13=Paguemen.
- * 
+ *
  * @param {number} year a year for which the number of months is sought
  */
 ilib.Cal.Ethiopic.prototype.getNumMonths = function(year) {
@@ -14556,7 +14556,7 @@ ilib.Cal.Ethiopic.prototype.getNumMonths = function(year) {
  * Return the number of days in a particular month in a particular year. This function
  * can return a different number for a month depending on the year because of things
  * like leap years.
- * 
+ *
  * @param {number} month the month for which the length is sought
  * @param {number} year the year within which that month can be found
  * @return {number} the number of days within the given month in the given year
@@ -14582,8 +14582,8 @@ ilib.Cal.Ethiopic.prototype.isLeapYear = function(year) {
 
 /**
  * Return the type of this calendar.
- * 
- * @return {string} the name of the type of this calendar 
+ *
+ * @return {string} the name of the type of this calendar
  */
 ilib.Cal.Ethiopic.prototype.getType = function() {
 	return this.type;
@@ -14592,7 +14592,7 @@ ilib.Cal.Ethiopic.prototype.getType = function() {
 /**
  * Return a date instance for this calendar type using the given
  * options.
- * @param {Object} options options controlling the construction of 
+ * @param {Object} options options controlling the construction of
  * the date instance
  * @return {ilib.Date} a date appropriate for this calendar type
  */
@@ -14604,7 +14604,7 @@ ilib.Cal.Ethiopic.prototype.newDateInstance = function (options) {
 ilib.Cal._constructors["ethiopic"] = ilib.Cal.Ethiopic;
 /*
  * ethiopicdate.js - Represent a date in the Ethiopic calendar
- * 
+ *
  * Copyright © 2015, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14621,60 +14621,60 @@ ilib.Cal._constructors["ethiopic"] = ilib.Cal.Ethiopic;
  * limitations under the License.
  */
 
-/* !depends 
-date.js 
-calendar/ethiopic.js 
+/* !depends
+date.js
+calendar/ethiopic.js
 util/utils.js
-util/search.js 
+util/search.js
 util/math.js
-localeinfo.js 
-julianday.js 
+localeinfo.js
+julianday.js
 */
 
 /**
  * @class
- * Construct a new Ethiopic RD date number object. The constructor parameters can 
+ * Construct a new Ethiopic RD date number object. The constructor parameters can
  * contain any of the following properties:
- * 
+ *
  * <ul>
- * <li><i>unixtime<i> - sets the time of this instance according to the given 
+ * <li><i>unixtime<i> - sets the time of this instance according to the given
  * unix time. Unix time is the number of milliseconds since midnight on Jan 1, 1970.
- * 
+ *
  * <li><i>julianday</i> - sets the time of this instance according to the given
  * Julian Day instance or the Julian Day given as a float
- * 
+ *
  * <li><i>year</i> - any integer, including 0
- * 
+ *
  * <li><i>month</i> - 1 to 12, where 1 means Maskaram, 2 means Teqemt, etc., and 13 means Paguemen
- * 
+ *
  * <li><i>day</i> - 1 to 30
- * 
- * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation 
+ *
+ * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation
  * is always done with an unambiguous 24 hour representation
- * 
+ *
  * <li><i>minute</i> - 0 to 59
- * 
+ *
  * <li><i>second</i> - 0 to 59
- * 
+ *
  * <li><i>millisecond</i> - 0 to 999
- * 
+ *
  * <li><i>date</i> - use the given intrinsic Javascript date to initialize this one.
  * </ul>
  *
  * If the constructor is called with another Ethiopic date instance instead of
  * a parameter block, the other instance acts as a parameter block and its
  * settings are copied into the current instance.<p>
- * 
- * If the constructor is called with no arguments at all or if none of the 
- * properties listed above are present, then the RD is calculate based on 
+ *
+ * If the constructor is called with no arguments at all or if none of the
+ * properties listed above are present, then the RD is calculate based on
  * the current date at the time of instantiation. <p>
- * 
+ *
  * If any of the properties from <i>year</i> through <i>millisecond</i> are not
  * specified in the params, it is assumed that they have the smallest possible
  * value in the range for the property (zero or one).<p>
- * 
+ *
  * Depends directive: !depends ethiopicdate.js
- * 
+ *
  * @private
  * @constructor
  * @extends ilib.Date.RataDie
@@ -14692,11 +14692,11 @@ ilib.Date.EthiopicRataDie.prototype.constructor = ilib.Date.EthiopicRataDie;
 
 /**
  * The difference between the zero Julian day and the first Ethiopic date
- * of Friday, August 29, 8 CE Julian at 6:00am UTC.<p> 
- * 
+ * of Friday, August 29, 8 CE Julian at 6:00am UTC.<p>
+ *
  * See <a href="http://us.wow.com/wiki/Time_in_Ethiopia?s_chn=90&s_pt=aolsem&v_t=aolsem"
  * Time in Ethiopia</a> for information about how time is handled in Ethiopia.
- * 
+ *
  * @protected
  * @type number
  */
@@ -14705,7 +14705,7 @@ ilib.Date.EthiopicRataDie.prototype.epoch = 1724219.75;
 /**
  * Calculate the Rata Die (fixed day) number of the given date from the
  * date components.
- * 
+ *
  * @protected
  * @param {Object} date the date components to calculate the RD from
  */
@@ -14716,9 +14716,9 @@ ilib.Date.EthiopicRataDie.prototype._setDateComponents = function(date) {
 	var rdtime = (date.hour * 3600000 +
 		date.minute * 60000 +
 		date.second * 1000 +
-		date.millisecond) / 
+		date.millisecond) /
 		86400000;
-	
+
 	/*
 	console.log("calcRataDie: converting " +  JSON.stringify(parts));
 	console.log("getRataDie: year is " +  years);
@@ -14726,7 +14726,7 @@ ilib.Date.EthiopicRataDie.prototype._setDateComponents = function(date) {
 	console.log("getRataDie: rdtime is " +  rdtime);
 	console.log("getRataDie: rd is " +  (years + dayInYear + rdtime));
 	*/
-	
+
 	this.rd = years + dayInYear + rdtime;
 };
 
@@ -14734,54 +14734,54 @@ ilib.Date.EthiopicRataDie.prototype._setDateComponents = function(date) {
  * @class
  * Construct a new date object for the Ethiopic Calendar. The constructor can be called
  * with a parameter object that contains any of the following properties:
- * 
+ *
  * <ul>
- * <li><i>unixtime<i> - sets the time of this instance according to the given 
+ * <li><i>unixtime<i> - sets the time of this instance according to the given
  * unix time. Unix time is the number of milliseconds since midnight on Jan 1, 1970 (Gregorian).
  * <li><i>julianday</i> - the Julian Day to set into this date
  * <li><i>year</i> - any integer
  * <li><i>month</i> - 1 to 13, where 1 means Maskaram, 2 means Teqemt, etc., and 13 means Paguemen
  * <li><i>day</i> - 1 to 30
- * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation 
+ * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation
  * is always done with an unambiguous 24 hour representation
  * <li><i>minute</i> - 0 to 59
  * <li><i>second</i> - 0 to 59
  * <li><i>millisecond<i> - 0 to 999
- * <li><i>locale</i> - the ilib.TimeZone instance or time zone name as a string 
+ * <li><i>locale</i> - the ilib.TimeZone instance or time zone name as a string
  * of this ethiopic date. The date/time is kept in the local time. The time zone
  * is used later if this date is formatted according to a different time zone and
  * the difference has to be calculated, or when the date format has a time zone
  * component in it.
- * <li><i>timezone</i> - the time zone of this instance. If the time zone is not 
+ * <li><i>timezone</i> - the time zone of this instance. If the time zone is not
  * given, it can be inferred from this locale. For locales that span multiple
- * time zones, the one with the largest population is chosen as the one that 
- * represents the locale. 
- * 
+ * time zones, the one with the largest population is chosen as the one that
+ * represents the locale.
+ *
  * <li><i>date</i> - use the given intrinsic Javascript date to initialize this one.
  * </ul>
- *  
+ *
  * If called with another Ethiopic date argument, the date components of the given
  * date are copied into the current one.<p>
- * 
- * If the constructor is called with no arguments at all or if none of the 
- * properties listed above 
- * from <i>unixtime</i> through <i>millisecond</i> are present, then the date 
- * components are 
+ *
+ * If the constructor is called with no arguments at all or if none of the
+ * properties listed above
+ * from <i>unixtime</i> through <i>millisecond</i> are present, then the date
+ * components are
  * filled in with the current date at the time of instantiation. Note that if
- * you do not give the time zone when defaulting to the current time and the 
+ * you do not give the time zone when defaulting to the current time and the
  * time zone for all of ilib was not set with <i>ilib.setTimeZone()</i>, then the
- * time zone will default to UTC ("Universal Time, Coordinated" or "Greenwich 
+ * time zone will default to UTC ("Universal Time, Coordinated" or "Greenwich
  * Mean Time").<p>
- * 
+ *
  * Depends directive: !depends ethiopicdate.js
- * 
+ *
  * @constructor
  * @extends ilib.Date
  * @param {Object=} params parameters that govern the settings and behaviour of this Ethiopic date
  */
 ilib.Date.EthiopicDate = function(params) {
 	this.cal = new ilib.Cal.Ethiopic();
-	
+
 	if (params) {
 		if (typeof(params.noinstance) === 'boolean' && params.noinstance) {
 			// for doing inheritance, so don't need to fill in the data. The inheriting class only wants the methods.
@@ -14790,12 +14790,12 @@ ilib.Date.EthiopicDate = function(params) {
 		if (params.locale) {
 			this.locale = (typeof(params.locale) === 'string') ? new ilib.Locale(params.locale) : params.locale;
 			var li = new ilib.LocaleInfo(this.locale);
-			this.timezone = li.getTimeZone(); 
+			this.timezone = li.getTimeZone();
 		}
 		if (params.timezone) {
 			this.timezone = params.timezone;
 		}
-		
+
 		if (params.year || params.month || params.day || params.hour ||
 				params.minute || params.second || params.millisecond ) {
 			/**
@@ -14834,25 +14834,25 @@ ilib.Date.EthiopicDate = function(params) {
 			 * @type number
 			 */
 			this.millisecond = parseInt(params.millisecond, 10) || 0;
-			
+
 			/**
 			 * The day of the year. Ranges from 1 to 366.
 			 * @type number
 			 */
 			this.dayOfYear = parseInt(params.dayOfYear, 10);
-			
+
 			if (typeof(params.dst) === 'boolean') {
 				this.dst = params.dst;
 			}
-			
+
 			this.rd = this.newRd(this);
-			
+
 			// add the time zone offset to the rd to convert to UTC
 			if (!this.tz) {
 				this.tz = new ilib.TimeZone({id: this.timezone});
 			}
-			// getOffsetMillis requires that this.year, this.rd, and this.dst 
-			// are set in order to figure out which time zone rules apply and 
+			// getOffsetMillis requires that this.year, this.rd, and this.dst
+			// are set in order to figure out which time zone rules apply and
 			// what the offset is at that point in the year
 			this.offset = this.tz._getOffsetMillisWallTime(this) / 86400000;
 			if (this.offset !== 0) {
@@ -14862,7 +14862,7 @@ ilib.Date.EthiopicDate = function(params) {
 			}
 		}
 	}
-	
+
 	if (!this.rd) {
 		this.rd = this.newRd(params);
 		this._calcDateComponents();
@@ -14886,12 +14886,12 @@ ilib.Date.EthiopicDate.prototype.newRd = function (params) {
 /**
  * Return the year for the given RD
  * @protected
- * @param {number} rd RD to calculate from 
+ * @param {number} rd RD to calculate from
  * @returns {number} the year for the RD
  */
 ilib.Date.EthiopicDate.prototype._calcYear = function(rd) {
 	var year = Math.floor((4*(Math.floor(rd)-1) + 1463)/1461);
-	
+
 	return year;
 };
 
@@ -14903,13 +14903,13 @@ ilib.Date.EthiopicDate.prototype._calcDateComponents = function () {
 	var remainder,
 		cumulative,
 		rd = this.rd.getRataDie();
-	
+
 	this.year = this._calcYear(rd);
 
 	if (typeof(this.offset) === "undefined") {
 		this.year = this._calcYear(rd);
-		
-		// now offset the RD by the time zone, then recalculate in case we were 
+
+		// now offset the RD by the time zone, then recalculate in case we were
 		// near the year boundary
 		if (!this.tz) {
 			this.tz = new ilib.TimeZone({id: this.timezone});
@@ -14921,7 +14921,7 @@ ilib.Date.EthiopicDate.prototype._calcDateComponents = function () {
 		rd += this.offset;
 		this.year = this._calcYear(rd);
 	}
-	
+
 	var jan1 = this.newRd({
 		year: this.year,
 		month: 1,
@@ -14932,31 +14932,31 @@ ilib.Date.EthiopicDate.prototype._calcDateComponents = function () {
 		millisecond: 0
 	});
 	remainder = rd + 1 - jan1.getRataDie();
-	
+
 	this.month = Math.floor((remainder-1)/30) + 1;
 	remainder = remainder - (this.month-1) * 30;
-	
+
 	this.day = Math.floor(remainder);
 	remainder -= this.day;
 	// now convert to milliseconds for the rest of the calculation
 	remainder = Math.round(remainder * 86400000);
-	
+
 	this.hour = Math.floor(remainder/3600000);
 	remainder -= this.hour * 3600000;
-	
+
 	this.minute = Math.floor(remainder/60000);
 	remainder -= this.minute * 60000;
-	
+
 	this.second = Math.floor(remainder/1000);
 	remainder -= this.second * 1000;
-	
+
 	this.millisecond = remainder;
 };
 
 /**
  * Return the day of the week of this date. The day of the week is encoded
  * as number from 0 to 6, with 0=Sunday, 1=Monday, etc., until 6=Saturday.
- * 
+ *
  * @return {number} the day of the week
  */
 ilib.Date.EthiopicDate.prototype.getDayOfWeek = function() {
@@ -14966,7 +14966,7 @@ ilib.Date.EthiopicDate.prototype.getDayOfWeek = function() {
 
 /**
  * Return the name of the calendar that governs this date.
- * 
+ *
  * @return {string} a string giving the name of the calendar
  */
 ilib.Date.EthiopicDate.prototype.getCalendar = function() {
@@ -14977,7 +14977,7 @@ ilib.Date.EthiopicDate.prototype.getCalendar = function() {
 ilib.Date._constructors["ethiopic"] = ilib.Date.EthiopicDate;
 /*
  * coptic.js - Represent a Coptic calendar object.
- * 
+ *
  * Copyright © 2015, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15001,9 +15001,9 @@ ilib.Date._constructors["ethiopic"] = ilib.Date.EthiopicDate;
  * @class
  * Construct a new Coptic calendar object. This class encodes information about
  * a Coptic calendar.<p>
- * 
+ *
  * Depends directive: !depends coptic.js
- * 
+ *
  * @constructor
  * @implements ilib.Cal
  */
@@ -15018,7 +15018,7 @@ ilib.Cal.Coptic.prototype.constructor = ilib.Cal.Coptic;
 /**
  * Return a date instance for this calendar type using the given
  * options.
- * @param {Object} options options controlling the construction of 
+ * @param {Object} options options controlling the construction of
  * the date instance
  * @return {ilib.Date} a date appropriate for this calendar type
  */
@@ -15030,7 +15030,7 @@ ilib.Cal.Coptic.prototype.newDateInstance = function (options) {
 ilib.Cal._constructors["coptic"] = ilib.Cal.Coptic;
 /*
  * copticdate.js - Represent a date in the Coptic calendar
- * 
+ *
  * Copyright © 2015, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15047,61 +15047,61 @@ ilib.Cal._constructors["coptic"] = ilib.Cal.Coptic;
  * limitations under the License.
  */
 
-/* !depends 
-date.js 
-calendar/coptic.js 
+/* !depends
+date.js
+calendar/coptic.js
 util/utils.js
-util/search.js 
+util/search.js
 util/math.js
-localeinfo.js 
-julianday.js 
+localeinfo.js
+julianday.js
 calendar/ethiopicdate.js
 */
 
 /**
  * @class
- * Construct a new Coptic RD date number object. The constructor parameters can 
+ * Construct a new Coptic RD date number object. The constructor parameters can
  * contain any of the following properties:
- * 
+ *
  * <ul>
- * <li><i>unixtime<i> - sets the time of this instance according to the given 
+ * <li><i>unixtime<i> - sets the time of this instance according to the given
  * unix time. Unix time is the number of milliseconds since midnight on Jan 1, 1970.
- * 
+ *
  * <li><i>julianday</i> - sets the time of this instance according to the given
  * Julian Day instance or the Julian Day given as a float
- * 
+ *
  * <li><i>year</i> - any integer, including 0
- * 
+ *
  * <li><i>month</i> - 1 to 13, where 1 means Thoout, 2 means Paope, etc., and 13 means Epagomene
- * 
+ *
  * <li><i>day</i> - 1 to 30
- * 
- * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation 
+ *
+ * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation
  * is always done with an unambiguous 24 hour representation
- * 
+ *
  * <li><i>minute</i> - 0 to 59
- * 
+ *
  * <li><i>second</i> - 0 to 59
- * 
+ *
  * <li><i>millisecond</i> - 0 to 999
- * 
+ *
  * <li><i>date</i> - use the given intrinsic Javascript date to initialize this one.
  * </ul>
  *
  * If the constructor is called with another Coptic date instance instead of
  * a parameter block, the other instance acts as a parameter block and its
  * settings are copied into the current instance.<p>
- * 
- * If the constructor is called with no arguments at all or if none of the 
- * properties listed above are present, then the RD is calculate based on 
+ *
+ * If the constructor is called with no arguments at all or if none of the
+ * properties listed above are present, then the RD is calculate based on
  * the current date at the time of instantiation. <p>
- * 
+ *
  * If any of the properties from <i>year</i> through <i>millisecond</i> are not
  * specified in the params, it is assumed that they have the smallest possible
  * value in the range for the property (zero or one).<p>
- * 
+ *
  * Depends directive: !depends copticdate.js
- * 
+ *
  * @private
  * @constructor
  * @extends ilib.Date.EthiopicRataDie
@@ -15112,7 +15112,7 @@ ilib.Date.CopticRataDie = function(params) {
 	this.rd = undefined;
 	/**
 	 * The difference between the zero Julian day and the first Coptic date
-	 * of Friday, August 29, 284 CE Julian at 7:00am UTC. 
+	 * of Friday, August 29, 284 CE Julian at 7:00am UTC.
 	 * @private
 	 * @const
 	 * @type number
@@ -15135,47 +15135,47 @@ ilib.Date.CopticRataDie.prototype.constructor = ilib.Date.CopticRataDie;
  * @class
  * Construct a new date object for the Coptic Calendar. The constructor can be called
  * with a parameter object that contains any of the following properties:
- * 
+ *
  * <ul>
- * <li><i>unixtime<i> - sets the time of this instance according to the given 
+ * <li><i>unixtime<i> - sets the time of this instance according to the given
  * unix time. Unix time is the number of milliseconds since midnight on Jan 1, 1970 (Gregorian).
  * <li><i>julianday</i> - the Julian Day to set into this date
  * <li><i>year</i> - any integer
  * <li><i>month</i> - 1 to 13, where 1 means Thoout, 2 means Paope, etc., and 13 means Epagomene
  * <li><i>day</i> - 1 to 30
- * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation 
+ * <li><i>hour</i> - 0 to 23. A formatter is used to display 12 hour clocks, but this representation
  * is always done with an unambiguous 24 hour representation
  * <li><i>minute</i> - 0 to 59
  * <li><i>second</i> - 0 to 59
  * <li><i>millisecond<i> - 0 to 999
- * <li><i>locale</i> - the ilib.TimeZone instance or time zone name as a string 
+ * <li><i>locale</i> - the ilib.TimeZone instance or time zone name as a string
  * of this coptic date. The date/time is kept in the local time. The time zone
  * is used later if this date is formatted according to a different time zone and
  * the difference has to be calculated, or when the date format has a time zone
  * component in it.
- * <li><i>timezone</i> - the time zone of this instance. If the time zone is not 
+ * <li><i>timezone</i> - the time zone of this instance. If the time zone is not
  * given, it can be inferred from this locale. For locales that span multiple
- * time zones, the one with the largest population is chosen as the one that 
- * represents the locale. 
- * 
+ * time zones, the one with the largest population is chosen as the one that
+ * represents the locale.
+ *
  * <li><i>date</i> - use the given intrinsic Javascript date to initialize this one.
  * </ul>
- *  
+ *
  * If called with another Coptic date argument, the date components of the given
  * date are copied into the current one.<p>
- * 
- * If the constructor is called with no arguments at all or if none of the 
- * properties listed above 
- * from <i>unixtime</i> through <i>millisecond</i> are present, then the date 
- * components are 
+ *
+ * If the constructor is called with no arguments at all or if none of the
+ * properties listed above
+ * from <i>unixtime</i> through <i>millisecond</i> are present, then the date
+ * components are
  * filled in with the current date at the time of instantiation. Note that if
- * you do not give the time zone when defaulting to the current time and the 
+ * you do not give the time zone when defaulting to the current time and the
  * time zone for all of ilib was not set with <i>ilib.setTimeZone()</i>, then the
- * time zone will default to UTC ("Universal Time, Coordinated" or "Greenwich 
+ * time zone will default to UTC ("Universal Time, Coordinated" or "Greenwich
  * Mean Time").<p>
- * 
+ *
  * Depends directive: !depends copticdate.js
- * 
+ *
  * @constructor
  * @extends ilib.Date.EthiopicDate
  * @param {Object=} params parameters that govern the settings and behaviour of this Coptic date
@@ -15203,7 +15203,7 @@ ilib.Date.CopticDate.prototype.newRd = function (params) {
 /**
  * Return the day of the week of this date. The day of the week is encoded
  * as number from 0 to 6, with 0=Sunday, 1=Monday, etc., until 6=Saturday.
- * 
+ *
  * @return {number} the day of the week
  */
 ilib.Date.CopticDate.prototype.getDayOfWeek = function() {
@@ -15213,7 +15213,7 @@ ilib.Date.CopticDate.prototype.getDayOfWeek = function() {
 
 /**
  * Return the name of the calendar that governs this date.
- * 
+ *
  * @return {string} a string giving the name of the calendar
  */
 ilib.Date.CopticDate.prototype.getCalendar = function() {
@@ -15224,7 +15224,7 @@ ilib.Date.CopticDate.prototype.getCalendar = function() {
 ilib.Date._constructors["coptic"] = ilib.Date.CopticDate;
 /*
  * ctype.js - Character type definitions
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15247,7 +15247,7 @@ ilib.Date._constructors["coptic"] = ilib.Date.CopticDate;
 
 /**
  * Provides a set of static routines that return information about characters.
- * These routines emulate the C-library ctype functions. The characters must be 
+ * These routines emulate the C-library ctype functions. The characters must be
  * encoded in utf-16, as no other charsets are currently supported. Only the first
  * character of the given string is tested.
  * @namespace
@@ -15255,9 +15255,9 @@ ilib.Date._constructors["coptic"] = ilib.Date.CopticDate;
 ilib.CType = {
 	/**
 	 * Actual implementation for withinRange. Searches the given object for ranges.
-	 * The range names are taken from the Unicode range names in 
+	 * The range names are taken from the Unicode range names in
 	 * http://www.unicode.org/Public/UNIDATA/extracted/DerivedGeneralCategory.txt
-	 * 
+	 *
 	 * <ul>
 	 * <li>Cn - Unassigned
 	 * <li>Lu - Uppercase_Letter
@@ -15290,7 +15290,7 @@ ilib.CType = {
 	 * <li>Pi - Initial_Punctuation
 	 * <li>Pf - Final_Punctuation
 	 * </ul>
-	 * 
+	 *
 	 * @protected
 	 * @param {number} num code point of the character to examine
 	 * @param {string} rangeName the name of the range to check
@@ -15303,12 +15303,12 @@ ilib.CType = {
 		if (num < 0 || !rangeName || !obj) {
 			return false;
 		}
-		
+
 		range = obj[rangeName];
 		if (!range) {
 			return false;
 		}
-		
+
 		var compare = function(singlerange, target) {
 			if (singlerange.length === 1) {
 				return singlerange[0] - target;
@@ -15320,14 +15320,14 @@ ilib.CType = {
 		var result = ilib.bsearch(num, range, compare);
 		return result < range.length && compare(range[result], num) === 0;
 	},
-	
+
 	/**
 	 * Return whether or not the first character is within the named range
-	 * of Unicode characters. The valid list of range names are taken from 
+	 * of Unicode characters. The valid list of range names are taken from
 	 * the Unicode 6.0 spec. Characters in all ranges of Unicode are supported,
-	 * including those supported in Javascript via UTF-16. Currently, this method 
+	 * including those supported in Javascript via UTF-16. Currently, this method
 	 * supports the following range names:
-	 * 
+	 *
 	 * <ul>
 	 * <li><i>ascii</i> - basic ASCII
 	 * <li><i>latin</i> - Latin, Latin Extended Additional, Latin Extended-C, Latin Extended-D
@@ -15353,7 +15353,7 @@ ilib.CType = {
 	 * <li><i>osmanya</i>
 	 * <li><i>tifinagh</i>
 	 * <li><i>val</i>
-	 * <li><i>arabic</i> - Arabic, Arabic Supplement, Arabic Presentation Forms-A, 
+	 * <li><i>arabic</i> - Arabic, Arabic Supplement, Arabic Presentation Forms-A,
 	 * Arabic Presentation Forms-B
 	 * <li><i>carlan</i>
 	 * <li><i>hebrew</i>
@@ -15403,13 +15403,13 @@ ilib.CType = {
 	 * <li><i>tagbanwa</i>
 	 * <li><i>bopomofo</i> - Bopomofo, Bopomofo Extended
 	 * <li><i>cjk</i> - the CJK unified ideographs (Han), CJK Unified Ideographs
-	 *  Extension A, CJK Unified Ideographs Extension B, CJK Unified Ideographs 
-	 *  Extension C, CJK Unified Ideographs Extension D, Ideographic Description 
+	 *  Extension A, CJK Unified Ideographs Extension B, CJK Unified Ideographs
+	 *  Extension C, CJK Unified Ideographs Extension D, Ideographic Description
 	 *  Characters (=isIdeo())
-	 * <li><i>cjkcompatibility</i> - CJK Compatibility, CJK Compatibility 
+	 * <li><i>cjkcompatibility</i> - CJK Compatibility, CJK Compatibility
 	 * Ideographs, CJK Compatibility Forms, CJK Compatibility Ideographs Supplement
 	 * <li><i>cjkradicals</i> - the CJK radicals, KangXi radicals
-	 * <li><i>hangul</i> - Hangul Jamo, Hangul Syllables, Hangul Jamo Extended-A, 
+	 * <li><i>hangul</i> - Hangul Jamo, Hangul Syllables, Hangul Jamo Extended-A,
 	 * Hangul Jamo Extended-B, Hangul Compatibility Jamo
 	 * <li><i>cjkpunct</i> - CJK symbols and punctuation
 	 * <li><i>cjkstrokes</i> - CJK strokes
@@ -15419,7 +15419,7 @@ ilib.CType = {
 	 * <li><i>lisu</i>
 	 * <li><i>yi</i> - Yi Syllables, Yi Radicals
 	 * <li><i>cherokee</i>
-	 * <li><i>canadian</i> - Unified Canadian Aboriginal Syllabics, Unified Canadian 
+	 * <li><i>canadian</i> - Unified Canadian Aboriginal Syllabics, Unified Canadian
 	 * Aboriginal Syllabics Extended
 	 * <li><i>presentation</i> - Alphabetic presentation forms
 	 * <li><i>vertical</i> - Vertical Forms
@@ -15428,7 +15428,7 @@ ilib.CType = {
 	 * <li><i>box</i> - Box Drawing
 	 * <li><i>block</i> - Block Elements
 	 * <li><i>letterlike</i> - Letterlike symbols
-	 * <li><i>mathematical</i> - Mathematical alphanumeric symbols, Miscellaneous 
+	 * <li><i>mathematical</i> - Mathematical alphanumeric symbols, Miscellaneous
 	 * Mathematical Symbols-A, Miscellaneous Mathematical Symbols-B
 	 * <li><i>enclosedalpha</i> - Enclosed alphanumerics, Enclosed Alphanumeric Supplement
 	 * <li><i>enclosedcjk</i> - Enclosed CJK letters and months, Enclosed Ideographic Supplement
@@ -15437,7 +15437,7 @@ ilib.CType = {
 	 * <li><i>controlpictures</i> - Control pictures
 	 * <li><i>misc</i> - Miscellaneous technical
 	 * <li><i>ocr</i> - Optical character recognition (OCR)
-	 * <li><i>combining</i> - Combining Diacritical Marks, Combining Diacritical Marks 
+	 * <li><i>combining</i> - Combining Diacritical Marks, Combining Diacritical Marks
 	 * for Symbols, Combining Diacritical Marks Supplement
 	 * <li><i>digits</i> - ASCII digits (=isDigit())
 	 * <li><i>indicnumber</i> - Common Indic Number Forms
@@ -15445,8 +15445,8 @@ ilib.CType = {
 	 * <li><i>supersub</i> - Super- and subscripts
 	 * <li><i>arrows</i> - Arrows, Miscellaneous Symbols and Arrows, Supplemental Arrows-A,
 	 * Supplemental Arrows-B
-	 * <li><i>operators</i> - Mathematical operators, supplemental 
-	 * mathematical operators 
+	 * <li><i>operators</i> - Mathematical operators, supplemental
+	 * mathematical operators
 	 * <li><i>geometric</i> - Geometric shapes
 	 * <li><i>ancient</i> - Ancient symbols
 	 * <li><i>braille</i> - Braille patterns
@@ -15456,7 +15456,7 @@ ilib.CType = {
 	 * <li><i>yijing</i> - Yijing Hexagram Symbols
 	 * <li><i>specials</i>
 	 * <li><i>variations</i> - Variation Selectors, Variation Selectors Supplement
-	 * <li><i>privateuse</i> - Private Use Area, Supplementary Private Use Area-A, 
+	 * <li><i>privateuse</i> - Private Use Area, Supplementary Private Use Area-A,
 	 * Supplementary Private Use Area-B
 	 * <li><i>supplementarya</i> - Supplementary private use area-A
 	 * <li><i>supplementaryb</i> - Supplementary private use area-B
@@ -15465,9 +15465,9 @@ ilib.CType = {
 	 * <li><i>reserved</i>
 	 * <li><i>noncharacters</i>
 	 * </ul><p>
-	 * 
+	 *
 	 * Depends directive: !depends ctype.js
-	 * 
+	 *
 	 * @param {string|ilib.String|number} ch character or code point to examine
 	 * @param {string} rangeName the name of the range to check
 	 * @return {boolean} true if the first character is within the named
@@ -15494,7 +15494,7 @@ ilib.CType = {
 
 		return ilib.CType._inRange(num, rangeName.toLowerCase(), ilib.data.ctype);
 	},
-	
+
 	/**
 	 * @protected
 	 * @param {boolean} sync
@@ -15504,7 +15504,7 @@ ilib.CType = {
 	_init: function(sync, loadParams, onLoad) {
 		ilib.CType._load("ctype", sync, loadParams, onLoad);
 	},
-	
+
 	/**
 	 * @protected
 	 * @param {string} name
@@ -15520,7 +15520,7 @@ ilib.CType = {
 				locale: "-",
 				nonlocale: true,
 				sync: sync,
-				loadParams: loadParams, 
+				loadParams: loadParams,
 				callback: /** @type function(Object=):undefined */ ilib.bind(this, /** @type function() */ function(ct) {
 					ilib.data[name] = ct;
 					if (onLoad && typeof(onLoad) === 'function') {
@@ -15538,7 +15538,7 @@ ilib.CType = {
 
 /*
  * ctype.isdigit.js - Character type is digit
- * 
+ *
  * Copyright © 2012-2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15562,12 +15562,12 @@ ilib.CType = {
 /**
  * Return whether or not the first character is a digit character in the
  * Latin script.<p>
- * 
+ *
  * Depends directive: !depends ctype.isdigit.js
- * 
+ *
  * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is a digit character in the
- * Latin script. 
+ * Latin script.
  */
 ilib.CType.isDigit = function (ch) {
 	var num;
@@ -15599,7 +15599,7 @@ ilib.CType.isDigit._init = function (sync, loadParams, onLoad) {
 
 /*
  * ctype.isspace.js - Character type is space char
- * 
+ *
  * Copyright © 2012-2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15622,9 +15622,9 @@ ilib.CType.isDigit._init = function (sync, loadParams, onLoad) {
 
 /**
  * Return whether or not the first character is a whitespace character.<p>
- * 
+ *
  * Depends directive: !depends ctype.isspace.js
- * 
+ *
  * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is a whitespace character.
  */
@@ -15664,7 +15664,7 @@ ilib.CType.isSpace._init = function (sync, loadParams, onLoad) {
 
 /*
  * numprs.js - Parse a number in any locale
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15682,30 +15682,30 @@ ilib.CType.isSpace._init = function (sync, loadParams, onLoad) {
  */
 
 /*
-!depends 
-ilibglobal.js 
-locale.js 
-strings.js 
-ctype.isdigit.js 
+!depends
+ilibglobal.js
+locale.js
+strings.js
+ctype.isdigit.js
 ctype.isspace.js
 */
 
 /**
  * @class
  * Parse a string as a number, ignoring all locale-specific formatting.<p>
- * 
- * This class is different from the standard Javascript parseInt() and parseFloat() 
- * functions in that the number to be parsed can have formatting characters in it 
+ *
+ * This class is different from the standard Javascript parseInt() and parseFloat()
+ * functions in that the number to be parsed can have formatting characters in it
  * that are not supported by those two
- * functions, and it handles numbers written in other locales properly. For example, 
- * if you pass the string "203,231.23" to the parseFloat() function in Javascript, it 
- * will return you the number 203. The ilib.Number class will parse it correctly and 
- * the value() function will return the number 203231.23. If you pass parseFloat() the 
+ * functions, and it handles numbers written in other locales properly. For example,
+ * if you pass the string "203,231.23" to the parseFloat() function in Javascript, it
+ * will return you the number 203. The ilib.Number class will parse it correctly and
+ * the value() function will return the number 203231.23. If you pass parseFloat() the
  * string "203.231,23" with the locale set to de-DE, it will return you 203 again. This
  * class will return the correct number 203231.23 again.<p>
- * 
+ *
  * The options object may contain any of the following properties:
- * 
+ *
  * <ul>
  * <li><i>locale</i> - specify the locale of the string to parse. This is used to
  * figure out what the decimal point character is. If not specified, the default locale
@@ -15716,46 +15716,46 @@ ctype.isspace.js
  * return undefined. If
  * the number is to be interpretted as percentage amount and there is a percentage sign
  * in the string, then the number will be returned
- * as a fraction from the valueOf() method. If there is no percentage sign, then the 
- * number will be returned as a regular number. That is "58.3%" will be returned as the 
- * number 0.583 but "58.3" will be returned as 58.3. Valid values for this property 
+ * as a fraction from the valueOf() method. If there is no percentage sign, then the
+ * number will be returned as a regular number. That is "58.3%" will be returned as the
+ * number 0.583 but "58.3" will be returned as 58.3. Valid values for this property
  * are "number", "currency", and "percentage". Default if this is not specified is
  * "number".
- * <li><i>onLoad</i> - a callback function to call when the locale data is fully 
+ * <li><i>onLoad</i> - a callback function to call when the locale data is fully
  * loaded. When the onLoad option is given, this class will attempt to
  * load any missing locale data using the ilib loader callback.
- * When the constructor is done (even if the data is already preassembled), the 
+ * When the constructor is done (even if the data is already preassembled), the
  * onLoad function is called with the current instance as a parameter, so this
- * callback can be used with preassembled or dynamic loading or a mix of the two. 
- * 
- * <li><i>sync</i> - tell whether to load any missing locale data synchronously or 
+ * callback can be used with preassembled or dynamic loading or a mix of the two.
+ *
+ * <li><i>sync</i> - tell whether to load any missing locale data synchronously or
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
  * not be usable for a while.
- *  
- * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ *
+ * <li><i>loadParams</i> - an object containing parameters to pass to the
  * loader callback function when locale data is missing. The parameters are not
- * interpretted or modified in any way. They are simply passed along. The object 
+ * interpretted or modified in any way. They are simply passed along. The object
  * may contain any property/value pairs as long as the calling code is in
  * agreement with the loader callback function as to what those parameters mean.
  * </ul>
  * <p>
- * 
+ *
  * Depends directive: !depends numprs.js
- * 
+ *
  * @constructor
  * @param {string|number|Number|ilib.Number|undefined} str a string to parse as a number, or a number value
- * @param {Object=} options Options controlling how the instance should be created 
+ * @param {Object=} options Options controlling how the instance should be created
  */
 ilib.Number = function (str, options) {
-	var i, stripped = "", 
+	var i, stripped = "",
 		sync = true,
 		loadParams,
 		onLoad;
-	
+
 	this.locale = new ilib.Locale();
 	this.type = "number";
-	
+
 	if (options) {
 		if (options.locale) {
 			this.locale = (typeof(options.locale) === 'string') ? new ilib.Locale(options.locale) : options.locale;
@@ -15777,14 +15777,14 @@ ilib.Number = function (str, options) {
 		loadParams = options.loadParams;
 		onLoad = options.onLoad;
 	}
-	
+
 	ilib.CType.isDigit._init(sync, loadParams, /** @type {function()|undefined} */ ilib.bind(this, function() {
 		ilib.CType.isSpace._init(sync, loadParams, /** @type {function()|undefined} */ ilib.bind(this, function() {
 			new ilib.LocaleInfo(this.locale, {
 				sync: sync,
 				onLoad: ilib.bind(this, function (li) {
 					this.decimal = li.getDecimalSeparator();
-					
+
 					switch (typeof(str)) {
 					case 'string':
 						// stripping should work for all locales, because you just ignore all the
@@ -15810,18 +15810,18 @@ ilib.Number = function (str, options) {
 						this.str = "" + str;
 						this.value = str;
 						break;
-						
+
 					case 'object':
 						this.value = /** @type {number} */ str.valueOf();
 						this.str = "" + this.value;
 						break;
-						
+
 					case 'undefined':
 						this.value = 0;
 						this.str = "0";
 						break;
 					}
-					
+
 					switch (this.type) {
 						default:
 							// don't need to do anything special for other types
@@ -15840,33 +15840,33 @@ ilib.Number = function (str, options) {
 								stripped += this.str.charAt(i++);
 							}
 							if (stripped.length === 0) {
-								while (i < this.str.length && 
+								while (i < this.str.length &&
 									   ilib.CType.isDigit(this.str.charAt(i)) ||
 									   ilib.CType.isSpace(this.str.charAt(i)) ||
 									   this.str.charAt(i) === '.' ||
 									   this.str.charAt(i) === ',' ) {
 									i++;
 								}
-								while (i < this.str.length && 
+								while (i < this.str.length &&
 									   !ilib.CType.isDigit(this.str.charAt(i)) &&
 									   !ilib.CType.isSpace(this.str.charAt(i))) {
 									stripped += this.str.charAt(i++);
 								}
 							}
 							new ilib.Currency({
-								locale: this.locale, 
+								locale: this.locale,
 								sign: stripped,
 								sync: sync,
 								onLoad: ilib.bind(this, function (cur) {
 									this.currency = cur;
 									if (options && typeof(options.onLoad) === 'function') {
 										options.onLoad(this);
-									}				
+									}
 								})
 							});
 							return;
 					}
-					
+
 					if (options && typeof(options.onLoad) === 'function') {
 						options.onLoad(this);
 					}
@@ -15884,7 +15884,7 @@ ilib.Number.prototype = {
 	getLocale: function () {
 		return this.locale;
 	},
-	
+
 	/**
 	 * Return the original string that this number instance was created with.
 	 * @return {string} the original string
@@ -15892,15 +15892,15 @@ ilib.Number.prototype = {
 	toString: function () {
 		return this.str;
 	},
-	
+
 	/**
 	 * If the type of this Number instance is "currency", then the parser will attempt
 	 * to figure out which currency this amount represents. The amount can be written
 	 * with any of the currency signs or ISO 4217 codes that are currently
 	 * recognized by ilib, and the currency signs may occur before or after the
-	 * numeric portion of the string. If no currency can be recognized, then the 
+	 * numeric portion of the string. If no currency can be recognized, then the
 	 * default currency for the locale is returned. If multiple currencies can be
-	 * recognized (for example if the currency sign is "$"), then this method 
+	 * recognized (for example if the currency sign is "$"), then this method
 	 * will prefer the one for the current locale. If multiple currencies can be
 	 * recognized, but none are used in the current locale, then the first currency
 	 * encountered will be used. This may produce random results, though the larger
@@ -15908,14 +15908,14 @@ ilib.Number.prototype = {
 	 * string is "$" and that is not the sign of the currency of the current locale
 	 * then the US dollar will be recognized, as it is the largest currency that uses
 	 * the "$" as its sign.
-	 * 
-	 * @return {ilib.Currency|undefined} the currency instance for this amount, or 
+	 *
+	 * @return {ilib.Currency|undefined} the currency instance for this amount, or
 	 * undefined if this Number object is not of type currency
 	 */
 	getCurrency: function () {
 		return this.currency;
 	},
-	
+
 	/**
 	 * Return the value of this number object as a primitive number instance.
 	 * @return {number} the value of this number instance
@@ -15927,7 +15927,7 @@ ilib.Number.prototype = {
 
 /*
  * currency.js - Currency definition
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15950,43 +15950,43 @@ ilib.Number.prototype = {
 
 /**
  * @class
- * Create a new currency information instance. Instances of this class encode 
+ * Create a new currency information instance. Instances of this class encode
  * information about a particular currency.<p>
- * 
+ *
  * Note: that if you are looking to format currency for display, please see
  * the number formatting class {ilib.NumFmt}. This class only gives information
- * about currencies.<p> 
- * 
+ * about currencies.<p>
+ *
  * The options can contain any of the following properties:
- * 
+ *
  * <ul>
  * <li><i>locale</i> - specify the locale for this instance
- * <li><i>code</i> - find info on a specific currency with the given ISO 4217 code 
+ * <li><i>code</i> - find info on a specific currency with the given ISO 4217 code
  * <li><i>sign</i> - search for a currency that uses this sign
- * <li><i>onLoad</i> - a callback function to call when the currency data is fully 
+ * <li><i>onLoad</i> - a callback function to call when the currency data is fully
  * loaded. When the onLoad option is given, this class will attempt to
  * load any missing locale data using the ilib loader callback.
- * When the constructor is done (even if the data is already preassembled), the 
+ * When the constructor is done (even if the data is already preassembled), the
  * onLoad function is called with the current instance as a parameter, so this
- * callback can be used with preassembled or dynamic loading or a mix of the two. 
- * <li><i>sync</i> - tell whether to load any missing locale data synchronously or 
+ * callback can be used with preassembled or dynamic loading or a mix of the two.
+ * <li><i>sync</i> - tell whether to load any missing locale data synchronously or
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
  * not be usable for a while.
- * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ * <li><i>loadParams</i> - an object containing parameters to pass to the
  * loader callback function when locale data is missing. The parameters are not
- * interpretted or modified in any way. They are simply passed along. The object 
+ * interpretted or modified in any way. They are simply passed along. The object
  * may contain any property/value pairs as long as the calling code is in
  * agreement with the loader callback function as to what those parameters mean.
  * </ul>
- * 
- * When searching for a currency by its sign, this class cannot guarantee 
- * that it will return info about a specific currency. The reason is that currency 
- * signs are sometimes shared between different currencies and the sign is 
- * therefore ambiguous. If you need a 
+ *
+ * When searching for a currency by its sign, this class cannot guarantee
+ * that it will return info about a specific currency. The reason is that currency
+ * signs are sometimes shared between different currencies and the sign is
+ * therefore ambiguous. If you need a
  * guarantee, find the currency using the code instead.<p>
- * 
- * The way this class finds a currency by sign is the following. If the sign is 
+ *
+ * The way this class finds a currency by sign is the following. If the sign is
  * unambiguous, then
  * the currency is returned. If there are multiple currencies that use the same
  * sign, and the current locale uses that sign, then the default currency for
@@ -15994,11 +15994,11 @@ ilib.Number.prototype = {
  * does not use that sign, then the currency with the largest circulation is
  * returned. For example, if you are in the en-GB locale, and the sign is "$",
  * then this class will notice that there are multiple currencies with that
- * sign (USD, CAD, AUD, HKD, MXP, etc.) Since "$" is not used in en-GB, it will 
+ * sign (USD, CAD, AUD, HKD, MXP, etc.) Since "$" is not used in en-GB, it will
  * pick the one with the largest circulation, which in this case is the US Dollar
  * (USD).<p>
- * 
- * If neither the code or sign property is set, the currency that is most common 
+ *
+ * If neither the code or sign property is set, the currency that is most common
  * for the locale
  * will be used instead. If the locale is not set, the default locale will be used.
  * If the code is given, but it is not found in the list of known currencies, this
@@ -16007,17 +16007,17 @@ ilib.Number.prototype = {
  * the code and sign properties are given, then the sign property will be ignored
  * and only the code property used. If the locale is given, but it is not a known
  * locale, this class will default to the default locale instead.<p>
- * 
+ *
  * Depends directive: !depends currency.js
- * 
+ *
  * @constructor
  * @param options {Object} a set of properties to govern how this instance is constructed.
- * @throws "currency xxx is unknown" when the given currency code is not in the list of 
+ * @throws "currency xxx is unknown" when the given currency code is not in the list of
  * known currencies. xxx is replaced with the requested code.
  */
 ilib.Currency = function (options) {
 	this.sync = true;
-	
+
 	if (options) {
 		if (options.code) {
 			this.code = options.code;
@@ -16035,15 +16035,15 @@ ilib.Currency = function (options) {
 			this.loadParams = options.loadParams;
 		}
 	}
-	
+
 	this.locale = this.locale || new ilib.Locale();
 	if (typeof(ilib.data.currency) === 'undefined') {
 		ilib.loadData({
 			name: "currency.json",
-			object: ilib.Currency, 
+			object: ilib.Currency,
 			locale: "-",
-			sync: this.sync, 
-			loadParams: this.loadParams, 
+			sync: this.sync,
+			loadParams: this.loadParams,
 			callback: /** @type function(Object=):undefined */ ilib.bind(this, /** @type function() */ function(currency) {
 				ilib.data.currency = currency;
 				this._loadLocinfo(options && options.onLoad);
@@ -16057,7 +16057,7 @@ ilib.Currency = function (options) {
 /**
  * Return an array of the ids for all ISO 4217 currencies that
  * this copy of ilib knows about.
- * 
+ *
  * @static
  * @return {Array.<string>} an array of currency ids that this copy of ilib knows about.
  */
@@ -16067,13 +16067,13 @@ ilib.Currency.getAvailableCurrencies = function() {
 		currencies = new ilib.ResBundle({
 			name: "currency"
 		}).getResObj();
-	
+
 	for (cur in currencies) {
 		if (cur && currencies[cur]) {
 			ret.push(cur);
 		}
 	}
-	
+
 	return ret;
 };
 
@@ -16085,7 +16085,7 @@ ilib.Currency.prototype = {
 		new ilib.LocaleInfo(this.locale, {
 			onLoad: ilib.bind(this, function (li) {
 				var currInfo;
-				
+
 				this.locinfo = li;
 		    	if (this.code) {
 		    		currInfo = ilib.data.currency[this.code];
@@ -16116,23 +16116,23 @@ ilib.Currency.prototype = {
 		    			}
 		    		}
 		    	}
-		    	
+
 		    	if (!currInfo || !this.code) {
 		    		this.code = this.locinfo.getCurrency();
 		    		currInfo = ilib.data.currency[this.code];
 		    	}
-		    	
+
 		    	this.name = currInfo.name;
 		    	this.fractionDigits = currInfo.decimals;
 		    	this.sign = currInfo.sign;
-		    	
+
 				if (typeof(onLoad) === 'function') {
 					onLoad(this);
 				}
 			})
 		});
 	},
-	
+
 	/**
 	 * Return the ISO 4217 currency code for this instance.
 	 * @return {string} the ISO 4217 currency code for this instance
@@ -16140,7 +16140,7 @@ ilib.Currency.prototype = {
 	getCode: function () {
 		return this.code;
 	},
-	
+
 	/**
 	 * Return the default number of fraction digits that is typically used
 	 * with this type of currency.
@@ -16149,7 +16149,7 @@ ilib.Currency.prototype = {
 	getFractionDigits: function () {
 		return this.fractionDigits;
 	},
-	
+
 	/**
 	 * Return the sign commonly used to represent this currency.
 	 * @return {string} the sign commonly used to represent this currency
@@ -16157,7 +16157,7 @@ ilib.Currency.prototype = {
 	getSign: function () {
 		return this.sign;
 	},
-	
+
 	/**
 	 * Return the name of the currency in English.
 	 * @return {string} the name of the currency in English
@@ -16165,9 +16165,9 @@ ilib.Currency.prototype = {
 	getName: function () {
 		return this.name;
 	},
-	
+
 	/**
-	 * Return the locale for this currency. If the options to the constructor 
+	 * Return the locale for this currency. If the options to the constructor
 	 * included a locale property in order to find the currency that is appropriate
 	 * for that locale, then the locale is returned here. If the options did not
 	 * include a locale, then this method returns undefined.
@@ -16200,8 +16200,8 @@ ilib.Currency.prototype = {
 
 // !depends ilibglobal.js locale.js strings.js currency.js
 /*
-!depends 
-ilibglobal.js 
+!depends
+ilibglobal.js
 locale.js
 localeinfo.js
 util/utils.js
@@ -16276,11 +16276,11 @@ util/jsutils.js
  * When the type of this formatter is "number", the style can be one of the following:
  * <ul>
  *   <li><i>standard - format a fully specified floating point number properly for the locale
- *   <li><i>scientific</i> - use scientific notation for all numbers. That is, 1 integral 
- *   digit, followed by a number of fractional digits, followed by an "e" which denotes 
- *   exponentiation, followed digits which give the power of 10 in the exponent. 
- *   <li><i>native</i> - format a floating point number using the native digits and 
- *   formatting symbols for the script of the locale. 
+ *   <li><i>scientific</i> - use scientific notation for all numbers. That is, 1 integral
+ *   digit, followed by a number of fractional digits, followed by an "e" which denotes
+ *   exponentiation, followed digits which give the power of 10 in the exponent.
+ *   <li><i>native</i> - format a floating point number using the native digits and
+ *   formatting symbols for the script of the locale.
  *   <li><i>nogrouping</i> - format a floating point number without grouping digits for
  *   the integral portion of the number
  * </ul>
@@ -16317,9 +16317,9 @@ util/jsutils.js
 ilib.NumFmt = function (options) {
 	var sync = true;
 	this.locale = new ilib.Locale();
-	/** 
+	/**
 	 * @private
-	 * @type {string} 
+	 * @type {string}
 	 */
 	this.type = "number";
 	var loadParams = undefined;
@@ -16338,24 +16338,24 @@ ilib.NumFmt = function (options) {
 		}
 
 		if (options.currency) {
-			/** 
-			 * @private 
-			 * @type {string} 
+			/**
+			 * @private
+			 * @type {string}
 			 */
 			this.currency = options.currency;
 		}
 
 		if (typeof (options.maxFractionDigits) === 'number') {
-			/** 
-			 * @private 
-			 * @type {number|undefined} 
+			/**
+			 * @private
+			 * @type {number|undefined}
 			 */
 			this.maxFractionDigits = this._toPrimitive(options.maxFractionDigits);
 		}
 		if (typeof (options.minFractionDigits) === 'number') {
-			/** 
-			 * @private 
-			 * @type {number|undefined} 
+			/**
+			 * @private
+			 * @type {number|undefined}
 			 */
 			this.minFractionDigits = this._toPrimitive(options.minFractionDigits);
 			// enforce the limits to avoid JS exceptions
@@ -16367,22 +16367,22 @@ ilib.NumFmt = function (options) {
 			}
 		}
 		if (options.style) {
-			/** 
-			 * @private 
-			 * @type {string} 
+			/**
+			 * @private
+			 * @type {string}
 			 */
 			this.style = options.style;
 		}
 		if (typeof(options.useNative) === 'boolean') {
-			/** 
-			 * @private 
-			 * @type {boolean} 
+			/**
+			 * @private
+			 * @type {boolean}
 			 * */
 			this.useNative = options.useNative;
 		}
-		/** 
-		 * @private 
-		 * @type {string} 
+		/**
+		 * @private
+		 * @type {string}
 		 */
 		this.roundingMode = options.roundingMode;
 
@@ -16390,23 +16390,23 @@ ilib.NumFmt = function (options) {
 			/** @type {boolean} */
 			sync = (options.sync == true);
 		}
-		
+
 		loadParams = options.loadParams;
 	}
 
-	/** 
-	 * @private 
-	 * @type {ilib.LocaleInfo|undefined} 
+	/**
+	 * @private
+	 * @type {ilib.LocaleInfo|undefined}
 	 */
 	this.localeInfo = undefined;
-	
+
 	new ilib.LocaleInfo(this.locale, {
 		sync: sync,
 		loadParams: loadParams,
 		onLoad: ilib.bind(this, function (li) {
-			/** 
-			 * @private 
-			 * @type {ilib.LocaleInfo|undefined} 
+			/**
+			 * @private
+			 * @type {ilib.LocaleInfo|undefined}
 			 */
 			this.localeInfo = li;
 
@@ -16429,7 +16429,7 @@ ilib.NumFmt = function (options) {
 						if (this.style !== "common" && this.style !== "iso") {
 							this.style = "common";
 						}
-						
+
 						if (typeof(this.maxFractionDigits) !== 'number' && typeof(this.minFractionDigits) !== 'number') {
 							this.minFractionDigits = this.maxFractionDigits = this.currencyInfo.getFractionDigits();
 						}
@@ -16438,7 +16438,7 @@ ilib.NumFmt = function (options) {
 						this.template = new ilib.String(templates[this.style] || templates.common);
 						this.templateNegative = new ilib.String(templates[this.style + "Negative"] || templates["commonNegative"]);
 						this.sign = (this.style === "iso") ? this.currencyInfo.getCode() : this.currencyInfo.getSign();
-						
+
 						if (!this.roundingMode) {
 							this.roundingMode = this.currencyInfo && this.currencyInfo.roundingMode;
 						}
@@ -16487,16 +16487,16 @@ ilib.NumFmt.prototype = {
 	 * option is given to the constructor, then this flag will be honoured. If the useNative
 	 * option is not given to the constructor, this this formatter will use native digits if
 	 * the locale typically uses native digits.
-	 * 
+	 *
 	 *  @return {boolean} true if this formatter will format with native digits, false otherwise
 	 */
 	getUseNative: function() {
 		if (typeof(this.useNative) === "boolean") {
 			return this.useNative;
-		} 
+		}
 		return (this.localeInfo.getDigitsStyle() === "native");
 	},
-	
+
 	/**
 	 * @private
 	 */
@@ -16520,23 +16520,23 @@ ilib.NumFmt.prototype = {
 			this.roundingMode = "halfdown";
 			this.round = ilib._roundFnc[this.roundingMode];
 		}
-		
+
 		if (this.style === "nogrouping") {
 			this.prigroupSize = this.secgroupSize = 0;
 		} else {
 			this.prigroupSize = this.localeInfo.getPrimaryGroupingDigits();
 			this.secgroupSize = this.localeInfo.getSecondaryGroupingDigits();
 			this.groupingSeparator = this.getUseNative() ? this.localeInfo.getNativeGroupingSeparator() : this.localeInfo.getGroupingSeparator();
-		} 
+		}
 		this.decimalSeparator = this.getUseNative() ? this.localeInfo.getNativeDecimalSeparator() : this.localeInfo.getDecimalSeparator();
-		
+
 		if (this.getUseNative()) {
 			var nd = this.localeInfo.getNativeDigits() || this.localeInfo.getDigits();
 			if (nd) {
 				this.digits = nd.split("");
 			}
 		}
-		
+
 		this.exponentSymbol = this.localeInfo.getExponential() || "e";
 	},
 
@@ -16567,7 +16567,7 @@ ilib.NumFmt.prototype = {
 			n = parseFloat(num);
 			break;
 		case 'object':
-			// Number.valueOf() is incorrectly documented as being of type "string" rather than "number", so coerse 
+			// Number.valueOf() is incorrectly documented as being of type "string" rather than "number", so coerse
 			// the type here to shut the type checker up
 			n = /** @type {number} */ num.valueOf();
 			break;
@@ -16586,7 +16586,7 @@ ilib.NumFmt.prototype = {
 	_formatScientific: function (num) {
 		var n = new Number(num);
 		var formatted;
-		
+
 		var factor,
 			str = n.toExponential(),
 			parts = str.split("e"),
@@ -16597,8 +16597,8 @@ ilib.NumFmt.prototype = {
 			fraction;
 
 		if (this.maxFractionDigits > 0) {
-			// if there is a max fraction digits setting, round the fraction to 
-			// the right length first by dividing or multiplying by powers of 10. 
+			// if there is a max fraction digits setting, round the fraction to
+			// the right length first by dividing or multiplying by powers of 10.
 			// manipulate the fraction digits so as to
 			// avoid the rounding errors of floating point numbers
 			factor = Math.pow(10, this.maxFractionDigits);
@@ -16607,7 +16607,7 @@ ilib.NumFmt.prototype = {
 		numparts = ("" + significant).split(".");
 		integral = numparts[0];
 		fraction = numparts[1];
-		
+
 		if (typeof(this.maxFractionDigits) !== 'undefined') {
 			fraction = fraction.substring(0, this.maxFractionDigits);
 		}
@@ -16616,8 +16616,8 @@ ilib.NumFmt.prototype = {
 		}
 		formatted = integral;
 		if (fraction.length) {
-			formatted += this.decimalSeparator + fraction;	
-		} 
+			formatted += this.decimalSeparator + fraction;
+		}
 		formatted += this.exponentSymbol + exponent;
 		return formatted;
 	},
@@ -16631,7 +16631,7 @@ ilib.NumFmt.prototype = {
 	_formatStandard: function (num) {
 		var i;
 		var k;
-		
+
 		if (typeof(this.maxFractionDigits) !== 'undefined' && this.maxFractionDigits > -1) {
 			var factor = Math.pow(10, this.maxFractionDigits);
 			num = this.round(num * factor) / factor;
@@ -16644,7 +16644,7 @@ ilib.NumFmt.prototype = {
 			fraction = parts[1],
 			cycle,
 			formatted;
-		
+
 		integral = integral.toString();
 
 		if (this.minFractionDigits > 0) {
@@ -16691,11 +16691,11 @@ ilib.NumFmt.prototype = {
 			formatted += this.decimalSeparator;
 			formatted += fraction;
 		}
-		
+
 		if (this.digits) {
 			formatted = ilib.mapString(formatted, this.digits);
 		}
-		
+
 		return formatted;
 	},
 
@@ -16826,7 +16826,7 @@ ilib.NumFmt.prototype = {
 
 /*
  * durfmt.js - Date formatter definition
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16844,12 +16844,12 @@ ilib.NumFmt.prototype = {
  */
 
 /*
-!depends 
-ilibglobal.js 
-locale.js 
-date.js 
-strings.js 
-resources.js 
+!depends
+ilibglobal.js
+locale.js
+date.js
+strings.js
+resources.js
 localeinfo.js
 util/jsutils.js
 */
@@ -16864,77 +16864,77 @@ util/jsutils.js
  * options. Create different duration formatter instances for different purposes
  * and then keep them cached for use later if you have more than one duration to
  * format.<p>
- * 
- * Duration formatters format lengths of time. The duration formatter is meant to format 
- * durations of such things as the length of a song or a movie or a meeting, or the 
- * current position in that song or movie while playing it. If you wish to format a 
+ *
+ * Duration formatters format lengths of time. The duration formatter is meant to format
+ * durations of such things as the length of a song or a movie or a meeting, or the
+ * current position in that song or movie while playing it. If you wish to format a
  * period of time that has a specific start and end date/time, then use a
  * [ilib.DateRngFmt] instance instead and call its format method.<p>
- *  
+ *
  * The options may contain any of the following properties:
- * 
+ *
  * <ul>
  * <li><i>locale</i> - locale to use when formatting the duration. If the locale is
  * not specified, then the default locale of the app or web page will be used.
- * 
- * <li><i>length</i> - Specify the length of the format to use. The length is the approximate size of the 
+ *
+ * <li><i>length</i> - Specify the length of the format to use. The length is the approximate size of the
  * formatted string.
- * 
+ *
  * <ul>
  * <li><i>short</i> - use a short representation of the duration. This is the most compact format possible for the locale. eg. 1y 1m 1w 1d 1:01:01
  * <li><i>medium</i> - use a medium length representation of the duration. This is a slightly longer format. eg. 1 yr 1 mo 1 wk 1 dy 1 hr 1 mi 1 se
- * <li><i>long</i> - use a long representation of the duration. This is a fully specified format, but some of the textual 
+ * <li><i>long</i> - use a long representation of the duration. This is a fully specified format, but some of the textual
  * parts may still be abbreviated. eg. 1 yr 1 mo 1 wk 1 day 1 hr 1 min 1 sec
- * <li><i>full</i> - use a full representation of the duration. This is a fully specified format where all the textual 
+ * <li><i>full</i> - use a full representation of the duration. This is a fully specified format where all the textual
  * parts are spelled out completely. eg. 1 year, 1 month, 1 week, 1 day, 1 hour, 1 minute and 1 second
  * </ul>
- * 
+ *
  * <li><i>style<i> - whether hours, minutes, and seconds should be formatted as a text string
  * or as a regular time as on a clock. eg. text is "1 hour, 15 minutes", whereas clock is "1:15:00". Valid
  * values for this property are "text" or "clock". Default if this property is not specified
  * is "text".
- * 
- *<li><i>useNative</i> - the flag used to determaine whether to use the native script settings 
+ *
+ *<li><i>useNative</i> - the flag used to determaine whether to use the native script settings
  * for formatting the numbers .
- * 
- * <li><i>onLoad</i> - a callback function to call when the format data is fully 
+ *
+ * <li><i>onLoad</i> - a callback function to call when the format data is fully
  * loaded. When the onLoad option is given, this class will attempt to
  * load any missing locale data using the ilib loader callback.
- * When the constructor is done (even if the data is already preassembled), the 
+ * When the constructor is done (even if the data is already preassembled), the
  * onLoad function is called with the current instance as a parameter, so this
- * callback can be used with preassembled or dynamic loading or a mix of the two. 
- * 
- * <li>sync - tell whether to load any missing locale data synchronously or 
+ * callback can be used with preassembled or dynamic loading or a mix of the two.
+ *
+ * <li>sync - tell whether to load any missing locale data synchronously or
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
  * not be usable for a while.
- *  
- * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ *
+ * <li><i>loadParams</i> - an object containing parameters to pass to the
  * loader callback function when locale data is missing. The parameters are not
- * interpretted or modified in any way. They are simply passed along. The object 
+ * interpretted or modified in any way. They are simply passed along. The object
  * may contain any property/value pairs as long as the calling code is in
  * agreement with the loader callback function as to what those parameters mean.
  * </ul>
  * <p>
- * 
+ *
  * Depends directive: !depends durfmt.js
- * 
+ *
  * @constructor
  * @param {?Object} options options governing the way this date formatter instance works
  */
 ilib.DurFmt = function(options) {
 	var sync = true;
 	var loadParams = undefined;
-	
+
 	this.locale = new ilib.Locale();
 	this.length = "short";
 	this.style = "text";
-	
+
 	if (options) {
 		if (options.locale) {
 			this.locale = (typeof(options.locale) === 'string') ? new ilib.Locale(options.locale) : options.locale;
 		}
-		
+
 		if (options.length) {
 			if (options.length === 'short' ||
 				options.length === 'medium' ||
@@ -16943,24 +16943,24 @@ ilib.DurFmt = function(options) {
 				this.length = options.length;
 			}
 		}
-		
+
 		if (options.style) {
 			if (options.style === 'text' || options.style === 'clock') {
 				this.style = options.style;
 			}
 		}
-		
+
 		if (typeof(options.sync) !== 'undefined') {
 			sync = (options.sync == true);
 		}
-		
+
 		if (typeof(options.useNative) === 'boolean') {
 			this.useNative = options.useNative;
 		}
-		
+
 		loadParams = options.loadParams;
 	}
-	
+
 	new ilib.ResBundle({
 		locale: this.locale,
 		name: "sysres",
@@ -16982,7 +16982,7 @@ ilib.DurFmt = function(options) {
 						finalSeparator: "" // not used at this length
 					};
 					break;
-					
+
 				case 'medium':
 					this.components = {
 						year: sysres.getString("1#1 yr|#{num} yrs", "durationMediumYears"),
@@ -16997,7 +16997,7 @@ ilib.DurFmt = function(options) {
 						finalSeparator: "" // not used at this length
 					};
 					break;
-					
+
 				case 'long':
 					this.components = {
 						year: sysres.getString("1#1 yr|#{num} yrs"),
@@ -17012,7 +17012,7 @@ ilib.DurFmt = function(options) {
 						finalSeparator: "" // not used at this length
 					};
 					break;
-					
+
 				case 'full':
 					this.components = {
 						year: sysres.getString("1#1 year|#{num} years"),
@@ -17028,7 +17028,7 @@ ilib.DurFmt = function(options) {
 					};
 					break;
 			}
-			
+
 			if (this.style === 'clock') {
 				new ilib.DateFmt({
 					locale: this.locale,
@@ -17049,7 +17049,7 @@ ilib.DurFmt = function(options) {
 							loadParams: loadParams,
 							useNative: this.useNative,
 							onLoad: ilib.bind(this, function (fmtHM) {
-								this.timeFmtHM = fmtHM;		
+								this.timeFmtHM = fmtHM;
 								new ilib.DateFmt({
 									locale: this.locale,
 									calendar: "gregorian",
@@ -17059,14 +17059,14 @@ ilib.DurFmt = function(options) {
 									loadParams: loadParams,
 									useNative: this.useNative,
 									onLoad: ilib.bind(this, function (fmtHMS) {
-										this.timeFmtHMS = fmtHMS;		
+										this.timeFmtHMS = fmtHMS;
 
 										// munge with the template to make sure that the hours are not formatted mod 12
 										this.timeFmtHM.template = this.timeFmtHM.template.replace(/hh?/, 'H');
 										this.timeFmtHM.templateArr = this.timeFmtHM._tokenize(this.timeFmtHM.template);
 										this.timeFmtHMS.template = this.timeFmtHMS.template.replace(/hh?/, 'H');
 										this.timeFmtHMS.templateArr = this.timeFmtHMS._tokenize(this.timeFmtHMS.template);
-										
+
 										this._init(this.timeFmtHM.locinfo, options && options.onLoad);
 									})
 								});
@@ -17123,7 +17123,7 @@ ilib.DurFmt.prototype._init = function(locinfo, onLoad) {
 			}
 		}
 	} else if (locinfo.getDigitsStyle() === "native") {
-		// else if the locale usually uses native digits, then use them 
+		// else if the locale usually uses native digits, then use them
 		digits = locinfo.getNativeDigits();
 		if (digits) {
 			this.useNative = true;
@@ -17138,10 +17138,10 @@ ilib.DurFmt.prototype._init = function(locinfo, onLoad) {
 
 /**
  * Format a duration according to the format template of this formatter instance.<p>
- * 
- * The components parameter should be an object that contains any or all of these 
+ *
+ * The components parameter should be an object that contains any or all of these
  * numeric properties:
- * 
+ *
  * <ul>
  * <li>year
  * <li>month
@@ -17155,20 +17155,20 @@ ilib.DurFmt.prototype._init = function(locinfo, onLoad) {
  *
  * When a property is left out of the components parameter or has a value of 0, it will not
  * be formatted into the output string, except for times that include 0 minutes and 0 seconds.
- * 
+ *
  * This formatter will not ensure that numbers for each component property is within the
  * valid range for that component. This allows you to format durations that are longer
  * than normal range. For example, you could format a duration has being "33 hours" rather
  * than "1 day, 9 hours".
- * 
+ *
  * @param {Object} components date/time components to be formatted into a duration string
- * @return {ilib.String} a string with the duration formatted according to the style and 
- * locale set up for this formatter instance. If the components parameter is empty or 
+ * @return {ilib.String} a string with the duration formatted according to the style and
+ * locale set up for this formatter instance. If the components parameter is empty or
  * undefined, an empty string is returned.
  */
 ilib.DurFmt.prototype.format = function (components) {
 	var i, list, temp, fmt, secondlast = true, str = "";
-	
+
 	list = ilib.DurFmt.complist[this.style];
 	//for (i = 0; i < list.length; i++) {
 	for (i = list.length-1; i >= 0; i--) {
@@ -17188,13 +17188,13 @@ ilib.DurFmt.prototype.format = function (components) {
 		} else {
 			fmt = this.timeFmtMS;
 		}
-				
+
 		if (str.length > 0) {
 			str += this.components.separator;
 		}
 		str += fmt._formatTemplate(components, fmt.templateArr);
 	}
-	
+
 	return new ilib.String(str);
 };
 
@@ -17202,7 +17202,7 @@ ilib.DurFmt.prototype.format = function (components) {
  * Return the locale that was used to construct this duration formatter object. If the
  * locale was not given as parameter to the constructor, this method returns the default
  * locale of the system.
- * 
+ *
  * @return {ilib.Locale} locale that this duration formatter was constructed with
  */
 ilib.DurFmt.prototype.getLocale = function () {
@@ -17213,7 +17213,7 @@ ilib.DurFmt.prototype.getLocale = function () {
  * Return the length that was used to construct this duration formatter object. If the
  * length was not given as parameter to the constructor, this method returns the default
  * length. Valid values are "short", "medium", "long", and "full".
- * 
+ *
  * @return {string} length that this duration formatter was constructed with
  */
 ilib.DurFmt.prototype.getLength = function () {
@@ -17223,7 +17223,7 @@ ilib.DurFmt.prototype.getLength = function () {
 /**
  * Return the style that was used to construct this duration formatter object. Returns
  * one of "text" or "clock".
- * 
+ *
  * @return {string} style that this duration formatter was constructed with
  */
 ilib.DurFmt.prototype.getStyle = function () {
@@ -17232,7 +17232,7 @@ ilib.DurFmt.prototype.getStyle = function () {
 
 /*
  * ctype.islpha.js - Character type is alphabetic
- * 
+ *
  * Copyright © 2012-2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17255,9 +17255,9 @@ ilib.DurFmt.prototype.getStyle = function () {
 
 /**
  * Return whether or not the first character is alphabetic.<p>
- * 
+ *
  * Depends directive: !depends ctype.isalnum.js
- * 
+ *
  * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is alphabetic.
  */
@@ -17297,7 +17297,7 @@ ilib.CType.isAlpha._init = function (sync, loadParams, onLoad) {
 
 /*
  * ctype.isalnum.js - Character type alphanumeric
- * 
+ *
  * Copyright © 2012-2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17318,9 +17318,9 @@ ilib.CType.isAlpha._init = function (sync, loadParams, onLoad) {
 
 /**
  * Return whether or not the first character is alphabetic or numeric.<p>
- * 
+ *
  * Depends directive: !depends ctype.isalnum.js
- * 
+ *
  * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is alphabetic or numeric
  */
@@ -17356,7 +17356,7 @@ ilib.CType.isAlnum._init = function (sync, loadParams, onLoad) {
 
 /*
  * ctype.isascii.js - Character type is ASCII
- * 
+ *
  * Copyright © 2012-2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17379,9 +17379,9 @@ ilib.CType.isAlnum._init = function (sync, loadParams, onLoad) {
 
 /**
  * Return whether or not the first character is in the ASCII range.<p>
- * 
+ *
  * Depends directive: !depends ctype.isascii.js
- * 
+ *
  * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is in the ASCII range.
  */
@@ -17415,7 +17415,7 @@ ilib.CType.isAscii._init = function (sync, loadParams, onLoad) {
 
 /*
  * ctype.isblank.js - Character type is blank
- * 
+ *
  * Copyright © 2012-2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17438,9 +17438,9 @@ ilib.CType.isAscii._init = function (sync, loadParams, onLoad) {
 
 /**
  * Return whether or not the first character is a blank character.<p>
- * 
+ *
  * Depends directive: !depends ctype.isblank.js
- * 
+ *
  * ie. a space or a tab.
  * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is a blank character.
@@ -17475,7 +17475,7 @@ ilib.CType.isBlank._init = function (sync, loadParams, onLoad) {
 
 /*
  * ctype.iscntrl.js - Character type is control character
- * 
+ *
  * Copyright © 2012-2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17498,9 +17498,9 @@ ilib.CType.isBlank._init = function (sync, loadParams, onLoad) {
 
 /**
  * Return whether or not the first character is a control character.<p>
- * 
+ *
  * Depends directive: !depends ctype.iscntrl.js
- * 
+ *
  * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is a control character.
  */
@@ -17534,7 +17534,7 @@ ilib.CType.isCntrl._init = function (sync, loadParams, onLoad) {
 
 /*
  * ctype.isgraph.js - Character type is graph char
- * 
+ *
  * Copyright © 2012-2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17556,12 +17556,12 @@ ilib.CType.isCntrl._init = function (sync, loadParams, onLoad) {
 /**
  * Return whether or not the first character is any printable character
  * other than space.<p>
- * 
+ *
  * Depends directive: !depends ctype.isgraph.js
- * 
+ *
  * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is any printable character
- * other than space. 
+ * other than space.
  */
 ilib.CType.isGraph = function (ch) {
 	var num;
@@ -17595,7 +17595,7 @@ ilib.CType.isGraph._init = function (sync, loadParams, onLoad) {
 
 /*
  * ctype.js - Character type definitions
- * 
+ *
  * Copyright © 2012-2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17618,9 +17618,9 @@ ilib.CType.isGraph._init = function (sync, loadParams, onLoad) {
 
 /**
  * Return whether or not the first character is an ideographic character.<p>
- * 
+ *
  * Depends directive: !depends ctype.isideo.js
- * 
+ *
  * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is an ideographic character.
  */
@@ -17659,7 +17659,7 @@ ilib.CType.isIdeo._init = function (sync, loadParams, onLoad) {
 
 /*
  * ctype.islower.js - Character type is lower case letter
- * 
+ *
  * Copyright © 2012-2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17682,11 +17682,11 @@ ilib.CType.isIdeo._init = function (sync, loadParams, onLoad) {
 
 /**
  * Return whether or not the first character is lower-case. For alphabetic
- * characters in scripts that do not make a distinction between upper- and 
+ * characters in scripts that do not make a distinction between upper- and
  * lower-case, this function always returns true.<p>
- * 
+ *
  * Depends directive: !depends ctype.islower.js
- * 
+ *
  * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is lower-case.
  */
@@ -17721,7 +17721,7 @@ ilib.CType.isLower._init = function (sync, loadParams, onLoad) {
 
 /*
  * ctype.isprint.js - Character type is printable char
- * 
+ *
  * Copyright © 2012-2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17743,9 +17743,9 @@ ilib.CType.isLower._init = function (sync, loadParams, onLoad) {
 /**
  * Return whether or not the first character is any printable character,
  * including space.<p>
- * 
+ *
  * Depends directive: !depends ctype.isprint.js
- * 
+ *
  * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is printable.
  */
@@ -17765,7 +17765,7 @@ ilib.CType.isPrint._init = function (sync, loadParams, onLoad) {
 
 /*
  * ctype.ispunct.js - Character type is punctuation
- * 
+ *
  * Copyright © 2012-2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17788,9 +17788,9 @@ ilib.CType.isPrint._init = function (sync, loadParams, onLoad) {
 
 /**
  * Return whether or not the first character is punctuation.<p>
- * 
+ *
  * Depends directive: !depends ctype.isprint.js
- * 
+ *
  * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is punctuation.
  */
@@ -17831,7 +17831,7 @@ ilib.CType.isPunct._init = function (sync, loadParams, onLoad) {
 
 /*
  * ctype.isupper.js - Character type is upper-case letter
- * 
+ *
  * Copyright © 2012-2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17854,11 +17854,11 @@ ilib.CType.isPunct._init = function (sync, loadParams, onLoad) {
 
 /**
  * Return whether or not the first character is upper-case. For alphabetic
- * characters in scripts that do not make a distinction between upper- and 
+ * characters in scripts that do not make a distinction between upper- and
  * lower-case, this function always returns true.<p>
- * 
+ *
  * Depends directive: !depends ctype.isupper.js
- * 
+ *
  * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is upper-case.
  */
@@ -17893,7 +17893,7 @@ ilib.CType.isUpper._init = function (sync, loadParams, onLoad) {
 
 /*
  * ctype.isdigit.js - Character type is digit
- * 
+ *
  * Copyright © 2012-2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17917,9 +17917,9 @@ ilib.CType.isUpper._init = function (sync, loadParams, onLoad) {
 /**
  * Return whether or not the first character is a hexadecimal digit written
  * in the Latin script. (0-9 or A-F)<p>
- * 
+ *
  * Depends directive: !depends ctype.isxdigit.js
- * 
+ *
  * @param {string|ilib.String|number} ch character or code point to examine
  * @return {boolean} true if the first character is a hexadecimal digit written
  * in the Latin script.
@@ -17955,7 +17955,7 @@ ilib.CType.isXdigit._init = function (sync, loadParams, onLoad) {
 
 /*
  * ctype.isscript.js - Character type is script
- * 
+ *
  * Copyright © 2012-2013, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17977,12 +17977,12 @@ ilib.CType.isXdigit._init = function (sync, loadParams, onLoad) {
 // !data scriptToRange
 
 /**
- * Return whether or not the first character in the given string is 
+ * Return whether or not the first character in the given string is
  * in the given script. The script is given as the 4-letter ISO
  * 15924 script code.<p>
- * 
+ *
  * Depends directive: !depends ctype.isscript.js
- * 
+ *
  * @param {string|ilib.String|number} ch character or code point to examine
  * @param {string} script the 4-letter ISO 15924 to query against
  * @return {boolean} true if the first character is in the given script, and
@@ -18020,7 +18020,7 @@ ilib.CType.isScript._init = function (sync, loadParams, onLoad) {
 
 /*
  * scriptinfo.js - information about scripts
- * 
+ *
  * Copyright © 2012-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18045,46 +18045,46 @@ ilib.CType.isScript._init = function (sync, loadParams, onLoad) {
  * @class
  * Create a new script info instance. This class encodes information about
  * scripts, which are sets of characters used in a writing system.<p>
- * 
+ *
  * The options object may contain any of the following properties:
- * 
+ *
  * <ul>
- * <li><i>onLoad</i> - a callback function to call when the script info object is fully 
+ * <li><i>onLoad</i> - a callback function to call when the script info object is fully
  * loaded. When the onLoad option is given, the script info object will attempt to
  * load any missing locale data using the ilib loader callback.
- * When the constructor is done (even if the data is already preassembled), the 
+ * When the constructor is done (even if the data is already preassembled), the
  * onLoad function is called with the current instance as a parameter, so this
  * callback can be used with preassembled or dynamic loading or a mix of the two.
- * 
- * <li><i>sync</i> - tell whether to load any missing locale data synchronously or 
+ *
+ * <li><i>sync</i> - tell whether to load any missing locale data synchronously or
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
- * not be usable for a while. 
+ * not be usable for a while.
  *
- * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ * <li><i>loadParams</i> - an object containing parameters to pass to the
  * loader callback function when locale data is missing. The parameters are not
- * interpretted or modified in any way. They are simply passed along. The object 
+ * interpretted or modified in any way. They are simply passed along. The object
  * may contain any property/value pairs as long as the calling code is in
  * agreement with the loader callback function as to what those parameters mean.
  * </ul>
- * 
+ *
  * Depends directive: !depends scriptinfo.js
- * 
+ *
  * @constructor
  * @param {string} script The ISO 15924 4-letter identifier for the script
- * @param {Object} options parameters to initialize this matcher 
+ * @param {Object} options parameters to initialize this matcher
  */
 ilib.ScriptInfo = function(script, options) {
 	var sync = true,
 	    loadParams = undefined;
-	
+
 	this.script = script;
-	
+
 	if (options) {
 		if (typeof(options.sync) !== 'undefined') {
 			sync = (options.sync == true);
 		}
-		
+
 		if (typeof(options.loadParams) !== 'undefined') {
 			loadParams = options.loadParams;
 		}
@@ -18096,11 +18096,11 @@ ilib.ScriptInfo = function(script, options) {
 
 	if (!ilib.data.scripts) {
 		ilib.loadData({
-			object: ilib.ScriptInfo, 
-			locale: "-", 
-			name: "scripts.json", 
-			sync: sync, 
-			loadParams: loadParams, 
+			object: ilib.ScriptInfo,
+			locale: "-",
+			name: "scripts.json",
+			sync: sync,
+			loadParams: loadParams,
 			callback: ilib.bind(this, function (info) {
 				if (!info) {
 					info = {"Latn":{"nb":215,"nm":"Latin","lid":"Latin","rtl":false,"ime":false,"casing":true}};
@@ -18131,13 +18131,13 @@ ilib.ScriptInfo.getAllScripts = function() {
 	var ret = [],
 		script = undefined,
 		scripts = ilib.data.scripts;
-	
+
 	for (script in scripts) {
 		if (script && scripts[script]) {
 			ret.push(script);
 		}
 	}
-	
+
 	return ret;
 };
 
@@ -18150,60 +18150,60 @@ ilib.ScriptInfo.prototype = {
 	getCode: function () {
 		return this.info && this.script;
 	},
-	
+
 	/**
 	 * Get the ISO 15924 code number associated with this
 	 * script.
-	 * 
+	 *
 	 * @return {number} the ISO 15924 code number
 	 */
 	getCodeNumber: function () {
 		return this.info && this.info.nb || 0;
 	},
-	
+
 	/**
 	 * Get the name of this script in English.
-	 * 
+	 *
 	 * @return {string} the name of this script in English
 	 */
 	getName: function () {
 		return this.info && this.info.nm;
 	},
-	
+
 	/**
 	 * Get the long identifier assciated with this script.
-	 * 
+	 *
 	 * @return {string} the long identifier of this script
 	 */
 	getLongCode: function () {
 		return this.info && this.info.lid;
 	},
-	
+
 	/**
 	 * Return the usual direction that text in this script is written
 	 * in. Possible return values are "rtl" for right-to-left,
 	 * "ltr" for left-to-right, and "ttb" for top-to-bottom.
-	 * 
+	 *
 	 * @return {string} the usual direction that text in this script is
 	 * written in
 	 */
 	getScriptDirection: function() {
 		return (this.info && typeof(this.info.rtl) !== 'undefined' && this.info.rtl) ? "rtl" : "ltr";
 	},
-	
+
 	/**
 	 * Return true if this script typically requires an input method engine
 	 * to enter its characters.
-	 * 
+	 *
 	 * @return {boolean} true if this script typically requires an IME
 	 */
 	getNeedsIME: function () {
 		return this.info && this.info.ime ? true : false; // converts undefined to false
 	},
-	
+
 	/**
 	 * Return true if this script uses lower- and upper-case characters.
-	 * 
+	 *
 	 * @return {boolean} true if this script uses letter case
 	 */
 	getCasing: function () {
@@ -18229,15 +18229,15 @@ ilib.ScriptInfo.prototype = {
  * limitations under the License.
  */
 
-/* !depends 
-ilibglobal.js 
+/* !depends
+ilibglobal.js
 locale.js
-util/utils.js 
-ctype.isalpha.js 
-ctype.isideo.js 
-ctype.ispunct.js 
+util/utils.js
+ctype.isalpha.js
+ctype.isideo.js
+ctype.ispunct.js
 ctype.isspace.js
-util/jsutils.js 
+util/jsutils.js
 */
 
 // !data name
@@ -18341,17 +18341,17 @@ ilib.Name = function (name, options) {
     }
 
 	this.locale = this.locale || new ilib.Locale();
-	
+
 	ilib.CType.isAlpha._init(sync, this.loadParams, /** @type {function()|undefined} */ ilib.bind(this, function() {
 		ilib.CType.isIdeo._init(sync, this.loadParams, /** @type {function()|undefined} */ ilib.bind(this, function() {
 			ilib.CType.isPunct._init(sync, this.loadParams, /** @type {function()|undefined} */ ilib.bind(this, function() {
 				ilib.CType.isSpace._init(sync, this.loadParams, /** @type {function()|undefined} */ ilib.bind(this, function() {
 					ilib.loadData({
-						object: ilib.Name, 
-						locale: this.locale, 
-						name: "name.json", 
-						sync: sync, 
-						loadParams: this.loadParams, 
+						object: ilib.Name,
+						locale: this.locale,
+						name: "name.json",
+						sync: sync,
+						loadParams: this.loadParams,
 						callback: ilib.bind(this, function (info) {
 							if (!info) {
 								info = ilib.Name.defaultInfo;
@@ -18397,7 +18397,7 @@ ilib.Name = function (name, options) {
 							    this.isAsianName = name.isAsianName;
 					    	    return;
 						    }
-							/** 
+							/**
 							 * @type {{
 							 *   nameStyle:string,
 							 *   order:string,
@@ -18415,7 +18415,7 @@ ilib.Name = function (name, options) {
 								options.onLoad(this);
 							}
 						})
-					});					
+					});
 				}));
 			}));
 		}));
@@ -18622,7 +18622,7 @@ ilib.Name.prototype = {
                 }
                 parts = name.trim().split('');
             }
-            //} 
+            //}
             else {
                 name = name.replace(/, /g, ' , ');
                 name = name.replace(/\s+/g, ' '); // compress multiple whitespaces
@@ -18693,11 +18693,11 @@ ilib.Name.prototype = {
     },
 
     /**
-	 * @return {number} 
+	 * @return {number}
 	 *
 	_findSequence: function(parts, hash, isAsian) {
 		var sequence, sequenceLower, sequenceArray, aux = [], i, ret = {};
-		
+
 		if (parts.length > 0 && hash) {
 			//console.info("_findSequence: finding sequences");
 			for (var start = 0; start < parts.length-1; start++) {
@@ -18706,9 +18706,9 @@ ilib.Name.prototype = {
 					sequence = sequenceArray.join(isAsian ? '' : ' ');
 					sequenceLower = sequence.toLowerCase();
 					sequenceLower = sequenceLower.replace(/[,\.]/g, '');  // ignore commas and periods
-					
+
 					//console.info("_findSequence: checking sequence: '" + sequenceLower + "'");
-					
+
 					if ( sequenceLower in hash ) {
 						ret.match = sequenceArray;
 						ret.start = start;
@@ -18719,7 +18719,7 @@ ilib.Name.prototype = {
 				}
 			}
 		}
-	
+
 		return undefined;
 	},
 	*/
@@ -18930,7 +18930,7 @@ ilib.Name.prototype = {
         if (familyNameArray && familyNameArray.length > 0) {
             this.familyName = familyNameArray.join('');
             this.givenName = parts.slice(this.familyName.length).join('');
-            
+
             //Overide parsing rules if spaces are found in korean
             if (language === "ko" && tempFullName.search(/\s*[/\s]/) > -1 && !this.suffix) {
                 this._parseKoreanName(tempFullName);
@@ -18963,7 +18963,7 @@ ilib.Name.prototype = {
             this.middleName = tempName.slice(fistSpaceIndex, lastSpaceIndex);
             this.givenName = tempName.slice(lastSpaceIndex, tempName.length);
         }
-        
+
     },
 
     /**
@@ -18984,7 +18984,7 @@ ilib.Name.prototype = {
     		}
     	}
     	if (parts.length > 1) {
-    		var fn = "";                                                                    
+    		var fn = "";
     		for (var i = 0; i < parts.length; i++) {
     			if (ilib.CType.withinRange(parts[i], "cjk")) {
     				fn += parts[i];
@@ -19008,7 +19008,7 @@ ilib.Name.prototype = {
     	} else if (parts.length > 3) {
     		this.familyName = parts.slice(0,2).join("")
     		this.givenName = parts.slice(2,parts.length).join("");
-    	}      
+    	}
     },
 
     /**
@@ -19043,7 +19043,7 @@ ilib.Name.prototype = {
             conjunctionIndex = this._findLastConjunction(parts);
             ////console.log("@@@@@@@@@@@@@@@@"+conjunctionIndex)
             if (conjunctionIndex > 0) {
-                // if there's a conjunction that's not the first token, put everything up to and 
+                // if there's a conjunction that's not the first token, put everything up to and
                 // including the token after it into the first name, the last 2 tokens into
                 // the family name (if they exist) and everything else in to the middle name
                 // 0 1 2 3 4 5
@@ -19095,7 +19095,7 @@ ilib.Name.prototype = {
 
             conjunctionIndex = this._findLastConjunction(parts);
             if (conjunctionIndex > 0) {
-                // if there's a conjunction that's not the first token, put everything up to and 
+                // if there's a conjunction that's not the first token, put everything up to and
                 // including the token after it into the first name, the last 2 tokens into
                 // the family name (if they exist) and everything else in to the middle name
                 // 0 1 2 3 4 5
@@ -19125,12 +19125,12 @@ ilib.Name.prototype = {
             }
         }
     },
-    
+
     /**
      * @protected
      */
     _parseGenericWesternName: function (parts) {
-        /* Western names are parsed as follows, and rules are applied in this 
+        /* Western names are parsed as follows, and rules are applied in this
          * order:
          *
          * G
@@ -19164,7 +19164,7 @@ ilib.Name.prototype = {
             conjunctionIndex = this._findLastConjunction(parts);
 
             if (conjunctionIndex > 0) {
-                // if there's a conjunction that's not the first token, put everything up to and 
+                // if there's a conjunction that's not the first token, put everything up to and
                 // including the token after it into the first name, the last token into
                 // the family name (if it exists) and everything else in to the middle name
                 // 0 1 2 3 4 5
@@ -19199,9 +19199,9 @@ ilib.Name.prototype = {
             }
         }
     },
-    
+
      /**
-     * parse patrinomic name from the russian names 
+     * parse patrinomic name from the russian names
      * @protected
      * @param {Array.<string>} parts the current array of name parts
      * @return number  index of the part which contains patronymic name
@@ -19225,7 +19225,7 @@ ilib.Name.prototype = {
 
     /**
 	 * find if the given part is patronymic name
-	 * 
+	 *
 	 * @protected
 	 * @param {string} part string from name parts @
 	 * @return number index of the part which contains familyName
@@ -19246,7 +19246,7 @@ ilib.Name.prototype = {
 
     /**
 	 * find family name from the russian name
-	 * 
+	 *
 	 * @protected
 	 * @param {Array.<string>} parts the current array of name parts
 	 * @return boolean true if patronymic, false otherwise
@@ -19283,7 +19283,7 @@ ilib.Name.prototype = {
 
     /**
 	 * parse russian name
-	 * 
+	 *
 	 * @protected
 	 * @param {Array.<string>} parts the current array of name parts
 	 * @return
@@ -19384,15 +19384,15 @@ ilib.Name.prototype = {
 		    }
 	    }
     },
-    
-    
+
+
     /**
      * @protected
      */
     _parseWesternName: function (parts) {
 
         if (this.locale.getLanguage() === "es" || this.locale.getLanguage() === "pt") {
-            // in spain and mexico and portugal, we parse names differently than in the rest of the world 
+            // in spain and mexico and portugal, we parse names differently than in the rest of the world
             // because of the double family names
             this._parseSpanishName(parts);
         } else if (this.locale.getLanguage() === "ru") {
@@ -19403,7 +19403,7 @@ ilib.Name.prototype = {
              */
             this._parseRussianName(parts);
         } else if (this.locale.getLanguage() === "id") {
-            // in indonesia, we parse names differently than in the rest of the world 
+            // in indonesia, we parse names differently than in the rest of the world
             // because names don't have family names usually.
             this._parseIndonesianName(parts);
         } else {
@@ -19469,7 +19469,7 @@ ilib.Name.prototype = {
 
     getHeadFamilyName: function () {},
 
-    /** 
+    /**
      * @protected
      * Return a shallow copy of the current instance.
      */
@@ -19480,7 +19480,7 @@ ilib.Name.prototype = {
 
 /*
  * namefmt.js - Format person names for display
- * 
+ *
  * Copyright © 2013-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19497,7 +19497,7 @@ ilib.Name.prototype = {
  * limitations under the License.
  */
 
-/* !depends 
+/* !depends
 ilibglobal.js
 locale.js
 strings.js
@@ -19511,11 +19511,11 @@ ctype.ispunct.js
  * @class
  * Creates a formatter that can format person name instances (ilib.Name) for display to
  * a user. The options may contain the following properties:
- * 
+ *
  * <ul>
- * <li><i>locale</i> - Use the conventions of the given locale to construct the name format. 
+ * <li><i>locale</i> - Use the conventions of the given locale to construct the name format.
  * <li><i>style</i> - Format the name with the given style. The value of this property
- * should be one of the following strings: 
+ * should be one of the following strings:
  *   <ul>
  *     <li><i>short</i> - Format a short name with just the given and family names.
  *     <li><i>medium</i> - Format a medium-length name with the given, middle, and family names.
@@ -19535,44 +19535,44 @@ ctype.ispunct.js
  *     <li><i>s</i> - suffixes
  *   </ul>
  * <p>
- * 
- * For example, the string "pf" would mean to only format any prefixes and family names 
+ *
+ * For example, the string "pf" would mean to only format any prefixes and family names
  * together and leave out all the other parts of the name.<p>
- * 
- * The components can be listed in any order in the string. The <i>components</i> option 
+ *
+ * The components can be listed in any order in the string. The <i>components</i> option
  * overrides the <i>style</i> option if both are specified.
  *
- * <li>onLoad - a callback function to call when the locale info object is fully 
+ * <li>onLoad - a callback function to call when the locale info object is fully
  * loaded. When the onLoad option is given, the localeinfo object will attempt to
  * load any missing locale data using the ilib loader callback.
- * When the constructor is done (even if the data is already preassembled), the 
+ * When the constructor is done (even if the data is already preassembled), the
  * onLoad function is called with the current instance as a parameter, so this
  * callback can be used with preassembled or dynamic loading or a mix of the two.
- * 
- * <li>sync - tell whether to load any missing locale data synchronously or 
+ *
+ * <li>sync - tell whether to load any missing locale data synchronously or
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
- * not be usable for a while. 
+ * not be usable for a while.
  *
- * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ * <li><i>loadParams</i> - an object containing parameters to pass to the
  * loader callback function when locale data is missing. The parameters are not
- * interpretted or modified in any way. They are simply passed along. The object 
+ * interpretted or modified in any way. They are simply passed along. The object
  * may contain any property/value pairs as long as the calling code is in
  * agreement with the loader callback function as to what those parameters mean.
  * </ul>
- * 
- * Formatting names is a locale-dependent function, as the order of the components 
+ *
+ * Formatting names is a locale-dependent function, as the order of the components
  * depends on the locale. The following explains some of the details:<p>
- * 
+ *
  * <ul>
- * <li>In Western countries, the given name comes first, followed by a space, followed 
+ * <li>In Western countries, the given name comes first, followed by a space, followed
  * by the family name. In Asian countries, the family name comes first, followed immediately
  * by the given name with no space. But, that format is only used with Asian names written
- * in ideographic characters. In Asian countries, especially ones where both an Asian and 
- * a Western language are used (Hong Kong, Singapore, etc.), the convention is often to 
- * follow the language of the name. That is, Asian names are written in Asian style, and 
+ * in ideographic characters. In Asian countries, especially ones where both an Asian and
+ * a Western language are used (Hong Kong, Singapore, etc.), the convention is often to
+ * follow the language of the name. That is, Asian names are written in Asian style, and
  * Western names are written in Western style. This class follows that convention as
- * well. 
+ * well.
  * <li>In other Asian countries, Asian names
  * written in Latin script are written with Asian ordering. eg. "Xu Ping-an" instead
  * of the more Western order "Ping-an Xu", as the order is thought to go with the style
@@ -19580,49 +19580,49 @@ ctype.ispunct.js
  * <li>In some Spanish speaking countries, people often take both their maternal and
  * paternal last names as their own family name. When formatting a short or medium style
  * of that family name, only the paternal name is used. In the long style, all the names
- * are used. eg. "Juan Julio Raul Lopez Ortiz" took the name "Lopez" from his father and 
+ * are used. eg. "Juan Julio Raul Lopez Ortiz" took the name "Lopez" from his father and
  * the name "Ortiz" from his mother. His family name would be "Lopez Ortiz". The formatted
  * short style of his name would be simply "Juan Lopez" which only uses his paternal
  * family name of "Lopez".
  * <li>In many Western languages, it is common to use auxillary words in family names. For
- * example, the family name of "Ludwig von Beethoven" in German is "von Beethoven", not 
- * "Beethoven". This class ensures that the family name is formatted correctly with 
- * all auxillary words.   
+ * example, the family name of "Ludwig von Beethoven" in German is "von Beethoven", not
+ * "Beethoven". This class ensures that the family name is formatted correctly with
+ * all auxillary words.
  * </ul>
- * 
+ *
  * Depends directive: !depends namefmt.js
- * 
+ *
  * @constructor
  * @param {Object} options A set of options that govern how the formatter will behave
  */
 ilib.NameFmt = function(options) {
 	var sync = true;
-	
+
 	this.style = "short";
 	this.loadParams = {};
-	
+
 	if (options) {
 		if (options.locale) {
 			this.locale = (typeof(options.locale) === 'string') ? new ilib.Locale(options.locale) : options.locale;
 		}
-		
+
 		if (options.style) {
 			this.style = options.style;
 		}
-		
+
 		if (options.components) {
 			this.components = options.components;
 		}
-		
+
 		if (typeof(options.sync) !== 'undefined') {
 			sync = (options.sync == true);
 		}
-		
+
 		if (typeof(options.loadParams) !== 'undefined') {
 			this.loadParams = options.loadParams;
 		}
 	}
-	
+
 	// set up defaults in case we need them
 	this.defaultEuroTemplate = new ilib.String("{prefix} {givenName} {middleName} {familyName}{suffix}");
 	this.defaultAsianTemplate = new ilib.String("{prefix}{familyName}{givenName}{middleName}{suffix}");
@@ -19653,14 +19653,14 @@ ilib.NameFmt = function(options) {
 	}
 
 	this.locale = this.locale || new ilib.Locale();
-	
+
 	ilib.CType.isPunct._init(sync, this.loadParams, /** @type {function()|undefined} */ ilib.bind(this, function() {
 		ilib.loadData({
-			object: ilib.Name, 
-			locale: this.locale, 
-			name: "name.json", 
-			sync: sync, 
-			loadParams: this.loadParams, 
+			object: ilib.Name,
+			locale: this.locale,
+			name: "name.json",
+			sync: sync,
+			loadParams: this.loadParams,
 			callback: ilib.bind(this, function (info) {
 				if (!info) {
 					info = ilib.Name.defaultInfo;
@@ -19678,7 +19678,7 @@ ilib.NameFmt = function(options) {
 };
 
 ilib.NameFmt.prototype = {
-	/**                          
+	/**
 	 * @protected
 	 */
 	_init: function() {
@@ -19696,7 +19696,7 @@ ilib.NameFmt.prototype = {
 		}
 
 		this.template = new ilib.String(this.info.format);
-		
+
 		if (this.locale.language === "es" && (this.style !== "long" && this.style !== "full")) {
 			this.useFirstFamilyName = true;	// in spanish, they have 2 family names, the maternal and paternal
 		}
@@ -19710,9 +19710,9 @@ ilib.NameFmt.prototype = {
 	 */
 	_adjoinAuxillaries: function (parts, namePrefix) {
 		var start, i, prefixArray, prefix, prefixLower;
-		
+
 		//console.info("_adjoinAuxillaries: finding and adjoining aux words in " + parts.join(' '));
-		
+
 		if ( this.info.auxillaries && (parts.length > 2 || namePrefix) ) {
 			for ( start = 0; start < parts.length-1; start++ ) {
 				for ( i = parts.length; i > start; i-- ) {
@@ -19720,9 +19720,9 @@ ilib.NameFmt.prototype = {
 					prefix = prefixArray.join(' ');
 					prefixLower = prefix.toLowerCase();
 					prefixLower = prefixLower.replace(/[,\.]/g, '');  // ignore commas and periods
-					
+
 					//console.info("_adjoinAuxillaries: checking aux prefix: '" + prefixLower + "' which is " + start + " to " + i);
-					
+
 					if ( prefixLower in this.info.auxillaries ) {
 						//console.info("Found! Old parts list is " + JSON.stringify(parts));
 						parts.splice(start, i+1-start, prefixArray.concat(parts[i]));
@@ -19732,7 +19732,7 @@ ilib.NameFmt.prototype = {
 				}
 			}
 		}
-		
+
 		//console.info("_adjoinAuxillaries: done. Result is " + JSON.stringify(parts));
 
 		return parts;
@@ -19745,7 +19745,7 @@ ilib.NameFmt.prototype = {
 	getLocale: function () {
 		return this.locale;
 	},
-	
+
 	/**
 	 * Return the style of names returned by this formatter
 	 * @return {string} the style of names returned by this formatter
@@ -19753,7 +19753,7 @@ ilib.NameFmt.prototype = {
 	getStyle: function () {
 		return this.style;
 	},
-	
+
 	/**
 	 * Return the list of components used to format names in this formatter
 	 * @return {string} the list of components
@@ -19761,40 +19761,40 @@ ilib.NameFmt.prototype = {
 	getComponents: function () {
 		return this.components;
 	},
-	
+
 	/**
 	 * Format the name for display in the current locale with the options set up
 	 * in the constructor of this formatter instance.<p>
-	 * 
+	 *
 	 * If the name does not contain all the parts required for the style, those parts
 	 * will be left blank.<p>
-	 * 
+	 *
 	 * There are two basic styles of formatting: European, and Asian. If this formatter object
 	 * is set for European style, but an Asian name is passed to the format method, then this
 	 * method will format the Asian name with a generic Asian template. Similarly, if the
 	 * formatter is set for an Asian style, and a European name is passed to the format method,
 	 * the formatter will use a generic European template.<p>
-	 * 
+	 *
 	 * This means it is always safe to format any name with a formatter for any locale. You should
 	 * always get something at least reasonable as output.<p>
-	 * 
+	 *
 	 * @param {ilib.Name} name the name to format
 	 * @return {string|undefined} the name formatted according to the style of this formatter instance
 	 */
 	format: function(name) {
 		var formatted, temp, modified, isAsianName;
 		var currentLanguage = this.locale.getLanguage();
-		 
+
 		if (!name || typeof(name) !== 'object') {
 			return undefined;
 		}
-		
+
 		if ((typeof(name.isAsianName) === 'boolean' && !name.isAsianName) ||
 				ilib.Name._isEuroName([name.givenName, name.middleName, name.familyName].join(""), currentLanguage)) {
 			isAsianName = false;	// this is a euro name, even if the locale is asian
 			modified = name.clone();
-			
-			// handle the case where there is no space if there is punctuation in the suffix like ", Phd". 
+
+			// handle the case where there is no space if there is punctuation in the suffix like ", Phd".
 			// Otherwise, put a space in to transform "PhD" to " PhD"
 			/*
 			console.log("suffix is " + modified.suffix);
@@ -19804,33 +19804,33 @@ ilib.NameFmt.prototype = {
 			}
 			*/
 			if (modified.suffix && ilib.CType.isPunct(modified.suffix.charAt(0)) === false) {
-				modified.suffix = ' ' + modified.suffix; 
+				modified.suffix = ' ' + modified.suffix;
 			}
-			
+
 			if (this.useFirstFamilyName && name.familyName) {
 				var familyNameParts = modified.familyName.trim().split(' ');
 				if (familyNameParts.length > 1) {
 					familyNameParts = this._adjoinAuxillaries(familyNameParts, name.prefix);
 				}	//in spain and mexico, we parse names differently than in the rest of the world
-	
+
 				modified.familyName = familyNameParts[0];
 			}
-		
+
 			modified._joinNameArrays();
 		} else {
 			isAsianName = true;
 			modified = name;
 			if (modified.suffix && currentLanguage === "ko" && this.info.honorifics.indexOf(name.suffix) == -1) {
-				modified.suffix = ' ' + modified.suffix; 
+				modified.suffix = ' ' + modified.suffix;
 			}
 		}
-		
+
 		if (!this.template || isAsianName !== this.isAsianLocale) {
 			temp = isAsianName ? this.defaultAsianTemplate : this.defaultEuroTemplate;
 		} else {
 			temp = this.template;
 		}
-		
+
 		var parts = {
 			prefix: this.comps["p"] && modified.prefix || "",
 			givenName: this.comps["g"] && modified.givenName || "",
@@ -19838,7 +19838,7 @@ ilib.NameFmt.prototype = {
 			familyName: this.comps["f"] && modified.familyName || "",
 			suffix: this.comps["s"] && modified.suffix || ""
 		};
-		
+
 		formatted = temp.format(parts);
 		return formatted.replace(/\s+/g, ' ').trim();
 	}
@@ -19846,7 +19846,7 @@ ilib.NameFmt.prototype = {
 
 /**
  * addressprs.js - Represent a mailing address
- * 
+ *
  * Copyright © 2013-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19865,10 +19865,10 @@ ilib.NameFmt.prototype = {
 
 /*globals console RegExp */
 
-/* !depends 
-ilibglobal.js 
-locale.js 
-ctype.isideo.js 
+/* !depends
+ilibglobal.js
+locale.js
+ctype.isideo.js
 ctype.isascii.js
 ctype.isdigit.js
 */
@@ -19878,65 +19878,65 @@ ctype.isdigit.js
 /**
  * @class
  * Create a new Address instance and parse a physical address.<p>
- * 
- * This function parses a physical address written in a free-form string. 
- * It returns an object with a number of properties from the list below 
+ *
+ * This function parses a physical address written in a free-form string.
+ * It returns an object with a number of properties from the list below
  * that it may have extracted from that address.<p>
- * 
+ *
  * The following is a list of properties that the algorithm will return:<p>
- * 
+ *
  * <ul>
  * <li><i>streetAddress</i>: The street address, including house numbers and all.
- * <li><i>locality</i>: The locality of this address (usually a city or town). 
+ * <li><i>locality</i>: The locality of this address (usually a city or town).
  * <li><i>region</i>: The region where the locality is located. In the US, this
  * corresponds to states. In other countries, this may be provinces,
  * cantons, prefectures, etc. In some smaller countries, there are no
  * such divisions.
- * <li><i>postalCode</i>: Country-specific code for expediting mail. In the US, 
+ * <li><i>postalCode</i>: Country-specific code for expediting mail. In the US,
  * this is the zip code.
  * <li><i>country</i>: The country of the address.
  * <li><i>countryCode</i>: The ISO 3166 2-letter region code for the destination
  * country in this address.
- * </ul> 
- * 
- * The above properties will not necessarily appear in the instance. For 
- * any individual property, if the free-form address does not contain 
+ * </ul>
+ *
+ * The above properties will not necessarily appear in the instance. For
+ * any individual property, if the free-form address does not contain
  * that property or it cannot be parsed out, the it is left out.<p>
- * 
+ *
  * The options parameter may contain any of the following properties:
- * 
+ *
  * <ul>
- * <li><i>locale</i> - locale or localeSpec to use to parse the address. If not 
+ * <li><i>locale</i> - locale or localeSpec to use to parse the address. If not
  * specified, this function will use the current ilib locale
- * 
+ *
  * <li><i>onLoad</i> - a callback function to call when the address info for the
- * locale is fully loaded and the address has been parsed. When the onLoad 
- * option is given, the address object 
+ * locale is fully loaded and the address has been parsed. When the onLoad
+ * option is given, the address object
  * will attempt to load any missing locale data using the ilib loader callback.
- * When the constructor is done (even if the data is already preassembled), the 
+ * When the constructor is done (even if the data is already preassembled), the
  * onLoad function is called with the current instance as a parameter, so this
- * callback can be used with preassembled or dynamic loading or a mix of the two. 
- * 
- * <li><i>sync</i> - tell whether to load any missing locale data synchronously or 
+ * callback can be used with preassembled or dynamic loading or a mix of the two.
+ *
+ * <li><i>sync</i> - tell whether to load any missing locale data synchronously or
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
- * not be usable for a while. 
+ * not be usable for a while.
  *
- * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ * <li><i>loadParams</i> - an object containing parameters to pass to the
  * loader callback function when locale data is missing. The parameters are not
- * interpretted or modified in any way. They are simply passed along. The object 
+ * interpretted or modified in any way. They are simply passed along. The object
  * may contain any property/value pairs as long as the calling code is in
  * agreement with the loader callback function as to what those parameters mean.
  * </ul>
- * 
+ *
  * When an address cannot be parsed properly, the entire address will be placed
  * into the streetAddress property.<p>
- * 
+ *
  * When the freeformAddress is another ilib.Address, this will act like a copy
  * constructor.<p>
- * 
+ *
  * Depends directive: !depends addressprs.js
- * 
+ *
  * @constructor
  * @param {string|ilib.Address} freeformAddress free-form address to parse, or a
  * javascript object containing the fields
@@ -19951,16 +19951,16 @@ ilib.Address = function (freeformAddress, options) {
 
 	this.sync = true;
 	this.loadParams = {};
-	
+
 	if (options) {
 		if (options.locale) {
 			this.locale = (typeof(options.locale) === 'string') ? new ilib.Locale(options.locale) : options.locale;
 		}
-		
+
 		if (typeof(options.sync) !== 'undefined') {
 			this.sync = (options.sync == true);
 		}
-		
+
 		if (options.loadParams) {
 			this.loadParams = options.loadParams;
 		}
@@ -19972,32 +19972,32 @@ ilib.Address = function (freeformAddress, options) {
 		/**
 		 * The street address, including house numbers and all.
 		 * @expose
-		 * @type {string|undefined} 
+		 * @type {string|undefined}
 		 */
 		this.streetAddress = freeformAddress.streetAddress;
 		/**
 		 * The locality of this address (usually a city or town).
 		 * @expose
-		 * @type {string|undefined} 
+		 * @type {string|undefined}
 		 */
 		this.locality = freeformAddress.locality;
 		/**
 		 * The region (province, canton, prefecture, state, etc.) where the address is located.
 		 * @expose
-		 * @type {string|undefined} 
+		 * @type {string|undefined}
 		 */
 		this.region = freeformAddress.region;
 		/**
 		 * Country-specific code for expediting mail. In the US, this is the zip code.
 		 * @expose
-		 * @type {string|undefined} 
+		 * @type {string|undefined}
 		 */
 		this.postalCode = freeformAddress.postalCode;
 		/**
 		 * Optional city-specific code for a particular post office, used to expidite
 		 * delivery.
 		 * @expose
-		 * @type {string|undefined} 
+		 * @type {string|undefined}
 		 */
 		this.postOffice = freeformAddress.postOffice;
 		/**
@@ -20010,8 +20010,8 @@ ilib.Address = function (freeformAddress, options) {
 			/**
 			 * The 2 or 3 letter ISO 3166 region code for the destination country in this address.
 			 * @expose
-			 * @type {string} 
-			 * 
+			 * @type {string}
+			 *
 			 */
 			this.countryCode = freeformAddress.countryCode;
 		}
@@ -20029,11 +20029,11 @@ ilib.Address = function (freeformAddress, options) {
 	address = address.replace(/[\s\n]+$/, "");
 	address = address.replace(/^[\s\n]+/, "");
 	//console.log("\n\n-------------\nAddress is '" + address + "'");
-	
+
 	this.lines = address.split(/[,，\n]/g);
 	this.removeEmptyLines(this.lines);
-	
-	ilib.Address.shared = ilib.Address.shared || {}; 
+
+	ilib.Address.shared = ilib.Address.shared || {};
 	if (typeof(ilib.Address.ctry) === 'undefined') {
 		ilib.Address.ctry = {}; // make sure not to conflict with the address info
 	}
@@ -20042,10 +20042,10 @@ ilib.Address = function (freeformAddress, options) {
 			ilib.CType.isDigit._init(this.sync, this.loadParams, /** @type {function(*)|undefined} */ ilib.bind(this, function() {
 				if (typeof(ilib.data.nativecountries) === 'undefined') {
 					ilib.loadData({
-						name: "nativecountries.json", // countries in their own language 
-						locale: "-", // only need to load the root file 
-						sync: this.sync, 
-						loadParams: this.loadParams, 
+						name: "nativecountries.json", // countries in their own language
+						locale: "-", // only need to load the root file
+						sync: this.sync,
+						loadParams: this.loadParams,
 						callback: /** @type function(Object=):undefined */ ilib.bind(this, /** @type function() */ function(nativecountries) {
 							ilib.data.nativecountries = nativecountries;
 							this._loadCountries(options && options.onLoad);
@@ -20069,8 +20069,8 @@ ilib.Address.prototype = {
 			ilib.loadData({
 				name: "countries.json", // countries in English
 				locale: "-", // only need to load the root file
-				sync: this.sync, 
-				loadParams: this.loadParams, 
+				sync: this.sync,
+				loadParams: this.loadParams,
 				callback: /** @type function(Object=):undefined */ ilib.bind(this, /** @type function() */ function(countries) {
 					ilib.data.countries = countries;
 					this._loadCtrynames(onLoad);
@@ -20086,24 +20086,24 @@ ilib.Address.prototype = {
 	 */
 	_loadCtrynames: function(onLoad) {
 		ilib.loadData({
-			name: "ctrynames.json", 
-			object: ilib.Address.ctry, 
-			locale: this.locale, 
-			sync: this.sync, 
-			loadParams: this.loadParams, 
+			name: "ctrynames.json",
+			object: ilib.Address.ctry,
+			locale: this.locale,
+			sync: this.sync,
+			loadParams: this.loadParams,
 			callback: /** @type function(Object=):undefined */ ilib.bind(this, /** @type function() */ function(ctrynames) {
 				this._determineDest(ctrynames, onLoad);
 			})
 		});
 	},
-	
+
 	/**
 	 * @private
 	 * @param {Object?} ctrynames
 	 */
 	_findDest: function (ctrynames) {
 		var match;
-		
+
 		for (var countryName in ctrynames) {
 			if (countryName && countryName !== "generated") {
 				// find the longest match in the current table
@@ -20121,7 +20121,7 @@ ilib.Address.prototype = {
 		}
 		return match;
 	},
-	
+
 	/**
 	 * @private
 	 * @param {Object?} localizedCountries
@@ -20129,10 +20129,10 @@ ilib.Address.prototype = {
 	 */
 	_determineDest: function (localizedCountries, callback) {
 		var match;
-		
+
 		/*
 		 * First, find the name of the destination country, as that determines how to parse
-		 * the rest of the address. For any address, there are three possible ways 
+		 * the rest of the address. For any address, there are three possible ways
 		 * that the name of the country could be written:
 		 * 1. In the current language
 		 * 2. In its own native language
@@ -20145,10 +20145,10 @@ ilib.Address.prototype = {
 		}
 		tables.push(ilib.data.nativecountries);
 		tables.push(ilib.data.countries);
-		
+
 		for (var i = 0; i < tables.length; i++) {
 			match = this._findDest(tables[i]);
-			
+
 			if (match) {
 				this.lines[match.line] = this.lines[match.line].substring(0, match.start) + this.lines[match.line].substring(match.start + match.text.length);
 
@@ -20156,7 +20156,7 @@ ilib.Address.prototype = {
 				return;
 			}
 		}
-		
+
 		// no country, so try parsing it as if we were in the same country
 		this.country = undefined;
 		this.countryCode = this.locale.getRegion();
@@ -20169,26 +20169,26 @@ ilib.Address.prototype = {
 	 */
 	_init: function(callback) {
 		ilib.loadData({
-			object: ilib.Address, 
-			locale: new ilib.Locale(this.countryCode), 
-			name: "address.json", 
-			sync: this.sync, 
+			object: ilib.Address,
+			locale: new ilib.Locale(this.countryCode),
+			name: "address.json",
+			sync: this.sync,
 			loadParams: this.loadParams,
 			callback: /** @type function(Object=):undefined */ ilib.bind(this, function(info) {
 				if (!info || ilib.isEmpty(info)) {
 					// load the "unknown" locale instead
 					ilib.loadData({
-						object: ilib.Address, 
-						locale: new ilib.Locale("XX"), 
-						name: "address.json", 
-						sync: this.sync, 
+						object: ilib.Address,
+						locale: new ilib.Locale("XX"),
+						name: "address.json",
+						sync: this.sync,
 						loadParams: this.loadParams,
 						callback: /** @type function(Object=):undefined */ ilib.bind(this, function(info) {
 							this.info = info;
 							this._parseAddress();
 							if (typeof(callback) === 'function') {
 								callback(this);
-							}	
+							}
 						})
 					});
 				} else {
@@ -20207,8 +20207,8 @@ ilib.Address.prototype = {
 	 */
 	_parseAddress: function() {
 		// clean it up first
-		var i, 
-			asianChars = 0, 
+		var i,
+			asianChars = 0,
 			latinChars = 0,
 			startAt,
 			infoFields,
@@ -20217,8 +20217,8 @@ ilib.Address.prototype = {
 			matchFunction,
 			match,
 			fieldNumber;
-		
-		// for locales that support both latin and asian character addresses, 
+
+		// for locales that support both latin and asian character addresses,
 		// decide if we are parsing an asian or latin script address
 		if (this.info && this.info.multiformat) {
 			for (var j = 0; j < this.lines.length; j++) {
@@ -20233,7 +20233,7 @@ ilib.Address.prototype = {
 					}
 				}
 			}
-			
+
 			this.format = (asianChars >= latinChars) ? "asian" : "latin";
 			startAt = this.info.startAt[this.format];
 			infoFields = this.info.fields[this.format];
@@ -20243,9 +20243,9 @@ ilib.Address.prototype = {
 			infoFields = this.info.fields;
 		}
 		this.compare = (startAt === "end") ? this.endsWith : this.startsWith;
-		
+
 		//console.log("this.lines is: " + JSON.stringify(this.lines));
-		
+
 		for (i = 0; i < infoFields.length && this.lines.length > 0; i++) {
 			/** @type {{name:string, line:string, pattern:(string|Array.<string>), matchGroup:number}} */
 			field = infoFields[i];
@@ -20259,7 +20259,7 @@ ilib.Address.prototype = {
 					pattern = field.pattern;
 					matchFunction = this.matchPattern;
 				}
-					
+
 				switch (field.line) {
 				case 'startAtFirst':
 					for (fieldNumber = 0; fieldNumber < this.lines.length; fieldNumber++) {
@@ -20299,7 +20299,7 @@ ilib.Address.prototype = {
 				//console.log("typeof(this[field.name]) is " + typeof(this[field.name]) + " and value is " + JSON.stringify(this[field.name]));
 			}
 		}
-			
+
 		// all the left overs go in the street address field
 		this.removeEmptyLines(this.lines);
 		if (this.lines.length > 0) {
@@ -20308,18 +20308,18 @@ ilib.Address.prototype = {
 			var joinString = (this.info.joinString && this.info.joinString[this.format]) || ((this.format && this.format === "asian") ? "" : ", ");
 			this.streetAddress = this.lines.join(joinString).trim();
 		}
-		
+
 		this.lines = undefined;
 		//console.log("final result is " + JSON.stringify(this));
 	},
-	
+
 	/**
 	 * @protected
 	 * Find the named country either at the end or the beginning of the address.
 	 */
 	_findCountry: function(name) {
 		var start = -1, match, line = 0;
-		
+
 		if (this.lines.length > 0) {
 			start = this.startsWith(this.lines[line], name);
 			if (start === -1) {
@@ -20334,10 +20334,10 @@ ilib.Address.prototype = {
 				};
 			}
 		}
-		
+
 		return match;
 	},
-	
+
 	endsWith: function (subject, query) {
 		var start = subject.length-query.length,
 			i,
@@ -20352,14 +20352,14 @@ ilib.Address.prototype = {
 		if (start > 0) {
 			pat = /\s/;
 			if (!pat.test(subject.charAt(start-1))) {
-				// make sure if we are not at the beginning of the string, that the match is 
+				// make sure if we are not at the beginning of the string, that the match is
 				// not the end of some other word
 				return -1;
 			}
 		}
 		return start;
 	},
-	
+
 	startsWith: function (subject, query) {
 		var i;
 		// //console.log("startsWith: checking " + query + " against " + subject);
@@ -20371,10 +20371,10 @@ ilib.Address.prototype = {
 		}
 		return 0;
 	},
-	
+
 	removeEmptyLines: function (arr) {
 		var i = 0;
-		
+
 		while (i < arr.length) {
 			if (arr[i]) {
 				arr[i] = arr[i].trim();
@@ -20388,15 +20388,15 @@ ilib.Address.prototype = {
 			}
 		}
 	},
-	
+
 	matchRegExp: function(address, line, expression, matchGroup, startAt) {
 		var lastMatch,
 			match,
 			ret = {},
 			last;
-		
+
 		//console.log("searching for regexp " + expression.source + " in line " + line);
-		
+
 		match = expression.exec(line);
 		if (startAt === 'end') {
 			while (match !== null && match.length > 0) {
@@ -20406,7 +20406,7 @@ ilib.Address.prototype = {
 			}
 			match = lastMatch;
 		}
-		
+
 		if (match && match !== null) {
 			//console.log("found matches " + JSON.stringify(match));
 			matchGroup = matchGroup || 0;
@@ -20414,7 +20414,7 @@ ilib.Address.prototype = {
 				ret.match = match[matchGroup].trim();
 				ret.match = ret.match.replace(/^\-|\-+$/, '');
 				ret.match = ret.match.replace(/\s+$/, '');
-				last = (startAt === 'end') ? line.lastIndexOf(match[matchGroup]) : line.indexOf(match[matchGroup]); 
+				last = (startAt === 'end') ? line.lastIndexOf(match[matchGroup]) : line.indexOf(match[matchGroup]);
 				//console.log("last is " + last);
 				ret.line = line.slice(0,last);
 				if (address.format !== "asian") {
@@ -20428,21 +20428,21 @@ ilib.Address.prototype = {
 		//} else {
 			//console.log("no match");
 		}
-		
+
 		return undefined;
 	},
-	
+
 	matchPattern: function(address, line, pattern, matchGroup) {
 		var start,
 			j,
 			ret = {};
-		
+
 		//console.log("searching in line " + line);
-		
+
 		// search an array of possible fixed strings
 		//console.log("Using fixed set of strings.");
 		for (j = 0; j < pattern.length; j++) {
-			start = address.compare(line, pattern[j]); 
+			start = address.compare(line, pattern[j]);
 			if (start !== -1) {
                             ret.match = line.substring(start, start+pattern[j].length);
                             if (start !== 0) {
@@ -20454,14 +20454,14 @@ ilib.Address.prototype = {
                             return ret;
 			}
 		}
-		
+
 		return undefined;
 	}
 };
 
 /*
  * addressfmt.js - Format an address
- * 
+ *
  * Copyright © 2013-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20478,8 +20478,8 @@ ilib.Address.prototype = {
  * limitations under the License.
  */
 
-/* !depends 
-ilibglobal.js 
+/* !depends
+ilibglobal.js
 locale.js
 addressprs.js
 */
@@ -20494,32 +20494,32 @@ addressprs.js
  *
  * <ul>
  * <li><i>locale</i> - the locale to use to format this address. If not specified, it uses the default locale
- * 
- * <li><i>style</i> - the style of this address. The default style for each country usually includes all valid 
+ *
+ * <li><i>style</i> - the style of this address. The default style for each country usually includes all valid
  * fields for that country.
- * 
+ *
  * <li><i>onLoad</i> - a callback function to call when the address info for the
- * locale is fully loaded and the address has been parsed. When the onLoad 
- * option is given, the address formatter object 
+ * locale is fully loaded and the address has been parsed. When the onLoad
+ * option is given, the address formatter object
  * will attempt to load any missing locale data using the ilib loader callback.
- * When the constructor is done (even if the data is already preassembled), the 
+ * When the constructor is done (even if the data is already preassembled), the
  * onLoad function is called with the current instance as a parameter, so this
- * callback can be used with preassembled or dynamic loading or a mix of the two. 
- * 
- * <li><i>sync</i> - tell whether to load any missing locale data synchronously or 
+ * callback can be used with preassembled or dynamic loading or a mix of the two.
+ *
+ * <li><i>sync</i> - tell whether to load any missing locale data synchronously or
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
- * not be usable for a while. 
+ * not be usable for a while.
  *
- * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ * <li><i>loadParams</i> - an object containing parameters to pass to the
  * loader callback function when locale data is missing. The parameters are not
- * interpretted or modified in any way. They are simply passed along. The object 
+ * interpretted or modified in any way. They are simply passed along. The object
  * may contain any property/value pairs as long as the calling code is in
  * agreement with the loader callback function as to what those parameters mean.
  * </ul>
- * 
+ *
  * Depends directive: !depends addressfmt.js
- * 
+ *
  * @constructor
  * @param {Object} options options that configure how this formatter should work
  * Returns a formatter instance that can format multiple addresses.
@@ -20529,41 +20529,41 @@ ilib.AddressFmt = function(options) {
 	this.styleName = 'default';
 	this.loadParams = {};
 	this.locale = new ilib.Locale();
-	
+
 	if (options) {
 		if (options.locale) {
 			this.locale = (typeof(options.locale) === 'string') ? new ilib.Locale(options.locale) : options.locale;
 		}
-		
+
 		if (typeof(options.sync) !== 'undefined') {
 			this.sync = (options.sync == true);
 		}
-		
+
 		if (options.style) {
 			this.styleName = options.style;
 		}
-		
+
 		if (options.loadParams) {
 			this.loadParams = options.loadParams;
 		}
 	}
-	
+
 	// console.log("Creating formatter for region: " + this.locale.region);
 	ilib.loadData({
 		name: "address.json",
-		object: ilib.Address, 
+		object: ilib.Address,
 		locale: this.locale,
-		sync: this.sync, 
-		loadParams: this.loadParams, 
+		sync: this.sync,
+		loadParams: this.loadParams,
 		callback: /** @type function(Object?):undefined */ ilib.bind(this, function(info) {
 			if (!info || ilib.isEmpty(info)) {
 				// load the "unknown" locale instead
 				ilib.loadData({
 					name: "address.json",
-					object: ilib.Address, 
+					object: ilib.Address,
 					locale: new ilib.Locale("XX"),
-					sync: this.sync, 
-					loadParams: this.loadParams, 
+					sync: this.sync,
+					loadParams: this.loadParams,
 					callback: /** @type function(Object?):undefined */ ilib.bind(this, function(info) {
 						this.info = info;
 						this._init();
@@ -20588,24 +20588,24 @@ ilib.AddressFmt = function(options) {
  */
 ilib.AddressFmt.prototype._init = function () {
 	this.style = this.info && this.info.formats && this.info.formats[this.styleName];
-	
+
 	// use generic default -- should not happen, but just in case...
 	this.style = this.style || (this.info && this.info.formats["default"]) || "{streetAddress}\n{locality} {region} {postalCode}\n{country}";
 };
 
 /**
- * This function formats a physical address (ilib.Address instance) for display. 
- * Whitespace is trimmed from the beginning and end of final resulting string, and 
- * multiple consecutive whitespace characters in the middle of the string are 
+ * This function formats a physical address (ilib.Address instance) for display.
+ * Whitespace is trimmed from the beginning and end of final resulting string, and
+ * multiple consecutive whitespace characters in the middle of the string are
  * compressed down to 1 space character.
- * 
+ *
  * If the Address instance is for a locale that is different than the locale for this
  * formatter, then a hybrid address is produced. The country name is located in the
  * correct spot for the current formatter's locale, but the rest of the fields are
  * formatted according to the default style of the locale of the actual address.
- * 
+ *
  * Example: a mailing address in China, but formatted for the US might produce the words
- * "People's Republic of China" in English at the last line of the address, and the 
+ * "People's Republic of China" in English at the last line of the address, and the
  * Chinese-style address will appear in the first line of the address. In the US, the
  * country is on the last line, but in China the country is usually on the first line.
  *
@@ -20614,32 +20614,32 @@ ilib.AddressFmt.prototype._init = function () {
  */
 ilib.AddressFmt.prototype.format = function (address) {
 	var ret, template, other, format;
-	
+
 	if (!address) {
 		return "";
 	}
 	// console.log("formatting address: " + JSON.stringify(address));
-	if (address.countryCode && 
-			address.countryCode !== this.locale.region && 
-			ilib.Locale._isRegionCode(this.locale.region) && 
+	if (address.countryCode &&
+			address.countryCode !== this.locale.region &&
+			ilib.Locale._isRegionCode(this.locale.region) &&
 			this.locale.region !== "XX") {
 		// we are formatting an address that is sent from this country to another country,
 		// so only the country should be in this locale, and the rest should be in the other
 		// locale
 		// console.log("formatting for another locale. Loading in its settings: " + address.countryCode);
 		other = new ilib.AddressFmt({
-			locale: new ilib.Locale(address.countryCode), 
+			locale: new ilib.Locale(address.countryCode),
 			style: this.styleName
 		});
 		return other.format(address);
 	}
-	
+
 	if (typeof(this.style) === 'object') {
 		format = this.style[address.format || "latin"];
 	} else {
 		format = this.style;
 	}
-	
+
 	// console.log("Using format: " + format);
 	// make sure we have a blank string for any missing parts so that
 	// those template parts get blanked out
@@ -20660,9 +20660,9 @@ ilib.AddressFmt.prototype.format = function (address) {
 };
 
 /*
- * glyphstring.js - ilib string subclass that allows you to access 
+ * glyphstring.js - ilib string subclass that allows you to access
  * whole glyphs at a time
- * 
+ *
  * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20684,10 +20684,10 @@ ilib.AddressFmt.prototype.format = function (address) {
 
 /**
  * @class
- * Create a new glyph string instance. This string inherits from 
+ * Create a new glyph string instance. This string inherits from
  * the ilib.String class, and adds methods that allow you to access
  * whole glyphs at a time. <p>
- * 
+ *
  * In Unicode, various accented characters can be created by using
  * a base character and one or more combining characters following
  * it. These appear on the screen to the user as a single glyph.
@@ -20695,69 +20695,69 @@ ilib.AddressFmt.prototype.format = function (address) {
  * combining diaresis character "¨" (U+0308) combine together to
  * form the "a with diaresis" glyph "ä", which looks like a single
  * character on the screen.<p>
- * 
+ *
  * The big problem with combining characters for web developers is
  * that many CSS engines do not ellipsize text between glyphs. They
- * only deal with single Unicode characters. So if a particular space 
+ * only deal with single Unicode characters. So if a particular space
  * only allows for 4 characters, the CSS engine will truncate a
  * string at 4 Unicode characters and then add the ellipsis (...)
  * character. What if the fourth Unicode character is the "a" and
  * the fifth one is the diaresis? Then a string like "xxxäxxx" that
- * is ellipsized at 4 characters will appear as "xxxa..." on the 
+ * is ellipsized at 4 characters will appear as "xxxa..." on the
  * screen instead of "xxxä...".<p>
- * 
+ *
  * In the Latin script as it is commonly used, it is not so common
  * to form accented characters using combining accents, so the above
  * example is mostly for illustrative purposes. It is not unheard of
- * however. The situation is much, much worse in scripts such as Thai and 
+ * however. The situation is much, much worse in scripts such as Thai and
  * Devanagari that normally make very heavy use of combining characters.
- * These scripts do so because Unicode does not include pre-composed 
- * versions of the accented characters like it does for Latin, so 
- * combining accents are the only way to create these accented and 
+ * These scripts do so because Unicode does not include pre-composed
+ * versions of the accented characters like it does for Latin, so
+ * combining accents are the only way to create these accented and
  * combined versions of the characters.<p>
- * 
- * The solution to thise problem is not to use the the CSS property 
+ *
+ * The solution to thise problem is not to use the the CSS property
  * "text-overflow: ellipsis" in your web site, ever. Instead, use
  * a glyph string to truncate text between glyphs instead of between
  * characters.<p>
- * 
- * Glyph strings are also useful for truncation, hyphenation, and 
+ *
+ * Glyph strings are also useful for truncation, hyphenation, and
  * line wrapping, as all of these should be done between glyphs instead
  * of between characters.<p>
- * 
+ *
  * The options parameter is optional, and may contain any combination
  * of the following properties:<p>
- * 
+ *
  * <ul>
  * <li><i>onLoad</i> - a callback function to call when the locale data are
  * fully loaded. When the onLoad option is given, this object will attempt to
  * load any missing locale data using the ilib loader callback.
- * When the constructor is done (even if the data is already preassembled), the 
+ * When the constructor is done (even if the data is already preassembled), the
  * onLoad function is called with the current instance as a parameter, so this
  * callback can be used with preassembled or dynamic loading or a mix of the two.
- * 
- * <li><i>sync</i> - tell whether to load any missing locale data synchronously or 
+ *
+ * <li><i>sync</i> - tell whether to load any missing locale data synchronously or
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
  * not be usable for a while.
- *  
- * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ *
+ * <li><i>loadParams</i> - an object containing parameters to pass to the
  * loader callback function when locale data is missing. The parameters are not
- * interpretted or modified in any way. They are simply passed along. The object 
+ * interpretted or modified in any way. They are simply passed along. The object
  * may contain any property/value pairs as long as the calling code is in
  * agreement with the loader callback function as to what those parameters mean.
  * </ul>
- * 
- * 
+ *
+ *
  * Depends directive: !depends glyphstring.js
- * 
+ *
  * @constructor
- * @param {string|ilib.String=} str initialize this instance with this string 
+ * @param {string|ilib.String=} str initialize this instance with this string
  * @param {Object=} options options governing the way this instance works
  */
 ilib.GlyphString = function (str, options) {
 	ilib.String.call(this, str);
-	
+
 	var sync = true;
 	var loadParams = {};
 	if (options) {
@@ -20768,16 +20768,16 @@ ilib.GlyphString = function (str, options) {
 			loadParams = options.loadParams;
 		}
 	}
-	
+
 	ilib.CType._load("ctype_m", sync, loadParams, function() {
 		if (typeof(ilib.data.norm) === 'undefined' || typeof(ilib.data.norm.ccc) === 'undefined') {
 			ilib.loadData({
-				object: ilib.GlyphString, 
-				locale: "-", 
+				object: ilib.GlyphString,
+				locale: "-",
 				name: "norm.json",
 				nonlocale: true,
-				sync: sync, 
-				loadParams: loadParams, 
+				sync: sync,
+				loadParams: loadParams,
 				callback: ilib.bind(this, function (norm) {
 					ilib.data.norm = norm;
 					if (options && typeof(options.onLoad) === 'function') {
@@ -20803,11 +20803,11 @@ ilib.GlyphString.prototype.constructor = ilib.GlyphString;
 
 /**
  * Return true if the given character is a leading Jamo (Choseong) character.
- * 
+ *
  * @private
  * @static
  * @param {number} n code point to check
- * @return {boolean} true if the character is a leading Jamo character, 
+ * @return {boolean} true if the character is a leading Jamo character,
  * false otherwise
  */
 ilib.GlyphString._isJamoL = function (n) {
@@ -20816,11 +20816,11 @@ ilib.GlyphString._isJamoL = function (n) {
 
 /**
  * Return true if the given character is a vowel Jamo (Jungseong) character.
- * 
+ *
  * @private
  * @static
  * @param {number} n code point to check
- * @return {boolean} true if the character is a vowel Jamo character, 
+ * @return {boolean} true if the character is a vowel Jamo character,
  * false otherwise
  */
 ilib.GlyphString._isJamoV = function (n) {
@@ -20829,11 +20829,11 @@ ilib.GlyphString._isJamoV = function (n) {
 
 /**
  * Return true if the given character is a trailing Jamo (Jongseong) character.
- * 
+ *
  * @private
  * @static
  * @param {number} n code point to check
- * @return {boolean} true if the character is a trailing Jamo character, 
+ * @return {boolean} true if the character is a trailing Jamo character,
  * false otherwise
  */
 ilib.GlyphString._isJamoT = function (n) {
@@ -20842,11 +20842,11 @@ ilib.GlyphString._isJamoT = function (n) {
 
 /**
  * Return true if the given character is a precomposed Hangul character.
- * 
+ *
  * @private
  * @static
  * @param {number} n code point to check
- * @return {boolean} true if the character is a precomposed Hangul character, 
+ * @return {boolean} true if the character is a precomposed Hangul character,
  * false otherwise
  */
 ilib.GlyphString._isHangul = function (n) {
@@ -20856,8 +20856,8 @@ ilib.GlyphString._isHangul = function (n) {
 /**
  * Algorithmically compose an L and a V combining Jamo characters into
  * a precomposed Korean syllabic Hangul character. Both should already
- * be in the proper ranges for L and V characters. 
- * 
+ * be in the proper ranges for L and V characters.
+ *
  * @private
  * @static
  * @param {number} lead the code point of the lead Jamo character to compose
@@ -20871,9 +20871,9 @@ ilib.GlyphString._composeJamoLV = function (lead, trail) {
 };
 
 /**
- * Algorithmically compose a Hangul LV and a combining Jamo T character 
- * into a precomposed Korean syllabic Hangul character. 
- * 
+ * Algorithmically compose a Hangul LV and a combining Jamo T character
+ * into a precomposed Korean syllabic Hangul character.
+ *
  * @private
  * @static
  * @param {number} lead the code point of the lead Hangul character to compose
@@ -20885,11 +20885,11 @@ ilib.GlyphString._composeJamoLVT = function (lead, trail) {
 };
 
 /**
- * Compose one character out of a leading character and a 
+ * Compose one character out of a leading character and a
  * trailing character. If the characters are Korean Jamo, they
  * will be composed algorithmically. If they are any other
  * characters, they will be looked up in the nfc tables.
- * 
+ *
  * @private
  * @static
  * @param {string} lead leading character to compose
@@ -20912,36 +20912,36 @@ ilib.GlyphString._compose = function (lead, trail) {
 
 /**
  * Return an iterator that will step through all of the characters
- * in the string one at a time, taking care to step through decomposed 
- * characters and through surrogate pairs in the UTF-16 encoding 
+ * in the string one at a time, taking care to step through decomposed
+ * characters and through surrogate pairs in the UTF-16 encoding
  * as single characters. <p>
- * 
+ *
  * The GlyphString class will return decomposed Unicode characters
  * as a single unit that a user might see on the screen as a single
- * glyph. If the 
- * next character in the iteration is a base character and it is 
- * followed by combining characters, the base and all its following 
+ * glyph. If the
+ * next character in the iteration is a base character and it is
+ * followed by combining characters, the base and all its following
  * combining characters are returned as a single unit.<p>
- * 
+ *
  * The standard Javascript String's charAt() method only
- * returns information about a particular 16-bit character in the 
+ * returns information about a particular 16-bit character in the
  * UTF-16 encoding scheme.
  * If the index is pointing to a low- or high-surrogate character,
- * it will return that surrogate character rather 
- * than the surrogate pair which represents a character 
+ * it will return that surrogate character rather
+ * than the surrogate pair which represents a character
  * in the supplementary planes.<p>
- * 
+ *
  * The iterator instance returned has two methods, hasNext() which
  * returns true if the iterator has more characters to iterate through,
  * and next() which returns the next character.<p>
- * 
+ *
  * @override
- * @return {Object} an iterator 
+ * @return {Object} an iterator
  * that iterates through all the characters in the string
  */
 ilib.GlyphString.prototype.charIterator = function() {
 	var it = ilib.String.prototype.charIterator.call(this);
-	
+
 	/**
 	 * @constructor
 	 */
@@ -20956,21 +20956,21 @@ ilib.GlyphString.prototype.charIterator = function() {
 				prevCcc = ilib.data.norm.ccc[ch],
 				nextCcc,
 				composed = ch;
-			
+
 			this.nextChar = undefined;
 			this.spacingCombining = false;
-			
-			if (ilib.data.norm.ccc && 
+
+			if (ilib.data.norm.ccc &&
 					(typeof(ilib.data.norm.ccc[ch]) === 'undefined' || ilib.data.norm.ccc[ch] === 0)) {
 				// found a starter... find all the non-starters until the next starter. Must include
-				// the next starter because under some odd circumstances, two starters sometimes recompose 
+				// the next starter because under some odd circumstances, two starters sometimes recompose
 				// together to form another character
 				var notdone = true;
 				while (it.hasNext() && notdone) {
 					this.nextChar = it.next();
 					nextCcc = ilib.data.norm.ccc[this.nextChar];
 					var codePoint = ilib.String.toCodePoint(this.nextChar, 0);
-					// Mn characters are Marks that are non-spacing. These do not take more room than an accent, so they should be 
+					// Mn characters are Marks that are non-spacing. These do not take more room than an accent, so they should be
 					// considered part of the on-screen glyph, even if they are non-combining. Mc are marks that are spacing
 					// and combining, which means they are part of the glyph, but they cause the glyph to use up more space than
 					// just the base character alone.
@@ -20985,13 +20985,13 @@ ilib.GlyphString.prototype.charIterator = function() {
 					} else {
 						// found the next starter. See if this can be composed with the previous starter
 						var testChar = ilib.GlyphString._compose(composed, this.nextChar);
-						if (prevCcc === 0 && typeof(testChar) !== 'undefined') { 
-							// not blocked and there is a mapping 
+						if (prevCcc === 0 && typeof(testChar) !== 'undefined') {
+							// not blocked and there is a mapping
 							composed = testChar;
 							ch += this.nextChar;
 							this.nextChar = undefined;
 						} else {
-							// finished iterating, leave this.nextChar for the next next() call 
+							// finished iterating, leave this.nextChar for the next next() call
 							notdone = false;
 						}
 					}
@@ -21013,7 +21013,7 @@ ilib.GlyphString.prototype.charIterator = function() {
 /**
  * Truncate the current string at the given number of whole glyphs and return
  * the resulting string.
- * 
+ *
  * @param {number} length the number of whole glyphs to keep in the string
  * @return {string} a string truncated to the requested number of glyphs
  */
@@ -21023,13 +21023,13 @@ ilib.GlyphString.prototype.truncate = function(length) {
 	for (var i = 0; i < length-1 && it.hasNext(); i++) {
 		tr += it.next();
 	}
-	
+
 	/*
 	 * handle the last character separately. If it contains spacing combining
 	 * accents, then we must assume that it uses up more horizontal space on
 	 * the screen than just the base character by itself, and therefore this
 	 * method will not truncate enough characters to fit in the given length.
-	 * In this case, we have to chop off not only the combining characters, 
+	 * In this case, we have to chop off not only the combining characters,
 	 * but also the base character as well because the base without the
 	 * combining accents is considered a different character.
 	 */
@@ -21046,8 +21046,8 @@ ilib.GlyphString.prototype.truncate = function(length) {
  * Truncate the current string at the given number of glyphs and add an ellipsis
  * to indicate that is more to the string. The ellipsis forms the last character
  * in the string, so the string is actually truncated at length-1 glyphs.
- * 
- * @param {number} length the number of whole glyphs to keep in the string 
+ *
+ * @param {number} length the number of whole glyphs to keep in the string
  * including the ellipsis
  * @return {string} a string truncated to the requested number of glyphs
  * with an ellipsis
@@ -21059,7 +21059,7 @@ ilib.GlyphString.prototype.ellipsize = function(length) {
 
 /*
  * normstring.js - ilib normalized string subclass definition
- * 
+ *
  * Copyright © 2013-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21080,14 +21080,14 @@ ilib.GlyphString.prototype.ellipsize = function(length) {
 
 /**
  * @class
- * Create a new normalized string instance. This string inherits from 
+ * Create a new normalized string instance. This string inherits from
  * the ilib.GlyphString class, and adds the normalize method. It can be
  * used anywhere that a normal Javascript string is used. <p>
- * 
+ *
  * Depends directive: !depends normstring.js
- * 
+ *
  * @constructor
- * @param {string|ilib.String=} str initialize this instance with this string 
+ * @param {string|ilib.String=} str initialize this instance with this string
  */
 ilib.NormString = function (str) {
 	ilib.GlyphString.call(this, str);
@@ -21102,21 +21102,21 @@ ilib.NormString.prototype.constructor = ilib.NormString;
  * is intended to be called in a dynamic-load version of ilib
  * to load the data need to normalize strings before any instances
  * of ilib.NormString are created.<p>
- * 
+ *
  * The options parameter may contain any of the following properties:
- * 
+ *
  * <ul>
  * <li><i>form</i> - {string} the normalization form to load
- * <li><i>script</i> - {string} load the normalization for this script. If the 
+ * <li><i>script</i> - {string} load the normalization for this script. If the
  * script is given as "all" then the normalization data for all scripts
  * is loaded at the same time
  * <li><i>sync</i> - {boolean} whether to load the files synchronously or not
  * <li><i>loadParams</i> - {Object} parameters to the loader function
- * <li><i>onLoad</i> - {function()} a function to call when the 
+ * <li><i>onLoad</i> - {function()} a function to call when the
  * files are done being loaded
  * </ul>
- * 
- * @param {Object} options an object containing properties that govern 
+ *
+ * @param {Object} options an object containing properties that govern
  * how to initialize the data
  */
 ilib.NormString.init = function(options) {
@@ -21149,7 +21149,7 @@ ilib.NormString.init = function(options) {
 	for (var f in forms) {
 		files.push(forms[f] + "/" + script + ".json");
 	}
-	
+
 	ilib._callLoadData(files, sync, loadParams, function(arr) {
 		ilib.data.norm = arr[0];
 		for (var i = 1; i < arr.length; i++) {
@@ -21157,7 +21157,7 @@ ilib.NormString.init = function(options) {
 				ilib.data.norm[forms[i-1]] = arr[i];
 			}
 		}
-		
+
 		if (onLoad) {
 			onLoad(arr);
 		}
@@ -21165,10 +21165,10 @@ ilib.NormString.init = function(options) {
 };
 
 /**
- * Algorithmically decompose a precomposed Korean syllabic Hangul 
- * character into its individual combining Jamo characters. The given 
+ * Algorithmically decompose a precomposed Korean syllabic Hangul
+ * character into its individual combining Jamo characters. The given
  * character must be in the range of Hangul characters U+AC00 to U+D7A3.
- * 
+ *
  * @private
  * @static
  * @param {number} cp code point of a Korean Hangul character to decompose
@@ -21176,7 +21176,7 @@ ilib.NormString.init = function(options) {
  */
 ilib.NormString._decomposeHangul = function (cp) {
 	var sindex = cp - 0xAC00;
-	var result = String.fromCharCode(0x1100 + sindex / 588) + 
+	var result = String.fromCharCode(0x1100 + sindex / 588) +
 			String.fromCharCode(0x1161 + (sindex % 588) / 28);
 	var t = sindex % 28;
 	if (t !== 0) {
@@ -21186,7 +21186,7 @@ ilib.NormString._decomposeHangul = function (cp) {
 };
 
 /**
- * Expand one character according to the given canonical and 
+ * Expand one character according to the given canonical and
  * compatibility mappings.
  *
  * @private
@@ -21198,7 +21198,7 @@ ilib.NormString._decomposeHangul = function (cp) {
  * @return {string} the mapped character
  */
 ilib.NormString._expand = function (ch, canon, compat) {
-	var i, 
+	var i,
 		expansion = "",
 		n = ch.charCodeAt(0);
 	if (ilib.GlyphString._isHangul(n)) {
@@ -21220,25 +21220,25 @@ ilib.NormString._expand = function (ch, canon, compat) {
 };
 
 /**
- * Perform the Unicode Normalization Algorithm upon the string and return 
+ * Perform the Unicode Normalization Algorithm upon the string and return
  * the resulting new string. The current string is not modified.
- * 
+ *
  * <h2>Forms</h2>
- * 
- * The forms of possible normalizations are defined by the <a 
+ *
+ * The forms of possible normalizations are defined by the <a
  * href="http://www.unicode.org/reports/tr15/">Unicode Standard
- * Annex (UAX) 15</a>. The form parameter is a string that may have one 
+ * Annex (UAX) 15</a>. The form parameter is a string that may have one
  * of the following values:
- * 
+ *
  * <ul>
  * <li>nfd - Canonical decomposition. This decomposes characters into
  * their exactly equivalent forms. For example, "&uuml;" would decompose
- * into a "u" followed by the combining diaeresis character. 
+ * into a "u" followed by the combining diaeresis character.
  * <li>nfc - Canonical decomposition followed by canonical composition.
  * This decomposes and then recomposes character into their shortest
  * exactly equivalent forms by recomposing as many combining characters
- * as possible. For example, "&uuml;" followed by a combining 
- * macron character would decompose into a "u" followed by the combining 
+ * as possible. For example, "&uuml;" followed by a combining
+ * macron character would decompose into a "u" followed by the combining
  * macron characters the combining diaeresis character, and then be recomposed into
  * the u with macron and diaeresis "&#x1E7B;" character. The reason that
  * the "nfc" form decomposes and then recomposes is that combining characters
@@ -21250,8 +21250,8 @@ ilib.NormString._expand = function (ch, canon, compat) {
  * into compatible forms that may not be exactly equivalent semantically,
  * as well as performing canonical decomposition as well.
  * For example, the "&oelig;" ligature character decomposes to the two
- * characters "oe" because they are compatible even though they are not 
- * exactly the same semantically. 
+ * characters "oe" because they are compatible even though they are not
+ * exactly the same semantically.
  * <li>nfkc - Compatibility decomposition followed by canonical composition.
  * This decomposes characters into compatible forms, then recomposes
  * characters using the canonical composition. That is, it breaks down
@@ -21262,127 +21262,127 @@ ilib.NormString._expand = function (ch, canon, compat) {
  * combining mark, and then recomposed to an "a" followed by the "e"
  * with acute accent.
  * </ul>
- * 
+ *
  * <h2>Operation</h2>
- * 
- * Two strings a and b can be said to be canonically equivalent if 
+ *
+ * Two strings a and b can be said to be canonically equivalent if
  * normalize(a) = normalize(b)
  * under the nfc normalization form. Two strings can be said to be compatible if
  * normalize(a) = normalize(b) under the nfkc normalization form.<p>
- * 
- * The canonical normalization is often used to see if strings are 
- * equivalent to each other, and thus is useful when implementing parsing 
+ *
+ * The canonical normalization is often used to see if strings are
+ * equivalent to each other, and thus is useful when implementing parsing
  * algorithms or exact matching algorithms. It can also be used to ensure
  * that any string output produces a predictable sequence of characters.<p>
- * 
- * Compatibility normalization 
- * does not always preserve the semantic meaning of all the characters, 
- * although this is sometimes the behaviour that you are after. It is useful, 
- * for example, when doing searches of user-input against text in documents 
+ *
+ * Compatibility normalization
+ * does not always preserve the semantic meaning of all the characters,
+ * although this is sometimes the behaviour that you are after. It is useful,
+ * for example, when doing searches of user-input against text in documents
  * where the matches are supposed to "fuzzy". In this case, both the query
- * string and the document string would be mapped to their compatibility 
+ * string and the document string would be mapped to their compatibility
  * normalized forms, and then compared.<p>
- * 
+ *
  * Compatibility normalization also does not guarantee round-trip conversion
- * to and from legacy character sets as the normalization is "lossy". It is 
+ * to and from legacy character sets as the normalization is "lossy". It is
  * akin to doing a lower- or upper-case conversion on text -- after casing,
- * you cannot tell what case each character is in the original string. It is 
- * good for matching and searching, but it rarely good for output because some 
+ * you cannot tell what case each character is in the original string. It is
+ * good for matching and searching, but it rarely good for output because some
  * distinctions or meanings in the original text have been lost.<p>
- * 
+ *
  * Note that W3C normalization for HTML also escapes and unescapes
  * HTML character entities such as "&amp;uuml;" for u with diaeresis. This
  * method does not do such escaping or unescaping. If normalization is required
- * for HTML strings with entities, unescaping should be performed on the string 
+ * for HTML strings with entities, unescaping should be performed on the string
  * prior to calling this method.<p>
- * 
+ *
  * <h2>Data</h2>
- * 
- * Normalization requires a fair amount of mapping data, much of which you may 
+ *
+ * Normalization requires a fair amount of mapping data, much of which you may
  * not need for the characters expected in your texts. It is possible to assemble
- * a copy of ilib that saves space by only including normalization data for 
+ * a copy of ilib that saves space by only including normalization data for
  * those scripts that you expect to encounter in your data.<p>
- * 
+ *
  * The normalization data is organized by normalization form and within there
  * by script. To include the normalization data for a particular script with
  * a particular normalization form, use the directive:
- * 
+ *
  * <pre><code>
  * !depends &lt;form&gt;/&lt;script&gt;.js
  * </code></pre>
- * 
+ *
  * Where &lt;form&gt is the normalization form ("nfd", "nfc", "nfkd", or "nfkc"), and
  * &lt;script&gt; is the ISO 15924 code for the script you would like to
  * support. Example: to load in the NFC data for Cyrillic, you would use:
- * 
+ *
  * <pre><code>
  * !depends nfc/Cyrl.js
  * </code></pre>
- * 
- * Note that because certain normalization forms include others in their algorithm, 
- * their data also depends on the data for the other forms. For example, if you 
- * include the "nfc" data for a script, you will automatically get the "nfd" data 
- * for that same script as well because the NFC algorithm does NFD normalization 
+ *
+ * Note that because certain normalization forms include others in their algorithm,
+ * their data also depends on the data for the other forms. For example, if you
+ * include the "nfc" data for a script, you will automatically get the "nfd" data
+ * for that same script as well because the NFC algorithm does NFD normalization
  * first. Here are the dependencies:<p>
- * 
+ *
  * <ul>
  * <li>NFD -> no dependencies
  * <li>NFC -> NFD
  * <li>NFKD -> NFD
  * <li>NFKC -> NFKD, NFD, NFC
  * </ul>
- * 
- * A special value for the script dependency is "all" which will cause the data for 
+ *
+ * A special value for the script dependency is "all" which will cause the data for
  * all scripts
  * to be loaded for that normalization form. This would be useful if you know that
  * you are going to normalize a lot of multilingual text or cannot predict which scripts
- * will appear in the input. Because the NFKC form depends on all others, you can 
+ * will appear in the input. Because the NFKC form depends on all others, you can
  * get all of the data for all forms automatically by depending on "nfkc/all.js".
  * Note that the normalization data for practically all script automatically depend
  * on data for the Common script (code "Zyyy") which contains all of the characters
  * that are commonly used in many different scripts. Examples of characters in the
- * Common script are the ASCII punctuation characters, or the ASCII Arabic 
+ * Common script are the ASCII punctuation characters, or the ASCII Arabic
  * numerals "0" through "9".<p>
- * 
- * By default, none of the data for normalization is automatically 
- * included in the preassembled iliball.js file. 
+ *
+ * By default, none of the data for normalization is automatically
+ * included in the preassembled iliball.js file.
  * If you would like to normalize strings, you must assemble
  * your own copy of ilib and explicitly include the normalization data
- * for those scripts as per the instructions above. This normalization method will 
- * produce output, even without the normalization data. However, the output will be 
- * simply the same thing as its input for all scripts 
- * except Korean Hangul and Jamo, which are decomposed and recomposed 
+ * for those scripts as per the instructions above. This normalization method will
+ * produce output, even without the normalization data. However, the output will be
+ * simply the same thing as its input for all scripts
+ * except Korean Hangul and Jamo, which are decomposed and recomposed
  * algorithmically and therefore do not rely on data.<p>
- * 
+ *
  * If characters are encountered for which there are no normalization data, they
  * will be passed through to the output string unmodified.
- * 
+ *
  * @param {string} form The normalization form requested
  * @return {ilib.String} a new instance of an ilib.String that has been normalized
  * according to the requested form. The current instance is not modified.
  */
 ilib.NormString.prototype.normalize = function (form) {
 	var i;
-	
+
 	if (typeof(form) !== 'string' || this.str.length === 0) {
 		return new ilib.String(this.str);
 	}
-	
+
 	var nfc = false,
 		nfkd = false;
-	
+
 	switch (form) {
 	default:
 		break;
-		
+
 	case "nfc":
 		nfc = true;
 		break;
-		
+
 	case "nfkd":
 		nfkd = true;
 		break;
-		
+
 	case "nfkc":
 		nfkd = true;
 		nfc = true;
@@ -21391,7 +21391,7 @@ ilib.NormString.prototype.normalize = function (form) {
 
 	// decompose
 	var decomp = "";
-	
+
 	if (nfkd) {
 		var ch, it = ilib.String.prototype.charIterator.call(this);
 		while (it.hasNext()) {
@@ -21406,16 +21406,16 @@ ilib.NormString.prototype.normalize = function (form) {
 		}
 	}
 
-	// now put the combining marks in a fixed order by 
+	// now put the combining marks in a fixed order by
 	// sorting on the combining class
 	function compareByCCC(left, right) {
-		return ilib.data.norm.ccc[left] - ilib.data.norm.ccc[right]; 
+		return ilib.data.norm.ccc[left] - ilib.data.norm.ccc[right];
 	}
-	
+
 	function ccc(c) {
 		return ilib.data.norm.ccc[c] || 0;
 	}
-		
+
 	var dstr = new ilib.String(decomp);
 	var it = dstr.charIterator();
 	var cpArray = [];
@@ -21424,18 +21424,18 @@ ilib.NormString.prototype.normalize = function (form) {
 	while (it.hasNext()) {
 		cpArray.push(it.next());
 	}
-	
+
 	i = 0;
 	while (i < cpArray.length) {
 		if (typeof(ilib.data.norm.ccc[cpArray[i]]) !== 'undefined' && ccc(cpArray[i]) !== 0) {
 			// found a non-starter... rearrange all the non-starters until the next starter
 			var end = i+1;
 			while (end < cpArray.length &&
-					typeof(ilib.data.norm.ccc[cpArray[end]]) !== 'undefined' && 
+					typeof(ilib.data.norm.ccc[cpArray[end]]) !== 'undefined' &&
 					ccc(cpArray[end]) !== 0) {
 				end++;
 			}
-			
+
 			// simple sort of the non-starter chars
 			if (end - i > 1) {
 				cpArray = cpArray.slice(0,i).concat(cpArray.slice(i, end).sort(compareByCCC), cpArray.slice(end));
@@ -21443,28 +21443,28 @@ ilib.NormString.prototype.normalize = function (form) {
 		}
 		i++;
 	}
-	
+
 	if (nfc) {
 		i = 0;
 		while (i < cpArray.length) {
 			if (typeof(ilib.data.norm.ccc[cpArray[i]]) === 'undefined' || ilib.data.norm.ccc[cpArray[i]] === 0) {
 				// found a starter... find all the non-starters until the next starter. Must include
-				// the next starter because under some odd circumstances, two starters sometimes recompose 
+				// the next starter because under some odd circumstances, two starters sometimes recompose
 				// together to form another character
 				var end = i+1;
 				var notdone = true;
 				while (end < cpArray.length && notdone) {
-					if (typeof(ilib.data.norm.ccc[cpArray[end]]) !== 'undefined' && 
+					if (typeof(ilib.data.norm.ccc[cpArray[end]]) !== 'undefined' &&
 						ilib.data.norm.ccc[cpArray[end]] !== 0) {
-						if (ccc(cpArray[end-1]) < ccc(cpArray[end])) { 
-							// not blocked 
+						if (ccc(cpArray[end-1]) < ccc(cpArray[end])) {
+							// not blocked
 							var testChar = ilib.GlyphString._compose(cpArray[i], cpArray[end]);
 							if (typeof(testChar) !== 'undefined') {
 								cpArray[i] = testChar;
-								
+
 								// delete the combining char
-								cpArray.splice(end,1);	
-								
+								cpArray.splice(end,1);
+
 								// restart the iteration, just in case there is more to recompose with the new char
 								end = i;
 							}
@@ -21473,17 +21473,17 @@ ilib.NormString.prototype.normalize = function (form) {
 					} else {
 						// found the next starter. See if this can be composed with the previous starter
 						var testChar = ilib.GlyphString._compose(cpArray[i], cpArray[end]);
-						if (ccc(cpArray[end-1]) === 0 && typeof(testChar) !== 'undefined') { 
-							// not blocked and there is a mapping 
+						if (ccc(cpArray[end-1]) === 0 && typeof(testChar) !== 'undefined') {
+							// not blocked and there is a mapping
 							cpArray[i] = testChar;
-							
+
 							// delete the combining char
 							cpArray.splice(end,1);
-							
+
 							// restart the iteration, just in case there is more to recompose with the new char
 							end = i+1;
 						} else {
-							// finished iterating 
+							// finished iterating
 							notdone = false;
 						}
 					}
@@ -21492,41 +21492,41 @@ ilib.NormString.prototype.normalize = function (form) {
 			i++;
 		}
 	}
-	
+
 	return new ilib.String(cpArray.length > 0 ? cpArray.join("") : "");
 };
-	
+
 /**
  * @override
  * Return an iterator that will step through all of the characters
- * in the string one at a time, taking care to step through decomposed 
- * characters and through surrogate pairs in UTF-16 encoding 
+ * in the string one at a time, taking care to step through decomposed
+ * characters and through surrogate pairs in UTF-16 encoding
  * properly. <p>
- * 
+ *
  * The NormString class will return decomposed Unicode characters
- * as a single unit that a user might see on the screen. If the 
- * next character in the iteration is a base character and it is 
- * followed by combining characters, the base and all its following 
+ * as a single unit that a user might see on the screen. If the
+ * next character in the iteration is a base character and it is
+ * followed by combining characters, the base and all its following
  * combining characters are returned as a single unit.<p>
- * 
+ *
  * The standard Javascript String's charAt() method only
- * returns information about a particular 16-bit character in the 
+ * returns information about a particular 16-bit character in the
  * UTF-16 encoding scheme.
  * If the index is pointing to a low- or high-surrogate character,
- * it will return that surrogate character rather 
- * than the surrogate pair which represents a character 
+ * it will return that surrogate character rather
+ * than the surrogate pair which represents a character
  * in the supplementary planes.<p>
- * 
+ *
  * The iterator instance returned has two methods, hasNext() which
  * returns true if the iterator has more characters to iterate through,
  * and next() which returns the next character.<p>
- * 
- * @return {Object} an iterator 
+ *
+ * @return {Object} an iterator
  * that iterates through all the characters in the string
  */
 ilib.NormString.prototype.charIterator = function() {
 	var it = ilib.String.prototype.charIterator.call(this);
-	
+
 	/**
 	 * @constructor
 	 */
@@ -21547,13 +21547,13 @@ ilib.NormString.prototype.charIterator = function() {
 				prevCcc = ccc(ch),
 				nextCcc,
 				composed = ch;
-			
+
 			this.nextChar = undefined;
-			
-			if (ilib.data.norm.ccc && 
+
+			if (ilib.data.norm.ccc &&
 					(typeof(ilib.data.norm.ccc[ch]) === 'undefined' || ccc(ch) === 0)) {
 				// found a starter... find all the non-starters until the next starter. Must include
-				// the next starter because under some odd circumstances, two starters sometimes recompose 
+				// the next starter because under some odd circumstances, two starters sometimes recompose
 				// together to form another character
 				var notdone = true;
 				while (it.hasNext() && notdone) {
@@ -21565,13 +21565,13 @@ ilib.NormString.prototype.charIterator = function() {
 					} else {
 						// found the next starter. See if this can be composed with the previous starter
 						var testChar = ilib.GlyphString._compose(composed, this.nextChar);
-						if (prevCcc === 0 && typeof(testChar) !== 'undefined') { 
-							// not blocked and there is a mapping 
+						if (prevCcc === 0 && typeof(testChar) !== 'undefined') {
+							// not blocked and there is a mapping
 							composed = testChar;
 							ch += this.nextChar;
 							this.nextChar = undefined;
 						} else {
-							// finished iterating, leave this.nextChar for the next next() call 
+							// finished iterating, leave this.nextChar for the next next() call
 							notdone = false;
 						}
 					}
@@ -21587,7 +21587,7 @@ ilib.NormString.prototype.charIterator = function() {
 
 /*
  * collate.js - Collation routines
- * 
+ *
  * Copyright © 2013-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21612,9 +21612,9 @@ ilib.NormString.prototype.charIterator = function() {
  * @class
  * Represents a buffered source of code points. The input string is first
  * normalized so that combining characters come out in a standardized order.
- * If the "ignorePunctuation" flag is turned on, then punctuation 
+ * If the "ignorePunctuation" flag is turned on, then punctuation
  * characters are skipped.
- * 
+ *
  * @constructor
  * @private
  * @param {ilib.NormString|string} str a string to get code points from
@@ -21632,8 +21632,8 @@ ilib.CodePointSource = function(str, ignorePunctuation) {
 /**
  * Return the first num code points in the source without advancing the
  * source pointer. If there are not enough code points left in the
- * string to satisfy the request, this method will return undefined. 
- * 
+ * string to satisfy the request, this method will return undefined.
+ *
  * @param {number} num the number of characters to peek ahead
  * @return {string|undefined} a string formed out of up to num code points from
  * the start of the string, or undefined if there are not enough character left
@@ -21678,10 +21678,10 @@ ilib.CodePointSource.prototype.consume = function(num) {
  * iterator takes a source of code points, converts them into
  * collation elements, and allows the caller to get single
  * elements at a time.
- * 
+ *
  * @constructor
  * @private
- * @param {ilib.CodePointSource} source source of code points to 
+ * @param {ilib.CodePointSource} source source of code points to
  * convert to collation elements
  * @param {Object} map mapping from sequences of code points to
  * collation elements
@@ -21699,7 +21699,7 @@ ilib.ElementIterator = function (source, map, keysize) {
  */
 ilib.ElementIterator.prototype._fillBuffer = function () {
 	var str = undefined;
-	
+
 	// peek ahead by up to 4 characters, which may combine
 	// into 1 or more collation elements
 	for (var i = 4; i > 0; i--) {
@@ -21710,7 +21710,7 @@ ilib.ElementIterator.prototype._fillBuffer = function () {
 			return;
 		}
 	}
-	
+
 	if (str) {
 		// no mappings for the first code point, so just use its
 		// Unicode code point as a proxy for its sort order. Shift
@@ -21738,12 +21738,12 @@ ilib.ElementIterator.prototype.hasNext = function () {
 };
 
 /**
- * Return the next collation element. If more than one collation 
- * element is generated from a sequence of code points 
+ * Return the next collation element. If more than one collation
+ * element is generated from a sequence of code points
  * (ie. an "expansion"), then this class will buffer the
- * other elements and return them on subsequent calls to 
+ * other elements and return them on subsequent calls to
  * this method.
- * 
+ *
  * @returns {number|undefined} the next collation element or
  * undefined for no more collation elements
  */
@@ -21759,132 +21759,132 @@ ilib.ElementIterator.prototype.next = function () {
 
 /**
  * @class
- * A class that implements a locale-sensitive comparator function 
+ * A class that implements a locale-sensitive comparator function
  * for use with sorting function. The comparator function
  * assumes that the strings it is comparing contain Unicode characters
  * encoded in UTF-16.<p>
- * 
- * Collations usually depend only on the language, because most collation orders 
+ *
+ * Collations usually depend only on the language, because most collation orders
  * are shared between locales that speak the same language. There are, however, a
  * number of instances where a locale collates differently than other locales
  * that share the same language. There are also a number of instances where a
  * locale collates differently based on the script used. This object can handle
  * these cases automatically if a full locale is specified in the options rather
  * than just a language code.<p>
- * 
+ *
  * <h2>Options</h2>
- * 
+ *
  * The options parameter can contain any of the following properties:
- * 
+ *
  * <ul>
- * <li><i>locale</i> - String|Locale. The locale which the comparator function 
+ * <li><i>locale</i> - String|Locale. The locale which the comparator function
  * will collate with. Default: the current iLib locale.
- * 
- * <li><i>sensitivity</i> - String. Sensitivity or strength of collator. This is one of 
- * "primary", "base", "secondary", "accent", "tertiary", "case", "quaternary", or 
+ *
+ * <li><i>sensitivity</i> - String. Sensitivity or strength of collator. This is one of
+ * "primary", "base", "secondary", "accent", "tertiary", "case", "quaternary", or
  * "variant". Default: "primary"
  *   <ol>
  *   <li>base or primary - Only the primary distinctions between characters are significant.
- *   Another way of saying that is that the collator will be case-, accent-, and 
+ *   Another way of saying that is that the collator will be case-, accent-, and
  *   variation-insensitive, and only distinguish between the base characters
  *   <li>case or secondary - Both the primary and secondary distinctions between characters
  *   are significant. That is, the collator will be accent- and variation-insensitive
  *   and will distinguish between base characters and character case.
  *   <li>accent or tertiary - The primary, secondary, and tertiary distinctions between
- *   characters are all significant. That is, the collator will be 
- *   variation-insensitive, but accent-, case-, and base-character-sensitive. 
+ *   characters are all significant. That is, the collator will be
+ *   variation-insensitive, but accent-, case-, and base-character-sensitive.
  *   <li>variant or quaternary - All distinctions between characters are significant. That is,
  *   the algorithm is base character-, case-, accent-, and variation-sensitive.
  *   </ol>
- *   
+ *
  * <li><i>upperFirst</i> - boolean. When collating case-sensitively in a script that
  * has the concept of case, put upper-case
  * characters first, otherwise lower-case will come first. Warning: some browsers do
- * not implement this feature or at least do not implement it properly, so if you are 
+ * not implement this feature or at least do not implement it properly, so if you are
  * using the native collator with this option, you may get different results in different
- * browsers. To guarantee the same results, set useNative to false to use the ilib 
- * collator implementation. This of course will be somewhat slower, but more 
+ * browsers. To guarantee the same results, set useNative to false to use the ilib
+ * collator implementation. This of course will be somewhat slower, but more
  * predictable. Default: true
- * 
+ *
  * <li><i>reverse</i> - boolean. Return the list sorted in reverse order. When the
- * upperFirst option is also set to true, upper-case characters would then come at 
+ * upperFirst option is also set to true, upper-case characters would then come at
  * the end of the list. Default: false.
- * 
+ *
  * <li><i>scriptOrder</i> - string. When collating strings in multiple scripts,
  * this property specifies what order those scripts should be sorted. The default
  * Unicode Collation Algorithm (UCA) already has a default order for scripts, but
- * this can be tailored via this property. The value of this option is a 
+ * this can be tailored via this property. The value of this option is a
  * space-separated list of ISO 15924 scripts codes. If a code is specified in this
  * property, its default data must be included using the JS assembly tool. If the
  * data is not included, the ordering for the script will be ignored. Default:
- * the default order defined by the UCA. 
- * 
+ * the default order defined by the UCA.
+ *
  * <li><i>style</i> - The value of the style parameter is dependent on the locale.
  * For some locales, there are different styles of collating strings depending
- * on what kind of strings are being collated or what the preference of the user 
+ * on what kind of strings are being collated or what the preference of the user
  * is. For example, in German, there is a phonebook order and a dictionary ordering
  * that sort the same array of strings slightly differently.
  * The static method {@link ilib.Collator#getAvailableStyles} will return a list of styles that ilib
- * currently knows about for any given locale. If the value of the style option is 
+ * currently knows about for any given locale. If the value of the style option is
  * not recognized for a locale, it will be ignored. Default style is "standard".<p>
- * 
+ *
  * <li><i>usage</i> - Whether this collator will be used for searching or sorting.
  * Valid values are simply the strings "sort" or "search". When used for sorting,
- * it is good idea if a collator produces a stable sort. That is, the order of the 
+ * it is good idea if a collator produces a stable sort. That is, the order of the
  * sorted array of strings should not depend on the order of the strings in the
- * input array. As such, when a collator is supposed to act case insensitively, 
+ * input array. As such, when a collator is supposed to act case insensitively,
  * it nonetheless still distinguishes between case after all other criteria
  * are satisfied so that strings that are distinguished only by case do not sort
- * randomly. For searching, we would like to match two strings that different only 
- * by case, so the collator must return equals in that situation instead of 
+ * randomly. For searching, we would like to match two strings that different only
+ * by case, so the collator must return equals in that situation instead of
  * further distinguishing by case. Default is "sort".
- * 
+ *
  * <li><i>numeric</i> - Treat the left and right strings as if they started with
  * numbers and sort them numerically rather than lexically.
- * 
+ *
  * <li><i>ignorePunctuation</i> - Skip punctuation characters when comparing the
  * strings.
- *  
- * <li>onLoad - a callback function to call when the collator object is fully 
+ *
+ * <li>onLoad - a callback function to call when the collator object is fully
  * loaded. When the onLoad option is given, the collator object will attempt to
  * load any missing locale data using the ilib loader callback.
- * When the constructor is done (even if the data is already preassembled), the 
+ * When the constructor is done (even if the data is already preassembled), the
  * onLoad function is called with the current instance as a parameter, so this
  * callback can be used with preassembled or dynamic loading or a mix of the two.
- * 
- * <li>sync - tell whether to load any missing locale data synchronously or 
+ *
+ * <li>sync - tell whether to load any missing locale data synchronously or
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
- * not be usable for a while. 
+ * not be usable for a while.
  *
- * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ * <li><i>loadParams</i> - an object containing parameters to pass to the
  * loader callback function when locale data is missing. The parameters are not
- * interpretted or modified in any way. They are simply passed along. The object 
+ * interpretted or modified in any way. They are simply passed along. The object
  * may contain any property/value pairs as long as the calling code is in
  * agreement with the loader callback function as to what those parameters mean.
- * 
+ *
  * <li><i>useNative</i> - when this option is true, use the native Intl object
  * provided by the Javascript engine, if it exists, to implement this class. If
- * it doesn't exist, or if this parameter is false, then this class uses a pure 
- * Javascript implementation, which is slower and uses a lot more memory, but 
+ * it doesn't exist, or if this parameter is false, then this class uses a pure
+ * Javascript implementation, which is slower and uses a lot more memory, but
  * works everywhere that ilib works. Default is "true".
  * </ul>
- * 
+ *
  * <h2>Operation</h2>
- * 
- * The Collator constructor returns a collator object tailored with the above 
- * options. The object contains an internal compare() method which compares two 
+ *
+ * The Collator constructor returns a collator object tailored with the above
+ * options. The object contains an internal compare() method which compares two
  * strings according to those options. This can be used directly to compare
  * two strings, but is not useful for passing to the javascript sort function
- * because then it will not have its collation data available. Instead, use the 
+ * because then it will not have its collation data available. Instead, use the
  * getComparator() method to retrieve a function that is bound to the collator
- * object. (You could also bind it yourself using ilib.bind()). The bound function 
- * can be used with the standard Javascript array sorting algorithm, or as a 
+ * object. (You could also bind it yourself using ilib.bind()). The bound function
+ * can be used with the standard Javascript array sorting algorithm, or as a
  * comparator with your own sorting algorithm.<p>
- * 
+ *
  * Example using the standard Javascript array sorting call with the bound
  * function:<p>
- * 
+ *
  * <code>
  * <pre>
  * var arr = ["ö", "oe", "ü", "o", "a", "ae", "u", "ß", "ä"];
@@ -21894,20 +21894,20 @@ ilib.ElementIterator.prototype.next = function () {
  * </pre>
  * </code>
  * <p>
- * 
+ *
  * Would give the output:<p>
- * 
+ *
  * <code>
  * <pre>
  * ["a", "ae", "ä", "o", "oe", "ö", "ß", "u", "ü"]
  * </pre>
  * </code>
- * 
- * When sorting an array of Javascript objects according to one of the 
- * string properties of the objects, wrap the collator's compare function 
+ *
+ * When sorting an array of Javascript objects according to one of the
+ * string properties of the objects, wrap the collator's compare function
  * in your own comparator function that knows the structure of the objects
  * being sorted:<p>
- * 
+ *
  * <code>
  * <pre>
  * var collator = ilib.Collator({locale: 'de-DE'});
@@ -21922,87 +21922,87 @@ ilib.ElementIterator.prototype.next = function () {
  * </pre>
  * </code>
  * <p>
- * 
+ *
  * <h2>Sort Keys</h2>
- * 
+ *
  * The collator class also has a method to retrieve the sort key for a
- * string. The sort key is an array of values that represent how each  
+ * string. The sort key is an array of values that represent how each
  * character in the string should be collated according to the characteristics
- * of the collation algorithm and the given options. Thus, sort keys can be 
- * compared directly value-for-value with other sort keys that were generated 
- * by the same collator, and the resulting ordering is guaranteed to be the 
+ * of the collation algorithm and the given options. Thus, sort keys can be
+ * compared directly value-for-value with other sort keys that were generated
+ * by the same collator, and the resulting ordering is guaranteed to be the
  * same as if the original strings were compared by the collator.
  * Sort keys generated by different collators are not guaranteed to give
- * any reasonable results when compared together unless the two collators 
- * were constructed with 
- * exactly the same options and therefore end up representing the exact same 
+ * any reasonable results when compared together unless the two collators
+ * were constructed with
+ * exactly the same options and therefore end up representing the exact same
  * collation sequence.<p>
- * 
+ *
  * A good rule of thumb is that you would use a sort key if you had 10 or more
- * items to sort or if your array might be resorted arbitrarily. For example, if your 
+ * items to sort or if your array might be resorted arbitrarily. For example, if your
  * user interface was displaying a table with 100 rows in it, and each row had
  * 4 sortable text columns which could be sorted in acending or descending order,
  * the recommended practice would be to generate a sort key for each of the 4
  * sortable fields in each row and store that in the Javascript representation of the
  * table data. Then, when the user clicks on a column header to resort the
- * table according to that column, the resorting would be relatively quick 
- * because it would only be comparing arrays of values, and not recalculating 
+ * table according to that column, the resorting would be relatively quick
+ * because it would only be comparing arrays of values, and not recalculating
  * the collation values for each character in each string for every comparison.<p>
- * 
+ *
  * For tables that are large, it is usually a better idea to do the sorting
  * on the server side, especially if the table is the result of a database
  * query. In this case, the table is usually a view of the cursor of a large
  * results set, and only a few entries are sent to the front end at a time.
  * In order to sort the set efficiently, it should be done on the database
  * level instead.
- * 
+ *
  * <h2>Data</h2>
- * 
+ *
  * Doing correct collation entails a huge amount of mapping data, much of which is
  * not necessary when collating in one language with one script, which is the most
  * common case. Thus, ilib implements a number of ways to include the data you
  * need or leave out the data you don't need using the JS assembly tool:
- * 
+ *
  * <ol>
- * <li>Full multilingual data - if you are sorting multilingual data and need to collate 
- * text written in multiple scripts, you can use the directive "!data collation/ducet" to 
- * load in the full collation data.  This allows the collator to perform the entire 
- * Unicode Collation Algorithm (UCA) based on the Default Unicode Collation Element 
- * Table (DUCET). The data is very large, on the order of multiple megabytes, but 
+ * <li>Full multilingual data - if you are sorting multilingual data and need to collate
+ * text written in multiple scripts, you can use the directive "!data collation/ducet" to
+ * load in the full collation data.  This allows the collator to perform the entire
+ * Unicode Collation Algorithm (UCA) based on the Default Unicode Collation Element
+ * Table (DUCET). The data is very large, on the order of multiple megabytes, but
  * sometimes it is necessary.
- * <li>A few scripts - if you are sorting text written in only a few scripts, you may 
+ * <li>A few scripts - if you are sorting text written in only a few scripts, you may
  * want to include only the data for those scripts. Each ISO 15924 script code has its
  * own data available in a separate file, so you can use the data directive to include
- * only the data for the scripts you need. For example, use  
+ * only the data for the scripts you need. For example, use
  * "!data collation/Latn" to retrieve the collation information for the Latin script.
- * Because the "ducet" table mentioned in the previous point is a superset of the 
- * tables for all other scripts, you do not need to include explicitly the data for 
- * any particular script when using "ducet". That is, you either include "ducet" or 
+ * Because the "ducet" table mentioned in the previous point is a superset of the
+ * tables for all other scripts, you do not need to include explicitly the data for
+ * any particular script when using "ducet". That is, you either include "ducet" or
  * you include a specific list of scripts.
  * <li>Only one script - if you are sorting text written only in one script, you can
- * either include the data directly as in the previous point, or you can rely on the 
+ * either include the data directly as in the previous point, or you can rely on the
  * locale to include the correct data for you. In this case, you can use the directive
  * "!data collate" to load in the locale's collation data for its most common script.
  * </ol>
- *   
+ *
  * With any of the above ways of including the data, the collator will only perform the
  * correct language-sensitive sorting for the given locale. All other scripts will be
  * sorted in the default manner according to the UCA. For example, if you include the
  * "ducet" data and pass in "de-DE" (German for Germany) as the locale spec, then
  * only the Latin script (the default script for German) will be sorted according to
- * German rules. All other scripts in the DUCET, such as Japanese or Arabic, will use 
+ * German rules. All other scripts in the DUCET, such as Japanese or Arabic, will use
  * the default UCA collation rules.<p>
- * 
+ *
  * If this collator encounters a character for which it has no collation data, it will
  * sort those characters by pure Unicode value after all characters for which it does have
  * collation data. For example, if you only loaded in the German collation data (ie. the
  * data for the Latin script tailored to German) to sort a list of person names, but that
- * list happens to include the names of a few Japanese people written in Japanese 
+ * list happens to include the names of a few Japanese people written in Japanese
  * characters, the Japanese names will sort at the end of the list after all German names,
  * and will sort according to the Unicode values of the characters.
- * 
+ *
  * @constructor
- * @param {Object} options options governing how the resulting comparator 
+ * @param {Object} options options governing how the resulting comparator
  * function will operate
  */
 ilib.Collator = function(options) {
@@ -22011,12 +22011,12 @@ ilib.Collator = function(options) {
 		useNative = true;
 
 	// defaults
-	/** 
+	/**
 	 * @private
-	 * @type {ilib.Locale} 
+	 * @type {ilib.Locale}
 	 */
 	this.locale = new ilib.Locale(ilib.getLocale());
-	
+
 	/** @private */
 	this.caseFirst = "upper";
 	/** @private */
@@ -22033,7 +22033,7 @@ ilib.Collator = function(options) {
 	this.style = "standard";
 	/** @private */
 	this.ignorePunctuation = false;
-	
+
 	if (options) {
 		if (options.locale) {
 			this.locale = (typeof(options.locale) === 'string') ? new ilib.Locale(options.locale) : options.locale;
@@ -22063,25 +22063,25 @@ ilib.Collator = function(options) {
 			}
 		}
 		if (typeof(options.upperFirst) !== 'undefined') {
-			this.caseFirst = options.upperFirst ? "upper" : "lower"; 
+			this.caseFirst = options.upperFirst ? "upper" : "lower";
 		}
-		
+
 		if (typeof(options.ignorePunctuation) !== 'undefined') {
 			this.ignorePunctuation = options.ignorePunctuation;
 		}
 		if (typeof(options.sync) !== 'undefined') {
 			sync = (options.sync == true);
 		}
-		
+
 		loadParams = options.loadParams;
 		if (typeof(options.useNative) !== 'undefined') {
 			useNative = options.useNative;
 		}
-		
+
 		if (options.usage === "sort" || options.usage === "search") {
 			this.usage = options.usage;
 		}
-		
+
 		if (typeof(options.reverse) === 'boolean') {
 			this.reverse = options.reverse;
 		}
@@ -22089,7 +22089,7 @@ ilib.Collator = function(options) {
 		if (typeof(options.numeric) === 'boolean') {
 			this.numeric = options.numeric;
 		}
-		
+
 		if (typeof(options.style) === 'string') {
 			this.style = options.style;
 		}
@@ -22103,12 +22103,12 @@ ilib.Collator = function(options) {
 	if (useNative && typeof(Intl) !== 'undefined' && Intl) {
 		// this engine is modern and supports the new Intl object!
 		//console.log("implemented natively");
-		/** 
+		/**
 		 * @private
-		 * @type {{compare:function(string,string)}} 
+		 * @type {{compare:function(string,string)}}
 		 */
 		this.collator = new Intl.Collator(this.locale.getSpec(), this);
-		
+
 		if (options && typeof(options.onLoad) === 'function') {
 			options.onLoad(this);
 		}
@@ -22120,12 +22120,12 @@ ilib.Collator = function(options) {
 
 		// else implement in pure Javascript
 		ilib.loadData({
-			object: ilib.Collator, 
-			locale: this.locale, 
+			object: ilib.Collator,
+			locale: this.locale,
 			name: "collation.json",
 			replace: true,
 			sync: sync,
-			loadParams: loadParams, 
+			loadParams: loadParams,
 			callback: ilib.bind(this, function (collation) {
 				if (!collation) {
 					collation = ilib.data.collation;
@@ -22170,7 +22170,7 @@ ilib.Collator.prototype = {
 			}
 			for (var i = 0; i < this.level; i++) {
 				if (i > 0) {
-					value <<= this.collation.bits[i];	
+					value <<= this.collation.bits[i];
 				}
 				if (i === 2 && this.caseFirst === "lower") {
 					// sort the lower case first instead of upper
@@ -22182,7 +22182,7 @@ ilib.Collator.prototype = {
 		}
 		return value;
 	},
-	
+
 	/**
 	 * @private
 	 * Return the rule packed into an array of collation elements.
@@ -22200,12 +22200,12 @@ ilib.Collator.prototype = {
 			return [ this._pack(rule) ];
 		}
 	},
-    	
+
 	/**
      * @private
      */
     _init: function(rules) {
-    	/** 
+    	/**
     	 * @private
     	 * @type {{scripts:Array.<string>,bits:Array.<number>,maxes:Array.<number>,bases:Array.<number>,map:Object.<string,Array.<number|null|Array.<number>>>}}
     	 */
@@ -22217,14 +22217,14 @@ ilib.Collator.prototype = {
     	}
     	var remainder = ilib.mod(this.keysize, 4);
     	this.keysize += (remainder > 0) ? (4 - remainder) : 0; // round to the nearest 4 to find how many bits to use in hex
-    	
+
     	for (var r in this.collation.map) {
     		if (r) {
     			this.map[r] = this._packRule(this.collation.map[r]);
     		}
     	}
     },
-    
+
     /**
      * @private
      */
@@ -22246,11 +22246,11 @@ ilib.Collator.prototype = {
 				r = (right instanceof ilib.NormString) ? right : new ilib.NormString(right),
 				lelements,
 				relements;
-				
+
 			// if the reverse sort is on, switch the char sources so that the result comes out swapped
 			lelements = new ilib.ElementIterator(new ilib.CodePointSource(l, this.ignorePunctuation), this.map, this.keysize);
 			relements = new ilib.ElementIterator(new ilib.CodePointSource(r, this.ignorePunctuation), this.map, this.keysize);
-			
+
 			while (lelements.hasNext() && relements.hasNext()) {
 				var diff = lelements.next() - relements.next();
 				if (diff) {
@@ -22266,18 +22266,18 @@ ilib.Collator.prototype = {
 			}
 		}
     },
-    
+
 	/**
-	 * Compare two strings together according to the rules of this 
-	 * collator instance. Do not use this function directly with 
+	 * Compare two strings together according to the rules of this
+	 * collator instance. Do not use this function directly with
 	 * Array.sort, as it will not have its collation data available
 	 * and therefore will not function properly. Use the function
 	 * returned by getComparator() instead.
-	 * 
+	 *
 	 * @param {string} left the left string to compare
 	 * @param {string} right the right string to compare
 	 * @return {number} a negative number if left comes before right, a
-	 * positive number if right comes before left, and zero if left and 
+	 * positive number if right comes before left, and zero if left and
 	 * right are equivalent according to this collator
 	 */
 	compare: function (left, right) {
@@ -22290,20 +22290,20 @@ ilib.Collator.prototype = {
 		var ret = this._basicCompare(left, right);
 		return this.reverse ? -ret : ret;
 	},
-	
+
 	/**
 	 * Return a comparator function that can compare two strings together
-	 * according to the rules of this collator instance. The function 
-	 * returns a negative number if the left 
-	 * string comes before right, a positive number if the right string comes 
+	 * according to the rules of this collator instance. The function
+	 * returns a negative number if the left
+	 * string comes before right, a positive number if the right string comes
 	 * before the left, and zero if left and right are equivalent. If the
-	 * reverse property was given as true to the collator constructor, this 
+	 * reverse property was given as true to the collator constructor, this
 	 * function will
 	 * switch the sign of those values to cause sorting to happen in the
 	 * reverse order.
-	 * 
-	 * @return {function(...)|undefined} a comparator function that 
-	 * can compare two strings together according to the rules of this 
+	 *
+	 * @return {function(...)|undefined} a comparator function that
+	 * can compare two strings together according to the rules of this
 	 * collator instance
 	 */
 	getComparator: function() {
@@ -22313,34 +22313,34 @@ ilib.Collator.prototype = {
 			// implemented by the core engine
 			return this.collator.compare;
 		}
-		
+
 		return /** @type function(string,string):number */ ilib.bind(this, this.compare);
 	},
-	
+
 	/**
 	 * Return a sort key string for the given string. The sort key
-	 * string is a list of values that represent each character 
+	 * string is a list of values that represent each character
 	 * in the original string. The sort key
 	 * values for any particular character consists of 3 numbers that
 	 * encode the primary, secondary, and tertiary characteristics
-	 * of that character. The values of each characteristic are 
-	 * modified according to the strength of this collator instance 
+	 * of that character. The values of each characteristic are
+	 * modified according to the strength of this collator instance
 	 * to give the correct collation order. The idea is that this
-	 * sort key string is directly comparable byte-for-byte to 
+	 * sort key string is directly comparable byte-for-byte to
 	 * other sort key strings generated by this collator without
 	 * any further knowledge of the collation rules for the locale.
-	 * More formally, if a < b according to the rules of this collation, 
+	 * More formally, if a < b according to the rules of this collation,
 	 * then it is guaranteed that sortkey(a) < sortkey(b) when compared
 	 * byte-for-byte. The sort key string can therefore be used
 	 * without the collator to sort an array of strings efficiently
 	 * because the work of determining the applicability of various
-	 * collation rules is done once up-front when generating 
+	 * collation rules is done once up-front when generating
 	 * the sort key.<p>
-	 * 
+	 *
 	 * The sort key string can be treated as a regular, albeit somewhat
-	 * odd-looking, string. That is, it can be pass to regular 
-	 * Javascript functions without problems.  
-	 * 
+	 * odd-looking, string. That is, it can be pass to regular
+	 * Javascript functions without problems.
+	 *
 	 * @param {string} str the original string to generate the sort key for
 	 * @return {string} a sort key string for the given string
 	 */
@@ -22348,32 +22348,32 @@ ilib.Collator.prototype = {
 		if (!str) {
 			return "";
 		}
-		
+
 		if (this.collator) {
 			// native, no sort keys available
 			return str;
 		}
-		
+
 		function pad(str, limit) {
 			return "0000000000000000".substring(0, limit - str.length) + str;
 		}
-		
+
 		if (this.numeric) {
 			var v = new ilib.Number(str, {locale: this.locale});
 			var s = isNaN(v.valueOf()) ? "" : v.valueOf().toString(16);
-			return pad(s, 16);	
+			return pad(s, 16);
 		} else {
 			var n = (typeof(str) === "string") ? new ilib.NormString(str) : str,
 				ret = "",
 				lelements = new ilib.ElementIterator(new ilib.CodePointSource(n, this.ignorePunctuation), this.map, this.keysize),
 				element;
-			
+
 			while (lelements.hasNext()) {
 				element = lelements.next();
 				if (this.reverse) {
 					element = (1 << this.keysize) - element;
 				}
-				ret += pad(element.toString(16), this.keysize/4);	
+				ret += pad(element.toString(16), this.keysize/4);
 			}
 		}
 		return ret;
@@ -22381,11 +22381,11 @@ ilib.Collator.prototype = {
 };
 
 /**
- * Retrieve the list of collation style names that are available for the 
+ * Retrieve the list of collation style names that are available for the
  * given locale. This list varies depending on the locale, and depending
  * on whether or not the data for that locale was assembled into this copy
  * of ilib.
- * 
+ *
  * @param {ilib.Locale|string=} locale The locale for which the available
  * styles are being sought
  * @return Array.<string> an array of style names that are available for
@@ -22397,15 +22397,15 @@ ilib.Collator.getAvailableStyles = function (locale) {
 
 /**
  * Retrieve the list of ISO 15924 script codes that are available in this
- * copy of ilib. This list varies depending on whether or not the data for 
+ * copy of ilib. This list varies depending on whether or not the data for
  * various scripts was assembled into this copy of ilib. If the "ducet"
  * data is assembled into this copy of ilib, this method will report the
  * entire list of scripts as being available. If a collator instance is
  * instantiated with a script code that is not on the list returned by this
  * function, it will be ignored and text in that script will be sorted by
  * numeric Unicode values of the characters.
- * 
- * @return Array.<string> an array of ISO 15924 script codes that are 
+ *
+ * @return Array.<string> an array of ISO 15924 script codes that are
  * available
  */
 ilib.Collator.getAvailableScripts = function () {
@@ -22414,7 +22414,7 @@ ilib.Collator.getAvailableScripts = function () {
 
 /*
  * all.js - include file for normalization data for a particular script
- * 
+ *
  * Copyright © 2012, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22431,13 +22431,13 @@ ilib.Collator.getAvailableScripts = function () {
  * limitations under the License.
  */
 /* WARNING: THIS IS A FILE GENERATED BY gennorm.js. DO NOT EDIT BY HAND. */
-// !depends util/utils.js 
+// !depends util/utils.js
 // !data norm nfd/all
 ilib.data.norm.nfd = ilib.merge(ilib.data.norm.nfd || {}, ilib.data.nfd_all);
 ilib.data.nfd_all = undefined;
 /*
  * all.js - include file for normalization data for a particular script
- * 
+ *
  * Copyright © 2012, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22454,13 +22454,13 @@ ilib.data.nfd_all = undefined;
  * limitations under the License.
  */
 /* WARNING: THIS IS A FILE GENERATED BY gennorm.js. DO NOT EDIT BY HAND. */
-// !depends util/utils.js 
+// !depends util/utils.js
 // !depends nfd/all.js
 // !data norm
 
 /*
  * all.js - include file for normalization data for a particular script
- * 
+ *
  * Copyright © 2012, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22477,14 +22477,14 @@ ilib.data.nfd_all = undefined;
  * limitations under the License.
  */
 /* WARNING: THIS IS A FILE GENERATED BY gennorm.js. DO NOT EDIT BY HAND. */
-// !depends util/utils.js 
+// !depends util/utils.js
 // !depends nfd/all.js
 // !data norm nfkd/all
 ilib.data.norm.nfkd = ilib.merge(ilib.data.norm.nfkd || {}, ilib.data.nfkd_all);
 ilib.data.nfkd_all = undefined;
 /*
  * all.js - include file for normalization data for a particular script
- * 
+ *
  * Copyright © 2012, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22501,13 +22501,13 @@ ilib.data.nfkd_all = undefined;
  * limitations under the License.
  */
 /* WARNING: THIS IS A FILE GENERATED BY gennorm.js. DO NOT EDIT BY HAND. */
-// !depends util/utils.js 
+// !depends util/utils.js
 // !depends nfd/all.js nfc/all.js nfkd/all.js
 // !data norm
 
 /*
  * localematch.js - Locale matcher definition
- * 
+ *
  * Copyright © 2013-2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22532,51 +22532,51 @@ ilib.data.nfkd_all = undefined;
  * Create a new locale matcher instance. This is used
  * to see which locales can be matched with each other in
  * various ways.<p>
- * 
+ *
  * The options object may contain any of the following properties:
- * 
+ *
  * <ul>
  * <li><i>locale</i> - the locale to match
- * 
- * <li><i>onLoad</i> - a callback function to call when the locale matcher object is fully 
+ *
+ * <li><i>onLoad</i> - a callback function to call when the locale matcher object is fully
  * loaded. When the onLoad option is given, the locale matcher object will attempt to
  * load any missing locale data using the ilib loader callback.
- * When the constructor is done (even if the data is already preassembled), the 
+ * When the constructor is done (even if the data is already preassembled), the
  * onLoad function is called with the current instance as a parameter, so this
  * callback can be used with preassembled or dynamic loading or a mix of the two.
- * 
- * <li><i>sync</i> - tell whether to load any missing locale data synchronously or 
+ *
+ * <li><i>sync</i> - tell whether to load any missing locale data synchronously or
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
- * not be usable for a while. 
+ * not be usable for a while.
  *
- * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ * <li><i>loadParams</i> - an object containing parameters to pass to the
  * loader callback function when locale data is missing. The parameters are not
- * interpretted or modified in any way. They are simply passed along. The object 
+ * interpretted or modified in any way. They are simply passed along. The object
  * may contain any property/value pairs as long as the calling code is in
  * agreement with the loader callback function as to what those parameters mean.
  * </ul>
- * 
+ *
  * Depends directive: !depends localematch.js
- * 
+ *
  * @constructor
- * @param {Object} options parameters to initialize this matcher 
+ * @param {Object} options parameters to initialize this matcher
  */
 ilib.LocaleMatcher = function(options) {
 	var sync = true,
 	    loadParams = undefined;
-	
+
 	this.locale = new ilib.Locale();
-	
+
 	if (options) {
 		if (typeof(options.locale) !== 'undefined') {
 			this.locale = (typeof(options.locale) === 'string') ? new ilib.Locale(options.locale) : options.locale;
 		}
-		
+
 		if (typeof(options.sync) !== 'undefined') {
 			sync = (options.sync == true);
 		}
-		
+
 		if (typeof(options.loadParams) !== 'undefined') {
 			loadParams = options.loadParams;
 		}
@@ -22588,11 +22588,11 @@ ilib.LocaleMatcher = function(options) {
 
 	if (typeof(ilib.data.likelylocales) === 'undefined') {
 		ilib.loadData({
-			object: ilib.LocaleMatcher, 
-			locale: "-", 
-			name: "likelylocales.json", 
-			sync: sync, 
-			loadParams: loadParams, 
+			object: ilib.LocaleMatcher,
+			locale: "-",
+			name: "likelylocales.json",
+			sync: sync,
+			loadParams: loadParams,
 			callback: ilib.bind(this, function (info) {
 				if (!info) {
 					info = {};
@@ -22614,24 +22614,24 @@ ilib.LocaleMatcher = function(options) {
 
 ilib.LocaleMatcher.prototype = {
 	/**
-	 * Return the locale used to construct this instance. 
+	 * Return the locale used to construct this instance.
 	 * @return {ilib.Locale|undefined} the locale for this matcher
 	 */
 	getLocale: function() {
 		return this.locale;
 	},
-	
+
 	/**
 	 * Return an ilib.Locale instance that is fully specified based on partial information
 	 * given to the constructor of this locale matcher instance. For example, if the locale
-	 * spec given to this locale matcher instance is simply "ru" (for the Russian language), 
-	 * then it will fill in the missing region and script tags and return a locale with 
+	 * spec given to this locale matcher instance is simply "ru" (for the Russian language),
+	 * then it will fill in the missing region and script tags and return a locale with
 	 * the specifier "ru-Cyrl-RU". (ie. Russian language, Cyrillic, Russian Federation).
 	 * Any one or two of the language, script, or region parts may be left unspecified,
 	 * and the other one or two parts will be filled in automatically. If this
 	 * class has no information about the given locale, then the locale of this
 	 * locale matcher instance is returned unchanged.
-	 * 
+	 *
 	 * @returns {ilib.Locale} the most likely completion of the partial locale given
 	 * to the constructor of this locale matcher instance
 	 */
@@ -22639,7 +22639,7 @@ ilib.LocaleMatcher.prototype = {
 		if (typeof(this.info[this.locale.getSpec()]) === 'undefined') {
 			return this.locale;
 		}
-		
+
 		return new ilib.Locale(this.info[this.locale.getSpec()]);
 	}
 };
@@ -22647,7 +22647,7 @@ ilib.LocaleMatcher.prototype = {
 
 /*
  * casemapper.js - define upper- and lower-case mapper
- * 
+ *
  * Copyright © 2014-2015, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22669,34 +22669,34 @@ ilib.LocaleMatcher.prototype = {
 /**
  * @class
  * Create a new string mapper instance that maps strings to upper or
- * lower case. This mapping will work for any string as characters 
+ * lower case. This mapping will work for any string as characters
  * that have no case will be returned unchanged.<p>
- * 
+ *
  * The options may contain any of the following properties:
- * 
+ *
  * <ul>
- * <li><i>locale</i> - locale to use when loading the mapper. Some maps are 
+ * <li><i>locale</i> - locale to use when loading the mapper. Some maps are
  * locale-dependent, and this locale selects the right one. Default if this is
  * not specified is the current locale.
- * 
+ *
  * <li><i>direction</i> - "toupper" for upper-casing, or "tolower" for lower-casing.
  * Default if not specified is "toupper".
  * </ul>
- * 
+ *
  * Depends directive: !depends casemapper.js
- * 
+ *
  * @constructor
- * @param {Object=} options options to initialize this mapper 
+ * @param {Object=} options options to initialize this mapper
  */
 ilib.CaseMapper = function (options) {
 	this.up = true;
 	this.locale = new ilib.Locale();
-	
+
 	if (options) {
 		if (typeof(options.locale) !== 'undefined') {
 			this.locale = (typeof(options.locale) === 'string') ? new ilib.Locale(options.locale) : options.locale;
 		}
-		
+
 		this.up = (!options.direction || options.direction === "toupper");
 	}
 
@@ -22736,7 +22736,7 @@ ilib.CaseMapper = function (options) {
 			}
 			break;
 	}
-	
+
 	if (ilib._getBrowser() === "ie") {
 		// IE is missing these mappings for some reason
 		if (this.up) {
@@ -22744,13 +22744,13 @@ ilib.CaseMapper = function (options) {
 		}
 		this._setUpMap("ⲁⲃⲅⲇⲉⲋⲍⲏⲑⲓⲕⲗⲙⲛⲝⲟⲡⲣⲥⲧⲩⲫⲭⲯⲱⳁⳉⳋ", "ⲀⲂⲄⲆⲈⲊⲌⲎⲐⲒⲔⲖⲘⲚⲜⲞⲠⲢⲤⲦⲨⲪⲬⲮⲰⳀⳈⳊ"); // Coptic
 		// Georgian Nuskhuri <-> Asomtavruli
-		this._setUpMap("ⴀⴁⴂⴃⴄⴅⴆⴇⴈⴉⴊⴋⴌⴍⴎⴏⴐⴑⴒⴓⴔⴕⴖⴗⴘⴙⴚⴛⴜⴝⴞⴟⴠⴡⴢⴣⴤⴥ", "ႠႡႢႣႤႥႦႧႨႩႪႫႬႭႮႯႰႱႲႳႴႵႶႷႸႹႺႻႼႽႾႿჀჁჂჃჄჅ");	
+		this._setUpMap("ⴀⴁⴂⴃⴄⴅⴆⴇⴈⴉⴊⴋⴌⴍⴎⴏⴐⴑⴒⴓⴔⴕⴖⴗⴘⴙⴚⴛⴜⴝⴞⴟⴠⴡⴢⴣⴤⴥ", "ႠႡႢႣႤႥႦႧႨႩႪႫႬႭႮႯႰႱႲႳႴႵႶႷႸႹႺႻႼႽႾႿჀჁჂჃჄჅ");
 	}
 };
 
 ilib.CaseMapper.prototype = {
-	/** 
-	 * @private 
+	/**
+	 * @private
 	 */
 	_charMapper: function(string) {
 		if (!string) {
@@ -22760,7 +22760,7 @@ ilib.CaseMapper.prototype = {
 		var ret = "";
 		var it = input.charIterator();
 		var c;
-		
+
 		while (it.hasNext()) {
 			c = it.next();
 			if (!this.up && c === 'Σ') {
@@ -22783,7 +22783,7 @@ ilib.CaseMapper.prototype = {
 				}
 			}
 		}
-		
+
 		return ret;
 	},
 
@@ -22803,16 +22803,16 @@ ilib.CaseMapper.prototype = {
 	},
 
 	/**
-	 * Return the locale that this mapper was constructed with. 
+	 * Return the locale that this mapper was constructed with.
 	 * @returns {ilib.Locale} the locale that this mapper was constructed with
 	 */
 	getLocale: function () {
 		return this.locale;
 	},
-		
+
 	/**
 	 * Map a string to lower case in a locale-sensitive manner.
-	 * 
+	 *
 	 * @param {string|undefined} string
 	 * @return {string|undefined}
 	 */
@@ -22822,7 +22822,7 @@ ilib.CaseMapper.prototype = {
 };
 /*
  * numplan.js - Represent a phone numbering plan.
- * 
+ *
  * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22840,9 +22840,9 @@ ilib.CaseMapper.prototype = {
  */
 
 /*
-!depends 
-ilibglobal.js 
-locale.js 
+!depends
+ilibglobal.js
+locale.js
 localeinfo.js
 */
 
@@ -22851,35 +22851,35 @@ localeinfo.js
 /**
  * @class
  * Create a numbering plan information instance for a particular country's plan.<p>
- * 
+ *
  * The options may contain any of the following properties:
- * 
+ *
  * <ul>
  * <li><i>locale</i> - locale for which the numbering plan is sought. This locale
  * will be mapped to the actual numbering plan, which may be shared amongst a
  * number of countries.
  *
- * <li>onLoad - a callback function to call when the date format object is fully 
+ * <li>onLoad - a callback function to call when the date format object is fully
  * loaded. When the onLoad option is given, the DateFmt object will attempt to
  * load any missing locale data using the ilib loader callback.
- * When the constructor is done (even if the data is already preassembled), the 
+ * When the constructor is done (even if the data is already preassembled), the
  * onLoad function is called with the current instance as a parameter, so this
  * callback can be used with preassembled or dynamic loading or a mix of the two.
- * 
- * <li>sync - tell whether to load any missing locale data synchronously or 
+ *
+ * <li>sync - tell whether to load any missing locale data synchronously or
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
  * not be usable for a while.
- *  
- * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ *
+ * <li><i>loadParams</i> - an object containing parameters to pass to the
  * loader callback function when locale data is missing. The parameters are not
- * interpretted or modified in any way. They are simply passed along. The object 
+ * interpretted or modified in any way. They are simply passed along. The object
  * may contain any property/value pairs as long as the calling code is in
  * agreement with the loader callback function as to what those parameters mean.
  * </ul>
- * 
+ *
  * Depends directive: !depends phone/numplan.js
- * 
+ *
  * @constructor
  * @package
  * @param {Object} options options governing the way this plan is loaded
@@ -22887,29 +22887,29 @@ localeinfo.js
 ilib.NumPlan = function (options) {
 	var sync = true,
 	    loadParams = {};
-	
+
 	this.locale = new ilib.Locale();
 
 	if (options) {
 		if (options.locale) {
 			this.locale = (typeof(options.locale) === 'string') ? new ilib.Locale(options.locale) : options.locale;
 		}
-		
+
 		if (typeof(options.sync) !== 'undefined') {
 			sync = (options.sync == true);
 		}
-		
+
 		if (options.loadParams) {
 			loadParams = options.loadParams;
 		}
-	}	
+	}
 
 	ilib.loadData({
 		name: "numplan.json",
 		object: ilib.NumPlan,
 		locale: this.locale,
-		sync: sync, 
-		loadParams: loadParams, 
+		sync: sync,
+		loadParams: loadParams,
 		callback: ilib.bind(this, function (npdata) {
 			if (!npdata) {
 				npdata = {
@@ -22928,7 +22928,7 @@ ilib.NumPlan = function (options) {
 				};
 			}
 
-			/** 
+			/**
 			 * @type {{
 			 *   region:string,
 			 *   skipTrunk:boolean,
@@ -22953,8 +22953,8 @@ ilib.NumPlan = function (options) {
 
 ilib.NumPlan.prototype = {
 	/**
-	 * Return the name of this plan. This may be different than the 
-	 * name of the region because sometimes multiple countries share 
+	 * Return the name of this plan. This may be different than the
+	 * name of the region because sometimes multiple countries share
 	 * the same plan.
 	 * @return {string} the name of the plan
 	 */
@@ -22970,29 +22970,29 @@ ilib.NumPlan.prototype = {
 	getTrunkCode: function() {
 		return this.npdata.trunkCode;
 	},
-	
+
 	/**
 	 * Return the international direct dialing code of this plan.
 	 * @return {string} the IDD code of this plan
 	 */
 	getIDDCode: function() {
-		return this.npdata.iddCode;	
+		return this.npdata.iddCode;
 	},
-	
+
 	/**
 	 * Return the plan style for this plan. The plan style may be
 	 * one of:
-	 * 
+	 *
 	 * <ul>
-	 * <li>"open" - area codes may be left off if the caller is 
+	 * <li>"open" - area codes may be left off if the caller is
 	 * dialing to another number within the same area code
 	 * <li>"closed" - the area code must always be specified, even
 	 * if calling another number within the same area code
 	 * </ul>
-	 * 
+	 *
 	 * @return {string} the plan style, "open" or "closed"
 	 */
-	getPlanStyle: function() {	
+	getPlanStyle: function() {
 		return this.npdata.dialingPlan;
 	},
 	/** [Need Comment]
@@ -23005,7 +23005,7 @@ ilib.NumPlan.prototype = {
 	},
 	/** [Need Comment]
 	 * Return a findExtensions
-	 * 
+	 *
 	 * @return {boolean}
 	 */
 	getFindExtensions: function() {
@@ -23013,7 +23013,7 @@ ilib.NumPlan.prototype = {
 	},
 	/** [Need Comment]
 	 * Return a skipTrunk
-	 * 
+	 *
 	 * @return {boolean}
 	 */
 	getSkipTrunk: function() {
@@ -23021,7 +23021,7 @@ ilib.NumPlan.prototype = {
 	},
 	/** [Need Comment]
 	 * Return a skipTrunk
-	 * 
+	 *
 	 * @return {boolean}
 	 */
 	getTrunkRequired: function() {
@@ -23042,27 +23042,27 @@ ilib.NumPlan.prototype = {
 	getCommonFormatChars: function() {
 		return this.npdata.commonFormatChars;
 	},
-	
+
 	/**
 	 * Return the length of the field with the given name. If the length
 	 * is returned as 0, this means it is variable length.
-	 * 
-	 * @param {string} field name of the field for which the length is 
+	 *
+	 * @param {string} field name of the field for which the length is
 	 * being sought
-	 * @return {number} if positive, this gives the length of the given 
+	 * @return {number} if positive, this gives the length of the given
 	 * field. If zero, the field is variable length. If negative, the
 	 * field is not known.
 	 */
 	getFieldLength: function (field) {
 		var dataField = this.npdata.fieldLengths;
-		
+
 		return dataField[field];
 	}
 };
 
 /*
  * phoneloc.js - Represent a phone locale object.
- * 
+ *
  * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23080,9 +23080,9 @@ ilib.NumPlan.prototype = {
  */
 
 /*
-!depends 
-ilibglobal.js 
-locale.js 
+!depends
+ilibglobal.js
+locale.js
 localeinfo.js
 */
 
@@ -23103,18 +23103,18 @@ ilib.Locale.PhoneLoc = function(options) {
 		sync = true,
 		loadParams = {},
 		locale;
-	
+
 	locale = (options && options.locale) || ilib.getLocale();
 
 	this.parent.call(this, locale);
-	
+
 	region = this.region;
-	
+
 	if (options) {
 		if (typeof(options.mcc) !== 'undefined') {
 			mcc = options.mcc;
 		}
-		
+
 		if (typeof(options.countryCode) !== 'undefined') {
 			cc = options.countryCode;
 		}
@@ -23122,7 +23122,7 @@ ilib.Locale.PhoneLoc = function(options) {
 		if (typeof(options.sync) !== 'undefined') {
 			sync = (options.sync == true);
 		}
-		
+
 		if (options.loadParams) {
 			loadParams = options.loadParams;
 		}
@@ -23132,14 +23132,14 @@ ilib.Locale.PhoneLoc = function(options) {
 		name: "phoneloc.json",
 		object: ilib.Locale.PhoneLoc,
 		nonlocale: true,
-		sync: sync, 
-		loadParams: loadParams, 
+		sync: sync,
+		loadParams: loadParams,
 		callback: ilib.bind(this, function (data) {
 			/** @type {{mcc2reg:Object.<string,string>,cc2reg:Object.<string,string>,reg2cc:Object.<string,string>,area2reg:Object.<string,string>}} */
 			this.mappings = data;
-			
+
 			if (typeof(mcc) !== 'undefined') {
-				region = this.mappings.mcc2reg[mcc];	
+				region = this.mappings.mcc2reg[mcc];
 			}
 
 			if (typeof(cc) !== 'undefined') {
@@ -23155,7 +23155,7 @@ ilib.Locale.PhoneLoc = function(options) {
 
 			if (options && typeof(options.onLoad) === 'function') {
 				options.onLoad(this);
-			}									
+			}
 		})
 	});
 };
@@ -23233,7 +23233,7 @@ ilib.Locale.PhoneLoc.prototype._mapAreatoRegion = function(cc, area) {
 /**
  * Return the region that controls the dialing plan in the given
  * region. (ie. the "normalized phone region".)
- * 
+ *
  * @static
  * @package
  * @param {string} region the region code to normalize
@@ -23241,8 +23241,8 @@ ilib.Locale.PhoneLoc.prototype._mapAreatoRegion = function(cc, area) {
  */
 ilib.Locale.PhoneLoc.prototype._normPhoneReg = function(region) {
 	var norm;
-	
-	// Map all NANP regions to the right region, so that they get parsed using the 
+
+	// Map all NANP regions to the right region, so that they get parsed using the
 	// correct state table
 	switch (region) {
 		case "US": // usa
@@ -23264,7 +23264,7 @@ ilib.Locale.PhoneLoc.prototype._normPhoneReg = function(region) {
 		case "KY": // cayman islands
 		case "MS": // montserrat
 		case "TC": // turks and caicos
-		case "AS": // American Samoa 
+		case "AS": // American Samoa
 		case "VI": // Virgin Islands, U.S.
 		case "PR": // Puerto Rico
 		case "MP": // Northern Mariana Islands
@@ -23272,19 +23272,19 @@ ilib.Locale.PhoneLoc.prototype._normPhoneReg = function(region) {
 		case "GU": // Guam
 			norm = "US";
 			break;
-		
+
 		// these all use the Italian dialling plan
 		case "IT": // italy
 		case "SM": // san marino
 		case "VA": // vatican city
 			norm = "IT";
 			break;
-		
+
 		// all the French dependencies are on the French dialling plan
 		case "FR": // france
 		case "GF": // french guiana
 		case "MQ": // martinique
-		case "GP": // guadeloupe, 
+		case "GP": // guadeloupe,
 		case "BL": // saint barthélemy
 		case "MF": // saint martin
 		case "RE": // réunion, mayotte
@@ -23293,12 +23293,12 @@ ilib.Locale.PhoneLoc.prototype._normPhoneReg = function(region) {
 		default:
 			norm = region;
 			break;
-	}	
+	}
 	return norm;
 };
 /*
  * handler.js - Handle phone number parse states
- * 
+ *
  * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23316,14 +23316,14 @@ ilib.Locale.PhoneLoc.prototype._normPhoneReg = function(region) {
  */
 
 /*
-!depends 
-ilibglobal.js 
+!depends
+ilibglobal.js
 phone/phoneloc.js
 */
 
 /**
  * @class
- * [Need Comments] globals console ilib PhoneLoc 
+ * [Need Comments] globals console ilib PhoneLoc
  *
  * @private
  * @constructor
@@ -23341,7 +23341,7 @@ ilib.StateHandler.prototype = {
 	 */
 	processSubscriberNumber: function(number, fields, regionSettings) {
 		var last;
-		
+
 		last = number.search(/[xwtp,;]/i);	// last digit of the local number
 
 		if (last > -1) {
@@ -23356,7 +23356,7 @@ ilib.StateHandler.prototype = {
 				fields.subscriberNumber = number;
 			}
 		}
-		
+
 		if (regionSettings.plan.getFieldLength('maxLocalLength') &&
 				fields.subscriberNumber &&
 				fields.subscriberNumber.length > regionSettings.plan.getFieldLength('maxLocalLength')) {
@@ -23365,17 +23365,17 @@ ilib.StateHandler.prototype = {
 	},
 	/**
 	 * @private
-	 * @param {string} fieldName 
+	 * @param {string} fieldName
 	 * @param {number} length length of phone number
 	 * @param {string} number phone number
 	 * @param {number} currentChar currentChar to be parsed
 	 * @param {Object} fields the fields that have been extracted so far
 	 * @param {Object} regionSettings settings used to parse the rest of the number
-	 * @param {boolean} noExtractTrunk 
+	 * @param {boolean} noExtractTrunk
 	 */
 	processFieldWithSubscriberNumber: function(fieldName, length, number, currentChar, fields, regionSettings, noExtractTrunk) {
 		var ret, end;
-		
+
 		if (length !== undefined && length > 0) {
 			// fixed length
 			end = length;
@@ -23387,7 +23387,7 @@ ilib.StateHandler.prototype = {
 			// the setting is the negative of the length to add, so subtract to make it positive
 			end = currentChar + 1 - length;
 		}
-		
+
 		if (fields[fieldName] !== undefined) {
 			// we have a spurious recognition, because this number already contains that field! So, just put
 			// everything into the subscriberNumber as the default
@@ -23398,7 +23398,7 @@ ilib.StateHandler.prototype = {
 				this.processSubscriberNumber(number.substring(end), fields, regionSettings);
 			}
 		}
-		
+
 		ret = {
 			number: ""
 		};
@@ -23407,7 +23407,7 @@ ilib.StateHandler.prototype = {
 	},
 	/**
 	 * @private
-	 * @param {string} fieldName 
+	 * @param {string} fieldName
 	 * @param {number} length length of phone number
 	 * @param {string} number phone number
 	 * @param {number} currentChar currentChar to be parsed
@@ -23416,7 +23416,7 @@ ilib.StateHandler.prototype = {
 	 */
 	processField: function(fieldName, length, number, currentChar, fields, regionSettings) {
 		var ret = {}, end;
-		
+
 		if (length !== undefined && length > 0) {
 			// fixed length
 			end = length;
@@ -23428,17 +23428,17 @@ ilib.StateHandler.prototype = {
 			// the setting is the negative of the length to add, so subtract to make it positive
 			end = currentChar + 1 - length;
 		}
-		
+
 		if (fields[fieldName] !== undefined) {
 			// we have a spurious recognition, because this number already contains that field! So, just put
 			// everything into the subscriberNumber as the default
 			this.processSubscriberNumber(number, fields, regionSettings);
 			ret.number = "";
 		} else {
-			fields[fieldName] = number.substring(0, end);			
+			fields[fieldName] = number.substring(0, end);
 			ret.number = (number.length > end) ? number.substring(end) : "";
 		}
-		
+
 		return ret;
 	},
 	/**
@@ -23450,7 +23450,7 @@ ilib.StateHandler.prototype = {
 	 */
 	trunk: function(number, currentChar, fields, regionSettings) {
 		var ret, trunkLength;
-		
+
 		if (fields.trunkAccess !== undefined) {
 			// What? We already have one? Okay, put the rest of this in the subscriber number as the default behaviour then.
 			this.processSubscriberNumber(number, fields, regionSettings);
@@ -23460,11 +23460,11 @@ ilib.StateHandler.prototype = {
 			fields.trunkAccess = number.substring(0, trunkLength);
 			number = (number.length > trunkLength) ? number.substring(trunkLength) : "";
 		}
-		
+
 		ret = {
 			number: number
 		};
-		
+
 		return ret;
 	},
 	/**
@@ -23476,7 +23476,7 @@ ilib.StateHandler.prototype = {
 	 */
 	plus: function(number, currentChar, fields, regionSettings) {
 		var ret = {};
-		
+
 		if (fields.iddPrefix !== undefined) {
 			// What? We already have one? Okay, put the rest of this in the subscriber number as the default behaviour then.
 			this.processSubscriberNumber(number, fields, regionSettings);
@@ -23485,12 +23485,12 @@ ilib.StateHandler.prototype = {
 			// found the idd prefix, so save it and cause the function to parse the next part
 			// of the number with the idd table
 			fields.iddPrefix = number.substring(0, 1);
-	
+
 			ret = {
 				number: number.substring(1),
 				table: 'idd'    // shared subtable that parses the country code
 			};
-		}		
+		}
 		return ret;
 	},
 	/**
@@ -23502,7 +23502,7 @@ ilib.StateHandler.prototype = {
 	 */
 	idd: function(number, currentChar, fields, regionSettings) {
 		var ret = {};
-		
+
 		if (fields.iddPrefix !== undefined) {
 			// What? We already have one? Okay, put the rest of this in the subscriber number as the default behaviour then.
 			this.processSubscriberNumber(number, fields, regionSettings);
@@ -23511,13 +23511,13 @@ ilib.StateHandler.prototype = {
 			// found the idd prefix, so save it and cause the function to parse the next part
 			// of the number with the idd table
 			fields.iddPrefix = number.substring(0, currentChar+1);
-	
+
 			ret = {
 				number: number.substring(currentChar+1),
 				table: 'idd'    // shared subtable that parses the country code
 			};
 		}
-		
+
 		return ret;
 	},
 	/**
@@ -23526,21 +23526,21 @@ ilib.StateHandler.prototype = {
 	 * @param {number} currentChar currentChar to be parsed
 	 * @param {Object} fields the fields that have been extracted so far
 	 * @param {Object} regionSettings settings used to parse the rest of the number
-	 */	
+	 */
 	country: function(number, currentChar, fields, regionSettings) {
 		var ret, cc;
-		
-		// found the country code of an IDD number, so save it and cause the function to 
+
+		// found the country code of an IDD number, so save it and cause the function to
 		// parse the rest of the number with the regular table for this locale
 		fields.countryCode = number.substring(0, currentChar+1);
 		cc = fields.countryCode.replace(/[wWpPtT\+#\*]/g, ''); // fix for NOV-108200
 		// console.log("Found country code " + fields.countryCode + ". Switching to country " + locale.region + " to parse the rest of the number");
-		
+
 		ret = {
 			number: number.substring(currentChar+1),
 			countryCode: cc
 		};
-		
+
 		return ret;
 	},
 	/**
@@ -23572,7 +23572,7 @@ ilib.StateHandler.prototype = {
 	 */
 	area: function(number, currentChar, fields, regionSettings) {
 		var ret, last, end, localLength;
-		
+
 		last = number.search(/[xwtp]/i);	// last digit of the local number
 		localLength = (last > -1) ? last : number.length;
 
@@ -23588,7 +23588,7 @@ ilib.StateHandler.prototype = {
 			// the setting is the negative of the length to add, so subtract to make it positive
 			end = currentChar + 1 - regionSettings.plan.getFieldLength('areaCode');
 		}
-		
+
 		// substring() extracts the part of the string up to but not including the end character,
 		// so add one to compensate
 		if (regionSettings.plan.getFieldLength('maxLocalLength') !== undefined) {
@@ -23611,7 +23611,7 @@ ilib.StateHandler.prototype = {
 				this.processSubscriberNumber(number.substring(end), fields, regionSettings);
 			}
 		}
-		
+
 		// extensions are separated from the number by a dash in Germany
 		if (regionSettings.plan.getFindExtensions() !== undefined && fields.subscriberNumber !== undefined) {
 			var dash = fields.subscriberNumber.indexOf("-");
@@ -23636,10 +23636,10 @@ ilib.StateHandler.prototype = {
 	 */
 	none: function(number, currentChar, fields, regionSettings) {
 		var ret;
-		
+
 		// this is a last resort function that is called when nothing is recognized.
 		// When this happens, just put the whole stripped number into the subscriber number
-			
+
 		if (number.length > 0) {
 			this.processSubscriberNumber(number, fields, regionSettings);
 			if (currentChar > 0 && currentChar < number.length) {
@@ -23648,11 +23648,11 @@ ilib.StateHandler.prototype = {
 				fields.invalid = true;
 			}
 		}
-		
+
 		ret = {
 			number:""
 		};
-		
+
 		return ret;
 	},
 	/**
@@ -23675,8 +23675,8 @@ ilib.StateHandler.prototype = {
 				// the setting is the negative of the length to add, so subtract to make it positive
 				end = currentChar + 1 - length;
 			}
-			
-			// found a VSC code (ie. a "star code"), so save it and cause the function to 
+
+			// found a VSC code (ie. a "star code"), so save it and cause the function to
 			// parse the rest of the number with the same table for this locale
 			fields.vsc = number.substring(0, end);
 			number = (number.length > end) ? "^" + number.substring(end) : "";
@@ -23836,9 +23836,9 @@ ilib.CSStateHandler = function () {
 ilib.CSStateHandler.prototype = new ilib.StateHandler();
 ilib.CSStateHandler.prototype.special = function (number, currentChar, fields, regionSettings) {
 	var ret;
-	
+
 	// found a special area code that is both a node and a leaf. In
-	// this state, we have found the leaf, so chop off the end 
+	// this state, we have found the leaf, so chop off the end
 	// character to make it a leaf.
 	if (number.charAt(0) === "0") {
 		fields.trunkAccess = number.charAt(0);
@@ -23847,11 +23847,11 @@ ilib.CSStateHandler.prototype.special = function (number, currentChar, fields, r
 		fields.areaCode = number.substring(0, currentChar);
 	}
 	this.processSubscriberNumber(number.substring(currentChar), fields, regionSettings);
-	
+
 	ret = {
 		number: ""
 	};
-	
+
 	return ret;
 };
 
@@ -23898,7 +23898,7 @@ ilib._handlerFactory = function (locale, plan) {
 };
 /*
  * phonenum.js - Represent a phone number.
- * 
+ *
  * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23916,9 +23916,9 @@ ilib._handlerFactory = function (locale, plan) {
  */
 
 /*
-!depends 
+!depends
 ilibglobal.js
-locale.js 
+locale.js
 localeinfo.js
 phone/numplan.js
 phone/phoneloc.js
@@ -23929,55 +23929,55 @@ phone/handler.js
 
 /**
  * @class
- * Create a new phone number instance that parses the phone number parameter for its 
+ * Create a new phone number instance that parses the phone number parameter for its
  * constituent parts, and store them as separate fields in the returned object.
- * 
+ *
  * The options object may include any of these properties:
- * 
+ *
  * <ul>
  * <li><i>locale</i> The locale with which to parse the number. This gives a clue as to which
  * numbering plan to use.
- * <li><i>mcc</i> The mobile carrier code (MCC) associated with the carrier that the phone is 
+ * <li><i>mcc</i> The mobile carrier code (MCC) associated with the carrier that the phone is
  * currently connected to, if known. This also can give a clue as to which numbering plan to
  * use
- * <li>onLoad - a callback function to call when this instance is fully 
+ * <li>onLoad - a callback function to call when this instance is fully
  * loaded. When the onLoad option is given, this class will attempt to
  * load any missing locale data using the ilib loader callback.
- * When the constructor is done (even if the data is already preassembled), the 
+ * When the constructor is done (even if the data is already preassembled), the
  * onLoad function is called with the current instance as a parameter, so this
  * callback can be used with preassembled or dynamic loading or a mix of the two.
- * <li>sync - tell whether to load any missing locale data synchronously or 
+ * <li>sync - tell whether to load any missing locale data synchronously or
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
  * not be usable for a while.
- * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ * <li><i>loadParams</i> - an object containing parameters to pass to the
  * loader callback function when locale data is missing. The parameters are not
- * interpretted or modified in any way. They are simply passed along. The object 
+ * interpretted or modified in any way. They are simply passed along. The object
  * may contain any property/value pairs as long as the calling code is in
  * agreement with the loader callback function as to what those parameters mean.
  * </ul>
- * 
+ *
  * This function is locale-sensitive, and will assume any number passed to it is
  * appropriate for the given locale. If the MCC is given, this method will assume
  * that numbers without an explicit country code have been dialled within the country
  * given by the MCC. This affects how things like area codes are parsed. If the MCC
  * is not given, this method will use the given locale to determine the country
- * code. If the locale is not explicitly given either, then this function uses the 
+ * code. If the locale is not explicitly given either, then this function uses the
  * region of current locale as the default.<p>
- * 
- * The input number may contain any formatting characters for the given locale. Each 
+ *
+ * The input number may contain any formatting characters for the given locale. Each
  * field that is returned in the json object is a simple string of digits with
  * all formatting and whitespace characters removed.<p>
- * 
+ *
  * The number is decomposed into its parts, regardless if the number
- * contains formatting characters. If a particular part cannot be extracted from given 
+ * contains formatting characters. If a particular part cannot be extracted from given
  * number, the field will not be returned as a field in the object. If no fields can be
- * extracted from the number at all, then all digits found in the string will be 
- * returned in the subscriberNumber field. If the number parameter contains no 
+ * extracted from the number at all, then all digits found in the string will be
+ * returned in the subscriberNumber field. If the number parameter contains no
  * digits, an empty object is returned.<p>
- * 
+ *
  * This instance can contain any of the following fields after parsing is done:
- * 
+ *
  * <ul>
  * <li>vsc - if this number starts with a VSC (Vertical Service Code, or "star code"), this field will contain the star and the code together
  * <li>iddPrefix - the prefix for international direct dialing. This can either be in the form of a plus character or the IDD access code for the given locale
@@ -23992,28 +23992,28 @@ phone/handler.js
  * <li>extension - in some countries, extensions are dialed directly without going through an operator or a voice prompt system. If the number includes an extension, it is given in this field.
  * <li>invalid - this property is added and set to true if the parser found that the number is invalid in the numbering plan for the country. This method will make its best effort at parsing, but any digits after the error will go into the subscriberNumber field
  * </ul>
- * 
+ *
  * The following rules determine how the number is parsed:
- * 
+ *
  * <ol>
  * <li>If the number starts with a character that is alphabetic instead of numeric, do
  * not parse the number at all. There is a good chance that it is not really a phone number.
  * In this case, an empty instance will be returned.
  * <li>If the phone number uses the plus notation or explicitly uses the international direct
- * dialing prefix for the given locale, then the country code is identified in 
+ * dialing prefix for the given locale, then the country code is identified in
  * the number. The rules of given locale are used to parse the IDD prefix, and then the rules
  * of the country in the prefix are used to parse the rest of the number.
  * <li>If a country code is provided as an argument to the function call, use that country's
- * parsing rules for the number. This is intended for programs like a Contacts application that 
- * know what the country is of the person that owns the phone number and can pass that on as 
+ * parsing rules for the number. This is intended for programs like a Contacts application that
+ * know what the country is of the person that owns the phone number and can pass that on as
  * a hint.
- * <li>If the appropriate locale cannot be easily determined, default to using the rules 
+ * <li>If the appropriate locale cannot be easily determined, default to using the rules
  * for the current user's region.
  * </ol>
- * 
+ *
  * Example: parsing the number "+49 02101345345-78" will give the following properties in the
  * resulting phone number instance:
- * 
+ *
  * <pre>
  *      {
  *        iddPrefix: "+",
@@ -24023,13 +24023,13 @@ phone/handler.js
  *        extension: "78"
  *      }
  * </pre>
- *  
- * Note that in this example, because international direct dialing is explicitly used 
- * in the number, the part of this number after the IDD prefix and country code will be 
+ *
+ * Note that in this example, because international direct dialing is explicitly used
+ * in the number, the part of this number after the IDD prefix and country code will be
  * parsed exactly the same way in all locales with German rules (country code 49).
- *  
+ *
  * Regions currently supported are:
- *  
+ *
  * <ul>
  * <li>NANP (North American Numbering Plan) countries - USA, Canada, Bermuda, various Caribbean nations
  * <li>UK
@@ -24052,7 +24052,7 @@ phone/handler.js
  * <li>Russia
  * <li>Brazil
  * </ul>
- * 
+ *
  * @constructor
  * @param {!string|ilib.PhoneNumber} number A free-form phone number to be parsed, or another phone
  * number instance to copy
@@ -24064,7 +24064,7 @@ ilib.PhoneNumber = function(number, options) {
 
 	this.sync = true;
 	this.loadParams = {};
-	
+
 	if (!number || (typeof number === "string" && number.length === 0)) {
 		return this;
 	}
@@ -24079,9 +24079,9 @@ ilib.PhoneNumber = function(number, options) {
 		}
 
 		if (typeof(options.onLoad) === 'function') {
-			/** 
+			/**
 			 * @private
-			 * @type {function(ilib.PhoneNumber)} 
+			 * @type {function(ilib.PhoneNumber)}
 			 */
 			this.onLoad = options.onLoad;
 		}
@@ -24090,111 +24090,111 @@ ilib.PhoneNumber = function(number, options) {
 	if (typeof number === "object") {
 		/**
 		 * The vertical service code. These are codes that typically
-		 * start with a star or hash, like "*69" for "dial back the 
+		 * start with a star or hash, like "*69" for "dial back the
 		 * last number that called me".
-		 * @type {string|undefined} 
+		 * @type {string|undefined}
 		 */
 		this.vsc = number.vsc;
 
 		/**
 		 * The international direct dialing prefix. This is always
-		 * followed by the country code. 
-		 * @type {string} 
+		 * followed by the country code.
+		 * @type {string}
 		 */
 		this.iddPrefix = number.iddPrefix;
-		
+
 		/**
 		 * The unique IDD country code for the country where the
-		 * phone number is serviced. 
-		 * @type {string|undefined} 
+		 * phone number is serviced.
+		 * @type {string|undefined}
 		 */
 		this.countryCode = number.countryCode;
-		
+
 		/**
-		 * The digits required to access the trunk. 
-		 * @type {string|undefined} 
+		 * The digits required to access the trunk.
+		 * @type {string|undefined}
 		 */
 		this.trunkAccess = number.trunkAccess;
-		
+
 		/**
-		 * The carrier identification code used to identify 
-		 * alternate long distance or international carriers. 
-		 * @type {string|undefined} 
+		 * The carrier identification code used to identify
+		 * alternate long distance or international carriers.
+		 * @type {string|undefined}
 		 */
 		this.cic = number.cic;
-		
+
 		/**
 		 * Identifies an emergency number that is typically
 		 * short, such as "911" in North America or "112" in
-		 * many other places in the world. 
-		 * @type {string|undefined} 
+		 * many other places in the world.
+		 * @type {string|undefined}
 		 */
 		this.emergency = number.emergency;
-		
+
 		/**
 		 * The prefix of the subscriber number that indicates
-		 * that this is the number of a mobile phone. 
-		 * @type {string|undefined} 
+		 * that this is the number of a mobile phone.
+		 * @type {string|undefined}
 		 */
 		this.mobilePrefix = number.mobilePrefix;
-		
+
 		/**
 		 * The prefix that identifies this number as commercial
-		 * service number. 
-		 * @type {string|undefined} 
+		 * service number.
+		 * @type {string|undefined}
 		 */
 		this.serviceCode = number.serviceCode;
-		
+
 		/**
-		 * The area code prefix of a land line number. 
-		 * @type {string|undefined} 
+		 * The area code prefix of a land line number.
+		 * @type {string|undefined}
 		 */
 		this.areaCode = number.areaCode;
-		
+
 		/**
 		 * The unique number associated with the subscriber
-		 * of this phone. 
-		 * @type {string|undefined} 
+		 * of this phone.
+		 * @type {string|undefined}
 		 */
 		this.subscriberNumber = number.subscriberNumber;
-		
+
 		/**
-		 * The direct dial extension number. 
-		 * @type {string|undefined} 
+		 * The direct dial extension number.
+		 * @type {string|undefined}
 		 */
 		this.extension = number.extension;
-		
+
 		/**
 		 * @private
-		 * @type {boolean} 
+		 * @type {boolean}
 		 */
 		this.invalid = number.invalid;
 
 		if (number.plan && number.locale) {
-			/** 
+			/**
 			 * @private
-			 * @type {ilib.NumPlan} 
+			 * @type {ilib.NumPlan}
 			 */
 			this.plan = number.plan;
-			
-			/** 
+
+			/**
 			 * @private
-			 * @type {ilib.Locale.PhoneLoc} 
+			 * @type {ilib.Locale.PhoneLoc}
 			 */
 			this.locale = number.locale;
-	
-			/** 
+
+			/**
 			 * @private
-			 * @type {ilib.NumPlan} 
+			 * @type {ilib.NumPlan}
 			 */
 			this.destinationPlan = number.destinationPlan;
-			
-			/** 
+
+			/**
 			 * @private
-			 * @type {ilib.Locale.PhoneLoc} 
+			 * @type {ilib.Locale.PhoneLoc}
 			 */
 			this.destinationLocale = number.destinationLocale;
-	
+
 			if (options && typeof(options.onLoad) === 'function') {
 				options.onLoad(this);
 			}
@@ -24215,10 +24215,10 @@ ilib.PhoneNumber = function(number, options) {
 				loadParms: this.loadParams,
 				onLoad: ilib.bind(this, function (plan) {
 					this.plan = this.destinationPlan = plan;
-			
+
 					if (typeof number === "object") {
-						// the copy constructor code above did not find the locale 
-						// or plan before, but now they are loaded, so we can return 
+						// the copy constructor code above did not find the locale
+						// or plan before, but now they are loaded, so we can return
 						// already without going further
 						return;
 					}
@@ -24234,7 +24234,7 @@ ilib.PhoneNumber = function(number, options) {
 							if (!stdata) {
 								stdata = ilib.PhoneNumber._defaultStates;
 							}
-		
+
 							stateData = stdata;
 
 							regionSettings = {
@@ -24242,7 +24242,7 @@ ilib.PhoneNumber = function(number, options) {
 								plan: plan,
 								handler: ilib._handlerFactory(this.locale, plan)
 							};
-							
+
 							// use ^ to indicate the beginning of the number, because certain things only match at the beginning
 							number = "^" + number.replace(/\^/g, '');
 							number = ilib.PhoneNumber._stripFormatting(number);
@@ -24258,29 +24258,29 @@ ilib.PhoneNumber = function(number, options) {
 
 /**
  * Parse an International Mobile Subscriber Identity (IMSI) number into its 3 constituent parts:
- * 
+ *
  * <ol>
- * <li>mcc - Mobile Country Code, which identifies the country where the phone is currently receiving 
+ * <li>mcc - Mobile Country Code, which identifies the country where the phone is currently receiving
  * service.
- * <li>mnc - Mobile Network Code, which identifies the carrier which is currently providing service to the phone 
- * <li>msin - Mobile Subscription Identifier Number. This is a unique number identifying the mobile phone on 
+ * <li>mnc - Mobile Network Code, which identifies the carrier which is currently providing service to the phone
+ * <li>msin - Mobile Subscription Identifier Number. This is a unique number identifying the mobile phone on
  * the network, which usually maps to an account/subscriber in the carrier's database.
  * </ol>
- * 
+ *
  * Because this function may need to load data to identify the above parts, you can pass an options
  * object that controls how the data is loaded. The options may contain any of the following properties:
  *
  * <ul>
- * <li>onLoad - a callback function to call when the parsing is done. When the onLoad option is given, 
+ * <li>onLoad - a callback function to call when the parsing is done. When the onLoad option is given,
  * this method will attempt to load the locale data using the ilib loader callback. When it is done
  * (even if the data is already preassembled), the onLoad function is called with the parsing results
- * as a parameter, so this callback can be used with preassembled or dynamic, synchronous or 
+ * as a parameter, so this callback can be used with preassembled or dynamic, synchronous or
  * asynchronous loading or a mix of the above.
- * <li>sync - tell whether to load any missing locale data synchronously or asynchronously. If this 
- * option is given as "false", then the "onLoad" callback must be given, as the results returned from 
+ * <li>sync - tell whether to load any missing locale data synchronously or asynchronously. If this
+ * option is given as "false", then the "onLoad" callback must be given, as the results returned from
  * this constructor will not be usable for a while.
- * <li><i>loadParams</i> - an object containing parameters to pass to the loader callback function 
- * when locale data is missing. The parameters are not interpretted or modified in any way. They are 
+ * <li><i>loadParams</i> - an object containing parameters to pass to the loader callback function
+ * when locale data is missing. The parameters are not interpretted or modified in any way. They are
  * simply passed along. The object may contain any property/value pairs as long as the calling code is in
  * agreement with the loader callback function as to what those parameters mean.
  * </ul>
@@ -24295,7 +24295,7 @@ ilib.PhoneNumber.parseImsi = function(imsi, options) {
 	var sync = true,
 		loadParams = {},
 		fields = {};
-	
+
 	if (!imsi) {
 		return undefined;
 	}
@@ -24304,29 +24304,29 @@ ilib.PhoneNumber.parseImsi = function(imsi, options) {
 		if (typeof(options.sync) !== 'undefined') {
 			sync = (options.sync == true);
 		}
-		
+
 		if (options.loadParams) {
 			loadParams = options.loadParams;
 		}
-	}	
+	}
 
 	if (ilib.data.mnc) {
 		fields = ilib.PhoneNumber._parseImsi(ilib.data.mnc, imsi);
-		
+
 		if (options && typeof(options.onLoad) === 'function') {
 			options.onLoad(fields);
 		}
 	} else {
 		ilib.loadData({
-			name: "mnc.json", 
-			object: ilib.PhoneNumber, 
-			nonlocale: true, 
-			sync: sync, 
-			loadParams: loadParams, 
+			name: "mnc.json",
+			object: ilib.PhoneNumber,
+			nonlocale: true,
+			sync: sync,
+			loadParams: loadParams,
 			callback: ilib.bind(this, function(data) {
 				ilib.data.mnc = data;
 				fields = ilib.PhoneNumber._parseImsi(data, imsi);
-				
+
 				if (options && typeof(options.onLoad) === 'function') {
 					options.onLoad(fields);
 				}
@@ -24342,30 +24342,30 @@ ilib.PhoneNumber.parseImsi = function(imsi, options) {
  * @protected
  */
 ilib.PhoneNumber._parseImsi = function(data, imsi) {
-	var ch, 
+	var ch,
 		i,
-		currentState, 
-		end, 
+		currentState,
+		end,
 		handlerMethod,
 		state = 0,
 		newState,
 		fields = {},
 		lastLeaf,
 		consumed = 0;
-	
+
 	currentState = data;
 	if (!currentState) {
 		// can't parse anything
 		return undefined;
 	}
-	
+
 	i = 0;
 	while (i < imsi.length) {
 		ch = ilib.PhoneNumber._getCharacterCode(imsi.charAt(i));
 		// console.info("parsing char " + imsi.charAt(i) + " code: " + ch);
 		if (ch >= 0) {
 			newState = currentState.s && currentState.s[ch];
-			
+
 			if (typeof(newState) === 'object') {
 				if (typeof(newState.l) !== 'undefined') {
 					// save for latter if needed
@@ -24380,13 +24380,13 @@ ilib.PhoneNumber._parseImsi = function(data, imsi) {
 				if ((typeof(newState) === 'undefined' || newState === 0 ||
 					(typeof(newState) === 'object' && typeof(newState.l) === 'undefined')) &&
 					 lastLeaf) {
-					// this is possibly a look-ahead and it didn't work... 
+					// this is possibly a look-ahead and it didn't work...
 					// so fall back to the last leaf and use that as the
 					// final state
 					newState = lastLeaf;
 					i = consumed;
 				}
-				
+
 				if ((typeof(newState) === 'number' && newState) ||
 					(typeof(newState) === 'object' && typeof(newState.l) !== 'undefined')) {
 					// final state
@@ -24394,7 +24394,7 @@ ilib.PhoneNumber._parseImsi = function(data, imsi) {
 					handlerMethod = ilib.PhoneNumber._states[stateNumber];
 
 					// console.info("reached final state " + newState + " handler method is " + handlerMethod + " and i is " + i);
-	
+
 					// deal with syntactic ambiguity by using the "special" end state instead of "area"
 					if ( handlerMethod === "area" ) {
 						end = i+1;
@@ -24402,11 +24402,11 @@ ilib.PhoneNumber._parseImsi = function(data, imsi) {
 						// unrecognized imsi, so just assume the mnc is 3 digits
 						end = 6;
 					}
-					
+
 					fields.mcc = imsi.substring(0,3);
 					fields.mnc = imsi.substring(3,end);
 					fields.msin = imsi.substring(end);
-	
+
 					return fields;
 				} else {
 					// parse error
@@ -24428,18 +24428,18 @@ ilib.PhoneNumber._parseImsi = function(data, imsi) {
 			i++;
 		}
 	}
-		
+
 	if (i >= imsi.length && imsi.length >= 6) {
-		// we reached the end of the imsi, but did not finish recognizing anything. 
+		// we reached the end of the imsi, but did not finish recognizing anything.
 		// Default to last resort and assume 3 digit mnc
 		fields.mcc = imsi.substring(0,3);
 		fields.mnc = imsi.substring(3,6);
 		fields.msin = imsi.substring(6);
 	} else {
-		// unknown or not enough characters for a real imsi 
+		// unknown or not enough characters for a real imsi
 		fields = undefined;
 	}
-		
+
 	// console.info("Globalization.Phone.parseImsi: final result is: " + JSON.stringify(fields));
 	return fields;
 };
@@ -24589,7 +24589,7 @@ ilib.PhoneNumber.prototype = {
 			onLoad: ilib.bind(this, function (loc) {
 				/*
 				 * this.locale is the locale where this number is being parsed,
-				 * and is used to parse the IDD prefix, if any, and this.destinationLocale is 
+				 * and is used to parse the IDD prefix, if any, and this.destinationLocale is
 				 * the locale of the rest of this number after the IDD prefix.
 				 */
 				/** @type {ilib.Locale.PhoneLoc} */
@@ -24607,7 +24607,7 @@ ilib.PhoneNumber.prototype = {
 						if (!stateData) {
 							stateData = ilib.PhoneNumber._defaultStates;
 						}
-						
+
 						new ilib.NumPlan({
 							locale: this.destinationLocale,
 							sync: this.sync,
@@ -24615,8 +24615,8 @@ ilib.PhoneNumber.prototype = {
 							onLoad: ilib.bind(this, function (plan) {
 								/*
 								 * this.plan is the plan where this number is being parsed,
-								 * and is used to parse the IDD prefix, if any, and this.destinationPlan is 
-								 * the plan of the rest of this number after the IDD prefix in the 
+								 * and is used to parse the IDD prefix, if any, and this.destinationPlan is
+								 * the plan of the rest of this number after the IDD prefix in the
 								 * destination locale.
 								 */
 								/** @type {ilib.NumPlan} */
@@ -24627,16 +24627,16 @@ ilib.PhoneNumber.prototype = {
 									plan: plan,
 									handler: ilib._handlerFactory(this.destinationLocale, plan)
 								};
-								
+
 								// for plans that do not skip the trunk code when dialing from
-								// abroad, we need to treat the number from here on in as if it 
+								// abroad, we need to treat the number from here on in as if it
 								// were parsing a local number from scratch. That way, the parser
 								// does not get confused between parts of the number at the
 								// beginning of the number, and parts in the middle.
 								if (!plan.getSkipTrunk()) {
 									number = '^' + number;
 								}
-									
+
 								// recursively call the parser with the new states data
 								// to finish the parsing
 								this._parseNumber(number, regionSettings, options);
@@ -24647,7 +24647,7 @@ ilib.PhoneNumber.prototype = {
 			})
 		});
 	},
-	
+
 	/**
 	 * @protected
 	 * @param {string} number
@@ -24674,11 +24674,11 @@ ilib.PhoneNumber.prototype = {
 			if (ch >= 0) {
 				// newState = stateData.states[state][ch];
 				newState = currentState.s && currentState.s[ch];
-				
+
 				if (!newState && currentState.s && currentState.s[dot]) {
 					newState = currentState.s[dot];
 				}
-				
+
 				if (typeof(newState) === 'object' && i+1 < number.length) {
 					if (typeof(newState.l) !== 'undefined') {
 						// this is a leaf node, so save that for later if needed
@@ -24693,7 +24693,7 @@ ilib.PhoneNumber.prototype = {
 					if ((typeof(newState) === 'undefined' || newState === 0 ||
 						(typeof(newState) === 'object' && typeof(newState.l) === 'undefined')) &&
 						 lastLeaf) {
-						// this is possibly a look-ahead and it didn't work... 
+						// this is possibly a look-ahead and it didn't work...
 						// so fall back to the last leaf and use that as the
 						// final state
 						newState = lastLeaf;
@@ -24701,29 +24701,29 @@ ilib.PhoneNumber.prototype = {
 						consumed = 0;
 						lastLeaf = undefined;
 					}
-					
+
 					if ((typeof(newState) === 'number' && newState) ||
 						(typeof(newState) === 'object' && typeof(newState.l) !== 'undefined')) {
 						// final state
 						var stateNumber = typeof(newState) === 'number' ? newState : newState.l;
 						handlerMethod = ilib.PhoneNumber._states[stateNumber];
-						
+
 						if (number.charAt(0) === '^') {
 							result = regionSettings.handler[handlerMethod](number.slice(1), i-1, this, regionSettings);
 						} else {
 							result = regionSettings.handler[handlerMethod](number, i, this, regionSettings);
 						}
-		
+
 						// reparse whatever is left
 						number = result.number;
 						i = consumed = 0;
 						lastLeaf = undefined;
-						
+
 						//console.log("reparsing with new number: " +  number);
 						currentState = regionSettings.stateData;
 						// if the handler requested a special sub-table, use it for this round of parsing,
 						// otherwise, set it back to the regular table to continue parsing
-	
+
 						if (result.countryCode !== undefined) {
 							this._parseOtherCountry(number, regionData, options, result.countryCode);
 							// don't process any further -- let the work be done in the onLoad callbacks
@@ -24739,13 +24739,13 @@ ilib.PhoneNumber.prototype = {
 									if (!data) {
 										data = ilib.PhoneNumber._defaultStates;
 									}
-	
+
 									regionSettings = {
 										stateData: data,
 										plan: regionSettings.plan,
 										handler: regionSettings.handler
 									};
-									
+
 									// recursively call the parser with the new states data
 									// to finish the parsing
 									this._parseNumber(number, regionSettings, options);
@@ -24782,7 +24782,7 @@ ilib.PhoneNumber.prototype = {
 		}
 		if (i >= number.length && currentState !== regionData.stateData) {
 			handlerMethod = (typeof(currentState.l) === 'undefined' || currentState === 0) ? "none" : "local";
-			// we reached the end of the phone number, but did not finish recognizing anything. 
+			// we reached the end of the phone number, but did not finish recognizing anything.
 			// Default to last resort and put everything that is left into the subscriber number
 			//console.log("Reached end of number before parsing was complete. Using handler for method none.")
 			if (number.charAt(0) === '^') {
@@ -24803,14 +24803,14 @@ ilib.PhoneNumber.prototype = {
 	_getPrefix: function() {
 		return this.areaCode || this.serviceCode || this.mobilePrefix || "";
 	},
-	
+
 	/**
 	 * @protected
 	 */
 	_hasPrefix: function() {
 		return (this._getPrefix() !== "");
 	},
-	
+
 	/**
 	 * Exclusive or -- return true, if one is defined and the other isn't
 	 * @protected
@@ -24822,14 +24822,14 @@ ilib.PhoneNumber.prototype = {
 			return true;
 		}
 	},
-	
+
 	/**
-	 * return a version of the phone number that contains only the dialable digits in the correct order 
+	 * return a version of the phone number that contains only the dialable digits in the correct order
 	 * @protected
 	 */
 	_join: function () {
 		var fieldName, formatted = "";
-		
+
 		try {
 			for (var field in ilib.PhoneNumber._fieldOrder) {
 				if (typeof field === 'string' && typeof ilib.PhoneNumber._fieldOrder[field] === 'string') {
@@ -24850,50 +24850,50 @@ ilib.PhoneNumber.prototype = {
 	/**
 	 * This routine will compare the two phone numbers in an locale-sensitive
 	 * manner to see if they possibly reference the same phone number.<p>
-	 * 
+	 *
 	 * In many places,
-	 * there are multiple ways to reach the same phone number. In North America for 
+	 * there are multiple ways to reach the same phone number. In North America for
 	 * example, you might have a number with the trunk access code of "1" and another
 	 * without, and they reference the exact same phone number. This is considered a
 	 * strong match. For a different pair of numbers, one may be a local number and
-	 * the other a full phone number with area code, which may reference the same 
-	 * phone number if the local number happens to be located in that area code. 
-	 * However, you cannot say for sure if it is in that area code, so it will 
+	 * the other a full phone number with area code, which may reference the same
+	 * phone number if the local number happens to be located in that area code.
+	 * However, you cannot say for sure if it is in that area code, so it will
 	 * be considered a somewhat weaker match.<p>
-	 *  
-	 * Similarly, in other countries, there are sometimes different ways of 
+	 *
+	 * Similarly, in other countries, there are sometimes different ways of
 	 * reaching the same destination, and the way that numbers
 	 * match depends on the locale.<p>
-	 * 
+	 *
 	 * The various phone number fields are handled differently for matches. There
 	 * are various fields that do not need to match at all. For example, you may
 	 * type equally enter "00" or "+" into your phone to start international direct
-	 * dialling, so the iddPrefix field does not need to match at all.<p> 
-	 * 
-	 * Typically, fields that require matches need to match exactly if both sides have a value 
+	 * dialling, so the iddPrefix field does not need to match at all.<p>
+	 *
+	 * Typically, fields that require matches need to match exactly if both sides have a value
 	 * for that field. If both sides specify a value and those values differ, that is
-	 * a strong non-match. If one side does not have a value and the other does, that 
+	 * a strong non-match. If one side does not have a value and the other does, that
 	 * causes a partial match, because the number with the missing field may possibly
 	 * have an implied value that matches the other number. For example, the numbers
 	 * "650-555-1234" and "555-1234" have a partial match as the local number "555-1234"
 	 * might possibly have the same 650 area code as the first number, and might possibly
-	 * not. If both side do not specify a value for a particular field, that field is 
+	 * not. If both side do not specify a value for a particular field, that field is
 	 * considered matching.<p>
-	 *  
+	 *
 	 * The values of following fields are ignored when performing matches:
-	 * 
+	 *
 	 * <ul>
 	 * <li>vsc
 	 * <li>iddPrefix
 	 * <li>cic
 	 * <li>trunkAccess
 	 * </ul>
-	 * 
+	 *
 	 * The values of the following fields matter if they do not match:
-	 *   
+	 *
 	 * <ul>
-	 * <li>countryCode - A difference causes a moderately strong problem except for 
-	 * certain countries where there is a way to access the same subscriber via IDD 
+	 * <li>countryCode - A difference causes a moderately strong problem except for
+	 * certain countries where there is a way to access the same subscriber via IDD
 	 * and via intranetwork dialling
 	 * <li>mobilePrefix - A difference causes a possible non-match
 	 * <li>serviceCode - A difference causes a possible non-match
@@ -24901,11 +24901,11 @@ ilib.PhoneNumber.prototype = {
 	 * <li>subscriberNumber - A difference causes a very strong non-match
 	 * <li>extension - A difference causes a minor non-match
 	 * </ul>
-	 *  
+	 *
 	 * @param {string|ilib.PhoneNumber} other other phone number to compare this one to
-	 * @return {number} non-negative integer describing the percentage quality of the 
-	 * match. 100 means a very strong match (100%), and lower numbers are less and 
-	 * less strong, down to 0 meaning not at all a match. 
+	 * @return {number} non-negative integer describing the percentage quality of the
+	 * match. 100 means a very strong match (100%), and lower numbers are less and
+	 * less strong, down to 0 meaning not at all a match.
 	 */
 	compare: function (other) {
 		var match = 100,
@@ -24918,7 +24918,7 @@ ilib.PhoneNumber.prototype = {
 		if (typeof this.locale.region === "string") {
 			currentCountryCode = this.locale._mapRegiontoCC(this.locale.region);
 		}
-		
+
 		// subscriber number must be present and must match
 		if (!this.subscriberNumber || !other.subscriberNumber || this.subscriberNumber !== other.subscriberNumber) {
 			return 0;
@@ -24932,7 +24932,7 @@ ilib.PhoneNumber.prototype = {
 		if (this._xor(this.countryCode, other.countryCode)) {
 			// if one doesn't have a country code, give it some demerit points, but if the
 			// one that has the country code has something other than the current country
-			// add even more. Ignore the special cases where you can dial the same number internationally or via 
+			// add even more. Ignore the special cases where you can dial the same number internationally or via
 			// the local numbering system
 			switch (this.locale.getRegion()) {
 			case 'FR':
@@ -24945,7 +24945,7 @@ ilib.PhoneNumber.prototype = {
 				}
 				break;
 			case 'IT':
-				if (this.countryCode in ITcountries || other.countryCode in ITcountries) { 
+				if (this.countryCode in ITcountries || other.countryCode in ITcountries) {
 					if (this.areaCode !== other.areaCode) {
 						match -= 100;
 					}
@@ -24955,13 +24955,13 @@ ilib.PhoneNumber.prototype = {
 				break;
 			default:
 				match -= 16;
-				if ((this.countryCode !== undefined && this.countryCode !== currentCountryCode) || 
+				if ((this.countryCode !== undefined && this.countryCode !== currentCountryCode) ||
 					(other.countryCode !== undefined && other.countryCode !== currentCountryCode)) {
 					match -= 16;
 				}
 			}
 		} else if (this.countryCode !== other.countryCode) {
-			// ignore the special cases where you can dial the same number internationally or via 
+			// ignore the special cases where you can dial the same number internationally or via
 			// the local numbering system
 			if (other.countryCode === '33' || this.countryCode === '33') {
 				// france
@@ -24974,7 +24974,7 @@ ilib.PhoneNumber.prototype = {
 				}
 			} else if (this.countryCode === '39' || other.countryCode === '39') {
 				// italy
-				if (this.countryCode in ITcountries || other.countryCode in ITcountries) { 
+				if (this.countryCode in ITcountries || other.countryCode in ITcountries) {
 					if (this.areaCode !== other.areaCode) {
 						match -= 100;
 					}
@@ -25008,25 +25008,25 @@ ilib.PhoneNumber.prototype = {
 
 		thisPrefix = this._getPrefix();
 		otherPrefix = other._getPrefix();
-		
+
 		if (thisPrefix && otherPrefix && thisPrefix !== otherPrefix) {
 			match -= 100;
 		}
-		
+
 		// make sure we are between 0 and 100
 		if (match < 0) {
-			match = 0;	
+			match = 0;
 		} else if (match > 100) {
 			match = 100;
 		}
 
 		return match;
 	},
-	
+
 	/**
 	 * Determine whether or not the other phone number is exactly equal to the current one.<p>
-	 *  
-	 * The difference between the compare method and the equals method is that the compare 
+	 *
+	 * The difference between the compare method and the equals method is that the compare
 	 * method compares normalized numbers with each other and returns the degree of match,
 	 * whereas the equals operator returns true iff the two numbers contain the same fields
 	 * and the fields are exactly the same. Functions and other non-phone number properties
@@ -25038,7 +25038,7 @@ ilib.PhoneNumber.prototype = {
 		if (other.locale && this.locale && !this.locale.equals(other.locale) && (!this.countryCode || !other.countryCode)) {
 			return false;
 		}
-		
+
 		for (var p in other) {
 			if (p !== undefined && this[p] !== undefined && typeof(this[p]) !== 'object') {
 				if (other[p] === undefined) {
@@ -25073,7 +25073,7 @@ ilib.PhoneNumber.prototype = {
 		}
 		return true;
 	},
-	
+
 
 	/**
 	 * @private
@@ -25085,7 +25085,7 @@ ilib.PhoneNumber.prototype = {
 	 *   assistedDialing:boolean,
 	 *   sms:boolean,
 	 *   manualDialing:boolean
-	 * }} options an object containing options to help in normalizing. 
+	 * }} options an object containing options to help in normalizing.
 	 * @param {ilib.PhoneNumber} norm
 	 * @param {ilib.Locale.PhoneLoc} homeLocale
 	 * @param {ilib.Locale.PhoneLoc} currentLocale
@@ -25097,11 +25097,11 @@ ilib.PhoneNumber.prototype = {
 	 */
 	_doNormalize: function(options, norm, homeLocale, currentLocale, currentPlan, destinationLocale, destinationPlan, sync, loadParams) {
 		var formatted = "";
-		
+
 		if (!norm.invalid && options && options.assistedDialing) {
 			// don't normalize things that don't have subscriber numbers. Also, don't normalize
 			// manually dialed local numbers. Do normalize local numbers in contact entries.
-			if (norm.subscriberNumber && 
+			if (norm.subscriberNumber &&
 					(!options.manualDialing ||
 					 norm.iddPrefix ||
 					 norm.countryCode ||
@@ -25109,10 +25109,10 @@ ilib.PhoneNumber.prototype = {
 				// console.log("normalize: assisted dialling normalization of " + JSON.stringify(norm));
 				if (currentLocale.getRegion() !== destinationLocale.getRegion()) {
 					// we are currently calling internationally
-					if (!norm._hasPrefix() && 
-							options.defaultAreaCode && 
+					if (!norm._hasPrefix() &&
+							options.defaultAreaCode &&
 							destinationLocale.getRegion() === homeLocale.getRegion() &&
-							(!destinationPlan.getFieldLength("minLocalLength") || 
+							(!destinationPlan.getFieldLength("minLocalLength") ||
 								norm.subscriberNumber.length >= destinationPlan.getFieldLength("minLocalLength"))) {
 						// area code is required when dialling from international, but only add it if we are dialing
 						// to our home area. Otherwise, the default area code is not valid!
@@ -25122,12 +25122,12 @@ ilib.PhoneNumber.prototype = {
 							norm.trunkAccess = destinationPlan.getTrunkCode();
 						}
 					}
-					
+
 					if (norm.trunkAccess && destinationPlan.getSkipTrunk()) {
 						// on some phone systems, the trunk access code is dropped when dialling from international
 						delete norm.trunkAccess;
 					}
-					
+
 					// make sure to get the country code for the destination region, not the current region!
 					if (options.sms) {
 						if (homeLocale.getRegion() === "US" && currentLocale.getRegion() !== "US") {
@@ -25182,9 +25182,9 @@ ilib.PhoneNumber.prototype = {
 							}
 						}
 					}
-					
+
 					if (options.sms &&
-							homeLocale.getRegion() === "US" && 
+							homeLocale.getRegion() === "US" &&
 							currentLocale.getRegion() !== "US") {
 						norm.iddPrefix = "011"; // make it go through the US first
 						if (destinationPlan.getSkipTrunk() && norm.trunkAccess) {
@@ -25194,7 +25194,7 @@ ilib.PhoneNumber.prototype = {
 						// we are in our destination country, so strip the international dialling prefixes
 						delete norm.iddPrefix;
 						delete norm.countryCode;
-						
+
 						if ((destinationPlan.getPlanStyle() === "open" || destinationPlan.getTrunkRequired()) && destinationPlan.getTrunkCode()) {
 							norm.trunkAccess = destinationPlan.getTrunkCode();
 						}
@@ -25206,19 +25206,19 @@ ilib.PhoneNumber.prototype = {
 			if (!norm._hasPrefix() && options && options.defaultAreaCode && destinationLocale.getRegion() === homeLocale.region) {
 				norm.areaCode = options.defaultAreaCode;
 			}
-			
+
 			if (!norm.countryCode && norm._hasPrefix()) {
 				norm.countryCode = homeLocale._mapRegiontoCC(destinationLocale.getRegion());
 			}
 
 			if (norm.countryCode) {
 				if (options && options.networkType && options.networkType === "cdma") {
-					norm.iddPrefix = currentPlan.getIDDCode(); 
+					norm.iddPrefix = currentPlan.getIDDCode();
 				} else {
 					// all umts carriers support plus dialing
 					norm.iddPrefix = "+";
 				}
-		
+
 				if (destinationPlan.getSkipTrunk() && norm.trunkAccess) {
 					delete norm.trunkAccess;
 				} else if (!destinationPlan.getSkipTrunk() && !norm.trunkAccess && destinationPlan.getTrunkCode()) {
@@ -25226,13 +25226,13 @@ ilib.PhoneNumber.prototype = {
 				}
 			}
 		}
-		
+
 		// console.info("normalize: after normalization, the normalized phone number is: " + JSON.stringify(norm));
 		formatted = norm._join();
 
 		return formatted;
 	},
-	
+
 	/**
 	 * @private
 	 * @param {{
@@ -25243,7 +25243,7 @@ ilib.PhoneNumber.prototype = {
 	 *   assistedDialing:boolean,
 	 *   sms:boolean,
 	 *   manualDialing:boolean
-	 * }} options an object containing options to help in normalizing. 
+	 * }} options an object containing options to help in normalizing.
 	 * @param {ilib.PhoneNumber} norm
 	 * @param {ilib.Locale.PhoneLoc} homeLocale
 	 * @param {ilib.Locale.PhoneLoc} currentLocale
@@ -25255,14 +25255,14 @@ ilib.PhoneNumber.prototype = {
 	 * @param {function(string)} callback
 	 */
 	_doReparse: function(options, norm, homeLocale, currentLocale, currentPlan, destinationLocale, destinationPlan, sync, loadParams, callback) {
-		var formatted, 
+		var formatted,
 			tempRegion;
-		
+
 		if (options &&
 				options.assistedDialing &&
-				!norm.trunkAccess && 
+				!norm.trunkAccess &&
 				!norm.iddPrefix &&
-				norm.subscriberNumber && 
+				norm.subscriberNumber &&
 				norm.subscriberNumber.length > destinationPlan.getFieldLength("maxLocalLength")) {
 
 			// numbers that are too long are sometimes international direct dialed numbers that
@@ -25280,7 +25280,7 @@ ilib.PhoneNumber.prototype = {
 						destinationLocale = data.destinationLocale;
 						destinationPlan = data.destinationPlan;
 					}
-					
+
 					formatted = this._doNormalize(options, norm, homeLocale, currentLocale, currentPlan, destinationLocale, destinationPlan, sync, loadParams);
 					if (typeof(callback) === 'function') {
 						callback(formatted);
@@ -25299,7 +25299,7 @@ ilib.PhoneNumber.prototype = {
 					if (data && !data.invalid) {
 						norm = data;
 					}
-					
+
 					formatted = this._doNormalize(options, norm, homeLocale, currentLocale, currentPlan, destinationLocale, destinationPlan, sync, loadParams);
 					if (typeof(callback) === 'function') {
 						callback(formatted);
@@ -25313,92 +25313,92 @@ ilib.PhoneNumber.prototype = {
 			}
 		}
 	},
-	
+
 	/**
 	 * This function normalizes the current phone number to a canonical format and returns a
-	 * string with that phone number. If parts are missing, this function attempts to fill in 
+	 * string with that phone number. If parts are missing, this function attempts to fill in
 	 * those parts.<p>
-	 * 	  
+	 *
 	 * The options object contains a set of properties that can possibly help normalize
 	 * this number by providing "extra" information to the algorithm. The options
 	 * parameter may be null or an empty object if no hints can be determined before
 	 * this call is made. If any particular hint is not
 	 * available, it does not need to be present in the options object.<p>
-	 * 
+	 *
 	 * The following is a list of hints that the algorithm will look for in the options
 	 * object:
-	 * 
+	 *
 	 * <ul>
-	 * <li><i>mcc</i> the mobile carrier code of the current network upon which this 
-	 * phone is operating. This is translated into an IDD country code. This is 
+	 * <li><i>mcc</i> the mobile carrier code of the current network upon which this
+	 * phone is operating. This is translated into an IDD country code. This is
 	 * useful if the number being normalized comes from CNAP (callerid) and the
 	 * MCC is known.
 	 * <li><i>defaultAreaCode</i> the area code of the phone number of the current
-	 * device, if available. Local numbers in a person's contact list are most 
+	 * device, if available. Local numbers in a person's contact list are most
 	 * probably in this same area code.
 	 * <li><i>country</i> the 2 letter ISO 3166 code of the country if it is
 	 * known from some other means such as parsing the physical address of the
-	 * person associated with the phone number, or the from the domain name 
+	 * person associated with the phone number, or the from the domain name
 	 * of the person's email address
 	 * <li><i>networkType</i> specifies whether the phone is currently connected to a
 	 * CDMA network or a UMTS network. Valid values are the strings "cdma" and "umts".
 	 * If one of those two strings are not specified, or if this property is left off
 	 * completely, this method will assume UMTS.
 	 * </ul>
-	 * 
+	 *
 	 * The following are a list of options that control the behaviour of the normalization:
-	 * 
+	 *
 	 * <ul>
 	 * <li><i>assistedDialing</i> if this is set to true, the number will be normalized
-	 * so that it can dialled directly on the type of network this phone is 
-	 * currently connected to. This allows customers to dial numbers or use numbers 
-	 * in their contact list that are specific to their "home" region when they are 
-	 * roaming and those numbers would not otherwise work with the current roaming 
-	 * carrier as they are. The home region is 
-	 * specified as the phoneRegion system preference that is settable in the 
-	 * regional settings app. With assisted dialling, this method will add or 
+	 * so that it can dialled directly on the type of network this phone is
+	 * currently connected to. This allows customers to dial numbers or use numbers
+	 * in their contact list that are specific to their "home" region when they are
+	 * roaming and those numbers would not otherwise work with the current roaming
+	 * carrier as they are. The home region is
+	 * specified as the phoneRegion system preference that is settable in the
+	 * regional settings app. With assisted dialling, this method will add or
 	 * remove international direct dialling prefixes and country codes, as well as
 	 * national trunk access codes, as required by the current roaming carrier and the
-	 * home region in order to dial the number properly. If it is not possible to 
+	 * home region in order to dial the number properly. If it is not possible to
 	 * construct a full international dialling sequence from the options and hints given,
 	 * this function will not modify the phone number, and will return "undefined".
 	 * If assisted dialling is false or not specified, then this method will attempt
 	 * to add all the information it can to the number so that it is as fully
 	 * specified as possible. This allows two numbers to be compared more easily when
 	 * those two numbers were otherwise only partially specified.
-	 * <li><i>sms</i> set this option to true for the following conditions: 
+	 * <li><i>sms</i> set this option to true for the following conditions:
 	 *   <ul>
 	 *   <li>assisted dialing is turned on
 	 *   <li>the phone number represents the destination of an SMS message
-	 *   <li>the phone is UMTS 
+	 *   <li>the phone is UMTS
 	 *   <li>the phone is SIM-locked to its carrier
-	 *   </ul> 
+	 *   </ul>
 	 * This enables special international direct dialling codes to route the SMS message to
 	 * the correct carrier. If assisted dialling is not turned on, this option has no
 	 * affect.
 	 * <li><i>manualDialing</i> set this option to true if the user is entering this number on
-	 * the keypad directly, and false when the number comes from a stored location like a 
-	 * contact entry or a call log entry. When true, this option causes the normalizer to 
-	 * not perform any normalization on numbers that look like local numbers in the home 
+	 * the keypad directly, and false when the number comes from a stored location like a
+	 * contact entry or a call log entry. When true, this option causes the normalizer to
+	 * not perform any normalization on numbers that look like local numbers in the home
 	 * country. If false, all numbers go through normalization. This option only has an effect
 	 * when the assistedDialing option is true as well, otherwise it is ignored.
-	 * </ul> 
-	 * 
+	 * </ul>
+	 *
 	 * If both a set of options and a locale are given, and they offer conflicting
 	 * information, the options will take precedence. The idea is that the locale
-	 * tells you the region setting that the user has chosen (probably in 
+	 * tells you the region setting that the user has chosen (probably in
 	 * firstuse), whereas the the hints are more current information such as
-	 * where the phone is currently operating (the MCC).<p> 
-	 * 
+	 * where the phone is currently operating (the MCC).<p>
+	 *
 	 * This function performs the following types of normalizations with assisted
 	 * dialling turned on:
-	 * 
+	 *
 	 * <ol>
 	 * <li>If the current location of the phone matches the home country, this is a
 	 * domestic call.
-	 *   <ul> 
+	 *   <ul>
 	 *   <li>Remove any iddPrefix and countryCode fields, as they are not needed
-	 *   <li>Add in a trunkAccess field that may be necessary to call a domestic numbers 
+	 *   <li>Add in a trunkAccess field that may be necessary to call a domestic numbers
 	 *     in the home country
 	 *   </ul>
 	 * <li> If the current location of the phone does not match the home country,
@@ -25406,49 +25406,49 @@ ilib.PhoneNumber.prototype = {
 	 *   <ul>
 	 *   <li>Add in the area code if it is missing from the phone number and the area code
 	 *     of the current phone is available in the hints
-	 *   <li>Add the country dialling code for the home country if it is missing from the 
+	 *   <li>Add the country dialling code for the home country if it is missing from the
 	 *     phone number
 	 *   <li>Add or replace the iddPrefix with the correct one for the current country. The
 	 *     phone number will have been parsed with the settings for the home country, so
 	 *     the iddPrefix may be incorrect for the
-	 *     current country. The iddPrefix for the current country can be "+" if the phone 
-	 *     is connected to a UMTS network, and either a "+" or a country-dependent 
+	 *     current country. The iddPrefix for the current country can be "+" if the phone
+	 *     is connected to a UMTS network, and either a "+" or a country-dependent
 	 *     sequences of digits for CDMA networks.
 	 *   </ul>
 	 * </ol>
-	 * 
+	 *
 	 * This function performs the following types of normalization with assisted
 	 * dialling turned off:
-	 * 
+	 *
 	 * <ul>
 	 * <li>Normalize the international direct dialing prefix to be a plus or the
 	 * international direct dialling access code for the current country, depending
 	 * on the network type.
-	 * <li>If a number is a local number (ie. it is missing its area code), 
-	 * use a default area code from the hints if available. CDMA phones always know their area 
-	 * code, and GSM/UMTS phones know their area code in many instances, but not always 
-	 * (ie. not on Vodaphone or Telcel phones). If the default area code is not available, 
+	 * <li>If a number is a local number (ie. it is missing its area code),
+	 * use a default area code from the hints if available. CDMA phones always know their area
+	 * code, and GSM/UMTS phones know their area code in many instances, but not always
+	 * (ie. not on Vodaphone or Telcel phones). If the default area code is not available,
 	 * do not add it.
-	 * <li>In assisted dialling mode, if a number is missing its country code, 
+	 * <li>In assisted dialling mode, if a number is missing its country code,
 	 * use the current MCC number if
-	 * it is available to figure out the current country code, and prepend that 
-	 * to the number. If it is not available, leave it off. Also, use that 
-	 * country's settings to parse the number instead of the current format 
+	 * it is available to figure out the current country code, and prepend that
+	 * to the number. If it is not available, leave it off. Also, use that
+	 * country's settings to parse the number instead of the current format
 	 * locale.
-	 * <li>For North American numbers with an area code but no trunk access 
+	 * <li>For North American numbers with an area code but no trunk access
 	 * code, add in the trunk access code.
-	 * <li>For other countries, if the country code is added in step 3, remove the 
-	 * trunk access code when required by that country's conventions for 
-	 * international calls. If the country requires a trunk access code for 
+	 * <li>For other countries, if the country code is added in step 3, remove the
+	 * trunk access code when required by that country's conventions for
+	 * international calls. If the country requires a trunk access code for
 	 * international calls and it doesn't exist, add one.
 	 * </ul>
-	 *  
-	 * This method modifies the current object, and also returns a string 
+	 *
+	 * This method modifies the current object, and also returns a string
 	 * containing the normalized phone number that can be compared directly against
-	 * other normalized numbers. The canonical format for phone numbers that is 
-	 * returned from thhomeLocaleis method is simply an uninterrupted and unformatted string 
+	 * other normalized numbers. The canonical format for phone numbers that is
+	 * returned from thhomeLocaleis method is simply an uninterrupted and unformatted string
 	 * of dialable digits.
-	 * 
+	 *
 	 * @param {{
 	 *   mcc:string,
 	 *   defaultAreaCode:string,
@@ -25457,7 +25457,7 @@ ilib.PhoneNumber.prototype = {
 	 *   assistedDialing:boolean,
 	 *   sms:boolean,
 	 *   manualDialing:boolean
-	 * }} options an object containing options to help in normalizing. 
+	 * }} options an object containing options to help in normalizing.
 	 * @return {string|undefined} the normalized string, or undefined if the number
 	 * could not be normalized
 	 */
@@ -25465,25 +25465,25 @@ ilib.PhoneNumber.prototype = {
 		var norm,
 			sync = true,
 			loadParams = {};
-			
+
 
 		if (options) {
 			if (typeof(options.sync) !== 'undefined') {
 				sync = (options.sync == true);
 			}
-			
+
 			if (options.loadParams) {
 				loadParams = options.loadParams;
 			}
 		}
-		
+
 		// Clone this number, so we don't mess with the original.
-		// No need to do this asynchronously because it's a copy constructor which doesn't 
+		// No need to do this asynchronously because it's a copy constructor which doesn't
 		// load any extra files.
 		norm = new ilib.PhoneNumber(this);
 
 		var normalized;
-		
+
 		if (options && (typeof(options.mcc) !== 'undefined' || typeof(options.country) !== 'undefined')) {
 			new ilib.Locale.PhoneLoc({
 				mcc: options.mcc,
@@ -25499,7 +25499,7 @@ ilib.PhoneNumber.prototype = {
 						onLoad: ilib.bind(this, function (plan) {
 							this._doReparse(options, norm, this.locale, loc, plan, this.destinationLocale, this.destinationPlan, sync, loadParams, function (fmt) {
 								normalized = fmt;
-								
+
 								if (options && typeof(options.onLoad) === 'function') {
 									options.onLoad(fmt);
 								}
@@ -25511,7 +25511,7 @@ ilib.PhoneNumber.prototype = {
 		} else {
 			this._doReparse(options, norm, this.locale, this.locale, this.plan, this.destinationLocale, this.destinationPlan, sync, loadParams, function (fmt) {
 				normalized = fmt;
-				
+
 				if (options && typeof(options.onLoad) === 'function') {
 					options.onLoad(fmt);
 				}
@@ -25524,7 +25524,7 @@ ilib.PhoneNumber.prototype = {
 };
 /*
  * phonefmt.js - Represent a phone number formatter.
- * 
+ *
  * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25542,9 +25542,9 @@ ilib.PhoneNumber.prototype = {
  */
 
 /*
-!depends 
-ilibglobal.js 
-locale.js 
+!depends
+ilibglobal.js
+locale.js
 localeinfo.js
 phone/numplan.js
 phone/phonenum.js
@@ -25555,7 +25555,7 @@ phone/phonenum.js
 /**
  * @class
  * Create a new phone number formatter object that formats numbers according to the parameters.<p>
- * 
+ *
  * The options object can contain zero or more of the following parameters:
  *
  * <ul>
@@ -25563,36 +25563,36 @@ phone/phonenum.js
  * <li><i>style</i> the name of style to use to format numbers, or undefined to use the default style
  * <li><i>mcc</i> the MCC of the country to use if the number is a local number and the country code is not known
  *
- * <li><i>onLoad</i> - a callback function to call when the locale data is fully loaded and the address has been 
- * parsed. When the onLoad option is given, the address formatter object 
+ * <li><i>onLoad</i> - a callback function to call when the locale data is fully loaded and the address has been
+ * parsed. When the onLoad option is given, the address formatter object
  * will attempt to load any missing locale data using the ilib loader callback.
- * When the constructor is done (even if the data is already preassembled), the 
+ * When the constructor is done (even if the data is already preassembled), the
  * onLoad function is called with the current instance as a parameter, so this
- * callback can be used with preassembled or dynamic loading or a mix of the two. 
- * 
- * <li><i>sync</i> - tell whether to load any missing locale data synchronously or 
+ * callback can be used with preassembled or dynamic loading or a mix of the two.
+ *
+ * <li><i>sync</i> - tell whether to load any missing locale data synchronously or
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
- * not be usable for a while. 
+ * not be usable for a while.
  *
- * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ * <li><i>loadParams</i> - an object containing parameters to pass to the
  * loader callback function when locale data is missing. The parameters are not
- * interpretted or modified in any way. They are simply passed along. The object 
+ * interpretted or modified in any way. They are simply passed along. The object
  * may contain any property/value pairs as long as the calling code is in
  * agreement with the loader callback function as to what those parameters mean.
  * </ul>
  *
  * Some regions have more than one style of formatting, and the style parameter
  * selects which style the user prefers. An array of style names that this locale
- * supports can be found by calling {@link ilib.PhoneFmt.getAvailableStyles}. 
- * Example phone numbers can be retrieved for each style by calling 
+ * supports can be found by calling {@link ilib.PhoneFmt.getAvailableStyles}.
+ * Example phone numbers can be retrieved for each style by calling
  * {@link ilib.PhoneFmt.getStyleExample}.
  * <p>
  *
  * If the MCC is given, numbers will be formatted in the manner of the country
  * specified by the MCC. If it is not given, but the locale is, the manner of
  * the country in the locale will be used. If neither the locale or MCC are not given,
- * then the country of the current ilib locale is used. 
+ * then the country of the current ilib locale is used.
  *
  * @constructor
  * @param {Object} options properties that control how this formatter behaves
@@ -25641,14 +25641,14 @@ ilib.PhoneFmt = function(options) {
 					ilib.loadData({
 						name: "phonefmt.json",
 						object: ilib.PhoneFmt,
-						locale: this.locale, 
+						locale: this.locale,
 						sync: this.sync,
 						loadParams: ilib.merge(this.loadParams, {
 							returnOne: true
 						}),
 						callback: ilib.bind(this, function (fmtdata) {
 							this.fmtdata = fmtdata;
-							
+
 							if (options && typeof(options.onLoad) === 'function') {
 								options.onLoad(this);
 							}
@@ -25662,7 +25662,7 @@ ilib.PhoneFmt = function(options) {
 
 ilib.PhoneFmt.prototype = {
 	/**
-	 * 
+	 *
 	 * @protected
 	 * @param {string} part
 	 * @param {Object} formats
@@ -25702,15 +25702,15 @@ ilib.PhoneFmt.prototype = {
 				formatted += formatString.charAt(i);
 			}
 		}
-		
+
 		if (mustUseAll && partIndex < part.length-1) {
 			// didn't use the whole thing in this format? Hmm... go to last resort rule
 			throw "too many digits in " + part + " for format " + formatString;
 		}
-		
+
 		return formatted;
 	},
-	
+
 	/**
 	 * Returns the style with the given name, or the default style if there
 	 * is no style with that name.
@@ -25724,7 +25724,7 @@ ilib.PhoneFmt.prototype = {
 	/**
 	 * Do the actual work of formatting the phone number starting at the given
 	 * field in the regular field order.
-	 * 
+	 *
 	 * @param {!ilib.PhoneNumber} number
 	 * @param {{
 	 *   partial:boolean,
@@ -25740,26 +25740,26 @@ ilib.PhoneFmt.prototype = {
 	_doFormat: function(number, options, startField, locale, fmtdata, callback) {
 		var sync = true,
 			loadParams = {},
-			temp, 
-			templates, 
-			fieldName, 
-			countryCode, 
-			isWhole, 
+			temp,
+			templates,
+			fieldName,
+			countryCode,
+			isWhole,
 			style,
 			formatted = "",
 			styleTemplates,
 			lastFieldName;
-	
+
 		if (options) {
 			if (typeof(options.sync) !== 'undefined') {
-				sync = (options.sync == true);				
+				sync = (options.sync == true);
 			}
-		
+
 			if (options.loadParams) {
 				loadParams = options.loadParams;
 			}
 		}
-	
+
 		style = this.style; // default style for this formatter
 
 		// figure out what style to use for this type of number
@@ -25776,7 +25776,7 @@ ilib.PhoneFmt.prototype = {
 
 		isWhole = (!options || !options.partial);
 		styleTemplates = this._getStyle(style, fmtdata);
-		
+
 		// console.log("Style ends up being " + style + " and using subtype " + (isWhole ? "whole" : "partial"));
 		styleTemplates = (isWhole ? styleTemplates.whole : styleTemplates.partial) || styleTemplates;
 
@@ -25793,23 +25793,23 @@ ilib.PhoneFmt.prototype = {
 					}
 					if (lastFieldName && typeof(styleTemplates[lastFieldName].suffix) !== 'undefined') {
 						if (fieldName !== "extension" && number[fieldName].search(/[xwtp,;]/i) <= -1) {
-							formatted += styleTemplates[lastFieldName].suffix;	
+							formatted += styleTemplates[lastFieldName].suffix;
 						}
 					}
 					lastFieldName = fieldName;
-					
+
 					// console.info("format: formatting field " + fieldName + " with templates " + JSON.stringify(templates));
 					temp = this._substituteDigits(number[fieldName], templates, (fieldName === "subscriberNumber"));
 					// console.info("format: formatted is: " + temp);
 					formatted += temp;
-	
+
 					if (fieldName === "countryCode") {
 						// switch to the new country to format the rest of the number
 						countryCode = number.countryCode.replace(/[wWpPtT\+#\*]/g, '');	// fix for NOV-108200
 
 						new ilib.Locale.PhoneLoc({
 							locale: this.locale,
-							sync: sync,							
+							sync: sync,
 							loadParms: loadParams,
 							countryCode: countryCode,
 							onLoad: ilib.bind(this, function (/** @type {ilib.Locale.PhoneLoc} */ locale) {
@@ -25823,7 +25823,7 @@ ilib.PhoneFmt.prototype = {
 									}),
 									callback: ilib.bind(this, function (fmtdata) {
 										// console.info("format: switching to region " + locale.region + " and style " + style + " to format the rest of the number ");
-										
+
 										var subfmt = "";
 
 										this._doFormat(number, options, i+1, locale, fmtdata, function (subformat) {
@@ -25832,7 +25832,7 @@ ilib.PhoneFmt.prototype = {
 												callback(formatted + subformat);
 											}
 										});
-										
+
 										formatted += subfmt;
 									})
 								});
@@ -25847,68 +25847,68 @@ ilib.PhoneFmt.prototype = {
 				}
 			}
 		}
-		
+
 		if (typeof(callback) === 'function') {
 			callback(formatted);
 		}
 
 		return formatted;
 	},
-	
+
 	/**
-	 * Format the parts of a phone number appropriately according to the settings in 
+	 * Format the parts of a phone number appropriately according to the settings in
 	 * this formatter instance.
-	 *  
+	 *
 	 * The options can contain zero or more of these properties:
-	 * 
+	 *
 	 * <ul>
-	 * <li><i>partial</i> boolean which tells whether or not this phone number 
-	 * represents a partial number or not. The default is false, which means the number 
-	 * represents a whole number. 
-	 * <li><i>style</i> style to use to format the number, if different from the 
+	 * <li><i>partial</i> boolean which tells whether or not this phone number
+	 * represents a partial number or not. The default is false, which means the number
+	 * represents a whole number.
+	 * <li><i>style</i> style to use to format the number, if different from the
 	 * default style or the style specified in the constructor
 	 * <li><i>locale</i> The locale with which to parse the number. This gives a clue as to which
      * numbering plan to use.
-     * <li><i>mcc</i> The mobile carrier code (MCC) associated with the carrier that the phone is 
+     * <li><i>mcc</i> The mobile carrier code (MCC) associated with the carrier that the phone is
      * currently connected to, if known. This also can give a clue as to which numbering plan to
      * use
-     * <li><i>onLoad</i> - a callback function to call when the date format object is fully 
+     * <li><i>onLoad</i> - a callback function to call when the date format object is fully
      * loaded. When the onLoad option is given, the DateFmt object will attempt to
      * load any missing locale data using the ilib loader callback.
-     * When the constructor is done (even if the data is already preassembled), the 
+     * When the constructor is done (even if the data is already preassembled), the
      * onLoad function is called with the current instance as a parameter, so this
      * callback can be used with preassembled or dynamic loading or a mix of the two.
-     * <li><i>sync</i> - tell whether to load any missing locale data synchronously or 
+     * <li><i>sync</i> - tell whether to load any missing locale data synchronously or
      * asynchronously. If this option is given as "false", then the "onLoad"
      * callback must be given, as the instance returned from this constructor will
      * not be usable for a while.
-     * <li><i>loadParams</i> - an object containing parameters to pass to the 
+     * <li><i>loadParams</i> - an object containing parameters to pass to the
      * loader callback function when locale data is missing. The parameters are not
-     * interpretted or modified in any way. They are simply passed along. The object 
+     * interpretted or modified in any way. They are simply passed along. The object
      * may contain any property/value pairs as long as the calling code is in
      * agreement with the loader callback function as to what those parameters mean.
 	 * </ul>
-	 *      
+	 *
 	 * The partial parameter specifies whether or not the phone number contains
-	 * a partial phone number or if it is a whole phone number. A partial 
+	 * a partial phone number or if it is a whole phone number. A partial
 	 * number is usually a number as the user is entering it with a dial pad. The
 	 * reason is that certain types of phone numbers should be formatted differently
 	 * depending on whether or not it represents a whole number. Specifically, SMS
 	 * short codes are formatted differently.<p>
-	 * 
+	 *
 	 * Example: a subscriber number of "48773" in the US would get formatted as:
-	 * 
+	 *
 	 * <ul>
-	 * <li>partial: 487-73  (perhaps the user is in the process of typing a whole phone 
+	 * <li>partial: 487-73  (perhaps the user is in the process of typing a whole phone
 	 * number such as 487-7379)
 	 * <li>whole:   48773   (this is the entire SMS short code)
 	 * </ul>
-	 * 
-	 * Any place in the UI where the user types in phone numbers, such as the keypad in 
-	 * the phone app, should pass in partial: true to this formatting routine. All other 
-	 * places, such as the call log in the phone app, should pass in partial: false, or 
-	 * leave the partial flag out of the parameters entirely. 
-	 * 
+	 *
+	 * Any place in the UI where the user types in phone numbers, such as the keypad in
+	 * the phone app, should pass in partial: true to this formatting routine. All other
+	 * places, such as the call log in the phone app, should pass in partial: false, or
+	 * leave the partial flag out of the parameters entirely.
+	 *
 	 * @param {!ilib.PhoneNumber} number object containing the phone number to format
 	 * @param {{
 	 *   partial:boolean,
@@ -25930,13 +25930,13 @@ ilib.PhoneFmt.prototype = {
 		try {
 			this._doFormat(number, options, 0, this.locale, this.fmtdata, function (fmt) {
 				formatted = fmt;
-				
+
 				if (typeof(callback) === 'function') {
 					callback(fmt);
 				}
 			});
 		} catch (e) {
-			if (typeof(e) === 'string') { 
+			if (typeof(e) === 'string') {
 				// console.warn("caught exception: " + e + ". Using last resort rule.");
 				// if there was some exception, use this last resort rule
 				formatted = "";
@@ -25952,16 +25952,16 @@ ilib.PhoneFmt.prototype = {
 			} else {
 				throw e;
 			}
-			
+
 			if (typeof(callback) === 'function') {
 				callback(formatted);
 			}
 		}
 		return formatted;
 	},
-	
+
 	/**
-	 * Return an array of names of all available styles that can be used with the current 
+	 * Return an array of names of all available styles that can be used with the current
 	 * formatter.
 	 * @return {Array.<string>} an array of names of styles that are supported by this formatter
 	 */
@@ -25978,15 +25978,15 @@ ilib.PhoneFmt.prototype = {
 		}
 		return ret;
 	},
-	
+
 	/**
 	 * Return an example phone number formatted with the given style.
-	 * 
+	 *
 	 * @param {string|undefined} style style to get an example of, or undefined to use
 	 * the current default style for this formatter
-	 * @return {string|undefined} an example phone number formatted according to the 
-	 * given style, or undefined if the style is not recognized or does not have an 
-	 * example 
+	 * @return {string|undefined} an example phone number formatted according to the
+	 * given style, or undefined if the style is not recognized or does not have an
+	 * example
 	 */
 	getStyleExample: function (style) {
 		return this.fmtdata[style].example || undefined;
@@ -25995,7 +25995,7 @@ ilib.PhoneFmt.prototype = {
 
 /*
  * phonegeo.js - Represent a phone number geolocator object.
- * 
+ *
  * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26013,9 +26013,9 @@ ilib.PhoneFmt.prototype = {
  */
 
 /*
-!depends 
-ilibglobal.js 
-locale.js 
+!depends
+ilibglobal.js
+locale.js
 localeinfo.js
 phone/numplan.js
 phone/phoneloc.js
@@ -26027,71 +26027,71 @@ phone/phonenum.js
 /**
  * @class
  * Create an instance that can geographically locate a phone number.<p>
- * 
+ *
  * The location of the number is calculated according to the following rules:
- * 
+ *
  * <ol>
- * <li>If the areaCode property is undefined or empty, or if the number specifies a 
- * country code for which we do not have information, then the area property may be 
+ * <li>If the areaCode property is undefined or empty, or if the number specifies a
+ * country code for which we do not have information, then the area property may be
  * missing from the returned object. In this case, only the country object will be returned.
- * 
- * <li>If there is no area code, but there is a mobile prefix, service code, or emergency 
+ *
+ * <li>If there is no area code, but there is a mobile prefix, service code, or emergency
  * code, then a fixed string indicating the type of number will be returned.
- * 
+ *
  * <li>The country object is filled out according to the countryCode property of the phone
- * number. 
- * 
+ * number.
+ *
  * <li>If the phone number does not have an explicit country code, the MCC will be used if
- * it is available. The country code can be gleaned directly from the MCC. If the MCC 
- * of the carrier to which the phone is currently connected is available, it should be 
+ * it is available. The country code can be gleaned directly from the MCC. If the MCC
+ * of the carrier to which the phone is currently connected is available, it should be
  * passed in so that local phone numbers will look correct.
- * 
- * <li>If the country's dialling plan mandates a fixed length for phone numbers, and a 
+ *
+ * <li>If the country's dialling plan mandates a fixed length for phone numbers, and a
  * particular number exceeds that length, then the area code will not be given on the
  * assumption that the number has problems in the first place and we cannot guess
  * correctly.
  * </ol>
- * 
+ *
  * The returned area property varies in specificity according
  * to the locale. In North America, the area is no finer than large parts of states
  * or provinces. In Germany and the UK, the area can be as fine as small towns.<p>
- * 
+ *
  * If the number passed in is invalid, no geolocation will be performed. If the location
  * information about the country where the phone number is located is not available,
  * then the area information will be missing and only the country will be available.<p>
- * 
+ *
  * The options parameter can contain any one of the following properties:
- * 
+ *
  * <ul>
  * <li><i>locale</i> The locale parameter is used to load translations of the names of regions and
- * areas if available. For example, if the locale property is given as "en-US" (English for USA), 
+ * areas if available. For example, if the locale property is given as "en-US" (English for USA),
  * but the phone number being geolocated is in Germany, then this class would return the the names
- * of the country (Germany) and region inside of Germany in English instead of German. That is, a 
+ * of the country (Germany) and region inside of Germany in English instead of German. That is, a
  * phone number in Munich and return the country "Germany" and the area code "Munich"
- * instead of "Deutschland" and "München". The default display locale is the current ilib locale. 
- * If translations are not available, the region and area names are given in English, which should 
+ * instead of "Deutschland" and "München". The default display locale is the current ilib locale.
+ * If translations are not available, the region and area names are given in English, which should
  * always be available.
  * <li><i>mcc</i> The mcc of the current mobile carrier, if known.
- * 
+ *
  * <li><i>onLoad</i> - a callback function to call when the data for the
- * locale is fully loaded. When the onLoad option is given, this object 
+ * locale is fully loaded. When the onLoad option is given, this object
  * will attempt to load any missing locale data using the ilib loader callback.
- * When the constructor is done (even if the data is already preassembled), the 
+ * When the constructor is done (even if the data is already preassembled), the
  * onLoad function is called with the current instance as a parameter, so this
- * callback can be used with preassembled or dynamic loading or a mix of the two. 
- * 
- * <li><i>sync</i> - tell whether to load any missing locale data synchronously or 
+ * callback can be used with preassembled or dynamic loading or a mix of the two.
+ *
+ * <li><i>sync</i> - tell whether to load any missing locale data synchronously or
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
- * not be usable for a while. 
+ * not be usable for a while.
  *
- * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ * <li><i>loadParams</i> - an object containing parameters to pass to the
  * loader callback function when locale data is missing. The parameters are not
- * interpretted or modified in any way. They are simply passed along. The object 
+ * interpretted or modified in any way. They are simply passed along. The object
  * may contain any property/value pairs as long as the calling code is in
  * agreement with the loader callback function as to what those parameters mean.
  * </ul>
- * 
+ *
  * @constructor
  * @param {Object} options parameters controlling the geolocation of the phone number.
  */
@@ -26108,12 +26108,12 @@ ilib.GeoLocator = function(options) {
 		if (typeof(options.sync) === 'boolean') {
 			sync = options.sync;
 		}
-		
+
 		if (options.loadParams) {
 			loadParams = options.loadParams;
 		}
 	}
-	
+
 	new ilib.Locale.PhoneLoc({
 		locale: locale,
 		mcc: options && options.mcc,
@@ -26128,7 +26128,7 @@ ilib.GeoLocator = function(options) {
 				loadParams: loadParams,
 				onLoad: ilib.bind(this, function (plan) {
 					this.plan = plan;
-					
+
 					new ilib.ResBundle({
 						locale: this.locale,
 						name: "phoneres",
@@ -26136,7 +26136,7 @@ ilib.GeoLocator = function(options) {
 						loadParams: loadParams,
 						onLoad: ilib.bind(this, function (rb) {
 							this.rb = rb;
-							
+
 							ilib.loadData({
 								name: "iddarea.json",
 								object: ilib.GeoLocator,
@@ -26155,7 +26155,7 @@ ilib.GeoLocator = function(options) {
 										}),
 										callback: ilib.bind(this, function (areadata) {
 											this.areadata = areadata;
-		
+
 											if (options && typeof(options.onLoad) === 'function') {
 												options.onLoad(this);
 											}
@@ -26174,10 +26174,10 @@ ilib.GeoLocator = function(options) {
 ilib.GeoLocator.prototype = {
 	/**
 	 * @private
-	 * 
+	 *
 	 * Used for locales where the area code is very general, and you need to add in
 	 * the initial digits of the subscriber number in order to get the area
-	 * 
+	 *
 	 * @param {string} number
 	 * @param {Object} stateTable
 	 */
@@ -26206,11 +26206,11 @@ ilib.GeoLocator.prototype = {
 			if (ch >= 0) {
 				// newState = stateData.states[state][ch];
 				newState = currentState.s && currentState.s[ch];
-				
+
 				if (!newState && currentState.s && currentState.s[dot]) {
 					newState = currentState.s[dot];
 				}
-				
+
 				if (typeof(newState) === 'object') {
 					if (typeof(newState.l) !== 'undefined') {
 						// save for latter if needed
@@ -26223,13 +26223,13 @@ ilib.GeoLocator.prototype = {
 					i++;
 				} else {
 					if (typeof(newState) === 'undefined' || newState === 0) {
-						// this is possibly a look-ahead and it didn't work... 
+						// this is possibly a look-ahead and it didn't work...
 						// so fall back to the last leaf and use that as the
 						// final state
 						newState = lastLeaf;
 						i = consumed;
 					}
-					
+
 					if ((typeof(newState) === 'number' && newState) ||
 						(typeof(newState) === 'object' && typeof(newState.l) !== 'undefined')) {
 						// final state
@@ -26237,7 +26237,7 @@ ilib.GeoLocator.prototype = {
 						handlerMethod = ilib.PhoneNumber._states[stateNumber];
 
 						//console.info("reached final state " + newState + " handler method is " + handlerMethod + " and i is " + i);
-	
+
 						return (handlerMethod === "area") ? number.substring(0, i+1) : undefined;
 					} else {
 						// failed parse. Either no last leaf to fall back to, or there was an explicit
@@ -26289,7 +26289,7 @@ ilib.GeoLocator.prototype = {
 			}
 		}
 
-		// match entries with dots last, so sort the matches so that the entry with the 
+		// match entries with dots last, so sort the matches so that the entry with the
 		// most dots sorts last. The entry that ends up at the beginning of the list is
 		// the best match because it has the fewest dots
 		if (matchesWithDots.length > 0) {
@@ -26298,7 +26298,7 @@ ilib.GeoLocator.prototype = {
 			});
 			return table[matchesWithDots[0]];
 		}
-		
+
 		return undefined;
 	},
 	/**
@@ -26312,13 +26312,13 @@ ilib.GeoLocator.prototype = {
 	 */
 	_getAreaInfo: function(number, data, locale, plan, options) {
 		var sync = true,
-			ret = {}, 
-			countryCode, 
-			areaInfo, 
-			temp, 
-			areaCode, 
-			geoTable, 
-			tempNumber, 
+			ret = {},
+			countryCode,
+			areaInfo,
+			temp,
+			areaCode,
+			geoTable,
+			tempNumber,
 			prefix;
 
 		if (options && typeof(options.sync) === 'boolean') {
@@ -26327,17 +26327,17 @@ ilib.GeoLocator.prototype = {
 
 		prefix = number.areaCode || number.serviceCode;
 		geoTable = data;
-		
+
 		if (prefix !== undefined) {
 			if (plan.getExtendedAreaCode()) {
 				// for countries where the area code is very general and large, and you need a few initial
 				// digits of the subscriber number in order find the actual area
 				tempNumber = prefix + number.subscriberNumber;
 				tempNumber = tempNumber.replace(/[wWpPtT\+#\*]/g, '');	// fix for NOV-108200
-		
+
 				ilib.loadData({
 					name: "extarea.json",
-					object: ilib.GeoLocator, 
+					object: ilib.GeoLocator,
 					locale: locale,
 					sync: sync,
 					loadParams: ilib.merge((options && options.loadParams) || {}, {returnOne: true}),
@@ -26345,7 +26345,7 @@ ilib.GeoLocator.prototype = {
 						this.extarea = data;
 						ilib.loadData({
 							name: "extstates.json",
-							object: ilib.GeoLocator, 
+							object: ilib.GeoLocator,
 							locale: locale,
 							sync: sync,
 							loadParams: ilib.merge((options && options.loadParams) || {}, {returnOne: true}),
@@ -26355,14 +26355,14 @@ ilib.GeoLocator.prototype = {
 								if (this.extarea && this.extstates) {
 									prefix = this._parseAreaAndSubscriber(tempNumber, this.extstates);
 								}
-								
+
 								if (!prefix) {
 									// not a recognized prefix, so now try the general table
 									geoTable = this.areadata;
-									prefix = number.areaCode || number.serviceCode;					
+									prefix = number.areaCode || number.serviceCode;
 								}
 
-								if ((!plan.fieldLengths || 
+								if ((!plan.fieldLengths ||
 								  plan.getFieldLength('maxLocalLength') === undefined ||
 								  !number.subscriberNumber ||
 								 	number.subscriberNumber.length <= plan.fieldLengths('maxLocalLength'))) {
@@ -26374,14 +26374,14 @@ ilib.GeoLocator.prototype = {
 											ln: this.rb.getString(areaInfo.ln).toString()
 										};
 									}
-								}		
+								}
 							})
 						});
 					})
 				});
 
-			} else if (!plan || 
-					plan.getFieldLength('maxLocalLength') === undefined || 
+			} else if (!plan ||
+					plan.getFieldLength('maxLocalLength') === undefined ||
 					!number.subscriberNumber ||
 					number.subscriberNumber.length <= plan.getFieldLength('maxLocalLength')) {
 				if (geoTable) {
@@ -26441,8 +26441,8 @@ ilib.GeoLocator.prototype = {
 		return ret;
 	},
 	/**
-	 * Returns a the location of the given phone number, if known. 
-	 * The returned object has 2 properties, each of which has an sn (short name) 
+	 * Returns a the location of the given phone number, if known.
+	 * The returned object has 2 properties, each of which has an sn (short name)
 	 * and an ln (long name) string. Additionally, the country code, if given,
 	 * includes the 2 letter ISO code for the recognized country.
 	 *	 	{
@@ -26456,25 +26456,25 @@ ilib.GeoLocator.prototype = {
 	 *          	 "ln": "Central California: San Jose, Los Gatos, Milpitas, Sunnyvale, Cupertino, Gilroy"
 	 *         	 }
 	 *    	 }
-	 * 
+	 *
 	 * The location name is subject to the following rules:
 	 *
-	 * If the areaCode property is undefined or empty, or if the number specifies a 
-	 * country code for which we do not have information, then the area property may be 
+	 * If the areaCode property is undefined or empty, or if the number specifies a
+	 * country code for which we do not have information, then the area property may be
 	 * missing from the returned object. In this case, only the country object will be returned.
 	 *
-	 * If there is no area code, but there is a mobile prefix, service code, or emergency 
+	 * If there is no area code, but there is a mobile prefix, service code, or emergency
 	 * code, then a fixed string indicating the type of number will be returned.
-	 * 
+	 *
 	 * The country object is filled out according to the countryCode property of the phone
-	 * number. 
-	 * 
+	 * number.
+	 *
 	 * If the phone number does not have an explicit country code, the MCC will be used if
-	 * it is available. The country code can be gleaned directly from the MCC. If the MCC 
-	 * of the carrier to which the phone is currently connected is available, it should be 
+	 * it is available. The country code can be gleaned directly from the MCC. If the MCC
+	 * of the carrier to which the phone is currently connected is available, it should be
 	 * passed in so that local phone numbers will look correct.
-	 * 
-	 * If the country's dialling plan mandates a fixed length for phone numbers, and a 
+	 *
+	 * If the country's dialling plan mandates a fixed length for phone numbers, and a
 	 * particular number exceeds that length, then the area code will not be given on the
 	 * assumption that the number has problems in the first place and we cannot guess
 	 * correctly.
@@ -26483,7 +26483,7 @@ ilib.GeoLocator.prototype = {
 	 * to the locale. In North America, the area is no finer than large parts of states
 	 * or provinces. In Germany and the UK, the area can be as fine as small towns.
 	 *
-	 * The strings returned from this function are already localized to the 
+	 * The strings returned from this function are already localized to the
 	 * given locale, and thus are ready for display to the user.
 	 *
 	 * If the number passed in is invalid, an empty object is returned. If the location
@@ -26491,50 +26491,50 @@ ilib.GeoLocator.prototype = {
 	 * then the area information will be missing and only the country will be returned.
      *
 	 * The options parameter can contain any one of the following properties:
- 	 * 
+ 	 *
  	 * <ul>
  	 * <li><i>locale</i> The locale parameter is used to load translations of the names of regions and
- 	 * areas if available. For example, if the locale property is given as "en-US" (English for USA), 
+ 	 * areas if available. For example, if the locale property is given as "en-US" (English for USA),
  	 * but the phone number being geolocated is in Germany, then this class would return the the names
- 	 * of the country (Germany) and region inside of Germany in English instead of German. That is, a 
+ 	 * of the country (Germany) and region inside of Germany in English instead of German. That is, a
  	 * phone number in Munich and return the country "Germany" and the area code "Munich"
- 	 * instead of "Deutschland" and "München". The default display locale is the current ilib locale. 
- 	 * If translations are not available, the region and area names are given in English, which should 
+ 	 * instead of "Deutschland" and "München". The default display locale is the current ilib locale.
+ 	 * If translations are not available, the region and area names are given in English, which should
  	 * always be available.
  	 * <li><i>mcc</i> The mcc of the current mobile carrier, if known.
- 	 * 
+ 	 *
  	 * <li><i>onLoad</i> - a callback function to call when the data for the
- 	 * locale is fully loaded. When the onLoad option is given, this object 
+ 	 * locale is fully loaded. When the onLoad option is given, this object
  	 * will attempt to load any missing locale data using the ilib loader callback.
- 	 * When the constructor is done (even if the data is already preassembled), the 
+ 	 * When the constructor is done (even if the data is already preassembled), the
  	 * onLoad function is called with the current instance as a parameter, so this
- 	 * callback can be used with preassembled or dynamic loading or a mix of the two. 
- 	 * 
- 	 * <li><i>sync</i> - tell whether to load any missing locale data synchronously or 
+ 	 * callback can be used with preassembled or dynamic loading or a mix of the two.
+ 	 *
+ 	 * <li><i>sync</i> - tell whether to load any missing locale data synchronously or
  	 * asynchronously. If this option is given as "false", then the "onLoad"
  	 * callback must be given, as the instance returned from this constructor will
- 	 * not be usable for a while. 
+ 	 * not be usable for a while.
  	 *
- 	 * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ 	 * <li><i>loadParams</i> - an object containing parameters to pass to the
  	 * loader callback function when locale data is missing. The parameters are not
- 	 * interpretted or modified in any way. They are simply passed along. The object 
+ 	 * interpretted or modified in any way. They are simply passed along. The object
  	 * may contain any property/value pairs as long as the calling code is in
  	 * agreement with the loader callback function as to what those parameters mean.
  	 * </ul>
-	 * 
+	 *
 	 * @param {ilib.PhoneNumber} number phone number to locate
 	 * @param {Object} options options governing the way this ares is loaded
-	 * @return {Object} an object  
+	 * @return {Object} an object
 	 * that describes the country and the area in that country corresponding to this
 	 * phone number. Each of the country and area contain a short name (sn) and long
 	 * name (ln) that describes the location.
 	 */
 	locate: function(number, options) {
 		var loadParams = {},
-			ret = {}, 
-			region, 
-			countryCode, 
-			temp, 
+			ret = {},
+			region,
+			countryCode,
+			temp,
 			plan,
 			areaResult,
 			phoneLoc = this.locale,
@@ -26548,7 +26548,7 @@ ilib.GeoLocator.prototype = {
 			if (typeof(options.sync) !== 'undefined') {
 				sync = (options.sync == true);
 			}
-		
+
 			if (options.loadParams) {
 				loadParams = options.loadParams;
 			}
@@ -26567,11 +26567,11 @@ ilib.GeoLocator.prototype = {
 				code: phoneLoc.getRegion()
 			};
 		}
-		
+
 		if (!plan) {
 			plan = this.plan;
 		}
-		
+
 		ilib.loadData({
 			name: "area.json",
 			object: ilib.GeoLocator,
@@ -26582,14 +26582,14 @@ ilib.GeoLocator.prototype = {
 			}),
 			callback: ilib.bind(this, function (areadata) {
 				if (areadata) {
-					this.areadata = areadata;	
+					this.areadata = areadata;
 				}
 				areaResult = this._getAreaInfo(number, this.areadata, phoneLoc, plan, options);
 				ret = ilib.merge(ret, areaResult);
 
 				if (ret.country === undefined) {
 					countryCode = number.locale._mapRegiontoCC(region);
-					
+
 					if (countryCode !== "0" && this.regiondata) {
 						temp = this.regiondata[countryCode];
 						if (temp && temp.sn) {
@@ -26603,14 +26603,14 @@ ilib.GeoLocator.prototype = {
 				}
 			})
 		});
-		
+
 		return ret;
 	},
-	
+
 	/**
 	 * Returns a string that describes the ISO-3166-2 country code of the given phone
-	 * number.<p> 
-	 * 
+	 * number.<p>
+	 *
 	 * If the phone number is a local phone number and does not contain
 	 * any country information, this routine will return the region for the current
 	 * formatter instance.
@@ -26630,24 +26630,24 @@ ilib.GeoLocator.prototype = {
 		phoneLoc = number.locale;
 
 		region = (number.countryCode && phoneLoc._mapCCtoRegion(number.countryCode)) ||
-			(number.locale && number.locale.region) || 
+			(number.locale && number.locale.region) ||
 			phoneLoc.locale.getRegion() ||
 			this.locale.getRegion();
 
 		countryCode = number.countryCode || phoneLoc._mapRegiontoCC(region);
-		
+
 		if (number.areaCode) {
 			region = phoneLoc._mapAreatoRegion(countryCode, number.areaCode);
 		} else if (countryCode === "33" && number.serviceCode) {
 			// french departments are in the service code, not the area code
 			region = phoneLoc._mapAreatoRegion(countryCode, number.serviceCode);
-		}		
+		}
 		return region;
 	}
 };
 /*
  * unit.js - Unit class
- * 
+ *
  * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26665,9 +26665,9 @@ ilib.GeoLocator.prototype = {
  */
 
 /*
-!depends 
-ilibglobal.js 
-locale.js 
+!depends
+ilibglobal.js
+locale.js
 localeinfo.js
 */
 
@@ -26676,30 +26676,30 @@ localeinfo.js
  * @class
  * Create a measurement instance. The measurement is immutable once
  * it is created, but can be converted to other measurements later.<p>
- * 
+ *
  * The options may contain any of the following properties:
- * 
+ *
  * <ul>
  * <li><i>amount</i> - either a numeric amount for this measurement given
- * as a number of the specified units, or another ilib.Measurement instance 
+ * as a number of the specified units, or another ilib.Measurement instance
  * to convert to the requested units. If converting to new units, the type
  * of measure between the other instance's units and the current units
  * must be the same. That is, you can only convert one unit of mass to
- * another. You cannot convert a unit of mass into a unit of length. 
- * 
- * <li><i>unit</i> - units of this measurement. Use the 
+ * another. You cannot convert a unit of mass into a unit of length.
+ *
+ * <li><i>unit</i> - units of this measurement. Use the
  * static call {@link ilib.Measurement.getAvailableUnits}
  * to find out what units this version of ilib supports. If the given unit
  * is not a base unit, the amount will be normalized to the number of base units
  * and stored as that number of base units.
  * For example, if an instance is constructed with 1 kg, this will be converted
- * automatically into 1000 g, as grams are the base unit and kg is merely a 
+ * automatically into 1000 g, as grams are the base unit and kg is merely a
  * commonly used scale of grams.
  * </ul>
- * 
+ *
  * Here are some examples of converting a length into new units. The first method
  * is via the constructor by passing the old measurement in as the amount property.
- * 
+ *
  * <pre>
  * var measurement1 = new ilib.Measurement({
  *   amount: 5,
@@ -26710,11 +26710,11 @@ localeinfo.js
  *   units: "miles"
  * });
  * </pre>
- * 
+ *
  * The value in measurement2 will end up being about 3.125 miles.
- * 
+ *
  * The second method will be using the convert method.
- * 
+ *
  * <pre>
  * var measurement1 = new ilib.Measurement({
  *   amount: 5,
@@ -26725,8 +26725,8 @@ localeinfo.js
  * </pre>
  *
  * The value in measurement2 will again end up being about 3.125 miles.
- * 
- * @constructor 
+ *
+ * @constructor
  * @param {Object} options options that control the construction of this instance
  */
 ilib.Measurement = function(options) {
@@ -26749,7 +26749,7 @@ ilib.Measurement = function(options) {
 		return new ilib.Measurement.Unknown({
 			unit: options.unit,
 			amount: options.amount
-		});                
+		});
 	} else {
 		return new ilib.Measurement._constructors[measure](options);
 	}
@@ -26764,7 +26764,7 @@ ilib.Measurement._constructors = {};
  * Return a list of all possible units that this version of ilib supports.
  * Typically, the units are given as their full names in English. Unit names
  * are case-insensitive.
- * 
+ *
  * @static
  * @return {Array.<string>} an array of strings containing names of units available
  */
@@ -26798,16 +26798,16 @@ ilib.Measurement.prototype = {
 	/**
 	 * Return the normalized name of the given units. If the units are
 	 * not recognized, this method returns its parameter unmodified.<p>
-	 * 
+	 *
 	 * Examples:
-	 * 
+	 *
 	 * <ui>
 	 * <li>"metres" gets normalized to "meter"<br>
 	 * <li>"ml" gets normalized to "milliliter"<br>
 	 * <li>"foobar" gets normalized to "foobar" (no change because it is not recognized)
 	 * </ul>
-	 *  
-	 * @param {string} name name of the units to normalize. 
+	 *
+	 * @param {string} name name of the units to normalize.
 	 * @returns {string} normalized name of the units
 	 */
 	normalizeUnits: function(name) {
@@ -26816,21 +26816,21 @@ ilib.Measurement.prototype = {
 
 	/**
 	 * Return the normalized units used in this measurement.
-	 * @return {string} name of the unit of measurement 
+	 * @return {string} name of the unit of measurement
 	 */
 	getUnit: function() {
 		return this.unit;
 	},
-     
+
 	/**
 	 * Return the units originally used to construct this measurement
 	 * before it was normalized.
-	 * @return {string} name of the unit of measurement 
+	 * @return {string} name of the unit of measurement
 	 */
 	getOriginalUnit: function() {
 		return this.originalUnit;
 	},
-	
+
 	/**
 	 * Return the numeric amount of this measurement.
 	 * @return {number} the numeric amount of this measurement
@@ -26838,58 +26838,58 @@ ilib.Measurement.prototype = {
 	getAmount: function() {
 		return this.amount;
 	},
-	
+
 	/**
 	 * Return the type of this measurement. Examples are "mass",
 	 * "length", "speed", etc. Measurements can only be converted
 	 * to measurements of the same type.<p>
-	 * 
-	 * The type of the units is determined automatically from the 
-	 * units. For example, the unit "grams" is type "mass". Use the 
+	 *
+	 * The type of the units is determined automatically from the
+	 * units. For example, the unit "grams" is type "mass". Use the
 	 * static call {@link ilib.Measurement.getAvailableUnits}
 	 * to find out what units this version of ilib supports.
-	 * 
+	 *
 	 * @abstract
 	 * @return {string} the name of the type of this measurement
 	 */
 	getMeasure: function() {},
-	
+
 	/**
 	 * Return a new measurement instance that is converted to a new
 	 * measurement unit. Measurements can only be converted
 	 * to measurements of the same type.<p>
-	 * 
+	 *
 	 * @abstract
 	 * @param {string} to The name of the units to convert to
 	 * @return {ilib.Measurement|undefined} the converted measurement
 	 * or undefined if the requested units are for a different
 	 * measurement type
 	 */
-	convert: function(to) {},     
-        
+	convert: function(to) {},
+
         /**
 	 * Scale the measurement unit to an acceptable level. The scaling
 	 * happens so that the integer part of the amount is as small as
-	 * possible without being below zero. This will result in the 
+	 * possible without being below zero. This will result in the
 	 * largest units that can represent this measurement without
-	 * fractions. Measurements can only be scaled to other measurements 
+	 * fractions. Measurements can only be scaled to other measurements
 	 * of the same type.
-	 * 
+	 *
 	 * @abstract
 	 * @param {string=} measurementsystem system to use (uscustomary|imperial|metric),
 	 * or undefined if the system can be inferred from the current measure
-	 * @return {ilib.Measurement} a new instance that is scaled to the 
+	 * @return {ilib.Measurement} a new instance that is scaled to the
 	 * right level
 	 */
 	scale: function(measurementsystem) {},
-        
+
 	/**
 	 * Localize the measurement to the commonly used measurement in that locale, for example
-	 * If a user's locale is "en-US" and the measurement is given as "60 kmh", 
-	 * the formatted number should be automatically converted to the most appropriate 
+	 * If a user's locale is "en-US" and the measurement is given as "60 kmh",
+	 * the formatted number should be automatically converted to the most appropriate
 	 * measure in the other system, in this case, mph. The formatted result should
-	 * appear as "37.3 mph". 
-	 * 
+	 * appear as "37.3 mph".
+	 *
 	 * @abstract
 	 * @param {string} locale current locale string
 	 * @returns {ilib.Measurement} a new instance that is converted to locale
@@ -26899,7 +26899,7 @@ ilib.Measurement.prototype = {
 
 /*
  * unitfmt.js - Unit formatter class
- * 
+ *
  * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26917,10 +26917,10 @@ ilib.Measurement.prototype = {
  */
 
 /*
-!depends 
-ilibglobal.js 
-locale.js 
-resources.js 
+!depends
+ilibglobal.js
+locale.js
+resources.js
 localeinfo.js
 strings.js
 */
@@ -26931,17 +26931,17 @@ strings.js
  * @class
  * Create a new unit formatter instance. The unit formatter is immutable once
  * it is created, but can format as many different strings with different values
- * as needed with the same options. Create different unit formatter instances 
- * for different purposes and then keep them cached for use later if you have 
+ * as needed with the same options. Create different unit formatter instances
+ * for different purposes and then keep them cached for use later if you have
  * more than one unit string to format.<p>
- * 
+ *
  * The options may contain any of the following properties:
- * 
+ *
  * <ul>
  * <li><i>locale</i> - locale to use when formatting the units. The locale also
  * controls the translation of the names of the units. If the locale is
  * not specified, then the default locale of the app or web page will be used.
- * 
+ *
  * <li><i>autoScale</i> - when true, automatically scale the amount to get the smallest
  * number greater than 1, where possible, possibly by converting units within the locale's
  * measurement system. For example, if the current locale is "en-US", and we have
@@ -26952,23 +26952,23 @@ strings.js
  * already, it cannot be scaled down any further and no autoscaling will be applied.
  * Default for the autoScale property is "true", so it only needs to be specified when
  * you want to turn off autoscaling.
- * 
+ *
  * <li><i>autoConvert</i> - automatically convert the units to the nearest appropriate
- * measure of the same type in the measurement system used by the locale. For example, 
- * if a measurement of length is given in meters, but the current locale is "en-US" 
- * which uses the US Customary system, then the nearest appropriate measure would be 
+ * measure of the same type in the measurement system used by the locale. For example,
+ * if a measurement of length is given in meters, but the current locale is "en-US"
+ * which uses the US Customary system, then the nearest appropriate measure would be
  * "yards", and the amount would be converted from meters to yards automatically before
- * being formatted. Default for the autoConvert property is "true", so it only needs to 
+ * being formatted. Default for the autoConvert property is "true", so it only needs to
  * be specified when you want to turn off autoconversion.
- * 
+ *
  * <li><i>maxFractionDigits</i> - the maximum number of digits that should appear in the
  * formatted output after the decimal. A value of -1 means unlimited, and 0 means only print
  * the integral part of the number.
- * 
+ *
  * <li><i>minFractionDigits</i> - the minimum number of fractional digits that should
  * appear in the formatted output. If the number does not have enough fractional digits
  * to reach this minimum, the number will be zero-padded at the end to get to the limit.
- * 
+ *
  * <li><i>roundingMode</i> - When the maxFractionDigits or maxIntegerDigits is specified,
  * this property governs how the least significant digits are rounded to conform to that
  * maximum. The value of this property is a string with one of the following values:
@@ -26982,38 +26982,38 @@ strings.js
  *   <li><i>halfeven</i> - round towards nearest neighbour. If equidistant, round towards the even neighbour
  *   <li><i>halfodd</i> - round towards nearest neighbour. If equidistant, round towards the odd neighbour
  * </ul>
- * 
- * <li><i>onLoad</i> - a callback function to call when the date format object is fully 
+ *
+ * <li><i>onLoad</i> - a callback function to call when the date format object is fully
  * loaded. When the onLoad option is given, the UnitFmt object will attempt to
  * load any missing locale data using the ilib loader callback.
- * When the constructor is done (even if the data is already preassembled), the 
+ * When the constructor is done (even if the data is already preassembled), the
  * onLoad function is called with the current instance as a parameter, so this
  * callback can be used with preassembled or dynamic loading or a mix of the two.
- * 
- * <li><i>sync</i> - tell whether to load any missing locale data synchronously or 
+ *
+ * <li><i>sync</i> - tell whether to load any missing locale data synchronously or
  * asynchronously. If this option is given as "false", then the "onLoad"
  * callback must be given, as the instance returned from this constructor will
  * not be usable for a while.
- *  
- * <li><i>loadParams</i> - an object containing parameters to pass to the 
+ *
+ * <li><i>loadParams</i> - an object containing parameters to pass to the
  * loader callback function when locale data is missing. The parameters are not
- * interpretted or modified in any way. They are simply passed along. The object 
+ * interpretted or modified in any way. They are simply passed along. The object
  * may contain any property/value pairs as long as the calling code is in
  * agreement with the loader callback function as to what those parameters mean.
  * </ul>
- * 
+ *
  * Here is an example of how you might use the unit formatter to format a string with
  * the correct units.<p>
- * 
+ *
  * Depends directive: !depends unitfmt.js
- *  
+ *
  * @constructor
  * @param {Object} options options governing the way this date formatter instance works
  */
 ilib.UnitFmt = function(options) {
-	var sync = true, 
+	var sync = true,
 		loadParams = undefined;
-	
+
     this.length = "long";
     this.scale  = true;
     this.measurementType = 'undefined';
@@ -27044,7 +27044,7 @@ ilib.UnitFmt = function(options) {
     	if (typeof(options.autoConvert) === 'boolean') {
     		this.convert = options.autoConvert;
     	}
-        
+
         if (typeof(options.useNative) === 'boolean') {
     		this.useNative = options.useNative;
     	}
@@ -27052,24 +27052,24 @@ ilib.UnitFmt = function(options) {
     	if (options.measurementSystem) {
     		this.measurementSystem = options.measurementSystem;
     	}
-        
+
         if (typeof (options.maxFractionDigits) === 'number') {
-            /** 
+            /**
              * @private
-             * @type {number|undefined} 
+             * @type {number|undefined}
              */
             this.maxFractionDigits = options.maxFractionDigits;
         }
         if (typeof (options.minFractionDigits) === 'number') {
-            /** 
+            /**
              * @private
-             * @type {number|undefined} 
+             * @type {number|undefined}
              */
             this.minFractionDigits = options.minFractionDigits;
         }
-        /** 
+        /**
          * @private
-         * @type {string} 
+         * @type {string}
          */
         this.roundingMode = options.roundingMode;
     }
@@ -27079,12 +27079,12 @@ ilib.UnitFmt = function(options) {
     }
 
 	ilib.loadData({
-		object: ilib.UnitFmt, 
-		locale: this.locale, 
-		name: "unitfmt.json", 
-		sync: sync, 
-		loadParams: loadParams, 
-		callback: ilib.bind(this, function (format) {                      
+		object: ilib.UnitFmt,
+		locale: this.locale,
+		name: "unitfmt.json",
+		sync: sync,
+		loadParams: loadParams,
+		callback: ilib.bind(this, function (format) {
 			var formatted = format;
 			this.template = formatted["unitfmt"][this.length];
 			if (options && typeof(options.onLoad) === 'function') {
@@ -27095,7 +27095,7 @@ ilib.UnitFmt = function(options) {
 };
 
 ilib.UnitFmt.prototype = {
-	
+
 	/**
 	 * Return the locale used with this formatter instance.
 	 * @return {ilib.Locale} the ilib.Locale instance for this formatter
@@ -27103,30 +27103,30 @@ ilib.UnitFmt.prototype = {
 	getLocale: function() {
 		return this.locale;
 	},
-	
+
 	/**
 	 * Return the template string that is used to format date/times for this
-	 * formatter instance. This will work, even when the template property is not explicitly 
-	 * given in the options to the constructor. Without the template option, the constructor 
+	 * formatter instance. This will work, even when the template property is not explicitly
+	 * given in the options to the constructor. Without the template option, the constructor
 	 * will build the appropriate template according to the options and use that template
-	 * in the format method. 
-	 * 
+	 * in the format method.
+	 *
 	 * @return {string} the format template for this formatter
 	 */
 	getTemplate: function() {
 		return this.template;
 	},
-	
+
 	/**
 	 * Convert this formatter to a string representation by returning the
 	 * format template. This method delegates to getTemplate.
-	 * 
+	 *
 	 * @return {string} the format template
 	 */
 	toString: function() {
 		return this.getTemplate();
 	},
-    
+
 	/**
 	 * Return whether or not this formatter will auto-scale the units while formatting.
 	 * @returns {boolean} true if auto-scaling is turned on
@@ -27146,8 +27146,8 @@ ilib.UnitFmt.prototype = {
 	/**
 	 * Format a particular unit instance according to the settings of this
 	 * formatter object.
-	 * 
-	 * @param {ilib.Measurement} measurement measurement to format	 
+	 *
+	 * @param {ilib.Measurement} measurement measurement to format
 	 * @return {string} the formatted version of the given date instance
 	 */
     format: function (measurement) {
@@ -27170,7 +27170,7 @@ ilib.UnitFmt.prototype = {
 
 /*
  * Length.js - Unit conversions for Lengths/lengths
- * 
+ *
  * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27188,30 +27188,30 @@ ilib.UnitFmt.prototype = {
  */
 
 /*
-!depends 
-ilibglobal.js 
+!depends
+ilibglobal.js
 */
 
 /**
  * @class
  * Create a new length measurement instance.
- *  
+ *
  * @constructor
  * @extends ilib.Measurement
- * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
+ * @param options {{unit:string,amount:number|string|undefined}} Options controlling
  * the construction of this instance
  */
 ilib.Measurement.Length = function (options) {
 	this.unit = "meter";
 	this.amount = 0;
 	this.aliases = ilib.Measurement.Length.aliases; // share this table in all instances
-	
+
 	if (options) {
 		if (typeof(options.unit) !== 'undefined') {
 			this.originalUnit = options.unit;
 			this.unit = this.aliases[options.unit] || options.unit;
 		}
-		
+
 		if (typeof(options.amount) === 'object') {
 			if (options.amount.getMeasure() === "length") {
 				this.amount = ilib.Measurement.Length.convert(this.unit, options.amount.getUnit(), options.amount.getAmount());
@@ -27222,14 +27222,14 @@ ilib.Measurement.Length = function (options) {
 			this.amount = parseFloat(options.amount);
 		}
 	}
-	
+
 	if (typeof(ilib.Measurement.Length.ratios[this.unit]) === 'undefined') {
 		throw "Unknown unit: " + options.unit;
 	}
 };
 
 ilib.Measurement.Length.ratios = {
-	/*              index, µm           mm           cm           inch         dm           foot          yard          m             dam            hm              km              mile            nm            Mm             Gm             */ 
+	/*              index, µm           mm           cm           inch         dm           foot          yard          m             dam            hm              km              mile            nm            Mm             Gm             */
 	"micrometer":   [ 1,   1,           1e-3,        1e-4,        3.93701e-5,  1e-5,        3.28084e-6,   1.09361e-6,   1e-6,         1e-7,          1e-8,           1e-9,           6.21373e-10,  5.39957e-10,  1e-12,          1e-15           ],
 	"millimeter":   [ 2,   1000,        1,           0.1,         0.0393701,   0.01,        0.00328084,   1.09361e-3,   0.001,        1e-4,          1e-5,           1e-6,           6.21373e-7,   5.39957e-7,   1e-9,           1e-12           ],
 	"centimeter":   [ 3,   1e4,         10,          1,           0.393701,    0.1,         0.0328084,    0.0109361,    0.01,         0.001,         1e-4,           1e-5,           6.21373e-6,   5.39957e-6,   1e-8,           1e-9            ],
@@ -27243,8 +27243,8 @@ ilib.Measurement.Length.ratios = {
 	"kilometer":    [ 11,  1e9,         1e6,         1e5,         39370.1,     1e4,         3280.84,      1093.61,      1000,         100,           10,             1,              0.621373,     0.539957,     0.001,          1e-4            ],
     "mile":         [ 12,  1.60934e9,   1.60934e6,   1.60934e5,   63360,       1.60934e4,   5280,         1760,         1609.34,      160.934,       16.0934,        1.60934,        1,            0.868976,     1.60934e-3,     1.60934e-6      ],
     "nauticalmile": [ 13,  1.852e9,     1.852e6,     1.852e5,     72913.4,     1.852e4,     6076.12,      2025.37,      1852,         185.2,         18.52,          1.852,          1.15078,      1,            1.852e-3,       1.852e-6        ],
-	"megameter":    [ 14,  1e12,        1e9,         1e6,         3.93701e7,   1e5,         3.28084e6,    1.09361e6,    1e4,          1000,          100,            10,             621.373,      539.957,      1,              0.001           ],        
-    "gigameter":    [ 15,  1e15,        1e12,        1e9,         3.93701e10,  1e8,         3.28084e9,    1.09361e9,    1e7,          1e6,           1e5,            1e4,            621373.0,     539957.0,     1000,           1               ]	
+	"megameter":    [ 14,  1e12,        1e9,         1e6,         3.93701e7,   1e5,         3.28084e6,    1.09361e6,    1e4,          1000,          100,            10,             621.373,      539.957,      1,              0.001           ],
+    "gigameter":    [ 15,  1e15,        1e12,        1e9,         3.93701e10,  1e8,         3.28084e9,    1.09361e9,    1e7,          1e6,           1e5,            1e4,            621373.0,     539957.0,     1000,           1               ]
 };
 
 ilib.Measurement.Length.metricSystem = {
@@ -27302,12 +27302,12 @@ ilib.Measurement.Length.prototype.constructor = ilib.Measurement.Length;
  * Return the type of this measurement. Examples are "mass",
  * "length", "speed", etc. Measurements can only be converted
  * to measurements of the same type.<p>
- * 
- * The type of the units is determined automatically from the 
- * units. For example, the unit "grams" is type "mass". Use the 
+ *
+ * The type of the units is determined automatically from the
+ * units. For example, the unit "grams" is type "mass". Use the
  * static call {@link ilib.Measurement.getAvailableUnits}
  * to find out what units this version of ilib supports.
- *  
+ *
  * @return {string} the name of the type of this measurement
  */
 ilib.Measurement.Length.prototype.getMeasure = function() {
@@ -27316,11 +27316,11 @@ ilib.Measurement.Length.prototype.getMeasure = function() {
 
 /**
  * Localize the measurement to the commonly used measurement in that locale. For example
- * If a user's locale is "en-US" and the measurement is given as "60 kmh", 
- * the formatted number should be automatically converted to the most appropriate 
+ * If a user's locale is "en-US" and the measurement is given as "60 kmh",
+ * the formatted number should be automatically converted to the most appropriate
  * measure in the other system, in this case, mph. The formatted result should
- * appear as "37.3 mph". 
- * 
+ * appear as "37.3 mph".
+ *
  * @abstract
  * @param {string} locale current locale string
  * @returns {ilib.Measurement} a new instance that is converted to locale
@@ -27342,11 +27342,11 @@ ilib.Measurement.Length.prototype.localize = function(locale) {
  * Return a new measurement instance that is converted to a new
  * measurement unit. Measurements can only be converted
  * to measurements of the same type.<p>
- *  
+ *
  * @param {string} to The name of the units to convert to
  * @return {ilib.Measurement|undefined} the converted measurement
  * or undefined if the requested units are for a different
- * measurement type 
+ * measurement type
  */
 ilib.Measurement.Length.prototype.convert = function(to) {
 	if (!to || typeof(ilib.Measurement.Length.ratios[this.normalizeUnits(to)]) === 'undefined') {
@@ -27361,25 +27361,25 @@ ilib.Measurement.Length.prototype.convert = function(to) {
 /**
  * Scale the measurement unit to an acceptable level. The scaling
  * happens so that the integer part of the amount is as small as
- * possible without being below zero. This will result in the 
+ * possible without being below zero. This will result in the
  * largest units that can represent this measurement without
- * fractions. Measurements can only be scaled to other measurements 
+ * fractions. Measurements can only be scaled to other measurements
  * of the same type.
- * 
+ *
  * @param {string=} measurementsystem system to use (uscustomary|imperial|metric),
  * or undefined if the system can be inferred from the current measure
- * @return {ilib.Measurement} a new instance that is scaled to the 
+ * @return {ilib.Measurement} a new instance that is scaled to the
  * right level
  */
 ilib.Measurement.Length.prototype.scale = function(measurementsystem) {
-    var mSystem;    
-    if (measurementsystem === "metric" || (typeof(measurementsystem) === 'undefined' 
+    var mSystem;
+    if (measurementsystem === "metric" || (typeof(measurementsystem) === 'undefined'
             && typeof(ilib.Measurement.Length.metricSystem[this.unit]) !== 'undefined')) {
         mSystem = ilib.Measurement.Length.metricSystem;
-    } else if (measurementsystem === "imperial" || (typeof(measurementsystem) === 'undefined' 
+    } else if (measurementsystem === "imperial" || (typeof(measurementsystem) === 'undefined'
             && typeof(ilib.Measurement.Length.imperialSystem[this.unit]) !== 'undefined')) {
         mSystem = ilib.Measurement.Length.imperialSystem;
-    } else if (measurementsystem === "uscustomary" || (typeof(measurementsystem) === 'undefined' 
+    } else if (measurementsystem === "uscustomary" || (typeof(measurementsystem) === 'undefined'
             && typeof(ilib.Measurement.Length.uscustomarySystem[this.unit]) !== 'undefined')) {
         mSystem = ilib.Measurement.Length.uscustomarySystem;
     } else {
@@ -27387,19 +27387,19 @@ ilib.Measurement.Length.prototype.scale = function(measurementsystem) {
 			unit: this.unit,
 			amount: this.amount
 		});
-    }    
-    
+    }
+
     var length = this.amount;
     var munit = this.unit;
     var fromRow = ilib.Measurement.Length.ratios[this.unit];
-    
+
     for (var m in mSystem) {
         var tmp = this.amount * fromRow[mSystem[m]];
         if (tmp < 1) break;
         length = tmp;
         munit = m;
     }
-    
+
     return new ilib.Measurement.Length({
 		unit: munit,
 		amount: length
@@ -27423,7 +27423,7 @@ ilib.Measurement.Length.aliases = {
 	"metre": "meter",
 	"metres": "meter",
 	"m": "meter",
-	"meter": "meter",        
+	"meter": "meter",
 	"micrometers": "micrometer",
 	"micrometres": "micrometer",
 	"micrometre": "micrometer",
@@ -27507,7 +27507,7 @@ ilib.Measurement._constructors["length"] = ilib.Measurement.Length;
 
 /*
  * Speed.js - Unit conversions for Speeds/speeds
- * 
+ *
  * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27525,7 +27525,7 @@ ilib.Measurement._constructors["length"] = ilib.Measurement.Length;
  */
 
 /*
-!depends 
+!depends
 ilibglobal.js
 unit.js
 */
@@ -27533,23 +27533,23 @@ unit.js
 /**
  * @class
  * Create a new speed measurement instance.
- * 
+ *
  * @constructor
  * @extends ilib.Measurement
- * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
+ * @param options {{unit:string,amount:number|string|undefined}} Options controlling
  * the construction of this instance
  */
 ilib.Measurement.Speed = function (options) {
 	this.unit = "meters/second";
 	this.amount = 0;
 	this.aliases = ilib.Measurement.Speed.aliases; // share this table in all instances
-	
+
 	if (options) {
 		if (typeof(options.unit) !== 'undefined') {
 			this.originalUnit = options.unit;
 			this.unit = this.aliases[options.unit] || options.unit;
 		}
-		
+
 		if (typeof(options.amount) === 'object') {
 			if (options.amount.getMeasure() === "speed") {
 				this.amount = ilib.Measurement.Speed.convert(this.unit, options.amount.getUnit(), options.amount.getAmount());
@@ -27560,7 +27560,7 @@ ilib.Measurement.Speed = function (options) {
 			this.amount = parseFloat(options.amount);
 		}
 	}
-	
+
 	if (typeof(ilib.Measurement.Speed.ratios[this.unit]) === 'undefined') {
 		throw "Unknown unit: " + options.unit;
 	}
@@ -27569,10 +27569,10 @@ ilib.Measurement.Speed = function (options) {
 ilib.Measurement.Speed.ratios = {
 	/*                 index, k/h         f/s         miles/h      knot         m/s        km/s         miles/s */
     "kilometer/hour":   [ 1,  1,          0.911344,   0.621371,    0.539957,    0.277778,  2.77778e-4,  1.72603109e-4 ],
-	"feet/second":      [ 2,  1.09728,    1,          0.681818,    0.592484,    0.3048,    3.048e-4,    1.89393939e-4 ],  
+	"feet/second":      [ 2,  1.09728,    1,          0.681818,    0.592484,    0.3048,    3.048e-4,    1.89393939e-4 ],
     "miles/hour":       [ 3,  1.60934,    1.46667,    1,           0.868976,    0.44704,   4.4704e-4,   2.77777778e-4 ],
     "knot":             [ 4,  1.852,      1.68781,    1.15078,     1,           0.514444,  5.14444e-4,  3.19660958e-4 ],
-  	"meters/second":    [ 5,  3.6,        3.28084,    2.236936,    1.94384,     1,         0.001,       6.21371192e-4 ],	
+  	"meters/second":    [ 5,  3.6,        3.28084,    2.236936,    1.94384,     1,         0.001,       6.21371192e-4 ],
     "kilometer/second": [ 6,  3600,       3280.8399,  2236.93629,  1943.84449,  1000,      1,           0.621371192   ],
     "miles/second":     [ 7,  5793.6384,  5280,       3600,        3128.31447,  1609.344,  1.609344,    1             ]
 };
@@ -27615,12 +27615,12 @@ ilib.Measurement.Speed.prototype.constructor = ilib.Measurement.Speed;
  * Return the type of this measurement. Examples are "mass",
  * "length", "speed", etc. Measurements can only be converted
  * to measurements of the same type.<p>
- * 
- * The type of the units is determined automatically from the 
- * units. For example, the unit "grams" is type "mass". Use the 
+ *
+ * The type of the units is determined automatically from the
+ * units. For example, the unit "grams" is type "mass". Use the
  * static call {@link ilib.Measurement.getAvailableUnits}
  * to find out what units this version of ilib supports.
- *  
+ *
  * @return {string} the name of the type of this measurement
  */
 ilib.Measurement.Speed.prototype.getMeasure = function() {
@@ -27631,11 +27631,11 @@ ilib.Measurement.Speed.prototype.getMeasure = function() {
  * Return a new measurement instance that is converted to a new
  * measurement unit. Measurements can only be converted
  * to measurements of the same type.<p>
- *  
+ *
  * @param {string} to The name of the units to convert to
  * @return {ilib.Measurement|undefined} the converted measurement
  * or undefined if the requested units are for a different
- * measurement type 
+ * measurement type
  */
 ilib.Measurement.Speed.prototype.convert = function(to) {
 	if (!to || typeof(ilib.Measurement.Speed.ratios[this.normalizeUnits(to)]) === 'undefined') {
@@ -27650,14 +27650,14 @@ ilib.Measurement.Speed.prototype.convert = function(to) {
 /**
  * Scale the measurement unit to an acceptable level. The scaling
  * happens so that the integer part of the amount is as small as
- * possible without being below zero. This will result in the 
+ * possible without being below zero. This will result in the
  * largest units that can represent this measurement without
- * fractions. Measurements can only be scaled to other measurements 
+ * fractions. Measurements can only be scaled to other measurements
  * of the same type.
- * 
+ *
  * @param {string=} measurementsystem system to use (uscustomary|imperial|metric),
  * or undefined if the system can be inferred from the current measure
- * @return {ilib.Measurement} a new instance that is scaled to the 
+ * @return {ilib.Measurement} a new instance that is scaled to the
  * right level
  */
 ilib.Measurement.Speed.prototype.scale = function(measurementsystem) {
@@ -27698,11 +27698,11 @@ ilib.Measurement.Speed.prototype.scale = function(measurementsystem) {
 
 /**
  * Localize the measurement to the commonly used measurement in that locale. For example
- * If a user's locale is "en-US" and the measurement is given as "60 kmh", 
- * the formatted number should be automatically converted to the most appropriate 
+ * If a user's locale is "en-US" and the measurement is given as "60 kmh",
+ * the formatted number should be automatically converted to the most appropriate
  * measure in the other system, in this case, mph. The formatted result should
- * appear as "37.3 mph". 
- * 
+ * appear as "37.3 mph".
+ *
  * @abstract
  * @param {string} locale current locale string
  * @returns {ilib.Measurement} a new instance that is converted to locale
@@ -27804,7 +27804,7 @@ ilib.Measurement.Speed.convert = function(to, from, speed) {
 	var toRow = ilib.Measurement.Speed.ratios[to];
 	if (typeof(from) === 'undefined' || typeof(to) === 'undefined') {
 		return undefined;
-	}	
+	}
 	var result = speed * fromRow[toRow[0]];
     return result;
 };
@@ -27826,7 +27826,7 @@ ilib.Measurement._constructors["speed"] = ilib.Measurement.Speed;
 
 /*
  * digitalStorage.js - Unit conversions for Digital Storage
- * 
+ *
  * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27844,31 +27844,31 @@ ilib.Measurement._constructors["speed"] = ilib.Measurement.Speed;
  */
 
 /*
-!depends 
-ilibglobal.js 
+!depends
+ilibglobal.js
 unit.js
 */
 
 /**
  * @class
  * Create a new DigitalStorage measurement instance.
- *  
+ *
  * @constructor
  * @extends ilib.Measurement
- * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
+ * @param options {{unit:string,amount:number|string|undefined}} Options controlling
  * the construction of this instance
  */
 ilib.Measurement.DigitalStorage = function (options) {
 	this.unit = "bit";
 	this.amount = 0;
 	this.aliases = ilib.Measurement.DigitalStorage.aliases; // share this table in all instances
-	
+
 	if (options) {
 		if (typeof(options.unit) !== 'undefined') {
 			this.originalUnit = options.unit;
 			this.unit = this.aliases[options.unit] || options.unit;
 		}
-		
+
 		if (typeof(options.amount) === 'object') {
 			if (options.amount.getMeasure() === "digitalStorage") {
 				this.amount = ilib.Measurement.DigitalStorage.convert(this.unit, options.amount.getUnit(), options.amount.getAmount());
@@ -27879,14 +27879,14 @@ ilib.Measurement.DigitalStorage = function (options) {
 			this.amount = parseFloat(options.amount);
 		}
 	}
-	
+
 	if (typeof(ilib.Measurement.DigitalStorage.ratios[this.unit]) === 'undefined') {
 		throw "Unknown unit: " + options.unit;
 	}
 };
 
 ilib.Measurement.DigitalStorage.ratios = {
-    /*                 bit             byte            kb              kB              mb              mB              gb               gB               tb               tB               pb               pB   */           
+    /*                 bit             byte            kb              kB              mb              mB              gb               gB               tb               tB               pb               pB   */
 	"bit":      [ 1,   1,              0.125,          0.0009765625,   1.220703125e-4, 9.536743164e-7, 1.192092896e-7, 9.313225746e-10, 1.164153218e-10, 9.094947017e-13, 1.136868377e-13, 8.881784197e-16, 1.110223025e-16 ],
     "byte":     [ 2,   8,              1,              0.0078125,      0.0009765625,   7.629394531e-6, 9.536743164e-7, 7.450580597e-9,  9.313225746e-10, 7.275957614e-12, 9.094947017e-13, 7.105427358e-15, 8.881784197e-16 ],
     "kilobit":  [ 3,   1024,           128,            1,              0.125,          0.0009765625,   1.220703125e-4, 9.536743164e-7,  1.192092896e-7,  9.313225746e-10, 1.164153218e-10, 9.094947017e-13, 1.136868377e-13 ],
@@ -27908,12 +27908,12 @@ ilib.Measurement.DigitalStorage.prototype.constructor = ilib.Measurement.Digital
  * Return the type of this measurement. Examples are "mass",
  * "length", "speed", etc. Measurements can only be converted
  * to measurements of the same type.<p>
- * 
- * The type of the units is determined automatically from the 
- * units. For example, the unit "grams" is type "mass". Use the 
+ *
+ * The type of the units is determined automatically from the
+ * units. For example, the unit "grams" is type "mass". Use the
  * static call {@link ilib.Measurement.getAvailableUnits}
  * to find out what units this version of ilib supports.
- *  
+ *
  * @return {string} the name of the type of this measurement
  */
 ilib.Measurement.DigitalStorage.prototype.getMeasure = function() {
@@ -27924,12 +27924,12 @@ ilib.Measurement.DigitalStorage.prototype.getMeasure = function() {
  * Return a new measurement instance that is converted to a new
  * measurement unit. Measurements can only be converted
  * to measurements of the same type.<p>
- *  
+ *
  * @param {string} to The name of the units to convert to
  * @return {ilib.Measurement|undefined} the converted measurement
  * or undefined if the requested units are for a different
  * measurement type
- * 
+ *
  */
 ilib.Measurement.DigitalStorage.prototype.convert = function(to) {
 	if (!to || typeof(ilib.Measurement.DigitalStorage.ratios[this.normalizeUnits(to)]) === 'undefined') {
@@ -27943,11 +27943,11 @@ ilib.Measurement.DigitalStorage.prototype.convert = function(to) {
 
 /**
  * Localize the measurement to the commonly used measurement in that locale. For example
- * If a user's locale is "en-US" and the measurement is given as "60 kmh", 
- * the formatted number should be automatically converted to the most appropriate 
+ * If a user's locale is "en-US" and the measurement is given as "60 kmh",
+ * the formatted number should be automatically converted to the most appropriate
  * measure in the other system, in this case, mph. The formatted result should
- * appear as "37.3 mph". 
- * 
+ * appear as "37.3 mph".
+ *
  * @abstract
  * @param {string} locale current locale string
  * @returns {ilib.Measurement} a new instance that is converted to locale
@@ -27962,23 +27962,23 @@ ilib.Measurement.DigitalStorage.prototype.localize = function(locale) {
 /**
  * Scale the measurement unit to an acceptable level. The scaling
  * happens so that the integer part of the amount is as small as
- * possible without being below zero. This will result in the 
+ * possible without being below zero. This will result in the
  * largest units that can represent this measurement without
- * fractions. Measurements can only be scaled to other measurements 
+ * fractions. Measurements can only be scaled to other measurements
  * of the same type.
- * 
+ *
  * @param {string=} measurementsystem system to use (uscustomary|imperial|metric),
  * or undefined if the system can be inferred from the current measure
- * @return {ilib.Measurement} a new instance that is scaled to the 
+ * @return {ilib.Measurement} a new instance that is scaled to the
  * right level
  */
 ilib.Measurement.DigitalStorage.prototype.scale = function(measurementsystem) {
-    
-    var fromRow = ilib.Measurement.DigitalStorage.ratios[this.unit];    
+
+    var fromRow = ilib.Measurement.DigitalStorage.ratios[this.unit];
     var dStorage = this.amount;
     var munit = this.unit;
     var i=1;
-    
+
     for (var m in ilib.Measurement.DigitalStorage.ratios) {
         var tmp = this.amount * fromRow[i];
         if (tmp < 1) break;
@@ -27986,11 +27986,11 @@ ilib.Measurement.DigitalStorage.prototype.scale = function(measurementsystem) {
         munit = m;
         ++i
     }
-    
+
     return new ilib.Measurement.DigitalStorage({
 	unit: munit,
 	amount: dStorage
-    });    
+    });
 };
 
 ilib.Measurement.DigitalStorage.aliases = {
@@ -28119,7 +28119,7 @@ ilib.Measurement.DigitalStorage.convert = function(to, from, digitalStorage) {
 	var toRow = ilib.Measurement.DigitalStorage.ratios[to];
 	if (typeof(from) === 'undefined' || typeof(to) === 'undefined') {
 		return undefined;
-	}	
+	}
 	var result = digitalStorage * fromRow[toRow[0]];
     return result;
 };
@@ -28141,7 +28141,7 @@ ilib.Measurement._constructors["digitalStorage"] = ilib.Measurement.DigitalStora
 
 /*
  * temperature.js - Unit conversions for Temperature/temperature
- * 
+ *
  * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28159,7 +28159,7 @@ ilib.Measurement._constructors["digitalStorage"] = ilib.Measurement.DigitalStora
  */
 
 /*
-!depends 
+!depends
 ilibglobal.js
 unit.js
 */
@@ -28167,10 +28167,10 @@ unit.js
 /**
  * @class
  * Create a new Temperature measurement instance.
- *  
+ *
  * @constructor
  * @extends ilib.Measurement
- * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
+ * @param options {{unit:string,amount:number|string|undefined}} Options controlling
  * the construction of this instance
  */
 ilib.Measurement.Temperature = function (options) {
@@ -28204,12 +28204,12 @@ ilib.Measurement.Temperature.prototype.constructor = ilib.Measurement.Temperatur
  * Return the type of this measurement. Examples are "mass",
  * "length", "speed", etc. Measurements can only be converted
  * to measurements of the same type.<p>
- * 
- * The type of the units is determined automatically from the 
- * units. For example, the unit "grams" is type "mass". Use the 
+ *
+ * The type of the units is determined automatically from the
+ * units. For example, the unit "grams" is type "mass". Use the
  * static call {@link ilib.Measurement.getAvailableUnits}
  * to find out what units this version of ilib supports.
- *  
+ *
  * @return {string} the name of the type of this measurement
  */
 ilib.Measurement.Temperature.prototype.getMeasure = function() {
@@ -28240,11 +28240,11 @@ ilib.Measurement.Temperature.aliases = {
  * Return a new measurement instance that is converted to a new
  * measurement unit. Measurements can only be converted
  * to measurements of the same type.<p>
- *  
+ *
  * @param {string} to The name of the units to convert to
  * @return {ilib.Measurement|undefined} the converted measurement
  * or undefined if the requested units are for a different
- * measurement type 
+ * measurement type
  */
 ilib.Measurement.Temperature.prototype.convert = function(to) {
 	if (!to || typeof(ilib.Measurement.Temperature.ratios[this.normalizeUnits(to)]) === 'undefined') {
@@ -28298,21 +28298,21 @@ ilib.Measurement.Temperature.convert = function(to, from, temperature) {
 /**
  * Scale the measurement unit to an acceptable level. The scaling
  * happens so that the integer part of the amount is as small as
- * possible without being below zero. This will result in the 
+ * possible without being below zero. This will result in the
  * largest units that can represent this measurement without
- * fractions. Measurements can only be scaled to other measurements 
+ * fractions. Measurements can only be scaled to other measurements
  * of the same type.
- * 
+ *
  * @param {string=} measurementsystem system to use (uscustomary|imperial|metric),
  * or undefined if the system can be inferred from the current measure
- * @return {ilib.Measurement} a new instance that is scaled to the 
+ * @return {ilib.Measurement} a new instance that is scaled to the
  * right level
  */
 ilib.Measurement.Temperature.prototype.scale = function(measurementsystem) {
     return new ilib.Measurement.Temperature({
         unit: this.unit,
         amount: this.amount
-    }); 
+    });
 };
 
 /**
@@ -28331,11 +28331,11 @@ ilib.Measurement.Temperature.usCustomaryToMetric = {
 
 /**
  * Localize the measurement to the commonly used measurement in that locale. For example
- * If a user's locale is "en-US" and the measurement is given as "60 kmh", 
- * the formatted number should be automatically converted to the most appropriate 
+ * If a user's locale is "en-US" and the measurement is given as "60 kmh",
+ * the formatted number should be automatically converted to the most appropriate
  * measure in the other system, in this case, mph. The formatted result should
- * appear as "37.3 mph". 
- * 
+ * appear as "37.3 mph".
+ *
  * @abstract
  * @param {string} locale current locale string
  * @returns {ilib.Measurement} a new instance that is converted to locale
@@ -28357,7 +28357,7 @@ ilib.Measurement._constructors["temperature"] = ilib.Measurement.Temperature;
 
 /*
  * Unknown.js - Dummy unit conversions for unknown types
- * 
+ *
  * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28375,18 +28375,18 @@ ilib.Measurement._constructors["temperature"] = ilib.Measurement.Temperature;
  */
 
 /*
-!depends 
-ilibglobal.js 
+!depends
+ilibglobal.js
 unit.js
 */
 
 /**
  * @class
  * Create a new unknown measurement instance.
- * 
+ *
  * @constructor
  * @extends ilib.Measurement
- * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
+ * @param options {{unit:string,amount:number|string|undefined}} Options controlling
  * the construction of this instance
  */
 ilib.Measurement.Unknown = function (options) {
@@ -28409,12 +28409,12 @@ ilib.Measurement.Unknown.aliases = {
  * Return the type of this measurement. Examples are "mass",
  * "length", "speed", etc. Measurements can only be converted
  * to measurements of the same type.<p>
- * 
- * The type of the units is determined automatically from the 
- * units. For example, the unit "grams" is type "mass". Use the 
+ *
+ * The type of the units is determined automatically from the
+ * units. For example, the unit "grams" is type "mass". Use the
  * static call {@link ilib.Measurement.getAvailableUnits}
  * to find out what units this version of ilib supports.
- *  
+ *
  * @return {string} the name of the type of this measurement
  */
 ilib.Measurement.Unknown.prototype.getMeasure = function() {
@@ -28425,11 +28425,11 @@ ilib.Measurement.Unknown.prototype.getMeasure = function() {
  * Return a new measurement instance that is converted to a new
  * measurement unit. Measurements can only be converted
  * to measurements of the same type.<p>
- *  
+ *
  * @param {string} to The name of the units to convert to
  * @return {ilib.Measurement|undefined} the converted measurement
  * or undefined if the requested units are for a different
- * measurement type 
+ * measurement type
  */
 ilib.Measurement.Unknown.prototype.convert = function(to) {
 	return undefined;
@@ -28449,11 +28449,11 @@ ilib.Measurement.Unknown.convert = function(to, from, unknown) {
 
 /**
  * Localize the measurement to the commonly used measurement in that locale. For example
- * If a user's locale is "en-US" and the measurement is given as "60 kmh", 
- * the formatted number should be automatically converted to the most appropriate 
+ * If a user's locale is "en-US" and the measurement is given as "60 kmh",
+ * the formatted number should be automatically converted to the most appropriate
  * measure in the other system, in this case, mph. The formatted result should
- * appear as "37.3 mph". 
- * 
+ * appear as "37.3 mph".
+ *
  * @abstract
  * @param {string} locale current locale string
  * @returns {ilib.Measurement} a new instance that is converted to locale
@@ -28468,21 +28468,21 @@ ilib.Measurement.Unknown.prototype.localize = function(locale) {
 /**
  * Scale the measurement unit to an acceptable level. The scaling
  * happens so that the integer part of the amount is as small as
- * possible without being below zero. This will result in the 
+ * possible without being below zero. This will result in the
  * largest units that can represent this measurement without
- * fractions. Measurements can only be scaled to other measurements 
+ * fractions. Measurements can only be scaled to other measurements
  * of the same type.
- * 
+ *
  * @param {string=} measurementsystem system to use (uscustomary|imperial|metric),
  * or undefined if the system can be inferred from the current measure
- * @return {ilib.Measurement} a new instance that is scaled to the 
+ * @return {ilib.Measurement} a new instance that is scaled to the
  * right level
  */
 ilib.Measurement.Unknown.prototype.scale = function(measurementsystem) {
     return new ilib.Measurement.Unknown({
         unit: this.unit,
         amount: this.amount
-    }); 
+    });
 };
 
 /**
@@ -28499,7 +28499,7 @@ ilib.Measurement._constructors["unknown"] = ilib.Measurement.Unknown;
 
 /*
  * Time.js - Unit conversions for Times/times
- * 
+ *
  * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28517,31 +28517,31 @@ ilib.Measurement._constructors["unknown"] = ilib.Measurement.Unknown;
  */
 
 /*
-!depends 
-ilibglobal.js 
+!depends
+ilibglobal.js
 unit.js
 */
 
 /**
  * @class
  * Create a new time measurement instance.
- * 
+ *
  * @constructor
  * @extends ilib.Measurement
- * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
+ * @param options {{unit:string,amount:number|string|undefined}} Options controlling
  * the construction of this instance
  */
 ilib.Measurement.Time = function (options) {
 	this.unit = "ns";
 	this.amount = 0;
 	this.aliases = ilib.Measurement.Time.aliases; // share this table in all instances
-	
+
 	if (options) {
 		if (typeof(options.unit) !== 'undefined') {
 			this.originalUnit = options.unit;
 			this.unit = this.aliases[options.unit] || options.unit;
 		}
-		
+
 		if (typeof(options.amount) === 'object') {
 			if (options.amount.getMeasure() === "time") {
 				this.amount = ilib.Measurement.Time.convert(this.unit, options.amount.getUnit(), options.amount.getAmount());
@@ -28552,16 +28552,16 @@ ilib.Measurement.Time = function (options) {
 			this.amount = parseFloat(options.amount);
 		}
 	}
-	
+
 	if (typeof(ilib.Measurement.Time.ratios[this.unit]) === 'undefined') {
 		throw "Unknown unit: " + options.unit;
 	}
 };
 
 ilib.Measurement.Time.ratios = {
-	/*              index  nsec        msec        mlsec       sec        min          hour          day           week         month        year         decade        century    */           
-	"nanosecond":   [ 1,   1,          0.001,      1e-6,       1e-9,      1.6667e-11,  2.7778e-13,   1.1574e-14,   1.6534e-15,  3.8027e-16,  3.1689e-17,  3.1689e-18,   3.1689e-19  ],  
-	"microsecond":  [ 2,   1000,       1,          0.001,      1e-6,      1.6667e-8,   2.7778e-10,   1.1574e-11,   1.6534e-12,  3.8027e-13,  3.1689e-14,  3.1689e-15,   3.1689e-16  ],  
+	/*              index  nsec        msec        mlsec       sec        min          hour          day           week         month        year         decade        century    */
+	"nanosecond":   [ 1,   1,          0.001,      1e-6,       1e-9,      1.6667e-11,  2.7778e-13,   1.1574e-14,   1.6534e-15,  3.8027e-16,  3.1689e-17,  3.1689e-18,   3.1689e-19  ],
+	"microsecond":  [ 2,   1000,       1,          0.001,      1e-6,      1.6667e-8,   2.7778e-10,   1.1574e-11,   1.6534e-12,  3.8027e-13,  3.1689e-14,  3.1689e-15,   3.1689e-16  ],
 	"millisecond":  [ 3,   1e+6,       1000,       1,          0.001,     1.6667e-5,   2.7778e-7,    1.1574e-8,    1.6534e-9,   3.8027e-10,  3.1689e-11,  3.1689e-12,   3.1689e-13  ],
 	"second":       [ 4,   1e+9,       1e+6,       1000,       1,         0.0166667,   0.000277778,  1.1574e-5,    1.6534e-6,   3.8027e-7,   3.1689e-8,   3.1689e-9,    3.1689e-10  ],
 	"minute":       [ 5,   6e+10,      6e+7,       60000,      60,        1,           0.0166667,    0.000694444,  9.9206e-5,   2.2816e-5,   1.9013e-6,   1.9013e-7,    1.9013e-8   ],
@@ -28582,12 +28582,12 @@ ilib.Measurement.Time.prototype.constructor = ilib.Measurement.Time;
  * Return the type of this measurement. Examples are "mass",
  * "length", "speed", etc. Measurements can only be converted
  * to measurements of the same type.<p>
- * 
- * The type of the units is determined automatically from the 
- * units. For example, the unit "grams" is type "mass". Use the 
+ *
+ * The type of the units is determined automatically from the
+ * units. For example, the unit "grams" is type "mass". Use the
  * static call {@link ilib.Measurement.getAvailableUnits}
  * to find out what units this version of ilib supports.
- *  
+ *
  * @return {string} the name of the type of this measurement
  */
 ilib.Measurement.Time.prototype.getMeasure = function() {
@@ -28598,11 +28598,11 @@ ilib.Measurement.Time.prototype.getMeasure = function() {
  * Return a new measurement instance that is converted to a new
  * measurement unit. Measurements can only be converted
  * to measurements of the same type.<p>
- *  
+ *
  * @param {string} to The name of the units to convert to
  * @return {ilib.Measurement|undefined} the converted measurement
  * or undefined if the requested units are for a different
- * measurement type 
+ * measurement type
  */
 ilib.Measurement.Time.prototype.convert = function(to) {
 	if (!to || typeof(ilib.Measurement.Time.ratios[this.normalizeUnits(to)]) === 'undefined') {
@@ -28713,17 +28713,17 @@ ilib.Measurement.Time.convert = function(to, from, time) {
     var toRow = ilib.Measurement.Time.ratios[to];
     if (typeof(from) === 'undefined' || typeof(to) === 'undefined') {
         return undefined;
-    }	
+    }
     return time * fromRow[toRow[0]];
 };
 
 /**
  * Localize the measurement to the commonly used measurement in that locale. For example
- * If a user's locale is "en-US" and the measurement is given as "60 kmh", 
- * the formatted number should be automatically converted to the most appropriate 
+ * If a user's locale is "en-US" and the measurement is given as "60 kmh",
+ * the formatted number should be automatically converted to the most appropriate
  * measure in the other system, in this case, mph. The formatted result should
- * appear as "37.3 mph". 
- * 
+ * appear as "37.3 mph".
+ *
  * @abstract
  * @param {string} locale current locale string
  * @returns {ilib.Measurement} a new instance that is converted to locale
@@ -28738,14 +28738,14 @@ ilib.Measurement.Time.prototype.localize = function(locale) {
 /**
  * Scale the measurement unit to an acceptable level. The scaling
  * happens so that the integer part of the amount is as small as
- * possible without being below zero. This will result in the 
+ * possible without being below zero. This will result in the
  * largest units that can represent this measurement without
- * fractions. Measurements can only be scaled to other measurements 
+ * fractions. Measurements can only be scaled to other measurements
  * of the same type.
- * 
+ *
  * @param {string=} measurementsystem system to use (uscustomary|imperial|metric),
  * or undefined if the system can be inferred from the current measure
- * @return {ilib.Measurement} a new instance that is scaled to the 
+ * @return {ilib.Measurement} a new instance that is scaled to the
  * right level
  */
 ilib.Measurement.Time.prototype.scale = function(measurementsystem) {
@@ -28785,7 +28785,7 @@ ilib.Measurement._constructors["time"] = ilib.Measurement.Time;
 
 /*
  * Mass.js - Unit conversions for Mass/mass
- * 
+ *
  * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28803,8 +28803,8 @@ ilib.Measurement._constructors["time"] = ilib.Measurement.Time;
  */
 
 /*
-!depends 
-ilibglobal.js 
+!depends
+ilibglobal.js
 */
 
 /**
@@ -28813,20 +28813,20 @@ ilibglobal.js
  *
  * @constructor
  * @extends ilib.Measurement
- * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
+ * @param options {{unit:string,amount:number|string|undefined}} Options controlling
  * the construction of this instance
  */
 ilib.Measurement.Mass = function (options) {
 	this.unit = "ns";
 	this.amount = 0;
 	this.aliases = ilib.Measurement.Mass.aliases; // share this table in all instances
-	
+
 	if (options) {
 		if (typeof(options.unit) !== 'undefined') {
 			this.originalUnit = options.unit;
 			this.unit = this.aliases[options.unit] || options.unit;
 		}
-		
+
 		if (typeof(options.amount) === 'object') {
 			if (options.amount.getMeasure() === "mass") {
 				this.amount = ilib.Measurement.Mass.convert(this.unit, options.amount.getUnit(), options.amount.getAmount());
@@ -28837,16 +28837,16 @@ ilib.Measurement.Mass = function (options) {
 			this.amount = parseFloat(options.amount);
 		}
 	}
-	
+
 	if (typeof(ilib.Measurement.Mass.ratios[this.unit]) === 'undefined') {
 		throw "Unknown unit: " + options.unit;
 	}
 };
 
 ilib.Measurement.Mass.ratios = {
-	/*             index  µg          mg         g          oz          lp           kg          st            sh ton       mt ton        ln ton      */           
-	"microgram":   [ 1,   1,          0.001,     1e-6,      3.5274e-8,  2.2046e-9,   1e-9,       1.5747e-10,   1.1023e-12,  1e-12,        9.8421e-13   ],  
-	"milligram":   [ 2,   1000,       1,         0.001,     3.5274e-5,  2.2046e-6,   1e-6,       1.5747e-7,    1.1023e-9,   1e-9,         9.8421e-10   ],  
+	/*             index  µg          mg         g          oz          lp           kg          st            sh ton       mt ton        ln ton      */
+	"microgram":   [ 1,   1,          0.001,     1e-6,      3.5274e-8,  2.2046e-9,   1e-9,       1.5747e-10,   1.1023e-12,  1e-12,        9.8421e-13   ],
+	"milligram":   [ 2,   1000,       1,         0.001,     3.5274e-5,  2.2046e-6,   1e-6,       1.5747e-7,    1.1023e-9,   1e-9,         9.8421e-10   ],
 	"gram":        [ 3,   1e+6,       1000,      1,         0.035274,   0.00220462,  0.001,      0.000157473,  1.1023e-6,   1e-6,         9.8421e-7    ],
 	"ounce":       [ 4,   2.835e+7,   28349.5,   28.3495,   1,          0.0625,      0.0283495,  0.00446429,   3.125e-5,    2.835e-5,     2.7902e-5    ],
 	"pound":       [ 5,   4.536e+8,   453592,    453.592,   16,         1,           0.453592,   0.0714286,    0.0005,      0.000453592,  0.000446429  ],
@@ -28924,11 +28924,11 @@ ilib.Measurement.Mass.prototype.constructor = ilib.Measurement.Mass;
 
 /**
  * Localize the measurement to the commonly used measurement in that locale. For example
- * If a user's locale is "en-US" and the measurement is given as "60 kmh", 
- * the formatted number should be automatically converted to the most appropriate 
+ * If a user's locale is "en-US" and the measurement is given as "60 kmh",
+ * the formatted number should be automatically converted to the most appropriate
  * measure in the other system, in this case, mph. The formatted result should
- * appear as "37.3 mph". 
- * 
+ * appear as "37.3 mph".
+ *
  * @abstract
  * @param {string} locale current locale string
  * @returns {ilib.Measurement} a new instance that is converted to locale
@@ -28955,12 +28955,12 @@ ilib.Measurement.Mass.prototype.localize = function(locale) {
  * Return the type of this measurement. Examples are "mass",
  * "length", "speed", etc. Measurements can only be converted
  * to measurements of the same type.<p>
- * 
- * The type of the units is determined automatically from the 
- * units. For example, the unit "grams" is type "mass". Use the 
+ *
+ * The type of the units is determined automatically from the
+ * units. For example, the unit "grams" is type "mass". Use the
  * static call {@link ilib.Measurement.getAvailableUnits}
  * to find out what units this version of ilib supports.
- *  
+ *
  * @return {string} the name of the type of this measurement
  */
 ilib.Measurement.Mass.prototype.getMeasure = function() {
@@ -28971,11 +28971,11 @@ ilib.Measurement.Mass.prototype.getMeasure = function() {
  * Return a new measurement instance that is converted to a new
  * measurement unit. Measurements can only be converted
  * to measurements of the same type.<p>
- *  
+ *
  * @param {string} to The name of the units to convert to
  * @return {ilib.Measurement|undefined} the converted measurement
  * or undefined if the requested units are for a different
- * measurement type 
+ * measurement type
  */
 ilib.Measurement.Mass.prototype.convert = function(to) {
 	if (!to || typeof(ilib.Measurement.Mass.ratios[this.normalizeUnits(to)]) === 'undefined') {
@@ -28990,7 +28990,7 @@ ilib.Measurement.Mass.prototype.convert = function(to) {
 ilib.Measurement.Mass.aliases = {
     "µg":"microgram",
     "microgram":"microgram",
-    "mcg":"microgram",  
+    "mcg":"microgram",
     "milligram":"milligram",
     "mg":"milligram",
     "milligrams":"milligram",
@@ -29019,7 +29019,7 @@ ilib.Measurement.Mass.aliases = {
     "kilograms":"kilogram",
     "kilo grams":"kilogram",
     "kilo gram":"kilogram",
-    "Kilogram":"kilogram",    
+    "Kilogram":"kilogram",
     "Kilograms":"kilogram",
     "KiloGram":"kilogram",
     "KiloGrams":"kilogram",
@@ -29040,7 +29040,7 @@ ilib.Measurement.Mass.aliases = {
     "tonne":"metric ton",
     "Tonne":"metric ton",
     "Metric Ton":"metric ton",
-    "MetricTon":"metric ton",    
+    "MetricTon":"metric ton",
     "long ton":"long ton",
     "longton":"long ton",
     "Longton":"long ton",
@@ -29065,32 +29065,32 @@ ilib.Measurement.Mass.convert = function(to, from, mass) {
     var toRow = ilib.Measurement.Mass.ratios[to];
     if (typeof(from) === 'undefined' || typeof(to) === 'undefined') {
         return undefined;
-    }	
-    return mass * fromRow[toRow[0]];    
+    }
+    return mass * fromRow[toRow[0]];
 };
 
 /**
  * Scale the measurement unit to an acceptable level. The scaling
  * happens so that the integer part of the amount is as small as
- * possible without being below zero. This will result in the 
+ * possible without being below zero. This will result in the
  * largest units that can represent this measurement without
- * fractions. Measurements can only be scaled to other measurements 
+ * fractions. Measurements can only be scaled to other measurements
  * of the same type.
- * 
+ *
  * @param {string=} measurementsystem system to use (uscustomary|imperial|metric),
  * or undefined if the system can be inferred from the current measure
- * @return {ilib.Measurement} a new instance that is scaled to the 
+ * @return {ilib.Measurement} a new instance that is scaled to the
  * right level
  */
 ilib.Measurement.Mass.prototype.scale = function(measurementsystem) {
-    var mSystem;    
-    if (measurementsystem === "metric" || (typeof(measurementsystem) === 'undefined' 
+    var mSystem;
+    if (measurementsystem === "metric" || (typeof(measurementsystem) === 'undefined'
             && typeof(ilib.Measurement.Mass.metricSystem[this.unit]) !== 'undefined')) {
         mSystem = ilib.Measurement.Mass.metricSystem;
-    } else if (measurementsystem === "imperial" || (typeof(measurementsystem) === 'undefined' 
+    } else if (measurementsystem === "imperial" || (typeof(measurementsystem) === 'undefined'
             && typeof(ilib.Measurement.Mass.imperialSystem[this.unit]) !== 'undefined')) {
         mSystem = ilib.Measurement.Mass.imperialSystem;
-    } else if (measurementsystem === "uscustomary" || (typeof(measurementsystem) === 'undefined' 
+    } else if (measurementsystem === "uscustomary" || (typeof(measurementsystem) === 'undefined'
             && typeof(ilib.Measurement.Mass.uscustomarySystem[this.unit]) !== 'undefined')) {
         mSystem = ilib.Measurement.Mass.uscustomarySystem;
     } else {
@@ -29098,19 +29098,19 @@ ilib.Measurement.Mass.prototype.scale = function(measurementsystem) {
 			unit: this.unit,
 			amount: this.amount
 		});
-    }    
-    
+    }
+
     var mass = this.amount;
     var munit = this.amount;
     var fromRow = ilib.Measurement.Mass.ratios[this.unit];
-    
+
     for (var m in mSystem) {
         var tmp = this.amount * fromRow[mSystem[m]];
         if (tmp < 1) break;
         mass = tmp;
         munit = m;
     }
-    
+
     return new ilib.Measurement.Mass({
 		unit: munit,
 		amount: mass
@@ -29134,7 +29134,7 @@ ilib.Measurement._constructors["mass"] = ilib.Measurement.Mass;
 
 /*
  * area.js - Unit conversions for Area
- * 
+ *
  * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29152,7 +29152,7 @@ ilib.Measurement._constructors["mass"] = ilib.Measurement.Mass;
  */
 
 /*
-!depends 
+!depends
 ilibglobal.js
 unit.js
 */
@@ -29162,20 +29162,20 @@ unit.js
  * Create a new area measurement instance.
  * @constructor
  * @extends ilib.Measurement
- * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
+ * @param options {{unit:string,amount:number|string|undefined}} Options controlling
  * the construction of this instance
  */
 ilib.Measurement.Area = function (options) {
 	this.unit = "square km";
 	this.amount = 0;
 	this.aliases = ilib.Measurement.Area.aliases; // share this table in all instances
-	
+
 	if (options) {
 		if (typeof(options.unit) !== 'undefined') {
 			this.originalUnit = options.unit;
 			this.unit = this.aliases[options.unit] || options.unit;
 		}
-		
+
 		if (typeof(options.amount) === 'object') {
 			if (options.amount.getMeasure() === "area") {
 				this.amount = ilib.Measurement.Area.convert(this.unit, options.amount.getUnit(), options.amount.getAmount());
@@ -29186,7 +29186,7 @@ ilib.Measurement.Area = function (options) {
 			this.amount = parseFloat(options.amount);
 		}
 	}
-	
+
 	if (typeof(ilib.Measurement.Area.ratios[this.unit]) === 'undefined') {
 		throw "Unknown unit: " + options.unit;
 	}
@@ -29213,35 +29213,35 @@ ilib.Measurement.Area.prototype.constructor = ilib.Measurement.Area;
  * Return the type of this measurement. Examples are "mass",
  * "length", "speed", etc. Measurements can only be converted
  * to measurements of the same type.<p>
- * 
- * The type of the units is determined automatically from the 
- * units. For example, the unit "grams" is type "mass". Use the 
+ *
+ * The type of the units is determined automatically from the
+ * units. For example, the unit "grams" is type "mass". Use the
  * static call {@link ilib.Measurement.getAvailableUnits}
  * to find out what units this version of ilib supports.
- *  
+ *
  * @return {string} the name of the type of this measurement
  */
 ilib.Measurement.Area.prototype.getMeasure = function() {
 	return "area";
-}; 
+};
 
 /**
  * Return a new measurement instance that is converted to a new
  * measurement unit. Measurements can only be converted
  * to measurements of the same type.<p>
- *  
+ *
  * @param {string} to The name of the units to convert to
  * @return {ilib.Measurement|undefined} the converted measurement
  * or undefined if the requested units are for a different
  * measurement type
- * 
+ *
  */
 ilib.Measurement.Area.prototype.convert = function(to) {
 	if (!to || typeof(ilib.Measurement.Area.ratios[this.normalizeUnits(to)]) === 'undefined') {
 		return undefined;
 	}
 	return new ilib.Measurement({
-		unit: to, 
+		unit: to,
 		amount: this
 	});
 };
@@ -29378,14 +29378,14 @@ ilib.Measurement.Area.usCustomaryToMetric = {
 /**
  * Scale the measurement unit to an acceptable level. The scaling
  * happens so that the integer part of the amount is as small as
- * possible without being below zero. This will result in the 
+ * possible without being below zero. This will result in the
  * largest units that can represent this measurement without
- * fractions. Measurements can only be scaled to other measurements 
+ * fractions. Measurements can only be scaled to other measurements
  * of the same type.
- * 
+ *
  * @param {string=} measurementsystem system to use (uscustomary|imperial|metric),
  * or undefined if the system can be inferred from the current measure
- * @return {ilib.Measurement} a new instance that is scaled to the 
+ * @return {ilib.Measurement} a new instance that is scaled to the
  * right level
  */
 ilib.Measurement.Area.prototype.scale = function(measurementsystem) {
@@ -29425,11 +29425,11 @@ ilib.Measurement.Area.prototype.scale = function(measurementsystem) {
 
 /**
  * Localize the measurement to the commonly used measurement in that locale. For example
- * If a user's locale is "en-US" and the measurement is given as "60 kmh", 
- * the formatted number should be automatically converted to the most appropriate 
+ * If a user's locale is "en-US" and the measurement is given as "60 kmh",
+ * the formatted number should be automatically converted to the most appropriate
  * measure in the other system, in this case, mph. The formatted result should
- * appear as "37.3 mph". 
- * 
+ * appear as "37.3 mph".
+ *
  * @abstract
  * @param {string} locale current locale string
  * @returns {ilib.Measurement} a new instance that is converted to locale
@@ -29470,13 +29470,13 @@ ilib.Measurement._constructors["area"] = ilib.Measurement.Area;
  * limitations under the License.
  */
 /*
-!depends 
-ilibglobal.js 
+!depends
+ilibglobal.js
 */
 /**
  * @class
  * Create a new fuelconsumption measurement instance.
- * 
+ *
  * @constructor
  * @extends ilib.Measurement
  * @param options {{unit:string,amount:number|string|undefined}} Options controlling
@@ -29521,12 +29521,12 @@ ilib.Measurement.FuelConsumption.prototype.constructor = ilib.Measurement.FuelCo
  * Return the type of this measurement. Examples are "mass",
  * "length", "speed", etc. Measurements can only be converted
  * to measurements of the same type.<p>
- * 
- * The type of the units is determined automatically from the 
- * units. For example, the unit "grams" is type "mass". Use the 
+ *
+ * The type of the units is determined automatically from the
+ * units. For example, the unit "grams" is type "mass". Use the
  * static call {@link ilib.Measurement.getAvailableUnits}
  * to find out what units this version of ilib supports.
- *  
+ *
  * @return {string} the name of the type of this measurement
  */
 ilib.Measurement.FuelConsumption.prototype.getMeasure = function() {
@@ -29537,11 +29537,11 @@ ilib.Measurement.FuelConsumption.prototype.getMeasure = function() {
  * Return a new measurement instance that is converted to a new
  * measurement unit. Measurements can only be converted
  * to measurements of the same type.<p>
- *  
+ *
  * @param {string} to The name of the units to convert to
  * @return {ilib.Measurement|undefined} the converted measurement
  * or undefined if the requested units are for a different
- * measurement type 
+ * measurement type
  */
 ilib.Measurement.FuelConsumption.prototype.convert = function(to) {
     if (!to || typeof(ilib.Measurement.FuelConsumption.ratios[this.normalizeUnits(to)]) === 'undefined') {
@@ -29618,11 +29618,11 @@ ilib.Measurement.FuelConsumption.uScustomarylToMetric = {
 
 /**
  * Localize the measurement to the commonly used measurement in that locale. For example
- * If a user's locale is "en-US" and the measurement is given as "60 kmh", 
- * the formatted number should be automatically converted to the most appropriate 
+ * If a user's locale is "en-US" and the measurement is given as "60 kmh",
+ * the formatted number should be automatically converted to the most appropriate
  * measure in the other system, in this case, mph. The formatted result should
- * appear as "37.3 mph". 
- * 
+ * appear as "37.3 mph".
+ *
  * @abstract
  * @param {string} locale current locale string
  * @returns {ilib.Measurement} a new instance that is converted to locale
@@ -29650,7 +29650,7 @@ ilib.Measurement.FuelConsumption.prototype.localize = function(locale) {
 
 /**
  * Convert a FuelConsumption to another measure.
- * 
+ *
  * @static
  * @param to {string} unit to convert to
  * @param from {string} unit to convert from
@@ -29734,21 +29734,21 @@ ilib.Measurement.FuelConsumption.convert = function(to, from, fuelConsumption) {
 /**
  * Scale the measurement unit to an acceptable level. The scaling
  * happens so that the integer part of the amount is as small as
- * possible without being below zero. This will result in the 
+ * possible without being below zero. This will result in the
  * largest units that can represent this measurement without
- * fractions. Measurements can only be scaled to other measurements 
+ * fractions. Measurements can only be scaled to other measurements
  * of the same type.
- * 
+ *
  * @param {string=} measurementsystem system to use (uscustomary|imperial|metric),
  * or undefined if the system can be inferred from the current measure
- * @return {ilib.Measurement} a new instance that is scaled to the 
+ * @return {ilib.Measurement} a new instance that is scaled to the
  * right level
  */
 ilib.Measurement.FuelConsumption.prototype.scale = function(measurementsystem) {
     return new ilib.Measurement.FuelConsumption({
         unit: this.unit,
         amount: this.amount
-    }); 
+    });
 };
 
 /**
@@ -29761,7 +29761,7 @@ ilib.Measurement.FuelConsumption.getMeasures = function() {
     ret.push("liter/100km");
     ret.push("mpg");
     ret.push("mpg(imp)");
-    
+
     return ret;
 };
 
@@ -29770,7 +29770,7 @@ ilib.Measurement._constructors["fuelconsumption"] = ilib.Measurement.FuelConsump
 
 /*
  * volume.js - Unit conversions for volume
- * 
+ *
  * Copyright © 2014, JEDLSoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29789,31 +29789,31 @@ ilib.Measurement._constructors["fuelconsumption"] = ilib.Measurement.FuelConsump
  */
 
 /*
-!depends 
-ilibglobal.js 
+!depends
+ilibglobal.js
 unit.js
 */
 
 /**
  * @class
  * Create a new Volume measurement instance.
- * 
+ *
  * @constructor
  * @extends ilib.Measurement
- * @param options {{unit:string,amount:number|string|undefined}} Options controlling 
+ * @param options {{unit:string,amount:number|string|undefined}} Options controlling
  * the construction of this instance
  */
 ilib.Measurement.Volume = function (options) {
 	this.unit = "cubic meter";
 	this.amount = 0;
 	this.aliases = ilib.Measurement.Volume.aliases; // share this table in all instances
-	
+
 	if (options) {
 		if (typeof(options.unit) !== 'undefined') {
 			this.originalUnit = options.unit;
 			this.unit = this.aliases[options.unit] || options.unit;
 		}
-		
+
 		if (typeof(options.amount) === 'object') {
 			if (options.amount.getMeasure() === "volume") {
 				this.amount = ilib.Measurement.Volume.convert(this.unit, options.amount.getUnit(), options.amount.getAmount());
@@ -29824,7 +29824,7 @@ ilib.Measurement.Volume = function (options) {
 			this.amount = parseFloat(options.amount);
 		}
 	}
-	
+
 	if (typeof(ilib.Measurement.Volume.ratios[this.unit]) === 'undefined') {
 		throw "Unknown unit: " + options.unit;
 	}
@@ -29860,12 +29860,12 @@ ilib.Measurement.Volume.prototype.constructor = ilib.Measurement.Volume;
  * Return the type of this measurement. Examples are "mass",
  * "length", "speed", etc. Measurements can only be converted
  * to measurements of the same type.<p>
- * 
- * The type of the units is determined automatically from the 
- * units. For example, the unit "grams" is type "mass". Use the 
+ *
+ * The type of the units is determined automatically from the
+ * units. For example, the unit "grams" is type "mass". Use the
  * static call {@link ilib.Measurement.getAvailableUnits}
  * to find out what units this version of ilib supports.
- *  
+ *
  * @return {string} the name of the type of this measurement
  */
 ilib.Measurement.Volume.prototype.getMeasure = function() {
@@ -29876,11 +29876,11 @@ ilib.Measurement.Volume.prototype.getMeasure = function() {
  * Return a new measurement instance that is converted to a new
  * measurement unit. Measurements can only be converted
  * to measurements of the same type.<p>
- *  
+ *
  * @param {string} to The name of the units to convert to
  * @return {ilib.Measurement|undefined} the converted measurement
  * or undefined if the requested units are for a different
- * measurement type 
+ * measurement type
  */
 ilib.Measurement.Volume.prototype.convert = function(to) {
 	if (!to || typeof(ilib.Measurement.Volume.ratios[this.normalizeUnits(to)]) === 'undefined') {
@@ -30007,7 +30007,7 @@ ilib.Measurement.Volume.convert = function(to, from, volume) {
 	var toRow = ilib.Measurement.Volume.ratios[to];
 	if (typeof(from) === 'undefined' || typeof(to) === 'undefined') {
 		return undefined;
-	}	
+	}
 	var result = volume * fromRow[toRow[0]];
     return result;
 };
@@ -30101,11 +30101,11 @@ ilib.Measurement.Volume.uScustomarylToMetric = {
 
 /**
  * Localize the measurement to the commonly used measurement in that locale. For example
- * If a user's locale is "en-US" and the measurement is given as "60 kmh", 
- * the formatted number should be automatically converted to the most appropriate 
+ * If a user's locale is "en-US" and the measurement is given as "60 kmh",
+ * the formatted number should be automatically converted to the most appropriate
  * measure in the other system, in this case, mph. The formatted result should
- * appear as "37.3 mph". 
- * 
+ * appear as "37.3 mph".
+ *
  * @abstract
  * @param {string} locale current locale string
  * @returns {ilib.Measurement} a new instance that is converted to locale
@@ -30134,14 +30134,14 @@ ilib.Measurement.Volume.prototype.localize = function(locale) {
 /**
  * Scale the measurement unit to an acceptable level. The scaling
  * happens so that the integer part of the amount is as small as
- * possible without being below zero. This will result in the 
+ * possible without being below zero. This will result in the
  * largest units that can represent this measurement without
- * fractions. Measurements can only be scaled to other measurements 
+ * fractions. Measurements can only be scaled to other measurements
  * of the same type.
- * 
+ *
  * @param {string=} measurementsystem system to use (uscustomary|imperial|metric),
  * or undefined if the system can be inferred from the current measure
- * @return {ilib.Measurement} a new instance that is scaled to the 
+ * @return {ilib.Measurement} a new instance that is scaled to the
  * right level
  */
 ilib.Measurement.Volume.prototype.scale = function(measurementsystem) {
@@ -30208,7 +30208,7 @@ ilibglobal.js
 /**
  * @class
  * Create a new energy measurement instance.
- * 
+ *
  * @constructor
  * @extends ilib.Measurement
  * @param options {{unit:string,amount:number|string|undefined}} Options controlling
@@ -30264,12 +30264,12 @@ ilib.Measurement.Energy.prototype.constructor = ilib.Measurement.Energy;
  * Return the type of this measurement. Examples are "mass",
  * "length", "speed", etc. Measurements can only be converted
  * to measurements of the same type.<p>
- * 
- * The type of the units is determined automatically from the 
- * units. For example, the unit "grams" is type "mass". Use the 
+ *
+ * The type of the units is determined automatically from the
+ * units. For example, the unit "grams" is type "mass". Use the
  * static call {@link ilib.Measurement.getAvailableUnits}
  * to find out what units this version of ilib supports.
- *  
+ *
  * @return {string} the name of the type of this measurement
  */
 ilib.Measurement.Energy.prototype.getMeasure = function() {
@@ -30280,11 +30280,11 @@ ilib.Measurement.Energy.prototype.getMeasure = function() {
  * Return a new measurement instance that is converted to a new
  * measurement unit. Measurements can only be converted
  * to measurements of the same type.<p>
- *  
+ *
  * @param {string} to The name of the units to convert to
  * @return {ilib.Measurement|undefined} the converted measurement
  * or undefined if the requested units are for a different
- * measurement type 
+ * measurement type
  */
 ilib.Measurement.Energy.prototype.convert = function(to) {
 	if (!to || typeof(ilib.Measurement.Energy.ratios[this.normalizeUnits(to)]) === 'undefined') {
@@ -30352,7 +30352,7 @@ ilib.Measurement.Energy.aliases = {
     "GJ": "gigajoule",
     "GigaJoule": "gigajoule",
     "gigaJoule": "gigajoule",
-    "gigajoule": "gigajoule",   
+    "gigajoule": "gigajoule",
     "GigaJoules": "gigajoule",
     "gigaJoules": "gigajoule",
     "Gigajoules": "gigajoule",
@@ -30443,11 +30443,11 @@ ilib.Measurement.Energy.imperialToMetric = {
 
 /**
  * Localize the measurement to the commonly used measurement in that locale. For example
- * If a user's locale is "en-US" and the measurement is given as "60 kmh", 
- * the formatted number should be automatically converted to the most appropriate 
+ * If a user's locale is "en-US" and the measurement is given as "60 kmh",
+ * the formatted number should be automatically converted to the most appropriate
  * measure in the other system, in this case, mph. The formatted result should
- * appear as "37.3 mph". 
- * 
+ * appear as "37.3 mph".
+ *
  * @abstract
  * @param {string} locale current locale string
  * @returns {ilib.Measurement} a new instance that is converted to locale
@@ -30469,14 +30469,14 @@ ilib.Measurement.Energy.prototype.localize = function(locale) {
 /**
  * Scale the measurement unit to an acceptable level. The scaling
  * happens so that the integer part of the amount is as small as
- * possible without being below zero. This will result in the 
+ * possible without being below zero. This will result in the
  * largest units that can represent this measurement without
- * fractions. Measurements can only be scaled to other measurements 
+ * fractions. Measurements can only be scaled to other measurements
  * of the same type.
- * 
+ *
  * @param {string=} measurementsystem system to use (uscustomary|imperial|metric),
  * or undefined if the system can be inferred from the current measure
- * @return {ilib.Measurement} a new instance that is scaled to the 
+ * @return {ilib.Measurement} a new instance that is scaled to the
  * right level
  */
 ilib.Measurement.Energy.prototype.scale = function(measurementsystem) {
@@ -30618,7 +30618,7 @@ units/time.js
 units/mass.js
 units/area.js
 units/fuelConsumption.js
-units/volume.js	
+units/volume.js
 units/energy.js
 */
 
