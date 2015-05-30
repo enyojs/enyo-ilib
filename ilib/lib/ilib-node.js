@@ -25,6 +25,7 @@ var ilib = require("../lib/ilib.js");
 ilib.setLoaderCallback(NodeLoader(ilib));
 
 ilib._dyncode = true; // indicate that we are using dynamically loaded code
+ilib._dyndata = true;
 
 // Define stubs for all the ilib classes so that they are loaded automatically 
 // the first time you use them

@@ -98,7 +98,7 @@ NormString.init = function(options) {
 		files.push(forms[f] + "/" + script + ".json");
 	}
 	
-	if (!ilib.data.norm || JSUtils.isEmpty(ilib.data.norm.ccc)) {
+	if (JSUtils.isEmpty(ilib.data.norm.ccc) || JSUtils.isEmpty(ilib.data.norm.nfd) || JSUtils.isEmpty(ilib.data.norm.nfkd)) {
 		//console.log("loading files " + JSON.stringify(files));
 		Utils._callLoadData(files, sync, loadParams, function(arr) {
 			ilib.extend(ilib.data.norm, arr[0]);

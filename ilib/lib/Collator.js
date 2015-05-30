@@ -39,9 +39,11 @@ var Locale = require("./Locale.js");
 var LocaleInfo = require("./LocaleInfo.js");
 var INumber = require("./INumber.js");
 var isPunct = require("./isPunct.js");
+var isDigit = require("./isDigit.js");
 var NormString = require("./NormString.js");
 var CodePointSource = require("./CodePointSource.js");
 var ElementIterator = require("./ElementIterator.js");
+var GlyphString = require("./GlyphString.js");
 
 /**
  * @class
@@ -174,7 +176,7 @@ var ElementIterator = require("./ElementIterator.js");
  * <code>
  * <pre>
  * var arr = ["ö", "oe", "ü", "o", "a", "ae", "u", "ß", "ä"];
- * var collator = Collator({locale: 'de-DE', style: "dictionary"});
+ * var collator = new Collator({locale: 'de-DE', style: "dictionary"});
  * arr.sort(collator.getComparator());
  * console.log(JSON.stringify(arr));
  * </pre>
@@ -316,7 +318,7 @@ var Collator = function(options) {
 	/** @private */
 	this.numeric = false;
 	/** @private */
-	this.style = "standard";
+	this.style = "default";
 	/** @private */
 	this.ignorePunctuation = false;
 	
@@ -332,13 +334,13 @@ var Collator = function(options) {
 					this.level = 1;
 					break;
 				case 'secondary':
-				case 'case':
-					this.sensitivity = "case";
+				case 'accent':
+					this.sensitivity = "accent";
 					this.level = 2;
 					break;
 				case 'tertiary':
-				case 'accent':
-					this.sensitivity = "accent";
+				case 'case':
+					this.sensitivity = "case";
 					this.level = 3;
 					break;
 				case 'quaternary':
@@ -409,7 +411,6 @@ var Collator = function(options) {
 			object: Collator, 
 			locale: this.locale, 
 			name: "collation.json",
-			replace: true,
 			sync: sync,
 			loadParams: loadParams, 
 			callback: ilib.bind(this, function (collation) {
@@ -447,22 +448,27 @@ Collator.prototype = {
 	 * @private
 	 * Bit pack an array of values into a single number
 	 * @param {number|null|Array.<number>} arr array of values to bit pack
+	 * @param {number} offset offset for the start of this map
 	 */
-	_pack: function (arr) {
+	_pack: function (arr, offset) {
 		var value = 0;
 		if (arr) {
 			if (typeof(arr) === 'number') {
 				arr = [ arr ];
 			}
 			for (var i = 0; i < this.level; i++) {
+				var thisLevel = (typeof(arr[i]) !== "undefined" ? arr[i] : 0);
+				if (i === 0) {
+					thisLevel += offset;
+				}
 				if (i > 0) {
 					value <<= this.collation.bits[i];	
 				}
 				if (i === 2 && this.caseFirst === "lower") {
 					// sort the lower case first instead of upper
-					value = value | (1 - (typeof(arr[i]) !== "undefined" ? arr[i] : 0));
+					value = value | (1 - thisLevel);
 				} else {
-					value = value | arr[i];
+					value = value | thisLevel;
 				}
 			}
 		}
@@ -473,83 +479,157 @@ Collator.prototype = {
 	 * @private
 	 * Return the rule packed into an array of collation elements.
 	 * @param {Array.<number|null|Array.<number>>} rule
+	 * @param {number} offset
 	 * @return {Array.<number>} a bit-packed array of numbers
 	 */
-	_packRule: function(rule) {
+	_packRule: function(rule, offset) {
 		if (ilib.isArray(rule[0])) {
 			var ret = [];
 			for (var i = 0; i < rule.length; i++) {
-				ret.push(this._pack(rule[i]));
+				ret.push(this._pack(rule[i], offset));
 			}
 			return ret;
 		} else {
-			return [ this._pack(rule) ];
+			return [ this._pack(rule, offset) ];
 		}
 	},
+    
+	/**
+	 * @private
+	 */
+	_addChars: function (str, offset) {
+		var gs = new GlyphString(str);
+		var it = gs.charIterator();
+		var c;
+		
+		while (it.hasNext()) {
+			c = it.next();
+			if (c === "'") {
+				// escape a sequence of chars as one collation element
+				c = "";
+				var x = "";
+				while (it.hasNext() && x !== "'") {
+					c += x;
+					x = it.next();
+				}
+			}
+			this.lastMap++;
+			this.map[c] = this._packRule([this.lastMap], offset);
+		}
+	},
+	
+	/**
+	 * @private
+	 */
+	_addRules: function(rules, start) {
+		var p;
+    	for (var r in rules.map) {
+    		if (r) {
+    			this.map[r] = this._packRule(rules.map[r], start);
+    			p = typeof(rules.map[r][0]) === 'number' ? rules.map[r][0] : rules.map[r][0][0]; 
+    			this.lastMap = Math.max(p + start, this.lastMap);
+    		}
+    	}
     	
+    	if (typeof(rules.ranges) !== 'undefined') {
+    		// for each range, everything in the range goes in primary sequence from the start
+    		for (var i = 0; i < rules.ranges.length; i++) {
+    			var range = rules.ranges[i];
+    			
+    			this.lastMap = range.start;
+    			if (typeof(range.chars) === "string") {
+    				this._addChars(range.chars, start);
+    			} else {
+    				for (var k = 0; k < range.chars.length; k++) {
+    					this._addChars(range.chars[k], start);
+    				}
+    			}
+    		}
+    	}
+	},
+	
 	/**
      * @private
      */
     _init: function(rules) {
+    	var rule = this.style;
+    	while (typeof(rule) === 'string') {
+    		rule = rules[rule];
+    	}
+    	if (!rule) {
+    		rule = "default";
+        	while (typeof(rule) === 'string') {
+        		rule = rules[rule];
+        	}
+    	}
+    	if (!rule) {
+    		this.map = {};
+    		return;
+    	}
+    	
     	/** 
     	 * @private
     	 * @type {{scripts:Array.<string>,bits:Array.<number>,maxes:Array.<number>,bases:Array.<number>,map:Object.<string,Array.<number|null|Array.<number>>>}}
     	 */
-    	this.collation = rules[this.style];
+    	this.collation = rule;
     	this.map = {};
-    	this.keysize = 0;
-    	for (var i = 0; i < this.level; i++) {
-    		this.keysize += this.collation.bits[i];
-    	}
-    	var remainder = MathUtils.mod(this.keysize, 4);
-    	this.keysize += (remainder > 0) ? (4 - remainder) : 0; // round to the nearest 4 to find how many bits to use in hex
+    	this.lastMap = -1;
+    	this.keysize = this.collation.keysize[this.level-1];
     	
-    	for (var r in this.collation.map) {
-    		if (r) {
-    			this.map[r] = this._packRule(this.collation.map[r]);
+    	if (typeof(this.collation.inherit) !== 'undefined') {
+    		for (var i = 0; i < this.collation.inherit.length; i++) {
+    			var col = this.collation.inherit[i];
+    			rule = typeof(col) === 'object' ? col.name : col;
+    			if (rules[rule]) {
+    				this._addRules(rules[rule], col.start || this.lastMap+1);
+    			}
     		}
     	}
+    	this._addRules(this.collation, this.lastMap+1);
     },
     
     /**
      * @private
      */
     _basicCompare: function(left, right) {
+		var l = (left instanceof NormString) ? left : new NormString(left),
+			r = (right instanceof NormString) ? right : new NormString(right),
+			lchar, 
+			rchar,
+			lelements,
+			relements;
+		
 		if (this.numeric) {
 			var lvalue = new INumber(left, {locale: this.locale});
 			var rvalue = new INumber(right, {locale: this.locale});
-			if (isNaN(lvalue.valueOf())) {
-				if (isNaN(rvalue.valueOf())) {
-					return 0;
-				}
-				return 1;
-			} else if (isNaN(rvalue.valueOf())) {
-				return -1;
-			}
-			return lvalue.valueOf() - rvalue.valueOf();
-		} else {
-			var l = (left instanceof NormString) ? left : new NormString(left),
-				r = (right instanceof NormString) ? right : new NormString(right),
-				lelements,
-				relements;
-				
-			// if the reverse sort is on, switch the char sources so that the result comes out swapped
-			lelements = new ElementIterator(new CodePointSource(l, this.ignorePunctuation), this.map, this.keysize);
-			relements = new ElementIterator(new CodePointSource(r, this.ignorePunctuation), this.map, this.keysize);
-			
-			while (lelements.hasNext() && relements.hasNext()) {
-				var diff = lelements.next() - relements.next();
+			if (!isNaN(lvalue.valueOf()) && !isNaN(rvalue.valueOf())) {
+				var diff = lvalue.valueOf() - rvalue.valueOf();
 				if (diff) {
 					return diff;
+				} else {
+					// skip the numeric part and compare the rest lexically
+					l = new NormString(left.substring(lvalue.parsed.length));
+					r = new NormString(right.substring(rvalue.parsed.length));
 				}
 			}
-			if (!lelements.hasNext() && !relements.hasNext()) {
-				return 0;
-			} else if (lelements.hasNext()) {
-				return 1;
-			} else {
-				return -1;
+			// else if they aren't both numbers, then let the code below take care of the lexical comparison instead
+		}
+			
+		lelements = new ElementIterator(new CodePointSource(l, this.ignorePunctuation), this.map, this.keysize);
+		relements = new ElementIterator(new CodePointSource(r, this.ignorePunctuation), this.map, this.keysize);
+		
+		while (lelements.hasNext() && relements.hasNext()) {
+			var diff = lelements.next() - relements.next();
+			if (diff) {
+				return diff;
 			}
+		}
+		if (!lelements.hasNext() && !relements.hasNext()) {
+			return 0;
+		} else if (lelements.hasNext()) {
+			return 1;
+		} else {
+			return -1;
 		}
     },
     
@@ -657,6 +737,7 @@ Collator.prototype = {
 			while (lelements.hasNext()) {
 				element = lelements.next();
 				if (this.reverse) {
+					// for reverse, take the bitwise inverse
 					element = (1 << this.keysize) - element;
 				}
 				ret += pad(element.toString(16), this.keysize/4);	

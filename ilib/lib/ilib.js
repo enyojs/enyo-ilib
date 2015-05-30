@@ -20,6 +20,8 @@
 /**
  * @namespace The global namespace that contains general ilib functions useful
  * to all of ilib
+ * 
+ * @version // !macro ilibVersion
  */
 var ilib = ilib || {};
 
@@ -63,7 +65,8 @@ ilib.data = {
     /** @type {null|Object.<string,Array.<Array.<number>>>} */ ctype_p: null,
     /** @type {null|Object.<string,Array.<Array.<number>>>} */ ctype_z: null,
     /** @type {null|Object.<string,Array.<Array.<number>>>} */ scriptToRange: null,
-    /** @type {null|Object.<string,string|Object.<string|Object.<string,string>>>} */ dateformats: null
+    /** @type {null|Object.<string,string|Object.<string|Object.<string,string>>>} */ dateformats: null,
+    /** @type {null|Array.<string>} */ timezones: []
 };
 
 /*
@@ -123,7 +126,7 @@ ilib._getPlatform = function () {
         } else if (typeof(process) !== 'undefined' && typeof(module) !== 'undefined') {
             ilib._platform = "nodejs";
         } else if (typeof(Qt) !== 'undefined') {
-        	ilib._platform = "qt";
+            ilib._platform = "qt";
         } else if (typeof(window) !== 'undefined') {
             ilib._platform = (typeof(PalmSystem) !== 'undefined') ? "webos" : "browser";
         } else {
@@ -187,7 +190,11 @@ ilib._isGlobal = function(name) {
         case "qt":
         	return false;
         default:
-            return typeof(window[name]) !== 'undefined';
+        	try {
+        		return window && typeof(window[name]) !== 'undefined';
+        	} catch (e) {
+        		return false;
+        	}
     }
 };
 
@@ -196,7 +203,8 @@ ilib._isGlobal = function(name) {
  * when no explicit locale is passed to any ilib class. If the default
  * locale is not set, ilib will attempt to use the locale of the
  * environment it is running in, if it can find that. If not, it will
- * default to the locale "en-US".<p>
+ * default to the locale "en-US". If a type of parameter is string, 
+ * ilib will take only well-formed BCP-47 tag  <p>
  * 
  * 
  * @static
@@ -250,6 +258,8 @@ ilib.getLocale = function () {
             } else if (typeof(PalmSystem.locale) !== 'undefined') {
             	ilib.locale = PalmSystem.locale;
             }
+        } else if (typeof(Qt) !== 'undefined' && typeof(Qt.locale) !== 'undefined') {
+            ilib.locale = Qt.locale().name;
         } else if (typeof(environment) !== 'undefined' && typeof(environment.user) !== 'undefined') {
             // running under rhino
             if (typeof(environment.user.language) === 'string' && environment.user.language.length > 0) {
@@ -264,7 +274,7 @@ ilib.getLocale = function () {
             // the LANG variable on unix is in the form "lang_REGION.CHARSET"
             // where language and region are the correct ISO codes separated by
             // an underscore. This translate it back to the BCP-47 form.
-            if (lang && lang !== 'undefined') {
+            if (lang && typeof(lang) !== 'undefined') {
                 ilib.locale = lang.substring(0,2).toLowerCase() + '-' + lang.substring(3,5).toUpperCase();
             }
         } else if (typeof(Qt) !== 'undefined') {
@@ -626,3 +636,21 @@ ilib._dyncode = false;
 ilib.isDynCode = function() {
 	return ilib._dyncode;
 };
+
+/**
+ * @private
+ */
+ilib._dyndata = false;
+
+/**
+ * Return true if this copy of ilib is using dynamically loaded locale data. It returns
+ * false for pre-assembled data.
+ * 
+ * @static
+ * @return {boolean} true if this ilib uses dynamically loaded locale data, and false otherwise
+ */
+ilib.isDynData = function() {
+	return ilib._dyndata;
+};
+
+ilib._loadtime = new Date().getTime();
