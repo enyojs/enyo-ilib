@@ -14703,13 +14703,8 @@ ilib.Cal.Ethiopic.prototype.getNumMonths = function(year) {
  * Return the number of days in a particular month in a particular year. This function
  * can return a different number for a month depending on the year because of things
  * like leap years.
-<<<<<<< HEAD
  *
  * @param {number|string} month the month for which the length is sought
-=======
- *
- * @param {number} month the month for which the length is sought
->>>>>>> 2.6.0-dev
  * @param {number} year the year within which that month can be found
  * @return {number} the number of days within the given month in the given year
  */
