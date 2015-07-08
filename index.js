@@ -1,6 +1,10 @@
 var
 	glue = require('./lib/glue'),
-	ilib = require('./ilib/lib/ilib');
+	ilib = require('./ilib/lib/ilib'),
+	shim = require('./lib/shim');
+
+// FIXME: temporarily add the known-used features onto ilib to easy migration.
+shim(ilib);
 
 // ensure the locale-specific date types are included
 require('./lib/dates');
