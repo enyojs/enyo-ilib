@@ -11244,7 +11244,7 @@ ilib.Date.EthiopicRataDie.prototype.constructor = ilib.Date.EthiopicRataDie;
  * @protected
  * @type number
  */
-ilib.Date.EthiopicRataDie.prototype.epoch = 1724219.75;
+ilib.Date.EthiopicRataDie.prototype.epoch = 1724220.25;
 
 /**
  * Calculate the Rata Die (fixed day) number of the given date from the
