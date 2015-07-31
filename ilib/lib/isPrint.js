@@ -1,1 +1,1 @@
-var CType=require("./CType.js");var isCntrl=require("./isCntrl.js");var isPrint=function(i){return typeof i!=="undefined"&&i.length>0&&!isCntrl(i)};isPrint._init=function(i,n,r){isCntrl._init(i,n,r)};module.exports=isPrint;
+var CType=require("./CType.js");var isCntrl=require("./isCntrl.js");var isPrint=function(ch){return typeof ch!=="undefined"&&ch.length>0&&!isCntrl(ch)};isPrint._init=function(sync,loadParams,onLoad){isCntrl._init(sync,loadParams,onLoad)};module.exports=isPrint;
