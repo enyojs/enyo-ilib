@@ -9,6 +9,6 @@ require('./lib/dates');
 require('./lib/patch');
 
 ilib.enyo = glue;
-ilib.enyo.version = '2.6.0-pre.5-dev';
+ilib.enyo.version = '2.6.0-pre.14.1';
 
 module.exports = ilib;
