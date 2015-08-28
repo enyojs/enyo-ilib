@@ -1,12 +1,12 @@
 var
-	glue = require('./lib/glue'),
+	glue = require('./src/glue'),
 	ilib = require('./ilib/lib/ilib');
 
 // ensure the locale-specific date types are included
-require('./lib/dates');
+require('./src/dates');
 
 // patch the circular dependencies between ilib date and calendar objects
-require('./lib/patch');
+require('./src/patch');
 
 ilib.enyo = glue;
 ilib.enyo.version = '2.6.0-pre.14.1';
