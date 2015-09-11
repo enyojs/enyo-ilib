@@ -432,8 +432,11 @@ i18n.updateLocale.extend(function (sup) {
 	return function(inLocale) {
 		// blow away the cache to force it to reload the manifest files for the new app
 		if (ilib._load) ilib._load.manifest = undefined;
-		ilib.setLocale(inLocale || ilib.getLocale());
-		setLocale(inLocale || ilib.getLocale());
+		// ilib handles falsy values and automatically uses local locale when encountered which
+		// is expected and desired
+		ilib.setLocale(inLocale);
+		// we supply whatever ilib determined was actually the locale based on what was passed in
+		setLocale(ilib.getLocale());
 		updateI18NClasses();
 		sup.call(this);
 	};
