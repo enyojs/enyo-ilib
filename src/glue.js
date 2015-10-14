@@ -95,7 +95,7 @@ enyoLoader.prototype._loadFilesAsync = function (context, paths, results, params
 	}
 	if (paths.length > 0) {
 		var path = paths.shift(),
-			url = undefined;
+			url;
 
 		if (this.webos && path.indexOf('zoneinfo') !== -1) {
 			results.push(this._createZoneFile(path));
@@ -103,7 +103,7 @@ enyoLoader.prototype._loadFilesAsync = function (context, paths, results, params
 			if (this.isAvailable(root, path)) {
 				url = this._pathjoin(root, path);
 			} else if (this.isAvailable(this.base + 'locale', path)) {
-				url = this._pathjoin(this._pathjoin(this.base, 'locale'), path)
+				url = this._pathjoin(this._pathjoin(this.base, 'locale'), path);
 			}
 
 			var resultFunc = function(inSender, json) {
@@ -280,12 +280,19 @@ function isNonLatinLocale (spec) {
 		locale = li.getLocale();
 
     // We use the non-latin fonts for these languages (even though their scripts are technically considered latin)
-    var nonLatinLanguageOverrides = ['ha', 'hu', 'vi'];
+    var nonLatinLanguageOverrides = ['ha', 'hu', 'vi', 'en-JP'];
     // We use the latin fonts (with non-Latin fallback) for these languages (even though their scripts are non-latin)
     var latinLanguageOverrides = ['ko'];
-	return ((li.getScript() !== 'Latn' || utils.indexOf(locale.getLanguage(), nonLatinLanguageOverrides) !== -1) &&
-		(utils.indexOf(locale.getLanguage(), latinLanguageOverrides) < 0));
-};
+	return (
+		(
+			li.getScript() !== 'Latn' ||                                              // the language actually is non-latin
+			utils.indexOf(locale.getLanguage(), nonLatinLanguageOverrides) !== -1 ||  // the language is treated as non-latin
+			utils.indexOf(locale.toString(), nonLatinLanguageOverrides) !== -1        // the combination of language and region is treated as non-latin
+		) && (
+			utils.indexOf(locale.getLanguage(), latinLanguageOverrides) < 0           // the non-latin language should be treated as latin
+		)
+	);
+}
 
 // enyo.updateI18NClasses should be called after every setLocale, but there isn't such a callback in current version
 function updateI18NClasses () {
@@ -294,8 +301,8 @@ function updateI18NClasses () {
 	var base = 'enyo-locale-';
 
     // Remove old style definitions (hack style becouse enyo.dom doesn't have methods like enyo.dom.getBodyClasses, enyo.dom.removeBodyClass)
-    if (document && document.body && document.body.className && document.body.className) {
-        document.body.className = document.body.className.replace(new RegExp('(^|\\s)'+ base +'[^\\s]*', 'g'), '');
+    if (document && document.body && document.body.className) {
+        document.body.className = document.body.className.replace(new RegExp('(^|\\s)'+ base +'\\S*', 'g'), '');
     }
 
 	if (isNonLatinLocale(locale)) {
@@ -343,7 +350,7 @@ function updateI18NClasses () {
 	}
 	// Recreate the case mappers to use the just-recently-set locale
  	setCaseMappers();
-};
+}
 
 // The ilib.ResBundle for the active locale used by $L
 var resBundle;
@@ -387,7 +394,7 @@ function setLocale (spec) {
 			lengthen: true		// if pseudo-localizing, this tells it to lengthen strings
 		});
 	}
-};
+}
 
 var toLowerCaseMapper, toUpperCaseMapper;
 
@@ -397,7 +404,7 @@ var toLowerCaseMapper, toUpperCaseMapper;
 function setCaseMappers () {
 	toLowerCaseMapper = new CaseMapper({direction: 'tolower'});
 	toUpperCaseMapper = new CaseMapper({direction: 'toupper'});
-};
+}
 
 /**
  * Override Enyo's toLowerCase and toUpperCase methods with these fancy ones
