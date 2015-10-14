@@ -280,12 +280,19 @@ function isNonLatinLocale (spec) {
 		locale = li.getLocale();
 
     // We use the non-latin fonts for these languages (even though their scripts are technically considered latin)
-    var nonLatinLanguageOverrides = ['ha', 'hu', 'vi'];
+    var nonLatinLanguageOverrides = ['ha', 'hu', 'vi', 'en-JP'];
     // We use the latin fonts (with non-Latin fallback) for these languages (even though their scripts are non-latin)
     var latinLanguageOverrides = ['ko'];
-	return ((li.getScript() !== 'Latn' || utils.indexOf(locale.getLanguage(), nonLatinLanguageOverrides) !== -1) &&
-		(utils.indexOf(locale.getLanguage(), latinLanguageOverrides) < 0));
-};
+	return (
+		(
+			li.getScript() !== 'Latn' ||                                              // the language actually is non-latin
+			utils.indexOf(locale.getLanguage(), nonLatinLanguageOverrides) !== -1 ||  // the language is treated as non-latin
+			utils.indexOf(locale.toString(), nonLatinLanguageOverrides) !== -1        // the combination of language and region is treated as non-latin
+		) && (
+			utils.indexOf(locale.getLanguage(), latinLanguageOverrides) < 0           // the non-latin language should be treated as latin
+		)
+	);
+}
 
 // enyo.updateI18NClasses should be called after every setLocale, but there isn't such a callback in current version
 function updateI18NClasses () {
