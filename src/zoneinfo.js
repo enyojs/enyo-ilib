@@ -48,11 +48,19 @@ var
 var _platform = "unknown";
 
 (function () {
-	if (typeof(enyo) !== 'undefined') {
-		_platform = "enyo";
+	if (typeof(require) !== 'undefined') {
+		try {
+			if(typeof(require('enyo')) !== 'undefined') {
+				_platform = "enyo";
+			} else {
+				_platform = "nodejs";
+			}
+		} catch(e) {
+			_platform = "nodejs";
+		}
 	} else if (typeof(environment) !== 'undefined') {
 		_platform = "rhino";
-	} else if (typeof(process) !== 'undefined' || typeof(require) !== 'undefined') {
+	} else if (typeof(process) !== 'undefined') {
 		_platform = "nodejs";
 	} else if (typeof(window) !== 'undefined') {
 		_platform = (typeof(PalmSystem) !== 'undefined') ? "webos" : "browser";
@@ -102,12 +110,16 @@ var ZoneInfoFile = function (path) {
 			break;
 			
 		default:
-			// use normal web techniques
+			// use normal web techniques for sync binary data fetching
+			// see https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
 			var req = new XMLHttpRequest();
 			req.open("GET", "file:" + path, false);
-			req.responseType = "arraybuffer";
+			req.overrideMimeType('text\/plain; charset=x-user-defined');
 			req.onload = function(e) {
-				var byteArray = new Uint8Array(req.response);
+				var byteArray = new Uint8Array(req.response.length);
+				for (var i=0; i<req.response.length; i++) {
+					byteArray[i] = req.response.charCodeAt(i) & 0xff;
+				}
 				// console.log("ZoneInfoFile bytes received: " + byteArray.length);
 				that._parseInfo(byteArray);
 			};
@@ -555,4 +567,4 @@ ZoneInfoFile.prototype.getIlibZoneInfo = function(date) {
 	return res;
 };
 
-module.exports.ZoneInfoFile = ZoneInfoFile;
+module.exports = ZoneInfoFile;
