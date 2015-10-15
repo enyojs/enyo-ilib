@@ -116,8 +116,7 @@ var ZoneInfoFile = function (path) {
 			req.open("GET", "file:" + path, false);
 			req.overrideMimeType('text\/plain; charset=x-user-defined');
 			req.onload = function(e) {
-				var buf = new ArrayBuffer(req.response.length);
-				var byteArray = new Uint8Array(buf);
+				var byteArray = new Uint8Array(req.response.length);
 				for (var i=0; i<req.response.length; i++) {
 					byteArray[i] = req.response.charCodeAt(i) & 0xff;
 				}
