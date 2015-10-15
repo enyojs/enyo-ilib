@@ -45,7 +45,7 @@
 var _platform = "unknown";
 
 (function () {
-	if (typeof(enyo) !== 'undefined') {
+	if (typeof(require) !== 'undefined' && typeof(require.enyo) !== 'undefined') {
 		_platform = "enyo";
 	} else if (typeof(environment) !== 'undefined') {
 		_platform = "rhino";
