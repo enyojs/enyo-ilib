@@ -7,7 +7,7 @@
   "styles": [],
   "main": "./index.js",
   "moduleDir": "ilib/lib",
-  "version": "2.6.3-rc.5",
+  "version": "2.6.3-rc.6",
   "description": "iLib plugin for enyo. iLib is a cross-engine library of internationalization (i18n) classes written in pure JS",
   "keywords": [
     "internationalization",
