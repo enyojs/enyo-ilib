@@ -1,0 +1,1895 @@
+# On branch 20151019-build-12.0-002-04
+# Changes not staged for commit:
+#   (use "git add/rm <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
+#
+#	modified:   lib/Address.js
+#	modified:   lib/AddressFmt.js
+#	modified:   lib/AreaUnit.js
+#	modified:   lib/Astro.js
+#	modified:   lib/CType.js
+#	modified:   lib/CaseMapper.js
+#	modified:   lib/Collator.js
+#	modified:   lib/CopticCal.js
+#	modified:   lib/CopticDate.js
+#	modified:   lib/CopticRataDie.js
+#	modified:   lib/Currency.js
+#	modified:   lib/DateFactory.js
+#	modified:   lib/DateFmt.js
+#	modified:   lib/DateRngFmt.js
+#	modified:   lib/DigitalStorageUnit.js
+#	modified:   lib/DurationFmt.js
+#	modified:   lib/EnergyUnit.js
+#	modified:   lib/EthiopicCal.js
+#	modified:   lib/EthiopicRataDie.js
+#	modified:   lib/FuelConsumptionUnit.js
+#	modified:   lib/GlyphString.js
+#	modified:   lib/GregRataDie.js
+#	modified:   lib/GregorianCal.js
+#	modified:   lib/HanCal.js
+#	modified:   lib/HanRataDie.js
+#	modified:   lib/HebrewRataDie.js
+#	modified:   lib/INumber.js
+#	modified:   lib/IString.js
+#	modified:   lib/IslamicCal.js
+#	modified:   lib/IslamicRataDie.js
+#	modified:   lib/JSUtils.js
+#	modified:   lib/JulianCal.js
+#	modified:   lib/JulianRataDie.js
+#	modified:   lib/LengthUnit.js
+#	modified:   lib/Loader.js
+#	modified:   lib/LocaleInfo.js
+#	modified:   lib/LocaleMatcher.js
+#	modified:   lib/MassUnit.js
+#	modified:   lib/Measurement.js
+#	modified:   lib/Name.js
+#	modified:   lib/NameFmt.js
+#	modified:   lib/NodeLoader.js
+#	modified:   lib/NumFmt.js
+#	modified:   lib/PersAlgoRataDie.js
+#	modified:   lib/PersRataDie.js
+#	modified:   lib/PersianAlgoCal.js
+#	modified:   lib/PersianCal.js
+#	modified:   lib/PhoneFmt.js
+#	modified:   lib/RataDie.js
+#	modified:   lib/ResBundle.js
+#	modified:   lib/TemperatureUnit.js
+#	modified:   lib/ThaiSolarCal.js
+#	modified:   lib/ThaiSolarDate.js
+#	modified:   lib/TimeUnit.js
+#	modified:   lib/UnknownUnit.js
+#	modified:   lib/Utils.js
+#	modified:   lib/VelocityUnit.js
+#	modified:   lib/VolumeUnit.js
+#	modified:   lib/ilib.js
+#	modified:   locale/aa/dateformats.json
+#	modified:   locale/aa/localeinfo.json
+#	modified:   locale/aa/sysres.json
+#	deleted:    locale/af/NA/localeinfo.json
+#	modified:   locale/af/ctrynames.json
+#	modified:   locale/af/dateformats.json
+#	modified:   locale/af/localeinfo.json
+#	modified:   locale/af/plurals.json
+#	modified:   locale/af/sysres.json
+#	modified:   locale/agq/ctrynames.json
+#	modified:   locale/agq/dateformats.json
+#	modified:   locale/agq/localeinfo.json
+#	modified:   locale/agq/sysres.json
+#	modified:   locale/ak/ctrynames.json
+#	modified:   locale/ak/dateformats.json
+#	modified:   locale/ak/localeinfo.json
+#	modified:   locale/ak/plurals.json
+#	modified:   locale/ak/sysres.json
+#	modified:   locale/am/ctrynames.json
+#	modified:   locale/am/dateformats.json
+#	modified:   locale/am/localeinfo.json
+#	modified:   locale/am/plurals.json
+#	modified:   locale/am/sysres.json
+#	deleted:    locale/ar/DZ/dateformats.json
+#	modified:   locale/ar/DZ/localeinfo.json
+#	modified:   locale/ar/DZ/sysres.json
+#	modified:   locale/ar/EH/localeinfo.json
+#	modified:   locale/ar/IQ/sysres.json
+#	modified:   locale/ar/JO/sysres.json
+#	modified:   locale/ar/LB/sysres.json
+#	modified:   locale/ar/MA/dateformats.json
+#	modified:   locale/ar/MA/localeinfo.json
+#	modified:   locale/ar/MA/sysres.json
+#	modified:   locale/ar/SY/sysres.json
+#	deleted:    locale/ar/TN/dateformats.json
+#	modified:   locale/ar/TN/localeinfo.json
+#	modified:   locale/ar/TN/sysres.json
+#	modified:   locale/ar/ctrynames.json
+#	modified:   locale/ar/dateformats.json
+#	modified:   locale/ar/localeinfo.json
+#	modified:   locale/ar/plurals.json
+#	modified:   locale/ar/sysres.json
+#	modified:   locale/arc/localeinfo.json
+#	modified:   locale/as/ctrynames.json
+#	modified:   locale/as/dateformats.json
+#	modified:   locale/as/localeinfo.json
+#	modified:   locale/as/sysres.json
+#	modified:   locale/asa/ctrynames.json
+#	modified:   locale/asa/dateformats.json
+#	modified:   locale/asa/localeinfo.json
+#	modified:   locale/asa/plurals.json
+#	modified:   locale/asa/sysres.json
+#	modified:   locale/ast/dateformats.json
+#	modified:   locale/ast/localeinfo.json
+#	modified:   locale/ast/plurals.json
+#	modified:   locale/ast/sysres.json
+#	modified:   locale/az/Cyrl/AZ/sysres.json
+#	modified:   locale/az/ctrynames.json
+#	modified:   locale/az/dateformats.json
+#	modified:   locale/az/localeinfo.json
+#	modified:   locale/az/sysres.json
+#	modified:   locale/bas/ctrynames.json
+#	modified:   locale/bas/dateformats.json
+#	modified:   locale/bas/localeinfo.json
+#	modified:   locale/bas/sysres.json
+#	modified:   locale/be/ctrynames.json
+#	modified:   locale/be/dateformats.json
+#	modified:   locale/be/localeinfo.json
+#	modified:   locale/be/plurals.json
+#	modified:   locale/be/sysres.json
+#	modified:   locale/bem/dateformats.json
+#	modified:   locale/bem/localeinfo.json
+#	modified:   locale/bem/plurals.json
+#	modified:   locale/bem/sysres.json
+#	modified:   locale/bez/ctrynames.json
+#	modified:   locale/bez/dateformats.json
+#	modified:   locale/bez/localeinfo.json
+#	modified:   locale/bez/plurals.json
+#	modified:   locale/bez/sysres.json
+#	modified:   locale/bg/ctrynames.json
+#	modified:   locale/bg/dateformats.json
+#	modified:   locale/bg/localeinfo.json
+#	modified:   locale/bg/plurals.json
+#	modified:   locale/bg/sysres.json
+#	modified:   locale/bh/plurals.json
+#	modified:   locale/bm/ctrynames.json
+#	modified:   locale/bm/dateformats.json
+#	modified:   locale/bm/localeinfo.json
+#	modified:   locale/bm/sysres.json
+#	modified:   locale/bn/ctrynames.json
+#	modified:   locale/bn/dateformats.json
+#	modified:   locale/bn/localeinfo.json
+#	modified:   locale/bn/plurals.json
+#	modified:   locale/bn/sysres.json
+#	modified:   locale/bo/ctrynames.json
+#	modified:   locale/bo/dateformats.json
+#	modified:   locale/bo/localeinfo.json
+#	modified:   locale/bo/sysres.json
+#	modified:   locale/br/ctrynames.json
+#	modified:   locale/br/dateformats.json
+#	modified:   locale/br/localeinfo.json
+#	modified:   locale/br/plurals.json
+#	modified:   locale/br/sysres.json
+#	modified:   locale/brx/ctrynames.json
+#	modified:   locale/brx/dateformats.json
+#	modified:   locale/brx/localeinfo.json
+#	modified:   locale/brx/plurals.json
+#	modified:   locale/brx/sysres.json
+#	modified:   locale/bs/Cyrl/BA/dateformats.json
+#	modified:   locale/bs/Cyrl/BA/localeinfo.json
+#	modified:   locale/bs/Cyrl/BA/sysres.json
+#	modified:   locale/bs/ctrynames.json
+#	modified:   locale/bs/dateformats.json
+#	modified:   locale/bs/localeinfo.json
+#	modified:   locale/bs/plurals.json
+#	modified:   locale/bs/sysres.json
+#	modified:   locale/byn/dateformats.json
+#	modified:   locale/byn/sysres.json
+#	modified:   locale/ca/ctrynames.json
+#	modified:   locale/ca/dateformats.json
+#	modified:   locale/ca/localeinfo.json
+#	modified:   locale/ca/plurals.json
+#	modified:   locale/ca/sysres.json
+#	modified:   locale/ce/localeinfo.json
+#	modified:   locale/cgg/ctrynames.json
+#	modified:   locale/cgg/dateformats.json
+#	modified:   locale/cgg/localeinfo.json
+#	modified:   locale/cgg/plurals.json
+#	modified:   locale/cgg/sysres.json
+#	modified:   locale/chm/localeinfo.json
+#	modified:   locale/chr/ctrynames.json
+#	modified:   locale/chr/dateformats.json
+#	modified:   locale/chr/localeinfo.json
+#	modified:   locale/chr/plurals.json
+#	modified:   locale/chr/sysres.json
+#	modified:   locale/ckb/localeinfo.json
+#	modified:   locale/ckb/plurals.json
+#	modified:   locale/cop/sysres.json
+#	modified:   locale/cs/ctrynames.json
+#	modified:   locale/cs/dateformats.json
+#	modified:   locale/cs/localeinfo.json
+#	modified:   locale/cs/plurals.json
+#	modified:   locale/cs/sysres.json
+#	modified:   locale/ctype.json
+#	modified:   locale/ctype_c.json
+#	modified:   locale/ctype_l.json
+#	modified:   locale/ctype_m.json
+#	modified:   locale/ctype_n.json
+#	modified:   locale/ctype_p.json
+#	modified:   locale/ctype_s.json
+#	modified:   locale/ctype_z.json
+#	modified:   locale/cu/localeinfo.json
+#	modified:   locale/currency.json
+#	modified:   locale/cy/ctrynames.json
+#	modified:   locale/cy/dateformats.json
+#	modified:   locale/cy/localeinfo.json
+#	modified:   locale/cy/plurals.json
+#	modified:   locale/cy/sysres.json
+#	modified:   locale/da/ctrynames.json
+#	modified:   locale/da/dateformats.json
+#	modified:   locale/da/localeinfo.json
+#	modified:   locale/da/plurals.json
+#	modified:   locale/da/sysres.json
+#	modified:   locale/dateformats.json
+#	modified:   locale/dav/ctrynames.json
+#	modified:   locale/dav/dateformats.json
+#	modified:   locale/dav/localeinfo.json
+#	modified:   locale/dav/sysres.json
+#	modified:   locale/de/AT/localeinfo.json
+#	modified:   locale/de/AT/sysres.json
+#	modified:   locale/de/CH/ctrynames.json
+#	modified:   locale/de/CH/localeinfo.json
+#	modified:   locale/de/LI/localeinfo.json
+#	modified:   locale/de/ctrynames.json
+#	modified:   locale/de/dateformats.json
+#	modified:   locale/de/localeinfo.json
+#	modified:   locale/de/plurals.json
+#	modified:   locale/de/sysres.json
+#	modified:   locale/dje/ctrynames.json
+#	modified:   locale/dje/dateformats.json
+#	modified:   locale/dje/localeinfo.json
+#	modified:   locale/dje/sysres.json
+#	modified:   locale/doi/localeinfo.json
+#	modified:   locale/dsb/localeinfo.json
+#	modified:   locale/dua/dateformats.json
+#	modified:   locale/dua/localeinfo.json
+#	modified:   locale/dua/sysres.json
+#	modified:   locale/dv/plurals.json
+#	modified:   locale/dyo/ctrynames.json
+#	modified:   locale/dyo/dateformats.json
+#	modified:   locale/dyo/localeinfo.json
+#	modified:   locale/dyo/sysres.json
+#	modified:   locale/dz/ctrynames.json
+#	modified:   locale/dz/dateformats.json
+#	modified:   locale/dz/localeinfo.json
+#	modified:   locale/dz/sysres.json
+#	modified:   locale/ebu/ctrynames.json
+#	modified:   locale/ebu/dateformats.json
+#	modified:   locale/ebu/localeinfo.json
+#	modified:   locale/ebu/sysres.json
+#	modified:   locale/ee/ctrynames.json
+#	modified:   locale/ee/dateformats.json
+#	modified:   locale/ee/localeinfo.json
+#	modified:   locale/ee/plurals.json
+#	modified:   locale/ee/sysres.json
+#	deleted:    locale/el/CY/localeinfo.json
+#	modified:   locale/el/ctrynames.json
+#	modified:   locale/el/dateformats.json
+#	modified:   locale/el/localeinfo.json
+#	modified:   locale/el/plurals.json
+#	modified:   locale/el/sysres.json
+#	modified:   locale/en/BE/localeinfo.json
+#	modified:   locale/en/CA/dateformats.json
+#	modified:   locale/en/Dsrt/US/ctrynames.json
+#	modified:   locale/en/Dsrt/US/localeinfo.json
+#	modified:   locale/en/IE/sysres.json
+#	modified:   locale/en/IN/localeinfo.json
+#	deleted:    locale/en/US/dateformats.json
+#	deleted:    locale/en/US/sysres.json
+#	modified:   locale/en/ZA/dateformats.json
+#	modified:   locale/en/ZA/localeinfo.json
+#	modified:   locale/en/ctrynames.json
+#	modified:   locale/en/localeinfo.json
+#	modified:   locale/en/plurals.json
+#	modified:   locale/eo/ctrynames.json
+#	modified:   locale/eo/dateformats.json
+#	modified:   locale/eo/localeinfo.json
+#	modified:   locale/eo/plurals.json
+#	modified:   locale/eo/sysres.json
+#	modified:   locale/es/AR/dateformats.json
+#	modified:   locale/es/AR/localeinfo.json
+#	modified:   locale/es/BO/localeinfo.json
+#	modified:   locale/es/CL/ctrynames.json
+#	modified:   locale/es/CL/localeinfo.json
+#	modified:   locale/es/CO/localeinfo.json
+#	modified:   locale/es/CR/localeinfo.json
+#	modified:   locale/es/CU/localeinfo.json
+#	modified:   locale/es/DO/localeinfo.json
+#	modified:   locale/es/EA/sysres.json
+#	modified:   locale/es/EC/localeinfo.json
+#	deleted:    locale/es/ES/sysres.json
+#	modified:   locale/es/GQ/localeinfo.json
+#	modified:   locale/es/GQ/sysres.json
+#	modified:   locale/es/GT/localeinfo.json
+#	modified:   locale/es/HN/localeinfo.json
+#	modified:   locale/es/IC/sysres.json
+#	modified:   locale/es/MX/localeinfo.json
+#	modified:   locale/es/NI/localeinfo.json
+#	modified:   locale/es/PA/localeinfo.json
+#	modified:   locale/es/PE/localeinfo.json
+#	modified:   locale/es/PH/dateformats.json
+#	modified:   locale/es/PH/sysres.json
+#	modified:   locale/es/PR/localeinfo.json
+#	modified:   locale/es/SV/localeinfo.json
+#	modified:   locale/es/US/dateformats.json
+#	modified:   locale/es/US/localeinfo.json
+#	modified:   locale/es/UY/localeinfo.json
+#	modified:   locale/es/VE/localeinfo.json
+#	modified:   locale/es/ctrynames.json
+#	modified:   locale/es/dateformats.json
+#	modified:   locale/es/localeinfo.json
+#	modified:   locale/es/plurals.json
+#	modified:   locale/es/sysres.json
+#	modified:   locale/et/ctrynames.json
+#	modified:   locale/et/dateformats.json
+#	modified:   locale/et/localeinfo.json
+#	modified:   locale/et/plurals.json
+#	modified:   locale/et/sysres.json
+#	modified:   locale/eu/ctrynames.json
+#	modified:   locale/eu/dateformats.json
+#	modified:   locale/eu/localeinfo.json
+#	modified:   locale/eu/plurals.json
+#	modified:   locale/eu/sysres.json
+#	modified:   locale/ewo/ctrynames.json
+#	modified:   locale/ewo/dateformats.json
+#	modified:   locale/ewo/localeinfo.json
+#	modified:   locale/ewo/sysres.json
+#	modified:   locale/fa/AF/ctrynames.json
+#	modified:   locale/fa/AF/sysres.json
+#	modified:   locale/fa/ctrynames.json
+#	modified:   locale/fa/dateformats.json
+#	modified:   locale/fa/localeinfo.json
+#	modified:   locale/fa/sysres.json
+#	modified:   locale/ff/ctrynames.json
+#	modified:   locale/ff/dateformats.json
+#	modified:   locale/ff/localeinfo.json
+#	modified:   locale/ff/plurals.json
+#	modified:   locale/ff/sysres.json
+#	modified:   locale/fi/ctrynames.json
+#	modified:   locale/fi/dateformats.json
+#	modified:   locale/fi/localeinfo.json
+#	modified:   locale/fi/plurals.json
+#	modified:   locale/fi/sysres.json
+#	modified:   locale/fil/ctrynames.json
+#	modified:   locale/fil/dateformats.json
+#	modified:   locale/fil/localeinfo.json
+#	modified:   locale/fil/plurals.json
+#	modified:   locale/fil/sysres.json
+#	modified:   locale/fo/ctrynames.json
+#	modified:   locale/fo/dateformats.json
+#	modified:   locale/fo/localeinfo.json
+#	modified:   locale/fo/plurals.json
+#	modified:   locale/fo/sysres.json
+#	deleted:    locale/fr/BE/localeinfo.json
+#	modified:   locale/fr/CA/ctrynames.json
+#	modified:   locale/fr/CA/localeinfo.json
+#	modified:   locale/fr/CH/localeinfo.json
+#	modified:   locale/fr/ctrynames.json
+#	modified:   locale/fr/dateformats.json
+#	modified:   locale/fr/localeinfo.json
+#	modified:   locale/fr/plurals.json
+#	modified:   locale/fr/sysres.json
+#	modified:   locale/fur/dateformats.json
+#	modified:   locale/fur/localeinfo.json
+#	modified:   locale/fur/plurals.json
+#	modified:   locale/fur/sysres.json
+#	modified:   locale/fy/localeinfo.json
+#	modified:   locale/fy/plurals.json
+#	modified:   locale/ga/ctrynames.json
+#	modified:   locale/ga/dateformats.json
+#	modified:   locale/ga/localeinfo.json
+#	modified:   locale/ga/plurals.json
+#	modified:   locale/ga/sysres.json
+#	modified:   locale/gd/dateformats.json
+#	modified:   locale/gd/localeinfo.json
+#	modified:   locale/gd/plurals.json
+#	modified:   locale/gd/sysres.json
+#	modified:   locale/gl/ctrynames.json
+#	modified:   locale/gl/dateformats.json
+#	modified:   locale/gl/localeinfo.json
+#	modified:   locale/gl/plurals.json
+#	modified:   locale/gl/sysres.json
+#	modified:   locale/gsw/ctrynames.json
+#	modified:   locale/gsw/dateformats.json
+#	modified:   locale/gsw/localeinfo.json
+#	modified:   locale/gsw/plurals.json
+#	modified:   locale/gsw/sysres.json
+#	modified:   locale/gu/ctrynames.json
+#	modified:   locale/gu/dateformats.json
+#	modified:   locale/gu/localeinfo.json
+#	modified:   locale/gu/plurals.json
+#	modified:   locale/gu/sysres.json
+#	modified:   locale/guz/ctrynames.json
+#	modified:   locale/guz/dateformats.json
+#	modified:   locale/guz/localeinfo.json
+#	modified:   locale/guz/sysres.json
+#	modified:   locale/gv/dateformats.json
+#	modified:   locale/gv/localeinfo.json
+#	modified:   locale/gv/plurals.json
+#	modified:   locale/gv/sysres.json
+#	modified:   locale/ha/ctrynames.json
+#	modified:   locale/ha/dateformats.json
+#	modified:   locale/ha/plurals.json
+#	modified:   locale/ha/sysres.json
+#	modified:   locale/haw/dateformats.json
+#	modified:   locale/haw/localeinfo.json
+#	modified:   locale/haw/plurals.json
+#	modified:   locale/haw/sysres.json
+#	modified:   locale/he/ctrynames.json
+#	modified:   locale/he/dateformats.json
+#	modified:   locale/he/localeinfo.json
+#	modified:   locale/he/plurals.json
+#	modified:   locale/he/sysres.json
+#	modified:   locale/hi/ctrynames.json
+#	modified:   locale/hi/dateformats.json
+#	modified:   locale/hi/localeinfo.json
+#	modified:   locale/hi/plurals.json
+#	modified:   locale/hi/sysres.json
+#	modified:   locale/hr/ctrynames.json
+#	modified:   locale/hr/dateformats.json
+#	modified:   locale/hr/localeinfo.json
+#	modified:   locale/hr/plurals.json
+#	modified:   locale/hr/sysres.json
+#	modified:   locale/hsb/localeinfo.json
+#	modified:   locale/ht/localeinfo.json
+#	modified:   locale/hu/ctrynames.json
+#	modified:   locale/hu/dateformats.json
+#	modified:   locale/hu/localeinfo.json
+#	modified:   locale/hu/sysres.json
+#	modified:   locale/hy/ctrynames.json
+#	modified:   locale/hy/dateformats.json
+#	modified:   locale/hy/localeinfo.json
+#	modified:   locale/hy/sysres.json
+#	modified:   locale/ia/dateformats.json
+#	modified:   locale/ia/localeinfo.json
+#	modified:   locale/ia/sysres.json
+#	modified:   locale/id/ctrynames.json
+#	modified:   locale/id/dateformats.json
+#	modified:   locale/id/localeinfo.json
+#	modified:   locale/id/sysres.json
+#	modified:   locale/ig/dateformats.json
+#	modified:   locale/ig/localeinfo.json
+#	modified:   locale/ig/sysres.json
+#	modified:   locale/ii/dateformats.json
+#	modified:   locale/ii/localeinfo.json
+#	modified:   locale/ii/sysres.json
+#	modified:   locale/ilibmanifest.json
+#	modified:   locale/is/ctrynames.json
+#	modified:   locale/is/dateformats.json
+#	modified:   locale/is/localeinfo.json
+#	modified:   locale/is/plurals.json
+#	modified:   locale/is/sysres.json
+#	modified:   locale/it/CH/localeinfo.json
+#	modified:   locale/it/ctrynames.json
+#	modified:   locale/it/dateformats.json
+#	modified:   locale/it/localeinfo.json
+#	modified:   locale/it/plurals.json
+#	modified:   locale/it/sysres.json
+#	modified:   locale/iu/plurals.json
+#	modified:   locale/ja/collation.json
+#	modified:   locale/ja/ctrynames.json
+#	modified:   locale/ja/dateformats.json
+#	modified:   locale/ja/localeinfo.json
+#	modified:   locale/ja/sysres.json
+#	modified:   locale/jgo/ctrynames.json
+#	modified:   locale/jgo/dateformats.json
+#	modified:   locale/jgo/localeinfo.json
+#	modified:   locale/jgo/plurals.json
+#	modified:   locale/jgo/sysres.json
+#	modified:   locale/jmc/ctrynames.json
+#	modified:   locale/jmc/dateformats.json
+#	modified:   locale/jmc/localeinfo.json
+#	modified:   locale/jmc/plurals.json
+#	modified:   locale/jmc/sysres.json
+#	modified:   locale/ka/ctrynames.json
+#	modified:   locale/ka/dateformats.json
+#	modified:   locale/ka/localeinfo.json
+#	modified:   locale/ka/sysres.json
+#	modified:   locale/kab/ctrynames.json
+#	modified:   locale/kab/dateformats.json
+#	modified:   locale/kab/localeinfo.json
+#	modified:   locale/kab/plurals.json
+#	modified:   locale/kab/sysres.json
+#	modified:   locale/kac/localeinfo.json
+#	modified:   locale/kaj/plurals.json
+#	modified:   locale/kam/ctrynames.json
+#	modified:   locale/kam/dateformats.json
+#	modified:   locale/kam/localeinfo.json
+#	modified:   locale/kam/sysres.json
+#	modified:   locale/kcg/plurals.json
+#	modified:   locale/kde/ctrynames.json
+#	modified:   locale/kde/dateformats.json
+#	modified:   locale/kde/localeinfo.json
+#	modified:   locale/kde/sysres.json
+#	modified:   locale/kea/ctrynames.json
+#	modified:   locale/kea/dateformats.json
+#	modified:   locale/kea/localeinfo.json
+#	modified:   locale/kea/sysres.json
+#	modified:   locale/khq/ctrynames.json
+#	modified:   locale/khq/dateformats.json
+#	modified:   locale/khq/localeinfo.json
+#	modified:   locale/khq/sysres.json
+#	modified:   locale/ki/ctrynames.json
+#	modified:   locale/ki/dateformats.json
+#	modified:   locale/ki/localeinfo.json
+#	modified:   locale/ki/sysres.json
+#	modified:   locale/kk/ctrynames.json
+#	modified:   locale/kk/dateformats.json
+#	modified:   locale/kk/localeinfo.json
+#	modified:   locale/kk/plurals.json
+#	modified:   locale/kk/sysres.json
+#	modified:   locale/kkj/dateformats.json
+#	modified:   locale/kkj/localeinfo.json
+#	modified:   locale/kkj/plurals.json
+#	modified:   locale/kkj/sysres.json
+#	modified:   locale/kl/dateformats.json
+#	modified:   locale/kl/localeinfo.json
+#	modified:   locale/kl/plurals.json
+#	modified:   locale/kl/sysres.json
+#	modified:   locale/kln/ctrynames.json
+#	modified:   locale/kln/dateformats.json
+#	modified:   locale/kln/localeinfo.json
+#	modified:   locale/kln/sysres.json
+#	modified:   locale/km/ctrynames.json
+#	modified:   locale/km/dateformats.json
+#	modified:   locale/km/localeinfo.json
+#	modified:   locale/km/sysres.json
+#	modified:   locale/kn/ctrynames.json
+#	modified:   locale/kn/dateformats.json
+#	modified:   locale/kn/localeinfo.json
+#	modified:   locale/kn/sysres.json
+#	modified:   locale/ko/ctrynames.json
+#	modified:   locale/ko/dateformats.json
+#	modified:   locale/ko/localeinfo.json
+#	modified:   locale/ko/sysres.json
+#	modified:   locale/kok/dateformats.json
+#	modified:   locale/kok/localeinfo.json
+#	modified:   locale/kok/sysres.json
+#	modified:   locale/krl/localeinfo.json
+#	modified:   locale/ks/ctrynames.json
+#	modified:   locale/ks/dateformats.json
+#	modified:   locale/ks/localeinfo.json
+#	modified:   locale/ks/plurals.json
+#	modified:   locale/ks/sysres.json
+#	modified:   locale/ksb/ctrynames.json
+#	modified:   locale/ksb/dateformats.json
+#	modified:   locale/ksb/localeinfo.json
+#	modified:   locale/ksb/plurals.json
+#	modified:   locale/ksb/sysres.json
+#	modified:   locale/ksf/ctrynames.json
+#	modified:   locale/ksf/dateformats.json
+#	modified:   locale/ksf/localeinfo.json
+#	modified:   locale/ksf/sysres.json
+#	modified:   locale/ksh/dateformats.json
+#	modified:   locale/ksh/localeinfo.json
+#	modified:   locale/ksh/plurals.json
+#	modified:   locale/ksh/sysres.json
+#	modified:   locale/ku/dateformats.json
+#	modified:   locale/ku/localeinfo.json
+#	modified:   locale/ku/plurals.json
+#	modified:   locale/ku/sysres.json
+#	modified:   locale/kv/localeinfo.json
+#	modified:   locale/kw/dateformats.json
+#	modified:   locale/kw/localeinfo.json
+#	modified:   locale/kw/plurals.json
+#	modified:   locale/kw/sysres.json
+#	modified:   locale/ky/dateformats.json
+#	modified:   locale/ky/localeinfo.json
+#	modified:   locale/ky/plurals.json
+#	modified:   locale/ky/sysres.json
+#	modified:   locale/lag/ctrynames.json
+#	modified:   locale/lag/dateformats.json
+#	modified:   locale/lag/localeinfo.json
+#	modified:   locale/lag/plurals.json
+#	modified:   locale/lag/sysres.json
+#	modified:   locale/lb/localeinfo.json
+#	modified:   locale/lb/plurals.json
+#	modified:   locale/lez/localeinfo.json
+#	modified:   locale/lg/ctrynames.json
+#	modified:   locale/lg/dateformats.json
+#	modified:   locale/lg/localeinfo.json
+#	modified:   locale/lg/plurals.json
+#	modified:   locale/lg/sysres.json
+#	modified:   locale/likelylocales.json
+#	modified:   locale/ln/ctrynames.json
+#	modified:   locale/ln/dateformats.json
+#	modified:   locale/ln/localeinfo.json
+#	modified:   locale/ln/plurals.json
+#	modified:   locale/ln/sysres.json
+#	modified:   locale/lo/ctrynames.json
+#	modified:   locale/lo/dateformats.json
+#	modified:   locale/lo/localeinfo.json
+#	modified:   locale/lo/sysres.json
+#	modified:   locale/localeinfo.json
+#	modified:   locale/lt/ctrynames.json
+#	modified:   locale/lt/dateformats.json
+#	modified:   locale/lt/localeinfo.json
+#	modified:   locale/lt/plurals.json
+#	modified:   locale/lt/sysres.json
+#	modified:   locale/lu/ctrynames.json
+#	modified:   locale/lu/dateformats.json
+#	modified:   locale/lu/localeinfo.json
+#	modified:   locale/lu/sysres.json
+#	modified:   locale/luo/ctrynames.json
+#	modified:   locale/luo/dateformats.json
+#	modified:   locale/luo/localeinfo.json
+#	modified:   locale/luo/sysres.json
+#	modified:   locale/luy/ctrynames.json
+#	modified:   locale/luy/dateformats.json
+#	modified:   locale/luy/localeinfo.json
+#	modified:   locale/luy/sysres.json
+#	modified:   locale/lv/ctrynames.json
+#	modified:   locale/lv/dateformats.json
+#	modified:   locale/lv/localeinfo.json
+#	modified:   locale/lv/plurals.json
+#	modified:   locale/lv/sysres.json
+#	modified:   locale/mai/localeinfo.json
+#	modified:   locale/man/localeinfo.json
+#	modified:   locale/mas/ctrynames.json
+#	modified:   locale/mas/dateformats.json
+#	modified:   locale/mas/localeinfo.json
+#	modified:   locale/mas/plurals.json
+#	modified:   locale/mas/sysres.json
+#	modified:   locale/men/localeinfo.json
+#	modified:   locale/mer/ctrynames.json
+#	modified:   locale/mer/dateformats.json
+#	modified:   locale/mer/localeinfo.json
+#	modified:   locale/mer/sysres.json
+#	modified:   locale/mfe/ctrynames.json
+#	modified:   locale/mfe/dateformats.json
+#	modified:   locale/mfe/localeinfo.json
+#	modified:   locale/mfe/sysres.json
+#	modified:   locale/mg/ctrynames.json
+#	modified:   locale/mg/dateformats.json
+#	modified:   locale/mg/localeinfo.json
+#	modified:   locale/mg/plurals.json
+#	modified:   locale/mg/sysres.json
+#	modified:   locale/mgh/dateformats.json
+#	modified:   locale/mgh/localeinfo.json
+#	modified:   locale/mgh/sysres.json
+#	modified:   locale/mgo/dateformats.json
+#	modified:   locale/mgo/localeinfo.json
+#	modified:   locale/mgo/plurals.json
+#	modified:   locale/mgo/sysres.json
+#	modified:   locale/mic/localeinfo.json
+#	modified:   locale/mk/ctrynames.json
+#	modified:   locale/mk/dateformats.json
+#	modified:   locale/mk/localeinfo.json
+#	modified:   locale/mk/plurals.json
+#	modified:   locale/mk/sysres.json
+#	modified:   locale/ml/ctrynames.json
+#	modified:   locale/ml/dateformats.json
+#	modified:   locale/ml/localeinfo.json
+#	modified:   locale/ml/plurals.json
+#	modified:   locale/ml/sysres.json
+#	modified:   locale/mn/ctrynames.json
+#	modified:   locale/mn/dateformats.json
+#	modified:   locale/mn/plurals.json
+#	modified:   locale/mn/sysres.json
+#	modified:   locale/mo/plurals.json
+#	modified:   locale/mr/ctrynames.json
+#	modified:   locale/mr/dateformats.json
+#	modified:   locale/mr/localeinfo.json
+#	modified:   locale/mr/plurals.json
+#	modified:   locale/mr/sysres.json
+#	modified:   locale/ms/BN/dateformats.json
+#	modified:   locale/ms/BN/localeinfo.json
+#	modified:   locale/ms/ctrynames.json
+#	modified:   locale/ms/dateformats.json
+#	modified:   locale/ms/localeinfo.json
+#	modified:   locale/ms/sysres.json
+#	modified:   locale/mt/ctrynames.json
+#	modified:   locale/mt/dateformats.json
+#	modified:   locale/mt/localeinfo.json
+#	modified:   locale/mt/plurals.json
+#	modified:   locale/mt/sysres.json
+#	modified:   locale/mua/ctrynames.json
+#	modified:   locale/mua/dateformats.json
+#	modified:   locale/mua/localeinfo.json
+#	modified:   locale/mua/sysres.json
+#	modified:   locale/mul/localeinfo.json
+#	modified:   locale/my/ctrynames.json
+#	modified:   locale/my/dateformats.json
+#	modified:   locale/my/localeinfo.json
+#	modified:   locale/my/sysres.json
+#	modified:   locale/nah/plurals.json
+#	modified:   locale/naq/ctrynames.json
+#	modified:   locale/naq/dateformats.json
+#	modified:   locale/naq/localeinfo.json
+#	modified:   locale/naq/plurals.json
+#	modified:   locale/naq/sysres.json
+#	modified:   locale/nb/ctrynames.json
+#	modified:   locale/nb/dateformats.json
+#	modified:   locale/nb/localeinfo.json
+#	modified:   locale/nb/plurals.json
+#	modified:   locale/nb/sysres.json
+#	modified:   locale/nd/ctrynames.json
+#	modified:   locale/nd/dateformats.json
+#	modified:   locale/nd/localeinfo.json
+#	modified:   locale/nd/plurals.json
+#	modified:   locale/nd/sysres.json
+#	modified:   locale/ne/IN/sysres.json
+#	modified:   locale/ne/ctrynames.json
+#	modified:   locale/ne/dateformats.json
+#	modified:   locale/ne/localeinfo.json
+#	modified:   locale/ne/plurals.json
+#	modified:   locale/ne/sysres.json
+#	modified:   locale/nfd/Cakm.json
+#	modified:   locale/nfd/Gran.json
+#	modified:   locale/nfd/Hani.json
+#	modified:   locale/nfd/Kthi.json
+#	modified:   locale/nfd/Tirh.json
+#	modified:   locale/nfd/Zyyy.json
+#	modified:   locale/nfd/all.json
+#	modified:   locale/nfkd/Arab.json
+#	modified:   locale/nfkd/Hira.json
+#	modified:   locale/nfkd/Zyyy.json
+#	modified:   locale/nfkd/all.json
+#	modified:   locale/nl/BE/localeinfo.json
+#	modified:   locale/nl/ctrynames.json
+#	modified:   locale/nl/dateformats.json
+#	modified:   locale/nl/localeinfo.json
+#	modified:   locale/nl/plurals.json
+#	modified:   locale/nl/sysres.json
+#	modified:   locale/nmg/ctrynames.json
+#	modified:   locale/nmg/dateformats.json
+#	modified:   locale/nmg/localeinfo.json
+#	modified:   locale/nmg/sysres.json
+#	modified:   locale/nn/ctrynames.json
+#	modified:   locale/nn/dateformats.json
+#	modified:   locale/nn/localeinfo.json
+#	modified:   locale/nn/plurals.json
+#	modified:   locale/nn/sysres.json
+#	modified:   locale/nnh/dateformats.json
+#	modified:   locale/nnh/localeinfo.json
+#	modified:   locale/nnh/plurals.json
+#	modified:   locale/nnh/sysres.json
+#	modified:   locale/no/dateformats.json
+#	modified:   locale/no/plurals.json
+#	modified:   locale/no/sysres.json
+#	modified:   locale/normdata.json
+#	modified:   locale/nr/dateformats.json
+#	modified:   locale/nr/localeinfo.json
+#	modified:   locale/nr/plurals.json
+#	modified:   locale/nr/sysres.json
+#	modified:   locale/nso/dateformats.json
+#	modified:   locale/nso/localeinfo.json
+#	modified:   locale/nso/plurals.json
+#	modified:   locale/nso/sysres.json
+#	modified:   locale/nus/dateformats.json
+#	modified:   locale/nus/localeinfo.json
+#	modified:   locale/nus/sysres.json
+#	modified:   locale/ny/plurals.json
+#	modified:   locale/nyn/ctrynames.json
+#	modified:   locale/nyn/dateformats.json
+#	modified:   locale/nyn/localeinfo.json
+#	modified:   locale/nyn/plurals.json
+#	modified:   locale/nyn/sysres.json
+#	modified:   locale/om/dateformats.json
+#	modified:   locale/om/localeinfo.json
+#	modified:   locale/om/plurals.json
+#	modified:   locale/om/sysres.json
+#	modified:   locale/or/ctrynames.json
+#	modified:   locale/or/dateformats.json
+#	modified:   locale/or/localeinfo.json
+#	modified:   locale/or/plurals.json
+#	modified:   locale/or/sysres.json
+#	modified:   locale/os/dateformats.json
+#	modified:   locale/os/localeinfo.json
+#	modified:   locale/os/plurals.json
+#	modified:   locale/os/sysres.json
+#	deleted:    locale/pa/Arab/PK/localeinfo.json
+#	deleted:    locale/pa/Arab/PK/sysres.json
+#	modified:   locale/pa/ctrynames.json
+#	modified:   locale/pa/dateformats.json
+#	modified:   locale/pa/localeinfo.json
+#	modified:   locale/pa/plurals.json
+#	modified:   locale/pa/sysres.json
+#	modified:   locale/pal/localeinfo.json
+#	modified:   locale/pap/plurals.json
+#	modified:   locale/pl/ctrynames.json
+#	modified:   locale/pl/dateformats.json
+#	modified:   locale/pl/localeinfo.json
+#	modified:   locale/pl/plurals.json
+#	modified:   locale/pl/sysres.json
+#	modified:   locale/ps/ctrynames.json
+#	modified:   locale/ps/dateformats.json
+#	modified:   locale/ps/localeinfo.json
+#	modified:   locale/ps/plurals.json
+#	modified:   locale/ps/sysres.json
+#	modified:   locale/pt/AO/ctrynames.json
+#	modified:   locale/pt/AO/localeinfo.json
+#	modified:   locale/pt/BR/sysres.json
+#	modified:   locale/pt/CV/ctrynames.json
+#	modified:   locale/pt/CV/localeinfo.json
+#	modified:   locale/pt/GW/ctrynames.json
+#	modified:   locale/pt/GW/localeinfo.json
+#	modified:   locale/pt/MO/ctrynames.json
+#	modified:   locale/pt/MO/localeinfo.json
+#	modified:   locale/pt/MZ/ctrynames.json
+#	modified:   locale/pt/MZ/localeinfo.json
+#	modified:   locale/pt/PT/ctrynames.json
+#	modified:   locale/pt/PT/localeinfo.json
+#	modified:   locale/pt/ST/ctrynames.json
+#	modified:   locale/pt/ST/localeinfo.json
+#	modified:   locale/pt/TL/ctrynames.json
+#	modified:   locale/pt/TL/localeinfo.json
+#	modified:   locale/pt/ctrynames.json
+#	modified:   locale/pt/dateformats.json
+#	modified:   locale/pt/localeinfo.json
+#	modified:   locale/pt/plurals.json
+#	modified:   locale/pt/sysres.json
+#	modified:   locale/qu/localeinfo.json
+#	modified:   locale/raj/localeinfo.json
+#	modified:   locale/rangeToScript.json
+#	modified:   locale/rej/localeinfo.json
+#	modified:   locale/rm/ctrynames.json
+#	modified:   locale/rm/dateformats.json
+#	modified:   locale/rm/localeinfo.json
+#	modified:   locale/rm/plurals.json
+#	modified:   locale/rm/sysres.json
+#	modified:   locale/rn/ctrynames.json
+#	modified:   locale/rn/dateformats.json
+#	modified:   locale/rn/localeinfo.json
+#	modified:   locale/rn/sysres.json
+#	modified:   locale/ro/ctrynames.json
+#	modified:   locale/ro/dateformats.json
+#	modified:   locale/ro/localeinfo.json
+#	modified:   locale/ro/plurals.json
+#	modified:   locale/ro/sysres.json
+#	modified:   locale/rof/ctrynames.json
+#	modified:   locale/rof/dateformats.json
+#	modified:   locale/rof/localeinfo.json
+#	modified:   locale/rof/plurals.json
+#	modified:   locale/rof/sysres.json
+#	modified:   locale/rom/localeinfo.json
+#	modified:   locale/ru/ctrynames.json
+#	modified:   locale/ru/dateformats.json
+#	modified:   locale/ru/localeinfo.json
+#	modified:   locale/ru/plurals.json
+#	modified:   locale/ru/sysres.json
+#	modified:   locale/rw/dateformats.json
+#	modified:   locale/rw/localeinfo.json
+#	modified:   locale/rw/sysres.json
+#	modified:   locale/rwk/ctrynames.json
+#	modified:   locale/rwk/dateformats.json
+#	modified:   locale/rwk/localeinfo.json
+#	modified:   locale/rwk/plurals.json
+#	modified:   locale/rwk/sysres.json
+#	modified:   locale/sa/localeinfo.json
+#	modified:   locale/sah/dateformats.json
+#	modified:   locale/sah/localeinfo.json
+#	modified:   locale/sah/sysres.json
+#	modified:   locale/saq/ctrynames.json
+#	modified:   locale/saq/dateformats.json
+#	modified:   locale/saq/localeinfo.json
+#	modified:   locale/saq/plurals.json
+#	modified:   locale/saq/sysres.json
+#	modified:   locale/sbp/ctrynames.json
+#	modified:   locale/sbp/dateformats.json
+#	modified:   locale/sbp/localeinfo.json
+#	modified:   locale/sbp/sysres.json
+#	modified:   locale/scriptToRange.json
+#	modified:   locale/scripts.json
+#	modified:   locale/sd/localeinfo.json
+#	modified:   locale/se/dateformats.json
+#	modified:   locale/se/localeinfo.json
+#	modified:   locale/se/plurals.json
+#	modified:   locale/se/sysres.json
+#	modified:   locale/seh/ctrynames.json
+#	modified:   locale/seh/dateformats.json
+#	modified:   locale/seh/localeinfo.json
+#	modified:   locale/seh/plurals.json
+#	modified:   locale/seh/sysres.json
+#	modified:   locale/ses/ctrynames.json
+#	modified:   locale/ses/dateformats.json
+#	modified:   locale/ses/localeinfo.json
+#	modified:   locale/ses/sysres.json
+#	modified:   locale/sg/ctrynames.json
+#	modified:   locale/sg/dateformats.json
+#	modified:   locale/sg/localeinfo.json
+#	modified:   locale/sg/sysres.json
+#	modified:   locale/sh/plurals.json
+#	deleted:    locale/shi/Latn/MA/sysres.json
+#	modified:   locale/shi/ctrynames.json
+#	modified:   locale/shi/dateformats.json
+#	modified:   locale/shi/localeinfo.json
+#	modified:   locale/shi/plurals.json
+#	modified:   locale/shi/sysres.json
+#	modified:   locale/si/ctrynames.json
+#	modified:   locale/si/dateformats.json
+#	modified:   locale/si/localeinfo.json
+#	modified:   locale/si/sysres.json
+#	modified:   locale/sk/ctrynames.json
+#	modified:   locale/sk/dateformats.json
+#	modified:   locale/sk/localeinfo.json
+#	modified:   locale/sk/plurals.json
+#	modified:   locale/sk/sysres.json
+#	modified:   locale/sl/ctrynames.json
+#	modified:   locale/sl/dateformats.json
+#	modified:   locale/sl/localeinfo.json
+#	modified:   locale/sl/plurals.json
+#	modified:   locale/sl/sysres.json
+#	modified:   locale/sma/plurals.json
+#	modified:   locale/smi/plurals.json
+#	modified:   locale/smj/plurals.json
+#	modified:   locale/smn/localeinfo.json
+#	modified:   locale/smn/plurals.json
+#	modified:   locale/sms/plurals.json
+#	modified:   locale/sn/ctrynames.json
+#	modified:   locale/sn/dateformats.json
+#	modified:   locale/sn/localeinfo.json
+#	modified:   locale/sn/plurals.json
+#	modified:   locale/sn/sysres.json
+#	modified:   locale/so/ctrynames.json
+#	modified:   locale/so/dateformats.json
+#	modified:   locale/so/localeinfo.json
+#	modified:   locale/so/plurals.json
+#	modified:   locale/so/sysres.json
+#	modified:   locale/sq/ctrynames.json
+#	modified:   locale/sq/dateformats.json
+#	modified:   locale/sq/localeinfo.json
+#	modified:   locale/sq/plurals.json
+#	modified:   locale/sq/sysres.json
+#	modified:   locale/sr/Cyrl/BA/sysres.json
+#	modified:   locale/sr/Latn/BA/ctrynames.json
+#	modified:   locale/sr/Latn/BA/dateformats.json
+#	deleted:    locale/sr/Latn/BA/localeinfo.json
+#	modified:   locale/sr/Latn/BA/sysres.json
+#	modified:   locale/sr/Latn/ME/ctrynames.json
+#	modified:   locale/sr/Latn/ME/dateformats.json
+#	deleted:    locale/sr/Latn/ME/localeinfo.json
+#	modified:   locale/sr/Latn/ME/sysres.json
+#	deleted:    locale/sr/Latn/RS/dateformats.json
+#	deleted:    locale/sr/Latn/RS/localeinfo.json
+#	deleted:    locale/sr/Latn/RS/sysres.json
+#	modified:   locale/sr/ctrynames.json
+#	modified:   locale/sr/dateformats.json
+#	modified:   locale/sr/localeinfo.json
+#	modified:   locale/sr/plurals.json
+#	modified:   locale/sr/sysres.json
+#	modified:   locale/ss/dateformats.json
+#	modified:   locale/ss/localeinfo.json
+#	modified:   locale/ss/plurals.json
+#	modified:   locale/ss/sysres.json
+#	modified:   locale/ssy/dateformats.json
+#	modified:   locale/ssy/localeinfo.json
+#	modified:   locale/ssy/plurals.json
+#	modified:   locale/ssy/sysres.json
+#	modified:   locale/st/dateformats.json
+#	modified:   locale/st/plurals.json
+#	modified:   locale/st/sysres.json
+#	modified:   locale/sv/ctrynames.json
+#	modified:   locale/sv/dateformats.json
+#	modified:   locale/sv/localeinfo.json
+#	modified:   locale/sv/plurals.json
+#	modified:   locale/sv/sysres.json
+#	modified:   locale/sw/ctrynames.json
+#	modified:   locale/sw/dateformats.json
+#	modified:   locale/sw/localeinfo.json
+#	modified:   locale/sw/plurals.json
+#	modified:   locale/sw/sysres.json
+#	modified:   locale/swc/dateformats.json
+#	modified:   locale/swc/localeinfo.json
+#	modified:   locale/swc/sysres.json
+#	modified:   locale/syr/plurals.json
+#	modified:   locale/sysres.json
+#	modified:   locale/ta/ctrynames.json
+#	modified:   locale/ta/dateformats.json
+#	modified:   locale/ta/localeinfo.json
+#	modified:   locale/ta/plurals.json
+#	modified:   locale/ta/sysres.json
+#	modified:   locale/te/ctrynames.json
+#	modified:   locale/te/dateformats.json
+#	modified:   locale/te/localeinfo.json
+#	modified:   locale/te/plurals.json
+#	modified:   locale/te/sysres.json
+#	modified:   locale/teo/ctrynames.json
+#	modified:   locale/teo/dateformats.json
+#	modified:   locale/teo/localeinfo.json
+#	modified:   locale/teo/plurals.json
+#	modified:   locale/teo/sysres.json
+#	modified:   locale/tg/dateformats.json
+#	modified:   locale/tg/sysres.json
+#	modified:   locale/th/ctrynames.json
+#	modified:   locale/th/dateformats.json
+#	modified:   locale/th/localeinfo.json
+#	modified:   locale/th/sysres.json
+#	modified:   locale/ti/ER/sysres.json
+#	modified:   locale/ti/dateformats.json
+#	modified:   locale/ti/localeinfo.json
+#	modified:   locale/ti/plurals.json
+#	modified:   locale/ti/sysres.json
+#	modified:   locale/tig/dateformats.json
+#	modified:   locale/tig/plurals.json
+#	modified:   locale/tig/sysres.json
+#	modified:   locale/tk/localeinfo.json
+#	modified:   locale/tk/plurals.json
+#	modified:   locale/tl/plurals.json
+#	modified:   locale/tn/dateformats.json
+#	modified:   locale/tn/localeinfo.json
+#	modified:   locale/tn/plurals.json
+#	modified:   locale/tn/sysres.json
+#	modified:   locale/to/ctrynames.json
+#	modified:   locale/to/dateformats.json
+#	modified:   locale/to/localeinfo.json
+#	modified:   locale/to/sysres.json
+#	modified:   locale/tr/ctrynames.json
+#	modified:   locale/tr/dateformats.json
+#	modified:   locale/tr/localeinfo.json
+#	modified:   locale/tr/sysres.json
+#	modified:   locale/ts/dateformats.json
+#	modified:   locale/ts/localeinfo.json
+#	modified:   locale/ts/plurals.json
+#	modified:   locale/ts/sysres.json
+#	modified:   locale/ttt/localeinfo.json
+#	modified:   locale/twq/ctrynames.json
+#	modified:   locale/twq/dateformats.json
+#	modified:   locale/twq/localeinfo.json
+#	modified:   locale/twq/sysres.json
+#	modified:   locale/tzm/ctrynames.json
+#	modified:   locale/tzm/dateformats.json
+#	modified:   locale/tzm/localeinfo.json
+#	modified:   locale/tzm/plurals.json
+#	modified:   locale/tzm/sysres.json
+#	modified:   locale/ug/localeinfo.json
+#	modified:   locale/uk/ctrynames.json
+#	modified:   locale/uk/dateformats.json
+#	modified:   locale/uk/localeinfo.json
+#	modified:   locale/uk/plurals.json
+#	modified:   locale/uk/sysres.json
+#	modified:   locale/und/AC/localeinfo.json
+#	modified:   locale/und/AG/localeinfo.json
+#	modified:   locale/und/AX/localeinfo.json
+#	modified:   locale/und/BA/localeinfo.json
+#	modified:   locale/und/BL/localeinfo.json
+#	modified:   locale/und/BV/localeinfo.json
+#	modified:   locale/und/BY/localeinfo.json
+#	modified:   locale/und/CC/localeinfo.json
+#	modified:   locale/und/CG/localeinfo.json
+#	modified:   locale/und/CU/localeinfo.json
+#	modified:   locale/und/DG/localeinfo.json
+#	modified:   locale/und/DK/localeinfo.json
+#	modified:   locale/und/EA/localeinfo.json
+#	modified:   locale/und/EU/localeinfo.json
+#	modified:   locale/und/FI/localeinfo.json
+#	modified:   locale/und/FO/localeinfo.json
+#	modified:   locale/und/GB/localeinfo.json
+#	modified:   locale/und/GL/localeinfo.json
+#	modified:   locale/und/GS/localeinfo.json
+#	modified:   locale/und/HM/localeinfo.json
+#	modified:   locale/und/HT/localeinfo.json
+#	modified:   locale/und/IC/localeinfo.json
+#	modified:   locale/und/KN/localeinfo.json
+#	modified:   locale/und/LC/localeinfo.json
+#	modified:   locale/und/LT/localeinfo.json
+#	modified:   locale/und/LV/localeinfo.json
+#	modified:   locale/und/MF/localeinfo.json
+#	modified:   locale/und/MM/localeinfo.json
+#	modified:   locale/und/NO/localeinfo.json
+#	modified:   locale/und/NU/localeinfo.json
+#	modified:   locale/und/PA/localeinfo.json
+#	modified:   locale/und/PM/localeinfo.json
+#	modified:   locale/und/PS/localeinfo.json
+#	modified:   locale/und/SE/localeinfo.json
+#	modified:   locale/und/SH/localeinfo.json
+#	modified:   locale/und/SJ/localeinfo.json
+#	modified:   locale/und/ST/localeinfo.json
+#	modified:   locale/und/TA/localeinfo.json
+#	modified:   locale/und/TC/localeinfo.json
+#	modified:   locale/und/TT/localeinfo.json
+#	modified:   locale/und/VC/localeinfo.json
+#	modified:   locale/und/WF/localeinfo.json
+#	modified:   locale/und/ZM/localeinfo.json
+#	modified:   locale/und/ZW/localeinfo.json
+#	modified:   locale/und/localeinfo.json
+#	modified:   locale/ur/IN/localeinfo.json
+#	modified:   locale/ur/ctrynames.json
+#	modified:   locale/ur/dateformats.json
+#	modified:   locale/ur/localeinfo.json
+#	modified:   locale/ur/plurals.json
+#	modified:   locale/ur/sysres.json
+#	modified:   locale/uz/Arab/AF/localeinfo.json
+#	deleted:    locale/uz/Arab/AF/sysres.json
+#	deleted:    locale/uz/Latn/UZ/sysres.json
+#	modified:   locale/uz/dateformats.json
+#	modified:   locale/uz/localeinfo.json
+#	modified:   locale/uz/sysres.json
+#	modified:   locale/vai/Latn/LR/dateformats.json
+#	deleted:    locale/vai/Latn/LR/sysres.json
+#	modified:   locale/vai/ctrynames.json
+#	modified:   locale/vai/dateformats.json
+#	modified:   locale/vai/localeinfo.json
+#	modified:   locale/vai/sysres.json
+#	modified:   locale/ve/dateformats.json
+#	modified:   locale/ve/localeinfo.json
+#	modified:   locale/ve/plurals.json
+#	modified:   locale/ve/sysres.json
+#	modified:   locale/vi/ctrynames.json
+#	modified:   locale/vi/dateformats.json
+#	modified:   locale/vi/localeinfo.json
+#	modified:   locale/vi/sysres.json
+#	modified:   locale/vo/dateformats.json
+#	modified:   locale/vo/plurals.json
+#	modified:   locale/vo/sysres.json
+#	modified:   locale/vun/ctrynames.json
+#	modified:   locale/vun/dateformats.json
+#	modified:   locale/vun/localeinfo.json
+#	modified:   locale/vun/plurals.json
+#	modified:   locale/vun/sysres.json
+#	modified:   locale/wa/plurals.json
+#	modified:   locale/wae/dateformats.json
+#	modified:   locale/wae/localeinfo.json
+#	modified:   locale/wae/plurals.json
+#	modified:   locale/wae/sysres.json
+#	modified:   locale/wal/dateformats.json
+#	modified:   locale/wal/sysres.json
+#	modified:   locale/xh/dateformats.json
+#	modified:   locale/xh/plurals.json
+#	modified:   locale/xh/sysres.json
+#	modified:   locale/xog/ctrynames.json
+#	modified:   locale/xog/dateformats.json
+#	modified:   locale/xog/localeinfo.json
+#	modified:   locale/xog/plurals.json
+#	modified:   locale/xog/sysres.json
+#	modified:   locale/yav/ctrynames.json
+#	modified:   locale/yav/dateformats.json
+#	modified:   locale/yav/localeinfo.json
+#	modified:   locale/yav/sysres.json
+#	modified:   locale/yi/localeinfo.json
+#	modified:   locale/yo/ctrynames.json
+#	modified:   locale/yo/dateformats.json
+#	modified:   locale/yo/localeinfo.json
+#	modified:   locale/yo/sysres.json
+#	modified:   locale/yue/localeinfo.json
+#	deleted:    locale/zh/HK/ctrynames.json
+#	deleted:    locale/zh/HK/dateformats.json
+#	deleted:    locale/zh/HK/sysres.json
+#	modified:   locale/zh/Hans/HK/dateformats.json
+#	modified:   locale/zh/Hans/MO/dateformats.json
+#	modified:   locale/zh/Hans/collation.json
+#	modified:   locale/zh/Hant/HK/dateformats.json
+#	modified:   locale/zh/Hant/MO/dateformats.json
+#	deleted:    locale/zh/Hant/TW/dateformats.json
+#	modified:   locale/zh/Hant/US/dateformats.json
+#	modified:   locale/zh/Hant/collation.json
+#	modified:   locale/zh/Hant/ctrynames.json
+#	modified:   locale/zh/Hant/sysres.json
+#	deleted:    locale/zh/MO/dateformats.json
+#	deleted:    locale/zh/MO/sysres.json
+#	deleted:    locale/zh/MY/ctrynames.json
+#	deleted:    locale/zh/MY/sysres.json
+#	deleted:    locale/zh/TW/ctrynames.json
+#	deleted:    locale/zh/TW/dateformats.json
+#	deleted:    locale/zh/TW/sysres.json
+#	deleted:    locale/zh/US/dateformats.json
+#	deleted:    locale/zh/US/sysres.json
+#	modified:   locale/zh/ctrynames.json
+#	modified:   locale/zh/dateformats.json
+#	modified:   locale/zh/localeinfo.json
+#	modified:   locale/zh/sysres.json
+#	modified:   locale/zoneinfo/Africa/Cairo.json
+#	modified:   locale/zoneinfo/Africa/Casablanca.json
+#	modified:   locale/zoneinfo/Africa/El_Aaiun.json
+#	modified:   locale/zoneinfo/America/Cayman.json
+#	modified:   locale/zoneinfo/Asia/Pyongyang.json
+#	modified:   locale/zoneinfo/Europe/Chisinau.json
+#	modified:   locale/zoneinfo/Pacific/Fiji.json
+#	modified:   locale/zoneinfo/Pacific/Norfolk.json
+#	modified:   locale/zoneinfo/zonetab.json
+#	modified:   locale/zu/ctrynames.json
+#	modified:   locale/zu/dateformats.json
+#	modified:   locale/zu/localeinfo.json
+#	modified:   locale/zu/plurals.json
+#	modified:   locale/zu/sysres.json
+#	modified:   locale/zxx/dateformats.json
+#	modified:   locale/zxx/localeinfo.json
+#	modified:   locale/zza/localeinfo.json
+#
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#	a
+#	locale/aa/DJ/sysres.json
+#	locale/af/NA/dateformats.json
+#	locale/af/NA/sysres.json
+#	locale/ar/AE/sysres.json
+#	locale/ar/IL/dateformats.json
+#	locale/ar/IL/localeinfo.json
+#	locale/ar/IL/sysres.json
+#	locale/ar/KM/dateformats.json
+#	locale/ar/KM/localeinfo.json
+#	locale/ar/KM/sysres.json
+#	locale/ar/KW/dateformats.json
+#	locale/ar/KW/sysres.json
+#	locale/ar/LY/ctrynames.json
+#	locale/ar/LY/localeinfo.json
+#	locale/ar/MR/sysres.json
+#	locale/ar/PS/sysres.json
+#	locale/ar/SA/ctrynames.json
+#	locale/ars/
+#	locale/as/plurals.json
+#	locale/ast/ctrynames.json
+#	locale/az/Cyrl/ctrynames.json
+#	locale/az/Cyrl/dateformats.json
+#	locale/az/Cyrl/sysres.json
+#	locale/az/Latn/dateformats.json
+#	locale/az/Latn/sysres.json
+#	locale/az/plurals.json
+#	locale/bem/ctrynames.json
+#	locale/bn/IN/ctrynames.json
+#	locale/bn/IN/dateformats.json
+#	locale/bn/IN/sysres.json
+#	locale/bo/IN/ctrynames.json
+#	locale/bo/IN/dateformats.json
+#	locale/bo/IN/sysres.json
+#	locale/bs/Cyrl/ctrynames.json
+#	locale/bs/Cyrl/dateformats.json
+#	locale/bs/Cyrl/localeinfo.json
+#	locale/bs/Cyrl/sysres.json
+#	locale/bs/Latn/dateformats.json
+#	locale/bs/Latn/sysres.json
+#	locale/ca/AD/dateformats.json
+#	locale/ca/AD/sysres.json
+#	locale/ca/FR/dateformats.json
+#	locale/ca/FR/sysres.json
+#	locale/ca/IT/dateformats.json
+#	locale/ca/IT/sysres.json
+#	locale/ce/ctrynames.json
+#	locale/ce/dateformats.json
+#	locale/ce/plurals.json
+#	locale/ce/sysres.json
+#	locale/charmaps/
+#	locale/charset/
+#	locale/charsetaliases.json
+#	locale/ckb/IR/
+#	locale/ckb/ctrynames.json
+#	locale/ckb/dateformats.json
+#	locale/ckb/sysres.json
+#	locale/cu/ctrynames.json
+#	locale/cu/dateformats.json
+#	locale/cu/sysres.json
+#	locale/da/GL/dateformats.json
+#	locale/da/GL/localeinfo.json
+#	locale/da/GL/sysres.json
+#	locale/de/AT/ctrynames.json
+#	locale/de/AT/dateformats.json
+#	locale/de/BE/dateformats.json
+#	locale/de/BE/sysres.json
+#	locale/de/CH/dateformats.json
+#	locale/de/IT/
+#	locale/de/LI/dateformats.json
+#	locale/de/LI/sysres.json
+#	locale/de/LU/dateformats.json
+#	locale/dsb/ctrynames.json
+#	locale/dsb/dateformats.json
+#	locale/dsb/plurals.json
+#	locale/dsb/sysres.json
+#	locale/dua/ctrynames.json
+#	locale/ee/TG/dateformats.json
+#	locale/ee/TG/localeinfo.json
+#	locale/ee/TG/sysres.json
+#	locale/en/001/dateformats.json
+#	locale/en/001/sysres.json
+#	locale/en/150/dateformats.json
+#	locale/en/150/localeinfo.json
+#	locale/en/150/sysres.json
+#	locale/en/AG/dateformats.json
+#	locale/en/AG/sysres.json
+#	locale/en/AI/dateformats.json
+#	locale/en/AI/localeinfo.json
+#	locale/en/AI/sysres.json
+#	locale/en/AS/dateformats.json
+#	locale/en/AS/sysres.json
+#	locale/en/AT/
+#	locale/en/AU/dateformats.json
+#	locale/en/AU/localeinfo.json
+#	locale/en/AU/sysres.json
+#	locale/en/BB/dateformats.json
+#	locale/en/BB/sysres.json
+#	locale/en/BE/dateformats.json
+#	locale/en/BE/sysres.json
+#	locale/en/BI/
+#	locale/en/BM/dateformats.json
+#	locale/en/BM/sysres.json
+#	locale/en/BS/dateformats.json
+#	locale/en/BS/sysres.json
+#	locale/en/BW/dateformats.json
+#	locale/en/BW/localeinfo.json
+#	locale/en/BW/sysres.json
+#	locale/en/BZ/dateformats.json
+#	locale/en/BZ/localeinfo.json
+#	locale/en/BZ/sysres.json
+#	locale/en/CA/sysres.json
+#	locale/en/CC/dateformats.json
+#	locale/en/CC/localeinfo.json
+#	locale/en/CC/sysres.json
+#	locale/en/CH/
+#	locale/en/CK/dateformats.json
+#	locale/en/CK/localeinfo.json
+#	locale/en/CK/sysres.json
+#	locale/en/CM/dateformats.json
+#	locale/en/CM/localeinfo.json
+#	locale/en/CM/sysres.json
+#	locale/en/CX/dateformats.json
+#	locale/en/CX/localeinfo.json
+#	locale/en/CX/sysres.json
+#	locale/en/CY/
+#	locale/en/DE/
+#	locale/en/DG/dateformats.json
+#	locale/en/DG/localeinfo.json
+#	locale/en/DG/sysres.json
+#	locale/en/DK/
+#	locale/en/DM/dateformats.json
+#	locale/en/DM/sysres.json
+#	locale/en/ER/dateformats.json
+#	locale/en/ER/sysres.json
+#	locale/en/ET/
+#	locale/en/FI/
+#	locale/en/FJ/dateformats.json
+#	locale/en/FJ/sysres.json
+#	locale/en/FK/dateformats.json
+#	locale/en/FK/localeinfo.json
+#	locale/en/FK/sysres.json
+#	locale/en/FM/dateformats.json
+#	locale/en/FM/sysres.json
+#	locale/en/GB/dateformats.json
+#	locale/en/GB/sysres.json
+#	locale/en/GD/dateformats.json
+#	locale/en/GD/sysres.json
+#	locale/en/GG/dateformats.json
+#	locale/en/GG/sysres.json
+#	locale/en/GH/dateformats.json
+#	locale/en/GH/sysres.json
+#	locale/en/GI/dateformats.json
+#	locale/en/GI/sysres.json
+#	locale/en/GM/dateformats.json
+#	locale/en/GM/sysres.json
+#	locale/en/GU/dateformats.json
+#	locale/en/GU/sysres.json
+#	locale/en/GY/dateformats.json
+#	locale/en/GY/sysres.json
+#	locale/en/HK/dateformats.json
+#	locale/en/HK/sysres.json
+#	locale/en/IE/dateformats.json
+#	locale/en/IL/
+#	locale/en/IM/dateformats.json
+#	locale/en/IM/sysres.json
+#	locale/en/IN/dateformats.json
+#	locale/en/IN/sysres.json
+#	locale/en/IO/dateformats.json
+#	locale/en/IO/localeinfo.json
+#	locale/en/IO/sysres.json
+#	locale/en/JE/dateformats.json
+#	locale/en/JE/sysres.json
+#	locale/en/JM/dateformats.json
+#	locale/en/JM/sysres.json
+#	locale/en/KE/dateformats.json
+#	locale/en/KE/localeinfo.json
+#	locale/en/KE/sysres.json
+#	locale/en/KI/dateformats.json
+#	locale/en/KI/sysres.json
+#	locale/en/KN/dateformats.json
+#	locale/en/KN/sysres.json
+#	locale/en/KY/dateformats.json
+#	locale/en/KY/sysres.json
+#	locale/en/LC/dateformats.json
+#	locale/en/LC/sysres.json
+#	locale/en/LR/dateformats.json
+#	locale/en/LR/sysres.json
+#	locale/en/LS/dateformats.json
+#	locale/en/LS/sysres.json
+#	locale/en/MG/dateformats.json
+#	locale/en/MG/localeinfo.json
+#	locale/en/MG/sysres.json
+#	locale/en/MH/dateformats.json
+#	locale/en/MH/sysres.json
+#	locale/en/MO/dateformats.json
+#	locale/en/MO/sysres.json
+#	locale/en/MP/dateformats.json
+#	locale/en/MP/sysres.json
+#	locale/en/MS/dateformats.json
+#	locale/en/MS/localeinfo.json
+#	locale/en/MS/sysres.json
+#	locale/en/MT/dateformats.json
+#	locale/en/MT/sysres.json
+#	locale/en/MU/dateformats.json
+#	locale/en/MU/localeinfo.json
+#	locale/en/MU/sysres.json
+#	locale/en/MW/dateformats.json
+#	locale/en/MW/sysres.json
+#	locale/en/MY/dateformats.json
+#	locale/en/MY/sysres.json
+#	locale/en/NA/dateformats.json
+#	locale/en/NA/sysres.json
+#	locale/en/NF/dateformats.json
+#	locale/en/NF/localeinfo.json
+#	locale/en/NF/sysres.json
+#	locale/en/NG/dateformats.json
+#	locale/en/NG/sysres.json
+#	locale/en/NL/
+#	locale/en/NR/dateformats.json
+#	locale/en/NR/localeinfo.json
+#	locale/en/NR/sysres.json
+#	locale/en/NU/dateformats.json
+#	locale/en/NU/localeinfo.json
+#	locale/en/NU/sysres.json
+#	locale/en/NZ/dateformats.json
+#	locale/en/NZ/sysres.json
+#	locale/en/PG/dateformats.json
+#	locale/en/PG/sysres.json
+#	locale/en/PH/dateformats.json
+#	locale/en/PH/sysres.json
+#	locale/en/PK/dateformats.json
+#	locale/en/PK/sysres.json
+#	locale/en/PN/dateformats.json
+#	locale/en/PN/localeinfo.json
+#	locale/en/PN/sysres.json
+#	locale/en/PR/dateformats.json
+#	locale/en/PR/sysres.json
+#	locale/en/PW/dateformats.json
+#	locale/en/PW/sysres.json
+#	locale/en/RW/dateformats.json
+#	locale/en/RW/localeinfo.json
+#	locale/en/RW/sysres.json
+#	locale/en/SB/dateformats.json
+#	locale/en/SB/sysres.json
+#	locale/en/SC/dateformats.json
+#	locale/en/SC/localeinfo.json
+#	locale/en/SC/sysres.json
+#	locale/en/SD/dateformats.json
+#	locale/en/SD/sysres.json
+#	locale/en/SE/
+#	locale/en/SG/dateformats.json
+#	locale/en/SG/sysres.json
+#	locale/en/SH/dateformats.json
+#	locale/en/SH/localeinfo.json
+#	locale/en/SH/sysres.json
+#	locale/en/SI/
+#	locale/en/SL/dateformats.json
+#	locale/en/SL/sysres.json
+#	locale/en/SS/dateformats.json
+#	locale/en/SS/sysres.json
+#	locale/en/SX/dateformats.json
+#	locale/en/SX/localeinfo.json
+#	locale/en/SX/sysres.json
+#	locale/en/SZ/dateformats.json
+#	locale/en/SZ/sysres.json
+#	locale/en/TC/dateformats.json
+#	locale/en/TC/sysres.json
+#	locale/en/TK/dateformats.json
+#	locale/en/TK/localeinfo.json
+#	locale/en/TK/sysres.json
+#	locale/en/TO/dateformats.json
+#	locale/en/TO/sysres.json
+#	locale/en/TT/dateformats.json
+#	locale/en/TT/sysres.json
+#	locale/en/TV/dateformats.json
+#	locale/en/TV/localeinfo.json
+#	locale/en/TV/sysres.json
+#	locale/en/TZ/dateformats.json
+#	locale/en/TZ/localeinfo.json
+#	locale/en/TZ/sysres.json
+#	locale/en/UG/dateformats.json
+#	locale/en/UG/localeinfo.json
+#	locale/en/UG/sysres.json
+#	locale/en/UM/dateformats.json
+#	locale/en/UM/sysres.json
+#	locale/en/VC/dateformats.json
+#	locale/en/VC/sysres.json
+#	locale/en/VG/dateformats.json
+#	locale/en/VG/sysres.json
+#	locale/en/VI/dateformats.json
+#	locale/en/VI/sysres.json
+#	locale/en/VU/dateformats.json
+#	locale/en/VU/sysres.json
+#	locale/en/WS/dateformats.json
+#	locale/en/WS/sysres.json
+#	locale/en/ZA/sysres.json
+#	locale/en/ZM/dateformats.json
+#	locale/en/ZM/sysres.json
+#	locale/en/ZW/dateformats.json
+#	locale/en/ZW/localeinfo.json
+#	locale/en/ZW/sysres.json
+#	locale/en/dateformats.json
+#	locale/en/sysres.json
+#	locale/es/419/ctrynames.json
+#	locale/es/419/dateformats.json
+#	locale/es/419/localeinfo.json
+#	locale/es/419/sysres.json
+#	locale/es/AR/ctrynames.json
+#	locale/es/AR/sysres.json
+#	locale/es/BO/ctrynames.json
+#	locale/es/BO/dateformats.json
+#	locale/es/BO/sysres.json
+#	locale/es/BR/
+#	locale/es/CL/dateformats.json
+#	locale/es/CL/sysres.json
+#	locale/es/CO/ctrynames.json
+#	locale/es/CO/dateformats.json
+#	locale/es/CO/sysres.json
+#	locale/es/CR/ctrynames.json
+#	locale/es/CR/dateformats.json
+#	locale/es/CR/sysres.json
+#	locale/es/CU/ctrynames.json
+#	locale/es/CU/dateformats.json
+#	locale/es/CU/sysres.json
+#	locale/es/DO/ctrynames.json
+#	locale/es/DO/dateformats.json
+#	locale/es/DO/sysres.json
+#	locale/es/EA/dateformats.json
+#	locale/es/EC/ctrynames.json
+#	locale/es/EC/dateformats.json
+#	locale/es/EC/sysres.json
+#	locale/es/GQ/dateformats.json
+#	locale/es/GT/ctrynames.json
+#	locale/es/GT/dateformats.json
+#	locale/es/GT/sysres.json
+#	locale/es/HN/ctrynames.json
+#	locale/es/HN/dateformats.json
+#	locale/es/HN/sysres.json
+#	locale/es/IC/dateformats.json
+#	locale/es/MX/ctrynames.json
+#	locale/es/MX/dateformats.json
+#	locale/es/MX/sysres.json
+#	locale/es/NI/ctrynames.json
+#	locale/es/NI/dateformats.json
+#	locale/es/NI/sysres.json
+#	locale/es/PA/ctrynames.json
+#	locale/es/PA/dateformats.json
+#	locale/es/PA/sysres.json
+#	locale/es/PE/ctrynames.json
+#	locale/es/PE/dateformats.json
+#	locale/es/PE/sysres.json
+#	locale/es/PH/localeinfo.json
+#	locale/es/PR/ctrynames.json
+#	locale/es/PR/dateformats.json
+#	locale/es/PR/sysres.json
+#	locale/es/PY/ctrynames.json
+#	locale/es/PY/dateformats.json
+#	locale/es/PY/sysres.json
+#	locale/es/SV/ctrynames.json
+#	locale/es/SV/dateformats.json
+#	locale/es/SV/sysres.json
+#	locale/es/US/ctrynames.json
+#	locale/es/US/sysres.json
+#	locale/es/UY/ctrynames.json
+#	locale/es/UY/dateformats.json
+#	locale/es/UY/sysres.json
+#	locale/es/VE/ctrynames.json
+#	locale/es/VE/dateformats.json
+#	locale/es/VE/sysres.json
+#	locale/fa/AF/dateformats.json
+#	locale/fa/AF/localeinfo.json
+#	locale/fa/plurals.json
+#	locale/ff/CM/dateformats.json
+#	locale/ff/CM/sysres.json
+#	locale/ff/GN/dateformats.json
+#	locale/ff/GN/sysres.json
+#	locale/ff/MR/dateformats.json
+#	locale/ff/MR/localeinfo.json
+#	locale/ff/MR/sysres.json
+#	locale/fo/DK/
+#	locale/fr/BE/ctrynames.json
+#	locale/fr/BE/dateformats.json
+#	locale/fr/BF/dateformats.json
+#	locale/fr/BI/dateformats.json
+#	locale/fr/BJ/dateformats.json
+#	locale/fr/BL/dateformats.json
+#	locale/fr/CA/dateformats.json
+#	locale/fr/CA/sysres.json
+#	locale/fr/CD/dateformats.json
+#	locale/fr/CF/dateformats.json
+#	locale/fr/CG/dateformats.json
+#	locale/fr/CH/dateformats.json
+#	locale/fr/CI/dateformats.json
+#	locale/fr/CM/dateformats.json
+#	locale/fr/CM/sysres.json
+#	locale/fr/DJ/dateformats.json
+#	locale/fr/DJ/localeinfo.json
+#	locale/fr/DZ/dateformats.json
+#	locale/fr/DZ/localeinfo.json
+#	locale/fr/GA/dateformats.json
+#	locale/fr/GF/dateformats.json
+#	locale/fr/GN/dateformats.json
+#	locale/fr/GP/dateformats.json
+#	locale/fr/GQ/dateformats.json
+#	locale/fr/HT/dateformats.json
+#	locale/fr/KM/dateformats.json
+#	locale/fr/LU/dateformats.json
+#	locale/fr/MA/dateformats.json
+#	locale/fr/MA/localeinfo.json
+#	locale/fr/MA/sysres.json
+#	locale/fr/MC/dateformats.json
+#	locale/fr/MF/dateformats.json
+#	locale/fr/MG/dateformats.json
+#	locale/fr/ML/dateformats.json
+#	locale/fr/MQ/dateformats.json
+#	locale/fr/MR/dateformats.json
+#	locale/fr/MR/localeinfo.json
+#	locale/fr/MU/dateformats.json
+#	locale/fr/NC/dateformats.json
+#	locale/fr/NE/dateformats.json
+#	locale/fr/PF/dateformats.json
+#	locale/fr/PM/dateformats.json
+#	locale/fr/RE/dateformats.json
+#	locale/fr/RW/dateformats.json
+#	locale/fr/SC/dateformats.json
+#	locale/fr/SN/dateformats.json
+#	locale/fr/SY/dateformats.json
+#	locale/fr/SY/localeinfo.json
+#	locale/fr/TD/dateformats.json
+#	locale/fr/TD/localeinfo.json
+#	locale/fr/TG/dateformats.json
+#	locale/fr/TN/dateformats.json
+#	locale/fr/TN/localeinfo.json
+#	locale/fr/VU/dateformats.json
+#	locale/fr/VU/localeinfo.json
+#	locale/fr/WF/dateformats.json
+#	locale/fr/YT/dateformats.json
+#	locale/fur/ctrynames.json
+#	locale/fy/ctrynames.json
+#	locale/fy/dateformats.json
+#	locale/fy/sysres.json
+#	locale/gd/ctrynames.json
+#	locale/gsw/FR/dateformats.json
+#	locale/gsw/FR/sysres.json
+#	locale/gsw/LI/dateformats.json
+#	locale/gsw/LI/sysres.json
+#	locale/guw/
+#	locale/gv/ctrynames.json
+#	locale/ha/GH/
+#	locale/ha/Latn/dateformats.json
+#	locale/ha/Latn/sysres.json
+#	locale/ha/NE/
+#	locale/hr/BA/dateformats.json
+#	locale/hr/BA/sysres.json
+#	locale/hsb/ctrynames.json
+#	locale/hsb/dateformats.json
+#	locale/hsb/plurals.json
+#	locale/hsb/sysres.json
+#	locale/hu/plurals.json
+#	locale/hy/plurals.json
+#	locale/it/CH/dateformats.json
+#	locale/it/SM/dateformats.json
+#	locale/it/SM/sysres.json
+#	locale/iw/plurals.json
+#	locale/ji/plurals.json
+#	locale/ka/plurals.json
+#	locale/kkj/ctrynames.json
+#	locale/kl/ctrynames.json
+#	locale/kn/plurals.json
+#	locale/ko/KP/ctrynames.json
+#	locale/ko/KP/dateformats.json
+#	locale/ko/KP/sysres.json
+#	locale/kok/ctrynames.json
+#	locale/ks/Arab/dateformats.json
+#	locale/ks/Arab/sysres.json
+#	locale/ksh/ctrynames.json
+#	locale/kw/ctrynames.json
+#	locale/ky/Cyrl/dateformats.json
+#	locale/ky/Cyrl/sysres.json
+#	locale/ky/ctrynames.json
+#	locale/lb/ctrynames.json
+#	locale/lb/dateformats.json
+#	locale/lb/sysres.json
+#	locale/lkt/ctrynames.json
+#	locale/lkt/dateformats.json
+#	locale/lkt/sysres.json
+#	locale/ln/AO/dateformats.json
+#	locale/ln/AO/sysres.json
+#	locale/ln/CF/dateformats.json
+#	locale/ln/CF/sysres.json
+#	locale/ln/CG/dateformats.json
+#	locale/ln/CG/sysres.json
+#	locale/lrc/
+#	locale/mas/TZ/dateformats.json
+#	locale/mas/TZ/sysres.json
+#	locale/ms/BN/sysres.json
+#	locale/ms/Latn/BN/
+#	locale/ms/SG/
+#	locale/mzn/
+#	locale/nb/SJ/dateformats.json
+#	locale/nb/SJ/sysres.json
+#	locale/nds/NL/
+#	locale/nds/ctrynames.json
+#	locale/nds/dateformats.json
+#	locale/nds/sysres.json
+#	locale/ne/IN/dateformats.json
+#	locale/ne/IN/localeinfo.json
+#	locale/nfd/Sidd.json
+#	locale/nfkd/Geor.json
+#	locale/nl/AW/dateformats.json
+#	locale/nl/AW/sysres.json
+#	locale/nl/BE/dateformats.json
+#	locale/nl/BE/sysres.json
+#	locale/nl/BQ/dateformats.json
+#	locale/nl/BQ/sysres.json
+#	locale/nl/CW/dateformats.json
+#	locale/nl/CW/sysres.json
+#	locale/nl/SR/dateformats.json
+#	locale/nl/SR/sysres.json
+#	locale/nl/SX/dateformats.json
+#	locale/nl/SX/sysres.json
+#	locale/nnh/ctrynames.json
+#	locale/om/KE/dateformats.json
+#	locale/om/KE/localeinfo.json
+#	locale/om/KE/sysres.json
+#	locale/os/RU/dateformats.json
+#	locale/os/RU/sysres.json
+#	locale/os/ctrynames.json
+#	locale/pa/Arab/ctrynames.json
+#	locale/pa/Arab/dateformats.json
+#	locale/pa/Arab/localeinfo.json
+#	locale/pa/Arab/sysres.json
+#	locale/pa/Guru/dateformats.json
+#	locale/pa/Guru/sysres.json
+#	locale/prg/ctrynames.json
+#	locale/prg/dateformats.json
+#	locale/prg/plurals.json
+#	locale/prg/sysres.json
+#	locale/pt/AO/dateformats.json
+#	locale/pt/AO/sysres.json
+#	locale/pt/BR/dateformats.json
+#	locale/pt/CH/
+#	locale/pt/CV/dateformats.json
+#	locale/pt/CV/sysres.json
+#	locale/pt/GQ/
+#	locale/pt/GW/dateformats.json
+#	locale/pt/GW/sysres.json
+#	locale/pt/LU/
+#	locale/pt/MO/dateformats.json
+#	locale/pt/MO/sysres.json
+#	locale/pt/MZ/dateformats.json
+#	locale/pt/MZ/sysres.json
+#	locale/pt/PT/dateformats.json
+#	locale/pt/PT/plurals.json
+#	locale/pt/PT/sysres.json
+#	locale/pt/ST/dateformats.json
+#	locale/pt/ST/sysres.json
+#	locale/pt/TL/dateformats.json
+#	locale/pt/TL/sysres.json
+#	locale/qu/BO/dateformats.json
+#	locale/qu/BO/localeinfo.json
+#	locale/qu/BO/sysres.json
+#	locale/qu/EC/dateformats.json
+#	locale/qu/EC/sysres.json
+#	locale/qu/ctrynames.json
+#	locale/qu/dateformats.json
+#	locale/qu/sysres.json
+#	locale/ro/MD/ctrynames.json
+#	locale/ro/MD/dateformats.json
+#	locale/ro/MD/sysres.json
+#	locale/ru/BY/dateformats.json
+#	locale/ru/MD/dateformats.json
+#	locale/ru/MD/sysres.json
+#	locale/ru/UA/ctrynames.json
+#	locale/ru/UA/dateformats.json
+#	locale/ru/UA/sysres.json
+#	locale/sah/ctrynames.json
+#	locale/sdh/plurals.json
+#	locale/se/FI/ctrynames.json
+#	locale/se/FI/dateformats.json
+#	locale/se/FI/sysres.json
+#	locale/se/SE/dateformats.json
+#	locale/se/SE/sysres.json
+#	locale/se/ctrynames.json
+#	locale/shi/Latn/ctrynames.json
+#	locale/shi/Latn/dateformats.json
+#	locale/shi/Latn/sysres.json
+#	locale/shi/Tfng/dateformats.json
+#	locale/shi/Tfng/sysres.json
+#	locale/si/plurals.json
+#	locale/smn/ctrynames.json
+#	locale/smn/dateformats.json
+#	locale/smn/sysres.json
+#	locale/so/DJ/dateformats.json
+#	locale/so/DJ/sysres.json
+#	locale/so/ET/dateformats.json
+#	locale/so/ET/sysres.json
+#	locale/so/KE/dateformats.json
+#	locale/so/KE/localeinfo.json
+#	locale/so/KE/sysres.json
+#	locale/sq/MK/dateformats.json
+#	locale/sq/MK/localeinfo.json
+#	locale/sq/MK/sysres.json
+#	locale/sq/XK/dateformats.json
+#	locale/sq/XK/localeinfo.json
+#	locale/sq/XK/sysres.json
+#	locale/sr/Cyrl/BA/ctrynames.json
+#	locale/sr/Cyrl/BA/dateformats.json
+#	locale/sr/Cyrl/ME/
+#	locale/sr/Cyrl/XK/
+#	locale/sr/Cyrl/dateformats.json
+#	locale/sr/Cyrl/sysres.json
+#	locale/sr/Latn/XK/
+#	locale/sr/Latn/ctrynames.json
+#	locale/sr/Latn/dateformats.json
+#	locale/sr/Latn/sysres.json
+#	locale/sv/AX/dateformats.json
+#	locale/sv/AX/sysres.json
+#	locale/sv/FI/dateformats.json
+#	locale/sw/CD/
+#	locale/sw/KE/ctrynames.json
+#	locale/sw/KE/dateformats.json
+#	locale/sw/KE/sysres.json
+#	locale/sw/UG/dateformats.json
+#	locale/sw/UG/sysres.json
+#	locale/ta/LK/dateformats.json
+#	locale/ta/LK/localeinfo.json
+#	locale/ta/LK/sysres.json
+#	locale/ta/MY/dateformats.json
+#	locale/ta/MY/sysres.json
+#	locale/ta/SG/dateformats.json
+#	locale/ta/SG/sysres.json
+#	locale/teo/KE/dateformats.json
+#	locale/teo/KE/sysres.json
+#	locale/ti/ER/dateformats.json
+#	locale/ti/ctrynames.json
+#	locale/tk/ctrynames.json
+#	locale/tk/dateformats.json
+#	locale/tk/sysres.json
+#	locale/tr/CY/dateformats.json
+#	locale/tr/CY/localeinfo.json
+#	locale/tr/plurals.json
+#	locale/ug/Arab/dateformats.json
+#	locale/ug/Arab/sysres.json
+#	locale/ug/ctrynames.json
+#	locale/ug/dateformats.json
+#	locale/ug/plurals.json
+#	locale/ug/sysres.json
+#	locale/und/XK/
+#	locale/ur/IN/ctrynames.json
+#	locale/ur/IN/dateformats.json
+#	locale/ur/IN/sysres.json
+#	locale/uz/Arab/ctrynames.json
+#	locale/uz/Arab/dateformats.json
+#	locale/uz/Arab/localeinfo.json
+#	locale/uz/Arab/sysres.json
+#	locale/uz/Cyrl/UZ/
+#	locale/uz/Cyrl/ctrynames.json
+#	locale/uz/Cyrl/dateformats.json
+#	locale/uz/Cyrl/sysres.json
+#	locale/uz/Latn/dateformats.json
+#	locale/uz/ctrynames.json
+#	locale/uz/plurals.json
+#	locale/vai/Latn/ctrynames.json
+#	locale/vai/Latn/dateformats.json
+#	locale/vai/Latn/sysres.json
+#	locale/vai/Vaii/dateformats.json
+#	locale/vai/Vaii/sysres.json
+#	locale/vo/ctrynames.json
+#	locale/wae/ctrynames.json
+#	locale/yi/ctrynames.json
+#	locale/yi/dateformats.json
+#	locale/yi/plurals.json
+#	locale/yi/sysres.json
+#	locale/yo/BJ/ctrynames.json
+#	locale/yo/BJ/dateformats.json
+#	locale/yo/BJ/sysres.json
+#	locale/yue/ctrynames.json
+#	locale/yue/dateformats.json
+#	locale/yue/sysres.json
+#	locale/zgh/ctrynames.json
+#	locale/zgh/dateformats.json
+#	locale/zgh/localeinfo.json
+#	locale/zgh/sysres.json
+#	locale/zh/Hans/HK/sysres.json
+#	locale/zh/Hans/MO/sysres.json
+#	locale/zh/Hans/SG/dateformats.json
+#	locale/zh/Hans/SG/sysres.json
+#	locale/zh/Hans/dateformats.json
+#	locale/zh/Hans/sysres.json
+#	locale/zh/Hant/HK/ctrynames.json
+#	locale/zh/Hant/HK/sysres.json
+#	locale/zh/Hant/MO/ctrynames.json
+#	locale/zh/Hant/MO/sysres.json
+#	locale/zh/Hant/TW/sysres.json
+#	locale/zh/Hant/dateformats.json
+#	locale/zoneinfo/America/Fort_Nelson.json
+no changes added to commit (use "git add" and/or "git commit -a")
