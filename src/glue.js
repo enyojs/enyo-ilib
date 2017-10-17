@@ -280,9 +280,9 @@ function isNonLatinLocale (spec) {
 		locale = li.getLocale();
 
     // We use the non-latin fonts for these languages (even though their scripts are technically considered latin)
-    var nonLatinLanguageOverrides = ['en-JP'];
+    var nonLatinLanguageOverrides = ['vi', 'en-JP'];
     // We use the latin fonts (with non-Latin fallback) for these languages (even though their scripts are non-latin)
-    var latinLanguageOverrides = ['ko'];
+    var latinLanguageOverrides = ['ko', 'ha'];
 	return (
 		(
 			li.getScript() !== 'Latn' ||                                              // the language actually is non-latin
