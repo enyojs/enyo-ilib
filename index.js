@@ -6,6 +6,6 @@ var
 require('./src/dates');
 
 ilib.enyo = glue;
-ilib.enyo.version = '2.6.3-rc.13.s';
+ilib.enyo.version = '2.6.3-rc.15.s';
 
 module.exports = ilib;
